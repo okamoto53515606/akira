@@ -1,6 +1,12 @@
 2026/07/03 朝の通勤電車でokamo思案中メモ。
 claude sonnet 5 に依頼予定メモ。
 
+スクショ取得URLメモ
+
+https://ai.google.dev/gemini-api/docs/pricing?hl=ja
+
+https://openai.com/ja-JP/business/pricing/#api
+
 タスク1 envサンプルをコミット
 
 .envをみて、.env.exampleの作成とgit commit
