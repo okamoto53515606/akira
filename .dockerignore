@@ -1,0 +1,11 @@
+.git
+.venv
+.env
+.examples
+.gitignore
+__pycache__
+*.pyc
+README.md
+generated_banners
+gcp-workload-config.json
+ga4_mcp_gemini-3.1-flash-image_aws_wi_gcp_sample.py
