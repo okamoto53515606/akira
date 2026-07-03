@@ -177,17 +177,9 @@ def create_delegation_tools(models, run_budget_jpy: float):
         logger.info("%s 完了 (約%.1f円 / 本日累計約%.1f円)", name, cost, budget.get_run_spent_jpy())
         return str(result)
 
-    claude_agent = Agent(
-        name="claude_engineer",
-        model=models["claude"],
-        system_prompt=prompts.CLAUDE_ENGINEER_PROMPT,
-        tools=[
-            akira_tools.publish_file_to_site,
-            akira_tools.get_site_file,
-            akira_tools.list_site_files,
-            _create_brave_mcp(),
-        ],
-    )
+    # GPT税理士・Gemini子育てママを先に作る（Claudeエンジニアが自分のツールとして使うため）。
+    # これによりAkira(高額な$10/$50モデル)が毎回レビュー往復を仲介せずに済み、
+    # 安価なClaudeエンジニア($2/$10導入価格)の会話内で完結させてコストを最適化する。
     gpt_agent = Agent(
         name="gpt_tax_advisor",
         model=models["gpt"],
@@ -206,15 +198,6 @@ def create_delegation_tools(models, run_budget_jpy: float):
     )
 
     @tool
-    def ask_claude_engineer(request: str) -> str:
-        """Claudeエンジニアに作業を依頼する（記事執筆・HTML/CSS/JS作成・サイトへの公開）。
-
-        Args:
-            request: 依頼内容。ページの目的・構成・必要な情報源・公開可否（GPT税理士のレビューでクリティカルなしか）を具体的に伝えること
-        """
-        return _run(claude_agent, CLAUDE_MODEL_ID, "Claudeエンジニア", request)
-
-    @tool
     def ask_gpt_tax_advisor(request: str) -> str:
         """GPT税理士にレビューを依頼する（ビジネス価値・PV貢献の観点とfactチェック。門番ではなくアドバイザー）。
 
@@ -231,6 +214,33 @@ def create_delegation_tools(models, run_budget_jpy: float):
             request: 依頼内容。画像なら目的と公開先パス、チェックなら対象ページ
         """
         return _run(gemini_agent, GEMINI_MODEL_ID, "Gemini子育てママ", request)
+
+    claude_agent = Agent(
+        name="claude_engineer",
+        model=models["claude"],
+        system_prompt=prompts.CLAUDE_ENGINEER_PROMPT,
+        tools=[
+            akira_tools.publish_file_to_site,
+            akira_tools.get_site_file,
+            akira_tools.list_site_files,
+            akira_tools.update_akira_config,
+            _create_brave_mcp(),
+            ask_gpt_tax_advisor,
+            ask_gemini_mother,
+        ],
+    )
+
+    @tool
+    def ask_claude_engineer(request: str) -> str:
+        """Claudeエンジニアに1日分の作業をまとめて依頼する（現場責任者としてリサーチ→執筆→
+        GPT税理士レビュー→必要ならGemini画像/UX→公開までを自律的に一気通貫で行い、最後に結果を
+        要約して返す）。Akira自身の高額な呼び出し回数を減らすため、原則1回のみ呼ぶこと。
+
+        Args:
+            request: 依頼内容。今日のテーマ候補・予算感・特筆事項を伝えれば十分（細かい手順の
+                     指示は不要。リサーチ・執筆・レビュー依頼・公開判断はClaudeエンジニアに任せる）
+        """
+        return _run(claude_agent, CLAUDE_MODEL_ID, "Claudeエンジニア", request)
 
     return [ask_claude_engineer, ask_gpt_tax_advisor, ask_gemini_mother]
 
@@ -278,27 +288,27 @@ DAILY_MISSION_TEMPLATE = """今日は {today} です。LLM Data Hub（{site_url}
 ## 予算状況
 {budget_line}
 
-## 本日の進め方
-1. list_site_files で現在のサイト状態を確認する
-2. Web検索でLLM料金・新モデル等の最新情報をリサーチする
-3. 本日の作業（新規ページ or 既存ページ更新、1〜2件まで）を決める
-4. Claudeエンジニアに執筆・実装を依頼する（この時点では公開しない）
-5. GPT税理士にレビューを依頼する（①価値・PV貢献 ②factチェックの2軸）。クリティカルな指摘
-   （明確な誤情報・法的リスク・アダルト/犯罪関連）がなければClaudeエンジニアに公開を指示する。
-   軽微な指摘（表現の好み・細かい改善提案等）は無視せず、update_akira_configでsite_planに
-   「課題」として追記し、翻日以降の検討事項とする（当日の公開は止めない）
-6. 必要な場合のみGemini子育てままに画像やUXチェックを依頼する（同様に、軽微な指摘だけで作業を止めない）
-7. 最後に write_daily_report で日報を書く（okamoさんへの依頼事項があれば必ず記載。
-   軽微な課題をsite_planに追記した場合はその旨も日報に書く）
+## 本日の進め方（コスト最適化: あなた自身の高額な呼び出し回数を最小限にする）
+1. list_site_files で現在のサイト状態を軽く確認する（大きいHTMLは読まない）
+2. 本日の作業テーマ（新規ページ or 既存ページ更新、1〜2件まで）の方向性だけ決める
+3. ask_claude_engineer に本日分をまとめて1回で依頼する。リサーチ・執筆・GPT税理士へのレビュー
+   依頼・（必要なら）Gemini子育てママへの画像/UX依頼・クリティカルな指摘がなければ公開・軽微な
+   指摘のsite_plan記録まで、Claudeエンジニアが現場責任者として自律的に行う。テーマ候補と予算感
+   を伝えるだけでよく、細かい手順の指示や公開可否の判断をあなたが都度行う必要はない
+4. Claudeエンジニアからの報告（公開したページ・GPT税理士の指摘件数・記録した課題・費用感）を確認する。
+   よほど気になる点がない限り、あなた自身がask_gpt_tax_advisor/ask_gemini_motherを直接呼ぶ必要はない
+   （呼ぶと高額なあなたの会話履歴が伸びてコスト増になるため、通常はClaudeエンジニアに任せる）
+5. 最後に write_daily_report で日報を書く（Claudeエンジニアの報告をもとにまとめる。
+   okamoさんへの依頼事項があれば必ず記載）
 
 ## 注意（費用規律・重要）
 - ハードリミットは「月額9,300円」のみ。300円/日は配分の目安（価値の高い日に多めに使う判断はあなたに任す。
   ただし月前半で使い切ると月末まで更新停止になることを忘れずに）
-- あなた(Akira)の単価は $10/$50 per MTok と高額。思考と指示は簡潔に、Web検索は合計4回まで
-- 本日の新規/更新は原則1ページ（予算残に余裕があり価値が高い場合は2ページまで可）
-- 3AIへの依頼は各担当につき原則1回で完結させる（依頼文に必要情報を全て含め、往復を減らす。
-  同じエージェントを何度も呼ぶと会話履歴が肥大化し費用が急増する）
-- ページ全文のget_site_fileは必要最小限に（大きいHTMLを何度も読まない）
+- あなた(Akira)の単価は $10/$50 per MTok と圧倒的に高額（Claudeエンジニアの5倍以上）。
+  自分で考え込んだりWeb検索・factチェックを自分でやったりせず、Claudeエンジニアに一括委任すること。
+  あなた自身の役割は「テーマ決定」と「最終確認・日報執筆」に絞る
+- ask_claude_engineer は原則1日1回のみ呼ぶ（同じエージェントを何度も呼ぶと会話履歴が肥大化し
+  費用が急増する。Claudeエンジニア内部でのGPT/Geminiとのやり取りは何度あってもあなたの費用には響かない）
 - 予算ガード（月次残額枯渇）が発動したら速やかに日報を書いて終了する
 - サイト全体の一貫性（ナビゲーション・sitemap.xml）を保つこと
 - GPT税理士・Gemini子育てママは門番ではなくアドバイザー。クリティカルな指摘（明確な誤情報・
