@@ -59,6 +59,10 @@ ENABLE_GA4_MCP = os.getenv("ENABLE_GA4_MCP", "false").lower() == "true"
 ENABLE_BIGQUERY_MCP = os.getenv("ENABLE_BIGQUERY_MCP", "false").lower() == "true"
 GOOGLE_BIGQUERY_PROJECT = os.getenv("GOOGLE_BIGQUERY_PROJECT", os.getenv("GOOGLE_CLOUD_PROJECT", ""))
 
+# LLMのツール/MCP呼び出しの詳細ログをCloudWatchへ出力するか（異常挙動監視のため一時的にtrue）。
+# 不要になったらタスク定義の環境変数を "false" にして再デプロイすれば止められる
+DEBUG_TOOL_LOGGING = os.getenv("DEBUG_TOOL_LOGGING", "true").lower() == "true"
+
 
 def load_secrets_into_env() -> None:
     """Secrets ManagerのAPIキー類を環境変数へ展開する（未設定のもののみ）。

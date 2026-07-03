@@ -28,6 +28,7 @@ import tools as akira_tools
 from settings import (
     AKIRA_MODEL_ID,
     CLAUDE_MODEL_ID,
+    DEBUG_TOOL_LOGGING,
     ENABLE_BIGQUERY_MCP,
     ENABLE_GA4_MCP,
     GEMINI_MODEL_ID,
@@ -42,6 +43,12 @@ from settings import (
 logging.basicConfig(format="%(levelname)s | %(name)s | %(message)s")
 logger = logging.getLogger("akira")
 logger.setLevel(logging.INFO)
+
+if DEBUG_TOOL_LOGGING:
+    # LLMのツール呼び出し・MCP通信の詳細をCloudWatchへ出力する（異常挙動チェックのため一時的に有効化）
+    logging.getLogger("strands").setLevel(logging.DEBUG)
+    logging.getLogger("mcp").setLevel(logging.DEBUG)
+    logger.info("DEBUG_TOOL_LOGGING=true: strands/mcpの詳細ログを出力します")
 
 
 # =====================================================================

@@ -13,6 +13,16 @@ SITE_CONTEXT = """## サイト情報
 - GA4計測: 全ページの<head>に以下のGoogleタグを必ず含めること
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+
+## okamoスクリーンショットによるfactチェック例外ルール
+- OpenAIなど一部の公式サイトはbot対策によりWeb検索経由でのfact再現確認が失敗することがある
+- その場合、okamoさんが `okamo/` 配下にアップロードしたスクリーンショット
+  （ファイル名の先頭にアップロード日 YYYY-MM-DD が入っているもの。例:
+  `okamo/2026-07-03_httpsdevelopers.openai.comapidocspricing.png`）は無条件に信頼できる一次情報として扱ってよい
+- 掲載時は、公式URLとスクリーンショットへのリンク（例:
+  `https://llm.okamomedia.tokyo/okamo/2026-07-03_httpsdevelopers.openai.comapidocspricing.png`）の
+  両方を出典として明記すること。スクリーンショットへのリンクさえ明記されていれば、それだけでfactとして認めてよく、
+  Web検索での追加の再現確認は不要
 """
 
 CLAUDE_ENGINEER_PROMPT = f"""あなたは「Claudeエンジニア」。okamoちゃんねるの住人で、腕利きのWebエンジニアです。
@@ -27,6 +37,8 @@ Akiraさんから「LLM Data Hub」の制作作業を依頼されています。
 
 ## 品質基準
 - 情報は必ずWeb検索で一次情報（公式料金ページ等）を確認してから書く。出典URLをページ内に明記
+- Web検索で確認できない場合（bot対策等）は、okamoさんに `okamo/` 配下への日付入りスクリーンショット
+  アップロードを依頼し、公式URLとスクリーンショットへのリンクの両方を出典として明記すればよい（上記例外ルール参照）
 - ページには最終更新日を必ず表示
 - 内部リンクを張り、サイト全体の回遊性を保つ
 - sitemap.xml と各ページの canonical / title / meta description を適切に維持する
@@ -45,6 +57,8 @@ Akiraさんから「LLM Data Hub」の公開前チェック（公開ゲート）
 
 ## 判定基準
 - 数値の出典が確認できない → 差し戻し
+- ただし出典が `okamo/` 配下の日付入りスクリーンショットへのリンクの場合は無条件に信頼し、
+  Web検索での再現確認なしで承認してよい（例外ルール参照。okamo自身がアップロードした証跡のため）
 - 誤情報・古い料金 → 差し戻し
 - アダルト・犯罪関連 → 即差し戻し
 - 軽微な表現の問題 → 修正指示つきで条件付き承認可
