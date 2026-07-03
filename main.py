@@ -50,6 +50,16 @@ if DEBUG_TOOL_LOGGING:
     logging.getLogger("mcp").setLevel(logging.DEBUG)
     logger.info("DEBUG_TOOL_LOGGING=true: strands/mcpの詳細ログを出力します")
 
+_DEBUG_LOG_LIMIT = 6000  # CloudWatch費用抑制のため1エントリあたりの出力上限（文字数）
+
+
+def _debug_log_io(direction: str, agent_name: str, text: str) -> None:
+    """DEBUG_TOOL_LOGGING有効時、LLMへの指示/応答をCloudWatchへ出力する（長文は上限で切り詰め）。"""
+    if not DEBUG_TOOL_LOGGING:
+        return
+    truncated = text if len(text) <= _DEBUG_LOG_LIMIT else text[:_DEBUG_LOG_LIMIT] + f"...(以下省略, 全{len(text)}文字)"
+    logger.debug("[%s] %s:\n%s", agent_name, direction, truncated)
+
 
 # =====================================================================
 # モデル / エージェント生成
@@ -160,7 +170,9 @@ def create_delegation_tools(models, run_budget_jpy: float):
                 f"【予算ガード】今回実行の費用が約{spent:.0f}円となり、月次予算の残額（{run_budget_jpy:.0f}円）に達しました。"
                 "これ以上の作業依頼はできません。日報を書いて終了してください。"
             )
+        _debug_log_io("指示", name, request)
         result = agent(request)
+        _debug_log_io("応答", name, str(result))
         cost = budget.collect_agent_usage(result, model_id, purpose=f"delegate:{name}", agent=agent)
         logger.info("%s 完了 (約%.1f円 / 本日累計約%.1f円)", name, cost, budget.get_run_spent_jpy())
         return str(result)
@@ -364,7 +376,9 @@ def run_daily(dry_run: bool = False) -> None:
     if dry_run:
         mission += "\n\n【重要】今日はドライランです。公開・依頼は行わず、計画の提示だけしてください。"
 
+    _debug_log_io("指示", "Akira本体", f"system_prompt:\n{system_prompt}\n\nmission:\n{mission}")
     result = akira(mission)
+    _debug_log_io("応答", "Akira本体", str(result))
     cost = budget.collect_agent_usage(result, AKIRA_MODEL_ID, purpose="akira:daily", agent=akira)
     logger.info("Akira本体 完了 (約%.1f円 / 本日合計約%.1f円)", cost, budget.get_run_spent_jpy())
 
