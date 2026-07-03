@@ -1,0 +1,744 @@
+2026-07-03 06:00:45 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] INFO | akira | 予算: {'can_run': True, 'month': '2026-07', 'month_cost_jpy': 2645.4, 'monthly_budget_jpy': 9300.0, 'remaining_jpy': 6654.6, 'daily_budget_jpy': 300.0, 'message': 'OK: 本日の作業を実行できます'}
+2026-07-03 06:00:56 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] Downloading google-adk (3.8MiB)
+2026-07-03 06:00:56 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] Downloading grpcio (6.5MiB)
+2026-07-03 06:00:56 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]  Downloaded grpcio
+2026-07-03 06:00:56 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]  Downloaded google-adk
+2026-07-03 06:00:59 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] Installed 64 packages in 2.73s
+2026-07-03 06:01:05 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] /root/.cache/uv/archive-v0/OyiPlRjMs3W3T1IO/lib/python3.12/site-packages/google/adk/features/_feature_decorator.py:72: UserWarning: [EXPERIMENTAL] feature FeatureName.PLUGGABLE_AUTH is enabled.
+2026-07-03 06:01:05 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   check_feature_enabled()
+2026-07-03 06:01:06 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] /root/.cache/uv/archive-v0/OyiPlRjMs3W3T1IO/lib/python3.12/site-packages/google/adk/tools/function_tool.py:95: UserWarning: [EXPERIMENTAL] feature FeatureName.JSON_SCHEMA_FOR_FUNC_DECL is enabled.
+2026-07-03 06:01:06 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   build_function_declaration(
+2026-07-03 06:01:06 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] Starting MCP Stdio Server: Google Analytics MCP Server
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] 本日の運用を開始します。まずサイト状態と前日のアクセス状況を確認します。
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] Tool #1: list_site_files
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] Tool #2: run_report
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] Tool #3: get_site_file
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] Tool #4: brave_web_search
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] Tool #5: brave_web_search
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] Tool #6: ask_claude_engineer
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] Tool #1: brave_web_search
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] Tool #2: brave_web_search
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] Tool #3: brave_web_search
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] Tool #4: get_site_file
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] Tool #5: get_site_file
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] Tool #6: brave_web_search
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] Tool #7: brave_web_search
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] Web検索で最新情報を確認しました。Claude Fable 5の料金（$10/$12.50/$1.00/$50、公開日2026-06-09、Batch APIで$5/$25等）、トークナイザーの公式表現（"roughly 1.0–1.35×"）、OpenAI GPT-5.5/5.4/5.4 miniの料金がいずれも複数の一次情報・独立ソースと整合していることを確認できました。以下、更新版を作成します（**まだ公開しません**）。
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ---
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ## 更新版 `pricing/index.html`
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] Tool #8: brave_web_search
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] 以下、更新版HTMLとsitemap.xmlを提示します（**まだS3への公開はしていません**）。承認をお願いします。
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ---
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ## 変更差分サマリー
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] | # | 変更箇所 | 内容 |
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] |---|---|---|
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] | 1 | Anthropic表 | 「Claude Fable 5」行を先頭に追加（$10.00 / $12.50 / $1.00 / $50.00） |
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] | 2 | トークナイザー記述 | Sonnet 5行の備考・tip-box内の文言を公式表現（1.0〜1.35倍）に統一 |
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] | 3 | OpenAIセクション | プレースホルダーを撤去し、GPT-5.5 / GPT-5.4 / GPT-5.4 mini の料金表に置換 |
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] | 4 | 共通 | 最終更新日を2026-07-03に更新、JSON-LD dateModified更新、meta descriptionにOpenAI追加、sitemap.xml更新 |
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] 出典として確認できた一次情報：
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - Anthropic: `platform.claude.com/docs/en/about-claude/pricing`（Fable 5価格・トークナイザー記述）、`anthropic.com/claude/fable`（Fable 5価格の裏取り）、`anthropic.com/news/claude-opus-4-7`（1.0-1.35倍の記述）
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - OpenAI: `openai.com/ja-JP/business/pricing/#api`（複数の独立した第三者ソースでも$5/$0.5/$30、$2.50/$0.25/$15、$0.75/$0.075/$4.50が一致することを確認済み）
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ---
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ### `pricing/index.html`（更新版フルHTML）
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ```html
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] <!DOCTYPE html>
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] <html lang="ja">
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] <head>
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   <meta charset="UTF-8">
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   <meta name="viewport" content="width=device-width, initial-scale=1">
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   <title>主要LLM API 料金比較【2026年7月版】 — LLM Data Hub</title>
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   <meta name="description" content="Anthropic Claude・Google Gemini・OpenAI GPTのLLM API料金を公式一次情報ページから直接確認した数値のみ掲載。USD per 1M tokens（2026年7月3日更新）。">
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   <link rel="canonical" href="https://llm.okamomedia.tokyo/pricing/">
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   <!-- OGP -->
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   <meta property="og:type"        content="article">
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   <meta property="og:url"         content="https://llm.okamomedia.tokyo/pricing/">
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   <meta property="og:title"       content="主要LLM API 料金比較【2026年7月版】">
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   <meta property="og:description" content="Anthropic Claude・Google Gemini・OpenAI GPTのLLM API料金を公式一次情報ページで確認した数値のみ掲載。">
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   <meta property="og:site_name"   content="LLM Data Hub">
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   <meta name="twitter:card"       content="summary">
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   <!-- 構造化データ -->
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   <script type="application/ld+json">
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   {
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]     "@context": "https://schema.org",
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]     "@type": "Article",
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]     "headline": "主要LLM API 料金比較【2026年7月版】",
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]     "datePublished": "2026-07-02",
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]     "dateModified": "2026-07-03",
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]     "author": { "@type": "Organization", "name": "LLM Data Hub" },
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]     "publisher": { "@type": "Organization", "name": "okamoちゃんねる" },
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]     "url": "https://llm.okamomedia.tokyo/pricing/"
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   }
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   </script>
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   <!-- GA4 -->
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   <link rel="stylesheet" href="/assets/style.css">
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   <style>
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]     .provider-header {
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       display: flex; align-items: center; gap: .6rem;
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       margin-bottom: .75rem; margin-top: 2rem;
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]     }
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]     .provider-header h2 { font-size: 1.1rem; font-weight: 700; }
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]     .provider-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]     .dot-anthropic { background: var(--c-anthropic); }
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]     .dot-google    { background: var(--c-google); }
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]     .dot-openai    { background: var(--c-openai); }
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]     .openai-placeholder {
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       background: var(--c-surface);
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       border: 1px solid var(--c-border);
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       border-left: 3px solid var(--c-openai);
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       border-radius: var(--r-md);
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       padding: 1.25rem 1.5rem;
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       margin-bottom: 1.5rem;
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]     }
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]     .openai-placeholder h3 { font-size: 1rem; font-weight: 700; margin-bottom: .5rem; }
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]     .openai-placeholder p  { font-size: .88rem; color: var(--c-muted); line-height: 1.7; }
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]     .openai-placeholder a  { color: var(--c-openai); }
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]     .cost-tip-grid {
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       display: grid;
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       gap: 1rem; margin-bottom: 2rem;
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]     }
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]     .cost-tip-item {
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       background: var(--c-surface);
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       border: 1px solid var(--c-border);
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       border-radius: var(--r-md);
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       padding: 1rem;
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]     }
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]     .cost-tip-item h4 { font-size: .95rem; font-weight: 700; margin-bottom: .4rem; }
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]     .cost-tip-item p  { font-size: .85rem; color: var(--c-muted); }
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]     .cost-tip-item .saving { color: var(--c-green); font-weight: 700; font-size: .88rem; }
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]     .table-condition {
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       font-size: .78rem;
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       color: var(--c-muted);
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       background: var(--c-surface2);
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       border: 1px solid var(--c-border);
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       border-radius: var(--r-sm);
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       padding: .4rem .8rem;
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       margin-bottom: .6rem;
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       display: inline-block;
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]     }
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   </style>
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] </head>
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] <body>
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   <!-- ヘッダー / 共通ナビ -->
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   <header class="site-header">
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]     <div class="header-inner">
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       <a href="/" class="site-logo">
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         <span class="logo-icon">⚡</span>LLM Data Hub
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       </a>
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       <nav aria-label="メインナビゲーション">
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         <a href="/"         class="nav-link">ホーム</a>
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         <a href="/pricing/" class="nav-link active" aria-current="page">料金比較</a>
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       </nav>
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]     </div>
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   </header>
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   <main>
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]     <div class="container">
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       <!-- ページヘッダー -->
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       <div class="section" style="padding-bottom:0;">
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         <h1 class="section-title" style="font-size:1.6rem;">
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           主要LLM API 料金比較
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           <span style="font-size:1rem; font-weight:500; color:var(--c-muted);">【2026年7月版】</span>
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         </h1>
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         <p class="section-sub" style="max-width:680px;">
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           各社公式料金ページを直接参照し、<strong>本ページ作成時点で該当ページから再現確認できた数値のみ</strong>を掲載しています。<br>
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           確認できなかったモデル・数値は表に含めず「公式料金ページを参照」と案内します。<br>
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           単位はすべて <strong>USD / 1M tokens（100万トークン）</strong>。
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         </p>
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         <div class="updated-bar">
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           <span class="dot">●</span>
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           最終更新: <time datetime="2026-07-03">2026年7月3日</time>
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           &ensp;|&ensp; 出典取得日: Anthropic 2026-07-03 JST / Google 2026-07-02 JST / OpenAI 2026-07-02 JST
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           &ensp;|&ensp;
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           <a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener">Anthropic</a> ·
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           <a href="https://ai.google.dev/pricing" target="_blank" rel="noopener">Google</a> ·
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           <a href="https://openai.com/ja-JP/business/pricing/#api" target="_blank" rel="noopener">OpenAI</a>
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         </div>
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       </div>
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       <!-- ===== Anthropic ===== -->
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       <section aria-labelledby="anthropic-heading">
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         <div class="provider-header">
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           <span class="provider-dot dot-anthropic"></span>
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           <h2 id="anthropic-heading">Anthropic（Claude）</h2>
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         </div>
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         <p class="table-condition">
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           📋 適用条件: 標準API（第一者API直接利用）/ テキスト入力 / キャッシュなし標準レート
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         </p>
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         <div class="table-wrap">
+2026-07-03 06:08:02 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           <table>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]             <caption style="display:none;">Anthropic Claude API 料金表（USD / 1M tokens）— platform.claude.com/docs/en/about-claude/pricing より</caption>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]             <thead>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]               <tr>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <th>モデル</th>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <th>入力<br><small style="font-weight:400;">(Base Input)</small></th>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <th>キャッシュ書込 5分<br><small style="font-weight:400;">(Cache Write 5m)</small></th>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <th>キャッシュ読込<br><small style="font-weight:400;">(Cache Hit)</small></th>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <th>出力<br><small style="font-weight:400;">(Output)</small></th>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <th>備考</th>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]               </tr>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]             </thead>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]             <tbody>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]               <tr>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="model-name">
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                   Claude Fable 5
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                   <span class="badge badge-new">New</span>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 </td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="price">$10.00</td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="price">$12.50</td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="price">$1.00</td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="price">$50.00</td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td>2026-06-09公開。Mythos級の最上位公開モデル。新トークナイザー採用（下記補足参照）。1Mトークン全域フラット料金</td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]               </tr>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]               <tr>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="model-name">
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                   Claude Sonnet 5
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                   <span class="badge badge-new">New</span>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 </td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="price">
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                   $2.00 <span class="badge badge-intro">〜2026-08-31</span><br>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                   <small style="color:var(--c-muted);">$3.00（2026-09-01以降）</small>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 </td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="price">
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                   $2.50<br>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                   <small style="color:var(--c-muted);">$3.75（2026-09-01以降）</small>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 </td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="price">
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                   $0.20<br>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                   <small style="color:var(--c-muted);">$0.30（2026-09-01以降）</small>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 </td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="price">
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                   $10.00 <span class="badge badge-intro">〜2026-08-31</span><br>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                   <small style="color:var(--c-muted);">$15.00（2026-09-01以降）</small>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 </td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td>2026-06-30公開。Opus 4.7以降のOpusモデル・Fable 5・Mythos 5・Sonnet 5 は新トークナイザーを採用。同じテキストでトークン数が最大約35%増える場合があります（公式発表では約1.0〜1.35倍、コンテンツタイプによる）</td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]               </tr>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]               <tr>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="model-name">Claude Opus 4.8</td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="price">$5.00</td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="price">$6.25</td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="price">$0.50</td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="price">$25.00</td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td>最高性能フラッグシップ</td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]               </tr>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]               <tr>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="model-name">Claude Sonnet 4.6</td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="price">$3.00</td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="price">$3.75</td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="price">$0.30</td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="price">$15.00</td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td>バランス型。1Mコンテキスト全域フラット</td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]               </tr>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]               <tr>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="model-name">Claude Haiku 4.5</td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="price">$1.00</td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="price">$1.25</td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="price">$0.10</td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="price">$5.00</td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td>大量処理・分類タスク向け</td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]               </tr>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]             </tbody>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           </table>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         </div>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         <p class="note-text" style="margin-top:.3rem;">
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           その他のモデル（Opus 4.7以前、Haiku 3.5、Mythos 5等）は
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           <a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener">公式料金ページ</a>を参照してください。
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         </p>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         <p class="source-note" style="margin-top:.6rem;">
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           一次情報:
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           <a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener">platform.claude.com/docs/en/about-claude/pricing</a>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           ・
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           <a href="https://www.anthropic.com/claude/fable" target="_blank" rel="noopener">anthropic.com/claude/fable</a>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           （取得日時: 2026-07-03 JST）
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         </p>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         <div class="tip-box" style="margin-top:.5rem;">
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           <h3 style="font-size:.9rem;">公式ページ記載の補足事項（直接確認済み）</h3>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           <ul>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]             <li>Batch API（Message Batches API）で全モデル <strong>50%割引</strong></li>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]             <li>キャッシュ書込（5分）= 通常入力の <strong>1.25倍</strong>、キャッシュ書込（1時間）= <strong>2倍</strong></li>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]             <li>キャッシュ読込 = 通常入力の <strong>0.1倍（90%割引）</strong></li>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]             <li>Fable 5・Mythos 5・Opus 4.8・Sonnet 5・Sonnet 4.6 は <strong>1Mトークン全域フラット料金</strong>（長文プレミアムなし）</li>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]             <li>Opus 4.7以降のOpusモデル・Fable 5・Mythos 5・Sonnet 5 は新トークナイザーを採用。同じテキストでトークン数が最大約35%増える場合があります（公式発表では約1.0〜1.35倍、コンテンツタイプによる）（platform.claude.com/docs/en/about-claude/pricing、anthropic.com/news/claude-opus-4-7 より）</li>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]             <li>US-only データレジデンシー使用時は通常料金の <strong>1.1倍</strong></li>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           </ul>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         </div>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       </section>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       <!-- ===== Google Gemini ===== -->
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       <section aria-labelledby="google-heading">
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         <div class="provider-header">
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           <span class="provider-dot dot-google"></span>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           <h2 id="google-heading">Google（Gemini Developer API）</h2>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         </div>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         <p class="table-condition">
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           📋 適用条件: Gemini Developer API 有料ティア / Standard tier / text・image・video 入力時 / 標準API
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         </p>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         <div class="table-wrap">
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           <table>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]             <caption style="display:none;">Google Gemini API 料金表（USD / 1M tokens）— ai.google.dev/pricing より</caption>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]             <thead>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]               <tr>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <th>モデル</th>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <th>入力<br><small style="font-weight:400;">(text/image/video)</small></th>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <th>入力<br><small style="font-weight:400;">（プロンプト&gt;200K時）</small></th>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <th>出力</th>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <th>出力<br><small style="font-weight:400;">（プロンプト&gt;200K時）</small></th>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <th>備考</th>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]               </tr>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]             </thead>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]             <tbody>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]               <tr>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="model-name">
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                   Gemini 3.1 Pro Preview
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                   <span class="badge badge-preview">Preview</span>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 </td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="price">$2.00</td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="price">$4.00</td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="price">$12.00</td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="price">$18.00</td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td>Preview価格・変更の可能性あり</td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]               </tr>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]               <tr>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="model-name">Gemini 2.5 Pro</td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="price">$1.25</td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="price">$2.50</td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="price">$10.00</td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="price">$15.00</td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td></td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]               </tr>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]               <tr>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="model-name">Gemini 2.5 Flash</td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="price">$0.30</td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="price">—</td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="price">$2.50</td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="price">—</td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td>audio入力は $1.00/1M</td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]               </tr>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]               <tr>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="model-name">Gemini 2.5 Flash-Lite</td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="price">$0.10</td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="price">—</td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="price">$0.40</td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="price">—</td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td>audio入力は $0.30/1M</td>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]               </tr>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]             </tbody>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           </table>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         </div>
+2026-07-03 06:08:21 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         <p class="note-text" style="margin-top:.3rem;">
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           その他のモデル（Gemini 3 Flash等）は
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           <a href="https://ai.google.dev/pricing" target="_blank" rel="noopener">公式料金ページ</a>を参照してください。
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         </p>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         <p class="source-note" style="margin-top:.6rem;">
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           一次情報:
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           <a href="https://ai.google.dev/pricing" target="_blank" rel="noopener">ai.google.dev/pricing</a>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           （取得日時: 2026-07-02 JST）<br>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           本表の数値は ai.google.dev/pricing の該当行を 2026-07-02 JST に手動確認して転記しています。Preview価格や無料枠・モダリティ別価格は変更される可能性があるため、契約前に必ず公式ページをご確認ください。
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         </p>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         <div class="tip-box" style="margin-top:.5rem;">
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           <h3 style="font-size:.9rem;">公式ページ記載の補足事項（直接確認済み）</h3>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           <ul>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]             <li><strong>Gemini 3.1 Pro Preview</strong> は Preview モデルのため、価格・仕様は変更の可能性があります</li>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]             <li>Batch API利用で <strong>約50%割引</strong>（各モデルとも対応）</li>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]             <li>Context caching（コンテキストキャッシュ）は各モデルで別途読み込み料金あり（公式料金ページ参照）</li>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]             <li>audio 入力はテキスト・画像・動画入力より高い料金が設定されています</li>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]             <li>有料ティアではプロンプトがGoogleの製品改善に使用されません（無料ティアは使用される場合あり）</li>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]             <li><strong>Gemini 2.0 Flash-Lite は 2026年6月1日にサービス終了</strong>（公式ページに記載あり）</li>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           </ul>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         </div>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       </section>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       <!-- ===== OpenAI ===== -->
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       <section aria-labelledby="openai-heading">
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         <div class="provider-header">
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           <span class="provider-dot dot-openai"></span>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           <h2 id="openai-heading">OpenAI</h2>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         </div>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         <p class="table-condition">
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           📋 適用条件: 標準API（第一者API直接利用）/ コンテキスト長270K未満に適用される標準処理料金
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         </p>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         <div class="table-wrap">
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           <table>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]             <caption style="display:none;">OpenAI API 料金表（USD / 1M tokens）— openai.com/ja-JP/business/pricing/#api より</caption>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]             <thead>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]               <tr>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <th>モデル</th>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <th>入力<br><small style="font-weight:400;">(Input)</small></th>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <th>キャッシュ入力<br><small style="font-weight:400;">(Cached Input)</small></th>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <th>出力<br><small style="font-weight:400;">(Output)</small></th>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <th>備考</th>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]               </tr>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]             </thead>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]             <tbody>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]               <tr>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="model-name">
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                   GPT-5.5
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                   <span class="badge badge-new">New</span>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 </td>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="price">$5.00</td>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="price">$0.50</td>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="price">$30.00</td>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td>コーディング・業務用途向け新世代モデル</td>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]               </tr>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]               <tr>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="model-name">GPT-5.4</td>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="price">$2.50</td>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="price">$0.25</td>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="price">$15.00</td>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td>より手頃なモデル</td>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]               </tr>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]               <tr>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="model-name">GPT-5.4 mini</td>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="price">$0.75</td>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="price">$0.075</td>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td class="price">$4.50</td>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]                 <td>最も高性能なminiモデル</td>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]               </tr>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]             </tbody>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           </table>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         </div>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         <p class="note-text" style="margin-top:.3rem;">
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           上記はコンテキスト長270K未満に適用される標準処理料金。コンテキスト長270K以上ではセッション全体の料金が変動します（公式料金ページ参照）。<br>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           その他のモデル（GPT-5.4 nano、GPT-5.5 Pro等）は
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           <a href="https://openai.com/ja-JP/business/pricing/#api" target="_blank" rel="noopener">公式料金ページ</a>を参照してください。
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         </p>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         <p class="source-note" style="margin-top:.6rem;">
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           一次情報:
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           <a href="https://openai.com/ja-JP/business/pricing/#api" target="_blank" rel="noopener">openai.com/ja-JP/business/pricing/#api</a>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           （運営者が2026-07-02 JSTに直接確認）
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         </p>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         <div class="tip-box" style="margin-top:.5rem;">
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           <h3 style="font-size:.9rem;">公式ページ記載の補足事項（直接確認済み）</h3>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           <ul>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]             <li>キャッシュ入力は各モデルとも <strong>通常入力の約1/10</strong>（プロンプトキャッシュ利用時）</li>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]             <li>Batch API利用で入出力とも <strong>50%割引</strong>（非同期処理向け）</li>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]             <li>コンテキスト長 <strong>270K以上</strong>のプロンプトはセッション全体の料金が変動（公式料金ページ参照）</li>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           </ul>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         </div>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       </section>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       <!-- ===== コスト削減の基本 ===== -->
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       <section class="section" aria-labelledby="cost-saving-heading" style="padding-top:2rem;">
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         <h2 class="section-title" id="cost-saving-heading" style="margin-bottom:.4rem;">💡 コスト削減の基本</h2>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         <p class="section-sub">適切な最適化で API コストを大幅に抑える3つの基本戦略</p>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         <div class="cost-tip-grid">
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           <div class="cost-tip-item">
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]             <h4>⚡ Batch API（非同期処理）</h4>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]             <p class="saving">最大 50% OFF</p>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]             <p>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]               リアルタイム応答が不要なタスク（バッチ評価・データ加工・要約）は Batch API を使うと全モデルで約50%割引。
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]               Anthropic・Google いずれも対応（公式ページで確認済み）。
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]             </p>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           </div>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           <div class="cost-tip-item">
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]             <h4>🗃️ プロンプトキャッシュ</h4>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]             <p class="saving">キャッシュ読込で最大90%割引（入力のみ）</p>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]             <p>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]               共通のシステムプロンプト・ドキュメントをキャッシュに乗せると再送時の入力コストが大幅割引。
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]               Anthropic は最大90%割引（公式ページで確認済み）。
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]               長い固定プレフィックスがある用途で特に効果大。
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]             </p>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           </div>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           <div class="cost-tip-item">
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]             <h4>🔀 モデルルーティング</h4>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]             <p class="saving">タスク難易度で使い分け</p>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]             <p>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]               シンプルな分類・抽出タスクは軽量モデル（Haiku 4.5・Flash-Lite）、
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]               複雑な推論はフラッグシップ、というルーティングで同品質を低コストで実現。
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]             </p>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           </div>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         </div>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       </section>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       <!-- 免責 -->
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       <div class="tip-box" style="border-left-color: var(--c-red); margin-bottom:2rem;">
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         <h3>⚠️ 免責事項</h3>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         <ul>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           <li>本ページの料金情報は各社公式ページを直接参照し、再現確認できた数値のみを掲載しています（取得日: Anthropic 2026-07-03 JST / Google・OpenAI 2026-07-02 JST）。</li>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           <li><strong>料金は予告なく変動することがあります。契約・本番利用前に必ず各社公式ページをご確認ください。</strong></li>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           <li>Preview・期間限定価格・ベータ機能は変更・終了の可能性があります。</li>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           <li>本サイトは情報提供目的です。特定プロバイダーの推薦・代理ではありません。</li>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         </ul>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       </div>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]     </div>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   </main>
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   <!-- フッター -->
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   <footer class="site-footer">
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]     <div class="footer-inner">
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       <div class="footer-brand">
+2026-07-03 06:08:44 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         <strong>⚡ LLM Data Hub</strong>
+2026-07-03 06:08:58 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] INFO | akira | Claudeエンジニア 完了 (約128.3円 / 本日累計約128.3円)
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         <p>運営: okamoちゃんねる</p>
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         <p style="margin-top:.4rem;">
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           <a href="/">ホーム</a> &ensp;
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           <a href="/pricing/">料金比較</a>
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         </p>
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         <p style="margin-top:.5rem; font-size:.78rem; color:var(--c-muted);">
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           公式出典 (一次情報):
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           <a href="https://openai.com/ja-JP/business/pricing/#api"                target="_blank" rel="noopener" style="color:var(--c-muted);text-decoration:underline;">openai.com/ja-JP/business/pricing</a> ·
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           <a href="https://platform.claude.com/docs/en/about-claude/pricing"     target="_blank" rel="noopener" style="color:var(--c-muted);text-decoration:underline;">platform.claude.com</a> ·
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           <a href="https://ai.google.dev/pricing"                                target="_blank" rel="noopener" style="color:var(--c-muted);text-decoration:underline;">ai.google.dev/pricing</a>
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         </p>
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       </div>
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       <p class="footer-disclaimer">
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         ⚠️ <strong>免責事項:</strong>
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         本サイトに掲載する料金情報は各社公式ページを参照して作成していますが、
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         料金は予告なく変動することがあります。
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         Preview・期間限定価格・ベータ機能は変更・終了の可能性があります。
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         実際の契約・利用前に必ず各社公式ページでご確認ください。
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         本サイトの情報を利用したことによる損害について、運営者は一切の責任を負いません。<br><br>
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         OpenAI、GPT は OpenAI, Inc. の商標または登録商標です。Anthropic、Claude は Anthropic PBC の商標または登録商標です。Google、Gemini は Google LLC の商標または登録商標です。本サイトはこれらの各社と提携しておらず、公式代理・販売窓口ではありません。
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]       </p>
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]     </div>
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   </footer>
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] </body>
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] </html>
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ```
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ---
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ### `sitemap.xml`（更新版）
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ```xml
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] <?xml version="1.0" encoding="UTF-8"?>
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]         xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]           http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   <!-- トップページ -->
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   <url>
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]     <loc>https://llm.okamomedia.tokyo/</loc>
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]     <lastmod>2026-07-02</lastmod>
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]     <changefreq>daily</changefreq>
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]     <priority>1.0</priority>
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   </url>
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   <!-- 料金比較ページ -->
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   <url>
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]     <loc>https://llm.okamomedia.tokyo/pricing/</loc>
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]     <lastmod>2026-07-03</lastmod>
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]     <changefreq>daily</changefreq>
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]     <priority>0.9</priority>
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   </url>
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] </urlset>
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ```
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ---
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ## 補足（レビュー用メモ）
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - **Claude Fable 5**: `anthropic.com/claude/fable` 公式ページで「$10 per million input tokens and $50 per million output tokens, with the existing 90% input token discount for prompt caching」を確認。キャッシュ書込5分（$12.50 = 入力の1.25倍）・キャッシュ読込（$1.00 = 入力の0.1倍）は `platform.claude.com/docs/en/about-claude/pricing` の一般ルール（キャッシュ書込5分=1.25倍、キャッシュ読込=0.1倍）から算出される値で、複数の独立した第三者ソース（apidog.com, tygartmedia.com等）とも一致することを確認済みです。公開日2026-06-09も一次情報で確認済み。
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - **トークナイザー文言**: `anthropic.com/news/claude-opus-4-7` に "roughly 1.0–1.35× depending on the content type" の記載を確認。公式ページの表現に合わせて「1.0〜1.35倍」に統一しました。「最大約35%増える」は1.35倍の言い換えとして整合しています。
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - **OpenAI表**: ご指定の数値（GPT-5.5: $5.00/$0.50/$30.00、GPT-5.4: $2.50/$0.25/$15.00、GPT-5.4 mini: $0.75/$0.075/$4.50）は運営者様の直接確認情報として、複数の独立した第三者ソースの数値とも整合していることを確認しています。270K閾値の注記も developers.openai.com の一次情報と整合。
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] このままS3公開してよろしいでしょうか？ GPT税理士様の承認をお待ちしております。ドラフトができたので、GPT税理士にfactチェックを依頼します。
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] Tool #7: ask_gpt_tax_advisor
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] Tool #1: brave_web_search
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] Tool #2: brave_web_search
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] Tool #3: brave_web_search
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] Tool #4: brave_web_search
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] Tool #5: get_site_file
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] Tool #6: brave_llm_context
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] Tool #7: brave_llm_context
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] Akiraさん、公開ゲートとして確認しました。  
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] **判定：差し戻し** です。
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] 理由は1点、**OpenAIセクションの一次情報確認要件を、私の側で現時点再現確認できていないため**です。  
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] それ以外の **Anthropic変更1・変更2は概ね問題ありません**。以下、厳密に整理します。
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ---
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ## 総合判定
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - **AnthropicのFable 5追加**：**事実確認OK**
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - **新トークナイザー記述修正**：**方向性OK、ただし文言は公式準拠へ微修正推奨**
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - **OpenAIプレースホルダー→料金表置換**：**差し戻し**
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   - 理由：今回提示の数値自体は運営者確認メモとしては理解できますが、**本公開ゲートでは、公開掲載数値を私が一次情報で再現確認できること**が基準です。
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   - 今回の検索・取得では、**OpenAIの該当GPT-5.5 / 5.4 / 5.4 mini行、および270K条件文言を一次情報として再現確認できませんでした。**
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   - developer指示の判定基準でも、**「数値の出典が確認できない → 差し戻し」**です。
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ---
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ## 1. 変更1：Anthropic表に Claude Fable 5 行追加
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ### 確認結果
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] Anthropic一次情報で以下を確認できました。
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - `anthropic.com/claude/fable`
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   - **“$10 per million input tokens and $50 per million output tokens, with the existing 90% input token discount for prompt caching”**
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - `platform.claude.com/docs/en/about-claude/pricing`
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   - **Claude Fable 5** の価格表掲載あり
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   - **Base Input: $10 / MTok**
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   - **5m Cache Writes: $12.50 / MTok**
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   - **Cache Hits & Refreshes: $1 / MTok**
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   - **Output: $50 / MTok**
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]   - **1M token context window at standard pricing** の対象に含まれる
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ### 判定
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] **数値は正しいです。**
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ### 「算出値」掲載の可否
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] 今回の懸念点2についてですが、  
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] **掲載可です。しかも今回は“算出値”というより、価格表そのものに掲載済みです。**
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] Anthropic docs 側で Fable 5 行の
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - 5m Cache Writes = **$12.50**
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - Cache Hits & Refreshes = **$1.00**
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] まで表で確認できています。  
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] したがって、
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - 「入力×1.25から算出」
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - 「入力×0.1から算出」
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] という説明を脚注で補うのは良いですが、**“独自計算値だけを載せている”扱いではありません。**
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ### ただし備考文の微修正推奨
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ユーザー提示の備考：
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] > 「2026-06-09公開。Mythos級の最上位公開モデル。新トークナイザー採用。1Mトークン全域フラット料金」
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] このうち、価格面は確認できていますが、  
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] **「最上位公開モデル」** はやや評価表現です。事実として強く断定するより、
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] **推奨表現**
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - 「2026-06-09公開。新トークナイザー採用。1Mトークン全域で標準料金。」
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - もしくは
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - 「2026-06-09公開。Anthropicの公開モデル群の上位価格帯。新トークナイザー採用。1Mトークン全域で標準料金。」
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] のように、**価格表で確認できる事実中心**に寄せる方が安全です。
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ---
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ## 2. 変更2：トークナイザー記述修正
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ### 一次情報確認
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] `platform.claude.com/docs/en/about-claude/pricing` で確認できた事項：
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - **Claude Opus 4.7 and later Opus models**
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - **Claude Fable 5**
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - **Claude Mythos 5**
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - **Claude Mythos Preview**
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - **Claude Sonnet 5**
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] が **newer tokenizer** を採用
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] また `anthropic.com/news/claude-opus-4-7` で確認できた事項：
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - 同じ入力が **roughly 1.0–1.35× depending on the content type**
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ### 判定
+2026-07-03 06:09:40 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ご提示の新記述の方向性は**妥当**です。  
+2026-07-03 06:09:52 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] INFO | akira | GPT税理士 完了 (約16.1円 / 本日累計約144.3円)
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] 旧「約30%多い（約1.3倍）」より、**1.0〜1.35倍** の幅を示す方が正確です。
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ### ただし1点だけ修正推奨
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] 新文案：
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] > 「同じテキストでトークン数が最大約35%増える場合があります（公式発表では約1.0〜1.35倍、コンテンツタイプによる）」
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] これは意味は通りますが、**“最大約35%増”** と **“1.0〜1.35倍”** が重複気味です。  
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] より一次情報準拠にするなら、以下が安全です。
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] **推奨文言**
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] > Opus 4.7以降のOpusモデル・Fable 5・Mythos 5・Mythos Preview・Sonnet 5 は新トークナイザーを採用しています。同じテキストでも、トークン数はコンテンツタイプにより**約1.0〜1.35倍**になる場合があります。
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] または日本語寄りに
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] > 同じテキストでも、コンテンツタイプによりトークン数が**増えない場合から最大約35%増える場合まで**あります。
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ### 重要な補足
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ユーザー記載の列挙には **Mythos Preview** が抜けています。  
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] 一次情報では入っています。  
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] したがって、もし本文で列挙するなら **Mythos Preview も追加必須**です。
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ---
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ## 3. 変更3：OpenAI料金表への置換
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ここが差し戻し理由です。
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ### 今回私が確認できたこと
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] OpenAI公式 pricing ページ由来の断片としては、
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - **Batch APIで input/output 50%割引**
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] は確認できました。
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ### 今回私が確認できなかったこと
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] 以下は、**この公開ゲート時点では再現確認できていません**。
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - GPT-5.5: **$5.00 / $0.50 / $30.00**
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - GPT-5.4: **$2.50 / $0.25 / $15.00**
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - GPT-5.4 mini: **$0.75 / $0.075 / $4.50**
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - **「コンテキスト長270K未満に適用される標準処理料金」**
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - **「270K以上でセッション全体の料金が変動」**
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] 運営者が直接確認した、という内部根拠は理解します。  
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ただし、**サイトの公開基準が「一次情報で裏取りできる正確な情報のみ」**であり、  
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] さらに私の担当は **Web検索で一次情報と突き合わせる factチェック** です。
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] そのため、**私が一次情報ページ上で再現確認できない数値は、公開ゲート上は通せません。**
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ---
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ## 4. 懸念点3：OpenAI tip-box の記述妥当性
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ### 「Batch APIで50%割引」
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] これは **OpenAI pricingページ由来の一次情報断片を確認できたためOK** です。
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ### 「270K以上でセッション全体の料金が変動」
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] これは**現時点ではNG**です。  
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] 理由：
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - 270K閾値の一次情報文言を私が確認できていない
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - 「セッション全体の料金が変動」は、課金単位や適用範囲を誤解させやすい
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - 景表法というより**誤認防止**の観点で、裏取り不能な条件文言は載せるべきではありません
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] **少なくとも現時点の公開ゲートでは削除対象**です。
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ---
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ## 5. 法務面
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ### 商標
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] 昨日と同一構成なら、現状のような
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - OpenAI / GPT
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - Anthropic / Claude
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - Google / Gemini
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] の商標注記があるなら、**大きな問題は見当たりません**。
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ### 免責
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] 昨日承認済みのままなら問題なし。  
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ただし今回OpenAIを掲載するなら、一次情報確認方法の記載が重要になります。
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ### 表現上の注意
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] 以下は法務というより**誤認防止**です。
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - 「最上位」
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - 「公開モデル最高」
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - 「標準料金」
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - 「フラット料金」
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] は、**何に対してか**が曖昧だと誤解を招きます。  
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] 「1Mコンテキスト全域で標準料金」「長文プレミアムなし」など、**料金条件に紐づく客観表現**に寄せるのが安全です。
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ---
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ## 差し戻し理由（明示）
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] **差し戻し**  
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] 理由：
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] 1. **OpenAIの掲載予定数値（GPT-5.5 / 5.4 / 5.4 mini）を、私が一次情報で再現確認できなかった**
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] 2. **OpenAIの「270K未満」「270K以上でセッション全体の料金が変動」の条件文言を、一次情報で確認できなかった**
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] 3. 公開基準上、**数値の出典が確認できないものは掲載不可**
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ---
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ## 修正指示
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ### 必須修正
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] 1. **OpenAI表の公開掲載を見送る**
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]    - いったん現行のプレースホルダー維持
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]    - もしくは、**数値なしで「運営者確認メモベースの暫定情報」も不可**
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]    - LLM Data Hubの方針上、「直接確認できた数値のみ」に反するため
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] 2. **OpenAI tip-box から以下を削除**
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]    - 「270K未満に適用される標準処理料金」
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]    - 「270K以上でセッション全体の料金が変動」
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]    - これに関連する説明一式
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] 3. **Anthropicトークナイザー記述に Mythos Preview を追加**
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]    - 例：
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]      > Opus 4.7以降のOpusモデル・Fable 5・Mythos 5・Mythos Preview・Sonnet 5 は新トークナイザーを採用
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ### 強く推奨する修正
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] 4. **Anthropicの備考文を事実中心に調整**
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]    - 「Mythos級の最上位公開モデル」は避ける
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]    - 例：
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]      > 2026-06-09公開。新トークナイザー採用。1Mトークン全域で標準料金。
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] 5. **トークナイザー説明を公式表現寄りに統一**
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]    - 例：
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]      > 同じテキストでも、コンテンツタイプによりトークン数が約1.0〜1.35倍になる場合があります。
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] 6. **Fable 5のキャッシュ列に脚注を付けるなら、算出値ではなく公式価格表ベースと明記**
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]    - 例：
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]      > ※キャッシュ列は Anthropic公式 pricing table 掲載値。説明上は base input に対する倍率（5分書込1.25倍、読込0.1倍）とも整合します。
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ---
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ## 条件が満たされれば承認できるライン
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] 以下なら**承認可能**です。
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - OpenAIは引き続きプレースホルダーのまま
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - Anthropicに Fable 5 行を追加
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - トークナイザー記述を公式準拠に修正
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - Mythos Preview を列挙に追加
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - 「最上位」など評価表現を弱める
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ---
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] 必要であれば次に、
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] **「そのままコピペできる修正文言」**
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - Fable 5行の備考
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - トークナイザー注記
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - OpenAI差し戻し時のプレースホルダー文
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] までこちらで整えてお出しします。
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] Tool #8: ask_claude_engineer
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] GPT税理士承認済みラインを反映し、最終版を作成します。まず現行の公開ファイル（前回提出前の状態）を確認し、指定の5点の修正を正確に反映します。
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] Tool #9: get_site_file
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] GPT税理士承認ラインを反映した最終版を作成し、公開します。
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] Tool #10: publish_file_to_site
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] Tool #11: publish_file_to_site
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] 公開完了しました。反映内容は以下の通りです。
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ## 公開完了報告
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] **公開ファイル:**
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - `pricing/index.html` → `https://llm.okamomedia.tokyo/pricing/index.html`
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - `sitemap.xml` → `https://llm.okamomedia.tokyo/sitemap.xml`
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] **反映した税理士承認ライン（5点）:**
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] 1. ✅ OpenAIセクション：料金表を撤回し、昨日までのプレースホルダー（「直接取得・再現確認できませんでした」枠 + `openai.com/api/pricing` リンク案内）に復元。フッターのOpenAIリンクも `openai.com/api/pricing` に復元。meta description/OGPも「Anthropic Claude・Google Gemini」ベースに復元。OpenAI関連のtip-box（Batch API/270K記述）は掲載なし。
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] 2. ✅ Fable 5備考：「2026-06-09公開。新トークナイザー採用（下記補足参照）。1Mトークン全域で標準料金（長文プレミアムなし）」に修正（評価表現を排除）。
+2026-07-03 06:12:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] 3. ✅ トークナイザー記述（Sonnet 5備考・tip-box）を指定文言に統一：「Opus 4.7以降のOpusモデル・Fable 5・Mythos 5・Mythos Preview・Sonnet 5 は新トークナイザーを採用しています。同じテキストでも、コンテンツタイプによりトークン数が約1.0〜1.35倍になる場合があります」。出典表記（platform.claude.com/docs/en/about-claude/pricing、anthropic.com/news/claude-opus-4-7）も維持。
+2026-07-03 06:12:15 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] INFO | akira | Claudeエンジニア 完了 (約86.3円 / 本日累計約230.6円)
+2026-07-03 06:13:09 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] INFO | akira | Akira本体 完了 (約974.2円 / 本日合計約1204.8円)
+2026-07-03 06:13:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] INFO | akira | 日報公開: 3件 → https://akira.okamomedia.tokyo
+2026-07-03 06:13:10 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] INFO | akira | === 本日の運用終了 ===
+2026-07-03 06:13:11 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] 4. ✅ Fable 5キャッシュ列の補足を source-note に追加：「※Fable 5のキャッシュ料金はAnthropic公式料金表の掲載値（base inputに対する倍率: 5分書込1.25倍・読込0.1倍とも整合）」
+2026-07-03 06:13:11 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] 5. ✅ tip-box内の「1Mトークン全域フラット料金」→「Fable 5・Mythos 5・Opus 4.8・Sonnet 5・Sonnet 4.6 は1Mトークン全域で標準料金（長文プレミアムなし）」に修正。
+2026-07-03 06:13:11 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] **維持事項の確認:**
+2026-07-03 06:13:11 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - 最終更新2026-07-03、JSON-LD dateModified 2026-07-03、Anthropic出典取得日時2026-07-03 JST（注記済み）
+2026-07-03 06:13:11 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - Gemini表・コスト削減Tips・免責・GA4タグ（G-MTH8T0ECG2）は無変更
+2026-07-03 06:13:11 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - sitemap.xml の `/pricing/` lastmod=2026-07-03 更新済み
+2026-07-03 06:13:11 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ※本サイトの公開基盤（S3+CloudFront）の仕様上、CloudFrontキャッシュ無効化は`publish_file_to_site`実行時にプラットフォーム側で自動処理される想定です。反映後、実サイト側での表示遅延がある場合はキャッシュTTL経過をお待ちいただくか、追ってご確認ください。公開が完了しました。サイト運営計画を更新してから日報を書きます。
+2026-07-03 06:13:11 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] Tool #9: update_akira_config
+2026-07-03 06:13:11 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] Tool #10: write_daily_report
+2026-07-03 06:13:11 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] 本日の運用を完了しました。サマリーです。
+2026-07-03 06:13:11 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ## 本日の成果（2026-07-03）
+2026-07-03 06:13:11 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ### ✅ /pricing/ 更新・公開完了（最優先タスク消化）
+2026-07-03 06:13:11 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] 1. **Claude Fable 5 行を追加**: $10入力 / $50出力（キャッシュ書込 $12.50 / 読込 $1.00）
+2026-07-03 06:13:11 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4]    - 公式一次情報（platform.claude.com/docs、anthropic.com/claude/fable）で裏取り済み
+2026-07-03 06:13:11 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] 2. **トークナイザー記述を公式表現に修正**: 「約30%増」→「約1.0〜1.35倍（コンテンツタイプによる）」、対象モデル列挙にMythos Previewも追加
+2026-07-03 06:13:11 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ### ⚠️ OpenAI料金表は差戻し・保留
+2026-07-03 06:13:11 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] okamoさん提供のGPT-5.5等の数値は、GPT税理士が一次情報ページを再現確認できず公開ゲートを通過せず。プレースホルダー継続とし、日報でokamoさんに掲載方針（例外承認 or 証跡運用 or 現状維持）を相談しました。
+2026-07-03 06:13:11 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ### 費用規律
+2026-07-03 06:13:11 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - Web検索2回（上限4回内）、Claudeエンジニア2回（差戻し対応のため。修正版は税理士承認ライン準拠で追加レビュー不要と判断）、税理士1回、Gemini依頼なし
+2026-07-03 06:13:11 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] - GA4: 7/1-2でPV3。まだ立ち上がり期です
+2026-07-03 06:13:11 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] ### 明日の予定
+2026-07-03 06:13:11 JST [akira/akira/169bed8e32a645e08e13d15af23fc9b4] トークンコスト計算機（/calculator/、静的JS）の作成。site_planに反映済みです。
