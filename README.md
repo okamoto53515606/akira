@@ -2,7 +2,7 @@
 
 Akira（`claude-fable-5`）が毎朝 AWS Fargate 上で自律起動し、「AI/LLM実用データハブ」サイト
 [llm.okamomedia.tokyo](https://llm.okamomedia.tokyo/) を広告なしで運営し続けるためのバッチシステムです。
-リサーチ・作業指示・公開ゲート・GA4/Search Console分析・日報公開までを毎日自動で行い、
+リサーチ・作業指示・レビュー・GA4/Search Console分析・日報公開までを毎日自動で行い、
 運営者の okamo には日報を通じて依頼事項を伝えます。
 
 ## ●プロジェクト概要
@@ -12,8 +12,11 @@ Akira（`claude-fable-5`）が毎朝 AWS Fargate 上で自律起動し、「AI/L
   モデル情報を一次情報（各社公式ページ）ベースで随時更新するデータハブ
 - **運営体制**: Akira自身はFargateタスク内で「リサーチ・指示・レビュー」に徹し、実作業は同一プロセス内で
   strandsのマルチエージェントとして同居する3人のAI（**Claudeエンジニア**=記事執筆・コーディング・
-  S3公開、**GPT税理士**=factチェック・公開ゲート、**Gemini子育てママ**=画像生成・初心者目線のUXレビュー）
-  に「依頼する」という舞台設定で進行する
+  S3公開、**GPT税理士**=価値・PV貢献とfactチェックの2軸で助言するアドバイザー、**Gemini子育てママ**=
+  画像生成・初心者目線のUXレビュー）に「依頼する」という舞台設定で進行する
+- **GPT税理士の立ち位置**: 公開可否を決める「門番」ではなく助言役。クリティカルな問題（明確な誤情報・
+  法的リスク・アダルト/犯罪関連）以外で公開を止めることはなく、軽微な指摘は「課題」として記録し
+  翌日以降に検討する（掲載情報の品質基準自体は下げない）
 - **日報**: 実行結果は [akira.okamomedia.tokyo](https://akira.okamomedia.tokyo/) にHTML日報として一般公開し、
   okamoへの依頼事項があれば必ず記載する。okamoはDynamoDB上のコメント欄に直接返信できる
 - **予算ガード**: LLM費用（AWS実行費は含まない）はハードリミット月額9,300円のみ。使い切ったら当月停止し
@@ -73,7 +76,7 @@ Secrets Manager共有のみの疎結合。
 |---|---|---|
 | Akira本体 | `claude-fable-5`（Anthropic, $10/$50 per 1Mトークン） | リサーチ計画・3AIへの作業依頼・GA4/BigQuery分析・日報執筆 |
 | Claudeエンジニア | `claude-sonnet-5`（Anthropic, 導入価格 $2/$10、2026-08-31まで。以降$3/$15に自動切替） | 記事執筆・コーディング・S3への公開作業 |
-| GPT税理士 | `gpt-5.4`（OpenAI, $1.25/$10） | 内容・法務・factチェックと公開可否のゲート判定 |
+| GPT税理士 | `gpt-5.4`（OpenAI, $1.25/$10） | 価値・PV貢献の助言とfactチェック（門番ではなくアドバイザー） |
 | Gemini子育てママ | `gemini-3.5-flash`（テキスト, $0.30/$2.50）/ `gemini-3.1-flash-image`（画像生成, $0.30/$2.50 + 画像$0.05/枚） | OGP・記事画像の生成、初心者目線のUXレビュー |
 
 料金・モデルIDは [settings.py](settings.py) の `MODEL_PRICING_USD` で一元管理し、[budget.py](budget.py) が
@@ -134,7 +137,7 @@ uv run python main.py --dry-run   # 公開せず計画のみ出力
 
 ### Akiraの日報 — <https://akira.okamomedia.tokyo/>
 
-Akiraが毎朝の作業内容・費用・GPT税理士の判定・okamoへの依頼事項を公開するHTML日報です。
+Akiraが毎朝の作業内容・費用・GPT税理士のレビュー・okamoへの依頼事項を公開するHTML日報です。
 
 ![Akira日報（2026-07-02）](docs/screenshot/akira-report-2026-07-02.png)
 
