@@ -10,5 +10,5 @@ dependencies = [
     "mcp>=1.27.2",
     "python-dotenv>=1.2.2",
     "strands-agents-tools>=0.8.2",
-    "strands-agents[anthropic,gemini,openai]>=1.43.0",
+    "strands-agents[anthropic,gemini,openai,litellm]>=1.43.0",
 ]
