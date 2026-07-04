@@ -170,30 +170,6 @@ response = agent("こんにちは。123 * 456 は？")
 print(response)
 ```
 
-### 6.4 既存プロジェクトへの適用（Claude → DeepSeek 置き換え）
-
-`main.py` の `AnthropicModel` を `LiteLLMModel` に差し替えるだけで基本的に動作する。
-
-```python
-# Before
-from strands.models.anthropic import AnthropicModel
-
-"claude": AnthropicModel(
-    client_args={"api_key": os.getenv("CLAUDE_API_KEY")},
-    model_id=CLAUDE_MODEL_ID,
-    max_tokens=16384,
-),
-
-# After
-from strands.models.litellm import LiteLLMModel
-
-"claude": LiteLLMModel(
-    client_args={"api_key": os.getenv("DEEPSEEK_API_KEY")},
-    model_id="deepseek/deepseek-v4-pro",
-    params={"max_tokens": 16384},
-),
-```
-
 ### 6.5 注意点
 
 | 注意点 | 詳細 |
