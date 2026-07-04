@@ -212,7 +212,7 @@ from strands.models.litellm import LiteLLMModel
 - 完全な**プリペイド方式**（手動チャージのみ）
 - **オートチャージ機能はなし**
 - 最低チャージ額: $2
-- 支払い方法: PayPal、銀行カード、Alipay、WeChat Pay
+- 支払い方法: PayPal、クレジットカード（VISA/mastercard）
 - チャージ残高に有効期限なし
 
 ### 7.2 Balance Alert 設定
@@ -235,20 +235,6 @@ from strands.models.litellm import LiteLLMModel
 | それ以外 | — | 通常 |
 
 日本時間の日中〜夕方がピーク。夜間〜早朝の実行がお得。
-
----
-
-## 8. ECR デプロイ実績
-
-Akira プロジェクトの Docker イメージ（litellm 含む）を ECR に push 済み。
-
-```
-ECR URI: 210387976006.dkr.ecr.us-east-1.amazonaws.com/akira:latest
-Digest:  sha256:842ab478bda8566f3bd8b464c49de55619029d234723c110715c9588001e4403
-```
-
-EventBridge Scheduler により毎朝 6:00 JST に Fargate タスクが自動起動され、
-最新イメージが pull される。
 
 ---
 
