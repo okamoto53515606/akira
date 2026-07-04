@@ -14,15 +14,12 @@ AWS_REGION = os.getenv("AWS_REGION", "us-east-1")
 # --- AWSリソース ---
 LLM_SITE_BUCKET = os.getenv("LLM_SITE_BUCKET", "akira-llm-site")
 REPORTS_BUCKET = os.getenv("REPORTS_BUCKET", "akira-reports-site")
-LLM_DIST_ID = os.getenv("LLM_DIST_ID", "E1V1Y3U21T20G")
-REPORTS_DIST_ID = os.getenv("REPORTS_DIST_ID", "E1PETXZ81SSGJS")
+LLM_DIST_ID = os.getenv("LLM_DIST_ID", "")
+REPORTS_DIST_ID = os.getenv("REPORTS_DIST_ID", "")
 USAGE_TABLE = os.getenv("USAGE_TABLE", "akira-usage")
 REPORTS_TABLE = os.getenv("REPORTS_TABLE", "akira-reports")
 CONFIG_TABLE = os.getenv("CONFIG_TABLE", "akira-config")
-SECRET_ARN = os.getenv(
-    "SECRET_ARN",
-    "arn:aws:secretsmanager:us-east-1:210387976006:secret:okamo-channel/secrets-3GPwNw",
-)
+SECRET_ARN = os.getenv("SECRET_ARN", "")
 
 # --- サイト ---
 LLM_SITE_URL = "https://llm.okamomedia.tokyo"
@@ -55,8 +52,8 @@ GEMINI_MODEL_ID = os.getenv("GEMINI_MODEL_ID", "gemini-3.5-flash")
 IMAGE_MODEL_ID = os.getenv("BANNER_MODEL", "gemini-3.1-flash-image")
 
 # --- 機能フラグ ---
-ENABLE_GA4_MCP = os.getenv("ENABLE_GA4_MCP", "false").lower() == "true"
-ENABLE_BIGQUERY_MCP = os.getenv("ENABLE_BIGQUERY_MCP", "false").lower() == "true"
+ENABLE_GA4_MCP = os.getenv("ENABLE_GA4_MCP", "true").lower() == "true"
+ENABLE_BIGQUERY_MCP = os.getenv("ENABLE_BIGQUERY_MCP", "true").lower() == "true"
 GOOGLE_BIGQUERY_PROJECT = os.getenv("GOOGLE_BIGQUERY_PROJECT", os.getenv("GOOGLE_CLOUD_PROJECT", ""))
 
 # LLMのツール/MCP呼び出しの詳細ログをCloudWatchへ出力するか（異常挙動監視のため一時的にtrue）。
@@ -72,6 +69,11 @@ def load_secrets_into_env() -> None:
     required = ["CLAUDE_API_KEY", "OPENAI_API_KEY", "GEMINI_API_KEY", "BRAVE_API_KEY"]
     if all(os.getenv(k) for k in required):
         return
+    if not SECRET_ARN:
+        raise RuntimeError(
+            "SECRET_ARN が設定されていません。環境変数 SECRET_ARN に "
+            "Secrets Manager の ARN を指定してください。"
+        )
     client = boto3.client("secretsmanager", region_name=AWS_REGION)
     secret = json.loads(client.get_secret_value(SecretId=SECRET_ARN)["SecretString"])
     for key, value in secret.items():
