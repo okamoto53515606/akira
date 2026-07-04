@@ -20,7 +20,7 @@
 | 要件 | 詳細 |
 |------|------|
 | VS Code | 1.116 以上 |
-| GitHub Copilot | Free / Pro / Enterprise（無料枠でも可） |
+| GitHub Copilot | Free / Pro / Pro+ / Max |
 | DeepSeek API キー | [platform.deepseek.com](https://platform.deepseek.com/) で取得（`sk-` で始まる） |
 | 拡張機能 | [DeepSeek V4 for Copilot Chat](https://marketplace.visualstudio.com/items?itemName=Vizards.deepseek-v4-for-copilot) |
 
