@@ -224,17 +224,20 @@ def take_screenshot(url: str, site_path: str = "", wait_until: str = "page_loade
     戻り値の path を image_reader ツールに渡すとLLMが画像を視認できる。
     UXチェックやデザイン確認などの「見た目を判断する」用途に使う。
 
+    site_path を指定した場合のみS3にも公開する（指定なしならローカルパスのみ返す）。
     無料枠（月100枚まで）で運用中。エラー時は "FREE_TIER_EXHAUSTED" の可能性あり。
 
     Args:
         url: スクリーンショット対象のURL（必須）
-        site_path: サイト保存先パス（例: "okamo/2026-07-06_openai.png"）。空文字なら自動生成
+        site_path: サイト保存先パス（例: "okamo/2026-07-06_openai.png"）。
+                   指定した場合のみS3公開される。未指定ならローカルのみ
         wait_until: ページ読み込み待機条件。デフォルト "page_loaded"
         width: ビューポート幅（デフォルト1280）
         height: ビューポート高さ（デフォルト720）
 
     Returns:
-        dict: path（ローカルファイルパス。image_readerに渡す）と url（公開URL）を含む。失敗時は reason
+        dict: path（ローカルファイルパス。image_readerに渡す）。
+              site_path指定時は url（公開URL）も含む。失敗時は reason
     """
     import tempfile
     import urllib.request
@@ -271,26 +274,18 @@ def take_screenshot(url: str, site_path: str = "", wait_until: str = "page_loade
             f.write(image_bytes)
             local_path = f.name
 
-        # S3にも保存（公開用）
-        if not site_path:
-            from urllib.parse import urlparse
-            from datetime import datetime, timezone, timedelta
-            jst = timezone(timedelta(hours=9))
-            today = datetime.now(jst).strftime("%Y-%m-%d")
-            domain = urlparse(url).netloc.replace(".", "_")
-            site_path = f"okamo/{today}_{domain}_{width}x{height}.png"
+        result: dict = {"status": "published", "path": local_path}
 
-        site_path = site_path.lstrip("/")
-        s3 = boto3.client("s3", region_name=AWS_REGION)
-        s3.put_object(Bucket=LLM_SITE_BUCKET, Key=site_path, Body=image_bytes,
-                      ContentType="image/png")
-        _invalidation_paths.append(f"/{site_path}")
+        # S3公開は site_path 指定時のみ
+        if site_path:
+            site_path = site_path.lstrip("/")
+            s3 = boto3.client("s3", region_name=AWS_REGION)
+            s3.put_object(Bucket=LLM_SITE_BUCKET, Key=site_path, Body=image_bytes,
+                          ContentType="image/png")
+            _invalidation_paths.append(f"/{site_path}")
+            result["url"] = f"{LLM_SITE_URL}/{site_path}"
 
-        return {
-            "status": "published",
-            "path": local_path,
-            "url": f"{LLM_SITE_URL}/{site_path}",
-        }
+        return result
 
     except urllib.error.HTTPError as e:
         body = e.read().decode("utf-8", errors="replace")[:500]
