@@ -106,6 +106,51 @@ def _create_brave_mcp():
     )
 
 
+def _create_firecrawl_mcp():
+    """Firecrawl MCP — Webページのスクレイピング・検索（無料枠あり。エラー時はクォータ超過の可能性）。
+
+    JSレンダリングが必要なSPAページ（OpenAI料金ページ等）の本文取得に特に有用。
+    Brave Searchでは取得できないページ内容の詳細抽出に使う。
+    """
+    from mcp import StdioServerParameters, stdio_client
+    from strands.tools.mcp import MCPClient
+
+    key = os.getenv("FIRECRAWL_API_KEY", "")
+    if not key:
+        logger.warning("FIRECRAWL_API_KEY が未設定のため Firecrawl MCP はスキップされます")
+        return None
+    return MCPClient(
+        lambda: stdio_client(
+            StdioServerParameters(
+                command="npx",
+                args=["-y", "firecrawl-mcp"],
+                env={"FIRECRAWL_API_KEY": key},
+            )
+        )
+    )
+
+
+def _create_github_mcp():
+    """GitHub MCP（Streamable HTTP）— 公開リポジトリの読み取り専用アクセス。
+
+    GITHUB_PAT_READ_ONLY_PUBLIC は Secrets Manager から load_secrets_into_env() で
+    環境変数に展開される前提。
+    """
+    from strands.tools.mcp import MCPClient
+    from mcp.client.streamable_http import streamablehttp_client
+
+    pat = os.getenv("GITHUB_PAT_READ_ONLY_PUBLIC", "")
+    if not pat:
+        logger.warning("GITHUB_PAT_READ_ONLY_PUBLIC が未設定のため GitHub MCP はスキップされます")
+        return None
+    return MCPClient(
+        lambda: streamablehttp_client(
+            url="https://api.githubcopilot.com/mcp/",
+            headers={"Authorization": f"Bearer {pat}"},
+        )
+    )
+
+
 def _wi_env() -> dict:
     """Workload Identity用の環境変数セットを作る。"""
     import boto3
@@ -180,21 +225,43 @@ def create_delegation_tools(models, run_budget_jpy: float):
     # GPT税理士・Gemini子育てママを先に作る（Claudeエンジニアが自分のツールとして使うため）。
     # これによりAkira(高額な$10/$50モデル)が毎回レビュー往復を仲介せずに済み、
     # 安価なClaudeエンジニア($2/$10導入価格)の会話内で完結させてコストを最適化する。
+
+    # --- 共通WEBツール（全員に配布）---
+    firecrawl = _create_firecrawl_mcp()
+    brave = _create_brave_mcp()
+    screenshot_tool = akira_tools.take_screenshot
+    fetch_image = akira_tools.fetch_image_from_url
+
+    # Firecrawl/Braveの無料枠注意文（ツール説明に含める）
+    _web_tool_note = (
+        "※無料枠で運用中。APIクォータ超過エラーが出た場合は別のツール（Brave/Firecrawl相互）で補完すること。"
+    )
+
+    gpt_tools = [akira_tools.get_site_file, akira_tools.list_site_files, brave,
+                 screenshot_tool, fetch_image]
+    if firecrawl:
+        gpt_tools.append(firecrawl)
     gpt_agent = Agent(
         name="gpt_tax_advisor",
         model=models["gpt"],
         system_prompt=prompts.GPT_TAX_ADVISOR_PROMPT,
-        tools=[akira_tools.get_site_file, akira_tools.list_site_files, _create_brave_mcp()],
+        tools=gpt_tools,
     )
+    gemini_tools = [
+        akira_tools.generate_and_publish_image,
+        akira_tools.get_site_file,
+        akira_tools.list_site_files,
+        brave,
+        screenshot_tool,
+        fetch_image,
+    ]
+    if firecrawl:
+        gemini_tools.append(firecrawl)
     gemini_agent = Agent(
         name="gemini_mother",
         model=models["gemini"],
         system_prompt=prompts.GEMINI_MOTHER_PROMPT,
-        tools=[
-            akira_tools.generate_and_publish_image,
-            akira_tools.get_site_file,
-            akira_tools.list_site_files,
-        ],
+        tools=gemini_tools,
     )
 
     @tool
@@ -215,20 +282,40 @@ def create_delegation_tools(models, run_budget_jpy: float):
         """
         return _run(gemini_agent, GEMINI_MODEL_ID, "Gemini子育てママ", request)
 
+    # Claudeエンジニアの追加ツール（オプショナル）
+    claude_tools = [
+        akira_tools.publish_file_to_site,
+        akira_tools.get_site_file,
+        akira_tools.list_site_files,
+        akira_tools.update_akira_config,
+        brave,
+        screenshot_tool,
+        fetch_image,
+        ask_gpt_tax_advisor,
+        ask_gemini_mother,
+    ]
+    if firecrawl:
+        claude_tools.append(firecrawl)
+    # GitHub MCP（公開リポジトリ読み取り専用）
+    github = _create_github_mcp()
+    if github:
+        claude_tools.append(github)
+
+    # shell / editor / file_read / file_write（Claudeエンジニアのみ。BYPASS_TOOL_CONSENT=true 要）
+    try:
+        from strands_tools import shell, editor, file_read, file_write
+        claude_tools.extend([shell, editor, file_read, file_write])
+        logger.info("Claudeエンジニアに shell/editor/file_* ツールを追加しました")
+    except ImportError:
+        logger.warning("strands_tools が利用できないため shell/editor/file_* は追加しません")
+
     claude_agent = Agent(
         name="claude_engineer",
         model=models["claude"],
         system_prompt=prompts.CLAUDE_ENGINEER_PROMPT,
-        tools=[
-            akira_tools.publish_file_to_site,
-            akira_tools.get_site_file,
-            akira_tools.list_site_files,
-            akira_tools.update_akira_config,
-            _create_brave_mcp(),
-            ask_gpt_tax_advisor,
-            ask_gemini_mother,
-        ],
+        tools=claude_tools,
     )
+
 
     @tool
     def ask_claude_engineer(request: str) -> str:
@@ -287,6 +374,12 @@ DAILY_MISSION_TEMPLATE = """今日は {today} です。LLM Data Hub（{site_url}
 
 ## 予算状況
 {budget_line}
+
+## 利用可能なWEBツール（すべて無料枠。factチェックはBrave→Firecrawlの順で）
+- Brave Search（Web検索。factチェック第一選択）/ Firecrawl（URL指定でMarkdown取得。JSサイト対応。第二選択）
+- take_screenshot（ApiFlashで画面キャプチャ・LLM視認可能。UX/デザイン確認用。月100枚無料）
+- fetch_image_from_url（指定URLの画像をLLM視認可能形式で取得）
+- GitHub MCP（公開リポジトリ読み取り専用）
 
 ## 本日の進め方（コスト最適化: あなた自身の高額な呼び出し回数を最小限にする）
 1. list_site_files で現在のサイト状態を軽く確認する（大きいHTMLは読まない）
@@ -367,20 +460,32 @@ def run_daily(dry_run: bool = False) -> None:
         akira_extra_tools.append(_create_bigquery_mcp())
 
     delegation = create_delegation_tools(models, run_budget_jpy=budget_status["remaining_jpy"])
+
+    # Akira自身のツール（delegation + 直接使うツール）
+    akira_tools_list = [
+        *delegation,
+        akira_tools.get_site_file,
+        akira_tools.list_site_files,
+        akira_tools.get_budget_status,
+        akira_tools.update_akira_config,
+        create_report_tool(collected),
+        _create_brave_mcp(),
+        akira_tools.take_screenshot,
+        akira_tools.fetch_image_from_url,
+        *akira_extra_tools,
+    ]
+    firecrawl = _create_firecrawl_mcp()
+    if firecrawl:
+        akira_tools_list.append(firecrawl)
+    github = _create_github_mcp()
+    if github:
+        akira_tools_list.append(github)
+
     akira = Agent(
         name="akira",
         model=models["akira"],
         system_prompt=system_prompt,
-        tools=[
-            *delegation,
-            akira_tools.get_site_file,
-            akira_tools.list_site_files,
-            akira_tools.get_budget_status,
-            akira_tools.update_akira_config,
-            create_report_tool(collected),
-            _create_brave_mcp(),
-            *akira_extra_tools,
-        ],
+        tools=akira_tools_list,
     )
 
     budget_line = (

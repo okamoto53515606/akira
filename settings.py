@@ -60,13 +60,18 @@ GOOGLE_BIGQUERY_PROJECT = os.getenv("GOOGLE_BIGQUERY_PROJECT", os.getenv("GOOGLE
 # 不要になったらタスク定義の環境変数を "false" にして再デプロイすれば止められる
 DEBUG_TOOL_LOGGING = os.getenv("DEBUG_TOOL_LOGGING", "true").lower() == "true"
 
+# --- APIキー（環境変数から直接）---
+FIRECRAWL_API_KEY = os.getenv("FIRECRAWL_API_KEY", "")
+APIFLASH_ACCESS_KEY = os.getenv("APIFLASH_ACCESS_KEY", "")
+
 
 def load_secrets_into_env() -> None:
     """Secrets ManagerのAPIキー類を環境変数へ展開する（未設定のもののみ）。
 
     ローカルでは .env が先に読み込まれている前提。Fargateではここで取得する。
     """
-    required = ["CLAUDE_API_KEY", "OPENAI_API_KEY", "GEMINI_API_KEY", "BRAVE_API_KEY"]
+    required = ["CLAUDE_API_KEY", "OPENAI_API_KEY", "GEMINI_API_KEY", "BRAVE_API_KEY",
+                "GITHUB_PAT_READ_ONLY_PUBLIC"]
     if all(os.getenv(k) for k in required):
         return
     if not SECRET_ARN:

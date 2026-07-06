@@ -27,11 +27,13 @@ RUN uv sync --frozen --no-dev --no-install-project
 COPY main.py settings.py budget.py config_store.py tools.py prompts.py report.py ./
 COPY gcp-workload-config-template.json ./
 
-# npx の Brave Search MCP を事前キャッシュ
+# npx の Brave Search MCP と Firecrawl MCP を事前キャッシュ
 RUN npx -y @brave/brave-search-mcp-server --help 2>/dev/null || true
+RUN npx -y firecrawl-mcp --help 2>/dev/null || true
 
 ENV PATH="/app/.venv/bin:$PATH" \
-    GCP_WORKLOAD_IDENTITY_TEMPLATE="/app/gcp-workload-config-template.json"
+    GCP_WORKLOAD_IDENTITY_TEMPLATE="/app/gcp-workload-config-template.json" \
+    BYPASS_TOOL_CONSENT=true
 
 # APIキーは実行時にSecrets Managerから取得（イメージに含めない）
 ENTRYPOINT ["python", "main.py"]
