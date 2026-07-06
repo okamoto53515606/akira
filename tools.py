@@ -47,8 +47,6 @@ def _content_type(path: str) -> str:
 def publish_file_to_site(path: str, content: str) -> dict:
     """llm.okamomedia.tokyo のサイトにテキストファイル（HTML/CSS/JS/JSON等）を公開する。
 
-    GPT税理士の承認を得たコンテンツのみ公開すること。
-
     Args:
         path: サイト内パス（例: "index.html", "pricing/index.html", "assets/style.css"）
         content: ファイルの中身（テキスト）
@@ -175,8 +173,6 @@ def _configure_gcp_keyless_env() -> str:
 @tool
 def generate_and_publish_image(purpose: str, site_path: str) -> dict:
     """画像を生成してサイトに公開する（Gemini子育てママ用ツール）。
-
-    画像生成は費用がかかるため、本当に必要な時だけ使うこと。
 
     Args:
         purpose: 画像の目的・内容（例: "LLM料金比較ページのOGP画像。サイト名 LLM Data Hub を含む"）
