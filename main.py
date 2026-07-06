@@ -231,6 +231,7 @@ def create_delegation_tools(models, run_budget_jpy: float):
     brave = _create_brave_mcp()
     screenshot_tool = akira_tools.take_screenshot
     fetch_image = akira_tools.fetch_image_from_url
+    from strands_tools import image_reader
 
     # Firecrawl/Braveの無料枠注意文（ツール説明に含める）
     _web_tool_note = (
@@ -238,7 +239,7 @@ def create_delegation_tools(models, run_budget_jpy: float):
     )
 
     gpt_tools = [akira_tools.get_site_file, akira_tools.list_site_files, brave,
-                 screenshot_tool, fetch_image]
+                 screenshot_tool, fetch_image, image_reader]
     if firecrawl:
         gpt_tools.append(firecrawl)
     gpt_agent = Agent(
@@ -254,6 +255,7 @@ def create_delegation_tools(models, run_budget_jpy: float):
         brave,
         screenshot_tool,
         fetch_image,
+        image_reader,
     ]
     if firecrawl:
         gemini_tools.append(firecrawl)
@@ -291,6 +293,7 @@ def create_delegation_tools(models, run_budget_jpy: float):
         brave,
         screenshot_tool,
         fetch_image,
+        image_reader,
         ask_gpt_tax_advisor,
         ask_gemini_mother,
     ]
@@ -377,8 +380,9 @@ DAILY_MISSION_TEMPLATE = """今日は {today} です。LLM Data Hub（{site_url}
 
 ## 利用可能なWEBツール（すべて無料枠。factチェックはBrave→Firecrawlの順で）
 - Brave Search（Web検索。factチェック第一選択）/ Firecrawl（URL指定でMarkdown取得。JSサイト対応。第二選択）
-- take_screenshot（ApiFlashで画面キャプチャ・LLM視認可能。UX/デザイン確認用。月100枚無料）
-- fetch_image_from_url（指定URLの画像をLLM視認可能形式で取得）
+- take_screenshot（ApiFlashで画面キャプチャ→ローカルパス返却。image_readerに渡して視認。UX/デザイン確認用。月100枚無料）
+- image_reader（ローカル画像パス→LLM視認可能形式に変換。strands標準ツール）
+- fetch_image_from_url（指定URLの画像を直接取得・LLM視認可能形式で返す）
 - GitHub MCP（公開リポジトリ読み取り専用）
 
 ## 本日の進め方（コスト最適化: あなた自身の高額な呼び出し回数を最小限にする）
@@ -462,6 +466,7 @@ def run_daily(dry_run: bool = False) -> None:
     delegation = create_delegation_tools(models, run_budget_jpy=budget_status["remaining_jpy"])
 
     # Akira自身のツール（delegation + 直接使うツール）
+    from strands_tools import image_reader
     akira_tools_list = [
         *delegation,
         akira_tools.get_site_file,
@@ -472,6 +477,7 @@ def run_daily(dry_run: bool = False) -> None:
         _create_brave_mcp(),
         akira_tools.take_screenshot,
         akira_tools.fetch_image_from_url,
+        image_reader,
         *akira_extra_tools,
     ]
     firecrawl = _create_firecrawl_mcp()

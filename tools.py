@@ -220,9 +220,9 @@ def generate_and_publish_image(purpose: str, site_path: str) -> dict:
 @tool
 def take_screenshot(url: str, site_path: str = "", wait_until: str = "page_loaded",
                     width: int = 1280, height: int = 720) -> dict:
-    """指定URLのスクリーンショットをApiFlashで取得し、LLMが視認可能な形式で返す。
+    """指定URLのスクリーンショットをApiFlashで取得し、ローカルに保存する。
+    戻り値の path を image_reader ツールに渡すとLLMが画像を視認できる。
     UXチェックやデザイン確認などの「見た目を判断する」用途に使う。
-    factチェックには使わないこと（factチェックはBrave Search/Firecrawlで行う）。
 
     無料枠（月100枚まで）で運用中。エラー時は "FREE_TIER_EXHAUSTED" の可能性あり。
 
@@ -234,13 +234,11 @@ def take_screenshot(url: str, site_path: str = "", wait_until: str = "page_loade
         height: ビューポート高さ（デフォルト720）
 
     Returns:
-        dict: image（LLM視認用）と url（公開URL）を含む。失敗時は reason
+        dict: path（ローカルファイルパス。image_readerに渡す）と url（公開URL）を含む。失敗時は reason
     """
     import tempfile
     import urllib.request
     import urllib.parse
-    from strands_tools import image_reader as _image_reader_module
-    _image_reader = _image_reader_module.image_reader
 
     access_key = os.getenv("APIFLASH_ACCESS_KEY", "")
     if not access_key:
@@ -268,14 +266,10 @@ def take_screenshot(url: str, site_path: str = "", wait_until: str = "page_loade
             except (json.JSONDecodeError, UnicodeDecodeError):
                 pass
 
-        # 一時ファイルに保存 → image_reader で LLM 視認可能形式に変換
+        # ローカル一時ファイルに保存（image_reader に渡す用）
         with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as f:
             f.write(image_bytes)
-            tmp_path = f.name
-        try:
-            image_result = _image_reader({"toolUseId": "tmp", "input": {"image_path": tmp_path}})
-        finally:
-            os.unlink(tmp_path)
+            local_path = f.name
 
         # S3にも保存（公開用）
         if not site_path:
@@ -294,7 +288,7 @@ def take_screenshot(url: str, site_path: str = "", wait_until: str = "page_loade
 
         return {
             "status": "published",
-            "image": image_result.get("image", image_result),
+            "path": local_path,
             "url": f"{LLM_SITE_URL}/{site_path}",
         }
 
@@ -310,24 +304,27 @@ def take_screenshot(url: str, site_path: str = "", wait_until: str = "page_loade
 
 @tool
 def fetch_image_from_url(image_url: str) -> dict:
-    """指定URLの画像を取得し、LLMが視認可能な形式で返す。
-    対応フォーマット: PNG, JPEG, GIF, WebP。
-    Webページ内の画像やロゴ・図版の確認に使う。
+    """URLから画像を取得し、Converse API形式（生バイナリ）で返す。
+    image_reader はローカルファイルのみ対応のため、Web上の画像はURLから
+    直接ダウンロードして一時ファイルに保存し、image_reader に渡す。
+    image_reader が PIL でフォーマット検出と変換を行う。
+    対応フォーマット: PNG, JPEG, GIF, WebP
 
     Args:
         image_url: 画像のURL（必須）
 
     Returns:
-        dict: LLM視認可能な画像データ。失敗時は reason
+        dict: LLM視認可能な画像データ（image_reader の生の戻り値）
     """
     import tempfile
     import requests
     from strands_tools import image_reader as _image_reader_module
     _image_reader = _image_reader_module.image_reader
 
-    resp = requests.get(image_url, timeout=30)
-    resp.raise_for_status()
-    content_type = resp.headers.get("Content-Type", "image/png").split(";")[0].strip()
+    content_type = ""
+    response = requests.get(image_url, timeout=30)
+    response.raise_for_status()
+    content_type = response.headers.get("Content-Type", "image/png").split(";")[0].strip()
 
     ext_map = {
         "image/png": ".png",
@@ -339,13 +336,12 @@ def fetch_image_from_url(image_url: str) -> dict:
     ext = ext_map.get(content_type, ".png")
 
     with tempfile.NamedTemporaryFile(suffix=ext, delete=False) as f:
-        f.write(resp.content)
+        f.write(response.content)
         tmp_path = f.name
 
     try:
         result = _image_reader({"toolUseId": "tmp", "input": {"image_path": tmp_path}})
-        return {"status": "ok", "image": result.get("image", result)}
-    except Exception as e:
-        return {"status": "failed", "reason": str(e)}
     finally:
         os.unlink(tmp_path)
+
+    return result
