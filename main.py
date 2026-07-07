@@ -348,7 +348,7 @@ def create_report_tool(collected: dict):
         Args:
             body_md: 日報本文（Markdown）。やったこと・サイトの状況・明日の予定など。
                      機密情報（APIキー等）は絶対に書かないこと
-            requests_to_okamo: okamoさんへの依頼事項（なければ空文字）
+            requests_to_okamo: okamoへの依頼事項（なければ空文字）
         """
         collected["body_md"] = body_md
         collected["requests_to_okamo"] = requests_to_okamo
@@ -396,7 +396,7 @@ DAILY_MISSION_TEMPLATE = """今日は {today} です。LLM Data Hub（{site_url}
    よほど気になる点がない限り、あなた自身がask_gpt_tax_advisor/ask_gemini_motherを直接呼ぶ必要はない
    （呼ぶと高額なあなたの会話履歴が伸びてコスト増になるため、通常はClaudeエンジニアに任せる）
 5. 最後に write_daily_report で日報を書く（Claudeエンジニアの報告をもとにまとめる。
-   okamoさんへの依頼事項があれば必ず記載）
+   okamoへの依頼事項があれば必ず書け。黙ってちゃ伝わらんぞ）
 
 ## 注意（重要）
 - あなた(Akira)の単価は $10/$50 per MTok と圧倒的に高額（Claudeエンジニアの5倍以上）。
@@ -450,7 +450,7 @@ def run_daily(dry_run: bool = False) -> None:
     # okamoの直近コメント（日報へのフィードバック）をミッションに含める
     comments = report.get_recent_comments(days=7)
     if comments:
-        system_prompt += "\n\n## okamoさんからの直近コメント（必ず考慮すること）\n" + "\n".join(
+        system_prompt += "\n\n## okamoからの直近コメント（必ず考慮しろ）\n" + "\n".join(
             f"- [{c['date']}] {c['text']}" for c in comments
         )
 

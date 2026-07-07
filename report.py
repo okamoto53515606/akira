@@ -181,7 +181,7 @@ def render_report_page(item: dict) -> str:
     requests_html = ""
     if item.get("requests_to_okamo", "").strip():
         requests_html = (
-            '<h2>okamoさんへの依頼事項</h2><div class="requests">'
+            '<h2>okamoへの依頼事項</h2><div class="requests">'
             + _md_to_html(item["requests_to_okamo"])
             + "</div>"
         )
