@@ -40,6 +40,7 @@ MODEL_PRICING_USD: dict[str, tuple[float, float]] = {
     "gpt-5.4": (1.25, 10.0),
     "gemini-3.5-flash": (0.30, 2.50),
     "gemini-3.1-flash-image": (0.30, 2.50),
+    "deepseek-v4-pro": (0.435, 0.87),  # DeepSeek V4 Pro プロモ価格（通常 $1.74/$3.48）
 }
 DEFAULT_PRICING_USD = (10.0, 50.0)
 IMAGE_PRICE_USD = float(os.getenv("IMAGE_PRICE_USD", "0.05"))  # 生成画像1枚あたり
@@ -50,6 +51,7 @@ CLAUDE_MODEL_ID = os.getenv("CLAUDE_MODEL_ID", "claude-sonnet-5")
 OPENAI_MODEL_ID = os.getenv("OPEN_AI_MODEL_ID", "gpt-5.4")
 GEMINI_MODEL_ID = os.getenv("GEMINI_MODEL_ID", "gemini-3.5-flash")
 IMAGE_MODEL_ID = os.getenv("BANNER_MODEL", "gemini-3.1-flash-image")
+DEEPSEEK_MODEL_ID = os.getenv("DEEPSEEK_MODEL_ID", "deepseek-v4-pro")
 
 # --- 機能フラグ ---
 ENABLE_GA4_MCP = os.getenv("ENABLE_GA4_MCP", "true").lower() == "true"

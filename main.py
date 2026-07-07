@@ -29,6 +29,7 @@ from settings import (
     AKIRA_MODEL_ID,
     CLAUDE_MODEL_ID,
     DEBUG_TOOL_LOGGING,
+    DEEPSEEK_MODEL_ID,
     ENABLE_BIGQUERY_MCP,
     ENABLE_GA4_MCP,
     GEMINI_MODEL_ID,
@@ -51,6 +52,27 @@ if DEBUG_TOOL_LOGGING:
     logger.info("DEBUG_TOOL_LOGGING=true: strands/mcpの詳細ログを出力します")
 
 _DEBUG_LOG_LIMIT = 6000  # CloudWatch費用抑制のため1エントリあたりの出力上限（文字数）
+
+
+def is_savings_mode() -> bool:
+    """DEEPSEEK_API_KEY と DEEPSEEK_MODEL_ID が両方設定されていれば節約モード。"""
+    key = os.getenv("DEEPSEEK_API_KEY")
+    model = os.getenv("DEEPSEEK_MODEL_ID")
+    return bool(key and model)
+
+
+def _create_deepseek_model():
+    """DeepSeek V4 Pro 用 LiteLLMModel（節約モード）。
+    APIキーは環境変数 DEEPSEEK_API_KEY を LiteLLM が自動読み取りする。
+    """
+    from strands.models.litellm import LiteLLMModel
+    model_id = os.getenv("DEEPSEEK_MODEL_ID", "deepseek-v4-pro")
+    if not model_id.startswith("deepseek/"):
+        model_id = f"deepseek/{model_id}"
+    return LiteLLMModel(
+        model_id=model_id,
+        params={"max_tokens": 4096},
+    )
 
 
 def _debug_log_io(direction: str, agent_name: str, text: str) -> None:
@@ -312,10 +334,22 @@ def create_delegation_tools(models, run_budget_jpy: float):
     except ImportError:
         logger.warning("strands_tools が利用できないため shell/editor/file_* は追加しません")
 
+    # --- 節約モード: Claudeエンジニア → DeepSeek V4 Pro ---
+    _savings = is_savings_mode()
+    if _savings:
+        logger.info("💰 節約モード: Claudeエンジニア → DeepSeek V4 Pro に切替")
+        engineer_model = _create_deepseek_model()
+        engineer_prompt = prompts.CLAUDE_ENGINEER_PROMPT + prompts.CLAUDE_ENGINEER_SAVINGS_NOTE
+        engineer_model_id = DEEPSEEK_MODEL_ID
+    else:
+        engineer_model = models["claude"]
+        engineer_prompt = prompts.CLAUDE_ENGINEER_PROMPT
+        engineer_model_id = CLAUDE_MODEL_ID
+
     claude_agent = Agent(
         name="claude_engineer",
-        model=models["claude"],
-        system_prompt=prompts.CLAUDE_ENGINEER_PROMPT,
+        model=engineer_model,
+        system_prompt=engineer_prompt,
         tools=claude_tools,
     )
 
@@ -330,7 +364,7 @@ def create_delegation_tools(models, run_budget_jpy: float):
             request: 依頼内容。今日のテーマ候補・予算感・特筆事項を伝えれば十分（細かい手順の
                      指示は不要。リサーチ・執筆・レビュー依頼・公開判断はClaudeエンジニアに任せる）
         """
-        return _run(claude_agent, CLAUDE_MODEL_ID, "Claudeエンジニア", request)
+        return _run(claude_agent, engineer_model_id, "Claudeエンジニア", request)
 
     return [ask_claude_engineer, ask_gpt_tax_advisor, ask_gemini_mother]
 
