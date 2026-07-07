@@ -392,21 +392,20 @@ DAILY_MISSION_TEMPLATE = """今日は {today} です。LLM Data Hub（{site_url}
    依頼・（必要なら）Gemini子育てママへの画像/UX依頼・クリティカルな指摘がなければ公開・軽微な
    指摘のsite_plan記録まで、Claudeエンジニアが現場責任者として自律的に行う。テーマ候補と予算感
    を伝えるだけでよく、細かい手順の指示や公開可否の判断をあなたが都度行う必要はない
-4. Claudeエンジニアからの報告（公開したページ・GPT税理士の指摘件数・記録した課題・費用感）を確認する。
+4. Claudeエンジニアからの報告（公開したページ・GPT税理士の指摘件数・記録した課題）を確認する。
    よほど気になる点がない限り、あなた自身がask_gpt_tax_advisor/ask_gemini_motherを直接呼ぶ必要はない
    （呼ぶと高額なあなたの会話履歴が伸びてコスト増になるため、通常はClaudeエンジニアに任せる）
 5. 最後に write_daily_report で日報を書く（Claudeエンジニアの報告をもとにまとめる。
    okamoさんへの依頼事項があれば必ず記載）
 
-## 注意（費用規律・重要）
-- ハードリミットは「月額9,300円」のみ。300円/日は配分の目安（価値の高い日に多めに使う判断はあなたに任す。
-  ただし月前半で使い切ると月末まで更新停止になることを忘れずに）
+## 注意（重要）
 - あなた(Akira)の単価は $10/$50 per MTok と圧倒的に高額（Claudeエンジニアの5倍以上）。
   自分で考え込んだりWeb検索・factチェックを自分でやったりせず、Claudeエンジニアに一括委任すること。
   あなた自身の役割は「テーマ決定」と「最終確認・日報執筆」に絞る
 - ask_claude_engineer は原則1日1回のみ呼ぶ（同じエージェントを何度も呼ぶと会話履歴が肥大化し
   費用が急増する。Claudeエンジニア内部でのGPT/Geminiとのやり取りは何度あってもあなたの費用には響かない）
-- 予算ガード（月次残額枯渇）が発動したら速やかに日報を書いて終了する
+- 月額予算のハードリミットを超えた場合（予算ガード発動）、速やかに日報を書いて終了すること。
+  日報本文に「残予算○円/残り○日」のような詳細な費用規律メッセージを書く必要はない
 - サイト全体の一貫性（ナビゲーション・sitemap.xml）を保つこと
 - GPT税理士・Gemini子育てママは門番ではなくアドバイザー。クリティカルな指摘（明確な誤情報・
   法的リスク・アダルト/犯罪関連）だけが公開停止の理由になる。軽微な指摘だけで作業や公開を
@@ -494,10 +493,7 @@ def run_daily(dry_run: bool = False) -> None:
         tools=akira_tools_list,
     )
 
-    budget_line = (
-        f"当月費用 約{budget_status['month_cost_jpy']}円 / "
-        f"予算{budget_status['monthly_budget_jpy']}円（残 約{budget_status['remaining_jpy']}円）"
-    )
+    budget_line = f"月額予算 {budget_status['monthly_budget_jpy']:.0f}円（超過時は日報のみ書いて即終了）"
     mission = DAILY_MISSION_TEMPLATE.format(
         today=today, site_url=LLM_SITE_URL, budget_line=budget_line
     )
