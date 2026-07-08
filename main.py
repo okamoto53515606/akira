@@ -174,16 +174,22 @@ def _create_github_mcp():
 
 
 def _wi_env() -> dict:
-    """Workload Identity用の環境変数セットを作る。
+    """Workload Identity用の環境変数セットを作る（MCPサブプロセス渡し専用。本体プロセスの
+    os.environは一切変更しない）。
 
     【2026-07-09 検証済み】ECS FargateはEC2版IMDS(169.254.169.254)に到達できないため、
     google-authのcredential_source経由の自動取得は使えない（実機テストで確認済み）。
     boto3の凍結クレデンシャルを明示的にAWS_ACCESS_KEY_ID等としてMCPサブプロセスへ
     渡す必要がある。
+
+    本体プロセスのos.environを書き換えると、同じプロセス内の他のboto3呼び出し
+    （S3公開・DynamoDB記録・CloudFront invalidation等）が自動更新されない凍結
+    クレデンシャルを誤って使ってしまうため、環境変数を変更しない
+    tools._write_gcp_wi_config_file() を使う。
     """
     import boto3
 
-    config_file = akira_tools._configure_gcp_keyless_env()
+    config_file = akira_tools._write_gcp_wi_config_file()
     session = boto3.Session()
     creds = session.get_credentials().get_frozen_credentials()
     env = {

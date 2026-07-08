@@ -141,11 +141,12 @@ def update_akira_config(key: str, content: str, note: str = "") -> dict:
 
 
 # =====================================================================
-# 画像生成（Vertex AI / Workload Identity キーレス認証）
-# サンプル ga4_mcp_gemini-3.1-flash-image_aws_wi_gcp_sample.py と同方式
+# GCP Workload Identity（AWS→GCPキーレス連携）
+# GA4/BigQuery MCPが使う（main.py _wi_env()経由）。画像生成はGemini Developer APIに
+# 切替済みのため、ここではWI構成ファイルの生成のみを行う
 # =====================================================================
-def _configure_gcp_keyless_env() -> str:
-    """WI構成テンプレートからADC設定を生成し環境変数をセットする。
+def _write_gcp_wi_config_file() -> str:
+    """WI構成テンプレートからregion_url/urlを除いたADC設定ファイルを生成する（環境変数は一切変更しない）。
 
     【2026-07-09 検証済み】ECS FargateはEC2版IMDS(169.254.169.254)に到達できないため、
     credential_source.url/region_url/imdsv2_session_token_url経由の自動取得は使えない
@@ -166,18 +167,12 @@ def _configure_gcp_keyless_env() -> str:
     config_file = os.path.abspath("gcp-workload-config.json")
     with open(config_file, "w") as f:
         json.dump(config, f, indent=2)
-
-    session = boto3.Session()
-    creds = session.get_credentials().get_frozen_credentials()
-    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = config_file
-    os.environ["AWS_ACCESS_KEY_ID"] = creds.access_key
-    os.environ["AWS_SECRET_ACCESS_KEY"] = creds.secret_key
-    if creds.token:
-        os.environ["AWS_SESSION_TOKEN"] = creds.token
-    os.environ.setdefault("AWS_REGION", session.region_name or AWS_REGION)
     return config_file
 
 
+# =====================================================================
+# 画像生成（Gemini Developer API / GEMINI_API_KEY）
+# =====================================================================
 @tool
 def generate_and_publish_image(purpose: str, site_path: str) -> dict:
     """画像を生成してサイトに公開する（Gemini子育てママ用ツール）。
@@ -192,12 +187,11 @@ def generate_and_publish_image(purpose: str, site_path: str) -> dict:
     from google import genai
     from google.genai import types
 
-    _configure_gcp_keyless_env()
-    project = os.getenv("GOOGLE_CLOUD_PROJECT")
-    if not project:
-        raise RuntimeError("GOOGLE_CLOUD_PROJECT が未設定です。")
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key:
+        raise RuntimeError("GEMINI_API_KEY が未設定です。")
 
-    client = genai.Client(vertexai=True, project=project, location=os.getenv("GOOGLE_CLOUD_LOCATION", "global"))
+    client = genai.Client(api_key=api_key)
     config = types.GenerateContentConfig(response_modalities=["TEXT", "IMAGE"])
     resp = client.models.generate_content(
         model=IMAGE_MODEL_ID,
