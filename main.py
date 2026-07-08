@@ -174,20 +174,27 @@ def _create_github_mcp():
 
 
 def _wi_env() -> dict:
-    """Workload Identity用の環境変数セットを作る（IMDSv2直接方式）。
+    """Workload Identity用の環境変数セットを作る。
 
-    google-authがcredential_source.imdsv2_session_token_url経由でMCPサブプロセス自身が
-    IMDSにアクセスし、都度フレッシュな認証情報を取得する。そのためAWS_ACCESS_KEY_ID等の
-    凍結クレデンシャルを明示的に渡す必要はない（以前の方式では必要だったが撤廃した）。
+    【2026-07-09 検証済み】ECS FargateはEC2版IMDS(169.254.169.254)に到達できないため、
+    google-authのcredential_source経由の自動取得は使えない（実機テストで確認済み）。
+    boto3の凍結クレデンシャルを明示的にAWS_ACCESS_KEY_ID等としてMCPサブプロセスへ
+    渡す必要がある。
     """
     import boto3
 
     config_file = akira_tools._configure_gcp_keyless_env()
     session = boto3.Session()
-    return {
+    creds = session.get_credentials().get_frozen_credentials()
+    env = {
         "GOOGLE_APPLICATION_CREDENTIALS": config_file,
+        "AWS_ACCESS_KEY_ID": creds.access_key,
+        "AWS_SECRET_ACCESS_KEY": creds.secret_key,
         "AWS_REGION": session.region_name or "us-east-1",
     }
+    if creds.token:
+        env["AWS_SESSION_TOKEN"] = creds.token
+    return env
 
 
 def _create_ga4_mcp():
@@ -549,6 +556,14 @@ def run_daily(dry_run: bool = False) -> None:
 def run_wi_test() -> None:
     """GCP Workload Identity（AWS→GCPキーレス連携）の疎通だけを検証する。
 
+    【重要】list_tools_sync() はMCPプロトコル上のスキーマ照会に過ぎず、GCP側の認証は
+    発生しない（サブプロセスが起動して応答するだけならIMDS/WI認証なしで成功してしまう）。
+    そのため実際にツールを呼び出し、GCP APIへの認証込みの疎通を検証する
+    （call_tool_sync は例外を投げず status="error"/"success" のdictを返す点に注意）。
+    さらにMCPサーバー実装によっては内部で例外を捕捉しstatus="success"のままcontentに
+    エラー文言を埋め込んで返す場合があるため、statusだけでなくcontentも必ず出力して
+    目視確認すること（2026-07-09: 実際にGA4側でこのケースを確認済み）。
+
     LLM呼び出し・予算ゲートを一切通さないため、予算超過中でも無料で実行できる。
     ECS Fargate環境でIMDS(169.254.169.254)に到達できるか等の確認用（デプロイ後の
     動作確認に使う。日次運用フローとは無関係）。
@@ -557,16 +572,20 @@ def run_wi_test() -> None:
     try:
         ga4 = _create_ga4_mcp()
         with ga4:
-            tools = ga4.list_tools_sync()
-        logger.info("GA4 MCP: OK (%d件のツール)", len(tools))
+            result = ga4.call_tool_sync(
+                tool_use_id="test-wi-ga4", name="get_account_summaries", arguments={}
+            )
+        logger.info("GA4 MCP: status=%s content=%s", result.get("status"), result.get("content"))
     except Exception:
         logger.exception("GA4 MCP: NG")
 
     try:
         bq = _create_bigquery_mcp()
         with bq:
-            tools = bq.list_tools_sync()
-        logger.info("BigQuery MCP: OK (%d件のツール)", len(tools))
+            result = bq.call_tool_sync(
+                tool_use_id="test-wi-bq", name="list_dataset_ids", arguments={}
+            )
+        logger.info("BigQuery MCP: status=%s content=%s", result.get("status"), result.get("content"))
     except Exception:
         logger.exception("BigQuery MCP: NG")
     logger.info("=== Workload Identity 疎通テスト終了 ===")
