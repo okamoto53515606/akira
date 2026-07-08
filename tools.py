@@ -145,28 +145,29 @@ def update_akira_config(key: str, content: str, note: str = "") -> dict:
 # サンプル ga4_mcp_gemini-3.1-flash-image_aws_wi_gcp_sample.py と同方式
 # =====================================================================
 def _configure_gcp_keyless_env() -> str:
-    """WI構成テンプレートからADC設定を生成し環境変数をセットする。"""
+    """WI構成テンプレートからADC設定を生成し環境変数をセットする（IMDSv2直接方式）。
+
+    credential_source に imdsv2_session_token_url を追加するだけで、google-authが
+    自力でIMDSv2から都度フレッシュな認証情報を取得できる（region_url/urlはテンプレートの
+    まま残す）。以前はboto3の凍結クレデンシャルをAWS_ACCESS_KEY_ID等としてenv経由で
+    明示的に渡していたが、この方式では不要になったため撤廃した。
+    """
     template_path = os.getenv("GCP_WORKLOAD_IDENTITY_TEMPLATE")
     if not template_path:
         raise RuntimeError("GCP_WORKLOAD_IDENTITY_TEMPLATE が未設定です。")
 
     with open(template_path) as f:
         config = json.load(f)
-    for field in ("region_url", "url"):
-        config.get("credential_source", {}).pop(field, None)
+    config.setdefault("credential_source", {}).setdefault(
+        "imdsv2_session_token_url", "http://169.254.169.254/latest/api/token"
+    )
 
     config_file = os.path.abspath("gcp-workload-config.json")
     with open(config_file, "w") as f:
         json.dump(config, f, indent=2)
 
-    session = boto3.Session()
-    creds = session.get_credentials().get_frozen_credentials()
     os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = config_file
-    os.environ["AWS_ACCESS_KEY_ID"] = creds.access_key
-    os.environ["AWS_SECRET_ACCESS_KEY"] = creds.secret_key
-    if creds.token:
-        os.environ["AWS_SESSION_TOKEN"] = creds.token
-    os.environ.setdefault("AWS_REGION", session.region_name or AWS_REGION)
+    os.environ.setdefault("AWS_REGION", boto3.Session().region_name or AWS_REGION)
     return config_file
 
 

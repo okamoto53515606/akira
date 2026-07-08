@@ -73,7 +73,7 @@ def load_secrets_into_env() -> None:
     ローカルでは .env が先に読み込まれている前提。Fargateではここで取得する。
     """
     required = ["CLAUDE_API_KEY", "OPENAI_API_KEY", "GEMINI_API_KEY", "BRAVE_API_KEY",
-                "GITHUB_PAT_READ_ONLY_PUBLIC"]
+                "GITHUB_PAT_READ_ONLY_PUBLIC", "DEEPSEEK_API_KEY"]
     if all(os.getenv(k) for k in required):
         return
     if not SECRET_ARN:

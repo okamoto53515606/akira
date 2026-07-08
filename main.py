@@ -174,21 +174,20 @@ def _create_github_mcp():
 
 
 def _wi_env() -> dict:
-    """Workload Identity用の環境変数セットを作る。"""
+    """Workload Identity用の環境変数セットを作る（IMDSv2直接方式）。
+
+    google-authがcredential_source.imdsv2_session_token_url経由でMCPサブプロセス自身が
+    IMDSにアクセスし、都度フレッシュな認証情報を取得する。そのためAWS_ACCESS_KEY_ID等の
+    凍結クレデンシャルを明示的に渡す必要はない（以前の方式では必要だったが撤廃した）。
+    """
     import boto3
 
     config_file = akira_tools._configure_gcp_keyless_env()
     session = boto3.Session()
-    creds = session.get_credentials().get_frozen_credentials()
-    env = {
+    return {
         "GOOGLE_APPLICATION_CREDENTIALS": config_file,
-        "AWS_ACCESS_KEY_ID": creds.access_key,
-        "AWS_SECRET_ACCESS_KEY": creds.secret_key,
         "AWS_REGION": session.region_name or "us-east-1",
     }
-    if creds.token:
-        env["AWS_SESSION_TOKEN"] = creds.token
-    return env
 
 
 def _create_ga4_mcp():
