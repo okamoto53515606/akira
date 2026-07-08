@@ -546,10 +546,41 @@ def run_daily(dry_run: bool = False) -> None:
     logger.info("=== 本日の運用終了 ===")
 
 
+def run_wi_test() -> None:
+    """GCP Workload Identity（AWS→GCPキーレス連携）の疎通だけを検証する。
+
+    LLM呼び出し・予算ゲートを一切通さないため、予算超過中でも無料で実行できる。
+    ECS Fargate環境でIMDS(169.254.169.254)に到達できるか等の確認用（デプロイ後の
+    動作確認に使う。日次運用フローとは無関係）。
+    """
+    logger.info("=== Workload Identity 疎通テスト開始 ===")
+    try:
+        ga4 = _create_ga4_mcp()
+        with ga4:
+            tools = ga4.list_tools_sync()
+        logger.info("GA4 MCP: OK (%d件のツール)", len(tools))
+    except Exception:
+        logger.exception("GA4 MCP: NG")
+
+    try:
+        bq = _create_bigquery_mcp()
+        with bq:
+            tools = bq.list_tools_sync()
+        logger.info("BigQuery MCP: OK (%d件のツール)", len(tools))
+    except Exception:
+        logger.exception("BigQuery MCP: NG")
+    logger.info("=== Workload Identity 疎通テスト終了 ===")
+
+
 def main():
     parser = argparse.ArgumentParser(description="Akira — LLM Data Hub 運営エージェント")
     parser.add_argument("--dry-run", action="store_true", help="公開せず計画のみ")
+    parser.add_argument("--test-wi", action="store_true",
+                         help="GCP Workload Identityの疎通テストのみ実行（LLM呼び出し・予算ゲートなし）")
     args = parser.parse_args()
+    if args.test_wi:
+        run_wi_test()
+        return
     run_daily(dry_run=args.dry_run)
 
 
