@@ -12,7 +12,13 @@
 # 公開構成:
 #   /index.html               … 日報一覧（新しい順）
 #   /reports/YYYY-MM-DD.html  … 各日報（コメント欄つき）
-# コメント反映: 毎朝、直近7日分の日報ページを再レンダリングして焼き込む
+# コメント反映: スケジュール実行のたび（予算超過で作業を停止した日も含む）に全日報ページを
+# 再レンダリングして焼き込む。件数が少ない前提で日付ウィンドウは設けず全件レンダリングする
+# （ウィンドウで区切ると、書き込みタイミング次第で二度と焼き込まれない古い日報が発生しうるため）。
+#
+# okamoの直近コメントをAkira自身が読む処理（get_recent_comments）は予算超過で停止した日は
+# 呼ばれない。そのため固定日数ではなく「前回実際にAkiraが確認した日」をconfig_storeに
+# マーカー保存し、そこからの差分を必ず取得する（main.py run_daily参照）。
 
 import html as html_mod
 import time
@@ -104,12 +110,19 @@ def get_okamo_comment(date: str) -> str:
     return text if text.replace("　", " ").strip() else ""
 
 
-def get_recent_comments(days: int = 7) -> list[dict]:
-    """直近N日のokamoコメント（記入済のみ）を新しい順で返す。翌朝のAkiraが読む。"""
-    cutoff = (datetime.now(JST) - timedelta(days=days)).strftime("%Y-%m-%d")
+def get_recent_comments(since: str | None = None, fallback_days: int = 7) -> list[dict]:
+    """指定日付(YYYY-MM-DD)以降のokamoコメント（記入済のみ）を新しい順で返す。翌朝のAkiraが読む。
+
+    予算超過で停止した日はこの関数自体が呼ばれない（main.pyが予算ゲートでreturnするため）。
+    そのためsinceには「前回実際にAkiraが作業した日」のマーカー（config_storeに保存）を
+    渡すこと。実行間隔がどれだけ空いても、前回確認日以降のコメントを必ず取りこぼさない。
+    sinceを省略した場合（初回実行等マーカー未登録時）はfallback_days日分にフォールバックする。
+    """
+    if since is None:
+        since = (datetime.now(JST) - timedelta(days=fallback_days)).strftime("%Y-%m-%d")
     resp = _table().query(
         KeyConditionExpression="pk = :p AND sk >= :d",
-        ExpressionAttributeValues={":p": "comment", ":d": cutoff},
+        ExpressionAttributeValues={":p": "comment", ":d": since},
         ScanIndexForward=False,
     )
     return [
@@ -205,19 +218,19 @@ def render_index_page(items: list[dict]) -> str:
     return PAGE_TEMPLATE.format(title="一覧", body=body)
 
 
-def publish_reports(days_to_rerender: int = 7) -> list[str]:
-    """直近N日分の日報ページ＋一覧をS3へ公開し、invalidationする。
+def publish_reports() -> list[str]:
+    """全日報ページ＋一覧をS3へ公開し、invalidationする。
 
-    毎朝呼ぶことで、okamoが前日以前に書いたコメントも焼き込まれる。
+    予算超過で停止した日も含めて毎回（スケジュール実行のたび）呼ばれる。日付ウィンドウで
+    区切ると「一定期間を過ぎたら二度と焼き込まれない日報」が発生しうる（okamoのコメントは
+    いつ書かれるか分からないため）。件数が少ない運用規模なので、確実性を優先して毎回全件
+    再レンダリングする。
     """
     items = list_reports()
     s3 = _s3()
     published = []
 
-    cutoff = (datetime.now(JST) - timedelta(days=days_to_rerender)).strftime("%Y-%m-%d")
     for item in items:
-        if item["sk"] < cutoff:
-            continue
         key = f"reports/{item['sk']}.html"
         s3.put_object(
             Bucket=REPORTS_BUCKET,

@@ -421,6 +421,9 @@ def publish_daily_report(collected: dict, budget_status: dict) -> None:
 # =====================================================================
 DAILY_MISSION_TEMPLATE = """今日は {today} です。LLM Data Hub（{site_url}）の定期運用を開始してください。
 
+## 前回の作業日
+{last_work_line}
+
 ## 予算状況
 {budget_line}
 
@@ -494,11 +497,33 @@ def run_daily(dry_run: bool = False) -> None:
         system_prompt += f"\n\n## サイト運営計画（自分で更新可能）\n{site_plan}"
 
     # okamoの直近コメント（日報へのフィードバック）をミッションに含める
-    comments = report.get_recent_comments(days=7)
+    # 予算超過で数日〜数週間ノーラン（正確には予算ゲートで停止）が続くことがあるため、
+    # 固定日数ではなく「前回実際にAkiraがコメントを確認した日」からの差分を必ず取得する。
+    # 前回確認日はconfig_storeにマーカー保存（予算超過で停止した日はここまで到達しない＝
+    # マーカーは更新されず、取りこぼしなく次回に持ち越される）
+    last_comment_check = config_store.load_config("last_comment_check_date")
+    comments = report.get_recent_comments(since=last_comment_check)
     if comments:
         system_prompt += "\n\n## okamoからの直近コメント（必ず考慮しろ）\n" + "\n".join(
             f"- [{c['date']}] {c['text']}" for c in comments
         )
+    # 今回確認した日を記録（次回起動時はここからの差分のみ取得すればよい状態にしておく）
+    config_store.save_config("last_comment_check_date", today)
+
+    # 前回の実作業日もAkira自身に伝える（予算超過で数日〜数週間空くことがあるため、
+    # 間隔が空いた場合は料金改定・新モデル等の情報が古くなっていないか優先確認させる）
+    if last_comment_check:
+        gap_days = (
+            datetime.strptime(today, "%Y-%m-%d") - datetime.strptime(last_comment_check, "%Y-%m-%d")
+        ).days
+        last_work_line = f"前回の実作業日: {last_comment_check}（{gap_days}日ぶりの再開です）"
+        if gap_days > 7:
+            last_work_line += (
+                "\n※間隔が空いているため、料金改定・新モデルリリース等サイト掲載情報が"
+                "古くなっていないか優先的に確認・更新すること。"
+            )
+    else:
+        last_work_line = "前回の実作業記録なし（初回実行です）"
 
     # --- 3. Akiraエージェント構築 ---
     models = _create_models()
@@ -541,7 +566,7 @@ def run_daily(dry_run: bool = False) -> None:
 
     budget_line = f"月額予算 {budget_status['monthly_budget_jpy']:.0f}円（超過時は日報のみ書いて即終了）"
     mission = DAILY_MISSION_TEMPLATE.format(
-        today=today, site_url=LLM_SITE_URL, budget_line=budget_line
+        today=today, site_url=LLM_SITE_URL, budget_line=budget_line, last_work_line=last_work_line
     )
     if dry_run:
         mission += "\n\n【重要】今日はドライランです。公開・依頼は行わず、計画の提示だけしてください。"
