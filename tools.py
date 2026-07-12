@@ -128,14 +128,26 @@ def get_budget_status() -> dict:
 
 @tool
 def update_akira_config(key: str, content: str, note: str = "") -> dict:
-    """Akira自身の設定（システムプロンプト/skills/サイト計画）を書き換える。
+    """Akira自身の設定（教訓/skills/サイト計画）を書き換える。
     翌日のFargate起動時から反映される。
 
     Args:
-        key: "system_prompt" / "skill#<名前>" / "site_plan" のいずれか
+        key: "lessons"（過去の自分からの教訓。システムプロンプト末尾に合成される。
+             古い教訓の整理・削除も可）/ "skill#<名前>" / "site_plan" のいずれか。
+             システムプロンプトの既定部分はコード管理のため書き換え不可
         content: 新しい内容（全文）
         note: 変更理由のメモ
     """
+    if key not in ("lessons", "site_plan") and not key.startswith("skill#"):
+        return {
+            "status": "rejected",
+            "reason": "keyは lessons / site_plan / skill#<名前> のみ。既定のシステムプロンプトは書き換え不可",
+        }
+    if key == "lessons" and len(content) > 8000:
+        return {
+            "status": "rejected",
+            "reason": "lessonsは8000文字以内。要点だけ残して整理すること",
+        }
     config_store.save_config(key, content, note)
     return {"status": "saved", "key": key, "effective": "翌日起動時から"}
 

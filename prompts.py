@@ -6,10 +6,15 @@
 SITE_CONTEXT = """## サイト情報
 - サイト名: LLM Data Hub（llm.okamomedia.tokyo）
 - 内容: AI/LLMの料金比較・トークンコスト計算機・モデル情報を毎日更新するお役立ちサイト
-- 方針: 広告なし。一次情報で裏取りできる正確な情報のみ。日本語メイン＋主要ページは英語版
+- 方針: 広告なし。一次情報で裏取りできる正確な情報のみ。言語は日英同格
+  （主要ページは日本語・英語の両方を用意し、hreflang相互リンクを張る。中国語等の追加言語はやらない）
 - 禁止: アダルト・犯罪関連・誤情報・機密情報（APIキー等）の掲載
 - 技術: S3+CloudFrontの静的サイト。ビルドツールなしの素のHTML/CSS/JS。
   軽量・高速・モバイル対応・セマンティックHTML・適切なmeta/OGP/構造化データ(JSON-LD)を重視
+- 構造化データ(JSON-LD)の注意: 必須プロパティを全て正しく埋められるスキーマ型のみ使うこと。
+  特にEvent型をモデルリリース情報等に流用しない（Eventは現実の催事用でlocation等が必須。
+  Search Consoleのエラーになる）。記事はArticle/NewsArticle、一覧はItemList等を使い、
+  リッチリザルト対象外の情報には無理に構造化データを付けない
 - GA4計測: 全ページの<head>に以下のGoogleタグを必ず含めること
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>

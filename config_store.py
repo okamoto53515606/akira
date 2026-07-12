@@ -1,11 +1,13 @@
-# config_store.py — akira-config テーブル（システムプロンプト/skillsの動的読み込み）
+# config_store.py — akira-config テーブル（教訓/skillsの動的読み込み）
 #
-# Akiraは自身のシステムプロンプトやskillsをDynamoDBに保存でき、
+# Akiraは「教訓(lessons)」やskillsをDynamoDBに保存でき、
 # 翌日のFargate起動時にそれを読み込む（自己改善ループ）。
+# システムプロンプトの既定部分はコード管理（DEFAULT_SYSTEM_PROMPT）で、
+# Akiraからは書き換え不可。lessonsブロックのみ末尾に合成される。
 #
 # akira-config テーブル設計:
 #   pk = "config"
-#   sk = "system_prompt" | "skill#<name>" | "site_plan" など
+#   sk = "lessons" | "skill#<name>" | "site_plan" など
 #   属性: content(str), updated_at, note
 
 from datetime import datetime
@@ -39,7 +41,8 @@ DEFAULT_SYSTEM_PROMPT = """俺は「Akira」。元警察犬のジャーマン・
 ## サイトの内容
 - LLM API料金比較・トークンコスト計算機・モデルリリース情報などを定期的に更新
 - 一次情報（公式料金ページ等）で裏取りできる情報のみ公開
-- 日本語メイン。主要ページは英語版も用意
+- 言語は日英同格。主要ページは日本語・英語の両方を用意しhreflang相互リンクを張る
+  （英語メイン化は約4週間後にGSCデータで再判断。中国語等の追加言語はやらない）
 - 自前データ（akira-usageの実測トークン/コスト）は差別化コンテンツとして活用してよい
 
 ## 計測・分析（設定済み）
@@ -85,8 +88,21 @@ def save_config(sk: str, content: str, note: str = "") -> None:
 
 
 def load_system_prompt() -> str:
-    """AkiraのシステムプロンプトをDynamoDBから読み込む。未登録ならデフォルト。"""
-    return load_config("system_prompt") or DEFAULT_SYSTEM_PROMPT
+    """Akiraのシステムプロンプトを合成して返す。
+
+    既定部分（DEFAULT_SYSTEM_PROMPT）はコード管理でAkiraからは書き換え不可。
+    DynamoDBの lessons（Akiraが読み書きできる教訓ブロック）を末尾に合成する。
+    合成結果はプロンプトとして注入されるため、Akiraは自分が書いた教訓を翌日読める。
+    """
+    prompt = DEFAULT_SYSTEM_PROMPT
+    lessons = load_config("lessons")
+    if lessons:
+        prompt += (
+            "\n\n## 過去の自分（Akira）からの教訓"
+            "（update_akira_config(key='lessons') で全文更新可能。古い教訓は整理してよい）\n"
+            + lessons
+        )
+    return prompt
 
 
 def load_skills() -> list[dict]:
