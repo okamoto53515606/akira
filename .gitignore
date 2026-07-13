@@ -221,3 +221,4 @@ __marimo__/
 .examples
 *_sample.py
 gcp-workload-config*
+akira-llm-site
