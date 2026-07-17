@@ -76,8 +76,8 @@ Secrets Manager共有のみの疎結合。
 |---|---|---|
 | Akira本体 | `claude-fable-5`（Anthropic, $10/$50 per 1Mトークン） | リサーチ計画・3AIへの作業依頼・GA4/BigQuery分析・日報執筆 |
 | Claudeエンジニア | `claude-sonnet-5`（Anthropic, 導入価格 $2/$10、2026-08-31まで。以降$3/$15に自動切替） | 記事執筆・コーディング・S3への公開作業 |
-| GPT税理士 | `gpt-5.6-terra`（OpenAI, $1.25/$10） | 価値・PV貢献の助言とfactチェック（門番ではなくアドバイザー） |
-| Gemini子育てママ | `gemini-3.5-flash`（テキスト, $0.30/$2.50）/ `gemini-3.1-flash-image`（画像生成, $0.30/$2.50 + 画像$0.05/枚） | OGP・記事画像の生成、初心者目線のUXレビュー |
+| GPT税理士 | `gpt-5.6-terra`（OpenAI, $2.5/$15） | 価値・PV貢献の助言とfactチェック（門番ではなくアドバイザー） |
+| Gemini子育てママ | `gemini-3.5-flash`（テキスト, $1.5/$9）/ `gemini-3.1-flash-image`（画像生成, $0.5/$3 + 画像$0.05/枚） | OGP・記事画像の生成、初心者目線のUXレビュー |
 
 料金・モデルIDは [settings.py](settings.py) の `MODEL_PRICING_USD` で一元管理し、[budget.py](budget.py) が
 DynamoDB (`akira-usage`) への記録と月次予算ゲートを行う。
