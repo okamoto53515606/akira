@@ -11,4 +11,6 @@ dependencies = [
     "python-dotenv>=1.2.2",
     "strands-agents-tools>=0.8.2",
     "strands-agents[anthropic,gemini,openai,litellm]>=1.43.0",
+    "fastapi",       # LiteLLM DeepSeekプロバイダが内部的に要求（節約モード用）
+    "orjson",        # LiteLLM DeepSeekプロバイダが内部的に要求（節約モード用）
 ]
