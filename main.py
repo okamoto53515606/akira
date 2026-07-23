@@ -89,7 +89,7 @@ def _debug_log_io(direction: str, agent_name: str, text: str) -> None:
 def _create_models():
     from strands.models.anthropic import AnthropicModel
     from strands.models.gemini import GeminiModel
-    from strands.models.openai import OpenAIModel
+    from strands.models.openai_responses import OpenAIResponsesModel
 
     return {
         "akira": AnthropicModel(
@@ -102,7 +102,7 @@ def _create_models():
             model_id=CLAUDE_MODEL_ID,
             max_tokens=16384,
         ),
-        "gpt": OpenAIModel(
+        "gpt": OpenAIResponsesModel(
             client_args={"api_key": os.getenv("OPENAI_API_KEY")},
             model_id=OPENAI_MODEL_ID,
         ),
