@@ -64,6 +64,12 @@ def is_savings_mode() -> bool:
 def _create_deepseek_model():
     """DeepSeek V4 Pro 用 LiteLLMModel（節約モード）。
     APIキーは環境変数 DEEPSEEK_API_KEY を LiteLLM が自動読み取りする。
+
+    【2026-08-01 修正】max_tokens を 4096→16384 に引き上げ。
+    エージェント（Claudeエンジニア代替）はリサーチ・執筆・レビューを一括で行うため
+    1回の応答が長大になりやすく、4096では MaxTokensReachedException が頻発した。
+    reasoning_content（推論内容）がマルチターン会話で非サポートという警告も出るため
+    drop_params=True で未対応パラメータを破棄する。
     """
     from strands.models.litellm import LiteLLMModel
     model_id = os.getenv("DEEPSEEK_MODEL_ID", "deepseek-v4-pro")
@@ -71,7 +77,10 @@ def _create_deepseek_model():
         model_id = f"deepseek/{model_id}"
     return LiteLLMModel(
         model_id=model_id,
-        params={"max_tokens": 4096},
+        params={
+            "max_tokens": 16384,
+            "drop_params": True,
+        },
     )
 
 
