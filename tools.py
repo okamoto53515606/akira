@@ -24,6 +24,9 @@ from settings import (
 
 _invalidation_paths: list[str] = []  # 実行終盤にまとめてinvalidation
 
+# サイト全体をローカルに展開する作業フォルダ。タスク開始時に run_daily が S3 から全件DLする。
+SITE_LOCAL_DIR = os.getenv("SITE_LOCAL_DIR", "/tmp/site")
+
 
 def _content_type(path: str) -> str:
     ext = path.rsplit(".", 1)[-1].lower() if "." in path else ""
@@ -100,6 +103,115 @@ def list_site_files(prefix: str = "") -> list[str]:
         if not resp.get("IsTruncated"):
             return keys
         kwargs["ContinuationToken"] = resp["NextContinuationToken"]
+
+
+def _resolve_local_path(rel_or_abs: str) -> str:
+    """SITE_LOCAL_DIR 配下の絶対パスへ解決する。範囲外や '..' は拒否。"""
+    base = os.path.abspath(SITE_LOCAL_DIR)
+    p = os.path.abspath(rel_or_abs if os.path.isabs(rel_or_abs) else os.path.join(base, rel_or_abs))
+    if p != base and not p.startswith(base + os.sep):
+        raise ValueError(f"path は {base} 配下に限定されています: {rel_or_abs}")
+    return p
+
+
+def download_site(dest_dir: str | None = None) -> dict:
+    """S3バケットの全ファイルをローカルの dest_dir にダウンロードする（サイト全体の作業用スナップショット）。
+
+    既存の dest_dir は削除して作り直す（ローカルでの編集内容は失われる点に注意）。
+    dest_dir 未指定時は SITE_LOCAL_DIR を使う。
+    """
+    import shutil
+
+    if dest_dir is None:
+        dest_dir = SITE_LOCAL_DIR
+    dest_dir = os.path.abspath(dest_dir)
+    if dest_dir in ("/", "/tmp", "/app", "/usr", "/home"):
+        raise ValueError(f"dest_dir が危険なため拒否します: {dest_dir}")
+    if os.path.exists(dest_dir):
+        shutil.rmtree(dest_dir)
+    os.makedirs(dest_dir, exist_ok=True)
+
+    s3 = boto3.client("s3", region_name=AWS_REGION)
+    keys = []
+    kwargs = {"Bucket": LLM_SITE_BUCKET}
+    while True:
+        resp = s3.list_objects_v2(**kwargs)
+        keys += [o["Key"] for o in resp.get("Contents", [])]
+        if not resp.get("IsTruncated"):
+            break
+        kwargs["ContinuationToken"] = resp["NextContinuationToken"]
+
+    files = [k for k in keys if not k.endswith("/")]
+    for key in files:
+        local = os.path.join(dest_dir, key)
+        os.makedirs(os.path.dirname(local), exist_ok=True)
+        s3.download_file(LLM_SITE_BUCKET, key, local)
+    return {"status": "downloaded", "dest_dir": dest_dir, "count": len(files), "files": files}
+
+
+@tool
+def site_download(dest_dir: str | None = None) -> dict:
+    """サイト全体をローカル作業フォルダに再ダウンロードする（リセット用）。
+    既存のローカル編集は失われるため、編集前にリセットしたい場合のみ使うこと。
+    """
+    return download_site(dest_dir)
+
+
+@tool
+def site_upload(local_path: str, site_prefix: str = "") -> dict:
+    """ローカル作業フォルダ（SITE_LOCAL_DIR）内のファイル/フォルダをS3に一括アップロードする。
+
+    publish_file_to_site と違い全文を文字列で渡す必要がなく、ローカルで編集した
+    ファイルやフォルダをまとめて公開できる。Content-Type判定とCloudFront invalidationは
+    自動処理される。レビュー完了後の一括公開に使うこと。
+
+    Args:
+        local_path: SITE_LOCAL_DIR からの相対パス（例: "pricing/" でフォルダ全体、
+                    "." でサイト全体）。絶対パスは SITE_LOCAL_DIR 配下のみ許可
+        site_prefix: S3キーの先頭に付けるプレフィックス（通常は不要）
+    """
+    base_dir = os.path.abspath(SITE_LOCAL_DIR)
+    src = _resolve_local_path(local_path)
+    if not os.path.exists(src):
+        return {"status": "failed", "reason": f"存在しません: {local_path}"}
+
+    if os.path.isfile(src):
+        files = [src]
+    else:
+        files = []
+        for root, _dirs, names in os.walk(src):
+            for name in names:
+                files.append(os.path.join(root, name))
+
+    s3 = boto3.client("s3", region_name=AWS_REGION)
+    uploaded = []
+    for f in files:
+        rel = os.path.relpath(f, base_dir).replace(os.sep, "/")
+        key = rel if not site_prefix else f"{site_prefix.strip('/')}/{rel}"
+        s3.upload_file(f, LLM_SITE_BUCKET, key, ExtraArgs={"ContentType": _content_type(key)})
+        _invalidation_paths.append("/" + key)
+        uploaded.append(key)
+    return {"status": "published", "count": len(uploaded), "uploaded": uploaded}
+
+
+@tool
+def list_local_files(rel_path: str = "") -> dict:
+    """ローカル作業フォルダ（SITE_LOCAL_DIR）内のファイル一覧を返す（list_site_files のローカル版）。
+
+    Args:
+        rel_path: SITE_LOCAL_DIR からの相対パス（例: "pricing/"。空で全体）
+    """
+    base_dir = os.path.abspath(SITE_LOCAL_DIR)
+    base = _resolve_local_path(rel_path)
+    if not os.path.isdir(base):
+        return {"status": "failed", "reason": f"ディレクトリではありません: {rel_path}"}
+    files = []
+    for root, _dirs, names in os.walk(base):
+        for name in names:
+            rel = os.path.relpath(os.path.join(root, name), base_dir).replace(os.sep, "/")
+            files.append(rel)
+    files.sort()
+    return {"status": "ok", "path": rel_path or "/", "count": len(files), "files": files}
 
 
 def flush_invalidations() -> None:

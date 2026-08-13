@@ -274,15 +274,16 @@ def create_delegation_tools(models, run_budget_jpy: float):
     brave = _create_brave_mcp()
     screenshot_tool = akira_tools.take_screenshot
     fetch_image = akira_tools.fetch_image_from_url
-    from strands_tools import image_reader
+    from strands_tools import file_read, image_reader
 
     # Firecrawl/Braveの無料枠注意文（ツール説明に含める）
     _web_tool_note = (
         "※無料枠で運用中。APIクォータ超過エラーが出た場合は別のツール（Brave/Firecrawl相互）で補完すること。"
     )
 
-    gpt_tools = [akira_tools.get_site_file, akira_tools.list_site_files, brave,
-                 screenshot_tool, fetch_image, image_reader]
+    gpt_tools = [akira_tools.get_site_file, akira_tools.list_site_files,
+                 akira_tools.list_local_files, file_read,
+                 brave, screenshot_tool, fetch_image, image_reader]
     if firecrawl:
         gpt_tools.append(firecrawl)
     gpt_agent = Agent(
@@ -295,6 +296,8 @@ def create_delegation_tools(models, run_budget_jpy: float):
         akira_tools.generate_and_publish_image,
         akira_tools.get_site_file,
         akira_tools.list_site_files,
+        akira_tools.list_local_files,
+        file_read,
         brave,
         screenshot_tool,
         fetch_image,
@@ -332,6 +335,9 @@ def create_delegation_tools(models, run_budget_jpy: float):
         akira_tools.publish_file_to_site,
         akira_tools.get_site_file,
         akira_tools.list_site_files,
+        akira_tools.list_local_files,
+        akira_tools.site_download,
+        akira_tools.site_upload,
         akira_tools.update_akira_config,
         brave,
         screenshot_tool,
@@ -494,6 +500,14 @@ def run_daily(dry_run: bool = False) -> None:
             publish_daily_report(collected, budget_status)
         return
 
+    # --- 1.5 サイト全体をローカル作業フォルダへDL（エンジニアのローカル編集→一括アップ用） ---
+    try:
+        dl = akira_tools.download_site()
+        logger.info("サイトDL: %s件 → %s", dl["count"], dl["dest_dir"])
+    except Exception:
+        # DL失敗は致命的ではない（従来の publish_file_to_site 経由で作業可能なため続行）
+        logger.exception("サイトのローカルDLに失敗しました（publish_file_to_site で代替可能）")
+
     # --- 2. 設定読み込み（自己改善の反映）---
     system_prompt = config_store.load_system_prompt()
     skills = config_store.load_skills()
@@ -545,11 +559,13 @@ def run_daily(dry_run: bool = False) -> None:
     delegation = create_delegation_tools(models, run_budget_jpy=budget_status["remaining_jpy"])
 
     # Akira自身のツール（delegation + 直接使うツール）
-    from strands_tools import image_reader
+    from strands_tools import file_read, image_reader
     akira_tools_list = [
         *delegation,
         akira_tools.get_site_file,
         akira_tools.list_site_files,
+        akira_tools.list_local_files,
+        file_read,
         akira_tools.get_budget_status,
         akira_tools.update_akira_config,
         create_report_tool(collected),
@@ -581,10 +597,30 @@ def run_daily(dry_run: bool = False) -> None:
         mission += "\n\n【重要】今日はドライランです。公開・依頼は行わず、計画の提示だけしてください。"
 
     _debug_log_io("指示", "Akira本体", f"system_prompt:\n{system_prompt}\n\nmission:\n{mission}")
-    result = akira(mission)
-    _debug_log_io("応答", "Akira本体", str(result))
-    cost = budget.collect_agent_usage(result, AKIRA_MODEL_ID, purpose="akira:daily", agent=akira)
-    logger.info("Akira本体 完了 (約%.1f円 / 本日合計約%.1f円)", cost, budget.get_run_spent_jpy())
+    try:
+        result = akira(mission)
+        _debug_log_io("応答", "Akira本体", str(result))
+        cost = budget.collect_agent_usage(result, AKIRA_MODEL_ID, purpose="akira:daily", agent=akira)
+        logger.info("Akira本体 完了 (約%.1f円 / 本日合計約%.1f円)", cost, budget.get_run_spent_jpy())
+    except Exception as e:
+        # 【2026-08-13 対策】Anthropic APIの一時的なサーバーエラー(500)などでAkira本体の
+        # 応答生成が失敗すると、イベントループが例外を投げてタスクがクラッシュし、
+        # 日報が生成されないことがあった（当日実機で "Internal server error" を確認）。
+        # ページ更新はエンジニアが完了済みの場合が多いため、ここで例外を捕捉し、
+        # フォールバックの日報を書いて後処理（invalidation + 公開）を続行する。
+        # 500はサーバー側の一時障害でリトライしても成功する保証が低く、再送コストも
+        # 大きいため、あえてリトライはせず「日報だけは確実に出す」方針を採る。
+        logger.exception("Akira本体の実行中に例外が発生しました（フォールバック日報で続行します）")
+        if not collected.get("body_md"):
+            spent = budget.get_run_spent_jpy()
+            collected["body_md"] = (
+                f"## 本日の運用は途中で終了しました（自動フォールバック）\n"
+                f"Akira本体の応答生成中にエラーが発生したため、通常どおりの日報を書けませんでした。\n\n"
+                f"- エラー種別: `{type(e).__name__}`\n"
+                f"- 本日累計LLM費用: 約{spent:.1f}円\n\n"
+                f"サイトへの作業・公開状況の詳細は、次回の日報またはサイトのファイル一覧で確認してください。"
+            )
+            collected.setdefault("requests_to_okamo", "")
 
     # --- 4. 後処理 ---
     if not dry_run:
