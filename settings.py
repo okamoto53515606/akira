@@ -38,9 +38,9 @@ MODEL_PRICING_USD: dict[str, tuple[float, float]] = {
     "claude-sonnet-4-6": (3.0, 15.0),
     "claude-sonnet-5": (2.0, 10.0),  # 導入価格。2026-09-01以降はbudget.pyが$3/$15で自動計算
     "gpt-5.6-terra": (2.5, 15.0),
-    "gemini-3.6-flash": (1.5, 7.5),
+    "gemini-3.7-flash": (0.75, 3.75), # 導入価格。2027-01-01以降は2倍
     "gemini-3.1-flash-image": (0.5, 3.0),
-    "deepseek-v4-pro": (0.435, 0.87),  # DeepSeek V4 Pro プロモ価格（通常 $1.74/$3.48）
+    "deepseek-v4-pro": (0.66, 1.98),  # DeepSeek V4 Pro OFF-PEAK（PEAK $1.32/$3.96）
 }
 DEFAULT_PRICING_USD = (10.0, 50.0)
 IMAGE_PRICE_USD = float(os.getenv("IMAGE_PRICE_USD", "0.05"))  # 生成画像1枚あたり
@@ -49,7 +49,7 @@ IMAGE_PRICE_USD = float(os.getenv("IMAGE_PRICE_USD", "0.05"))  # 生成画像1�
 AKIRA_MODEL_ID = os.getenv("AKIRA_MODEL_ID", "claude-fable-5")
 CLAUDE_MODEL_ID = os.getenv("CLAUDE_MODEL_ID", "claude-sonnet-5")
 OPENAI_MODEL_ID = os.getenv("OPEN_AI_MODEL_ID", "gpt-5.6-terra")
-GEMINI_MODEL_ID = os.getenv("GEMINI_MODEL_ID", "gemini-3.6-flash")
+GEMINI_MODEL_ID = os.getenv("GEMINI_MODEL_ID", "gemini-3.7-flash")
 IMAGE_MODEL_ID = os.getenv("BANNER_MODEL", "gemini-3.1-flash-image")
 DEEPSEEK_MODEL_ID = os.getenv("DEEPSEEK_MODEL_ID", "deepseek-v4-pro")
 
