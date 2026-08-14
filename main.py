@@ -27,8 +27,10 @@ import settings
 import tools as akira_tools
 from settings import (
     AKIRA_MODEL_ID,
+    AKIRA_USE_DEEPSEEK,
     CLAUDE_MODEL_ID,
     DEBUG_TOOL_LOGGING,
+    DEEPSEEK_ANTHROPIC_BASE_URL,
     DEEPSEEK_MODEL_ID,
     ENABLE_BIGQUERY_MCP,
     ENABLE_GA4_MCP,
@@ -100,12 +102,30 @@ def _create_models():
     from strands.models.gemini import GeminiModel
     from strands.models.openai_responses import OpenAIResponsesModel
 
-    return {
-        "akira": AnthropicModel(
+    if AKIRA_USE_DEEPSEEK:
+        # テスト運用: Akira本体をDeepSeek V4 Pro（Anthropic互換API）に切替。
+        # モデル名は deepseek-v4-pro を明示する（claude-fable-5 のままだと DeepSeek 側が
+        # 未対応名として deepseek-v4-flash に自動マッピングしてしまう罠がある）。
+        # 予算記録は従来どおり AKIRA_MODEL_ID のまま（fable に戻せるよう現状維持。
+        # 単価が高めに見積もられるだけで、予算は安全側に倒れる）。
+        logger.info("💰 Akira本体 → DeepSeek V4 Pro (Anthropic互換API) に切替")
+        akira_model = AnthropicModel(
+            client_args={
+                "api_key": os.getenv("DEEPSEEK_API_KEY"),
+                "base_url": DEEPSEEK_ANTHROPIC_BASE_URL,
+            },
+            model_id=DEEPSEEK_MODEL_ID,
+            max_tokens=16384,
+        )
+    else:
+        akira_model = AnthropicModel(
             client_args={"api_key": os.getenv("CLAUDE_API_KEY")},
             model_id=AKIRA_MODEL_ID,
             max_tokens=16384,
-        ),
+        )
+
+    return {
+        "akira": akira_model,
         "claude": AnthropicModel(
             client_args={"api_key": os.getenv("CLAUDE_API_KEY")},
             model_id=CLAUDE_MODEL_ID,
@@ -444,9 +464,6 @@ DAILY_MISSION_TEMPLATE = """今日は {today} です。LLM Data Hub（{site_url}
 
 ## 利用可能なWEBツール（すべて無料枠。factチェックはBrave→Firecrawlの順で）
 - Brave Search（Web検索。factチェック第一選択）/ Firecrawl（URL指定でMarkdown取得。JSサイト対応。第二選択）
-- take_screenshot（ApiFlashで画面キャプチャ→ローカルパス返却。image_readerに渡して視認。UX/デザイン確認用。月100枚無料）
-- image_reader（ローカル画像パス→LLM視認可能形式に変換。strands標準ツール）
-- fetch_image_from_url（指定URLの画像を直接取得・LLM視認可能形式で返す）
 - GitHub MCP（公開リポジトリ読み取り専用）
 
 ## 今回の進め方（コスト最適化: あなた自身の高額な呼び出し回数を最小限にする）
@@ -559,7 +576,10 @@ def run_daily(dry_run: bool = False) -> None:
     delegation = create_delegation_tools(models, run_budget_jpy=budget_status["remaining_jpy"])
 
     # Akira自身のツール（delegation + 直接使うツール）
-    from strands_tools import file_read, image_reader
+    # ※画像系（take_screenshot / image_reader / fetch_image_from_url）はAkiraから外す
+    #   （DeepSeekのAnthropic互換APIが画像ブロック非対応のため。Fableでも不要と判断）。
+    #   画像・UXの確認は ask_gemini_mother 経由で委任できるので運用に支障はない。
+    from strands_tools import file_read
     akira_tools_list = [
         *delegation,
         akira_tools.get_site_file,
@@ -570,9 +590,6 @@ def run_daily(dry_run: bool = False) -> None:
         akira_tools.update_akira_config,
         create_report_tool(collected),
         _create_brave_mcp(),
-        akira_tools.take_screenshot,
-        akira_tools.fetch_image_from_url,
-        image_reader,
         *akira_extra_tools,
     ]
     firecrawl = _create_firecrawl_mcp()

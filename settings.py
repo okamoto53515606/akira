@@ -53,6 +53,11 @@ GEMINI_MODEL_ID = os.getenv("GEMINI_MODEL_ID", "gemini-3.7-flash")
 IMAGE_MODEL_ID = os.getenv("BANNER_MODEL", "gemini-3.1-flash-image")
 DEEPSEEK_MODEL_ID = os.getenv("DEEPSEEK_MODEL_ID", "deepseek-v4-pro")
 
+# Akira本体をDeepSeek（Anthropic互換API）に切替えるか（テスト運用用）。trueで切替、false/falsyで従来のFable 5
+AKIRA_USE_DEEPSEEK = os.getenv("AKIRA_USE_DEEPSEEK", "false").lower() == "true"
+# DeepSeek の Anthropic 互換エンドポイント（https://api-docs.deepseek.com/guides/anthropic_api）
+DEEPSEEK_ANTHROPIC_BASE_URL = "https://api.deepseek.com/anthropic"
+
 # --- 機能フラグ ---
 ENABLE_GA4_MCP = os.getenv("ENABLE_GA4_MCP", "true").lower() == "true"
 ENABLE_BIGQUERY_MCP = os.getenv("ENABLE_BIGQUERY_MCP", "true").lower() == "true"
