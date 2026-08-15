@@ -106,8 +106,7 @@ def _create_models():
         # テスト運用: Akira本体をDeepSeek V4 Pro（Anthropic互換API）に切替。
         # モデル名は deepseek-v4-pro を明示する（claude-fable-5 のままだと DeepSeek 側が
         # 未対応名として deepseek-v4-flash に自動マッピングしてしまう罠がある）。
-        # 予算記録は従来どおり AKIRA_MODEL_ID のまま（fable に戻せるよう現状維持。
-        # 単価が高めに見積もられるだけで、予算は安全側に倒れる）。
+        # 予算記録は実モデル(deepseek-v4-pro)で行い、正しい単価(0.66/1.98)で見積もる。
         logger.info("💰 Akira本体 → DeepSeek V4 Pro (Anthropic互換API) に切替")
         akira_model = AnthropicModel(
             client_args={
@@ -286,8 +285,8 @@ def create_delegation_tools(models, run_budget_jpy: float):
         return str(result)
 
     # GPT税理士・Gemini子育てママを先に作る（Claudeエンジニアが自分のツールとして使うため）。
-    # これによりAkira(高額な$10/$50モデル)が毎回レビュー往復を仲介せずに済み、
-    # 安価なClaudeエンジニア($2/$10導入価格)の会話内で完結させてコストを最適化する。
+    # これによりAkiraが毎回レビュー往復を仲介せずに済み、Claudeエンジニアの会話内で
+    # 完結させてAkira本体の呼び出し回数・会話履歴の肥大化を抑える。
 
     # --- 共通WEBツール（全員に配布）---
     firecrawl = _create_firecrawl_mcp()
@@ -405,7 +404,7 @@ def create_delegation_tools(models, run_budget_jpy: float):
     def ask_claude_engineer(request: str) -> str:
         """Claudeエンジニアに今回分の作業をまとめて依頼する（現場責任者としてリサーチ→執筆→
         GPT税理士レビュー→必要ならGemini画像/UX→公開までを自律的に一気通貫で行い、最後に結果を
-        要約して返す）。Akira自身の高額な呼び出し回数を減らすため、原則1回のみ呼ぶこと。
+        要約して返す）。同じエージェントの会話履歴が肥大化するため、原則1回のみ呼ぶこと。
 
         Args:
             request: 依頼内容。今日のテーマ候補・予算感・特筆事項を伝えれば十分（細かい手順の
@@ -466,7 +465,7 @@ DAILY_MISSION_TEMPLATE = """今日は {today} です。LLM Data Hub（{site_url}
 - Brave Search（Web検索。factチェック第一選択）/ Firecrawl（URL指定でMarkdown取得。JSサイト対応。第二選択）
 - GitHub MCP（公開リポジトリ読み取り専用）
 
-## 今回の進め方（コスト最適化: あなた自身の高額な呼び出し回数を最小限にする）
+## 今回の進め方
 1. list_site_files で現在のサイト状態を軽く確認する（大きいHTMLは読まない）
 2. 今回の作業テーマ（新規ページ or 既存ページ更新、1〜2件まで）の方向性だけ決める
 3. ask_claude_engineer に今回分をまとめて1回で依頼する。リサーチ・執筆・GPT税理士へのレビュー
@@ -475,16 +474,15 @@ DAILY_MISSION_TEMPLATE = """今日は {today} です。LLM Data Hub（{site_url}
    を伝えるだけでよく、細かい手順の指示や公開可否の判断をあなたが都度行う必要はない
 4. Claudeエンジニアからの報告（公開したページ・GPT税理士の指摘件数・記録した課題）を確認する。
    よほど気になる点がない限り、あなた自身がask_gpt_tax_advisor/ask_gemini_motherを直接呼ぶ必要はない
-   （呼ぶと高額なあなたの会話履歴が伸びてコスト増になるため、通常はClaudeエンジニアに任せる）
+   （通常はClaudeエンジニアに任せる）
 5. 最後に write_daily_report で日報を書く（Claudeエンジニアの報告をもとにまとめる。
    okamoへの依頼事項があれば必ず書け。黙ってちゃ伝わらんぞ）
 
 ## 注意（重要）
-- あなた(Akira)の単価は $10/$50 per MTok と圧倒的に高額（Claudeエンジニアの5倍以上）。
-  自分で考え込んだりWeb検索・factチェックを自分でやったりせず、Claudeエンジニアに一括委任すること。
+- 自分で考え込んだりWeb検索・factチェックを自分でやったりせず、Claudeエンジニアに一括委任すること。
   あなた自身の役割は「テーマ決定」と「最終確認・日報執筆」に絞る
-- ask_claude_engineer は原則1回のみ呼ぶ（同じエージェントを何度も呼ぶと会話履歴が肥大化し
-  費用が急増する。Claudeエンジニア内部でのGPT/Geminiとのやり取りは何度あってもあなたの費用には響かない）
+- ask_claude_engineer は原則1回のみ呼ぶ（同じエージェントを何度も呼ぶと会話履歴が肥大化する。
+  Claudeエンジニア内部でのGPT/Geminiとのやり取りは何度あっても問題ない）
 - 月額予算のハードリミットを超えた場合（予算ガード発動）、速やかに日報を書いて終了すること。
   日報本文に「残予算○円/残り○日」のような詳細な費用規律メッセージを書く必要はない
 - サイト全体の一貫性（ナビゲーション・sitemap.xml）を保つこと
@@ -617,7 +615,10 @@ def run_daily(dry_run: bool = False) -> None:
     try:
         result = akira(mission)
         _debug_log_io("応答", "Akira本体", str(result))
-        cost = budget.collect_agent_usage(result, AKIRA_MODEL_ID, purpose="akira:daily", agent=akira)
+        # DeepSeek切替中は実モデル(deepseek-v4-pro)で記録して正しい単価(0.66/1.98)で見積もる。
+        # Fableモードは従来どおり AKIRA_MODEL_ID (claude-fable-5) のまま。
+        usage_model_id = DEEPSEEK_MODEL_ID if AKIRA_USE_DEEPSEEK else AKIRA_MODEL_ID
+        cost = budget.collect_agent_usage(result, usage_model_id, purpose="akira:daily", agent=akira)
         logger.info("Akira本体 完了 (約%.1f円 / 本日合計約%.1f円)", cost, budget.get_run_spent_jpy())
     except Exception as e:
         # 【2026-08-13 対策】Anthropic APIの一時的なサーバーエラー(500)などでAkira本体の
