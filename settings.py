@@ -57,6 +57,10 @@ DEEPSEEK_MODEL_ID = os.getenv("DEEPSEEK_MODEL_ID", "deepseek-v4-pro")
 AKIRA_USE_DEEPSEEK = os.getenv("AKIRA_USE_DEEPSEEK", "false").lower() == "true"
 # DeepSeek の Anthropic 互換エンドポイント（https://api-docs.deepseek.com/guides/anthropic_api）
 DEEPSEEK_ANTHROPIC_BASE_URL = "https://api.deepseek.com/anthropic"
+# DeepSeek V4 Pro の1レスポンス出力上限（公式MAX OUTPUTは384K。巨大file_write対策で128K）
+DEEPSEEK_MAX_TOKENS = int(os.getenv("DEEPSEEK_MAX_TOKENS", "128000"))
+# 日次タスクの壁時計上限（秒）。超過したら日報を書いて終了する
+RUN_DEADLINE_SECONDS = int(os.getenv("RUN_DEADLINE_SECONDS", "3600"))
 
 # --- 機能フラグ ---
 ENABLE_GA4_MCP = os.getenv("ENABLE_GA4_MCP", "true").lower() == "true"

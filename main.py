@@ -14,6 +14,8 @@
 import argparse
 import logging
 import os
+import signal
+import time
 from datetime import datetime
 
 from dotenv import load_dotenv
@@ -31,7 +33,9 @@ from settings import (
     CLAUDE_MODEL_ID,
     DEBUG_TOOL_LOGGING,
     DEEPSEEK_ANTHROPIC_BASE_URL,
+    DEEPSEEK_MAX_TOKENS,
     DEEPSEEK_MODEL_ID,
+    RUN_DEADLINE_SECONDS,
     ENABLE_BIGQUERY_MCP,
     ENABLE_GA4_MCP,
     GEMINI_MODEL_ID,
@@ -54,6 +58,35 @@ if DEBUG_TOOL_LOGGING:
     logger.info("DEBUG_TOOL_LOGGING=true: strands/mcpの詳細ログを出力します")
 
 _DEBUG_LOG_LIMIT = 6000  # CloudWatch費用抑制のため1エントリあたりの出力上限（文字数）
+_STOP_WORK_MSG = (
+    "【作業停止】本日の作業上限に達しました。"
+    "これ以上の作業依頼はできません。日報を書いて終了してください。"
+)
+_run_deadline_monotonic: float | None = None
+
+
+def _start_run_deadline() -> None:
+    """日次タスクの壁時計上限をセットする（RUN_DEADLINE_SECONDS、既定60分）。"""
+    global _run_deadline_monotonic
+    _run_deadline_monotonic = time.monotonic() + RUN_DEADLINE_SECONDS
+
+
+def _deadline_remaining_seconds() -> float:
+    if _run_deadline_monotonic is None:
+        return float(RUN_DEADLINE_SECONDS)
+    return max(0.0, _run_deadline_monotonic - time.monotonic())
+
+
+def _deadline_exceeded() -> bool:
+    return _deadline_remaining_seconds() <= 0
+
+
+class _RunDeadlineExceeded(Exception):
+    """壁時計上限に達した。"""
+
+
+def _alarm_handler(signum, frame) -> None:
+    raise _RunDeadlineExceeded("RUN_DEADLINE_SECONDS exceeded")
 
 
 def is_savings_mode() -> bool:
@@ -64,25 +97,20 @@ def is_savings_mode() -> bool:
 
 
 def _create_deepseek_model():
-    """DeepSeek V4 Pro 用 LiteLLMModel（節約モード）。
-    APIキーは環境変数 DEEPSEEK_API_KEY を LiteLLM が自動読み取りする。
+    """DeepSeek V4 Pro（Anthropic互換API）。節約モードのエンジニア役 / Akira本体で使用。
 
-    【2026-08-01 修正】max_tokens を 4096→16384 に引き上げ。
-    エージェント（Claudeエンジニア代替）はリサーチ・執筆・レビューを一括で行うため
-    1回の応答が長大になりやすく、4096では MaxTokensReachedException が頻発した。
-    reasoning_content（推論内容）がマルチターン会話で非サポートという警告も出るため
-    drop_params=True で未対応パラメータを破棄する。
+    LiteLLM+Chat Completions は reasoning_content がマルチターンで欠落するため使わない。
+    max_tokens は DEEPSEEK_MAX_TOKENS（既定128000）。公式MAX OUTPUTは384K。
     """
-    from strands.models.litellm import LiteLLMModel
-    model_id = os.getenv("DEEPSEEK_MODEL_ID", "deepseek-v4-pro")
-    if not model_id.startswith("deepseek/"):
-        model_id = f"deepseek/{model_id}"
-    return LiteLLMModel(
-        model_id=model_id,
-        params={
-            "max_tokens": 16384,
-            "drop_params": True,
+    from strands.models.anthropic import AnthropicModel
+
+    return AnthropicModel(
+        client_args={
+            "api_key": os.getenv("DEEPSEEK_API_KEY"),
+            "base_url": DEEPSEEK_ANTHROPIC_BASE_URL,
         },
+        model_id=DEEPSEEK_MODEL_ID,
+        max_tokens=DEEPSEEK_MAX_TOKENS,
     )
 
 
@@ -108,14 +136,7 @@ def _create_models():
         # 未対応名として deepseek-v4-flash に自動マッピングしてしまう罠がある）。
         # 予算記録は実モデル(deepseek-v4-pro)で行い、正しい単価(0.66/1.98)で見積もる。
         logger.info("💰 Akira本体 → DeepSeek V4 Pro (Anthropic互換API) に切替")
-        akira_model = AnthropicModel(
-            client_args={
-                "api_key": os.getenv("DEEPSEEK_API_KEY"),
-                "base_url": DEEPSEEK_ANTHROPIC_BASE_URL,
-            },
-            model_id=DEEPSEEK_MODEL_ID,
-            max_tokens=16384,
-        )
+        akira_model = _create_deepseek_model()
     else:
         akira_model = AnthropicModel(
             client_args={"api_key": os.getenv("CLAUDE_API_KEY")},
@@ -271,22 +292,18 @@ def create_delegation_tools(models, run_budget_jpy: float):
     import prompts
 
     def _run(agent: "Agent", model_id: str, name: str, request: str) -> str:
+        if _deadline_exceeded():
+            return _STOP_WORK_MSG
         spent = budget.get_run_spent_jpy()
         if spent >= run_budget_jpy:
-            return (
-                f"【予算ガード】今回実行の費用が約{spent:.0f}円となり、月次予算の残額（{run_budget_jpy:.0f}円）に達しました。"
-                "これ以上の作業依頼はできません。日報を書いて終了してください。"
-            )
+            logger.warning("予算ガード発動: spent=%.1f remaining_limit=%.1f", spent, run_budget_jpy)
+            return _STOP_WORK_MSG
         _debug_log_io("指示", name, request)
         result = agent(request)
         _debug_log_io("応答", name, str(result))
         cost = budget.collect_agent_usage(result, model_id, purpose=f"delegate:{name}", agent=agent)
         logger.info("%s 完了 (約%.1f円 / 本日累計約%.1f円)", name, cost, budget.get_run_spent_jpy())
         return str(result)
-
-    # GPT税理士・Gemini子育てママを先に作る（Claudeエンジニアが自分のツールとして使うため）。
-    # これによりAkiraが毎回レビュー往復を仲介せずに済み、Claudeエンジニアの会話内で
-    # 完結させてAkira本体の呼び出し回数・会話履歴の肥大化を抑える。
 
     # --- 共通WEBツール（全員に配布）---
     firecrawl = _create_firecrawl_mcp()
@@ -407,7 +424,7 @@ def create_delegation_tools(models, run_budget_jpy: float):
         要約して返す）。同じエージェントの会話履歴が肥大化するため、原則1回のみ呼ぶこと。
 
         Args:
-            request: 依頼内容。今日のテーマ候補・予算感・特筆事項を伝えれば十分（細かい手順の
+            request: 依頼内容。今日のテーマ候補・特筆事項を伝えれば十分（細かい手順の
                      指示は不要。リサーチ・執筆・レビュー依頼・公開判断はClaudeエンジニアに任せる）
         """
         return _run(claude_agent, engineer_model_id, "Claudeエンジニア", request)
@@ -458,9 +475,6 @@ DAILY_MISSION_TEMPLATE = """今日は {today} です。LLM Data Hub（{site_url}
 ## 前回の作業日
 {last_work_line}
 
-## 予算状況
-{budget_line}
-
 ## 利用可能なWEBツール（すべて無料枠。factチェックはBrave→Firecrawlの順で）
 - Brave Search（Web検索。factチェック第一選択）/ Firecrawl（URL指定でMarkdown取得。JSサイト対応。第二選択）
 - GitHub MCP（公開リポジトリ読み取り専用）
@@ -483,8 +497,7 @@ DAILY_MISSION_TEMPLATE = """今日は {today} です。LLM Data Hub（{site_url}
   あなた自身の役割は「テーマ決定」と「最終確認・日報執筆」に絞る
 - ask_claude_engineer は原則1回のみ呼ぶ（同じエージェントを何度も呼ぶと会話履歴が肥大化する。
   Claudeエンジニア内部でのGPT/Geminiとのやり取りは何度あっても問題ない）
-- 月額予算のハードリミットを超えた場合（予算ガード発動）、速やかに日報を書いて終了すること。
-  日報本文に「残予算○円/残り○日」のような詳細な費用規律メッセージを書く必要はない
+- 作業を止められたら、速やかに日報を書いて終了すること
 - サイト全体の一貫性（ナビゲーション・sitemap.xml）を保つこと
 - GPT税理士・Gemini子育てママは門番ではなくアドバイザー。クリティカルな指摘（明確な誤情報・
   法的リスク・アダルト/犯罪関連）だけが公開停止の理由になる。軽微な指摘だけで作業や公開を
@@ -514,6 +527,12 @@ def run_daily(dry_run: bool = False) -> None:
         if not dry_run:
             publish_daily_report(collected, budget_status)
         return
+
+    _start_run_deadline()
+    prev_alarm = signal.signal(signal.SIGALRM, _alarm_handler)
+    remaining = max(1, int(_deadline_remaining_seconds()))
+    signal.alarm(remaining)
+    logger.info("作業デッドライン: %d秒", remaining)
 
     # --- 1.5 サイト全体をローカル作業フォルダへDL（エンジニアのローカル編集→一括アップ用） ---
     try:
@@ -584,7 +603,6 @@ def run_daily(dry_run: bool = False) -> None:
         akira_tools.list_site_files,
         akira_tools.list_local_files,
         file_read,
-        akira_tools.get_budget_status,
         akira_tools.update_akira_config,
         create_report_tool(collected),
         _create_brave_mcp(),
@@ -604,9 +622,8 @@ def run_daily(dry_run: bool = False) -> None:
         tools=akira_tools_list,
     )
 
-    budget_line = f"月額予算 {budget_status['monthly_budget_jpy']:.0f}円（超過時は日報のみ書いて即終了）"
     mission = DAILY_MISSION_TEMPLATE.format(
-        today=today, site_url=LLM_SITE_URL, budget_line=budget_line, last_work_line=last_work_line
+        today=today, site_url=LLM_SITE_URL, last_work_line=last_work_line
     )
     if dry_run:
         mission += "\n\n【重要】今日はドライランです。公開・依頼は行わず、計画の提示だけしてください。"
@@ -620,6 +637,14 @@ def run_daily(dry_run: bool = False) -> None:
         usage_model_id = DEEPSEEK_MODEL_ID if AKIRA_USE_DEEPSEEK else AKIRA_MODEL_ID
         cost = budget.collect_agent_usage(result, usage_model_id, purpose="akira:daily", agent=akira)
         logger.info("Akira本体 完了 (約%.1f円 / 本日合計約%.1f円)", cost, budget.get_run_spent_jpy())
+    except _RunDeadlineExceeded:
+        logger.warning("作業デッドライン（%d秒）に達したため打ち切ります", RUN_DEADLINE_SECONDS)
+        if not collected.get("body_md"):
+            collected["body_md"] = (
+                "## 本日の運用は時間上限で終了しました\n"
+                "作業時間が上限に達したため打ち切りました。公開状況はサイトのファイル一覧で確認してください。"
+            )
+            collected.setdefault("requests_to_okamo", "")
     except Exception as e:
         # 【2026-08-13 対策】Anthropic APIの一時的なサーバーエラー(500)などでAkira本体の
         # 応答生成が失敗すると、イベントループが例外を投げてタスクがクラッシュし、
@@ -639,6 +664,9 @@ def run_daily(dry_run: bool = False) -> None:
                 f"サイトへの作業・公開状況の詳細は、次回の日報またはサイトのファイル一覧で確認してください。"
             )
             collected.setdefault("requests_to_okamo", "")
+    finally:
+        signal.alarm(0)
+        signal.signal(signal.SIGALRM, prev_alarm)
 
     # --- 4. 後処理 ---
     if not dry_run:

@@ -28,6 +28,11 @@ _invalidation_paths: list[str] = []  # 実行終盤にまとめてinvalidation
 SITE_LOCAL_DIR = os.getenv("SITE_LOCAL_DIR", "/tmp/site")
 
 
+def _is_skipped_upload_name(name: str) -> bool:
+    """公開対象から除外する作業ゴミ（editorの自動バックアップ等）。"""
+    return name.endswith(".bak") or name.endswith(".BAK")
+
+
 def _content_type(path: str) -> str:
     ext = path.rsplit(".", 1)[-1].lower() if "." in path else ""
     return {
@@ -176,11 +181,15 @@ def site_upload(local_path: str, site_prefix: str = "") -> dict:
         return {"status": "failed", "reason": f"存在しません: {local_path}"}
 
     if os.path.isfile(src):
+        if _is_skipped_upload_name(os.path.basename(src)):
+            return {"status": "skipped", "reason": f"除外対象: {os.path.basename(src)}"}
         files = [src]
     else:
         files = []
         for root, _dirs, names in os.walk(src):
             for name in names:
+                if _is_skipped_upload_name(name):
+                    continue
                 files.append(os.path.join(root, name))
 
     s3 = boto3.client("s3", region_name=AWS_REGION)
@@ -208,6 +217,8 @@ def list_local_files(rel_path: str = "") -> dict:
     files = []
     for root, _dirs, names in os.walk(base):
         for name in names:
+            if _is_skipped_upload_name(name):
+                continue
             rel = os.path.relpath(os.path.join(root, name), base_dir).replace(os.sep, "/")
             files.append(rel)
     files.sort()
