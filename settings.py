@@ -57,8 +57,14 @@ DEEPSEEK_MODEL_ID = os.getenv("DEEPSEEK_MODEL_ID", "deepseek-v4-pro")
 AKIRA_USE_DEEPSEEK = os.getenv("AKIRA_USE_DEEPSEEK", "false").lower() == "true"
 # DeepSeek の Anthropic 互換エンドポイント（https://api-docs.deepseek.com/guides/anthropic_api）
 DEEPSEEK_ANTHROPIC_BASE_URL = "https://api.deepseek.com/anthropic"
-# DeepSeek V4 Pro の1レスポンス出力上限（公式MAX OUTPUTは384K。巨大file_write対策で128K）
-DEEPSEEK_MAX_TOKENS = int(os.getenv("DEEPSEEK_MAX_TOKENS", "128000"))
+# DeepSeek V4 Pro の1レスポンス出力上限。公式MAX OUTPUTは384K（コンテキスト1M）なので
+# 上限値に設定（https://api-docs.deepseek.com/quick_start/pricing）。巨大file_writeの
+# MaxTokensReachedException 対策（2026-09-04: 128K → 384K へ引き上げ）
+DEEPSEEK_MAX_TOKENS = int(os.getenv("DEEPSEEK_MAX_TOKENS", "384000"))
+# DeepSeek API の HTTP read タイムアウト（秒）。anthropic SDK の既定は 600s。
+# 384K出力+thinking モードの長大生成でも切断されないよう上限に設定。
+# RUN_DEADLINE_SECONDS（日次タスクの壁時計上限=3600s）がそれ以上長くても意味がないため同じ値
+DEEPSEEK_READ_TIMEOUT = int(os.getenv("DEEPSEEK_READ_TIMEOUT", "3600"))
 # 日次タスクの壁時計上限（秒）。超過したら日報を書いて終了する
 RUN_DEADLINE_SECONDS = int(os.getenv("RUN_DEADLINE_SECONDS", "3600"))
 

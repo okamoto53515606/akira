@@ -35,6 +35,7 @@ from settings import (
     DEEPSEEK_ANTHROPIC_BASE_URL,
     DEEPSEEK_MAX_TOKENS,
     DEEPSEEK_MODEL_ID,
+    DEEPSEEK_READ_TIMEOUT,
     RUN_DEADLINE_SECONDS,
     ENABLE_BIGQUERY_MCP,
     ENABLE_GA4_MCP,
@@ -100,14 +101,20 @@ def _create_deepseek_model():
     """DeepSeek V4 Pro（Anthropic互換API）。節約モードのエンジニア役 / Akira本体で使用。
 
     LiteLLM+Chat Completions は reasoning_content がマルチターンで欠落するため使わない。
-    max_tokens は DEEPSEEK_MAX_TOKENS（既定128000）。公式MAX OUTPUTは384K。
+    max_tokens は DEEPSEEK_MAX_TOKENS（既定384000=公式MAX OUTPUT上限）。
+    readタイムアウトは DEEPSEEK_READ_TIMEOUT（既定3600s。SDK既定600sは
+    384K出力+thinkingの長大生成で切断されうるため拡張）。
     """
+    import httpx
     from strands.models.anthropic import AnthropicModel
 
     return AnthropicModel(
         client_args={
             "api_key": os.getenv("DEEPSEEK_API_KEY"),
             "base_url": DEEPSEEK_ANTHROPIC_BASE_URL,
+            # floatを渡すとconnect含む全フェーズに適用されるため、read/write/poolのみ
+            # 上限に伸ばし connect は短く保つ（接続先ダウンを素早く検知する）
+            "timeout": httpx.Timeout(DEEPSEEK_READ_TIMEOUT, connect=10.0),
         },
         model_id=DEEPSEEK_MODEL_ID,
         max_tokens=DEEPSEEK_MAX_TOKENS,

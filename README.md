@@ -85,7 +85,10 @@ DynamoDB (`akira-usage`) への記録と月次予算ゲートを行う。
 ### 節約モード（Claudeエンジニア → DeepSeek V4 Pro）
 
 `DEEPSEEK_API_KEY` と `DEEPSEEK_MODEL_ID` が両方とも空でなければ、Claudeエンジニアの実体が
-`deepseek-v4-pro`（Anthropic互換API、`max_tokens=128000`）に自動切替される（[main.py](main.py) `is_savings_mode()`）。
+`deepseek-v4-pro`（Anthropic互換API、`max_tokens=384000`=公式MAX OUTPUT上限、
+readタイムアウト3600秒）に自動切替される（[main.py](main.py) `is_savings_mode()`）。
+`AKIRA_USE_DEEPSEEK=true` の場合はAkira本体も同じ設定で DeepSeek に切替わる。
+パラメータは [settings.py](settings.py) の `DEEPSEEK_MAX_TOKENS` / `DEEPSEEK_READ_TIMEOUT` で調整可。
 
 - `DEEPSEEK_MODEL_ID` はECSタスク定義の環境変数として常時設定済み（`deepseek-v4-pro`）
 - `DEEPSEEK_API_KEY` はタスク定義には**置かず**、Secrets Manager（`SECRET_ARN`）経由で
