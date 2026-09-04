@@ -660,3 +660,38 @@ def load_workspace_tools() -> list:
         except Exception as e:
             print(f"[workspace] ツールのロードをスキップ: {os.path.basename(path)}: {e}")
     return loaded
+
+
+@tool
+def list_workspace_files(rel_path: str = "") -> dict:
+    """永続ワークスペース（翌日も残る持ち越し作業場）内のファイル一覧を返す。
+
+    /workspace はタスク終了時にS3へ保存され、翌朝の起動時に自動復元される。
+    前日までの cache/（一次情報スナップショット）・parts/（再利用素材）・
+    drafts/（持ち越し原稿）・notes/（メモ）を探すのに使う。
+    内容は file_read に絶対パス（例: /workspace/cache/pricing.md）で渡して読む。
+
+    Args:
+        rel_path: ワークスペースからの相対パス（例: "cache/"。空で全体）
+    """
+    base_dir = os.path.abspath(WORKSPACE_LOCAL_DIR)
+    base = os.path.abspath(os.path.join(base_dir, rel_path.lstrip("/")))
+    if base != base_dir and not base.startswith(base_dir + os.sep):
+        return {"status": "failed", "reason": f"パスは {base_dir} 配下に限定されています: {rel_path}"}
+    if not os.path.isdir(base):
+        return {"status": "failed", "reason": f"ディレクトリが存在しません: {rel_path}"}
+    files = []
+    for root, _dirs, names in os.walk(base):
+        for name in names:
+            if _is_workspace_excluded(name):
+                continue
+            p = os.path.join(root, name)
+            try:
+                files.append({
+                    "path": os.path.relpath(p, base_dir).replace(os.sep, "/"),
+                    "size": os.path.getsize(p),
+                })
+            except OSError:
+                continue
+    files.sort(key=lambda f: f["path"])
+    return {"status": "ok", "path": rel_path or "/", "count": len(files), "files": files}

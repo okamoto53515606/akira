@@ -325,7 +325,7 @@ def create_delegation_tools(models, run_budget_jpy: float):
     )
 
     gpt_tools = [akira_tools.get_site_file, akira_tools.list_site_files,
-                 akira_tools.list_local_files, file_read,
+                 akira_tools.list_local_files, akira_tools.list_workspace_files, file_read,
                  brave, screenshot_tool, fetch_image, image_reader]
     if firecrawl:
         gpt_tools.append(firecrawl)
@@ -340,6 +340,7 @@ def create_delegation_tools(models, run_budget_jpy: float):
         akira_tools.get_site_file,
         akira_tools.list_site_files,
         akira_tools.list_local_files,
+        akira_tools.list_workspace_files,
         file_read,
         brave,
         screenshot_tool,
@@ -379,6 +380,7 @@ def create_delegation_tools(models, run_budget_jpy: float):
         akira_tools.get_site_file,
         akira_tools.list_site_files,
         akira_tools.list_local_files,
+        akira_tools.list_workspace_files,
         akira_tools.site_download,
         akira_tools.site_upload,
         akira_tools.update_akira_config,
@@ -464,7 +466,13 @@ def create_report_tool(collected: dict):
         Args:
             body_md: 日報本文（Markdown）。やったこと・サイトの状況・明日の予定など。
                      機密情報（APIキー等）は絶対に書かないこと
-            requests_to_okamo: okamoへの依頼事項（なければ空文字）
+            requests_to_okamo: okamoへの依頼事項・確認事項（なければ空文字）。
+                     必ずAkira自身の口調（ハードボイルドでぶっきらぼう、だが身内には甘い）で
+                     書くこと。「【確認】【意向確認】」等の事務的な見出し・ビジネス文書調は
+                     禁止。okamoは身内だ。
+                     良い例: 「Cyberの料金、お前にも見えねぇか。まあいい、情報が出たら
+                     教えてくれ。次のテーマはマルチモーダル特集が一番伸びると俺は
+                     見てるが、お前の目はどうだ」
         """
         collected["body_md"] = body_md
         collected["requests_to_okamo"] = requests_to_okamo
@@ -511,13 +519,16 @@ DAILY_MISSION_TEMPLATE = """今日は {today} です。LLM Data Hub（{site_url}
    よほど気になる点がない限り、あなた自身がask_gpt_tax_advisor/ask_gemini_motherを直接呼ぶ必要はない
    （通常はClaudeエンジニアに任せる）
 5. 最後に write_daily_report で日報を書く（Claudeエンジニアの報告をもとにまとめる。
-   okamoへの依頼事項があれば必ず書け。黙ってちゃ伝わらんぞ）
+   okamoへの依頼事項があれば必ず書け。黙ってちゃ伝わらんぞ。依頼事項は俺の口調で書く
+   こと。【確認】【意向確認】等の事務的な見出しはやめだ。身内に話すように書け）
 
 ## 注意（重要）
 - 自分で考え込んだりWeb検索・factチェックを自分でやったりせず、Claudeエンジニアに一括委任すること。
   あなた自身の役割は「テーマ決定」と「最終確認・日報執筆」に絞る
 - ask_claude_engineer は原則1回のみ呼ぶ（同じエージェントを何度も呼ぶと会話履歴が肥大化する。
   Claudeエンジニア内部でのGPT/Geminiとのやり取りは何度あっても問題ない）
+- okamoのコメントで方針・優先度が決まったものは、その場でsite_planに写しておくこと
+  （okamoのコメントは翌日以降は読めなくなる。site_planこそが恒久の作業リストだ）
 - 作業を止められたら、速やかに日報を書いて終了すること
 - サイト全体の一貫性（ナビゲーション・sitemap.xml）を保つこと
 - GPT税理士・Gemini子育てママは門番ではなくアドバイザー。クリティカルな指摘（明確な誤情報・
