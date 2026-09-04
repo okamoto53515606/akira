@@ -20,6 +20,11 @@ from settings import (
     LLM_DIST_ID,
     LLM_SITE_BUCKET,
     LLM_SITE_URL,
+    WORKSPACE_BUCKET,
+    WORKSPACE_LOCAL_DIR,
+    WORKSPACE_MAX_FILE_BYTES,
+    WORKSPACE_MAX_TOTAL_BYTES,
+    WORKSPACE_TOOLS_MAX,
 )
 
 _invalidation_paths: list[str] = []  # 実行終盤にまとめてinvalidation
@@ -477,3 +482,181 @@ def fetch_image_from_url(image_url: str) -> dict:
         os.unlink(tmp_path)
 
     return result
+
+
+# =====================================================================
+# 永続ワークスペース（Fargateの使い捨てFSをS3と同期して翌日に持ち越す）
+# - restore_workspace(): タスク開始時に S3→ローカル全件復元（run_daily から呼ぶ）
+# - save_workspace():    タスク終了時にローカル→S3保存（例外/タイムアウト時も finally で呼ぶ）
+# - load_workspace_tools(): /workspace/tools/*.py の TOOL 変数を自作ツールとして自動登録
+#
+# 設計メモ:
+# - バケットは非公開の akira-workspace（公開サイト用バケットはCloudFront経由で丸見えのため使わない）
+# - 保存は upsert-only（リモート側の削除はしない）。誤って rm -rf してもS3の前回分は消えない
+# - 除外: __pycache__/.git/node_modules/.venv、*.pyc、隠しファイル、editorの .bak
+# =====================================================================
+_WORKSPACE_EXCLUDE_DIRS = {"__pycache__", ".git", "node_modules", ".venv", ".uv-cache"}
+
+
+def _is_workspace_excluded(name: str) -> bool:
+    """ワークスペースの同期から除外する作業ゴミ判定。"""
+    return (
+        name in _WORKSPACE_EXCLUDE_DIRS
+        or name.startswith(".")
+        or name.endswith((".pyc", ".pyo"))
+        or _is_skipped_upload_name(name)
+    )
+
+
+def _collect_workspace_files(base_dir: str) -> list[dict]:
+    """ワークスペース配下の同期対象ファイルを列挙する（除外適用済み）。
+
+    Returns: [{"abs": 絶対パス, "rel": 相対パス, "size": バイト, "mtime": 更新時刻}]
+    """
+    out = []
+    for root, dirs, names in os.walk(base_dir):
+        dirs[:] = [d for d in dirs if not _is_workspace_excluded(d)]
+        for name in names:
+            if _is_workspace_excluded(name):
+                continue
+            abs_path = os.path.join(root, name)
+            try:
+                st = os.stat(abs_path)
+            except OSError:
+                continue
+            out.append({
+                "abs": abs_path,
+                "rel": os.path.relpath(abs_path, base_dir).replace(os.sep, "/"),
+                "size": st.st_size,
+                "mtime": st.st_mtime,
+            })
+    return out
+
+
+def restore_workspace() -> dict:
+    """S3のワークスペースをローカルに全件復元する（タスク開始時に呼ぶ）。
+
+    バケット未作成・空でもエラーにせず失敗ステータスを返す（日次運用を止めない）。
+    """
+    base_dir = os.path.abspath(WORKSPACE_LOCAL_DIR)
+    os.makedirs(base_dir, exist_ok=True)
+    s3 = boto3.client("s3", region_name=AWS_REGION)
+    keys: list[str] = []
+    kwargs: dict = {"Bucket": WORKSPACE_BUCKET}
+    try:
+        while True:
+            resp = s3.list_objects_v2(**kwargs)
+            keys += [o["Key"] for o in resp.get("Contents", [])]
+            if not resp.get("IsTruncated"):
+                break
+            kwargs["ContinuationToken"] = resp["NextContinuationToken"]
+    except s3.exceptions.NoSuchBucket:
+        return {"status": "failed", "reason": f"バケット未作成: {WORKSPACE_BUCKET}"}
+    except boto3.exceptions.Boto3Error as e:
+        return {"status": "failed", "reason": f"S3 list 失敗: {e}"}
+
+    restored = []
+    for key in keys:
+        parts = key.split("/")
+        if any(_is_workspace_excluded(p) for p in parts) or key.endswith("/"):
+            continue
+        local = os.path.join(base_dir, key)
+        os.makedirs(os.path.dirname(local), exist_ok=True)
+        s3.download_file(WORKSPACE_BUCKET, key, local)
+        restored.append(key)
+    return {"status": "restored", "dest_dir": base_dir, "count": len(restored)}
+
+
+def save_workspace() -> dict:
+    """ローカルワークスペースをS3へ保存する（タスク終了時に finally で呼ぶ）。
+
+    - 新しいファイルから優先してアップロードし、合計上限（WORKSPACE_MAX_TOTAL_BYTES）を
+      超えた分は保存せず報告する（1ファイル上限 WORKSPACE_MAX_FILE_BYTES も同様）
+    - upsert-only: S3上の既存ファイルを削除しない（誤削除に強い。不要になったら
+      エンジニアに明示的に報告してもらう運用）
+    """
+    base_dir = os.path.abspath(WORKSPACE_LOCAL_DIR)
+    if not os.path.isdir(base_dir):
+        return {"status": "skipped", "reason": "ローカルワークスペースが存在しません"}
+
+    files = _collect_workspace_files(base_dir)
+    if not files:
+        return {"status": "skipped", "reason": "保存対象なし"}
+
+    oversized = [f["rel"] for f in files if f["size"] > WORKSPACE_MAX_FILE_BYTES]
+    files = [f for f in files if f["size"] <= WORKSPACE_MAX_FILE_BYTES]
+    files.sort(key=lambda f: f["mtime"], reverse=True)  # 新しいものを優先
+
+    s3 = boto3.client("s3", region_name=AWS_REGION)
+    uploaded, total, capped = [], 0, []
+    try:
+        for f in files:
+            if total + f["size"] > WORKSPACE_MAX_TOTAL_BYTES:
+                capped.append(f["rel"])
+                continue
+            s3.upload_file(f["abs"], WORKSPACE_BUCKET, f["rel"])
+            total += f["size"]
+            uploaded.append(f["rel"])
+    except boto3.exceptions.Boto3Error as e:
+        return {"status": "failed", "reason": f"S3 upload 失敗: {e}", "uploaded": uploaded}
+    result = {"status": "saved", "count": len(uploaded), "total_bytes": total, "uploaded": uploaded}
+    if oversized:
+        result["skipped_oversized"] = oversized
+    if capped:
+        result["skipped_total_cap"] = capped
+    return result
+
+
+def load_workspace_tools() -> list:
+    """/workspace/tools/*.py を自作ツールとしてロードする。
+
+    各ファイルは `from strands import tool` の @tool を付けた関数を
+    モジュール変数 TOOL に代入して定義する（1ファイル1ツール）。
+    - 1ファイルでもimportに失敗したらスキップして続行（1個の壊れたツールで
+      日次実行全体を止めない）
+    - 同名ツールの重複・上限件数（WORKSPACE_TOOLS_MAX）もガード
+    """
+    import glob
+    import importlib.util
+    import sys
+
+    tools_dir = os.path.join(os.path.abspath(WORKSPACE_LOCAL_DIR), "tools")
+    if not os.path.isdir(tools_dir):
+        return []
+
+    loaded: list = []
+    seen_names: set[str] = set()
+    for path in sorted(glob.glob(os.path.join(tools_dir, "*.py"))):
+        if len(loaded) >= WORKSPACE_TOOLS_MAX:
+            break
+        stem = os.path.basename(path)[:-3]
+        if stem.startswith("_"):
+            continue  # _XXX.py は「まだ未完成」の合図として無視
+        try:
+            modname = f"akira_ws_tool_{stem}"
+            spec = importlib.util.spec_from_file_location(modname, path)
+            if spec is None or spec.loader is None:
+                continue
+            module = importlib.util.module_from_spec(spec)
+            sys.modules[modname] = module
+            spec.loader.exec_module(module)
+            candidate = getattr(module, "TOOL", None)
+            if candidate is None:
+                # TOOL代入の書き忘れ対策: @tool 付き関数が1個だけならそれを TOOL とみなす
+                # （複数ある場合は曖昧なのでスキップ。変数名からは意図が読めないため）
+                decorated = [
+                    v for v in vars(module).values()
+                    if hasattr(v, "tool_spec") and getattr(v, "tool_name", None)
+                ]
+                if len(decorated) == 1:
+                    candidate = decorated[0]
+            if candidate is None or not hasattr(candidate, "tool_spec"):
+                raise ValueError("@tool を付けた TOOL 変数が定義されていません")
+            tool_name = getattr(candidate, "tool_name", stem)
+            if tool_name in seen_names:
+                continue  # 同名は先勝ち
+            seen_names.add(tool_name)
+            loaded.append(candidate)
+        except Exception as e:
+            print(f"[workspace] ツールのロードをスキップ: {os.path.basename(path)}: {e}")
+    return loaded

@@ -81,6 +81,18 @@ DEBUG_TOOL_LOGGING = os.getenv("DEBUG_TOOL_LOGGING", "true").lower() == "true"
 FIRECRAWL_API_KEY = os.getenv("FIRECRAWL_API_KEY", "")
 APIFLASH_ACCESS_KEY = os.getenv("APIFLASH_ACCESS_KEY", "")
 
+# --- 永続ワークスペース（Fargateの使い捨てFSをS3と同期して翌日に持ち越す）---
+# タスク開始時に S3→ローカルへ全件復元、終了時（例外/タイムアウト含む）にローカル→S3へ保存。
+# 自作ツール(tools/)・再利用パーツ(parts/)・一次情報キャッシュ(cache/)・持ち越し原稿(drafts/)用。
+# バケットは公開サイト用バケットと別の「非公開」バケットを使うこと（機密・作業ファイルを
+# CloudFront経由で公開しないため）
+WORKSPACE_BUCKET = os.getenv("WORKSPACE_BUCKET", "akira-workspace")
+WORKSPACE_LOCAL_DIR = os.getenv("WORKSPACE_LOCAL_DIR", "/workspace")
+WORKSPACE_MAX_FILE_BYTES = int(os.getenv("WORKSPACE_MAX_FILE_BYTES", str(10 * 1024 * 1024)))
+WORKSPACE_MAX_TOTAL_BYTES = int(os.getenv("WORKSPACE_MAX_TOTAL_BYTES", str(100 * 1024 * 1024)))
+# /workspace/tools/*.py から自動登録する自作ツールの上限
+WORKSPACE_TOOLS_MAX = int(os.getenv("WORKSPACE_TOOLS_MAX", "20"))
+
 
 def load_secrets_into_env() -> None:
     """Secrets ManagerのAPIキー類を環境変数へ展開する（未設定のもののみ）。

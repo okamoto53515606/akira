@@ -404,6 +404,18 @@ def create_delegation_tools(models, run_budget_jpy: float):
     except ImportError:
         logger.warning("strands_tools が利用できないため shell/editor/file_* は追加しません")
 
+    # --- 永続ワークスペースの自作ツール（/workspace/tools/*.py の TOOL 変数を自動登録） ---
+    # エンジニアが前日までに作ったツールが翌朝から使える＝自己拡張ループ。
+    # 1個の壊れたファイルで実行が止まらないよう、ロード失敗はスキップして続行
+    try:
+        ws_tools = akira_tools.load_workspace_tools()
+        if ws_tools:
+            claude_tools.extend(ws_tools)
+            logger.info("ワークスペースの自作ツール %d件を登録: %s",
+                        len(ws_tools), [getattr(t, "tool_name", "?") for t in ws_tools])
+    except Exception:
+        logger.exception("ワークスペースツールのロードに失敗しました（スキップします）")
+
     # --- 節約モード: Claudeエンジニア → DeepSeek V4 Pro ---
     _savings = is_savings_mode()
     if _savings:
@@ -489,6 +501,8 @@ DAILY_MISSION_TEMPLATE = """今日は {today} です。LLM Data Hub（{site_url}
 ## 今回の進め方
 1. list_site_files で現在のサイト状態を軽く確認する（大きいHTMLは読まない）
 2. 今回の作業テーマ（新規ページ or 既存ページ更新、1〜2件まで）の方向性だけ決める
+   （/workspace は前回から持ち越しの永続ワークスペース。drafts/に未完了作業が残っていれば
+   その続きを優先テーマにする。参照はエンジニアに任せてよい）
 3. ask_claude_engineer に今回分をまとめて1回で依頼する。リサーチ・執筆・GPT税理士へのレビュー
    依頼・（必要なら）Gemini子育てママへの画像/UX依頼・クリティカルな指摘がなければ公開・軽微な
    指摘のsite_plan記録まで、Claudeエンジニアが現場責任者として自律的に行う。テーマ候補
@@ -548,6 +562,14 @@ def run_daily(dry_run: bool = False) -> None:
     except Exception:
         # DL失敗は致命的ではない（従来の publish_file_to_site 経由で作業可能なため続行）
         logger.exception("サイトのローカルDLに失敗しました（publish_file_to_site で代替可能）")
+
+    # --- 1.6 永続ワークスペースの復元（自作ツール/パーツ/キャッシュ/持ち越し原稿） ---
+    try:
+        ws = akira_tools.restore_workspace()
+        logger.info("ワークスペース復元: %s", ws)
+    except Exception:
+        # ワークスペースの失敗で日次運用を止めない（初回起動はバケットが空で正常）
+        logger.exception("ワークスペースの復元に失敗しました（続行します）")
 
     # --- 2. 設定読み込み（自己改善の反映）---
     system_prompt = config_store.load_system_prompt()
@@ -674,6 +696,15 @@ def run_daily(dry_run: bool = False) -> None:
     finally:
         signal.alarm(0)
         signal.signal(signal.SIGALRM, prev_alarm)
+        # --- 永続ワークスペースの保存（日報公開より先に。ここは finally なので
+        # Akira本体のクラッシュ・タイムアウト時も通り、途中の下書きが翌日に持ち越される） ---
+        if not dry_run:
+            try:
+                ws = akira_tools.save_workspace()
+                logger.info("ワークスペース保存: %s", ws)
+            except Exception:
+                # 保存失敗で日報公開・invalidationを止めない
+                logger.exception("ワークスペースの保存に失敗しました（続行します）")
 
     # --- 4. 後処理 ---
     if not dry_run:
