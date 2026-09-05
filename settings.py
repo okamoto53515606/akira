@@ -36,8 +36,13 @@ USD_JPY = float(os.getenv("USD_JPY", "160"))
 MODEL_PRICING_USD: dict[str, tuple[float, float]] = {
     "claude-fable-5": (10.0, 50.0),
     "claude-sonnet-4-6": (3.0, 15.0),
-    "claude-sonnet-5": (2.0, 10.0),  # 導入価格。2026-09-01以降はbudget.pyが$3/$15で自動計算
-    "gpt-5.6-terra": (2.5, 15.0),
+    # 2026-09-01以降も導入価格を継続。budget.pyでの期間別上書きは行わない。
+    "claude-sonnet-5": (2.0, 10.0),
+    # 2026-09-05確認の現行料金。新しいモデルIDを料金テーブルに追加。
+    "gpt-5.6-luna": (0.2, 1.2),
+    "gpt-5.6-terra": (2.0, 12.0),
+    # 2026-09-05確認の現行料金。新しいモデルIDを料金テーブルに追加。
+    "gemini-3.5-flash-lite": (0.3, 2.5),
     "gemini-3.8-flash": (0.75, 3.75), # 導入価格。2027-01-01以降は2倍
     "gemini-3.1-flash-image": (0.5, 3.0),
     "deepseek-v4-pro": (0.66, 1.98),  # DeepSeek V4 Pro OFF-PEAK（PEAK $1.32/$3.96）

@@ -11,7 +11,8 @@
 #   属性: model_id, input_tokens, output_tokens, images, cost_jpy, purpose
 
 # モデル料金は settings.MODEL_PRICING_USD を参照。
-# claude-sonnet-5: 導入価格 $2/$10 は 2026-08-31 まで（estimate_cost_jpy で日付判定）
+# claude-sonnet-5: 2026-09-01以降も導入価格 $2/$10 を継続するため、
+# estimate_cost_jpy では日付による上書きを行わず、settings.pyの単価をそのまま使う。
 
 import uuid
 from datetime import datetime
@@ -52,9 +53,7 @@ def get_run_spent_jpy() -> float:
 def estimate_cost_jpy(model_id: str, input_tokens: int, output_tokens: int, images: int = 0) -> float:
     """トークン数からJPY費用を概算する。不明モデルは高め（上振れ防止）。"""
     price_in, price_out = MODEL_PRICING_USD.get(model_id, DEFAULT_PRICING_USD)
-    # claude-sonnet-5 の導入価格（$2/$10）は 2026-08-31 で終了 → 以降は通常価格 $3/$15
-    if model_id == "claude-sonnet-5" and datetime.now(JST).strftime("%Y-%m-%d") > "2026-08-31":
-        price_in, price_out = 3.0, 15.0
+    # 単価の適用日判定は行わず、settings.pyの料金テーブルを単一の根拠にする。
     usd = (input_tokens * price_in + output_tokens * price_out) / 1_000_000
     usd += images * IMAGE_PRICE_USD
     return usd * USD_JPY
