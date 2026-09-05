@@ -41,6 +41,9 @@ MODEL_PRICING_USD: dict[str, tuple[float, float]] = {
     "gemini-3.8-flash": (0.75, 3.75), # 導入価格。2027-01-01以降は2倍
     "gemini-3.1-flash-image": (0.5, 3.0),
     "deepseek-v4-pro": (0.66, 1.98),  # DeepSeek V4 Pro OFF-PEAK（PEAK $1.32/$3.96）
+    # 2026-09-05: 節約モード/Akira本体を V4 Flash Vision Exp に切替（タスク定義envで指定）。
+    # 公式OFF-PEAK単価（PEAK $0.44/$1.32）。画像は見ない前提で運用（Anthropic互換API・テキスト専用）
+    "deepseek-v4-flash-vision-exp": (0.22, 0.66),
 }
 DEFAULT_PRICING_USD = (10.0, 50.0)
 IMAGE_PRICE_USD = float(os.getenv("IMAGE_PRICE_USD", "0.05"))  # 生成画像1枚あたり
