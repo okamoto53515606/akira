@@ -280,6 +280,15 @@ def update_akira_config(key: str, content: str, note: str = "") -> dict:
     return {"status": "saved", "key": key, "effective": "翌日起動時から"}
 
 
+@tool
+def get_site_plan() -> str:
+    """サイト運営計画（site_plan）を読む。作業の優先順位・予定タスク・過去の指摘事項はこれに従う。
+
+    作業開始時に確認し、完了したら update_akira_config(key="site_plan") で対応状況を更新する。
+    """
+    return config_store.load_config("site_plan") or "（site_planは未設定）"
+
+
 # =====================================================================
 # GCP Workload Identity（AWS→GCPキーレス連携）
 # GA4/BigQuery MCPが使う（main.py _wi_env()経由）。画像生成はGemini Developer APIに

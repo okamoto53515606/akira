@@ -370,7 +370,10 @@ def create_delegation_tools(models, run_budget_jpy: float):
         """Gemini子育てママに依頼する（画像生成・初心者目線のわかりやすさチェック）。
 
         Args:
-            request: 依頼内容。画像なら目的と公開先パス、チェックなら対象ページ
+            request: 依頼内容。画像なら目的と公開先パス、チェックなら対象ページ。
+                     画像の視認や大規模なUXチェックは1回の依頼につき2ページ/2枚までに絞ること
+                     （並列の大量file_readや複数画像は入力トークンが爆発する。
+                     2026-09-05実績: 1回のUXレビューで約1,245円消費）
         """
         return _run(gemini_agent, GEMINI_MODEL_ID, "Gemini子育てママ", request)
 
@@ -384,6 +387,7 @@ def create_delegation_tools(models, run_budget_jpy: float):
         akira_tools.site_download,
         akira_tools.site_upload,
         akira_tools.update_akira_config,
+        akira_tools.get_site_plan,
         brave,
         screenshot_tool,
         fetch_image,
