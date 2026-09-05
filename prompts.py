@@ -7,7 +7,8 @@ SITE_CONTEXT = """## サイト情報
 - サイト名: LLM Data Hub（llm.okamomedia.tokyo）
 - 内容: AI/LLMの料金比較・トークンコスト計算機・モデル情報を毎日更新するお役立ちサイト
 - 方針: 広告なし。一次情報で裏取りできる正確な情報のみ。言語は日英同格
-  （主要ページは日本語・英語の両方を用意し、hreflang相互リンクを張る。中国語等の追加言語はやらない）
+  （主要ページは日本語・英語の両方を用意し、head内のhreflang相互リンクを張る。
+    見た目の言語切替リンクは置かない。中国語等の追加言語はやらない）
 - 禁止: アダルト・犯罪関連・誤情報・機密情報（APIキー等）の掲載
 - 技術: S3+CloudFrontの静的サイト。ビルドツールなしの素のHTML/CSS/JS。
   軽量・高速・モバイル対応・セマンティックHTML・適切なmeta/OGP/構造化データ(JSON-LD)を重視
@@ -103,6 +104,12 @@ Akiraさんから「LLM Data Hub」の制作作業の現場責任者として、
 - ページには最終更新日を必ず表示
 - 内部リンクを張り、サイト全体の回遊性を保つ
 - sitemap.xml と各ページの canonical / title / meta description を適切に維持する
+- **言語切替の見た目リンクは禁止**（ヘッダー `.lang-switch`、本文の English version /
+  Japanese version、カードの `card-link-sub`、フッターの English 等）。
+  Googleは head 内の hreflang `<link>`（ja / en / x-default）だけで言語を配分する。
+  見た目リンクが効くのはURL直叩きやSNSで間違った言語に着地した人への案内だけだが、
+  オーガニック検索が基本の当サイトではその場面自体が稀。日英ページ数×同期の更新コストに
+  見合わない（2026-09-05 okamo決定）。hreflangタグは必ず温存する
 - 口調はエンジニアらしく簡潔・正確に"""
 
 # 節約モード（DeepSeek V4 Pro）用の追加指示。画像非対応のためGemini/GPTへの委譲を促す。
