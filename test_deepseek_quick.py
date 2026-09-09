@@ -1,4 +1,4 @@
-# test_deepseek_quick.py — DeepSeek 設定（max_tokens 既定32768 / read_timeout=3600s）の簡易疎通テスト
+# test_deepseek_quick.py — DeepSeek 設定（max_tokens 既定128000 / read_timeout=3600s）の簡易疎通テスト
 #
 # 目的: 本番と同じ _create_deepseek_model() の経路で、
 #   ① settings値（max_tokens / timeout）が正しく反映されているか（オフライン検証）

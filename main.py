@@ -101,9 +101,10 @@ def _create_deepseek_model():
     """DeepSeek（Anthropic互換API）。節約モードのエンジニア役 / Akira本体で使用。
 
     LiteLLM+Chat Completions は reasoning_content がマルチターンで欠落するため使わない。
-    max_tokens は DEEPSEEK_MAX_TOKENS（既定32768）。APIは messages+max_tokens を
-    コンテキスト1Mに対して予約するため、384Kだと会話履歴が肥った時点で即400になる
-    （2026-09-09: 665132+384000=1049132 > 1048576）。
+    max_tokens は DEEPSEEK_MAX_TOKENS（既定128000）。APIは messages+max_tokens を
+    コンテキスト1Mに対して予約する。384Kだと履歴66.5万の時点で
+    665132+384000=1049132 > 1048576 となり400（2026-09-09）。128Kなら79.3万に収まり、
+    16Kで起きた MaxTokensReached（2026-08-27）の再発も防ぐ（3e0d7efと同じ値）。
     readタイムアウトは DEEPSEEK_READ_TIMEOUT（既定3600s。SDK既定600sは
     thinking付きの長め生成で切断されうるため拡張）。
     """

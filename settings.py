@@ -67,10 +67,13 @@ AKIRA_USE_DEEPSEEK = os.getenv("AKIRA_USE_DEEPSEEK", "false").lower() == "true"
 DEEPSEEK_ANTHROPIC_BASE_URL = "https://api.deepseek.com/anthropic"
 # DeepSeek の1レスポンス出力上限。公式MAX OUTPUTは384Kだが、APIは
 # 「messages + max_tokens」をコンテキスト1Mに対して予約する。
-# 2026-09-09: max_tokens=384000 のままだと messages 66.5万で 1,049,132 > 1,048,576
-# となり BadRequest。現行運用は Python スクリプトで HTML を書くため 32K で足りる。
-# 巨大 file_write が必要になったら env で一時的に上げる（上限384000）。
-DEEPSEEK_MAX_TOKENS = int(os.getenv("DEEPSEEK_MAX_TOKENS", "32768"))
+# 2つの失敗モードの間を取って128K（3e0d7ef と同じ値）:
+# - 低すぎ(16K) → 巨大file_writeが途中で切れ MaxTokensReached で回復不能
+#   （8/13・8/27に発生。128Kで解消した実績あり）
+# - 高すぎ(384K) → 履歴66.5万の時点で 665132+384000=1049132 > 1048576 となり400
+#   （2026-09-09に発生）
+# 128Kなら最悪時の履歴66.5万+128K=79.3万 < 1M に収まり、出力余裕も十分。
+DEEPSEEK_MAX_TOKENS = int(os.getenv("DEEPSEEK_MAX_TOKENS", "128000"))
 # DeepSeek API の HTTP read タイムアウト（秒）。anthropic SDK の既定は 600s。
 # thinking 付きの長めの生成でも切断されないよう余裕を持たせる。
 # RUN_DEADLINE_SECONDS（日次タスクの壁時計上限=3600s）がそれ以上長くても意味がないため同じ値
