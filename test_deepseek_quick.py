@@ -1,8 +1,8 @@
-# test_deepseek_quick.py — 2026-09-04 設定変更（max_tokens=384K / read_timeout=3600s）の簡易疎通テスト
+# test_deepseek_quick.py — DeepSeek 設定（max_tokens 既定32768 / read_timeout=3600s）の簡易疎通テスト
 #
 # 目的: 本番と同じ _create_deepseek_model() の経路で、
 #   ① settings値（max_tokens / timeout）が正しく反映されているか（オフライン検証）
-#   ② max_tokens=384000 のまま DeepSeek API が受け付けるか（実呼び出し1回）
+#   ② 現行 DEEPSEEK_MAX_TOKENS のまま DeepSeek API が受け付けるか（実呼び出し1回）
 # を確認する。本番書き込みなし（S3/DynamoDB/CloudFront等には触れない）。
 # 費用は短文生成のみ（OFF-PEAKで1円未満）。
 #

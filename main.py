@@ -98,12 +98,14 @@ def is_savings_mode() -> bool:
 
 
 def _create_deepseek_model():
-    """DeepSeek V4 Pro（Anthropic互換API）。節約モードのエンジニア役 / Akira本体で使用。
+    """DeepSeek（Anthropic互換API）。節約モードのエンジニア役 / Akira本体で使用。
 
     LiteLLM+Chat Completions は reasoning_content がマルチターンで欠落するため使わない。
-    max_tokens は DEEPSEEK_MAX_TOKENS（既定384000=公式MAX OUTPUT上限）。
+    max_tokens は DEEPSEEK_MAX_TOKENS（既定32768）。APIは messages+max_tokens を
+    コンテキスト1Mに対して予約するため、384Kだと会話履歴が肥った時点で即400になる
+    （2026-09-09: 665132+384000=1049132 > 1048576）。
     readタイムアウトは DEEPSEEK_READ_TIMEOUT（既定3600s。SDK既定600sは
-    384K出力+thinkingの長大生成で切断されうるため拡張）。
+    thinking付きの長め生成で切断されうるため拡張）。
     """
     import httpx
     from strands.models.anthropic import AnthropicModel
@@ -158,9 +160,15 @@ def _create_models():
             model_id=CLAUDE_MODEL_ID,
             max_tokens=16384,
         ),
+        # GPT税理士は factチェックが主。reasoning を低く、出力も短く抑える。
+        # effort=low だけでは TPM 50万超えは解消しないが、出力予約の無駄は減る。
         "gpt": OpenAIResponsesModel(
             client_args={"api_key": os.getenv("OPENAI_API_KEY")},
             model_id=OPENAI_MODEL_ID,
+            params={
+                "max_output_tokens": 8192,
+                "reasoning": {"effort": "low"},
+            },
         ),
         "gemini": GeminiModel(
             client_args={"api_key": os.getenv("GEMINI_API_KEY")},
@@ -295,6 +303,7 @@ def create_delegation_tools(models, run_budget_jpy: float):
     run_budget_jpy: 今回実行で使える上限（＝月次予算の残額。ハードリミット）。
     """
     from strands import Agent, tool
+    from strands.agent.conversation_manager import SlidingWindowConversationManager
 
     import prompts
 
@@ -324,17 +333,25 @@ def create_delegation_tools(models, run_budget_jpy: float):
         "※無料枠で運用中。APIクォータ超過エラーが出た場合は別のツール（Brave/Firecrawl相互）で補完すること。"
     )
 
+    # GPT税理士には Firecrawl を渡さない。
+    # 2026-09-09: 同一 gpt_agent が巨大ページを scrape して会話履歴に残し、
+    # 2回目以降の TPM が 518052 / 519208 と上限50万を超過した。
+    # 一次情報は /workspace/cache のスナップショット + file_read、足りなければ Brave。
     gpt_tools = [akira_tools.get_site_file, akira_tools.list_site_files,
                  akira_tools.list_local_files, akira_tools.list_workspace_files, file_read,
                  brave, screenshot_tool, fetch_image, image_reader]
-    if firecrawl:
-        gpt_tools.append(firecrawl)
-    gpt_agent = Agent(
-        name="gpt_tax_advisor",
-        model=models["gpt"],
-        system_prompt=prompts.GPT_TAX_ADVISOR_PROMPT,
-        tools=gpt_tools,
-    )
+
+    def _new_gpt_agent() -> "Agent":
+        """呼び出しごとに新規 Agent。会話履歴（scrape残骸）を持ち越さない。
+
+        collect_agent_usage は id(agent) で差分を取るため、毎回新規でも重複計上しない。
+        """
+        return Agent(
+            name="gpt_tax_advisor",
+            model=models["gpt"],
+            system_prompt=prompts.GPT_TAX_ADVISOR_PROMPT,
+            tools=gpt_tools,
+        )
     gemini_tools = [
         akira_tools.generate_and_publish_image,
         akira_tools.get_site_file,
@@ -363,7 +380,7 @@ def create_delegation_tools(models, run_budget_jpy: float):
         Args:
             request: レビュー対象（サイト内パスや本文）と確認してほしい観点
         """
-        return _run(gpt_agent, OPENAI_MODEL_ID, "GPT税理士", request)
+        return _run(_new_gpt_agent(), OPENAI_MODEL_ID, "GPT税理士", request)
 
     @tool
     def ask_gemini_mother(request: str) -> str:
@@ -439,6 +456,12 @@ def create_delegation_tools(models, run_budget_jpy: float):
         model=engineer_model,
         system_prompt=engineer_prompt,
         tools=claude_tools,
+        # Firecrawlの巨大結果が履歴に残り続けるのを防ぐ（2026-09-09: 66.5万トークン）。
+        # per_turn=True でモデル呼び出し前に窓を切る。プロンプト側の cache+要約と併用。
+        conversation_manager=SlidingWindowConversationManager(
+            window_size=40,
+            per_turn=True,
+        ),
     )
 
 
