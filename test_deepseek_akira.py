@@ -1,6 +1,6 @@
-# test_deepseek_akira.py — DeepSeek V4 Pro（Anthropic互換API）の単体テスト
+# test_deepseek_akira.py — DeepSeek V4.1 Flash（Anthropic互換API）の単体テスト
 #
-# 目的: Akira本体を claude-fable-5 → deepseek-v4-pro に切替える前に、
+# 目的: Akira本体を claude-fable-5 → deepseek-flash に切替える前に、
 #       本番と同じ経路（strands の AnthropicModel + Agent）で
 #       ①基本応答 ②tool呼び出しマルチターン ③長文ツール結果（委任の疑似）が動くかを確認する。
 #

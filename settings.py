@@ -45,10 +45,11 @@ MODEL_PRICING_USD: dict[str, tuple[float, float]] = {
     "gemini-3.5-flash-lite": (0.3, 2.5),
     "gemini-3.8-flash": (0.75, 3.75), # 導入価格。2027-01-01以降は2倍
     "gemini-3.1-flash-image": (0.5, 3.0),
-    "deepseek-v4-pro": (0.66, 1.98),  # DeepSeek V4 Pro OFF-PEAK（PEAK $1.32/$3.96）
-    # 2026-09-05: 節約モード/Akira本体を V4 Flash Vision Exp に切替（タスク定義envで指定）。
-    # 公式OFF-PEAK単価（PEAK $0.44/$1.32）。画像は見ない前提で運用（Anthropic互換API・テキスト専用）
-    "deepseek-v4-flash-vision-exp": (0.22, 0.66),
+    # 2026-09-10: DeepSeek V4.1 Flash に統一（モデル名は deepseek-flash）。
+    # 旧名 deepseek-v4-pro / deepseek-v4-flash-vision-exp は退役済み（公式: 旧名は依然受理されるが
+    # V4.1 Flash が応答し Flash 価格で課金。V4 Pro は 2026-09-14 以降 V4.1 Flash へルーティング）→ 削除
+    # 単価は公式 OFF-PEAK（PEAK $0.30/$1.20）。1Mコンテキスト / 最大出力384K / Vision対応
+    "deepseek-flash": (0.15, 0.6),
 }
 DEFAULT_PRICING_USD = (10.0, 50.0)
 IMAGE_PRICE_USD = float(os.getenv("IMAGE_PRICE_USD", "0.05"))  # 生成画像1枚あたり
@@ -59,7 +60,7 @@ CLAUDE_MODEL_ID = os.getenv("CLAUDE_MODEL_ID", "claude-sonnet-5")
 OPENAI_MODEL_ID = os.getenv("OPEN_AI_MODEL_ID", "gpt-5.6-terra")
 GEMINI_MODEL_ID = os.getenv("GEMINI_MODEL_ID", "gemini-3.8-flash")
 IMAGE_MODEL_ID = os.getenv("BANNER_MODEL", "gemini-3.1-flash-image")
-DEEPSEEK_MODEL_ID = os.getenv("DEEPSEEK_MODEL_ID", "deepseek-v4-pro")
+DEEPSEEK_MODEL_ID = os.getenv("DEEPSEEK_MODEL_ID", "deepseek-flash")
 
 # Akira本体をDeepSeek（Anthropic互換API）に切替えるか（テスト運用用）。trueで切替、false/falsyで従来のFable 5
 AKIRA_USE_DEEPSEEK = os.getenv("AKIRA_USE_DEEPSEEK", "false").lower() == "true"

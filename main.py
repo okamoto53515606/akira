@@ -141,11 +141,9 @@ def _create_models():
     from strands.models.openai_responses import OpenAIResponsesModel
 
     if AKIRA_USE_DEEPSEEK:
-        # テスト運用: Akira本体をDeepSeek V4 Pro（Anthropic互換API）に切替。
-        # モデル名は deepseek-v4-pro を明示する（claude-fable-5 のままだと DeepSeek 側が
-        # 未対応名として deepseek-v4-flash に自動マッピングしてしまう罠がある）。
-        # 予算記録は実モデル(deepseek-v4-pro)で行い、正しい単価(0.66/1.98)で見積もる。
-        logger.info("💰 Akira本体 → DeepSeek V4 Pro (Anthropic互換API) に切替")
+        # Akira本体を DeepSeek V4.1 Flash（model_id: deepseek-flash / Anthropic互換API）に切替。
+        # 旧名 deepseek-v4-pro は 2026-09-14 以降 V4.1 Flash へ自動ルーティングされる（公式）。
+        logger.info("💰 Akira本体 → DeepSeek V4.1 Flash (deepseek-flash / Anthropic互換API) に切替")
         akira_model = _create_deepseek_model()
     else:
         akira_model = AnthropicModel(
@@ -440,10 +438,10 @@ def create_delegation_tools(models, run_budget_jpy: float):
     except Exception:
         logger.exception("ワークスペースツールのロードに失敗しました（スキップします）")
 
-    # --- 節約モード: Claudeエンジニア → DeepSeek V4 Pro ---
+    # --- 節約モード: Claudeエンジニア → DeepSeek V4.1 Flash（model_id: deepseek-flash） ---
     _savings = is_savings_mode()
     if _savings:
-        logger.info("💰 節約モード: Claudeエンジニア → DeepSeek V4 Pro に切替")
+        logger.info("💰 節約モード: Claudeエンジニア → DeepSeek V4.1 Flash (deepseek-flash) に切替")
         engineer_model = _create_deepseek_model()
         engineer_prompt = prompts.CLAUDE_ENGINEER_PROMPT + prompts.CLAUDE_ENGINEER_SAVINGS_NOTE
         engineer_model_id = DEEPSEEK_MODEL_ID
@@ -700,8 +698,6 @@ def run_daily(dry_run: bool = False) -> None:
     try:
         result = akira(mission)
         _debug_log_io("応答", "Akira本体", str(result))
-        # DeepSeek切替中は実モデル(deepseek-v4-pro)で記録して正しい単価(0.66/1.98)で見積もる。
-        # Fableモードは従来どおり AKIRA_MODEL_ID (claude-fable-5) のまま。
         usage_model_id = DEEPSEEK_MODEL_ID if AKIRA_USE_DEEPSEEK else AKIRA_MODEL_ID
         cost = budget.collect_agent_usage(result, usage_model_id, purpose="akira:daily", agent=akira)
         logger.info("Akira本体 完了 (約%.1f円 / 本日合計約%.1f円)", cost, budget.get_run_spent_jpy())

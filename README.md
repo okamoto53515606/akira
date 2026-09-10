@@ -82,22 +82,22 @@ Secrets Manager共有のみの疎結合。
 料金・モデルIDは [settings.py](settings.py) の `MODEL_PRICING_USD` で一元管理し、[budget.py](budget.py) が
 DynamoDB (`akira-usage`) への記録と月次予算ゲートを行う。
 
-### 節約モード（Claudeエンジニア → DeepSeek V4 Pro）
+### 節約モード（Claudeエンジニア → DeepSeek V4.1 Flash）
 
 `DEEPSEEK_API_KEY` と `DEEPSEEK_MODEL_ID` が両方とも空でなければ、Claudeエンジニアの実体が
-`deepseek-v4-pro`（Anthropic互換API、`max_tokens` 既定128000。APIは messages+max_tokens を
+`deepseek-flash`（DeepSeek V4.1 Flash, Anthropic互換API、`max_tokens` 既定128000。APIは messages+max_tokens を
 コンテキスト1Mに対して予約する。384Kだと履歴66.5万で400になり（2026-09-09実績）、
 低すぎると巨大file_writeが切れMaxTokensReachedになるため128Kで両立。readタイムアウト3600秒）
 に自動切替される（[main.py](main.py) `is_savings_mode()`）。
 `AKIRA_USE_DEEPSEEK=true` の場合はAkira本体も同じ設定で DeepSeek に切替わる。
 パラメータは [settings.py](settings.py) の `DEEPSEEK_MAX_TOKENS` / `DEEPSEEK_READ_TIMEOUT` で調整可。
 
-- `DEEPSEEK_MODEL_ID` はECSタスク定義の環境変数として常時設定済み（`deepseek-v4-pro`）
+- `DEEPSEEK_MODEL_ID` はECSタスク定義の環境変数として常時設定済み（`deepseek-flash`）
 - `DEEPSEEK_API_KEY` はタスク定義には**置かず**、Secrets Manager（`SECRET_ARN`）経由で
   [settings.py](settings.py) `load_secrets_into_env()` が起動のたびに取得する
 - そのため、**タスク定義の更新・再デプロイは不要**で、Secrets Managerの
   `DEEPSEEK_API_KEY` の値を書き換えるだけで翌回の起動から節約モードをON/OFF切替できる
-  - 値を実際のAPIキー（`sk-...`）にする → 節約モードON（DeepSeek V4 Proで安価に運用）
+  - 値を実際のAPIキー（`sk-...`）にする → 節約モードON（DeepSeek V4.1 Flashで安価に運用）
   - 値を空文字列 `""` にする → 節約モードOFF（`claude-sonnet-5` で通常運用）
 
 ## ●AWSへのデプロイ手順
