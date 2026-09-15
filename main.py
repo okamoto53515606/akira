@@ -430,12 +430,25 @@ def create_delegation_tools(models, run_budget_jpy: float):
     ]
     if firecrawl:
         gemini_tools.append(firecrawl)
-    gemini_agent = Agent(
-        name="gemini_mother",
-        model=models["gemini"],
-        system_prompt=prompts.GEMINI_MOTHER_PROMPT,
-        tools=gemini_tools,
-    )
+
+    def _new_gemini_agent() -> "Agent":
+        """呼び出しごとに新規 Agent（会話履歴を持ち越さない）。
+
+        以前は1個の gemini_agent を使い回していたが、履歴が積み上がることで
+          ①何らかの理由で functionCall と functionResponse の対応が崩れると、
+            以降の呼び出しが400（function call turn ordering）で全減する
+            （2026-09-15: ask_gemini_mother が3連続で失敗）
+          ②マルチターンのたびに全履歴を再送するため入力トークンが膨らむ
+            （2026-09-05: UXレビュー1回で約1,245円）
+        という害があった。GPT税理士と同じ「毎回新規」方式に統一する。
+        collect_agent_usage は id(agent) で差分を取るため、毎回新規でも重複計上しない。
+        """
+        return Agent(
+            name="gemini_mother",
+            model=models["gemini"],
+            system_prompt=prompts.GEMINI_MOTHER_PROMPT,
+            tools=gemini_tools,
+        )
 
     @tool
     def ask_gpt_tax_advisor(request: str) -> str:
@@ -456,7 +469,7 @@ def create_delegation_tools(models, run_budget_jpy: float):
                      （並列の大量file_readや複数画像は入力トークンが爆発する。
                      2026-09-05実績: 1回のUXレビューで約1,245円消費）
         """
-        return _run(gemini_agent, GEMINI_MODEL_ID, "Gemini子育てママ", request)
+        return _run(_new_gemini_agent(), GEMINI_MODEL_ID, "Gemini子育てママ", request)
 
     # Claudeエンジニアの追加ツール（オプショナル）
     claude_tools = [
@@ -467,6 +480,11 @@ def create_delegation_tools(models, run_budget_jpy: float):
         akira_tools.list_workspace_files,
         akira_tools.site_download,
         akira_tools.site_upload,
+        # 画像生成はエージェント経由ではなく直接叩けるようにする。
+        # 2026-09-15: ask_gemini_mother（エージェント）が400で不通になり画像が作れなかった。
+        # 画像生成自体は APIキー1コールの決定論的な処理なので、依頼先のLLMが落ちても
+        # 使えるべき。Gemini子育てママの役割は「生成」より「視認チェック」に寄せる。
+        akira_tools.generate_and_publish_image,
         akira_tools.update_akira_config,
         akira_tools.get_site_plan,
         brave,
