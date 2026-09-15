@@ -16,7 +16,7 @@ import logging
 import os
 import signal
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 
 from dotenv import load_dotenv
 
@@ -63,6 +63,18 @@ _STOP_WORK_MSG = (
     "【作業停止】本日の作業上限に達しました。"
     "これ以上の作業依頼はできません。日報を書いて終了してください。"
 )
+
+# --- 「空応答」対策（2026-09-15 実発生）--------------------------------------
+# DeepSeek(Anthropic互換API)が「HTTP 200だがSSEイベントを1件も返さない」空ストリームを
+# 返すことがある。このとき strands は例外を出さず、anthropic SDK の
+# `stream.get_final_message()` が AssertionError になって
+# "failed to retrieve message snapshot, usage metadata unavailable" を警告し、
+# 「内容が空の応答」としてターンを正常終了させる。
+# 結果は「ツール呼び出しゼロ・日報も書かれない・usageも取れず0円記録」という静かな失敗で、
+# 例外でもデッドラインでもないため既存のフォールバックに入らない（公開日報は
+# 「（日報が生成されませんでした）」の1行だけになり、原因がログからも分からない）。
+# 空応答は課金も発生しないので、履歴を汚さない範囲で再試行するのが最も安い対策。
+_MAX_EMPTY_ATTEMPTS = 3
 _run_deadline_monotonic: float | None = None
 
 
@@ -130,6 +142,42 @@ def _debug_log_io(direction: str, agent_name: str, text: str) -> None:
         return
     truncated = text if len(text) <= _DEBUG_LOG_LIMIT else text[:_DEBUG_LOG_LIMIT] + f"...(以下省略, 全{len(text)}文字)"
     logger.debug("[%s] %s:\n%s", agent_name, direction, truncated)
+
+
+def _is_empty_response(result) -> bool:
+    """モデルから実質何も届かなかった（本文もツール呼び出しも無い）かを判定する。
+
+    正常な応答なら必ず text か toolUse のブロックが入る。ブロックが0件、または
+    中身が空のときだけ True を返す（reasoningContentのみ、も「何もしていない」扱い）。
+    """
+    message = getattr(result, "message", None)
+    if not isinstance(message, dict):
+        return True
+    blocks = message.get("content") or []
+    if not blocks:
+        return True
+    for block in blocks:
+        if not isinstance(block, dict):
+            return False
+        if "toolUse" in block:
+            return False
+        if str(block.get("text") or "").strip():
+            return False
+    return True
+
+
+def _tool_call_count(agent) -> int:
+    """エージェントが実行したツール呼び出しの累計回数。
+
+    呼び出し前後で差分を取り「この呼び出しで実際に作業したか」を判定する
+    （strands の event_loop_metrics はエージェント生涯累計のため差分で見る）。
+    """
+    metrics = getattr(agent, "event_loop_metrics", None)
+    tool_metrics = getattr(metrics, "tool_metrics", None) or {}
+    try:
+        return sum(int(getattr(m, "call_count", 0) or 0) for m in tool_metrics.values())
+    except Exception:  # メトリクス構造が変わっても判定を止めない
+        return 0
 
 
 # =====================================================================
@@ -314,10 +362,27 @@ def create_delegation_tools(models, run_budget_jpy: float):
             logger.warning("予算ガード発動: spent=%.1f remaining_limit=%.1f", spent, run_budget_jpy)
             return _STOP_WORK_MSG
         _debug_log_io("指示", name, request)
+        tools_before = _tool_call_count(agent)
         result = agent(request)
         _debug_log_io("応答", name, str(result))
         cost = budget.collect_agent_usage(result, model_id, purpose=f"delegate:{name}", agent=agent)
         logger.info("%s 完了 (約%.1f円 / 本日累計約%.1f円)", name, cost, budget.get_run_spent_jpy())
+        if _is_empty_response(result):
+            # 空応答（2026-09-15にAkira本体で発生したのと同症状）。ここで空文字を素直に返すと
+            # Akira本体が「作業完了」と誤認するため、空振りだったことを明示して返す。
+            tool_calls = max(0, _tool_call_count(agent) - tools_before)
+            logger.error("%s の応答が空でした（この呼び出しでのツール実行 %d回）", name, tool_calls)
+            if tool_calls == 0:
+                return (
+                    f"【{name}: 応答が空】モデルは本文もツール呼び出しも返さず終了した。"
+                    f"この呼び出しでは何も実行されていない。同じ依頼を1回だけ送り直してよい。"
+                    f"2回目も空なら、その旨を日報に書いて終了せよ。"
+                )
+            return (
+                f"【{name}: 応答が空】ツール実行が{tool_calls}回あった後に応答が空になった。"
+                f"作業が途中まで進んでいる可能性があるので、再依頼の前に"
+                f"list_local_files / list_site_files で状態を確認すること。"
+            )
         return str(result)
 
     # --- 共通WEBツール（全員に配布）---
@@ -570,6 +635,17 @@ def run_daily(dry_run: bool = False) -> None:
     today = datetime.now(JST).strftime("%Y-%m-%d")
     collected: dict = {}
 
+    # 起動直後の時計を必ずログに残す。2026-09-15のランでは okamoコメントのマーカーが
+    # 「読んだ値のまま（2026-09-13）」で書き込まれ、updated_at だけが当日時刻（05:11:34）
+    # という不整合が残った。today の算出（05:11:2x）と書き込み（05:11:34）の間で日付が
+    # 2日進んだことになり、Fargateタスク起動直後の時計ずれが疑わしい。
+    # ずれていると今日の日付でミッションを組めず日報の日付も誤るため、毎回記録して
+    # 次回以降に検知できるようにする。
+    logger.info(
+        "起動時刻: %s (UTC %s) / today=%s",
+        datetime.now(JST).isoformat(), datetime.now(timezone.utc).isoformat(), today,
+    )
+
     # --- 1. 予算ゲート ---
     budget_status = budget.check_budget()
     logger.info("予算: %s", budget_status)
@@ -631,7 +707,11 @@ def run_daily(dry_run: bool = False) -> None:
             f"- [{c['date']}] {c['text']}" for c in comments
         )
     # 今回確認した日を記録（次回起動時はここからの差分のみ取得すればよい状態にしておく）
-    config_store.save_config("last_comment_check_date", today)
+    # ※起動時の時計ずれで today が過去日になってもコメントを取りこぼさないよう、
+    #   マーカーは絶対に後退させない（max）。ISO形式の日付は文字列比較で大小が正しい。
+    config_store.save_config(
+        "last_comment_check_date", max(today, last_comment_check or today)
+    )
 
     # 前回の実作業日もAkira自身に伝える（予算超過で数日〜数週間空くことがあるため、
     # 間隔が空いた場合は料金改定・新モデル等の情報が古くなっていないか優先確認させる）
@@ -695,12 +775,48 @@ def run_daily(dry_run: bool = False) -> None:
         mission += "\n\n【重要】今日はドライランです。公開・依頼は行わず、計画の提示だけしてください。"
 
     _debug_log_io("指示", "Akira本体", f"system_prompt:\n{system_prompt}\n\nmission:\n{mission}")
+    usage_model_id = DEEPSEEK_MODEL_ID if AKIRA_USE_DEEPSEEK else AKIRA_MODEL_ID
     try:
-        result = akira(mission)
-        _debug_log_io("応答", "Akira本体", str(result))
-        usage_model_id = DEEPSEEK_MODEL_ID if AKIRA_USE_DEEPSEEK else AKIRA_MODEL_ID
-        cost = budget.collect_agent_usage(result, usage_model_id, purpose="akira:daily", agent=akira)
-        logger.info("Akira本体 完了 (約%.1f円 / 本日合計約%.1f円)", cost, budget.get_run_spent_jpy())
+        for attempt in range(1, _MAX_EMPTY_ATTEMPTS + 1):
+            tools_before = _tool_call_count(akira)
+            result = akira(mission)
+            _debug_log_io("応答", "Akira本体", str(result))
+            cost = budget.collect_agent_usage(result, usage_model_id, purpose="akira:daily", agent=akira)
+            logger.info("Akira本体 完了 (約%.1f円 / 本日合計約%.1f円)", cost, budget.get_run_spent_jpy())
+            if collected.get("body_md") or not _is_empty_response(result):
+                # 正常。日報を書いたか、少なくともモデルは動いている（内容の判断はモデルに任せる）
+                break
+
+            # --- ここから下は「空応答」= 本文もツール呼び出しも1件も届かなかった場合 ---
+            tool_calls = max(0, _tool_call_count(akira) - tools_before)
+            if tool_calls:
+                # 途中で途切れたケース。やり直すと二重作業（再委任・再公開）になりうるため再試行しない
+                logger.error(
+                    "Akira本体の応答が空（ツール実行%d回の後に途切れ）。再試行はしません", tool_calls
+                )
+                collected["body_md"] = (
+                    "## 本日の運用は途中で止まりました（LLMの空応答）\n"
+                    f"ツール実行が{tool_calls}回あった後、Akira本体の応答が空になりました。"
+                    "作業は途中まで進んでいる可能性があります（公開状況はサイトのファイル一覧を参照）。\n"
+                )
+                break
+            if attempt == _MAX_EMPTY_ATTEMPTS:
+                logger.error("Akira本体の応答が%d回連続で空でした（本日は作業できません）", _MAX_EMPTY_ATTEMPTS)
+                collected["body_md"] = (
+                    "## 本日の作業はできませんでした（LLMの空応答）\n"
+                    f"Akira本体への呼び出しが{_MAX_EMPTY_ATTEMPTS}回連続で「空応答」になりました。\n"
+                    "HTTPは成功しているのに、本文もツール呼び出しも1件も届いていない状態です"
+                    "（プロバイダ側のストリーム異常。usageが取れないため費用は計上されていません）。\n\n"
+                    "- サイトへの変更: なし（公開物は前回のまま）\n"
+                    "- 次回: 同じ手順で自動再試行します。連日続く場合はモデル切替を検討します\n"
+                )
+                break
+            logger.warning(
+                "Akira本体の応答が空でした（%d/%d回目, stop_reason=%r）。課金ゼロなので再試行します",
+                attempt, _MAX_EMPTY_ATTEMPTS, getattr(result, "stop_reason", None),
+            )
+            # 空のassistantメッセージが履歴に残ると次ターンのリクエストが不正になりうるため消す
+            akira.messages.clear()
     except _RunDeadlineExceeded:
         logger.warning("作業デッドライン（%d秒）に達したため打ち切ります", RUN_DEADLINE_SECONDS)
         if not collected.get("body_md"):
