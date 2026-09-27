@@ -8,6 +8,8 @@
 import json
 import os
 import time
+import urllib.error
+import urllib.request
 
 import boto3
 from strands import tool
@@ -56,6 +58,88 @@ def _content_type(path: str) -> str:
     }.get(ext, "application/octet-stream")
 
 
+# --- 公開データの契約（2026-09-27 追加）--------------------------------------------
+# 背景: 計算機の実行時データ /data/models.json（models は配列）を、ワークスペースの
+# 料金SOT（models はオブジェクト）で上書きし、/calculator/・/en/calculator/ が
+# 全滅した。既存の公開ゲートはこれを検出できなかった:
+#   check_site_pages = HTMLのみ（JSONは対象外） / verify_publish = MD5一致のみ
+#   verify_price_consistency = HTML本文の退役単価のみ
+# 対策: 公開ツール側でデータ契約を検証し、違反するファイルはアップロード自体を拒否する。
+# エージェントの判断に依存せず、物理的にサイトへ通らない層を作るのが目的。
+DATA_MODELS_KEY = "data/models.json"
+MODELS_REQUIRED_FIELDS = ("name", "provider", "label", "input", "output")
+MODELS_MIN_ROWS = 10  # 実データは38行。桁違いの縮小（取り違え・切り詰め）を検知する下限
+BASELINE_MODELS_PATH = os.path.join(WORKSPACE_LOCAL_DIR, "data", "calculator-models.json")
+_SOT_MARKERS = ("schema_note", "stale_price_patterns", "stale_policy")
+
+
+def _looks_like_price_sot(payload: dict) -> bool:
+    """ワークスペース側の料金SOT（真実データ）の形かどうか。"""
+    return any(k in payload for k in _SOT_MARKERS)
+
+
+def validate_calculator_models(payload: object) -> list[str]:
+    """計算機用 data/models.json の契約を検証し、違反理由のリストを返す（空＝合格）。"""
+    if not isinstance(payload, dict):
+        return ["トップレベルがオブジェクトではありません: %s" % type(payload).__name__]
+    errors: list[str] = []
+    if _looks_like_price_sot(payload):
+        errors.append(
+            "料金SOT（ワークスペースの真実データ）を公開しようとしています。"
+            "サイトの data/models.json は計算機専用で、models は配列である必要があります"
+        )
+    models = payload.get("models")
+    if isinstance(models, dict):
+        errors.append("models がオブジェクトです（計算機は配列を要求）")
+        return errors
+    if not isinstance(models, list):
+        errors.append("models が配列ではありません: %s" % type(models).__name__)
+        return errors
+    if len(models) < MODELS_MIN_ROWS:
+        errors.append("models の行数が少なすぎます: %d < %d" % (len(models), MODELS_MIN_ROWS))
+    for i, m in enumerate(models):
+        if not isinstance(m, dict):
+            errors.append("models[%d] がオブジェクトではありません" % i)
+            continue
+        missing = [f for f in MODELS_REQUIRED_FIELDS if f not in m]
+        if missing:
+            errors.append("models[%d] に必須キーがありません: %s" % (i, ",".join(missing)))
+        if not isinstance(m.get("provider"), str) or not m.get("provider"):
+            errors.append("models[%d].provider が空です" % i)
+        for field in ("input", "output"):
+            v = m.get(field)
+            if isinstance(v, bool) or not isinstance(v, (int, float)) or v <= 0:
+                errors.append("models[%d].%s が正の数値ではありません: %r" % (i, field, v))
+    return errors
+
+
+def _site_data_errors(key: str, data: bytes) -> list[str]:
+    """S3キーに応じたデータ契約を検証する（対象外のキーは空リスト）。"""
+    if key != DATA_MODELS_KEY:
+        return []
+    try:
+        payload = json.loads(data.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as e:
+        return ["JSONとして読み込めません: %s" % e]
+    return validate_calculator_models(payload)
+
+
+def _save_models_baseline(data: bytes) -> str | None:
+    """契約合格した計算機データをワークスペースへベースラインとして保存する（修復の原資）。
+
+    公開ゲートを通過した内容だけがここに入る＝自動的に「最後に公開した正常版」になる。
+    """
+    try:
+        os.makedirs(os.path.dirname(BASELINE_MODELS_PATH), exist_ok=True)
+        tmp = BASELINE_MODELS_PATH + ".tmp"
+        with open(tmp, "wb") as fh:
+            fh.write(data)
+        os.replace(tmp, BASELINE_MODELS_PATH)
+        return BASELINE_MODELS_PATH
+    except OSError:
+        return None
+
+
 @tool
 def publish_file_to_site(path: str, content: str) -> dict:
     """llm.okamomedia.tokyo のサイトにテキストファイル（HTML/CSS/JS/JSON等）を公開する。
@@ -68,14 +152,25 @@ def publish_file_to_site(path: str, content: str) -> dict:
         dict: status, url
     """
     path = path.lstrip("/")
+    body = content.encode("utf-8")
+    errors = _site_data_errors(path, body)
+    if errors:
+        return {
+            "status": "rejected",
+            "path": path,
+            "reason": "データ契約に違反するため公開を拒否しました（サイトを壊す恐れ）",
+            "errors": errors,
+        }
     s3 = boto3.client("s3", region_name=AWS_REGION)
     s3.put_object(
         Bucket=LLM_SITE_BUCKET,
         Key=path,
-        Body=content.encode("utf-8"),
+        Body=body,
         ContentType=_content_type(path),
     )
     _invalidation_paths.append(f"/{path}")
+    if path == DATA_MODELS_KEY:
+        _save_models_baseline(body)  # 正常版を修復の原資として保管
     return {"status": "published", "url": f"{LLM_SITE_URL}/{path}"}
 
 
@@ -198,14 +293,35 @@ def site_upload(local_path: str, site_prefix: str = "") -> dict:
                 files.append(os.path.join(root, name))
 
     s3 = boto3.client("s3", region_name=AWS_REGION)
-    uploaded = []
+    uploaded, rejected = [], []
     for f in files:
         rel = os.path.relpath(f, base_dir).replace(os.sep, "/")
         key = rel if not site_prefix else f"{site_prefix.strip('/')}/{rel}"
-        s3.upload_file(f, LLM_SITE_BUCKET, key, ExtraArgs={"ContentType": _content_type(key)})
+        if key == DATA_MODELS_KEY:
+            try:
+                with open(f, "rb") as fh:
+                    body = fh.read()
+            except OSError as e:
+                rejected.append({"key": key, "errors": ["読み込み失敗: %s" % e]})
+                continue
+            errors = _site_data_errors(key, body)
+            if errors:
+                rejected.append({"key": key, "errors": errors})
+                continue
+            s3.put_object(Bucket=LLM_SITE_BUCKET, Key=key, Body=body,
+                          ContentType=_content_type(key))
+            _save_models_baseline(body)
+        else:
+            s3.upload_file(f, LLM_SITE_BUCKET, key, ExtraArgs={"ContentType": _content_type(key)})
         _invalidation_paths.append("/" + key)
         uploaded.append(key)
-    return {"status": "published", "count": len(uploaded), "uploaded": uploaded}
+    result: dict = {"status": "published", "count": len(uploaded), "uploaded": uploaded}
+    if rejected:
+        result["status"] = "published_partial" if uploaded else "rejected"
+        result["reason"] = ("データ契約に違反するファイルはアップロードしませんでした"
+                            "（公開済みサイトは壊れていません）")
+        result["rejected"] = rejected
+    return result
 
 
 @tool
@@ -246,6 +362,182 @@ def flush_invalidations() -> None:
         },
     )
     _invalidation_paths.clear()
+
+
+# --- 公開サイトの契約チェックと決定論的修復（2026-09-27 追加）------------------------
+# 「静かな故障」（HTTPは200を返すが中身が壊れている）を毎朝の自動検査で拾う。
+# ローカルのコピーではなく**公開中の現物**を見るのが要点（今回の事故はローカル・公開の
+# 両方が同じ壊れ方をしていたため、ローカル検査だけでは検出できない）。
+CONTRACT_GTAG = "G-MTH8T0ECG2"
+CONTRACT_CALC_PAGES = ("calculator/index.html", "en/calculator/index.html")
+CONTRACT_MAIN_PAGES = (
+    "index.html", "pricing/index.html", "calculator/index.html",
+    "en/index.html", "en/calculator/index.html", "en/pricing/index.html",
+    "timeline/index.html", "china-ai/index.html", "multimodal/index.html",
+    "glossary/index.html", "en/glossary/index.html",
+)
+
+
+def _http_get(url: str, timeout: int = 20) -> tuple[int, bytes, str]:
+    req = urllib.request.Request(
+        url, headers={"User-Agent": "llm-data-hub-contract/1.0", "Cache-Control": "no-cache"}
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            return resp.status, resp.read(), ""
+    except urllib.error.HTTPError as e:
+        return e.code, b"", str(e)
+    except Exception as e:  # noqa: BLE001
+        return 0, b"", str(e)
+
+
+def _url_to_key(path: str) -> str:
+    rel = path.strip().lstrip("/").rstrip("/")
+    return rel + "/index.html" if rel else "index.html"
+
+
+def _sitemap_loc_keys(xml: bytes) -> set[str]:
+    import re
+
+    return {
+        _url_to_key(loc.split("llm.okamomedia.tokyo", 1)[-1])
+        for loc in re.findall(r"<loc>([^<]+)</loc>", xml.decode("utf-8", "replace"))
+    }
+
+
+def _published_html_keys() -> set[str]:
+    s3 = boto3.client("s3", region_name=AWS_REGION)
+    keys: list[str] = []
+    kwargs: dict = {"Bucket": LLM_SITE_BUCKET}
+    while True:
+        resp = s3.list_objects_v2(**kwargs)
+        keys += [o["Key"] for o in resp.get("Contents", [])]
+        if not resp.get("IsTruncated"):
+            break
+        kwargs["ContinuationToken"] = resp["NextContinuationToken"]
+    return {k for k in keys if k.endswith(".html")}
+
+
+def check_published_contracts() -> dict:
+    """公開中サイトの契約を検査する（読取のみ・LLMコスト0）。"""
+    violations: list[str] = []
+
+    # C1. 計算機データ（公開中の現物）
+    status, body, err = _http_get(f"{LLM_SITE_URL}/{DATA_MODELS_KEY}")
+    if status != 200:
+        violations.append("%s: HTTP %s で取得できません %s" % (DATA_MODELS_KEY, status, err))
+    else:
+        try:
+            payload = json.loads(body.decode("utf-8"))
+            violations += ["%s: %s" % (DATA_MODELS_KEY, e)
+                           for e in validate_calculator_models(payload)]
+        except (UnicodeDecodeError, json.JSONDecodeError) as e:
+            violations.append("%s: JSONとして読めません: %s" % (DATA_MODELS_KEY, e))
+
+    # C2. 計算機ページの必須要素（JSの配線が生きているか）
+    for rel in CONTRACT_CALC_PAGES:
+        status, body, err = _http_get(f"{LLM_SITE_URL}/{rel}")
+        if status != 200:
+            violations.append("%s: HTTP %s で取得できません %s" % (rel, status, err))
+            continue
+        text = body.decode("utf-8", "replace")
+        if DATA_MODELS_KEY not in text:
+            violations.append("%s: 計算機データ(%s)の読み込みが消えている" % (rel, DATA_MODELS_KEY))
+        if CONTRACT_GTAG not in text:
+            violations.append("%s: GA4タグが無い" % rel)
+
+    # C3. sitemap と公開実体の一致
+    status, body, err = _http_get(f"{LLM_SITE_URL}/sitemap.xml")
+    if status != 200:
+        violations.append("sitemap.xml: HTTP %s で取得できません %s" % (status, err))
+    else:
+        locs = _sitemap_loc_keys(body)
+        keys = _published_html_keys() - {"404.html"}
+        for p in sorted(locs - keys)[:10]:
+            violations.append("sitemap.xml: %s の実体が公開されていません" % p)
+        for p in sorted(keys - locs)[:10]:
+            violations.append("sitemap.xml: %s がsitemapに載っていません" % p)
+
+    # C4. 主要ページの疎通とGA4
+    for rel in CONTRACT_MAIN_PAGES:
+        status, body, err = _http_get(f"{LLM_SITE_URL}/{rel}")
+        if status != 200:
+            violations.append("%s: HTTP %s で取得できません %s" % (rel, status, err))
+            continue
+        if CONTRACT_GTAG not in body.decode("utf-8", "replace"):
+            violations.append("%s: GA4タグが無い" % rel)
+
+    return {
+        "violations": violations,
+        "summary": "公開契約チェック: 違反 %d 件" % len(violations),
+        "ok": not violations,
+    }
+
+
+def _restore_published_data_file(key: str = DATA_MODELS_KEY, dry_run: bool = False) -> dict:
+    """公開中の計算機データを、契約合格済みベースラインから復元する（許可キー限定）。"""
+    key = key.strip("/")
+    if key != DATA_MODELS_KEY:
+        return {"status": "rejected", "reason": "復元できるのは %s のみです" % DATA_MODELS_KEY}
+    if not os.path.exists(BASELINE_MODELS_PATH):
+        return {"status": "failed",
+                "reason": "ベースラインが無いため復元できません: %s" % BASELINE_MODELS_PATH}
+    with open(BASELINE_MODELS_PATH, "rb") as fh:
+        baseline = fh.read()
+    base_errors = _site_data_errors(key, baseline)
+    if base_errors:
+        return {"status": "failed", "reason": "ベースライン自体が契約違反です（要調査）",
+                "errors": base_errors}
+
+    s3 = boto3.client("s3", region_name=AWS_REGION)
+    try:
+        live = s3.get_object(Bucket=LLM_SITE_BUCKET, Key=key)["Body"].read()
+        live_errors = _site_data_errors(key, live)
+    except Exception as e:  # noqa: BLE001
+        live_errors = ["公開中のファイルを取得できません: %s" % e]
+    if not live_errors:
+        return {"status": "skipped", "reason": "公開中のデータは契約を満たしています（復元不要）"}
+    if dry_run:
+        return {"status": "dry_run", "reason": "復元が必要", "live_errors": live_errors}
+
+    s3.put_object(Bucket=LLM_SITE_BUCKET, Key=key, Body=baseline,
+                  ContentType=_content_type(key))
+    _invalidation_paths.append("/" + key)
+    flush_invalidations()
+    return {"status": "restored", "key": key, "bytes": len(baseline),
+            "live_errors": live_errors, "baseline": BASELINE_MODELS_PATH}
+
+
+@tool
+def verify_published_contracts() -> str:
+    """公開中サイトの契約（計算機データのスキーマ・計算機ページの配線・sitemap整合・主要ページの疎通）を検査する。
+
+    毎朝のランで自動実行され、日報にも結果が出る。公開後や異常時の単体確認にも使える。
+    """
+    res = check_published_contracts()
+    lines = [res["summary"]]
+    if res["violations"]:
+        lines += ["  - %s" % v for v in res["violations"][:30]]
+        if DATA_MODELS_KEY in " ".join(res["violations"]):
+            lines.append("  → restore_published_data_file() で計算機データを復元できる"
+                         "（ベースラインが正常な場合のみ）")
+    else:
+        lines.append("  公開サイトは契約を満たしています")
+    return "\n".join(lines)
+
+
+@tool
+def restore_published_data_file(key: str = DATA_MODELS_KEY, dry_run: bool = False) -> dict:
+    """公開中の計算機データが壊れている場合、ワークスペースのベースラインから復元する。
+
+    許可キーは data/models.json のみ。ベースラインが契約検証に通らない場合は復元しない
+    （誤った内容で上書きしないため）。料金内容の更新はエンジニアの通常作業で行う。
+
+    Args:
+        key: 復元対象（data/models.json のみ許可）
+        dry_run: True なら判定だけして書き込まない
+    """
+    return _restore_published_data_file(key, dry_run)
 
 
 @tool

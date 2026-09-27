@@ -487,6 +487,9 @@ def create_delegation_tools(models, run_budget_jpy: float):
         akira_tools.generate_and_publish_image,
         akira_tools.update_akira_config,
         akira_tools.get_site_plan,
+        # 健全性チェックと決定論的修復（エンジニアも公開前後に使う）
+        akira_tools.verify_published_contracts,
+        akira_tools.restore_published_data_file,
         brave,
         screenshot_tool,
         fetch_image,
@@ -611,6 +614,14 @@ DAILY_MISSION_TEMPLATE = """今日は {today} です。LLM Data Hub（{site_url}
 ## 前回の作業日
 {last_work_line}
 
+## 公開サイトの健全性チェック（毎朝の自動検査。決定論的でLLMコストは0）
+{health_line}
+- 違反が残っている場合は、まず自力で直せないか確認する（計算機データなら
+  restore_published_data_file → verify_published_contracts で復旧確認）。
+  決定論的に直せない種類の違反は Claudeエンジニアに最小の依頼として渡す
+- **この結果は日報に必ず1行書く**（違反0件でも「異常なし」と書け。
+  黙ってちゃ伝わらんぞ。表が空になった事故を人間が3.5時間気づかなかった実例がある）
+
 ## 利用可能なWEBツール（すべて無料枠。factチェックはBrave→Firecrawlの順で）
 - Brave Search（Web検索。factチェック第一選択）/ Firecrawl（URL指定でMarkdown取得。JSサイト対応。第二選択）
 - GitHub MCP（公開リポジトリ読み取り専用）
@@ -702,6 +713,31 @@ def run_daily(dry_run: bool = False) -> None:
         # ワークスペースの失敗で日次運用を止めない（初回起動はバケットが空で正常）
         logger.exception("ワークスペースの復元に失敗しました（続行します）")
 
+    # --- 1.7 公開サイトの契約チェック（決定論的・LLMコスト0）---
+    # 2026-09-27: 計算機の実行時データ /data/models.json を料金SOT（ワークスペースの
+    # 真実データ）で上書きし、/calculator/ と /en/calculator/ の表が全滅した。
+    # ページは200を返すため既存の公開ゲート（check_site_pages=HTMLのみ /
+    # verify_publish=MD5一致のみ）はどれも検出できず、「静かな故障」として人間が
+    # 見つけるまで残った。対策として毎朝ここで公開中の**現物**を機械検査し、
+    # 直せる種類の故障は決定論的に修復する（LLMの判断に依存させない）。
+    health_line = "公開契約チェック: 未実施"
+    try:
+        contract = akira_tools.check_published_contracts()
+        logger.info("%s", contract["summary"])
+        if contract["violations"]:
+            logger.warning("公開契約の違反: %s", contract["violations"])
+            if any(akira_tools.DATA_MODELS_KEY in v for v in contract["violations"]):
+                repair = akira_tools.restore_published_data_file()
+                logger.info("計算機データの自動復元: %s", repair)
+                contract = akira_tools.check_published_contracts()
+        health_line = contract["summary"]
+        health_line += ("（公開サイトは正常）" if not contract["violations"]
+                        else "（残: %s）" % " / ".join(contract["violations"][:5]))
+    except Exception:
+        logger.exception("公開契約チェックに失敗しました（続行します）")
+        health_line = "公開契約チェック: 実行失敗（ログ参照）"
+    logger.info("健全性: %s", health_line)
+
     # --- 2. 設定読み込み（自己改善の反映）---
     system_prompt = config_store.load_system_prompt()
     skills = config_store.load_skills()
@@ -766,6 +802,9 @@ def run_daily(dry_run: bool = False) -> None:
         akira_tools.get_site_file,
         akira_tools.list_site_files,
         akira_tools.list_local_files,
+        # 公開サイトの健全性チェックと決定論的修復（読取＋許可キーのみの修復）
+        akira_tools.verify_published_contracts,
+        akira_tools.restore_published_data_file,
         file_read,
         akira_tools.update_akira_config,
         create_report_tool(collected),
@@ -787,7 +826,8 @@ def run_daily(dry_run: bool = False) -> None:
     )
 
     mission = DAILY_MISSION_TEMPLATE.format(
-        today=today, site_url=LLM_SITE_URL, last_work_line=last_work_line
+        today=today, site_url=LLM_SITE_URL, last_work_line=last_work_line,
+        health_line=health_line,
     )
     if dry_run:
         mission += "\n\n【重要】今日はドライランです。公開・依頼は行わず、計画の提示だけしてください。"
@@ -877,6 +917,26 @@ def run_daily(dry_run: bool = False) -> None:
 
     # --- 4. 後処理 ---
     if not dry_run:
+        # 公開後の健全性チェック（その日の公開で壊れた場合に翌朝まで気づかない、を防ぐ）。
+        # 結果は body_md に直に足して日報に必ず載せる（LLMの書き忘れに依存させない）。
+        try:
+            post = akira_tools.check_published_contracts()
+            if post["violations"]:
+                logger.error("公開後の契約違反: %s", post["violations"])
+                if any(akira_tools.DATA_MODELS_KEY in v for v in post["violations"]):
+                    repair = akira_tools.restore_published_data_file()
+                    logger.info("公開後の自動復元: %s", repair)
+                    post = akira_tools.check_published_contracts()
+            post_line = post["summary"] + (
+                "（公開サイトは正常）" if not post["violations"]
+                else "（残: %s）" % " / ".join(post["violations"][:5])
+            )
+        except Exception:
+            logger.exception("公開後の契約チェックに失敗しました（日報には失敗として記載）")
+            post_line = "公開後の契約チェック: 実行失敗（ログ参照）"
+        collected["body_md"] = (collected.get("body_md") or "") + (
+            "\n\n## 公開後の健全性チェック（自動・決定論的）\n" + post_line + "\n"
+        )
         akira_tools.flush_invalidations()
         publish_daily_report(collected, budget_status)
     logger.info("=== 本日の運用終了 ===")

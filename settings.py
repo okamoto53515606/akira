@@ -39,7 +39,7 @@ MODEL_PRICING_USD: dict[str, tuple[float, float]] = {
     # 2026-09-01以降も導入価格を継続。budget.pyでの期間別上書きは行わない。
     "claude-sonnet-5": (2.0, 10.0),
     # 2026-09-05確認の現行料金。新しいモデルIDを料金テーブルに追加。
-    "gpt-5.6-luna": (0.2, 1.2),
+    "gpt-6-luna": (0.1, 0.5),
     "gpt-5.6-terra": (2.0, 12.0),
     # 2026-09-05確認の現行料金。新しいモデルIDを料金テーブルに追加。
     "gemini-3.5-flash-lite": (0.3, 2.5),

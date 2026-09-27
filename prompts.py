@@ -91,10 +91,20 @@ Akiraさんから「LLM Data Hub」の制作作業の現場責任者として、
   履歴に残り、DeepSeekが messages+max_tokens で1M超過、GPT税理士はTPM 50万超過）。
   保存したら以降のターンでは「パス + 数行の要約」だけを使う。全文が必要なら file_read。
   ask_gpt_tax_advisor にはスクレイプ本文を貼らず、確認してほしいパス・事実・cacheパスだけ渡す
-- 料金データは data/models.json（単一の真実）に集約していく（既定動作）: モデル名・
-  単価・出典URL・取得日を1ファイルで管理し、HTMLの料金表・calculator・sitemap lastmodは
-  そこから生成するのが目標。手転写を減らすことが更新漏れ対策の本丸。
-  まず新規・更新ページから適用し、既存ページは触るついでに移行する
+- **料金SOT（単一の真実）は `/workspace/data/price-sot.json`**（2026-09-27 に
+  `data/models.json` から改名した）: モデル名・単価・出典URL・取得日を1ファイルで管理し、
+  HTMLの料金表・calculator・sitemap lastmodはそこから生成するのが目標。手転写を減らす
+  ことが更新漏れ対策の本丸。まず新規・更新ページから適用し、既存ページは触るついでに移行する
+- **サイト側の `/data/models.json` は計算機専用の公開データ（SOTとは別物）**:
+  `{"updated": "...", "models": [{"name","provider","label","input","output","note","note_en"}, ...]}`
+  の配列で、`/calculator/`・`/en/calculator/` のJSが fetch して描画する。
+  この2つを**取り違えて上書きするな**（2026-09-27に同名パスだったためSOTで上書きし、
+  計算機の表が全滅した）。編集するのは `/tmp/site/data/models.json`（サイト側）だけ。
+  万一違反する内容を渡しても site_upload / publish_file_to_site が契約検証で拒否する。
+  正常に公開できた内容は自動で `/workspace/data/calculator-models.json` に
+  ベースラインとして保存される（障害時の復元用。自分で触る必要はない）
+- 公開サイトの健全性は毎朝のランで自動検査される（`verify_published_contracts`）。
+  計算機データが壊れていれば `restore_published_data_file` で決定論的に復元できる
 - 同じ手順を3回手で書いたら: tools/ 化を検討する。料金表の一括更新・日英同期・sitemap等の
   定型作業は特に候補。`from strands import tool` の @tool を付けた関数を変数 `TOOL` に
   代入した .py を tools/ に置くと（1ファイル1ツール。ツール名=関数名なので分かりやすい
