@@ -738,6 +738,25 @@ def run_daily(dry_run: bool = False) -> None:
         health_line = "公開契約チェック: 実行失敗（ログ参照）"
     logger.info("健全性: %s", health_line)
 
+    # --- 1.65 ワークスペースのバックアップ整理（決定論的）---
+    # notes/backup-* は日付つきのスナップショット。増え続けると「どれが正か」が
+    # 分からなくなるため、古い世代だけを消す。削除できるのは notes/backup-* 配下のみ
+    # （IAMでもこのプレフィックスに限定）で、最新世代は必ず残す。
+    rotation_line = "バックアップ整理: 未実施"
+    try:
+        rot = akira_tools.rotate_workspace_backups()
+        logger.info("バックアップ整理: %s", rot)
+        if rot.get("status") == "rotated":
+            rotation_line = ("バックアップ整理: 古い %d 世代・%d ファイルを削除"
+                             "（最新世代 %s は保持）"
+                             % (len(rot.get("deleted_generations", [])),
+                                rot.get("deleted_count", 0), rot.get("newest")))
+        else:
+            rotation_line = "バックアップ整理: %s" % rot.get("status")
+    except Exception:
+        logger.exception("バックアップ整理に失敗しました（続行します）")
+        rotation_line = "バックアップ整理: 実行失敗（ログ参照）"
+
     # --- 2. 設定読み込み（自己改善の反映）---
     system_prompt = config_store.load_system_prompt()
     skills = config_store.load_skills()
@@ -935,7 +954,9 @@ def run_daily(dry_run: bool = False) -> None:
             logger.exception("公開後の契約チェックに失敗しました（日報には失敗として記載）")
             post_line = "公開後の契約チェック: 実行失敗（ログ参照）"
         collected["body_md"] = (collected.get("body_md") or "") + (
-            "\n\n## 公開後の健全性チェック（自動・決定論的）\n" + post_line + "\n"
+            "\n\n## 自動メンテナンス（決定論的）\n"
+            "- " + rotation_line + "\n"
+            "- " + post_line + "\n"
         )
         akira_tools.flush_invalidations()
         publish_daily_report(collected, budget_status)

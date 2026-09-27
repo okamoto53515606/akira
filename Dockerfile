@@ -27,6 +27,14 @@ RUN uv sync --frozen --no-dev --no-install-project
 COPY main.py settings.py budget.py config_store.py tools.py prompts.py report.py ./
 COPY gcp-workload-config-template.json ./
 
+# 全モジュールのimport検品（2026-09-27 追加）。
+# prompts.py は f-string で書かれているため、プロンプト本文に { } を書くと置換フィールドと
+# 解釈されて **import時に ValueError** になり、タスクが起動直後にクラッシュする
+# （2026-09-27に実際に踏みかけた。import tools だけの検品では見逃す）。
+# ここで落とせば「壊れたイメージをビルド・push する」事故を防げる。
+# ※ ENV PATH の設定より前に置いているため、venv の python を絶対パスで呼ぶ
+RUN /app/.venv/bin/python -c "import budget, config_store, prompts, report, settings, tools, main"
+
 # npx の Brave Search MCP と Firecrawl MCP を事前キャッシュ
 RUN npx -y @brave/brave-search-mcp-server --help 2>/dev/null || true
 RUN npx -y firecrawl-mcp --help 2>/dev/null || true

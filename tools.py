@@ -7,9 +7,11 @@
 
 import json
 import os
+import re
 import time
 import urllib.error
 import urllib.request
+from datetime import date, timedelta
 
 import boto3
 from strands import tool
@@ -19,6 +21,7 @@ import config_store
 from settings import (
     AWS_REGION,
     IMAGE_MODEL_ID,
+    JST,
     LLM_DIST_ID,
     LLM_SITE_BUCKET,
     LLM_SITE_URL,
@@ -906,6 +909,101 @@ def save_workspace() -> dict:
     if capped:
         result["skipped_total_cap"] = capped
     return result
+
+
+# --- ワークスペースのバックアップ整理（2026-09-27 追加）------------------------------
+# notes/backup-* は日付つきスナップショット。放っておくと増え続け「どれが正か」が
+# 分からなくなる（2026-09-27時点で notes/backup-* は89ファイル・1.79MB、バケット全体では
+# 旧バージョンが634件）。古い世代だけを消す道具を用意する。
+# 削除対象は notes/backup-* 配下のみで、IAM でもこのプレフィックスに限定してある
+# （ワークスペース全体は upsert-only のまま＝「消えない」安全設計は維持。
+#  2026-09-27の計算機事故はこの設計に救われた）。
+# 安全弁: 日付が読めないキーには触らない／最新世代は必ず残す／keep_days は最低3日。
+WORKSPACE_BACKUP_PREFIX = "notes/backup"
+BACKUP_KEEP_DAYS_MIN = 3
+_BACKUP_DATE_RE = re.compile(r"backup[-_](\d{4})-?(\d{2})-?(\d{2})")
+
+
+def _backup_generation(key: str) -> tuple[str, str] | None:
+    """バックアップのキーから (世代キー, 日付YYYY-MM-DD) を返す。判定できなければ None。
+
+    対応する命名: notes/backup-2026-09-15/<file> / notes/backup_20260925/<file> /
+    notes/backup_20260927_index.html（単体ファイル形式）
+    """
+    if not key.startswith(WORKSPACE_BACKUP_PREFIX):
+        return None
+    m = _BACKUP_DATE_RE.search(key)
+    if not m:
+        return None
+    try:
+        iso = date(int(m.group(1)), int(m.group(2)), int(m.group(3))).isoformat()
+    except ValueError:
+        return None
+    return key[: m.end()], iso
+
+
+def _rotate_workspace_backups(keep_days: int = 7, dry_run: bool = False) -> dict:
+    """notes/backup-* の古い世代を削除する（最新世代は必ず残す）。"""
+    keep_days = max(BACKUP_KEEP_DAYS_MIN, int(keep_days))
+    s3 = boto3.client("s3", region_name=AWS_REGION)
+    keys: list[str] = []
+    kwargs: dict = {"Bucket": WORKSPACE_BUCKET, "Prefix": WORKSPACE_BACKUP_PREFIX}
+    while True:
+        resp = s3.list_objects_v2(**kwargs)
+        keys += [o["Key"] for o in resp.get("Contents", [])]
+        if not resp.get("IsTruncated"):
+            break
+        kwargs["ContinuationToken"] = resp["NextContinuationToken"]
+
+    gens: dict[str, str] = {}
+    for key in keys:
+        got = _backup_generation(key)
+        if not got:
+            continue
+        gen, iso = got
+        if gen not in gens or iso > gens[gen]:
+            gens[gen] = iso
+    if not gens:
+        return {"status": "skipped", "reason": "日付つきバックアップなし",
+                "kept_generations": [], "deleted_count": 0}
+
+    newest = max(gens.values())
+    newest_gens = {g for g, d in gens.items() if d == newest}
+    cutoff = (date.fromisoformat(newest) - timedelta(days=keep_days)).isoformat()
+    to_delete = [g for g, d in gens.items()
+                 if d < cutoff and g not in newest_gens]  # 最新世代は無条件で残す
+    kept = sorted(g for g in gens if g not in to_delete)
+
+    if dry_run:
+        return {"status": "dry_run", "newest": newest, "cutoff": cutoff,
+                "kept_generations": kept, "delete_generations": sorted(to_delete),
+                "delete_files": sum(1 for k in keys
+                                    if any(k.startswith(g) for g in to_delete))}
+
+    deleted: list[str] = []
+    for gen in to_delete:
+        for key in [k for k in keys if k.startswith(gen)]:
+            if not key.startswith(WORKSPACE_BACKUP_PREFIX):  # 二重の安全弁
+                continue
+            s3.delete_object(Bucket=WORKSPACE_BUCKET, Key=key)
+            deleted.append(key)
+    return {"status": "rotated", "newest": newest, "cutoff": cutoff,
+            "deleted_count": len(deleted), "deleted_generations": sorted(to_delete),
+            "kept_generations": kept, "deleted": deleted[:20]}
+
+
+@tool
+def rotate_workspace_backups(keep_days: int = 7, dry_run: bool = False) -> dict:
+    """バックアップ（notes/backup-*）の古い世代を削除してワークスペースを整理する。
+
+    最新世代より keep_days 日より古い世代だけを削除する。最新世代と日付が読めない
+    キーには触らない。削除できるのは notes/backup-* 配下のみ（IAMでも限定済み）。
+
+    Args:
+        keep_days: 残す日数（最低3日。既定7日）
+        dry_run: True なら削除せず対象だけ報告する
+    """
+    return _rotate_workspace_backups(keep_days, dry_run)
 
 
 def load_workspace_tools() -> list:

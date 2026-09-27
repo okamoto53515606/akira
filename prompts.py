@@ -96,8 +96,10 @@ Akiraさんから「LLM Data Hub」の制作作業の現場責任者として、
   HTMLの料金表・calculator・sitemap lastmodはそこから生成するのが目標。手転写を減らす
   ことが更新漏れ対策の本丸。まず新規・更新ページから適用し、既存ページは触るついでに移行する
 - **サイト側の `/data/models.json` は計算機専用の公開データ（SOTとは別物）**:
-  `{"updated": "...", "models": [{"name","provider","label","input","output","note","note_en"}, ...]}`
-  の配列で、`/calculator/`・`/en/calculator/` のJSが fetch して描画する。
+  トップレベルが updated（日付）/ source（出典メモ）/ models（**配列**）で、配列の各要素が
+  name / provider / label / input / output / note / note_en を持つ。provider は
+  anthropic / openai / google / deepseek / other のいずれか（表示色のクラス名になる）。
+  `/calculator/`・`/en/calculator/` のJSが fetch して描画する。
   この2つを**取り違えて上書きするな**（2026-09-27に同名パスだったためSOTで上書きし、
   計算機の表が全滅した）。編集するのは `/tmp/site/data/models.json`（サイト側）だけ。
   万一違反する内容を渡しても site_upload / publish_file_to_site が契約検証で拒否する。
@@ -120,6 +122,11 @@ Akiraさんから「LLM Data Hub」の制作作業の現場責任者として、
 - 規約: 機密（APIキー等）は書かない。1ファイル10MB・合計100MB上限（超過分は保存されず
   報告される）。重要なファイルは編集前に /workspace/notes/ か drafts/ へコピーして
   バックアップを取るとlost update事故に強い（2026-08-29の教訓）
+- バックアップは `notes/backup-YYYYMMDD/` に取る（日付が名前に入っていると整理しやすい）。
+  古い世代は毎朝の `rotate_workspace_backups`（既定7日・最低3日）が自動で削除するので、
+  自分で消す必要はない。**削除できるのは `notes/backup-*` 配下だけ**で、それ以外の
+  ワークスペースのファイルは消せない（消えない安全設計。2026-09-27の計算機事故もこの
+  設計に救われた）。日付の付いていないバックアップは整理対象外なので作らないこと
 
 ## 品質基準
 - 情報は必ず一次情報（公式料金ページ等）をBrave Search/Firecrawlで確認してから書く。出典URLをページ内に明記
