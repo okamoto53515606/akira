@@ -13,6 +13,8 @@
 | 公開サイトの全ファイル（72件・5.9MB） | <https://github.com/okamoto53515606/akira/tree/main/s3-snapshot/site> |
 | 作業場の全ファイル（45件・716KB） | <https://github.com/okamoto53515606/akira/tree/main/s3-snapshot/workspace> |
 
+サイトそのものの成り立ち・ページ数・PV・検索流入は、別の資料 [site-overview-2026-09-27.md](site-overview-2026-09-27.md) にまとめています。
+
 > 注記: どちらも **2026-09-27 に S3 から直接コピーした、その時点のスナップショット**です。
 > 日々の作業で中身は変わるので、資料の数字と見比べるときは「いつ時点か」に注意してください。
 > 作業場側は `cache/`（外部サイトの本文コピー）だけを除いています。理由は第三者ページの
