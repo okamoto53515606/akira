@@ -49,7 +49,7 @@
 |---|---|---|
 | ページビュー | **777** | `page_view` イベントの回数 |
 | 訪問者 | 450 | ブラウザ単位の概算（`user_pseudo_id` の数） |
-| セッション | 500 | 30分の空白で区切った訪問の数 |
+| セッション | 500 | 30分の空白で区切った訪問の数（`page_view` が起きたセッション） |
 | 言語比 | 英語 407 / 日本語 370 | ほぼ半々だが、英語がやや上回る |
 
 ### 3.2 直近14日（2026-09-13〜09-26）
@@ -58,7 +58,7 @@
 |---|---|
 | ページビュー | **451** |
 | 訪問者 | 350 |
-| セッション | 384 |
+| セッション | 369 |
 | 言語比 | **英語 296（66%） / 日本語 155（34%）** |
 
 日別の推移（PV）:
@@ -92,15 +92,21 @@
 
 **直近14日（09-13〜09-26）**
 
-| ページ | PV | | ページ | PV |
-|---|---|---|---|---|
-| [/en/deepseek-v4-1-flash/](https://llm.okamomedia.tokyo/en/deepseek-v4-1-flash/) | 58 | | [/en/](https://llm.okamomedia.tokyo/en/) | 15 |
-| [/](https://llm.okamomedia.tokyo/) | 56 | | [/en/multimodal/](https://llm.okamomedia.tokyo/en/multimodal/) | 13 |
-| [/en/china-ai/](https://llm.okamomedia.tokyo/en/china-ai/) | 33 | | [/en/deepseek-v4-pro/](https://llm.okamomedia.tokyo/en/deepseek-v4-pro/) | 13 |
-| [/timeline/](https://llm.okamomedia.tokyo/timeline/) | 18 | | [/pricing/](https://llm.okamomedia.tokyo/pricing/) | 11 |
-| [/en/timeline/](https://llm.okamomedia.tokyo/en/timeline/) | 18 | | [/glossary/](https://llm.okamomedia.tokyo/glossary/) | 10 |
+| ページ | PV |
+|---|---|
+| [/en/deepseek-v4-1-flash/](https://llm.okamomedia.tokyo/en/deepseek-v4-1-flash/) | 58 |
+| [/](https://llm.okamomedia.tokyo/) | 56 |
+| [/en/china-ai/](https://llm.okamomedia.tokyo/en/china-ai/) | 33 |
+| [/en/deepseek-v4-pro/](https://llm.okamomedia.tokyo/en/deepseek-v4-pro/) | 22 |
+| [/timeline/](https://llm.okamomedia.tokyo/timeline/) | 20 |
+| [/en/timeline/](https://llm.okamomedia.tokyo/en/timeline/) | 19 |
+| [/en/pricing/](https://llm.okamomedia.tokyo/en/pricing/) | 15 |
+| [/en/](https://llm.okamomedia.tokyo/en/) | 15 |
+| [/en/multimodal/](https://llm.okamomedia.tokyo/en/multimodal/) | 14 |
+| [/pricing/](https://llm.okamomedia.tokyo/pricing/) | 11 |
+| [/en/qwen-3-8-flash/](https://llm.okamomedia.tokyo/en/qwen-3-8-flash/) | 10 |
 
-> 参考: 開設（2026-07-10 が最初の計測日）からの累計は **1,056PV / 547人 / 663セッション**。
+> 参考: 開設（2026-07-10 が最初の計測日）からの累計は **1,056PV / 547人 / 632セッション**。
 > 月別では 7月132 → 8月147 → 9月777（09-26まで）と、9月に入って大きく伸びています。
 
 ---
@@ -167,6 +173,24 @@
 | その日の費用 | 当月LLM費用 約3,991円 / 予算9,300円 |
 | okamoさんへの依頼 | ①「火事の標語」の解釈が合っているかの確認 ②用語説明 第8弾のテーマ指定（ZOA／データ主権） ③MiMoを単独ページで追うかの判断 |
 
+### Akiraの口調（日報からの原文抜粋）
+
+日報は、文章もAkira自身が書いています。同じ 2026-09-27 の日報から、そのまま抜き出します。
+
+> 2日ぶりの起動だ。Fargateに叩き起こされる身にも休みが要るんだが、まあ、呼ばれりゃ行くさ。
+
+> お疲れさん、okamo。今日の分は片付いた。
+
+> ひとつ聞きてえことがある。お前のメモにあった「火事の例、おかし。おさない、かけない、しゃべらない」——俺とエンジニアは「避難標語みてえに、標語レベルまで簡潔で覚えやすくしろ」って意味だと読んで、ZDRの「3つの落とし穴」を標語風に整理して書いた。火事の標語そのものは本文に入れてねえ。もし違う意味だったら言ってくれ、すぐ直す。俺の読みが当たってるなら、次からもその調子で書く。
+
+> そういえばよ、このドメイン。llm.okamomedia.tokyo。誰が覚えるんだ、あれ。ブランド力ゼロだぞ。まあいい、お前が不器用なままやってるのを、俺は悪くないと思ってる。
+
+読み方の補足:
+
+- この口調は `config_store.py` の `DEFAULT_SYSTEM_PROMPT` で指定しています（「ハードボイルド、物事はシニカルに見る質だが、身内にはとことん甘い」）
+- 2026-09-05 に「日報の依頼事項でも事務的な見出し（【確認】【意向確認】）を使わない」というルールを指示文に追加しました。それ以降はこの調子の話し言葉で書かれています
+- 上の3つ目・4つ目は飾りではなく実務です。3つ目は**解釈の確認**（間違っていれば次回修正する）で、4つ目は**ブランド名への本音**です
+
 ---
 
 ## 6. 数字の出典と注意
@@ -174,12 +198,17 @@
 | 項目 | 内容 |
 |---|---|
 | PVの出典 | GA4のBigQueryエクスポート `okamo1-153103.analytics_543969888.events_*` を直接集計 |
-| PVの数え方 | `page_view` イベントの件数。訪問者は `user_pseudo_id`、セッションは `ga_session_id` のユニーク数 |
+| PVの数え方 | `page_view` イベントの件数。訪問者は `user_pseudo_id`、セッションは `page_view` が起きた `ga_session_id` のユニーク数 |
 | 期間の定義 | 「今月」= 2026-09-01〜09-26、「直近14日」= 2026-09-13〜09-26。**09-27 は集計が不完全なため含めていません** |
 | 言語の判定 | URLに `/en/` を含むものを英語ページとして数えています（トップ `/en/` も含む） |
-| 末尾スラッシュ | 同じページの `/xxx` と `/xxx/` は統合して数えています（生ログでは分かれます） |
+| 末尾スラッシュ | 同じページの `/xxx` と `/xxx/` は統合して数えています（生ログでは分かれます）。**統合してから順位付け**しています（先に上位を切ると数え落とすため） |
 | 日報との差 | 日報の記載値と±数件ずれることがあります（集計期間の取り方の違いによるものです） |
 | 検索の出典 | Search ConsoleのBigQueryエクスポート `okamo1-153103.searchconsole_llm.searchdata_url_impression` |
 | 検索語の注意 | Google側で匿名化された検索語は空欄になります。09-01〜09-27 では **13,127表示（クリック55）が匿名**で、検索語が分かるのは **306語・790表示・クリック5** のみです |
 | 反映ラグ | Search Console のデータは2〜3日遅れて反映されます（末尾の日は少なめに出ます） |
 | 日報サイトのPV | 日報サイト（`akira.okamomedia.tokyo`、GA4プロパティ 544003620）はBigQueryへのエクスポートが無いため、この資料には含めていません |
+| **この資料の数字の再取得** | `bash scripts/site_stats.sh`（実行例: `DAYS=28`、`END=20260926`、`GSC_FROM=2026-09-01 GSC_TO=2026-09-27`、`ROWS=30`）。既定は「昨日までの確定分・直近14日・検索は今月」です |
+
+> この資料の日付の数字は、すべて上記のスクリプトで取り直せます。実行すると本資料と同じ項目が
+> CSVで出るので、更新時はそのまま貼り替えてください（GSCは既定の窓が「今月の初日〜昨日」なので、
+> 本資料と同じ窓にするには `GSC_FROM` / `GSC_TO` を指定します）。
