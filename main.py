@@ -588,6 +588,9 @@ def create_report_tool(collected: dict):
         """
         collected["body_md"] = body_md
         collected["requests_to_okamo"] = requests_to_okamo
+        # Akira本体が自分で日報を書いた証跡。これが無い＝フォールバック日報なので、
+        # okamoコメントの確認済みマーカーを進めない（未反映のコメントを消費しない）
+        collected["report_written"] = True
         return {"status": "accepted"}
 
     return write_daily_report
@@ -738,24 +741,10 @@ def run_daily(dry_run: bool = False) -> None:
         health_line = "公開契約チェック: 実行失敗（ログ参照）"
     logger.info("健全性: %s", health_line)
 
-    # --- 1.65 ワークスペースのバックアップ整理（決定論的）---
-    # notes/backup-* は日付つきのスナップショット。増え続けると「どれが正か」が
-    # 分からなくなるため、古い世代だけを消す。削除できるのは notes/backup-* 配下のみ
-    # （IAMでもこのプレフィックスに限定）で、最新世代は必ず残す。
+    # ワークスペースのバックアップ整理は「後処理」（save_workspace の後）で行う。
+    # save_workspace() はローカル全件をS3へupsertするため、保存より先に回転させると
+    # 同じランで消したはずの世代がローカルから復活する（2026-09-27修正）
     rotation_line = "バックアップ整理: 未実施"
-    try:
-        rot = akira_tools.rotate_workspace_backups()
-        logger.info("バックアップ整理: %s", rot)
-        if rot.get("status") == "rotated":
-            rotation_line = ("バックアップ整理: 古い %d 世代・%d ファイルを削除"
-                             "（最新世代 %s は保持）"
-                             % (len(rot.get("deleted_generations", [])),
-                                rot.get("deleted_count", 0), rot.get("newest")))
-        else:
-            rotation_line = "バックアップ整理: %s" % rot.get("status")
-    except Exception:
-        logger.exception("バックアップ整理に失敗しました（続行します）")
-        rotation_line = "バックアップ整理: 実行失敗（ログ参照）"
 
     # --- 2. 設定読み込み（自己改善の反映）---
     system_prompt = config_store.load_system_prompt()
@@ -779,12 +768,9 @@ def run_daily(dry_run: bool = False) -> None:
         system_prompt += "\n\n## okamoからの直近コメント（必ず考慮しろ）\n" + "\n".join(
             f"- [{c['date']}] {c['text']}" for c in comments
         )
-    # 今回確認した日を記録（次回起動時はここからの差分のみ取得すればよい状態にしておく）
-    # ※起動時の時計ずれで today が過去日になってもコメントを取りこぼさないよう、
-    #   マーカーは絶対に後退させない（max）。ISO形式の日付は文字列比較で大小が正しい。
-    config_store.save_config(
-        "last_comment_check_date", max(today, last_comment_check or today)
-    )
+    # 今回確認した日のマーカー更新は「後処理」（日報公開の後）で行う。
+    # ここで進めてしまうと、Akira本体のクラッシュや空応答で日報が出なかった場合に
+    # コメントだけ消費され、翌日以降 site_plan にも日報にも残らない（2026-09-27修正）
 
     # 前回の実作業日もAkira自身に伝える（予算超過で数日〜数週間空くことがあるため、
     # 間隔が空いた場合は料金改定・新モデル等の情報が古くなっていないか優先確認させる）
@@ -953,6 +939,26 @@ def run_daily(dry_run: bool = False) -> None:
         except Exception:
             logger.exception("公開後の契約チェックに失敗しました（日報には失敗として記載）")
             post_line = "公開後の契約チェック: 実行失敗（ログ参照）"
+
+        # ワークスペースのバックアップ整理（決定論的）。
+        # notes/backup-* は日付つきのスナップショット。増え続けると「どれが正か」が
+        # 分からなくなるため、古い世代だけを消す。削除できるのは notes/backup-* 配下のみ
+        # （IAMでもこのプレフィックスに限定）で、最新世代は必ず残す。
+        # ※必ず save_workspace（finally）の後に実行する。先に消すと保存で復活する
+        try:
+            rot = akira_tools.rotate_workspace_backups()
+            logger.info("バックアップ整理: %s", rot)
+            if rot.get("status") == "rotated":
+                rotation_line = ("バックアップ整理: 古い %d 世代・%d ファイルを削除"
+                                 "（最新世代 %s は保持）"
+                                 % (len(rot.get("deleted_generations", [])),
+                                    rot.get("deleted_count", 0), rot.get("newest")))
+            else:
+                rotation_line = "バックアップ整理: %s" % rot.get("status")
+        except Exception:
+            logger.exception("バックアップ整理に失敗しました（続行します）")
+            rotation_line = "バックアップ整理: 実行失敗（ログ参照）"
+
         collected["body_md"] = (collected.get("body_md") or "") + (
             "\n\n## 自動メンテナンス（決定論的）\n"
             "- " + rotation_line + "\n"
@@ -960,6 +966,20 @@ def run_daily(dry_run: bool = False) -> None:
         )
         akira_tools.flush_invalidations()
         publish_daily_report(collected, budget_status)
+        # 日報を出し終えてからマーカーを進める（ドライランでは進めない）。
+        # フォールバック日報（クラッシュ・デッドライン・空応答）のときは okamoコメントが
+        # 実際には反映されていないため進めない＝次回に読み直して取りこぼしを防ぐ。
+        # ※起動時の時計ずれで today が過去日になってもコメントを取りこぼさないよう、
+        #   マーカーは絶対に後退させない（max）。ISO形式の日付は文字列比較で大小が正しい。
+        if collected.get("report_written"):
+            config_store.save_config(
+                "last_comment_check_date", max(today, last_comment_check or today)
+            )
+        else:
+            logger.warning(
+                "日報がフォールバックだったため、okamoコメントの確認済みマーカーは"
+                "進めません（未反映のコメントを次回に読み直します）"
+            )
     logger.info("=== 本日の運用終了 ===")
 
 

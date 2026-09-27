@@ -1,8 +1,8 @@
 # Akira — AI/LLM実用データハブ運営エージェント
 
-Akira（`claude-fable-5`）が毎朝 AWS Fargate 上で自律起動し、「AI/LLM実用データハブ」サイト
+Akira（`claude-fable-5`）が隔日 05:00 JST（EventBridge Scheduler）に AWS Fargate 上で自律起動し、「AI/LLM実用データハブ」サイト
 [llm.okamomedia.tokyo](https://llm.okamomedia.tokyo/) を広告なしで運営し続けるためのバッチシステムです。
-リサーチ・作業指示・レビュー・GA4/Search Console分析・日報公開までを毎日自動で行い、
+リサーチ・作業指示・レビュー・GA4/Search Console分析・日報公開までを起動のたびに自動で行い、
 運営者の okamo には日報を通じて依頼事項を伝えます。
 
 ## ●プロジェクト概要
@@ -34,10 +34,10 @@ Akira（`claude-fable-5`）が毎朝 AWS Fargate 上で自律起動し、「AI/L
 | 2026-07-02 22〜23時台 | AWS基盤を構築: S3（サイト+日報バケット）、ACM証明書リクエスト、DynamoDB 3テーブル、IAMロール（`AkiraTaskRole`）、CloudFront 2ディストリビューション（OAC経由） |
 | 2026-07-02 23時台 | okamoがムームードメインでCNAMEレコードを設定 → ACM証明書発行 → 独自ドメインでの疎通確認完了 |
 | 2026-07-02 深夜 | Akiraエージェント本体（`main.py` ほか）をstrandsマルチエージェント構成で実装。channelの実装パターンを参考にしつつ、channelとはSecrets Manager共有のみの疎結合として設計 |
-| 2026-07-02 深夜〜07-03未明 | Dockerfile作成、ECR/ECSクラスター・タスク定義、EventBridge Scheduler（毎朝5:00 JST）を構築。初回Fargate実行で失敗→CloudWatchログ調査→修正 |
+| 2026-07-02 深夜〜07-03未明 | Dockerfile作成、ECR/ECSクラスター・タスク定義、EventBridge Scheduler（定期起動）を構築。初回Fargate実行で失敗→CloudWatchログ調査→修正 |
 | **2026-07-03 00:30** | 初回 `git commit` & `git push`（GitHubリポジトリへ初公開）。トークン単価誤り・累積計上バグなどの教訓もコミットメッセージに記録 |
 | 2026-07-03 未明 | サイト本公開（Coming Soon状態を解除しトップページ・料金比較ページを公開）、GA4/Search Console/BigQueryエクスポートの疎通確認 |
-| 2026-07-03 以降 | 毎朝5:00 JSTの自動運用が稼働開始。Claudeエンジニアのモデルを`claude-sonnet-5`（導入価格）へ切替、予算ルールを「月9,300円のみのハードリミット」に確定するなど、日報経由でokamoと調整を継続中 |
+| 2026-07-03 以降 | 定期実行による自動運用が稼働開始（開始時刻・実行間隔は運用判断で変更し、現在は隔日05:00 JST）。Claudeエンジニアのモデルを`claude-sonnet-5`（導入価格）へ切替、予算ルールを「月9,300円のみのハードリミット」に確定するなど、日報経由でokamoと調整を継続中 |
 
 ## ●AWS構成の概要
 
@@ -48,7 +48,7 @@ Secrets Manager共有のみの疎結合。
 |---|---|---|
 | 配信 | S3 (`akira-llm-site` / `akira-reports-site`, 非公開) + CloudFront（OAC経由）+ ACM証明書 | LLM Data Hubサイト / Akira日報サイトの静的配信 |
 | 実行基盤 | ECR (`akira`) / ECS Fargateクラスター (`akira`) / タスク定義 (`akira-daily`, 1vCPU・2GB) | Akiraエージェント本体の日次バッチ実行 |
-| スケジューラ | EventBridge Scheduler（`cron(0 5 * * ? *)`, Asia/Tokyo） | 毎朝5:00 JSTにFargateタスクを自動起動 |
+| スケジューラ | EventBridge Scheduler（`cron(0 5 */2 * ? *)`, Asia/Tokyo, フレキシブル±15分） | 隔日05:00 JSTにFargateタスクを自動起動 |
 | データ | DynamoDB（`akira-usage` トークン/費用記録、`akira-reports` 日報+okamoコメント、`akira-config` システムプロンプト/skills/site_plan） | コスト管理・日報・自己改善ループの永続化 |
 | 権限 | IAM（`AkiraTaskRole` タスクロール、`AkiraExecutionRole` 実行ロール、`AkiraSchedulerRole` スケジューラ用） | 最小権限でのS3/DynamoDB/Secrets/CloudFront invalidation/RunTask |
 | シークレット | Secrets Manager（`okamo-channel/secrets-*`, channelと共有） | LLM各社APIキー・GitHub PATなどをランタイムで取得（イメージには含めない） |
@@ -124,7 +124,7 @@ DynamoDB (`akira-usage`) への記録と月次予算ゲートを行う。
     ```
 11. **CloudWatch Logsロググループ** `/ecs/akira`（保持30日）を作成
 12. **ECSクラスター** `akira` と **タスク定義** `akira-daily`（1vCPU/2GB, 上記ロールを指定）を登録
-13. **EventBridge Scheduler**で `cron(0 6 * * ? *)`（Asia/Tokyo）のスケジュールを作成し、ECS RunTaskをターゲットに設定
+13. **EventBridge Scheduler**で `cron(0 5 */2 * ? *)`（Asia/Tokyo）のスケジュールを作成し、ECS RunTaskをターゲットに設定
 14. **初回動作確認**: `aws ecs run-task` で手動起動し、CloudWatch Logsでエラーがないか確認（初回は例外発生→ログ調査→修正→再デプロイのサイクルを実施）
 15. **GA4 / Search Console / BigQueryエクスポート設定**（GCPコンソール側の操作）はokamoが実施し、
     プロパティID・データセット名をAkiraのシステムプロンプト（`config_store.py`）に反映
@@ -155,7 +155,7 @@ uv run python main.py --dry-run   # 公開せず計画のみ出力
 
 ### Akiraの日報 — <https://akira.okamomedia.tokyo/>
 
-Akiraが毎朝の作業内容・費用・GPT税理士のレビュー・okamoへの依頼事項を公開するHTML日報です。
+Akiraが各回の作業内容・費用・GPT税理士のレビュー・okamoへの依頼事項を公開するHTML日報です。
 
 ![Akira日報（2026-07-02）](docs/screenshot/akira-report-2026-07-02.png)
 
