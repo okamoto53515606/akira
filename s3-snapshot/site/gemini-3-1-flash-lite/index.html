@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gemini 3.1 Flash-Lite — Gemini 3シリーズ最安・最高速の高スループットモデル【料金・性能・比較】 — LLM Data Hub</title>
+  <meta name="description" content="Google Gemini 3.1 Flash-Liteの最新料金（$0.25/$1.50・2026年5月GA）・仕様・性能・GPT-5.6 LunaやGemini 3.5 Flash-Liteとの比較・ユースケースを一次情報ベースで解説。1Mコンテキスト・65K出力対応のマルチモーダル高効率モデル。">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/gemini-3-1-flash-lite/">
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/gemini-3-1-flash-lite/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/gemini-3-1-flash-lite/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/gemini-3-1-flash-lite/">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/gemini-3-1-flash-lite/">
+  <meta property="og:title" content="Gemini 3.1 Flash-Lite — Gemini 3シリーズ最安・最高速の高スループットモデル">
+  <meta property="og:description" content="Google Gemini 3.1 Flash-Liteの料金（$0.25/$1.50）・性能・競合比較を一次情報ベースで解説。">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Gemini 3.1 Flash-Lite — Gemini 3シリーズ最安・最高速の高スループットモデル【料金・性能・比較】","datePublished":"2026-08-10","dateModified":"2026-09-13","author":{"@type":"Organization","name":"LLM Data Hub"},"publisher":{"@type":"Organization","name":"okamoちゃんねる"},"url":"https://llm.okamomedia.tokyo/gemini-3-1-flash-lite/","inLanguage":"ja"}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .hero-flashlite{background:linear-gradient(135deg,#0f172a 0%,#1e293b 50%,#0f1117 100%);border-bottom:1px solid var(--c-border);padding:3rem 1rem 2.5rem;text-align:center}.hero-flashlite .price-flag{display:inline-block;background:rgba(96,165,250,.12);border:1px solid rgba(96,165,250,.3);color:var(--c-blue);font-size:.82rem;font-weight:700;padding:.3rem .8rem;border-radius:100px;margin-bottom:1rem}.hero-flashlite h1{font-size:clamp(1.6rem,4.5vw,2.4rem);font-weight:800;line-height:1.2;margin-bottom:.75rem}.hero-flashlite h1 span{color:var(--c-blue)}.hero-flashlite .lead{font-size:1.05rem;color:var(--c-muted);max-width:640px;margin:0 auto 1.5rem}.hero-flashlite .quick-stats{display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;margin-top:1rem}.hero-flashlite .stat{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.75rem 1.25rem;text-align:center}.hero-flashlite .stat .val{font-family:var(--font-mono);font-size:1.25rem;font-weight:700;color:var(--c-blue)}.hero-flashlite .stat .lbl{font-size:.75rem;color:var(--c-muted);margin-top:.15rem}
+    .compare-table th:first-child{width:200px}.compare-table td{text-align:center}.compare-table td:first-child{text-align:left;font-weight:600}.compare-table .winner{color:var(--c-green);font-weight:700}.compare-table .tie{color:var(--c-yellow)}
+    .spec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.8rem;margin-bottom:1.5rem}.spec-item{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.9rem 1rem}.spec-item .spec-label{font-size:.75rem;color:var(--c-muted);font-weight:600;margin-bottom:.25rem}.spec-item .spec-value{font-family:var(--font-mono);font-size:1rem;font-weight:700}
+    .use-case-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.8rem;margin-bottom:1.5rem}.use-case-card{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:1rem}.use-case-card .icon{font-size:1.5rem;margin-bottom:.5rem}.use-case-card h4{font-size:.92rem;font-weight:700;margin-bottom:.35rem}.use-case-card p{font-size:.82rem;color:var(--c-muted);line-height:1.5}
+    .thinking-note{background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-blue);border-radius:var(--r-md);padding:.8rem 1rem;margin:1rem 0;font-size:.84rem;color:var(--c-muted)}
+    @media(max-width:640px){.hero-flashlite .quick-stats{flex-direction:column;gap:.5rem}}
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="メインナビゲーション"><a href="/" class="nav-link">ホーム</a><a href="/pricing/" class="nav-link">料金比較</a><a href="/calculator/" class="nav-link">トークン計算機</a><a href="/timeline/" class="nav-link">リリース年表</a><a href="/china-ai/" class="nav-link">中国AI</a><a href="/multimodal/" class="nav-link">マルチモーダル</a><a href="/mai/" class="nav-link">MS AI (MAI)</a><a href="/glossary/" class="nav-link">用語説明</a></nav></div></header>
+
+<section class="hero-flashlite"><div class="container">
+  <p class="price-flag">⚡ Gemini 3シリーズ最安 — $0.25/$1.50（2026年5月GA）</p>
+  <h1>Gemini 3.1 <span>Flash-Lite</span></h1>
+  <p class="lead">Gemini 3シリーズ最安・最高速モデル。Gemini 3 Proアーキテクチャベースで2.5 Flashの主要性能に匹敵し、入力17%安・出力40%安で提供。</p>
+  <div class="quick-stats">
+    <div class="stat"><div class="val">$0.25</div><div class="lbl">入力 / 1M tokens</div></div>
+    <div class="stat"><div class="val">$1.50</div><div class="lbl">出力 / 1M tokens</div></div>
+    <div class="stat"><div class="val">1,048,576</div><div class="lbl">コンテキストウィンドウ</div></div>
+    <div class="stat"><div class="val">65,536</div><div class="lbl">最大出力トークン</div></div>
+  </div>
+</div></section>
+
+<main><div class="container">
+<div class="updated-bar" style="margin-top:2rem;"><span class="dot">●</span>最終更新: <time datetime="2026-09-13">2026年9月13日</time> | 出典: <a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">Google AI 料金ページ</a> · <a href="https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/3-1-flash-lite" target="_blank" rel="noopener">Google Cloud モデルドキュメント</a> | <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a></div>
+
+<!-- 料金 -->
+<section class="section" style="padding-top:0;" aria-labelledby="pricing-h">
+<h2 class="section-title" id="pricing-h" style="font-size:1.2rem;">料金（2026年5月GA以降・現行）</h2>
+<p class="section-sub">Google AI公式料金ページ（ai.google.dev）で確認。全額USD/1Mトークン。Flash-Liteはコンテキスト長に関わらず一律料金。</p>
+
+<div class="table-wrap"><table><thead><tr><th>ティア</th><th>入力（text/image/video）</th><th>入力（audio）</th><th>キャッシュ入力</th><th>出力</th><th>備考</th></tr></thead><tbody>
+<tr><td class="model-name">Standard</td><td class="price">$0.25</td><td class="price">$0.50</td><td class="price">$0.025 / $0.05(audio)</td><td class="price">$1.50</td><td>デフォルト料金。全コンテキスト長で一律</td></tr>
+<tr><td class="model-name">Batch</td><td class="price">$0.125</td><td class="price">$0.25</td><td class="price">$0.0125 / $0.025</td><td class="price">$0.75</td><td>Standardの半額。完了まで最大24時間</td></tr>
+<tr><td class="model-name">Flex</td><td class="price">$0.125</td><td class="price">$0.25</td><td class="price">$0.0125 / $0.025</td><td class="price">$0.75</td><td>低優先度処理。Standardの半額</td></tr>
+<tr><td class="model-name">Priority</td><td class="price">$0.45</td><td class="price">$0.90</td><td class="price">$0.045 / $0.09</td><td class="price">$2.70</td><td>高優先度。Standardの1.8倍</td></tr>
+</tbody></table></div>
+
+<div class="thinking-note">
+  💡 <strong>Thinkingレベル（思考深度）によるコスト制御:</strong> Gemini 3.1 Flash-Liteは minimal / low / medium / high の4段階のthinkingレベルに対応。thinking tokensも出力トークンとして課金されるため、レベル選択がコストに直結する。バルク処理ではminimal、エッジケースではmedium/highに引き上げる戦略が有効。
+</div>
+
+<div class="thinking-note" style="border-left-color:var(--c-yellow);">
+  ⚠️ <strong>音声入力は2倍:</strong> 音声（audio）入力はテキスト/画像/動画の2倍。音声処理が主用途の場合はコスト試算に注意。
+</div>
+
+<p class="source-note">一次情報: <a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">ai.google.dev/gemini-api/docs/pricing</a> · <a href="https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/3-1-flash-lite" target="_blank" rel="noopener">Google Cloud Docs: Gemini 3.1 Flash-Lite</a>（2026-08-10確認）</p>
+</section>
+
+<!-- 仕様 -->
+<section class="section" style="padding-top:0;" aria-labelledby="spec-h">
+<h2 class="section-title" id="spec-h" style="font-size:1.2rem;">モデル仕様</h2>
+<div class="spec-grid">
+  <div class="spec-item"><div class="spec-label">Preview公開</div><div class="spec-value">2026-03-03</div></div>
+  <div class="spec-item"><div class="spec-label">GA（一般提供）</div><div class="spec-value">2026-05-07</div></div>
+  <div class="spec-item"><div class="spec-label">知識カットオフ</div><div class="spec-value">2025年1月（第三者報告）</div></div>
+  <div class="spec-item"><div class="spec-label">コンテキスト</div><div class="spec-value">1,048,576 tokens</div></div>
+  <div class="spec-item"><div class="spec-label">最大出力</div><div class="spec-value">65,536 tokens</div></div>
+  <div class="spec-item"><div class="spec-label">入力モダリティ</div><div class="spec-value">テキスト + 画像 + 音声 + 動画</div></div>
+  <div class="spec-item"><div class="spec-label">出力モダリティ</div><div class="spec-value">テキスト</div></div>
+  <div class="spec-item"><div class="spec-label">ツール呼出</div><div class="spec-value">対応（Function Calling）</div></div>
+  <div class="spec-item"><div class="spec-label">ベースアーキテクチャ</div><div class="spec-value">Gemini 3 Pro</div></div>
+  <div class="spec-item"><div class="spec-label">モデルID</div><div class="spec-value" style="font-size:.85rem;">gemini-3.1-flash-lite</div></div>
+</div>
+<p class="source-note">出典: <a href="https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/3-1-flash-lite" target="_blank" rel="noopener">Google Cloud: Gemini 3.1 Flash-Lite</a> · <a href="https://deepmind.google/models/model-cards/gemini-3-1-flash-lite/" target="_blank" rel="noopener">Google DeepMind Model Card</a></p>
+</section>
+
+<!-- 性能 -->
+<section class="section" style="padding-top:0;" aria-labelledby="perf-h">
+<h2 class="section-title" id="perf-h" style="font-size:1.2rem;">性能 — Gemini 2.5 Flashの主要性能に匹敵、より低価格で</h2>
+<p class="section-sub">Gemini 3.1 Flash-LiteはGemini 3 Proアーキテクチャをベースに、高スループット向けに最適化。前世代（2.5 Flash-Lite）から大幅な品質向上を達成し、主要能力領域で2.5 Flashに匹敵。</p>
+<div class="tip-box">
+  <ul>
+    <li><strong>応答品質:</strong> 主要能力領域でGemini 2.5 Flashに匹敵する性能</li>
+    <li><strong>命令追従:</strong> 複雑なチャットボット・命令駆動ワークフロー向けに改善</li>
+    <li><strong>音声入力:</strong> 自動音声認識（ASR）タスクで音声入力品質が向上</li>
+    <li><strong>マルチモーダル:</strong> テキスト・画像・音声・動画の全入力に対応</li>
+    <li><strong>Thinkingレベル:</strong> minimal〜highの4段階で推論深度を制御可能。シンプルなタスクはminimalで高速処理、複雑なタスクはmedium/highで品質向上</li>
+    <li><strong>対Gemini 2.5 Flash:</strong> 入力17%安（$0.25 vs $0.30）、出力40%安（$1.50 vs $2.50）</li>
+    <li><strong>対Gemini 3 Flash:</strong> 半額（入力$0.25 vs $0.50、出力$1.50 vs $3.00）</li>
+  </ul>
+</div>
+<p style="font-size:.84rem;color:var(--c-muted);">GoogleはFlash-Liteを「高頻度・コスト重視のLLMトラフィック向けに最適化された、最も費用対効果の高いGeminiモデル」と位置づけている。翻訳、データ抽出、コード補完など、トークン単価が事業性を左右するユースケースで真価を発揮。</p>
+<p class="source-note">出典: <a href="https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/3-1-flash-lite" target="_blank" rel="noopener">Google Cloud Docs</a> · <a href="https://deepmind.google/models/model-cards/gemini-3-1-flash-lite/" target="_blank" rel="noopener">Google DeepMind Model Card</a> · <a href="https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-1-flash-lite/" target="_blank" rel="noopener">Google Blog</a></p>
+</section>
+
+<!-- 競合比較 -->
+<section class="section" style="padding-top:0;" aria-labelledby="compare-h">
+<h2 class="section-title" id="compare-h" style="font-size:1.2rem;">競合モデルとの料金比較</h2>
+<p class="section-sub">安さでは業界トップクラスだが、GPT-5.6 Lunaの80%値下げにより競争が激化。価格はすべてUSD/1Mトークン（Standard料金・テキスト入力）。</p>
+
+<div class="table-wrap compare-table"><table><thead><tr><th>モデル</th><th>提供元</th><th>入力</th><th>出力</th><th>Flash-Liteより</th><th>備考</th></tr></thead><tbody>
+<tr><td class="model-name">Gemini 3.1 Flash-Lite</td><td>Google</td><td class="price">$0.25</td><td class="price">$1.50</td><td>—</td><td>基準モデル。マルチモーダル対応</td></tr>
+<tr><td class="model-name"><a href="/gpt-5-6-luna/">GPT-5.6 Luna</a></td><td>OpenAI</td><td class="price">$0.20</td><td class="price">$1.20</td><td class="winner">Luna安</td><td>Lunaは入力20%安・出力20%安。テキスト+画像のみ</td></tr>
+<tr><td class="model-name">Gemini 3.5 Flash-Lite</td><td>Google</td><td class="price">$0.30</td><td class="price">$2.50</td><td class="winner">3.1安</td><td>次世代だが3.1より高価。3.1は入力17%安・出力40%安</td></tr>
+<tr><td class="model-name">Gemini 2.5 Flash-Lite</td><td>Google</td><td class="price">$0.10</td><td class="price">$0.40</td><td class="tie">2.5安</td><td>絶対額で最安だが旧世代。品質差大</td></tr>
+<tr><td class="model-name">Claude Haiku 4.5</td><td>Anthropic</td><td class="price">$1.00</td><td class="price">$5.00</td><td class="winner">Flash-Lite安</td><td>Flash-Liteは入力75%安・出力70%安</td></tr>
+<tr><td class="model-name">DeepSeek V4.1 Flash</td><td>DeepSeek</td><td class="price">$0.15–$0.30</td><td class="price">$0.60–$1.20</td><td class="tie">オフピークはDeepSeek安</td><td>ピーク/オフピーク制（8/16発効）。オフピークはピークの半額</td></tr>
+</tbody></table></div>
+<p style="font-size:.78rem;color:var(--c-muted);margin-top:.3rem;">※ GPT-5.6 Lunaとの比較はテキスト入力のみ。Gemini 3.1 Flash-Liteは音声・動画入力にも対応するマルチモーダルモデルであり、画像/音声/動画を含むワークロードではLunaより総合的なコスパで有利な場合がある。DeepSeekは2026-09-10リリースの <strong>V4.1 Flash</strong> が現行でピーク/オフピーク価格制（cache miss入力 オフピーク$0.15・ピーク$0.30、出力 オフピーク$0.60・ピーク$1.20）。V4 Pro は 2026-09-14 以降も提供継続が公式に告知されており（9/14 ルーティング予告は撤回）、単価も現行有効です。</p>
+<p class="source-note">出典: 各社公式料金ページ（2026-08-10確認）。詳細は<a href="/pricing/">料金比較ページ</a>を参照。<a href="/gpt-5-6-luna/">GPT-5.6 Lunaの詳細はこちら →</a></p>
+</section>
+
+<!-- ユースケース -->
+<section class="section" style="padding-top:0;" aria-labelledby="usecase-h">
+<h2 class="section-title" id="usecase-h" style="font-size:1.2rem;">こんな用途に最適</h2>
+<p class="section-sub">高スループット・低コスト・マルチモーダルが必要なワークロード全般。</p>
+<div class="use-case-grid">
+  <div class="use-case-card"><div class="icon">🌐</div><h4>翻訳・多言語処理</h4><p>大量テキストの翻訳パイプライン。thinkingレベル最小化でトークン効率最大化。</p></div>
+  <div class="use-case-card"><div class="icon">📊</div><h4>データ抽出・分類</h4><p>文書からの構造化データ抽出、コンテンツモデレーション、感情分析。</p></div>
+  <div class="use-case-card"><div class="icon">🎤</div><h4>音声認識（ASR）</h4><p>音声入力に対応。2.5 Flash-LiteからASR品質が改善。文字起こしパイプラインに。</p></div>
+  <div class="use-case-card"><div class="icon">💻</div><h4>コード補完・レビュー</h4><p>IDE/CI/CDスケールでのインライン補完、lint的レビュー、リファクタ提案。</p></div>
+  <div class="use-case-card"><div class="icon">🔄</div><h4>バッチ処理・夜間バッチ</h4><p>Batch/Flexでさらに50%オフ。大規模データの非同期処理に。</p></div>
+  <div class="use-case-card"><div class="icon">📹</div><h4>マルチモーダル一括処理</h4><p>画像・動画・音声を含む複合メディアの分類・メタデータ抽出。</p></div>
+</div>
+</section>
+
+<!-- Gemini 3.x 選び方 -->
+<section class="section" style="padding-top:0;" aria-labelledby="choice-h">
+<h2 class="section-title" id="choice-h" style="font-size:1.2rem;">Gemini 3.xシリーズの選び方</h2>
+<div class="table-wrap"><table><thead><tr><th>モデル</th><th>入力</th><th>出力</th><th>選ぶべき場面</th></tr></thead><tbody>
+<tr><td class="model-name">Gemini 3.1 Pro Preview</td><td class="price">$2.00</td><td class="price">$12.00</td><td>最難関推論・エージェント・複雑なマルチステップ問題</td></tr>
+<tr><td class="model-name">Gemini 3.6 Flash</td><td class="price">$1.50</td><td class="price">$7.50</td><td>速度重視の本番ワークロード。Grounding対応</td></tr>
+<tr><td class="model-name">Gemini 3.5 Flash</td><td class="price">$1.50</td><td class="price">$9.00</td><td>Flash帯の標準。出力が3.6よりやや高め</td></tr>
+<tr><td class="model-name" style="border-left:3px solid var(--c-blue);padding-left:.7rem;">Gemini 3.1 Flash-Lite ⬅</td><td class="price">$0.25</td><td class="price">$1.50</td><td>高スループット・コスト重視・マルチモーダル一括処理</td></tr>
+</tbody></table></div>
+<p style="font-size:.84rem;color:var(--c-muted);margin-top:.5rem;">💡 基本戦略: Flash-Liteで日常的な高頻度タスクを処理し、品質が必要な場合はFlash、最難関タスクはProへエスカレーション。</p>
+</section>
+
+<!-- CTA -->
+<section class="section" style="padding-top:0;">
+<div style="background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-accent);border-radius:var(--r-lg);padding:1.5rem;text-align:center;">
+  <h3 style="font-size:1.1rem;margin-bottom:.75rem;">実際のコストを試算する</h3>
+  <p style="color:var(--c-muted);font-size:.9rem;margin-bottom:1rem;">Gemini 3.1 Flash-Liteを含む全モデルのトークンコストを一括計算。入力・出力トークン数を入れるだけ。</p>
+  <a href="/calculator/" style="display:inline-block;background:var(--c-accent);color:#fff;font-weight:600;padding:.65rem 1.5rem;border-radius:var(--r-md);">🧮 トークン計算機で試算する →</a>
+  <p style="margin-top:.8rem;font-size:.82rem;color:var(--c-muted);"><a href="/pricing/">📊 全モデル料金比較</a> · <a href="/gpt-5-6-luna/">🌙 GPT-5.6 Lunaと比較</a> · <a href="/timeline/">🗓️ リリース年表</a> · <a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">🔗 Google公式料金ページ</a></p>
+</div>
+</section>
+
+<div class="tip-box" style="border-left-color:var(--c-red);margin-bottom:2rem;">
+  <h3>⚠️ 免責事項</h3>
+  <ul>
+    <li>料金はGoogle AI公式ページ（ai.google.dev）を2026-08-10に確認したものです。予告なく変動します。契約前に必ず公式ページをご確認ください。</li>
+    <li>本サイトは情報提供目的であり、特定プロバイダーの推薦・代理ではありません。</li>
+    <li>性能評価はGoogleの公表値および各評価機関のデータに基づきます。実際の使用感を保証するものではありません。</li>
+  </ul>
+</div>
+
+</div></main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>運営: okamoちゃんねる</p><p><a href="/">ホーム</a> · <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a> · <a href="/timeline/">年表</a> · <a href="/gpt-5-6-luna/">GPT-5.6 Luna</a></p></div><p class="footer-disclaimer">⚠️ 料金・仕様は予告なく変動します。契約前に必ず各社公式ページでご確認ください。本サイトは各社と提携していません。</p></div></footer>
+</body>
+</html>

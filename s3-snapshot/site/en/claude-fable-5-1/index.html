@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Claude Fable 5.1 — Anthropic's New Mythos-Class Flagship [Pricing, Benchmarks &amp; Comparison] — LLM Data Hub</title>
+  <meta name="description" content="Anthropic Claude Fable 5.1: latest pricing ($10/$50, cache reads $0.25 — up to ~45% cheaper effective), specs (1M context, 128K output), benchmarks (Terminal-Bench 55.8%, CursorBench 73.4%), and comparisons vs GPT-5.6 Sol and Claude Opus 5. Sister model Mythos 5.1 explained. Verified primary sources.">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/en/claude-fable-5-1/">
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/claude-fable-5-1/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/claude-fable-5-1/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/claude-fable-5-1/">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/en/claude-fable-5-1/">
+  <meta property="og:title" content="Claude Fable 5.1 — Anthropic's New Mythos-Class Flagship">
+  <meta property="og:description" content="$10/$50 with $0.25 cache reads. 1M context, 128K output. Comparisons vs GPT-5.6 Sol and Claude Opus 5. Verified primary sources.">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Claude Fable 5.1 — Anthropic's New Mythos-Class Flagship [Pricing, Benchmarks & Comparison]","datePublished":"2026-09-01","dateModified":"2026-09-01","author":{"@type":"Organization","name":"LLM Data Hub"},"publisher":{"@type":"Organization","name":"okamo channel"},"url":"https://llm.okamomedia.tokyo/en/claude-fable-5-1/","inLanguage":"en"}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .hero-fable{background:linear-gradient(135deg,#1a0f0a 0%,#2a1a12 50%,#0f1117 100%);border-bottom:1px solid var(--c-border);padding:3rem 1rem 2.5rem;text-align:center}.hero-fable .price-flag{display:inline-block;background:rgba(201,100,66,.15);border:1px solid rgba(201,100,66,.35);color:var(--c-anthropic);font-size:.82rem;font-weight:700;padding:.3rem .8rem;border-radius:100px;margin-bottom:1rem}.hero-fable h1{font-size:clamp(1.6rem,4.5vw,2.4rem);font-weight:800;line-height:1.2;margin-bottom:.75rem}.hero-fable h1 span{color:var(--c-anthropic)}.hero-fable .lead{font-size:1.05rem;color:var(--c-muted);max-width:680px;margin:0 auto 1.5rem}.hero-fable .quick-stats{display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;margin-top:1rem}.hero-fable .stat{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.75rem 1.25rem;text-align:center}.hero-fable .stat .val{font-family:var(--font-mono);font-size:1.25rem;font-weight:700;color:var(--c-anthropic)}.hero-fable .stat .lbl{font-size:.75rem;color:var(--c-muted);margin-top:.15rem}
+    .bench-table th:first-child{width:230px}.bench-table td{text-align:center}.bench-table td:first-child{text-align:left;font-weight:600}.bench-table .win{color:var(--c-green);font-weight:700}
+    .spec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.8rem;margin-bottom:1.5rem}.spec-item{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.9rem 1rem}.spec-item .spec-label{font-size:.75rem;color:var(--c-muted);font-weight:600;margin-bottom:.25rem}.spec-item .spec-value{font-family:var(--font-mono);font-size:1rem;font-weight:700}
+    .use-case-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.8rem;margin-bottom:1.5rem}.use-case-card{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:1rem}.use-case-card .icon{font-size:1.5rem;margin-bottom:.5rem}.use-case-card h4{font-size:.92rem;font-weight:700;margin-bottom:.35rem}.use-case-card p{font-size:.82rem;color:var(--c-muted);line-height:1.5}
+    .price-history{font-size:.86rem;color:var(--c-muted);line-height:1.8}.price-history .old{text-decoration:line-through;color:var(--c-red)}.price-history .arrow{color:var(--c-green);font-weight:700}
+    .mythos-note{background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-anthropic);border-radius:var(--r-md);padding:.9rem 1.1rem;margin:1rem 0;font-size:.86rem;color:var(--c-muted)}
+    @media(max-width:640px){.hero-fable .quick-stats{flex-direction:column;gap:.5rem}}
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/en/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="Main navigation"><a href="/en/" class="nav-link">Home</a><a href="/en/pricing/" class="nav-link">Pricing</a><a href="/en/calculator/" class="nav-link">Token Calculator</a><a href="/en/timeline/" class="nav-link">Release Timeline</a><a href="/en/china-ai/" class="nav-link">China AI</a><a href="/en/multimodal/" class="nav-link">Multimodal</a><a href="/en/mai/" class="nav-link">MS AI (MAI)</a><a href="/en/glossary/" class="nav-link">Glossary</a></nav></div></header>
+
+<section class="hero-fable"><div class="container">
+  <p class="price-flag">🚀 Released September 1, 2026 — 75% cache-read cut ($1.00→$0.25)</p>
+  <h1>Claude Fable <span>5.1</span></h1>
+  <p class="lead">Anthropic's new Mythos-class flagship. A new frontier for coding, knowledge work and long-horizon agents, with cache-read price cuts making it up to ~45% cheaper in practice.</p>
+  <div class="quick-stats">
+    <div class="stat"><div class="val">$10.00</div><div class="lbl">Input / 1M tokens</div></div>
+    <div class="stat"><div class="val">$50.00</div><div class="lbl">Output / 1M tokens</div></div>
+    <div class="stat"><div class="val">$0.25</div><div class="lbl">Cache read / 1M</div></div>
+    <div class="stat"><div class="val">1M</div><div class="lbl">Context window</div></div>
+    <div class="stat"><div class="val">128K</div><div class="lbl">Max output tokens</div></div>
+  </div>
+</div></section>
+
+<main><div class="container">
+<div class="updated-bar" style="margin-top:2rem;"><span class="dot">●</span>Last updated: <time datetime="2026-09-01">September 1, 2026</time> | Sources: <a href="https://www.anthropic.com/claude-fable-and-mythos-5-1" target="_blank" rel="noopener">Anthropic announcement</a> · <a href="https://platform.claude.com/docs/en/models/overview" target="_blank" rel="noopener">Model overview</a> · <a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener">Pricing</a> | <a href="/en/pricing/">All Pricing</a> · <a href="/en/calculator/">Calculator</a> · <a href="/en/claude-mythos-5-1/">Mythos 5.1</a></div>
+
+<!-- Pricing -->
+<section class="section" style="padding-top:0;" aria-labelledby="pricing-h">
+<h2 class="section-title" id="pricing-h" style="font-size:1.2rem;">Pricing (as of Sept 1, 2026 launch)</h2>
+<p class="section-sub">Verified against Anthropic's official pricing page (platform.claude.com). All prices in USD per 1M tokens.</p>
+
+<div class="table-wrap"><table><thead><tr><th>Tier</th><th>Input</th><th>5m Cache Write</th><th>1h Cache Write</th><th>Cache Read</th><th>Output</th><th>Notes</th></tr></thead><tbody>
+<tr><td class="model-name">Standard</td><td class="price">$10.00</td><td class="price">$12.50</td><td class="price">$20.00</td><td class="price">$0.25</td><td class="price">$50.00</td><td>Standard rate. Flat 1M context</td></tr>
+</tbody></table></div>
+
+<div class="price-history">
+  <strong>Key pricing points:</strong><br>
+  Input, output, and cache writes are unchanged from Fable 5 ($10/$50, 5m writes $12.50, 1h writes $20).<br>
+  <span class="arrow">Only cache reads dropped from $1.00 → $0.25 (a 75% cut)</span> — now 2.5% of the base input price (vs 10% for other models).<br>
+  * Anthropic estimates this yields <strong>~25% lower cost</strong> on typical workloads and <strong>up to ~45%</strong> on highly agentic (tool- and context-heavy) workloads.
+</div>
+
+<p class="source-note">Primary sources: <a href="https://www.anthropic.com/claude-fable-and-mythos-5-1" target="_blank" rel="noopener">Anthropic announcement (Cost and availability)</a> · <a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener">platform.claude.com pricing</a> (verified 2026-09-01). Batch API is 50% off (input $5 / output $25).</p>
+</section>
+
+<!-- Specs -->
+<section class="section" style="padding-top:0;" aria-labelledby="spec-h">
+<h2 class="section-title" id="spec-h" style="font-size:1.2rem;">Model Specifications</h2>
+<div class="spec-grid">
+  <div class="spec-item"><div class="spec-label">GA Release</div><div class="spec-value">September 1, 2026</div></div>
+  <div class="spec-item"><div class="spec-label">Knowledge Cutoff</div><div class="spec-value">June 2026</div></div>
+  <div class="spec-item"><div class="spec-label">Context Window</div><div class="spec-value">1,000,000 tokens</div></div>
+  <div class="spec-item"><div class="spec-label">Max Output</div><div class="spec-value">128,000 tokens</div></div>
+  <div class="spec-item"><div class="spec-label">Input Modalities</div><div class="spec-value">Text + Image</div></div>
+  <div class="spec-item"><div class="spec-label">Output Modalities</div><div class="spec-value">Text</div></div>
+  <div class="spec-item"><div class="spec-label">Thinking</div><div class="spec-value">Adaptive (always on)</div></div>
+  <div class="spec-item"><div class="spec-label">Default Effort</div><div class="spec-value">high</div></div>
+  <div class="spec-item"><div class="spec-label">Tool Use</div><div class="spec-value">Supported</div></div>
+  <div class="spec-item"><div class="spec-label">Model ID</div><div class="spec-value" style="font-size:.85rem;">claude-fable-5-1</div></div>
+</div>
+<p class="source-note">Sources: <a href="https://platform.claude.com/docs/en/models/overview" target="_blank" rel="noopener">Claude Platform model overview</a> (verified 2026-09-01). All current models support text &amp; image input, text output, multilingual, vision and tool use. Available on AWS Bedrock, Google Cloud (Vertex AI) and Microsoft Azure (Foundry).</p>
+</section>
+
+<!-- Performance -->
+<section class="section" style="padding-top:0;" aria-labelledby="perf-h">
+<h2 class="section-title" id="perf-h" style="font-size:1.2rem;">Performance — a major leap over Fable 5</h2>
+<p class="section-sub">Benchmarks from Anthropic's announcement (evaluated with production safeguards enabled). Figures as published by each vendor.</p>
+<div class="table-wrap bench-table"><table><thead><tr><th>Benchmark</th><th>Fable 5.1</th><th>Fable 5</th><th>Claude Opus 5</th><th>GPT-5.6 Sol</th></tr></thead><tbody>
+<tr><td>Agentic scientific research<br>Terminal-Bench-Science 0.1</td><td class="win">52.6%</td><td>24.7%</td><td>29.0%</td><td>22.4%</td></tr>
+<tr><td>Agentic coding<br>Terminal-Bench 4.0</td><td class="win">55.8%</td><td>42.0%</td><td>52.3%</td><td>37.3%</td></tr>
+<tr><td>Knowledge work<br>GDPval-AA v2</td><td class="win">1853</td><td>1723</td><td>1824</td><td>1711</td></tr>
+<tr><td>Computer use<br>OSWorld 2.0 (partial)</td><td class="win">77.9%</td><td>72.9%</td><td>75.4%</td><td>—</td></tr>
+<tr><td>Multidisciplinary reasoning<br>Humanity's Last Exam (no tools)</td><td class="win">60.9%</td><td>57.8%</td><td>56.6%</td><td>—</td></tr>
+<tr><td>Business workflows<br>AutomationBench</td><td class="win">31.4%</td><td>17.1%</td><td>26.9%</td><td>19.6%</td></tr>
+<tr><td>Agentic coding<br>CursorBench 3.2.0</td><td class="win">73.4%</td><td>70.5%</td><td>70.0%</td><td>67.2%</td></tr>
+</tbody></table></div>
+<p style="font-size:.84rem;color:var(--c-muted);">Terminal-Bench-Science more than doubling Fable 5's score (24.7% → 52.6%) is the headline change — the area Anthropic centers in this launch. Mythos 5.1 hits <strong>60.9%</strong> on Terminal-Bench 4.0. HLE (with tools) is 65.0%.</p>
+<p class="source-note">Source: <a href="https://www.anthropic.com/claude-fable-and-mythos-5-1" target="_blank" rel="noopener">Anthropic announcement</a> (verified 2026-09-01)</p>
+</section>
+
+<!-- Fable vs Mythos -->
+<section class="section" style="padding-top:0;" aria-labelledby="mythos-h">
+<h2 class="section-title" id="mythos-h" style="font-size:1.2rem;">Fable 5.1 vs Mythos 5.1</h2>
+<div class="mythos-note">
+  <strong>Same model, different safeguards.</strong> The two share the same underlying model; only the strength of applied safeguards differs.<br><br>
+  <strong>Claude Fable 5.1</strong> — generally available to all users via the API, Claude.ai, Claude Code and Claude Cowork.<br>
+  <strong>Claude Mythos 5.1</strong> — trusted-access only. A version with relaxed safeguards in cybersecurity (CVP) and life sciences (LSVP) for vetted organizations. See the <a href="/en/claude-mythos-5-1/">Mythos 5.1 page</a> for details.
+</div>
+</section>
+
+<!-- Competitor Comparison -->
+<section class="section" style="padding-top:0;" aria-labelledby="compare-h">
+<h2 class="section-title" id="compare-h" style="font-size:1.2rem;">Competitor Flag­ship Price Comparison</h2>
+<p class="section-sub">All prices in USD per 1M tokens (standard rate). Cache-read handling is the key cost differentiator.</p>
+<div class="table-wrap"><table><thead><tr><th>Model</th><th>Provider</th><th>Input</th><th>Output</th><th>Cache Read</th><th>Notes</th></tr></thead><tbody>
+<tr><td class="model-name">Claude Fable 5.1</td><td>Anthropic</td><td class="price">$10.00</td><td class="price">$50.00</td><td class="price">$0.25</td><td>New flagship (Mythos-class)</td></tr>
+<tr><td class="model-name">Claude Opus 5</td><td>Anthropic</td><td class="price">$5.00</td><td class="price">$25.00</td><td class="price">$0.50</td><td>For standard workloads. Half Fable 5.1's price</td></tr>
+<tr><td class="model-name"><a href="/en/gpt-5-6-sol/">GPT-5.6 Sol</a></td><td>OpenAI</td><td class="price">$4.00</td><td class="price">$20.00</td><td class="price">$0.40</td><td>Promo (thru 2026-11-21). Cheapest in absolute terms</td></tr>
+<tr><td class="model-name">Claude Fable 5</td><td>Anthropic</td><td class="price">$10.00</td><td class="price">$50.00</td><td class="price">$1.00</td><td>Previous gen. Fable 5.1 cuts only cache reads 75%</td></tr>
+</tbody></table></div>
+<p style="font-size:.84rem;color:var(--c-muted);">💡 How to read it: Fable 5.1 is for the hardest, longest-horizon agents. For price-per-performance, <a href="/en/gpt-5-6-sol/">GPT-5.6 Sol</a> ($4/$20) or Claude Opus 5 ($5/$25) are cheaper. Note that on agentic workloads dominated by cache reads, Fable 5.1's effective cost drops up to ~45%.</p>
+<p class="source-note">Sources: each provider's official pricing page (verified 2026-09-01). See <a href="/en/pricing/">full pricing comparison</a>.</p>
+</section>
+
+<!-- Use Cases -->
+<section class="section" style="padding-top:0;" aria-labelledby="usecase-h">
+<h2 class="section-title" id="usecase-h" style="font-size:1.2rem;">Ideal Use Cases</h2>
+<p class="section-sub">Fable 5.1 shines on long-running, high-difficulty reasoning and agentic work.</p>
+<div class="use-case-grid">
+  <div class="use-case-card"><div class="icon">💻</div><h4>Long-horizon agents</h4><p>Multi-step autonomous runs. Cache-read price cut improves cost efficiency.</p></div>
+  <div class="use-case-card"><div class="icon">🐛</div><h4>Hard coding &amp; debugging</h4><p>Root-causing rare crashes other models miss.</p></div>
+  <div class="use-case-card"><div class="icon">🔬</div><h4>Scientific research &amp; knowledge work</h4><p>More than 2× Fable 5 on Terminal-Bench-Science. Complex analysis and hypothesis generation.</p></div>
+  <div class="use-case-card"><div class="icon">🧠</div><h4>Hard reasoning</h4><p>60.9% on Humanity's Last Exam (no tools). Tough multidisciplinary problems.</p></div>
+  <div class="use-case-card"><div class="icon">🖥️</div><h4>Computer use</h4><p>77.9% OSWorld 2.0 (partial). GUI-driven automation.</p></div>
+  <div class="use-case-card"><div class="icon">📊</div><h4>Business workflows</h4><p>31.4% AutomationBench (~1.8× Fable 5's 17.1%). Autonomous routine work.</p></div>
+</div>
+</section>
+
+<!-- Model Selection -->
+<section class="section" style="padding-top:0;" aria-labelledby="choice-h">
+<h2 class="section-title" id="choice-h" style="font-size:1.2rem;">Claude Family Selection Guide</h2>
+<div class="table-wrap"><table><thead><tr><th>Model</th><th>Input</th><th>Output</th><th>When to Use</th></tr></thead><tbody>
+<tr><td class="model-name" style="border-left:3px solid var(--c-anthropic);padding-left:.7rem;">Claude Fable 5.1 ⬅</td><td class="price">$10.00</td><td class="price">$50.00</td><td>Hardest, long-horizon agents and scientific research (max capability)</td></tr>
+<tr><td class="model-name">Claude Opus 5</td><td class="price">$5.00</td><td class="price">$25.00</td><td>Standard coding, agents and enterprise work</td></tr>
+<tr><td class="model-name">Claude Sonnet 5</td><td class="price">$2.00</td><td class="price">$10.00</td><td>Speed × intelligence balance. High-volume, daily work</td></tr>
+<tr><td class="model-name">Claude Haiku 4.5</td><td class="price">$1.00</td><td class="price">$5.00</td><td>Fastest, high-volume, classification. Cost-first</td></tr>
+</tbody></table></div>
+<p style="font-size:.84rem;color:var(--c-muted);margin-top:.5rem;">💡 Strategy: Claude Opus 5 ($5/$25) is often sufficient. Escalate to Fable 5.1 when Opus 5 at higher effort still falls short. For cybersecurity / life-sciences work blocked by safeguards, <a href="/en/claude-mythos-5-1/">Mythos 5.1</a> (application required).</p>
+</section>
+
+<!-- CTA -->
+<section class="section" style="padding-top:0;">
+<div style="background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-anthropic);border-radius:var(--r-lg);padding:1.5rem;text-align:center;">
+  <h3 style="font-size:1.1rem;margin-bottom:.75rem;">Estimate Your Actual Costs</h3>
+  <p style="color:var(--c-muted);font-size:.9rem;margin-bottom:1rem;">Compare token costs for Claude Fable 5.1 and all major models. Just enter your token counts.</p>
+  <a href="/en/calculator/" style="display:inline-block;background:var(--c-anthropic);color:#fff;font-weight:600;padding:.65rem 1.5rem;border-radius:var(--r-md);">🧮 Open Token Calculator →</a>
+  <p style="margin-top:.8rem;font-size:.82rem;color:var(--c-muted);"><a href="/en/pricing/">📊 Full Pricing Comparison</a> · <a href="/en/claude-mythos-5-1/">🛡️ Claude Mythos 5.1</a> · <a href="/en/timeline/">🗓️ Release Timeline</a> · <a href="https://www.anthropic.com/claude-fable-and-mythos-5-1" target="_blank" rel="noopener">🔗 Anthropic Announcement</a></p>
+</div>
+</section>
+
+<div class="tip-box" style="border-left-color:var(--c-red);margin-bottom:2rem;">
+  <h3>⚠️ Disclaimer</h3>
+  <ul>
+    <li>Pricing and specs verified against Anthropic's official pages (platform.claude.com / anthropic.com) on 2026-09-01. Subject to change without notice. Always check official pages before contracting.</li>
+    <li>This site is informational only. We are not affiliated with or endorsed by any provider.</li>
+    <li>Benchmark scores are as published by Anthropic. Your mileage may vary.</li>
+  </ul>
+</div>
+
+</div></main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>Operated by okamo channel</p><p><a href="/en/">Home</a> · <a href="/en/pricing/">Pricing</a> · <a href="/en/calculator/">Calculator</a> · <a href="/en/timeline/">Timeline</a> · <a href="/en/claude-mythos-5-1/">Mythos 5.1</a> · <a href="/en/gpt-5-6-sol/">GPT-5.6 Sol</a></p></div><p class="footer-disclaimer">⚠️ Pricing and specifications may change without notice. Always verify on official pages. Not affiliated with any provider.</p></div></footer>
+</body>
+</html>

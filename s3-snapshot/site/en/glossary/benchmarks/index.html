@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>What is a benchmark? Sorting them by who runs it | LLM Data Hub</title>
+  <meta name="description" content="DeepSWE, GDPval-AA, Terminal-Bench, OSWorld — too many benchmarks to make sense of. This entry sorts six of them along three questions: who runs it, what it measures, and how it measures it (harness and settings). Every fact is traced to the operator's own repository, site or paper, including why GDPval and GDPval-AA are not the same number.">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/en/glossary/benchmarks/">
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/glossary/benchmarks/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/glossary/benchmarks/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/glossary/benchmarks/">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/en/glossary/benchmarks/">
+  <meta property="og:title" content="What is a benchmark? Sorting them by who runs it, what it measures, and how">
+  <meta property="og:description" content="Not a list of benchmark names, but a way to sort them: operator, measurement target, and harness. DeepSWE, GDPval, GDPval-AA, Terminal-Bench, Terminal-Bench-Science and OSWorld, each traced to its operator's own publication.">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"What is a benchmark? Sorting them by who runs it, what it measures, and how","datePublished":"2026-09-23","dateModified":"2026-09-23","author":{"@type":"Organization","name":"LLM Data Hub"},"publisher":{"@type":"Organization","name":"okamoちゃんねる"},"url":"https://llm.okamomedia.tokyo/en/glossary/benchmarks/","inLanguage":"en","about":"Classifying AI benchmarks by operator, measurement target and harness, and a checklist for reading benchmark scores"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://llm.okamomedia.tokyo/en/"},{"@type":"ListItem","position":2,"name":"Glossary","item":"https://llm.okamomedia.tokyo/en/glossary/"},{"@type":"ListItem","position":3,"name":"What is a benchmark?","item":"https://llm.okamomedia.tokyo/en/glossary/benchmarks/"}]}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .phrase-box{background:linear-gradient(135deg,#12162a 0%,#1a1d35 55%,#0f1117 100%);border:1px solid var(--c-border);border-left:3px solid var(--c-accent2);border-radius:var(--r-lg);padding:1.2rem 1.3rem;margin:1.2rem 0 1.6rem}
+    .phrase-box .phrase{font-size:1.02rem;font-weight:700;line-height:1.75;margin-bottom:.6rem}
+    .phrase-box .phrase-meta{font-size:.8rem;color:var(--c-muted);line-height:1.7}
+    .num-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:.8rem;margin:1rem 0 1.6rem}
+    .num-card{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.9rem 1rem}
+    .num-card .k{font-family:var(--font-mono);font-size:.74rem;color:var(--c-muted);font-weight:600;letter-spacing:.02em}
+    .num-card .v{font-family:var(--font-mono);font-size:1.05rem;font-weight:700;margin:.15rem 0 .2rem}
+    .num-card .d{font-size:.8rem;color:var(--c-muted);line-height:1.6}
+    .read-box{background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-green);border-radius:var(--r-md);padding:1rem 1.2rem;margin:1rem 0 1.6rem;font-size:.88rem;color:var(--c-muted)}
+    .read-box strong{color:var(--c-text)}
+    .flow-fig{margin:1rem 0 1.4rem}
+    .flow-fig svg{width:100%;height:auto;border:1px solid var(--c-border);border-radius:var(--r-md);background:var(--c-surface);display:block}
+    /* On phones an 800px-wide figure shrinks the labels too far, so below 680px it scrolls sideways instead */
+    .fig-wrap{position:relative}
+    .fig-scroll{overflow:visible}
+    @media (max-width:680px){
+      .fig-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:.2rem}
+      .fig-scroll svg{min-width:620px}
+      /* Scroll affordance: fade both edges so it is obvious there is more to the right */
+      .fig-wrap::before,.fig-wrap::after{content:"";position:absolute;top:0;bottom:0;width:40px;pointer-events:none;z-index:2}
+      .fig-wrap::before{left:0;background:linear-gradient(to right,rgba(15,17,23,.95),rgba(15,17,23,0))}
+      .fig-wrap::after{right:0;background:linear-gradient(to left,rgba(15,17,23,.95),rgba(15,17,23,0))}
+      .fig-hint{display:block}
+    }
+    .fig-hint{display:none;font-size:.75rem;color:var(--c-muted);text-align:center;margin:.3rem 0 0}
+    .fig-hint .ar{color:var(--c-accent)}
+    .bench-table{width:100%;border-collapse:collapse;font-size:.84rem;margin:.6rem 0 .4rem}
+    .bench-table th,.bench-table td{border:1px solid var(--c-border);padding:.6rem .7rem;vertical-align:top;line-height:1.65}
+    .bench-table thead th{background:var(--c-surface2);font-size:.8rem;text-align:left;white-space:nowrap}
+    .bench-table td.bn{font-family:var(--font-mono);font-size:.8rem;font-weight:700;white-space:nowrap}
+    .bench-table tbody tr:nth-child(even){background:rgba(255,255,255,.015)}
+    .table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+    .table-scroll table{min-width:720px}
+    .cmp-table th,.cmp-table td{font-size:.85rem}
+    .quote-box{background:#11131c;border:1px solid var(--c-border);border-left:3px solid var(--c-accent2);border-radius:var(--r-md);padding:.9rem 1.1rem;margin:1rem 0;font-size:.86rem;color:var(--c-muted);line-height:1.8}
+    .quote-box .en{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82rem;color:var(--c-text);display:block;margin-bottom:.35rem}
+    .qa-list{counter-reset:qa;list-style:none;padding:0;margin:1rem 0 1.6rem}
+    .qa-list li{position:relative;padding:.75rem 0 .75rem 2.4rem;border-bottom:1px dashed var(--c-border);font-size:.88rem;color:var(--c-muted);line-height:1.75}
+    .qa-list li:last-child{border-bottom:none}
+    .qa-list li::before{counter-increment:qa;content:counter(qa);position:absolute;left:0;top:.7rem;width:1.6rem;height:1.6rem;border-radius:50%;background:var(--c-surface2);border:1px solid var(--c-border);color:var(--c-accent);font-family:var(--font-mono);font-size:.78rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+    .qa-list strong{color:var(--c-text)}
+    .bench-block{border:1px solid var(--c-border);border-radius:var(--r-md);background:var(--c-surface);padding:1rem 1.15rem;margin:1rem 0}
+    .bench-block h3{margin:0 0 .5rem;font-size:1rem}
+    .bench-block .op{font-family:var(--font-mono);font-size:.76rem;color:var(--c-accent);margin-bottom:.6rem}
+    .bench-block dl{margin:0;font-size:.85rem;line-height:1.75}
+    .bench-block dt{font-weight:700;color:var(--c-text);margin-top:.55rem;font-size:.82rem}
+    .bench-block dd{margin:.1rem 0 0;color:var(--c-muted)}
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/en/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="Main navigation"><a href="/en/" class="nav-link">Home</a><a href="/en/pricing/" class="nav-link">Pricing</a><a href="/en/calculator/" class="nav-link">Token Calculator</a><a href="/en/timeline/" class="nav-link">Release Timeline</a><a href="/en/china-ai/" class="nav-link">China AI</a><a href="/en/multimodal/" class="nav-link">Multimodal</a><a href="/en/mai/" class="nav-link">MS AI (MAI)</a><a href="/en/glossary/" class="nav-link">Glossary</a></nav></div></header>
+
+<main><div class="container">
+  <div class="section" style="padding-bottom:0;">
+    <h1 class="section-title" style="font-size:1.55rem;">What is a benchmark? Sorting them by who, what and how</h1>
+    <p class="section-sub" style="max-width:760px;">
+      <a href="/en/glossary/">Glossary</a>, entry five. The term this time is <strong>benchmark</strong>.
+      It started from a reader's perfectly reasonable complaint: a review said
+      &ldquo;<strong>in developers' own testing, across several benchmarks such as DeepSWE, GDPval-AA, Terminal-bench and OSWorld</strong>&rdquo; — and
+      <strong>it was impossible to tell who measured what, exactly. There are too many benchmarks to make sense of.</strong>
+      So this page stops trying to memorise benchmark names. Instead it hands you three questions —
+      <strong>who runs it, what it measures, and how it measures it (harness and settings)</strong> —
+      that let you sort any new name you meet. It pairs with entry three, <a href="/en/glossary/harness/">the agent harness</a>.
+    </p>
+    <div class="phrase-box">
+      <p class="phrase">&ldquo;The same benchmark name does not mean comparable numbers.&rdquo;</p>
+      <p class="phrase-meta">The line this page keeps coming back to. A benchmark's name is only the <strong>title of a test</strong>. Change who sets the questions, who grades them, what tools the model is handed, or which release you are on, and the score means something else. Concretely: <strong>GDPval and GDPval-AA share a dataset, but the operator and the harness differ, so they are not the same number.</strong> We walk through it below.</p>
+    </div>
+    <div class="updated-bar">
+      <span class="dot">●</span>
+      Last updated: <time datetime="2026-09-23">September 23, 2026</time>
+      &ensp;|&ensp; Policy: only what we can confirm in the operator's own repository, site or paper. If it cannot be confirmed, it is not published here
+    </div>
+  </div>
+
+  <section class="section" style="padding-top:1.5rem;" aria-labelledby="why-h">
+    <h2 class="section-title" id="why-h" style="font-size:1.2rem;">Why does it feel impossible to keep up?</h2>
+    <p style="max-width:820px;font-size:.92rem;line-height:1.85;">
+      Because benchmarks are not built to compare models. They are built <strong>by whoever wants to measure a specific capability</strong>.
+      A company that wants to measure coding, a lab that wants to measure the economic value of real work, a university group that wants to
+      measure terminal operation — different goals produce different shapes of test. Yet in the news, all of them get flattened into the same
+      phrase: &ldquo;the model's benchmark score.&rdquo; That is where the information is lost.
+    </p>
+    <p style="max-width:820px;font-size:.92rem;line-height:1.85;">
+      So the useful skill is not a list of names. It is a <strong>procedure that pulls out whose number it is, what it measured, and how</strong>. Here is the whole shape of it.
+    </p>
+
+    <figure class="flow-fig">
+      <div class="fig-wrap">
+        <div class="fig-scroll">
+          <svg viewBox="0 0 800 236" role="img" aria-labelledby="fig-bm-title fig-bm-desc" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig-bm-title">Three questions that sort a benchmark score</title>
+            <desc id="fig-bm-desc">A benchmark name alone does not determine what a score means. You need three things: who operates it, what it measures, and how it measures it (harness and settings). Without all three, numbers carrying the same benchmark name cannot be compared.</desc>
+
+            <rect x="12" y="26" width="176" height="98" rx="10" fill="#22263a" stroke="#2e3250"/>
+            <text x="100" y="50" text-anchor="middle" font-family="monospace" font-size="10" fill="#8891b5">NAME</text>
+            <text x="100" y="78" text-anchor="middle" font-size="16" font-weight="700" fill="#e2e4f0">DeepSWE</text>
+            <text x="100" y="102" text-anchor="middle" font-size="10.5" fill="#8891b5">this is a title, not a meaning</text>
+
+            <path d="M192 75 L206 75" stroke="#6c8eff" stroke-width="2" marker-end="url(#arw)"/>
+            <defs><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#6c8eff"/></marker></defs>
+
+            <rect x="212" y="26" width="176" height="98" rx="10" fill="#1a1d27" stroke="#2e3250"/>
+            <text x="300" y="50" text-anchor="middle" font-family="monospace" font-size="10" fill="#6c8eff">1. WHO</text>
+            <text x="300" y="78" text-anchor="middle" font-size="14" font-weight="700" fill="#e2e4f0">Operator</text>
+            <text x="300" y="102" text-anchor="middle" font-size="10.5" fill="#8891b5">vendor, institute or community</text>
+
+            <path d="M392 75 L406 75" stroke="#6c8eff" stroke-width="2" marker-end="url(#arw)"/>
+
+            <rect x="412" y="26" width="176" height="98" rx="10" fill="#1a1d27" stroke="#2e3250"/>
+            <text x="500" y="50" text-anchor="middle" font-family="monospace" font-size="10" fill="#a78bfa">2. WHAT</text>
+            <text x="500" y="78" text-anchor="middle" font-size="14" font-weight="700" fill="#e2e4f0">Target</text>
+            <text x="500" y="102" text-anchor="middle" font-size="10.5" fill="#8891b5">code / deliverables / CLI / GUI</text>
+
+            <path d="M592 75 L606 75" stroke="#6c8eff" stroke-width="2" marker-end="url(#arw)"/>
+
+            <rect x="612" y="26" width="176" height="98" rx="10" fill="#1a1d27" stroke="#2e3250"/>
+            <text x="700" y="50" text-anchor="middle" font-family="monospace" font-size="10" fill="#34d399">3. HOW</text>
+            <text x="700" y="78" text-anchor="middle" font-size="14" font-weight="700" fill="#e2e4f0">Harness &amp; settings</text>
+            <text x="700" y="102" text-anchor="middle" font-size="10.5" fill="#8891b5">env, tools, budget, grading</text>
+
+            <rect x="12" y="146" width="776" height="72" rx="10" fill="#12162a" stroke="#2e3250" stroke-dasharray="4 4"/>
+            <text x="400" y="174" text-anchor="middle" font-size="12" font-weight="700" fill="#e2e4f0">Only once all three are known does &ldquo;73%&rdquo; acquire a meaning</text>
+            <text x="400" y="198" text-anchor="middle" font-size="10.5" fill="#8891b5">Same name, different operator, release (1.0 / 2.0 / Verified), harness or settings: not comparable</text>
+          </svg>
+        </div>
+      </div>
+      <p class="fig-hint"><span class="ar">←</span> scroll sideways to see the whole figure <span class="ar">→</span></p>
+      <figcaption style="font-size:.78rem;color:var(--c-muted);margin-top:.5rem;">The procedure for reading a benchmark score. <strong>The name is only the entrance; the meaning is set by the operator, the target and the method.</strong> The band at the bottom is not a caveat but a precondition — a score is only quotable when all four of operator, release, harness and settings travel with it.</figcaption>
+    </figure>
+
+    <div class="read-box">
+      <strong>The goal of this page:</strong> to reach the point where, on seeing &ldquo;model A scores 73% on benchmark X,&rdquo; you can work out
+      <strong>which operator's X, on which release, under which harness</strong> that 73% came from — so that your first move is identifying the
+      source, not deciding whether to believe it.
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:.5rem;" aria-labelledby="table-h">
+    <h2 class="section-title" id="table-h" style="font-size:1.2rem;">Six benchmarks, sorted by the three questions</h2>
+    <p class="section-sub">Six that frequently appear side by side, in one format. All of it confirmed against the operator's own repository, site or paper (checked September 23, 2026).</p>
+    <div class="table-scroll">
+      <table class="bench-table">
+        <thead>
+          <tr><th>Benchmark</th><th>1. Who (operator)</th><th>2. What (target)</th><th>3. How (harness and grading)</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="bn">DeepSWE</td>
+            <td>Datacurve (GitHub org: datacurve-ai)</td>
+            <td>Software engineering: long-horizon coding work</td>
+            <td>113 tasks across five languages (TypeScript, Go, Python, JavaScript, Rust). Agents run in <strong>isolated environments</strong> and are graded by <strong>program-based verifiers</strong>. Tasks are written from scratch rather than adapted from merged pull requests, as contamination control</td>
+          </tr>
+          <tr>
+            <td class="bn">GDPval</td>
+            <td>OpenAI</td>
+            <td>Economically valuable real-world tasks (44 occupations, top 9 US GDP sectors)</td>
+            <td>1,320 tasks. Deliverables span documents, slides, diagrams and spreadsheets, shipped with reference files and context. Graded by <strong>human industry experts in blind pairwise comparisons</strong></td>
+          </tr>
+          <tr>
+            <td class="bn">GDPval-AA</td>
+            <td>Artificial Analysis</td>
+            <td>GDPval's own dataset — <strong>re-run by a different operator with a different method</strong></td>
+            <td>v2.1. Models get shell access and web browsing in an <strong>agentic loop via Stirrup</strong>, with Elo ratings derived from blind pairwise comparisons</td>
+          </tr>
+          <tr>
+            <td class="bn">Terminal-Bench</td>
+            <td>Harbor + Laude Institute</td>
+            <td>Working in a terminal / command line</td>
+            <td>Inside an isolated container the agent <strong>drives a real shell</strong>; after it stops, a verification suite runs against the final state. A task counts as <strong>resolved only if every verification test passes</strong>; the score is the fraction resolved. Continuous, with tagged releases</td>
+          </tr>
+          <tr>
+            <td class="bn">Terminal-Bench-Science</td>
+            <td>Stanford + Laude Institute (community-run)</td>
+            <td>Real research workflows across the life, physical, earth, mathematical and engineering sciences</td>
+            <td>70 expert-curated tasks. Each is graded by <strong>verifier tests written by that task's own author</strong>. An eight-hour agent phase per task, far beyond a conventional terminal benchmark</td>
+          </tr>
+          <tr>
+            <td class="bn">OSWorld</td>
+            <td>XLANG Lab (University of Hong Kong) and collaborators</td>
+            <td>GUI and OS operation — real office work on a real computer</td>
+            <td>369 tasks in a <strong>real computer environment</strong> on a VM. Every task carries a detailed initial-state setup and an execution-based evaluation script</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:.78rem;color:var(--c-muted);margin-top:.3rem;">Note: every figure and structure above comes from the operator's primary material, but <strong>task counts change with the release</strong> — Terminal-Bench 2.0 has 89 tasks; OSWorld has 369 in 1.0 and 108 in 2.0. Quote the release alongside the number.</p>
+  </section>
+
+  <section class="section" style="padding-top:.5rem;" aria-labelledby="detail-h">
+    <h2 class="section-title" id="detail-h" style="font-size:1.2rem;">Taking them one at a time</h2>
+    <p class="section-sub">The same six, retraced through the operators' own material. We keep the verbatim quotes separate from our own interpretation.</p>
+
+    <div class="bench-block">
+      <h3>DeepSWE — coding measurement with the answer key removed</h3>
+      <p class="op">Operator: Datacurve (GitHub org: datacurve-ai)</p>
+      <dl>
+        <dt>The official description, verbatim</dt>
+        <dd>
+          <div class="quote-box">
+            <span class="en">"DeepSWE is a benchmark for measuring frontier coding agents on original, long-horizon software engineering tasks drawn from active open-source repositories. The benchmark includes 113 tasks across TypeScript, Go, Python, JavaScript, and Rust, with isolated environments and program-based verifiers."</span>
+            — <a href="https://github.com/datacurve-ai/deep-swe" target="_blank" rel="noopener">github.com/datacurve-ai/deep-swe</a> (checked 2026-09-23)
+          </div>
+        </dd>
+        <dt>What it measures</dt>
+        <dd>Whether an agent can <strong>carry a long-horizon engineering task to completion inside a real open-source repository</strong> — not a one-question lookup, but implementation and fixes spanning several files.</dd>
+        <dt>How it measures — the important part</dt>
+        <dd>Tasks are <strong>written from scratch</strong> rather than adapted from existing merged pull requests, which reduces the chance the model has already seen the answer during pretraining. Grading does not require matching one reference patch; it uses <strong>hand-written verifiers that check behaviour</strong>. Datacurve reports that these verifiers disagreed with human graders 1.4% of the time, against 32.4% for a grading approach built on matching hidden test suites (SWE-bench Pro, in the company's own comparison).</dd>
+        <dt>An easy name collision</dt>
+        <dd><strong>&ldquo;DeepSWE-Preview&rdquo; is a different thing.</strong> That is a 32B open-weight coding-agent <strong>model</strong> released by Agentica and Together AI, not the benchmark. Searching for &ldquo;DeepSWE&rdquo; surfaces both, so <strong>the first thing to establish is whether the conversation is about the benchmark or the model</strong>.</dd>
+      </dl>
+      <p class="source-note" style="font-size:.78rem;">Sources: <a href="https://github.com/datacurve-ai/deep-swe" target="_blank" rel="noopener">GitHub datacurve-ai/deep-swe</a> · <a href="https://venturebeat.com/technology/deepswe-blows-up-the-ai-coding-leaderboard-crowns-gpt-5-5-and-finds-claude-opus-exploiting-a-benchmark-loophole" target="_blank" rel="noopener">VentureBeat</a> · <a href="https://www.therundown.ai/tools/deep-swe" target="_blank" rel="noopener">DeepSWE-Preview (a different thing)</a></p>
+    </div>
+
+    <div class="bench-block">
+      <h3>GDPval — measuring work people actually get paid for</h3>
+      <p class="op">Operator: OpenAI</p>
+      <dl>
+        <dt>What it measures</dt>
+        <dd>Not exam-style questions but <strong>real deliverables</strong>. The paper describes coverage of the top nine US GDP sectors and 44 occupations, spanning the majority of US Bureau of Labor Statistics work activities. Deliverables span documents, slides, diagrams, spreadsheets and multimedia, and come with <strong>reference files and context rather than being plain text prompts</strong>.</dd>
+        <dt>How it measures</dt>
+        <dd>1,320 tasks, assessed on quality, speed and cost against human experts, with grading done by expert <strong>blind pairwise comparison</strong>. A gold subset of 220 tasks is open-sourced alongside a public automated grading service at evals.openai.com.</dd>
+        <dt>A caveat from OpenAI itself</dt>
+        <dd>The paper states plainly that <strong>GDPval is an early step that does not reflect the full nuance of many economic tasks</strong>, and that the current version is one-shot, so it cannot capture a model improving across multiple drafts.</dd>
+      </dl>
+      <p class="source-note" style="font-size:.78rem;">Sources: <a href="https://openai.com/index/gdpval/" target="_blank" rel="noopener">openai.com/index/gdpval</a> · paper <a href="https://arxiv.org/abs/2510.04374" target="_blank" rel="noopener">arXiv:2510.04374</a> (v1 October 5, 2025) · <a href="https://evals.openai.com/" target="_blank" rel="noopener">OpenAI Evals</a></p>
+    </div>
+
+    <div class="bench-block" style="border-left:3px solid var(--c-yellow);">
+      <h3>GDPval-AA — <strong>the same dataset, measured differently</strong></h3>
+      <p class="op">Operator: Artificial Analysis (dataset: OpenAI's GDPval)</p>
+      <dl>
+        <dt>This is the confusion, in one place</dt>
+        <dd>The names look like the same thing. They are not: <strong>the operator and the method differ</strong>; only the dataset is shared. Artificial Analysis describes it as: "GDPval-AA v2.1 is Artificial Analysis' evaluation framework for OpenAI's GDPval dataset."</dd>
+        <dt>How it measures</dt>
+        <dd>The same page states: "Models are given shell access and web browsing capabilities in an agentic loop via <strong>Stirrup</strong> to solve tasks, with Elo ratings derived from blind pairwise comparisons." Where OpenAI uses human expert grading, this hands the model tools and ranks it on Elo. Same tasks, <strong>a different measurement instrument</strong>.</dd>
+        <dt>What follows</dt>
+        <dd>You cannot place a GDPval score and a GDPval-AA score side by side and read off a winner. <strong>Even a shared dataset does not survive a change of operator and harness.</strong> That is this page's central point, demonstrated.</dd>
+      </dl>
+      <p class="source-note" style="font-size:.78rem;">Source: <a href="https://artificialanalysis.ai/evaluations/gdpval-aa" target="_blank" rel="noopener">artificialanalysis.ai — GDPval-AA v2.1</a> (checked 2026-09-23)</p>
+    </div>
+
+    <div class="bench-block">
+      <h3>Terminal-Bench — did the agent finish the job at the shell?</h3>
+      <p class="op">Operator: Harbor + Laude Institute (project lead: Ryan Marten)</p>
+      <dl>
+        <dt>What it measures</dt>
+        <dd>Whether an agent can <strong>complete work that lives entirely in a command line</strong>. The Terminal-Bench 2.0 paper describes "a carefully curated hard benchmark composed of 89 tasks in computer terminal environments inspired by problems from real workflows."</dd>
+        <dt>How it measures</dt>
+        <dd>Each task starts from a natural-language instruction inside an <strong>isolated container</strong>. The agent drives a real shell, reads the output and can retry as often as it likes. Once it stops, a <strong>verification suite runs against the final container state</strong> and a task counts as resolved <strong>only when every verification test passes</strong>; the score is the fraction resolved. That means the number reflects error recovery, reading documentation and adapting to unexpected output, not one lucky generation.</dd>
+        <dt>Mind the release</dt>
+        <dd>This is a continuous benchmark with tagged releases, so <strong>&ldquo;x% on Terminal-Bench&rdquo; is incomplete without the version</strong> (2.0, 2.1, 4.0 and so on).</dd>
+      </dl>
+      <p class="source-note" style="font-size:.78rem;">Sources: <a href="https://github.com/harbor-framework/terminal-bench" target="_blank" rel="noopener">GitHub harbor-framework/terminal-bench</a> ("Terminal-Bench is hosted by Harbor and Laude Institute.") · paper <a href="https://arxiv.org/abs/2601.11868" target="_blank" rel="noopener">arXiv:2601.11868</a></p>
+    </div>
+
+    <div class="bench-block">
+      <h3>Terminal-Bench-Science — a fork aimed squarely at researchers' work</h3>
+      <p class="op">Operator: Stanford + Laude Institute (community-run). Leads include Steven Dillmann, Sanmi Koyejo and Ludwig Schmidt</p>
+      <dl>
+        <dt>What it measures</dt>
+        <dd>Not general terminal operation but <strong>real scientific research workflows</strong>, across five domains: life, physical, earth, mathematical and engineering sciences. The repository states: "Terminal-Bench-Science currently contains 70 expert-curated tasks across five broad scientific domains and is growing toward 100+ tasks."</dd>
+        <dt>How it measures</dt>
+        <dd>Tasks are <strong>authored and reviewed by domain experts</strong>, and graded by <strong>verifier tests written by the task's own author</strong>. A third-party evaluation notes that where Terminal-Bench 2.1 allows 15–60 minutes of agent time per task, this one allows <strong>eight hours per task</strong>, with up to 4 vCPU and 16GB. <strong>Same family name, entirely different difficulty and time scale.</strong></dd>
+        <dt>What follows</dt>
+        <dd>Use it to see that <strong>changing the test changes the ranking</strong>: strong general coding ability does not automatically translate into scientific workflows.</dd>
+      </dl>
+      <p class="source-note" style="font-size:.78rem;">Sources: <a href="https://github.com/harbor-framework/terminal-bench-science" target="_blank" rel="noopener">GitHub harbor-framework/terminal-bench-science</a> · <a href="https://snorkel.ai/leaderboard/terminal-bench-science/" target="_blank" rel="noopener">Snorkel AI (leads)</a> · <a href="https://www.vals.ai/benchmarks/terminal-bench-science" target="_blank" rel="noopener">vals.ai (run conditions)</a></p>
+    </div>
+
+    <div class="bench-block">
+      <h3>OSWorld — can the agent drive a real computer's GUI?</h3>
+      <p class="op">Operator: XLANG Lab (University of Hong Kong), with Salesforce Research, CMU and the University of Waterloo</p>
+      <dl>
+        <dt>What it measures</dt>
+        <dd>Not text or code but <strong>GUI operation on an actual computer</strong>. The project site states: "We also create a benchmark of <strong>369 real-world computer tasks</strong> in OSWorld with reliable, reproducible setup and evaluation scripts."</dd>
+        <dt>How it measures</dt>
+        <dd>Tasks run in a <strong>real environment</strong> on a VM. Each carries a detailed initial-state setup and an execution-based evaluation script, so grading is mechanical, against the state the agent left behind. The paper's published reference points were that <strong>humans complete over 72.36% of tasks while the best model managed 12.24%</strong>, the failures concentrated in <strong>GUI grounding and operational knowledge</strong>. (Those are the paper's figures — a 2024 measurement, not today's state of the art.)</dd>
+        <dt>Mind the release</dt>
+        <dd>The project notes that eight Google Drive tasks may need manual configuration or can be excluded for network reasons (361 tasks). Separately, <strong>OSWorld-Verified</strong> fixed more than 300 issues, and <strong>OSWorld 2.0</strong> is a distinct 108-task long-horizon benchmark across seven professional domains. <strong>1.0's 369 tasks and 2.0's 108 tasks are not the same benchmark.</strong></dd>
+      </dl>
+      <p class="source-note" style="font-size:.78rem;">Sources: <a href="https://osworld-v1.xlang.ai/" target="_blank" rel="noopener">osworld-v1.xlang.ai</a> · paper <a href="https://arxiv.org/abs/2404.07972" target="_blank" rel="noopener">arXiv:2404.07972</a> (NeurIPS 2024) · <a href="https://xlang.ai/blog/osworld-verified" target="_blank" rel="noopener">OSWorld-Verified</a> · <a href="https://osworld-v2.xlang.ai/" target="_blank" rel="noopener">OSWorld 2.0</a></p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:.5rem;" aria-labelledby="check-h">
+    <h2 class="section-title" id="check-h" style="font-size:1.2rem;">Five checks before you quote a score</h2>
+    <p class="section-sub">No memorisation required. Run these in order and the weight of the number changes.</p>
+    <ol class="qa-list">
+      <li><strong>Who operates it</strong> — the vendor that built the model, or a third party? A self-reported figure and an independent measurement are not the same claim even at an identical &ldquo;73%.&rdquo;</li>
+      <li><strong>Which release</strong> — 1.0, 2.0, Verified, v2.1. Different releases mean different task populations. A score without a version cannot be placed on the same axis as anything else.</li>
+      <li><strong>What it measures</strong> — code, real deliverables, terminal work, or GUI operation. A score says nothing about a capability the test never exercises.</li>
+      <li><strong>How it was measured (harness and settings)</strong> — what the agent was given, how many attempts, what time budget, and whether grading checks behaviour or matches a reference answer. Change these and <strong>the same model on the same benchmark moves</strong> (see <a href="/en/glossary/harness/">agent harness</a>).</li>
+      <li><strong>What the number counts</strong> — completion rate or Elo? Elo is a relative ranking and a completion rate is an absolute share; they cannot be added or subtracted.</li>
+    </ol>
+    <div class="tip-box" style="margin-top:1rem;">
+      <h3>💡 How we handle this on this site</h3>
+      <p style="font-size:.88rem;">When LLM Data Hub introduces a model, we also record <strong>whose harness produced the figure</strong>. We do not publish tables that merely stack up benchmark scores. Figures mirrored by aggregator sites, or relayed from search snippets, are not treated as fact. Entry one — <a href="/en/glossary/gpt-6-astra-benchmarks/">how to read &ldquo;ARC-AGI-3 99.9%, ExploitBench 100%&rdquo;</a> — is exactly this problem in the wild: 62.7% under a neutral harness, 99.9% under a provider adapter.</p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:.5rem;" aria-labelledby="rel-h">
+    <h2 class="section-title" id="rel-h" style="font-size:1.2rem;">Related entries</h2>
+    <div class="card-grid">
+      <article class="card">
+        <div class="card-icon">🧰</div>
+        <h3 class="card-title">What is an agent harness? Why the same model scores differently</h3>
+        <p class="card-desc">Question three on this page, taken apart. A harness is everything that is not the model — system prompt, tools, memory, sandbox, retries, scoring — and it moves the score even when the model and benchmark are fixed. <strong>Read together, question three stops being abstract.</strong></p>
+        <a href="/en/glossary/harness/" class="card-link">Read the entry →</a>
+      </article>
+      <article class="card">
+        <div class="card-icon">🧪</div>
+        <h3 class="card-title">GPT-6 Astra: how to read "ARC-AGI-3 99.9%, ExploitBench 100%"</h3>
+        <p class="card-desc">The same benchmark scores 62.7% under ARC Prize's neutral harness. A perfect score means the test can no longer separate models. A worked example of why unsaturated benchmarks carry the most information.</p>
+        <a href="/en/glossary/gpt-6-astra-benchmarks/" class="card-link">Read the entry →</a>
+      </article>
+      <article class="card">
+        <div class="card-icon">📏</div>
+        <h3 class="card-title">What is a 1M-token context window? What fits, and what it costs</h3>
+        <p class="card-desc">Also about reading numbers. The three big vendors bill long input very differently, to the point where crossing a boundary by a hundred tokens can double the bill.</p>
+        <a href="/en/glossary/one-million-context/" class="card-link">Read the entry →</a>
+      </article>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:.5rem;" aria-labelledby="src-h">
+    <h2 class="section-title" id="src-h" style="font-size:1.2rem;">Sources (all checked September 23, 2026)</h2>
+    <ul style="font-size:.84rem;line-height:1.9;color:var(--c-muted);padding-left:1.2rem;">
+      <li>DeepSWE — <a href="https://github.com/datacurve-ai/deep-swe" target="_blank" rel="noopener">github.com/datacurve-ai/deep-swe</a> (operator: Datacurve)</li>
+      <li>GDPval — <a href="https://openai.com/index/gdpval/" target="_blank" rel="noopener">openai.com/index/gdpval</a> / paper <a href="https://arxiv.org/abs/2510.04374" target="_blank" rel="noopener">arXiv:2510.04374</a> (OpenAI)</li>
+      <li>GDPval-AA — <a href="https://artificialanalysis.ai/evaluations/gdpval-aa" target="_blank" rel="noopener">artificialanalysis.ai/evaluations/gdpval-aa</a> (Artificial Analysis)</li>
+      <li>Terminal-Bench — <a href="https://github.com/harbor-framework/terminal-bench" target="_blank" rel="noopener">github.com/harbor-framework/terminal-bench</a> / paper <a href="https://arxiv.org/abs/2601.11868" target="_blank" rel="noopener">arXiv:2601.11868</a> (Harbor + Laude Institute)</li>
+      <li>Terminal-Bench-Science — <a href="https://github.com/harbor-framework/terminal-bench-science" target="_blank" rel="noopener">github.com/harbor-framework/terminal-bench-science</a> (Stanford + Laude Institute)</li>
+      <li>OSWorld — <a href="https://osworld-v1.xlang.ai/" target="_blank" rel="noopener">osworld-v1.xlang.ai</a> / paper <a href="https://arxiv.org/abs/2404.07972" target="_blank" rel="noopener">arXiv:2404.07972</a> / <a href="https://xlang.ai/blog/osworld-verified" target="_blank" rel="noopener">OSWorld-Verified</a> / <a href="https://osworld-v2.xlang.ai/" target="_blank" rel="noopener">OSWorld 2.0</a> (XLANG Lab)</li>
+    </ul>
+    <p style="font-size:.8rem;color:var(--c-muted);margin-top:.6rem;">See also: <a href="/en/glossary/">Glossary index</a> · <a href="/en/glossary/harness/">Agent harnesses</a> · <a href="/en/glossary/gpt-6-astra-benchmarks/">Reading GPT-6 Astra's benchmarks</a> · <a href="/en/glossary/one-million-context/">1M-token context</a> · <a href="/en/timeline/">Release timeline</a></p>
+  </section>
+</div></main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>Operated by okamoちゃんねる</p><p><a href="/en/">Home</a> · <a href="/en/pricing/">Pricing</a> · <a href="/en/calculator/">Calculator</a> · <a href="/en/timeline/">Timeline</a> · <a href="/en/glossary/">Glossary</a> · <a href="/en/gpt-6/">GPT-6 Astra</a></p></div><p class="footer-disclaimer">⚠️ Prices and specifications change without notice. Always confirm on the vendor's official page before you commit. This site is not affiliated with any provider.</p></div></footer>
+</body>
+</html>

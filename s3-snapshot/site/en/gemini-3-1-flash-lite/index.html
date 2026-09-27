@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gemini 3.1 Flash-Lite — A Low-Cost, High-Throughput Gemini 3 Model [Pricing, Benchmarks &amp; Comparison] — LLM Data Hub</title>
+  <meta name="description" content="Google Gemini 3.1 Flash-Lite: latest pricing ($0.25/$1.50, GA May 2026), specs, capabilities, comparisons vs GPT-5.6 Luna, Gemini 3.5 Flash-Lite, and use cases. 1M context, 65K max output, multimodal. Verified against official Google sources.">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/en/gemini-3-1-flash-lite/">
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/gemini-3-1-flash-lite/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/gemini-3-1-flash-lite/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/gemini-3-1-flash-lite/">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/en/gemini-3-1-flash-lite/">
+  <meta property="og:title" content="Gemini 3.1 Flash-Lite — A Low-Cost, High-Throughput Gemini 3 Model">
+  <meta property="og:description" content="Google Gemini 3.1 Flash-Lite pricing ($0.25/$1.50), specs, and competitor comparison. Verified primary sources.">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Gemini 3.1 Flash-Lite — A Low-Cost, High-Throughput Gemini 3 Model [Pricing, Benchmarks & Comparison]","datePublished":"2026-08-10","dateModified":"2026-09-13","author":{"@type":"Organization","name":"LLM Data Hub"},"publisher":{"@type":"Organization","name":"okamo channel"},"url":"https://llm.okamomedia.tokyo/en/gemini-3-1-flash-lite/","inLanguage":"en"}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .hero-flashlite{background:linear-gradient(135deg,#0f172a 0%,#1e293b 50%,#0f1117 100%);border-bottom:1px solid var(--c-border);padding:3rem 1rem 2.5rem;text-align:center}.hero-flashlite .price-flag{display:inline-block;background:rgba(96,165,250,.12);border:1px solid rgba(96,165,250,.3);color:var(--c-blue);font-size:.82rem;font-weight:700;padding:.3rem .8rem;border-radius:100px;margin-bottom:1rem}.hero-flashlite h1{font-size:clamp(1.6rem,4.5vw,2.4rem);font-weight:800;line-height:1.2;margin-bottom:.75rem}.hero-flashlite h1 span{color:var(--c-blue)}.hero-flashlite .lead{font-size:1.05rem;color:var(--c-muted);max-width:640px;margin:0 auto 1.5rem}.hero-flashlite .quick-stats{display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;margin-top:1rem}.hero-flashlite .stat{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.75rem 1.25rem;text-align:center}.hero-flashlite .stat .val{font-family:var(--font-mono);font-size:1.25rem;font-weight:700;color:var(--c-blue)}.hero-flashlite .stat .lbl{font-size:.75rem;color:var(--c-muted);margin-top:.15rem}
+    .compare-table th:first-child{width:200px}.compare-table td{text-align:center}.compare-table td:first-child{text-align:left;font-weight:600}.compare-table .winner{color:var(--c-green);font-weight:700}.compare-table .tie{color:var(--c-yellow)}
+    .spec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.8rem;margin-bottom:1.5rem}.spec-item{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.9rem 1rem}.spec-item .spec-label{font-size:.75rem;color:var(--c-muted);font-weight:600;margin-bottom:.25rem}.spec-item .spec-value{font-family:var(--font-mono);font-size:1rem;font-weight:700}
+    .use-case-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.8rem;margin-bottom:1.5rem}.use-case-card{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:1rem}.use-case-card .icon{font-size:1.5rem;margin-bottom:.5rem}.use-case-card h4{font-size:.92rem;font-weight:700;margin-bottom:.35rem}.use-case-card p{font-size:.82rem;color:var(--c-muted);line-height:1.5}
+    .thinking-note{background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-blue);border-radius:var(--r-md);padding:.8rem 1rem;margin:1rem 0;font-size:.84rem;color:var(--c-muted)}
+    @media(max-width:640px){.hero-flashlite .quick-stats{flex-direction:column;gap:.5rem}}
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/en/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="Main navigation"><a href="/en/" class="nav-link">Home</a><a href="/en/pricing/" class="nav-link">Pricing</a><a href="/en/calculator/" class="nav-link">Token Calculator</a><a href="/en/timeline/" class="nav-link">Release Timeline</a><a href="/en/china-ai/" class="nav-link">China AI</a><a href="/en/multimodal/" class="nav-link">Multimodal</a><a href="/en/mai/" class="nav-link">MS AI (MAI)</a><a href="/en/glossary/" class="nav-link">Glossary</a></nav></div></header>
+
+<section class="hero-flashlite"><div class="container">
+  <p class="price-flag">⚡ Cheapest in Gemini 3 Series — $0.25/$1.50 (GA May 2026)</p>
+  <h1>Gemini 3.1 <span>Flash-Lite</span></h1>
+  <p class="lead">The cheapest and fastest Gemini 3 series model. Built on the Gemini 3 Pro architecture, matching 2.5 Flash across key capability areas at 17% lower input and 40% lower output pricing.</p>
+  <div class="quick-stats">
+    <div class="stat"><div class="val">$0.25</div><div class="lbl">Input / 1M tokens</div></div>
+    <div class="stat"><div class="val">$1.50</div><div class="lbl">Output / 1M tokens</div></div>
+    <div class="stat"><div class="val">1,048,576</div><div class="lbl">Context window</div></div>
+    <div class="stat"><div class="val">65,536</div><div class="lbl">Max output tokens</div></div>
+  </div>
+</div></section>
+
+<main><div class="container">
+<div class="updated-bar" style="margin-top:2rem;"><span class="dot">●</span>Last updated: <time datetime="2026-09-13">September 13, 2026</time> | Sources: <a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">Google AI Pricing</a> · <a href="https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/3-1-flash-lite" target="_blank" rel="noopener">Google Cloud Docs</a> | <a href="/en/pricing/">All Pricing</a> · <a href="/en/calculator/">Calculator</a></div>
+
+<!-- Pricing -->
+<section class="section" style="padding-top:0;" aria-labelledby="pricing-h">
+<h2 class="section-title" id="pricing-h" style="font-size:1.2rem;">Pricing (GA May 2026, current)</h2>
+<p class="section-sub">Verified against Google's official AI pricing page (ai.google.dev). All prices in USD per 1M tokens. Flash-Lite has flat pricing regardless of context length.</p>
+
+<div class="table-wrap"><table><thead><tr><th>Tier</th><th>Input (text/image/video)</th><th>Input (audio)</th><th>Cached Input</th><th>Output</th><th>Notes</th></tr></thead><tbody>
+<tr><td class="model-name">Standard</td><td class="price">$0.25</td><td class="price">$0.50</td><td class="price">$0.025 / $0.05(audio)</td><td class="price">$1.50</td><td>Default rate. Flat across all context lengths</td></tr>
+<tr><td class="model-name">Batch</td><td class="price">$0.125</td><td class="price">$0.25</td><td class="price">$0.0125 / $0.025</td><td class="price">$0.75</td><td>50% off Standard. Up to 24h completion</td></tr>
+<tr><td class="model-name">Flex</td><td class="price">$0.125</td><td class="price">$0.25</td><td class="price">$0.0125 / $0.025</td><td class="price">$0.75</td><td>Lower priority. 50% off Standard</td></tr>
+<tr><td class="model-name">Priority</td><td class="price">$0.45</td><td class="price">$0.90</td><td class="price">$0.045 / $0.09</td><td class="price">$2.70</td><td>High priority. 1.8× Standard</td></tr>
+</tbody></table></div>
+
+<div class="thinking-note">
+  💡 <strong>Thinking level cost control:</strong> Gemini 3.1 Flash-Lite supports 4 thinking levels: minimal, low, medium, high. Thinking tokens are billed as output tokens, so level choice directly impacts cost. Use minimal for bulk processing, medium/high for edge cases requiring deeper reasoning.
+</div>
+
+<div class="thinking-note" style="border-left-color:var(--c-yellow);">
+  ⚠️ <strong>Audio input is 2×:</strong> Audio input costs double the text/image/video rate. Factor this into cost estimates for audio-heavy workloads.
+</div>
+
+<p class="source-note">Primary sources: <a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">ai.google.dev/gemini-api/docs/pricing</a> · <a href="https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/3-1-flash-lite" target="_blank" rel="noopener">Google Cloud Docs: Gemini 3.1 Flash-Lite</a> (verified 2026-08-10)</p>
+</section>
+
+<!-- Specs -->
+<section class="section" style="padding-top:0;" aria-labelledby="spec-h">
+<h2 class="section-title" id="spec-h" style="font-size:1.2rem;">Model Specifications</h2>
+<div class="spec-grid">
+  <div class="spec-item"><div class="spec-label">Preview Release</div><div class="spec-value">March 3, 2026</div></div>
+  <div class="spec-item"><div class="spec-label">GA Release</div><div class="spec-value">May 7, 2026</div></div>
+  <div class="spec-item"><div class="spec-label">Knowledge Cutoff</div><div class="spec-value">January 2025 (3rd party)</div></div>
+  <div class="spec-item"><div class="spec-label">Context Window</div><div class="spec-value">1,048,576 tokens</div></div>
+  <div class="spec-item"><div class="spec-label">Max Output</div><div class="spec-value">65,536 tokens</div></div>
+  <div class="spec-item"><div class="spec-label">Input Modalities</div><div class="spec-value">Text + Image + Audio + Video</div></div>
+  <div class="spec-item"><div class="spec-label">Output Modalities</div><div class="spec-value">Text</div></div>
+  <div class="spec-item"><div class="spec-label">Tool Use</div><div class="spec-value">Function Calling ✓</div></div>
+  <div class="spec-item"><div class="spec-label">Base Architecture</div><div class="spec-value">Gemini 3 Pro</div></div>
+  <div class="spec-item"><div class="spec-label">Model ID</div><div class="spec-value" style="font-size:.85rem;">gemini-3.1-flash-lite</div></div>
+</div>
+<p class="source-note">Sources: <a href="https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/3-1-flash-lite" target="_blank" rel="noopener">Google Cloud: Gemini 3.1 Flash-Lite</a> · <a href="https://deepmind.google/models/model-cards/gemini-3-1-flash-lite/" target="_blank" rel="noopener">Google DeepMind Model Card</a></p>
+</section>
+
+<!-- Performance -->
+<section class="section" style="padding-top:0;" aria-labelledby="perf-h">
+<h2 class="section-title" id="perf-h" style="font-size:1.2rem;">Performance — Matches 2.5 Flash Key Capabilities at Lower Cost</h2>
+<p class="section-sub">Built on the Gemini 3 Pro architecture and optimized for high throughput. Significant quality uplift over 2.5 Flash-Lite, matching 2.5 Flash across key capability areas.</p>
+<div class="tip-box">
+  <ul>
+    <li><strong>Response quality:</strong> Matches Gemini 2.5 Flash performance across key capability areas</li>
+    <li><strong>Instruction following:</strong> Improved for complex chatbot and instruction-heavy workflows</li>
+    <li><strong>Audio input:</strong> Improved ASR quality for speech-to-text pipelines</li>
+    <li><strong>Multimodal:</strong> Full text, image, audio, and video input support</li>
+    <li><strong>Thinking levels:</strong> 4 levels (minimal–high) for fine-grained reasoning control. Minimal for bulk, medium/high for complex cases</li>
+    <li><strong>vs Gemini 2.5 Flash:</strong> 17% cheaper input ($0.25 vs $0.30), 40% cheaper output ($1.50 vs $2.50)</li>
+    <li><strong>vs Gemini 3 Flash:</strong> Half the price (input $0.25 vs $0.50, output $1.50 vs $3.00)</li>
+  </ul>
+</div>
+<p style="font-size:.84rem;color:var(--c-muted);">Google positions Flash-Lite as "our most cost-efficient Gemini model, optimized for low latency use cases for high-volume, cost-sensitive LLM traffic." Ideal for translation, data extraction, and code completion where per-token economics determine viability.</p>
+<p class="source-note">Sources: <a href="https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/3-1-flash-lite" target="_blank" rel="noopener">Google Cloud Docs</a> · <a href="https://deepmind.google/models/model-cards/gemini-3-1-flash-lite/" target="_blank" rel="noopener">Google DeepMind Model Card</a> · <a href="https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-1-flash-lite/" target="_blank" rel="noopener">Google Blog</a></p>
+</section>
+
+<!-- Competitor Comparison -->
+<section class="section" style="padding-top:0;" aria-labelledby="compare-h">
+<h2 class="section-title" id="compare-h" style="font-size:1.2rem;">Competitor Price Comparison</h2>
+<p class="section-sub">Flash-Lite is among the cheapest models, though GPT-5.6 Luna's 80% price cut has intensified competition. All prices in USD per 1M tokens (Standard tier, text input).</p>
+
+<div class="table-wrap compare-table"><table><thead><tr><th>Model</th><th>Provider</th><th>Input</th><th>Output</th><th>vs Flash-Lite</th><th>Notes</th></tr></thead><tbody>
+<tr><td class="model-name">Gemini 3.1 Flash-Lite</td><td>Google</td><td class="price">$0.25</td><td class="price">$1.50</td><td>—</td><td>Baseline. Multimodal input</td></tr>
+<tr><td class="model-name"><a href="/en/gpt-5-6-luna/">GPT-5.6 Luna</a></td><td>OpenAI</td><td class="price">$0.20</td><td class="price">$1.20</td><td class="winner">Luna cheaper</td><td>20% cheaper input &amp; output. Text + image only</td></tr>
+<tr><td class="model-name">Gemini 3.5 Flash-Lite</td><td>Google</td><td class="price">$0.30</td><td class="price">$2.50</td><td class="winner">3.1 cheaper</td><td>3.1: 17% cheaper input, 40% cheaper output</td></tr>
+<tr><td class="model-name">Gemini 2.5 Flash-Lite</td><td>Google</td><td class="price">$0.10</td><td class="price">$0.40</td><td class="tie">2.5 cheaper</td><td>Oldest gen. Large capability gap</td></tr>
+<tr><td class="model-name">Claude Haiku 4.5</td><td>Anthropic</td><td class="price">$1.00</td><td class="price">$5.00</td><td class="winner">Flash-Lite cheaper</td><td>Flash-Lite: 75% cheaper input, 70% cheaper output</td></tr>
+<tr><td class="model-name">DeepSeek V4.1 Flash</td><td>DeepSeek</td><td class="price">$0.15–$0.30</td><td class="price">$0.60–$1.20</td><td class="tie">Off-peak DeepSeek cheaper</td><td>Peak/off-peak (effective 8/16). Off-peak = half of peak</td></tr>
+</tbody></table></div>
+<p style="font-size:.78rem;color:var(--c-muted);margin-top:.3rem;">* GPT-5.6 Luna comparison is text-input only. Gemini 3.1 Flash-Lite accepts audio and video input as well, making it potentially more cost-effective for multimodal workloads. DeepSeek's current model is <strong>V4.1 Flash</strong> (released 2026-09-10) with peak/off-peak pricing: cache-miss input $0.15 off-peak / $0.30 peak, output $0.60 off-peak / $1.20 peak. V4 Pro keeps running after 2026-09-14 (DeepSeek withdrew the 9/14 routing notice) and its rates remain current.</p>
+<p class="source-note">Sources: official pricing pages from each provider (verified 2026-08-10). See <a href="/en/pricing/">full pricing comparison</a>. <a href="/en/gpt-5-6-luna/">GPT-5.6 Luna details →</a></p>
+</section>
+
+<!-- Use Cases -->
+<section class="section" style="padding-top:0;" aria-labelledby="usecase-h">
+<h2 class="section-title" id="usecase-h" style="font-size:1.2rem;">Ideal Use Cases</h2>
+<p class="section-sub">High-throughput, cost-sensitive, multimodal workloads.</p>
+<div class="use-case-grid">
+  <div class="use-case-card"><div class="icon">🌐</div><h4>Translation &amp; Multi-Language</h4><p>Bulk text translation pipelines. Use minimal thinking for maximum token efficiency.</p></div>
+  <div class="use-case-card"><div class="icon">📊</div><h4>Data Extraction &amp; Classification</h4><p>Structured data extraction, content moderation, sentiment analysis at scale.</p></div>
+  <div class="use-case-card"><div class="icon">🎤</div><h4>Speech Recognition (ASR)</h4><p>Audio input with improved ASR quality over 2.5 Flash-Lite. Ideal for transcription pipelines.</p></div>
+  <div class="use-case-card"><div class="icon">💻</div><h4>Code Completion &amp; Review</h4><p>Inline suggestions, lint-style review, refactor proposals at IDE/CI/CD scale.</p></div>
+  <div class="use-case-card"><div class="icon">🔄</div><h4>Batch Processing &amp; Nightly Jobs</h4><p>Batch/Flex for 50% additional savings. Ideal for async large-scale data processing.</p></div>
+  <div class="use-case-card"><div class="icon">📹</div><h4>Multimodal Bulk Processing</h4><p>Classification and metadata extraction from mixed media including images, video, and audio.</p></div>
+</div>
+</section>
+
+<!-- Selection Guide -->
+<section class="section" style="padding-top:0;" aria-labelledby="choice-h">
+<h2 class="section-title" id="choice-h" style="font-size:1.2rem;">Gemini 3.x Family Selection Guide</h2>
+<div class="table-wrap"><table><thead><tr><th>Model</th><th>Input</th><th>Output</th><th>When to Use</th></tr></thead><tbody>
+<tr><td class="model-name">Gemini 3.1 Pro Preview</td><td class="price">$2.00</td><td class="price">$12.00</td><td>Hardest reasoning, agents, complex multi-step problems</td></tr>
+<tr><td class="model-name">Gemini 3.6 Flash</td><td class="price">$1.50</td><td class="price">$7.50</td><td>Speed-focused production workloads. Grounding included</td></tr>
+<tr><td class="model-name">Gemini 3.5 Flash</td><td class="price">$1.50</td><td class="price">$9.00</td><td>Standard Flash tier. Slightly higher output cost than 3.6</td></tr>
+<tr><td class="model-name" style="border-left:3px solid var(--c-blue);padding-left:.7rem;">Gemini 3.1 Flash-Lite ⬅</td><td class="price">$0.25</td><td class="price">$1.50</td><td>High-throughput, cost-sensitive, multimodal bulk processing</td></tr>
+</tbody></table></div>
+<p style="font-size:.84rem;color:var(--c-muted);margin-top:.5rem;">💡 Strategy: Handle routine high-frequency tasks with Flash-Lite, escalate to Flash when quality matters, and reserve Pro for the hardest problems.</p>
+</section>
+
+<!-- CTA -->
+<section class="section" style="padding-top:0;">
+<div style="background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-accent);border-radius:var(--r-lg);padding:1.5rem;text-align:center;">
+  <h3 style="font-size:1.1rem;margin-bottom:.75rem;">Estimate Your Actual Costs</h3>
+  <p style="color:var(--c-muted);font-size:.9rem;margin-bottom:1rem;">Compare token costs for Gemini 3.1 Flash-Lite and all major models. Just enter your token counts.</p>
+  <a href="/en/calculator/" style="display:inline-block;background:var(--c-accent);color:#fff;font-weight:600;padding:.65rem 1.5rem;border-radius:var(--r-md);">🧮 Open Token Calculator →</a>
+  <p style="margin-top:.8rem;font-size:.82rem;color:var(--c-muted);"><a href="/en/pricing/">📊 Full Pricing Comparison</a> · <a href="/en/gpt-5-6-luna/">🌙 Compare with GPT-5.6 Luna</a> · <a href="/en/timeline/">🗓️ Release Timeline</a> · <a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">🔗 Google Official Pricing</a></p>
+</div>
+</section>
+
+<div class="tip-box" style="border-left-color:var(--c-red);margin-bottom:2rem;">
+  <h3>⚠️ Disclaimer</h3>
+  <ul>
+    <li>Pricing verified against Google's official AI page (ai.google.dev) on 2026-08-10. Subject to change without notice. Always check official pages before contracting.</li>
+    <li>This site is informational only. We are not affiliated with or endorsed by any provider.</li>
+    <li>Performance claims are based on Google's published data and third-party evaluations. Your mileage may vary.</li>
+  </ul>
+</div>
+
+</div></main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>Operated by okamo channel</p><p><a href="/en/">Home</a> · <a href="/en/pricing/">Pricing</a> · <a href="/en/calculator/">Calculator</a> · <a href="/en/timeline/">Timeline</a> · <a href="/en/gpt-5-6-luna/">GPT-5.6 Luna</a></p></div><p class="footer-disclaimer">⚠️ Pricing and specifications may change without notice. Always verify on official pages. Not affiliated with any provider.</p></div></footer>
+</body>
+</html>

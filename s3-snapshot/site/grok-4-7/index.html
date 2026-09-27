@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Grok 4.7 — 大型化したxAI最新フラッグシップ【料金・ベンチマーク・比較】 — LLM Data Hub</title>
+  <meta name="description" content="xAI Grok 4.7の料金（標準$2/$6・200K超は$4/$12・Fastは2倍・米国リージョンは1.1倍）・500Kコンテキスト・公式ベンチマーク7項目と第三者評価を一次情報で解説。前世代Grok 4.6との比較付き。2026年9月21日公開。">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/grok-4-7/">
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/grok-4-7/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/grok-4-7/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/grok-4-7/">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/grok-4-7/">
+  <meta property="og:title" content="Grok 4.7 — 大型化したxAI最新フラッグシップ">
+  <meta property="og:description" content="Grok 4.7の料金（$2/$6・200K超$4/$12・Fast2倍）・500Kコンテキスト・公式ベンチマーク7項目と第三者評価を一次情報で解説。">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Grok 4.7 — 大型化したxAI最新フラッグシップ【料金・ベンチマーク・比較】","datePublished":"2026-09-23","dateModified":"2026-09-23","author":{"@type":"Organization","name":"LLM Data Hub"},"publisher":{"@type":"Organization","name":"okamoちゃんねる"},"url":"https://llm.okamomedia.tokyo/grok-4-7/","inLanguage":"ja"}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .hero-grok{background:linear-gradient(135deg,#0b0b12 0%,#1a1a2b 50%,#0f1117 100%);border-bottom:1px solid var(--c-border);padding:3rem 1rem 2.5rem;text-align:center}.hero-grok .price-flag{display:inline-block;background:rgba(139,92,246,.14);border:1px solid rgba(139,92,246,.35);color:#a78bfa;font-size:.82rem;font-weight:700;padding:.3rem .8rem;border-radius:100px;margin-bottom:1rem}.hero-grok h1{font-size:clamp(1.6rem,4.5vw,2.4rem);font-weight:800;line-height:1.2;margin-bottom:.75rem}.hero-grok h1 span{color:#a78bfa}.hero-grok .lead{font-size:1.05rem;color:var(--c-muted);max-width:640px;margin:0 auto 1.5rem}.hero-grok .quick-stats{display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;margin-top:1rem}.hero-grok .stat{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.75rem 1.25rem;text-align:center}.hero-grok .stat .val{font-family:var(--font-mono);font-size:1.25rem;font-weight:700;color:#a78bfa}.hero-grok .stat .lbl{font-size:.75rem;color:var(--c-muted);margin-top:.15rem}
+    .compare-table th:first-child{width:200px}.compare-table td{text-align:center}.compare-table td:first-child{text-align:left;font-weight:600}.compare-table .winner{color:var(--c-green);font-weight:700}.compare-table .tie{color:var(--c-yellow)}
+    .spec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.8rem;margin-bottom:1.5rem}.spec-item{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.9rem 1rem}.spec-item .spec-label{font-size:.75rem;color:var(--c-muted);font-weight:600;margin-bottom:.25rem}.spec-item .spec-value{font-family:var(--font-mono);font-size:1rem;font-weight:700}
+    .use-case-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.8rem;margin-bottom:1.5rem}.use-case-card{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:1rem}.use-case-card .icon{font-size:1.5rem;margin-bottom:.5rem}.use-case-card h4{font-size:.92rem;font-weight:700;margin-bottom:.35rem}.use-case-card p{font-size:.82rem;color:var(--c-muted);line-height:1.5}
+    .context-note{background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid #a78bfa;border-radius:var(--r-md);padding:.8rem 1rem;margin:1rem 0;font-size:.84rem;color:var(--c-muted)}
+    @media(max-width:640px){.hero-grok .quick-stats{flex-direction:column;gap:.5rem}}
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="メインナビゲーション"><a href="/" class="nav-link">ホーム</a><a href="/pricing/" class="nav-link">料金比較</a><a href="/calculator/" class="nav-link">トークン計算機</a><a href="/timeline/" class="nav-link">リリース年表</a><a href="/china-ai/" class="nav-link">中国AI</a><a href="/multimodal/" class="nav-link">マルチモーダル</a><a href="/mai/" class="nav-link">MS AI (MAI)</a><a href="/glossary/" class="nav-link">用語説明</a></nav></div></header>
+
+<section class="hero-grok"><div class="container">
+  <p class="price-flag">🚀 2026年9月21日公開 — 標準 $2/$6 据え置き・Fastは2倍</p>
+  <h1>Grok <span>4.7</span></h1>
+  <p class="lead">xAI（x.ai）の最新フラッグシップ。ベースモデルを大型化しつつ、料金は前世代Grok 4.6と同額の$2/$6を維持。xAI公式ベンチマーク7項目すべてでGrok 4.6を上回り、EEBenchとHarvey Legal Agent Benchmarkでは比較4モデル中トップ。</p>
+  <div class="quick-stats">
+    <div class="stat"><div class="val">$2.00</div><div class="lbl">入力 / 1M tokens</div></div>
+    <div class="stat"><div class="val">$6.00</div><div class="lbl">出力 / 1M tokens</div></div>
+    <div class="stat"><div class="val">500K</div><div class="lbl">コンテキストウィンドウ</div></div>
+    <div class="stat"><div class="val">Text+Image</div><div class="lbl">入力モダリティ</div></div>
+  </div>
+</div></section>
+
+<main><div class="container">
+<div class="updated-bar" style="margin-top:2rem;"><span class="dot">●</span>最終更新: <time datetime="2026-09-23">2026年9月23日</time> | 出典: <a href="https://x.ai/news/grok-4-7" target="_blank" rel="noopener">x.ai公式発表</a> · <a href="https://docs.x.ai/developers/models/grok-4.7" target="_blank" rel="noopener">docs.x.ai モデル仕様</a> · <a href="https://docs.x.ai/developers/pricing" target="_blank" rel="noopener">docs.x.ai 料金表</a> | <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a> · <a href="/grok-4-6/">Grok 4.6</a></div>
+
+<!-- 料金 -->
+<section class="section" style="padding-top:0;" aria-labelledby="pricing-h">
+<h2 class="section-title" id="pricing-h" style="font-size:1.2rem;">料金（2026年9月21日公開時点）</h2>
+<p class="section-sub">docs.x.ai のAPI料金表で確認。全額USD/1Mトークン。標準料金はGrok 4.6と同額で据え置き。「キャッシュ入力」は同じプロンプトを再送したときにキャッシュから読み出す分の割安単価です（<a href="/glossary/prompt-cache/">プロンプトキャッシュの解説</a>）。</p>
+
+<div class="table-wrap"><table><thead><tr><th>ティア</th><th>入力</th><th>キャッシュ入力</th><th>出力</th><th>備考</th></tr></thead><tbody>
+<tr><td class="model-name">Standard（ショート &lt;200K）</td><td class="price">$2.00</td><td class="price">$0.50</td><td class="price">$6.00</td><td>デフォルト料金。Grok 4.6と同額</td></tr>
+<tr><td class="model-name">Long context（200K超）</td><td class="price">$4.00</td><td class="price">$1.00</td><td class="price">$12.00</td><td>200K超でリクエスト全体に適用</td></tr>
+</tbody></table></div>
+
+<p class="section-sub" style="margin-top:1.2rem;margin-bottom:.4rem;"><strong>高速版 Grok 4.7 Fast</strong>（Cursor / Grok Build 限定。同じGrok 4.7を高速インフラで提供するもので、標準の2倍のトークン単価）</p>
+<div class="table-wrap"><table><thead><tr><th>プロンプト長</th><th>入力</th><th>キャッシュ入力</th><th>出力</th></tr></thead><tbody>
+<tr><td class="model-name">200K未満</td><td class="price">$4.00</td><td class="price">$1.00</td><td class="price">$12.00</td></tr>
+<tr><td class="model-name">200K超</td><td class="price">$6.00</td><td class="price">$1.50</td><td class="price">$18.00</td></tr>
+</tbody></table></div>
+<p style="font-size:.78rem;color:var(--c-muted);margin-top:.3rem;">※ 区切りは公式表記（below 200k / above 200k）に従い「200K未満 / 200K超」と表記しています。ちょうど200Kトークンの扱いは docs.x.ai の料金表をご確認ください。</p>
+
+<div class="context-note">
+  ⚠️ <strong>200Kトークンの長文境界:</strong> プロンプトが200Kトークンに達すると、そのリクエストの<strong>全トークン</strong>に長文料金（$4/$12）が適用されます（docs.x.ai に明記）。エージェントループでツール出力が積み重なるワークロードは、この境界を越えると請求が急増するため注意。
+</div>
+
+<div class="context-note" style="border-left-color:var(--c-yellow);">
+  💡 <strong>実質コストを左右する3点:</strong> ①キャッシュ入力は$0.50（標準入力の75%割引）で、同じシステムプロンプト・リポジトリ文脈を再送する構成では請求額を大きく左右します。②<strong>Batch API割引（20%）はgrok-4.3 / grok-4.20系のみが対象で、grok-4.7は対象外</strong>（docs.x.ai の Batch discount 表で確認）。大量のバッチ処理が目的なら対象モデルとの比較を。③米国リージョナルエンドポイント（us.api.x.ai）は全トークン単価が1.1倍で、grok-4.7では200K未満 $2.20/$0.55/$6.60、200K超 $4.40/$1.10/$13.20。
+</div>
+
+<div class="context-note" style="border-left-color:var(--c-accent);">
+  🧩 <strong>サーバーサイドツールは別課金</strong>（docs.x.ai 料金表）: web_search $5 / 1k calls、x_search $5 / 1k posts・$10 / 1k profiles、code_execution $5 / 1k calls、attachment_search $10 / 1k calls、collections_search（file_search）$2.50 / 1k calls。ファイル保管 $0.025/GiB/日、コレクション保管 $0.10/GiB/日、ダウンロード $0.20/GiB。
+</div>
+
+<p class="source-note">一次情報: <a href="https://docs.x.ai/developers/pricing" target="_blank" rel="noopener">docs.x.ai/developers/pricing</a>（Last updated: September 21, 2026）· <a href="https://docs.x.ai/developers/models/grok-4.7" target="_blank" rel="noopener">docs.x.ai Grok 4.7</a> · <a href="https://x.ai/news/grok-4-7" target="_blank" rel="noopener">x.ai/news/grok-4-7</a>（2026-09-23確認）</p>
+</section>
+
+<!-- コスト計算例 -->
+<section class="section" style="padding-top:0;" aria-labelledby="ex-h">
+<h2 class="section-title" id="ex-h" style="font-size:1.2rem;">コスト計算例（標準ティア・USD）</h2>
+<p class="section-sub">入力単価 × 入力トークン数 + 出力単価 × 出力トークン数。長文条件（200K超）に入るとリクエスト全体の単価が切り替わります。</p>
+<div class="table-wrap"><table><thead><tr><th>ケース</th><th>入力トークン</th><th>出力トークン</th><th>想定コスト（USD）</th></tr></thead><tbody>
+<tr><td class="model-name">短文のやり取り</td><td>100,000</td><td>10,000</td><td class="price">$0.26</td></tr>
+<tr><td class="model-name">同じ入力の8割をキャッシュ</td><td>100,000（うち80,000がcache hit）</td><td>10,000</td><td class="price">$0.14</td></tr>
+<tr><td class="model-name">200Kちょうど（境界）</td><td>200,000</td><td>20,000</td><td class="price">$0.52 → 長文適用なら $1.04</td></tr>
+<tr><td class="model-name">長文コンテキスト（200K超）</td><td>250,000</td><td>20,000</td><td class="price">$1.24</td></tr>
+</tbody></table></div>
+<p style="font-size:.78rem;color:var(--c-muted);margin-top:.3rem;">※ いずれもキャッシュ書込料金・サーバーサイドツール・リージョン係数（米国は1.1倍）を含まない素の計算です。実トークン数での試算は<a href="/calculator/">トークン計算機</a>をご利用ください。</p>
+</section>
+
+<!-- 仕様 -->
+<section class="section" style="padding-top:0;" aria-labelledby="spec-h">
+<h2 class="section-title" id="spec-h" style="font-size:1.2rem;">モデル仕様</h2>
+<div class="spec-grid">
+  <div class="spec-item"><div class="spec-label">GA公開</div><div class="spec-value">2026-09-21</div></div>
+  <div class="spec-item"><div class="spec-label">知識カットオフ</div><div class="spec-value">2026年5月</div></div>
+  <div class="spec-item"><div class="spec-label">コンテキスト</div><div class="spec-value">500,000 tokens</div></div>
+  <div class="spec-item"><div class="spec-label">長文料金の境界</div><div class="spec-value">200,000 tokens</div></div>
+  <div class="spec-item"><div class="spec-label">入力モダリティ</div><div class="spec-value">テキスト + 画像</div></div>
+  <div class="spec-item"><div class="spec-label">出力モダリティ</div><div class="spec-value">テキスト</div></div>
+  <div class="spec-item"><div class="spec-label">推論エフォート</div><div class="spec-value">low / medium / high / xhigh（xhighが最も深く思考）</div></div>
+  <div class="spec-item"><div class="spec-label">既定のエフォート</div><div class="spec-value">high</div></div>
+  <div class="spec-item"><div class="spec-label">ツール呼び出し</div><div class="spec-value">Function Calling ✓</div></div>
+  <div class="spec-item"><div class="spec-label">構造化出力</div><div class="spec-value">対応</div></div>
+  <div class="spec-item"><div class="spec-label">リージョン</div><div class="spec-value">us-east-1（+米国リージョナル）</div></div>
+  <div class="spec-item"><div class="spec-label">モデルID</div><div class="spec-value" style="font-size:.85rem;">grok-4.7</div></div>
+</div>
+<p class="source-note">出典: <a href="https://docs.x.ai/developers/models/grok-4.7" target="_blank" rel="noopener">docs.x.ai Grok 4.7</a> · <a href="https://x.ai/news/grok-4-7" target="_blank" rel="noopener">xAI公式発表</a>。xAIは「ベースモデルをGrok 4.6より大型化し、自己検証と長いコンテキストの扱いが向上した」と説明しています。なお x.ai / docs.x.ai のサイト表示は2026-09-23時点で「SpaceXAI」となっています（社名変更の一次確認は未了のため、本ページでは提供元をxAIと表記）。</p>
+</section>
+
+<!-- 性能 -->
+<section class="section" style="padding-top:0;" aria-labelledby="perf-h">
+<h2 class="section-title" id="perf-h" style="font-size:1.2rem;">性能 — 公式ベンチマーク7項目すべてでGrok 4.6を上回る</h2>
+<p class="section-sub">xAI公式発表のベンチマーク表より。数値はGrok 4.7・Grok 4.6・GPT-5.6 Sol・Fable 5.1（Anthropic）の4モデル。各社公表値であり、テスト条件が同一とは限りません。</p>
+
+<div class="table-wrap compare-table"><table><thead><tr><th>ベンチマーク（領域）</th><th>Grok 4.7</th><th>Grok 4.6</th><th>GPT-5.6 Sol</th><th>Fable 5.1</th><th>ひとこと</th></tr></thead><tbody>
+<tr><td class="model-name">CursorBench 4.0（SWE）</td><td class="price">46.3%</td><td>40.4%</td><td>41.7%</td><td class="winner">51.8%</td><td>前世代から+5.9pt</td></tr>
+<tr><td class="model-name">DeepSWE v1.1（長時間SWE）</td><td class="price">71.0%*</td><td>65.2%</td><td class="winner">72.7%</td><td>70.0%</td><td>4モデル中2位（*はhigh effort）</td></tr>
+<tr><td class="model-name">EEBench（電気工学）</td><td class="winner">64.0%</td><td>53.0%</td><td>39.4%</td><td>56.4%</td><td><strong>4モデル中トップ</strong></td></tr>
+<tr><td class="model-name">AA Briefcase v1.1（長時間オフィス作業・Elo）</td><td class="price">1,657</td><td>1,546</td><td>1,487</td><td class="winner">1,678</td><td>Fable 5.1がわずかに上</td></tr>
+<tr><td class="model-name">Terminal-Bench 4.0（ターミナル作業）</td><td class="price">37.6%</td><td>20.3%</td><td>37.3%</td><td class="winner">57.9%</td><td>前世代比 約1.9倍</td></tr>
+<tr><td class="model-name">Harvey Legal Agent Benchmark（法務）</td><td class="winner">19.6%</td><td>15.8%</td><td>2.5%</td><td>6.7%</td><td><strong>4モデル中トップ</strong>（GPT-5.6 Solの約7.8倍）</td></tr>
+<tr><td class="model-name">HealthBench Professional（臨床推論）</td><td class="price">56.7%</td><td>48.5%</td><td>60.5%</td><td class="winner">62.1%</td><td>4モデル中3位</td></tr>
+</tbody></table></div>
+<p style="font-size:.78rem;color:var(--c-muted);margin-top:.3rem;">※ 太字＝4モデル中トップ。「winner」表示は各ベンチマークの最高値。DeepSWE v1.1はDatacurve運営の長時間ソフトウェアエンジニアリング・ベンチマーク（113タスク / 5言語）です。</p>
+
+<div class="tip-box">
+  <ul>
+    <li><strong>GDPval（Elo）: Grok 4.7 (xhigh) 1,695</strong> — Fable 5.1 (max) 1,735、Grok 4.6 (high) 1,605、GPT-6 Astra (max) 1,542。前世代から+90で、文書・プレゼン作成が改善（xAI公式の比較図より）。</li>
+    <li><strong>価格は据え置き:</strong> 入力$2 / 出力$6（xHigh）で、比較表上はGrok 4.6（High）と同額。GPT-5.6 Sol Maxは$4/$20、Fable 5.1 Maxは$10/$50（xAI掲載の比較表）。</li>
+    <li><strong>まとめ:</strong> 「前世代から全項目改善、価格は同じ」が公式の主張。ただし4モデル比較ではFable 5.1が7項目中3項目、GPT-5.6 Solが1項目で上回り、首位とは言い切れません。</li>
+  </ul>
+</div>
+<p class="source-note">出典: <a href="https://x.ai/news/grok-4-7" target="_blank" rel="noopener">xAI: Introducing Grok 4.7</a>（ベンチマーク表・GDPval図）</p>
+</section>
+
+<!-- 第三者評価 -->
+<section class="section" style="padding-top:0;" aria-labelledby="third-h">
+<h2 class="section-title" id="third-h" style="font-size:1.2rem;">第三者評価 — 「安いが、フロンティア最前線ではない」</h2>
+<p class="section-sub">xAIの主張と第三者計測のズレも、判断材料として併記します。</p>
+<div class="tip-box" style="border-left-color:var(--c-red);">
+  <ul>
+    <li><strong>総合知能指数では中位:</strong> 人工分析（Artificial Analysis）の Intelligence Index で Grok 4.7 は<strong>46</strong>。Claude Fable 5.1 と GPT-6 がそれぞれ53で、差があるとの報道（the-decoder, 2026-09-21）。エージェント型コーディングでは差がさらに広がるとされます。</li>
+    <li><strong>トークン消費が総コストを膨らませる可能性:</strong> VentureBeat は「トークン単価が安くても、同じ仕事を終えるのに推論トークンを大幅に多く消費するなら、完成ワークロードのコストはむしろ高くなる」と指摘（2026-09-21）。単価だけでなく実測トークン量での比較が必要です。</li>
+    <li><strong>配布チャネルは広い:</strong> 2026-09-21からGitHub Copilotでも順次利用可能（VS Code / JetBrains / Xcode等）。API・Cursor・Grok Build・サードパーティのコーディングハーネス・モデルルーター・クラウド経由で提供。</li>
+  </ul>
+</div>
+<p class="source-note">出典: <a href="https://the-decoder.com/xai-launches-grok-4-7-at-bargain-prices-but-benchmarks-reveal-a-wide-gap-to-claude-and-gpt-6/" target="_blank" rel="noopener">the-decoder</a> · <a href="https://venturebeat.com/technology/grok-4-7-pairs-coding-gains-with-the-same-affordable-pricing-but-high-token-consumption-threatens-real-world-roi" target="_blank" rel="noopener">VentureBeat</a> · <a href="https://github.blog/changelog/2026-09-21-grok-4-7-is-now-available-in-github-copilot/" target="_blank" rel="noopener">GitHub Changelog</a>（いずれも2026-09-23確認）。第三者の数値は各社の測定条件に依存します。</p>
+</section>
+
+<!-- 比較 -->
+<section class="section" style="padding-top:0;" aria-labelledby="compare-h">
+<h2 class="section-title" id="compare-h" style="font-size:1.2rem;">前世代・競合との比較</h2>
+<p class="section-sub">xAI掲載の比較表より。推論エフォート設定がモデルごとに異なるため、単純な同条件比較ではない点に留意してください。</p>
+<div class="table-wrap compare-table"><table><thead><tr><th>モデル</th><th>設定</th><th>入力</th><th>出力</th><th>Grok 4.7より</th></tr></thead><tbody>
+<tr><td class="model-name">Grok 4.7</td><td>xHigh</td><td class="price">$2.00</td><td class="price">$6.00</td><td>—（基準）</td></tr>
+<tr><td class="model-name"><a href="/grok-4-6/">Grok 4.6</a></td><td>High</td><td class="price">$2.00</td><td class="price">$6.00</td><td class="tie">同額</td></tr>
+<tr><td class="model-name">GPT-5.6 Sol</td><td>Max</td><td class="price">$4.00</td><td class="price">$20.00</td><td class="winner">Grok安（入力半額・出力70%安）</td></tr>
+<tr><td class="model-name">Claude Fable 5.1</td><td>Max</td><td class="price">$10.00</td><td class="price">$50.00</td><td class="winner">Grok安（入力1/5・出力約1/8）</td></tr>
+</tbody></table></div>
+<p style="font-size:.78rem;color:var(--c-muted);margin-top:.3rem;">※ 上表はxAI公式発表の比較図に基づく料金です。最高推論エフォート同士の比較であり、当サイトが各社公式ページで独自に確認した標準料金とは設定が異なる場合があります。全モデルの標準料金は<a href="/pricing/">料金比較ページ</a>をご参照ください。</p>
+<p class="source-note">出典: <a href="https://x.ai/news/grok-4-7" target="_blank" rel="noopener">xAI: Introducing Grok 4.7</a> · 各社公式料金は<a href="/pricing/">料金比較</a>（2026-09-23時点）</p>
+</section>
+
+<!-- ユースケース -->
+<section class="section" style="padding-top:0;" aria-labelledby="usecase-h">
+<h2 class="section-title" id="usecase-h" style="font-size:1.2rem;">ベンチマーク上で強みが出ている用途</h2>
+<p class="section-sub">コーディング・エージェント・専門ドメインを中心に。</p>
+<div class="use-case-grid">
+  <div class="use-case-card"><div class="icon">💻</div><h4>コーディング・コードレビュー</h4><p>CursorBench 4.0で46.3%（前世代比+5.9pt）。Cursor本体とGrok Buildで公開当日から利用可能。</p></div>
+  <div class="use-case-card"><div class="icon">🖥️</div><h4>長時間ターミナル作業</h4><p>Terminal-Bench 4.0が20.3%→37.6%（約1.9倍）へ大幅上昇。多段シェル操作の自動化。</p></div>
+  <div class="use-case-card"><div class="icon">⚖️</div><h4>法務・専門ドメイン</h4><p>Harvey Legal Agent Benchmark 19.6%で比較4モデル中トップ。専門領域のエージェント業務。</p></div>
+  <div class="use-case-card"><div class="icon">🔌</div><h4>電気工学・ハードウェア寄り設計</h4><p>EEBench 64.0%で比較4モデル中トップ。</p></div>
+  <div class="use-case-card"><div class="icon">📊</div><h4>文書・プレゼン作成</h4><p>AA Briefcase 1,657、GDPval Elo 1,695。専門職の成果物作成タスク。</p></div>
+  <div class="use-case-card"><div class="icon">🧠</div><h4>長文コンテキスト処理</h4><p>500Kコンテキスト。ただし200K超で単価が倍になるため、長さとコストのトレードオフ管理が前提。</p></div>
+</div>
+</section>
+
+<!-- 選び方 -->
+<section class="section" style="padding-top:0;" aria-labelledby="choice-h">
+<h2 class="section-title" id="choice-h" style="font-size:1.2rem;">Grok 4.7が向いている場面 / 向いていない場面</h2>
+<div class="tip-box">
+  <ul>
+    <li><strong>単価重視のフロンティア帯なら有力:</strong> 入力$2 / 出力$6は、GPT-5.6 SolやFable 5.1（最高エフォート）と比べて明確に安価。xAIは「同種モデルの2倍速く半額」と主張しています。</li>
+    <li><strong>総コストは実測トークンで判断:</strong> 推論を多く使う設定（既定high〜xhigh）では出力トークンが増え、単価差が縮まります。<code>reasoning_effort</code>をタスク難易度に合わせて下げるのが基本。</li>
+    <li><strong>200Kの壁に注意:</strong> 長文コンテキストを使うなら$4/$12（Fast時は$6/$1.50/$18）。キャッシュ入力（$0.50）の活用が実質コスト削減の要。</li>
+    <li><strong>Batch 20%割引は対象外:</strong> 大量バッチ処理が目的なら<a href="/grok-4-6/">Grok 4.6</a>も同様に対象外で、対象はgrok-4.3 / grok-4.20系のみです。</li>
+    <li><strong>最高性能が必要なら:</strong> 掲載した Artificial Analysis Intelligence Index では Claude Fable 5.1 と GPT-6（いずれも53）が Grok 4.7（46）を上回ります。精度が最優先なら上位モデルとの使い分けを。</li>
+  </ul>
+</div>
+</section>
+
+<!-- CTA -->
+<section class="section" style="padding-top:0;">
+<div style="background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-accent);border-radius:var(--r-lg);padding:1.5rem;text-align:center;">
+  <h3 style="font-size:1.1rem;margin-bottom:.75rem;">実際のコストを試算する</h3>
+  <p style="color:var(--c-muted);font-size:.9rem;margin-bottom:1rem;">Grok 4.7を含む全モデルのトークンコストを一括計算。入力・出力トークン数を入れるだけ。</p>
+  <a href="/calculator/" style="display:inline-block;background:var(--c-accent);color:#fff;font-weight:600;padding:.65rem 1.5rem;border-radius:var(--r-md);">🧮 トークン計算機で試算する →</a>
+  <p style="margin-top:.8rem;font-size:.82rem;color:var(--c-muted);"><a href="/pricing/">📊 全モデル料金比較</a> · <a href="/grok-4-6/">🤖 Grok 4.6と比較</a> · <a href="/timeline/">🗓️ リリース年表</a> · <a href="https://docs.x.ai/developers/pricing" target="_blank" rel="noopener">🔗 xAI公式料金ページ</a></p>
+</div>
+</section>
+
+<div class="tip-box" style="border-left-color:var(--c-red);margin-bottom:2rem;">
+  <h3>⚠️ 免責事項</h3>
+  <ul>
+    <li>料金はdocs.x.ai公式ページを2026-09-23に確認したものです。予告なく変動します。契約前に必ず公式ページをご確認ください。</li>
+    <li>本サイトは情報提供目的であり、特定プロバイダーの推薦・代理ではありません。</li>
+    <li>ベンチマーク数値はxAIの公表値であり、実際の使用感を保証するものではありません。第三者の数値は各社の測定条件に依存します。</li>
+  </ul>
+</div>
+
+</div></main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>運営: okamoちゃんねる</p><p><a href="/">ホーム</a> · <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a> · <a href="/timeline/">年表</a> · <a href="/gpt-5-6-luna/">GPT-5.6 Luna</a> · <a href="/gemini-3-7-flash/">Gemini 3.7 Flash</a></p></div><p class="footer-disclaimer">⚠️ 料金・仕様は予告なく変動します。契約前に必ず各社公式ページでご確認ください。本サイトは各社と提携していません。</p></div></footer>
+</body>
+</html>

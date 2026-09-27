@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>What Is Prompt Caching? cache hit, cache miss and cache writes, in dollars | LLM Data Hub</title>
+  <meta name="description" content="A plain-language guide to prompt caching: cache hit vs cache miss, what cache writes cost, TTLs, and the minimum cacheable prompt length — compared from OpenAI, Anthropic, Google and DeepSeek primary sources, with a 10-request cost example.">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/en/glossary/prompt-cache/">
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/glossary/prompt-cache/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/glossary/prompt-cache/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/glossary/prompt-cache/">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/en/glossary/prompt-cache/">
+  <meta property="og:title" content="What is prompt caching? cache hit, cache miss and cache writes, in dollars">
+  <meta property="og:description" content="With DeepSeek, the same input is billed at 1/50 the price. The mechanism, TTLs, minimum cacheable length and write multipliers, from four providers' own docs.">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"What Is Prompt Caching? cache hit, cache miss and cache writes, in dollars","datePublished":"2026-09-17","dateModified":"2026-09-17","author":{"@type":"Organization","name":"LLM Data Hub"},"publisher":{"@type":"Organization","name":"okamoちゃんねる"},"url":"https://llm.okamomedia.tokyo/en/glossary/prompt-cache/","inLanguage":"en","about":"Prompt caching: how cache hits, cache misses and cache writes are billed"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://llm.okamomedia.tokyo/en/"},{"@type":"ListItem","position":2,"name":"Glossary","item":"https://llm.okamomedia.tokyo/en/glossary/"},{"@type":"ListItem","position":3,"name":"What is prompt caching?","item":"https://llm.okamomedia.tokyo/en/glossary/prompt-cache/"}]}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .phrase-box{background:linear-gradient(135deg,#12162a 0%,#1a1d35 55%,#0f1117 100%);border:1px solid var(--c-border);border-left:3px solid var(--c-accent2);border-radius:var(--r-lg);padding:1.2rem 1.3rem;margin:1.2rem 0 1.6rem}
+    .phrase-box .phrase{font-size:1.02rem;font-weight:700;line-height:1.75;margin-bottom:.6rem}
+    .phrase-box .phrase-meta{font-size:.8rem;color:var(--c-muted);line-height:1.7}
+    .num-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:.8rem;margin:1rem 0 1.6rem}
+    .num-card{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.9rem 1rem}
+    .num-card .k{font-family:var(--font-mono);font-size:.74rem;color:var(--c-muted);font-weight:600;letter-spacing:.02em}
+    .num-card .v{font-family:var(--font-mono);font-size:1.05rem;font-weight:700;margin:.15rem 0 .2rem}
+    .num-card .d{font-size:.8rem;color:var(--c-muted);line-height:1.6}
+    .read-box{background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-green);border-radius:var(--r-md);padding:1rem 1.2rem;margin:1rem 0 1.6rem;font-size:.88rem;color:var(--c-muted)}
+    .read-box strong{color:var(--c-text)}
+    .flow-fig{margin:1rem 0 1.4rem}
+    .flow-fig svg{width:100%;height:auto;border:1px solid var(--c-border);border-radius:var(--r-md);background:var(--c-surface)}
+    .cmp-table th,.cmp-table td{font-size:.85rem}
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/en/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="Main navigation"><a href="/en/" class="nav-link">Home</a><a href="/en/pricing/" class="nav-link">Pricing</a><a href="/en/calculator/" class="nav-link">Token Calculator</a><a href="/en/timeline/" class="nav-link">Release Timeline</a><a href="/en/china-ai/" class="nav-link">China AI</a><a href="/en/multimodal/" class="nav-link">Multimodal</a><a href="/en/mai/" class="nav-link">MS AI (MAI)</a><a href="/en/glossary/" class="nav-link">Glossary</a></nav></div></header>
+
+<main><div class="container">
+  <div class="section" style="padding-bottom:0;">
+    <h1 class="section-title" style="font-size:1.55rem;">What is prompt caching? Reading &ldquo;cache hit&rdquo; in dollars</h1>
+    <p class="section-sub" style="max-width:760px;">
+      <a href="/en/glossary/">Glossary</a>, entry 2. We take common terms in pricing tables and vendor announcements and walk them back to primary sources.
+      This one is <strong>prompt caching</strong>, starting from a single line on DeepSeek's pricing page. The same input, billed at
+      <strong>1/50 the price</strong> &mdash; could you explain why?
+    </p>
+    <div class="phrase-box">
+      <p class="phrase">&ldquo;Input (cache hit) $0.003 per 1M tokens&rdquo;</p>
+      <p class="phrase-meta">Source: DeepSeek's official pricing page (V4.1 Flash, model id <code>deepseek-flash</code>, checked 2026-09-17) &mdash; the same table lists input (cache miss) at $0.15 off-peak per 1M. So <strong>a cache hit costs 1/50 of a cache miss</strong>. See <a href="/en/deepseek-v4-1-flash/">the full rate card</a>.</p>
+    </div>
+    <div class="updated-bar">
+      <span class="dot">●</span>
+      Last updated: <time datetime="2026-09-17">September 17, 2026</time>
+      &ensp;|&ensp; Primary sources: <a href="https://platform.openai.com/docs/guides/prompt-caching" target="_blank" rel="noopener">OpenAI prompt caching</a> ・ <a href="https://platform.claude.com/docs/en/build-with-claude/prompt-caching" target="_blank" rel="noopener">Anthropic prompt caching</a> ・ <a href="https://ai.google.dev/gemini-api/docs/caching" target="_blank" rel="noopener">Gemini context caching</a> ・ <a href="https://api-docs.deepseek.com/guides/kv_cache" target="_blank" rel="noopener">DeepSeek context caching</a>
+      &ensp;|&ensp; Checked: 2026-09-17
+    </div>
+  </div>
+
+  <!-- ===== terms ===== -->
+  <section class="section" style="padding-top:1.5rem;" aria-labelledby="words-h">
+    <h2 class="section-title" id="words-h" style="font-size:1.2rem;">Three terms, and you are done</h2>
+    <p class="section-sub" style="max-width:760px;">Every pricing table reduces to these three. Once they are separated, the rest is arithmetic.</p>
+    <div class="num-grid">
+      <div class="num-card"><div class="k">cache miss</div><div class="v">standard input rate</div><div class="d">The input was not in the cache. A first request is always a miss</div></div>
+      <div class="num-card"><div class="k">cache hit (cached input)</div><div class="v">discounted rate</div><div class="d">The same prefix was still cached. This is the cheap side</div></div>
+      <div class="num-card"><div class="k">cache write</div><div class="v">1.25x to 2x</div><div class="d">What you pay to store the prefix. This is the expensive side</div></div>
+    </div>
+    <div class="read-box">
+      <strong>Bottom line: prompt caching is not a discount, it is a prepayment.</strong>
+      You pay a premium to write the cache once and earn it back on later reads. That is why
+      <strong>caching a prompt you send only once costs you money</strong>. This asymmetry is where most cost models go wrong.
+    </div>
+  </section>
+
+  <!-- ===== mechanism ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="how-h">
+    <h2 class="section-title" id="how-h" style="font-size:1.2rem;">How it works: only the matching prefix is reused</h2>
+    <div class="read-box">
+      <strong>Bottom line: caching only applies to the part of the prompt that matches from the very beginning.</strong>
+      The provider walks your input tokens from the start and reuses the range that is identical to the previous request instead of recomputing it.
+      <strong>Put a dynamic value first &mdash; a timestamp, a user ID, today's question &mdash; and the match breaks there, so every request is a miss.</strong>
+    </div>
+    <figure class="flow-fig">
+      <svg viewBox="0 0 800 360" width="100%" role="img" aria-labelledby="pcFigTitleEn" style="display:block;">
+        <title id="pcFigTitleEn">How prompt caching works: the shared prefix is written once at 1.25x, read back at 0.1x, turning $0.80 into $0.172 across 10 requests</title>
+        <rect x="0" y="0" width="800" height="360" rx="14" fill="#14161f" stroke="#262a38"/>
+        <text x="36" y="44" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="18" font-weight="700" fill="#eef0f7">How prompt caching works</text>
+        <text x="36" y="68" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12.5" fill="#8b90a3">Same prefix every time, cheaper from the second call. Example: GPT-6 Astra ($10 input / $1.00 cache hit / $12.50 cache write per 1M)</text>
+        <text x="36" y="104" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12.5" fill="#9aa0b4">Prompt structure</text>
+        <rect x="36" y="114" width="430" height="38" rx="5" fill="#2f3a55"/>
+        <text x="52" y="138" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="13" fill="#e8eaf2">Shared prefix (system prompt, docs) 8,000 tokens</text>
+        <rect x="472" y="114" width="292" height="38" rx="5" fill="#3a2f55"/>
+        <text x="488" y="138" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="13" fill="#e8eaf2">This request's question</text>
+        <rect x="36" y="176" width="354" height="72" rx="8" fill="#1b1f2c" stroke="#3a3f52"/>
+        <text x="52" y="199" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12.5" fill="#8b90a3">Request 1 (nothing cached)</text>
+        <text x="52" y="222" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="14" font-weight="700" fill="#eef0f7">cache write 1.25x</text>
+        <text x="52" y="240" font-family="ui-monospace,Menlo,monospace" font-size="12" fill="#9aa0b4">$12.50 / 1M</text>
+        <rect x="410" y="176" width="354" height="72" rx="8" fill="#15251f" stroke="#2f5f45"/>
+        <text x="426" y="199" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12.5" fill="#8b90a3">Requests 2+ (prefix matches)</text>
+        <text x="426" y="222" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="14" font-weight="700" fill="#7ee2a8">cache hit 0.1x</text>
+        <text x="426" y="240" font-family="ui-monospace,Menlo,monospace" font-size="12" fill="#9aa0b4">$1.00 / 1M</text>
+        <text x="36" y="286" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12.5" fill="#9aa0b4">Input cost over 10 requests (8,000-token prefix sent every time)</text>
+        <text x="36" y="313" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" fill="#6b7280">No cache</text>
+        <rect x="150" y="300" width="480" height="16" rx="4" fill="#3a3f52"/>
+        <text x="640" y="313" font-family="ui-monospace,Menlo,monospace" font-size="12" fill="#c9cee0">$0.80</text>
+        <text x="36" y="343" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" fill="#6b7280">With cache</text>
+        <rect x="150" y="330" width="103" height="16" rx="4" fill="#2f7d5b"/>
+        <text x="263" y="343" font-family="ui-monospace,Menlo,monospace" font-size="12" fill="#7ee2a8">$0.172 (~78% less)</text>
+      </svg>
+      <figcaption style="font-size:.78rem;color:var(--c-muted);margin-top:.5rem;">Only the shared prefix is cached. It is written at 1.25x on the first request and read back at 0.1x afterwards (rates from OpenAI's GPT-6 Astra pricing).</figcaption>
+    </figure>
+    <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.2em;line-height:1.85;">
+      <li><strong>Prefix matching is the shared idea across all four providers.</strong> OpenAI describes avoiding recomputation of a prompt prefix; Anthropic states that caching covers the full prompt prefix (tools, system, messages); Gemini's docs advise putting large, common content at the beginning of the prompt and sending similar prefixes close together in time.</li>
+      <li><strong>Everything after the prefix stays flexible.</strong> Fix the prefix (system instructions, reference documents, tool definitions) and put the variable part last. That single change moves your hit rate.</li>
+      <li><strong>You can verify hits from the response.</strong> OpenAI returns <code>usage.input_tokens_details.cached_tokens</code> and <code>cache_write_tokens</code>; Anthropic returns <code>cache_read_input_tokens</code> and <code>cache_creation_input_tokens</code>; Gemini returns <code>usage.total_cached_tokens</code>. Measure first, optimise second.</li>
+    </ul>
+  </section>
+
+  <!-- ===== rules ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="rules-h">
+    <h2 class="section-title" id="rules-h" style="font-size:1.2rem;">Rules per provider (primary sources)</h2>
+    <p class="section-sub" style="max-width:760px;">Write charges, lifetimes and the minimum cacheable length all differ. These are the figures exactly as the official documentation states them.</p>
+    <div class="table-wrap"><table class="cmp-table"><thead><tr><th>Provider</th><th>Write charge</th><th>Read (cache hit)</th><th>Cache lifetime (TTL)</th><th>Minimum cacheable</th></tr></thead><tbody>
+      <tr><td class="model-name">OpenAI<br>(GPT-5.6 and later)</td><td>1.25x the standard input rate</td><td>0.1x &mdash; up to 90% off</td><td>30 minutes (<code>prompt_cache_options.ttl</code> supports only "30m", which is also the default)</td><td>&mdash; (model-dependent, automatic)</td></tr>
+      <tr><td class="model-name">Anthropic<br>(Claude)</td><td>5-minute TTL: 1.25x<br>1-hour TTL: 2x</td><td>0.1x<br>Except Fable 5.1 / Mythos 5.1: <strong>0.025x</strong></td><td>5 minutes by default (refreshed free on each use); 1 hour costs extra</td><td>512 tokens (Fable 5.1, Mythos 5.1, Opus 5) / 2,048 (others) / 4,096 (Haiku 4.5)</td></tr>
+      <tr><td class="model-name">Google<br>(Gemini)</td><td>Explicit caching adds a separate storage charge</td><td>10% of input</td><td>Implicit caching is automatic; explicit caches take a TTL</td><td>4,096 (3.x Flash family, 3.1 Pro Preview) / 2,048 (2.5 family)</td></tr>
+      <tr><td class="model-name">DeepSeek</td><td>No write charge documented (the first send bills as normal input)</td><td>1/50 of a cache miss</td><td>Automatic (on by default, no code change)</td><td>&mdash; (prefix units, automatic)</td></tr>
+    </tbody></table></div>
+    <p class="source-note">Sources: <a href="https://platform.openai.com/docs/guides/prompt-caching" target="_blank" rel="noopener">OpenAI prompt caching</a> ・ <a href="https://platform.claude.com/docs/en/build-with-claude/prompt-caching" target="_blank" rel="noopener">Anthropic prompt caching (multipliers and minimum lengths)</a> ・ <a href="https://ai.google.dev/gemini-api/docs/caching" target="_blank" rel="noopener">Gemini context caching (implicit caching on by default for Gemini 2.5 and newer; minimum token counts)</a> ・ <a href="https://api-docs.deepseek.com/guides/kv_cache" target="_blank" rel="noopener">DeepSeek context caching</a> (all checked 2026-09-17). Anthropic's headline multipliers are 5-minute writes at 1.25x, 1-hour writes at 2x, and reads (hits and refreshes) at 0.1x; Fable 5.1 and Mythos 5.1 are documented at 0.025x for reads.</p>
+  </section>
+
+  <!-- ===== real rates ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="real-h">
+    <h2 class="section-title" id="real-h" style="font-size:1.2rem;">Real rates (USD per 1M tokens)</h2>
+    <div class="table-wrap"><table class="cmp-table"><thead><tr><th>Model</th><th>Standard input</th><th>cache hit</th><th>cache write</th></tr></thead><tbody>
+      <tr><td class="model-name"><a href="/en/gpt-6/">GPT-6 Astra</a></td><td class="price">$10.00</td><td class="price">$1.00</td><td class="price">$12.50</td></tr>
+      <tr><td class="model-name"><a href="/en/claude-fable-5-1/">Claude Fable 5.1</a></td><td class="price">$10.00</td><td class="price">$0.25</td><td class="price">$12.50 (5m) / $20 (1h)</td></tr>
+      <tr><td class="model-name"><a href="/en/gemini-3-8-flash/">Gemini 3.8 Flash</a> (through 12/31)</td><td class="price">$0.75</td><td class="price">$0.075</td><td class="price">storage $0.50 / 1M / hour</td></tr>
+      <tr><td class="model-name"><a href="/en/deepseek-v4-1-flash/">DeepSeek V4.1 Flash</a> (off-peak)</td><td class="price">$0.15</td><td class="price">$0.003</td><td class="price">none (first send bills as input)</td></tr>
+      <tr><td class="model-name"><a href="/en/grok-4-6/">Grok 4.6</a></td><td class="price">$2.00</td><td class="price">$0.50</td><td class="price">&mdash;</td></tr>
+      <tr><td class="model-name"><a href="/en/glm-5-3-flash/">GLM-5.3-Flash</a></td><td class="price">$0.15</td><td class="price">$0.03</td><td class="price">storage free for a limited time</td></tr>
+      <tr><td class="model-name"><a href="/en/mai/">MAI-Thinking-1</a> (Azure Global)</td><td class="price">$2.00</td><td class="price">$0.20</td><td class="price">&mdash;</td></tr>
+    </tbody></table></div>
+    <p class="source-note">Values come from each provider's official pricing page (verified on this site; full source URLs are on the <a href="/en/pricing/">pricing comparison</a>). Gemini rates shown are the introductory rates available through December 31, 2026; from January 1, 2027 they rise to $1.50 / $0.15.</p>
+  </section>
+
+  <!-- ===== example ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="calc-h">
+    <h2 class="section-title" id="calc-h" style="font-size:1.2rem;">What 10 requests actually cost</h2>
+    <p class="section-sub" style="max-width:760px;">Assumptions: an 8,000-token shared prefix, sent in the same order across <strong>10 requests</strong>. Output ignored. The write happens once, on request 1; requests 2&ndash;10 all hit the cache.</p>
+    <div class="table-wrap"><table class="cmp-table"><thead><tr><th>Model</th><th>No cache</th><th>With cache</th><th>Difference</th></tr></thead><tbody>
+      <tr><td class="model-name">GPT-6 Astra ($10 / $1.00 / $12.50)</td><td class="price">$0.80</td><td class="price">$0.172</td><td class="price">~78% less</td></tr>
+      <tr><td class="model-name">Claude Fable 5.1 ($10 / $0.25 / $12.50)</td><td class="price">$0.80</td><td class="price">$0.118</td><td class="price">~85% less</td></tr>
+      <tr><td class="model-name">DeepSeek V4.1 Flash ($0.15 / $0.003, off-peak)</td><td class="price">$0.012</td><td class="price">$0.0014</td><td class="price">~88% less</td></tr>
+    </tbody></table></div>
+    <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.2em;line-height:1.85;">
+      <li><strong>The arithmetic (GPT-6 Astra):</strong> without caching, 8,000 x 10 = 80,000 tokens at $10 per 1M = $0.80. With caching, the first write costs 8,000 x $12.50 per 1M = $0.10, and the nine reads cost 72,000 x $1.00 per 1M = $0.072 &mdash; $0.172 in total.</li>
+      <li><strong>The 1.25x write premium is earned back on the second request.</strong> With two or more reuses, the write premium (0.25x) is more than offset by the read discount (0.9x). Conversely, <strong>if you send it once, the write is pure loss at $12.50 per 1M</strong>.</li>
+      <li><strong>A bigger percentage cut does not mean a bigger saving.</strong> DeepSeek cuts 88% and still totals $0.0014; GPT-6 Astra cuts 78% and totals $0.172 &mdash; over 100x more. Compare totals, not discount rates.</li>
+      <li><strong>Output is never discounted.</strong> Only input can be cached, so on output-heavy workloads the real-world saving is smaller than the table suggests. For totals, use the <a href="/en/calculator/">token calculator</a> (it computes standard rates without caching).</li>
+    </ul>
+    <p class="source-note">Rates are the published figures from each provider; the arithmetic is ours. Your actual bill depends on hit rates, TTL expiry and output tokens.</p>
+  </section>
+
+  <!-- ===== misconceptions ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="miss-h">
+    <h2 class="section-title" id="miss-h" style="font-size:1.2rem;">Four common misconceptions</h2>
+    <div class="read-box">
+      <strong>1. &ldquo;It is automatic, so it will just get cheaper.&rdquo;</strong>
+      It is automatic &mdash; OpenAI enables it by default, Gemini from 2.5 onward, DeepSeek for all users.
+      But <strong>whether you get a hit depends entirely on your prefix matching</strong>. Put a timestamp or a random value at the front and you will miss on every request, automatic or not.
+    </div>
+    <div class="read-box">
+      <strong>2. &ldquo;Writes are free; only reads are discounted.&rdquo;</strong>
+      The reverse. <strong>Writes cost 1.25x</strong> (2x on Anthropic's 1-hour TTL) while reads cost 0.1x. OpenAI's own documentation frames the trade-off: pay the write when you know the prefix will be reused. A one-shot giant context remains the most expensive way to call a model.
+    </div>
+    <div class="read-box">
+      <strong>3. &ldquo;Any prompt can be cached.&rdquo;</strong>
+      <strong>Below the minimum length, nothing is cached at all.</strong> Anthropic documents 512 / 2,048 / 4,096 tokens depending on model; Gemini 3.x Flash requires 4,096. Reusing a short instruction block generates no cache hits.
+    </div>
+    <div class="read-box">
+      <strong>4. &ldquo;A cache hit cuts my bill by the same percentage.&rdquo;</strong>
+      Only <strong>the cached part of the input</strong> is discounted; output rates do not move. And once the TTL expires the next request is a miss again (5 minutes by default on Anthropic, 30 minutes on OpenAI GPT-5.6 and later). Design with the TTL and your request interval in mind, together.
+    </div>
+  </section>
+
+  <!-- ===== summary ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="sum-h">
+    <h2 class="section-title" id="sum-h" style="font-size:1.2rem;">Summary: three things to check in a price table</h2>
+    <div class="tip-box">
+      <h3>When you see &ldquo;cache hit&rdquo;</h3>
+      <ul>
+        <li><strong>The multiplier vs standard input</strong> &mdash; 0.1x, 0.025x or 1/50. That is the value of caching.</li>
+        <li><strong>The write multiplier and the TTL</strong> &mdash; 1.25x or 2x; 5 minutes, 30 minutes or 1 hour. That decides whether it pays off.</li>
+        <li><strong>The minimum prompt length</strong> &mdash; 512 to 4,096 tokens. Below it, the saving is zero.</li>
+      </ul>
+    </div>
+    <p style="font-size:.9rem;color:var(--c-muted);max-width:760px;">Prompt caching rewards <strong>architectures that resend the same prefix</strong>. Put differently, how you assemble the prompt visibly moves the bill. Agentic loops that resend the same system prompt, tool definitions and reference documents every turn benefit the most.</p>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="section" style="padding-top:0;">
+    <div style="background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-accent);border-radius:var(--r-lg);padding:1.5rem;text-align:center;">
+      <h3 style="font-size:1.1rem;margin-bottom:.75rem;">Next</h3>
+      <p style="color:var(--c-muted);font-size:.9rem;margin-bottom:1rem;">See every rate in the <a href="/en/pricing/">pricing comparison</a>, run your own numbers in the <a href="/en/calculator/">token calculator</a>, or check worked examples on <a href="/en/deepseek-v4-1-flash/">DeepSeek V4.1 Flash</a> and <a href="/en/gpt-6/">GPT-6 Astra</a>.</p>
+      <a href="/en/pricing/" style="display:inline-block;background:var(--c-accent);color:#fff;font-weight:600;padding:.65rem 1.5rem;border-radius:var(--r-md);">📊 Open the pricing tables →</a>
+      <p style="margin-top:.8rem;font-size:.82rem;color:var(--c-muted);"><a href="/en/glossary/">Glossary</a> ・ <a href="/en/glossary/gpt-6-astra-benchmarks/">How to read benchmark numbers</a> ・ <a href="/en/calculator/">Token calculator</a> ・ <a href="/en/timeline/">Release timeline</a> ・ <a href="/en/mai/">MS AI (MAI)</a></p>
+    </div>
+  </section>
+
+  <div class="tip-box" style="border-left-color:var(--c-red);margin-bottom:2rem;">
+    <h3>⚠️ Disclaimer</h3>
+    <ul>
+      <li>Prices and specifications were checked against each provider's official pages and documentation on 2026-09-17. They change without notice &mdash; always confirm on the vendor's site before you commit.</li>
+      <li>The cost examples are simple arithmetic on published rates and do not guarantee your actual bill. Real cache hit rates depend on your workload.</li>
+      <li>Caching behaviour, defaults and multipliers can change; check each provider's current documentation before implementing.</li>
+    </ul>
+  </div>
+</div></main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>Operated by okamoちゃんねる</p><p><a href="/en/">Home</a> · <a href="/en/pricing/">Pricing</a> · <a href="/en/calculator/">Calculator</a> · <a href="/en/timeline/">Timeline</a> · <a href="/en/glossary/">Glossary</a> · <a href="/en/gpt-6/">GPT-6 Astra</a></p></div><p class="footer-disclaimer">⚠️ Prices and specifications change without notice. Always confirm on the vendor's official page before you commit. This site is not affiliated with any provider.</p></div></footer>
+</body>
+</html>

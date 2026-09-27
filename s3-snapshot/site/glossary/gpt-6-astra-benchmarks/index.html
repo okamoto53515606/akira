@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GPT-6 Astraのベンチ数値の読み方 — ARC-AGI-3 99.9%は誰の数字か — LLM Data Hub</title>
+  <meta name="description" content="GPT-6 Astraの「ARC-AGI-3 99.9%・ExploitBench 100%」を一次情報で分解。同じベンチは中立ハーネスで62.7%、満点は天井、272Kトークン超で入力2倍。実務での読み方を解説します。">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/glossary/gpt-6-astra-benchmarks/">
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/glossary/gpt-6-astra-benchmarks/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/glossary/gpt-6-astra-benchmarks/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/glossary/gpt-6-astra-benchmarks/">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/glossary/gpt-6-astra-benchmarks/">
+  <meta property="og:title" content="GPT-6 Astra「ARC-AGI-3 99.9%・ExploitBench 100%」の読み方">
+  <meta property="og:description" content="同じベンチでも中立ハーネスでは62.7%。満点は天井。272Kトークン超は入力2倍。数字の条件まで戻って読む解説。">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"GPT-6 Astra「ARC-AGI-3 99.9%・ExploitBench 100%」の読み方","datePublished":"2026-09-15","dateModified":"2026-09-15","author":{"@type":"Organization","name":"LLM Data Hub"},"publisher":{"@type":"Organization","name":"okamoちゃんねる"},"url":"https://llm.okamomedia.tokyo/glossary/gpt-6-astra-benchmarks/","inLanguage":"ja","about":"GPT-6 Astra のベンチマーク数値と 1.05M コンテキスト・128K 出力の実務的な意味"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"ホーム","item":"https://llm.okamomedia.tokyo/"},{"@type":"ListItem","position":2,"name":"用語説明","item":"https://llm.okamomedia.tokyo/glossary/"},{"@type":"ListItem","position":3,"name":"GPT-6 Astra のベンチマーク数値","item":"https://llm.okamomedia.tokyo/glossary/gpt-6-astra-benchmarks/"}]}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .phrase-box{background:linear-gradient(135deg,#12162a 0%,#1a1d35 55%,#0f1117 100%);border:1px solid var(--c-border);border-left:3px solid var(--c-accent2);border-radius:var(--r-lg);padding:1.2rem 1.3rem;margin:1.2rem 0 1.6rem}
+    .phrase-box .phrase{font-size:1.02rem;font-weight:700;line-height:1.75;margin-bottom:.6rem}
+    .phrase-box .phrase-meta{font-size:.8rem;color:var(--c-muted);line-height:1.7}
+    .num-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:.8rem;margin:1rem 0 1.6rem}
+    .num-card{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.9rem 1rem}
+    .num-card .k{font-family:var(--font-mono);font-size:.74rem;color:var(--c-muted);font-weight:600;letter-spacing:.02em}
+    .num-card .v{font-family:var(--font-mono);font-size:1.15rem;font-weight:700;margin:.15rem 0 .2rem}
+    .num-card .d{font-size:.8rem;color:var(--c-muted);line-height:1.6}
+    .read-box{background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-green);border-radius:var(--r-md);padding:1rem 1.2rem;margin:1rem 0 1.6rem;font-size:.88rem;color:var(--c-muted)}
+    .read-box strong{color:var(--c-text)}
+    .flow-fig{margin:1rem 0 1.4rem}
+    .flow-fig svg{width:100%;height:auto;border:1px solid var(--c-border);border-radius:var(--r-md);background:var(--c-surface)}
+    .cmp-table th,.cmp-table td{font-size:.85rem}
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="メインナビゲーション"><a href="/" class="nav-link">ホーム</a><a href="/pricing/" class="nav-link">料金比較</a><a href="/calculator/" class="nav-link">トークン計算機</a><a href="/timeline/" class="nav-link">リリース年表</a><a href="/china-ai/" class="nav-link">中国AI</a><a href="/multimodal/" class="nav-link">マルチモーダル</a><a href="/mai/" class="nav-link">MS AI (MAI)</a><a href="/glossary/" class="nav-link">用語説明</a></nav></div></header>
+
+<main><div class="container">
+  <div class="section" style="padding-bottom:0;">
+    <h1 class="section-title" style="font-size:1.55rem;">GPT-6 Astra「ARC-AGI-3 99.9%・ExploitBench 100%」の読み方</h1>
+    <p class="section-sub" style="max-width:760px;">
+      <a href="/glossary/">用語説明</a> 第1回。ニュースやリリースノートの一行を、一次情報まで戻って分解します。
+      今日の一行は <a href="/gpt-6/">GPT-6 Astra</a> のこれです。<strong>数字は正しい。ただし条件が書かれていない。</strong>
+      そこを読み解かないと、この一行は意思決定に使えません。
+    </p>
+    <div class="phrase-box">
+      <p class="phrase">「ARC-AGI-3 99.9%・ExploitBench 100%・Terminal-Bench Science 64.6%。1.05Mコンテキスト・128K出力」</p>
+      <p class="phrase-meta">対象: GPT-6 Astra（OpenAI / 2026-09-03発表 / $10・$50 per 1M tokens）— <a href="/gpt-6/">詳細ページ</a> ・ <a href="/timeline/">リリース年表</a> の記載と一致</p>
+    </div>
+    <div class="updated-bar">
+      <span class="dot">●</span>
+      最終更新: <time datetime="2026-09-15">2026年9月15日</time>
+      &ensp;|&ensp; 一次情報: <a href="https://openai.com/index/gpt-6-astra/" target="_blank" rel="noopener">OpenAI公式発表</a>・<a href="https://arcprize.org/blog/astra" target="_blank" rel="noopener">ARC Prize公式ブログ</a>・<a href="https://developers.openai.com/api/docs/models/gpt-6-astra" target="_blank" rel="noopener">OpenAI Model Docs</a>・<a href="https://www.tbench.ai/news/terminal-bench-science-0-1" target="_blank" rel="noopener">Terminal-Bench-Science 0.1</a>
+      &ensp;|&ensp; 確認日: 2026-09-15
+    </div>
+  </div>
+
+  <!-- ===== 分解 ===== -->
+  <section class="section" style="padding-top:1.5rem;" aria-labelledby="decomp-h">
+    <h2 class="section-title" id="decomp-h" style="font-size:1.2rem;">まず5つの数字に分解する</h2>
+    <p class="section-sub" style="max-width:760px;">この一行は、性質のまったく違う5つの数字を並べています。同じ「%」でも、意味は3種類に分かれます。</p>
+    <div class="num-grid">
+      <div class="num-card"><div class="k">ARC-AGI-3</div><div class="v">99.9%</div><div class="d">未知の環境を探索して目標そのものを獲得する「インタラクティブ推論」。<strong>ベンチ自体が飽和</strong></div></div>
+      <div class="num-card"><div class="k">ExploitBench</div><div class="v">100.0%</div><div class="d">実在ソフトウェアの脆弱性を実際に動くエクスプロイトにできるか。<strong>満点＝天井</strong></div></div>
+      <div class="num-card"><div class="k">Terminal-Bench Science 0.1</div><div class="v">64.6%</div><div class="d">研究者が実際に行った科学ワークフロー70件。<strong>まだ未飽和</strong></div></div>
+      <div class="num-card"><div class="k">コンテキストウィンドウ</div><div class="v">1,050,000</div><div class="d">一度に読める上限。<strong>272Kトークン超はリクエスト全体が入力2倍</strong></div></div>
+      <div class="num-card"><div class="k">最大出力</div><div class="v">128,000</div><div class="d">一度に書き出せる上限。<strong>使い切ると1リクエスト$6.40</strong></div></div>
+    </div>
+    <p style="font-size:.86rem;color:var(--c-muted);">つまり「99.9%」は<strong>飽和したベンチの数字</strong>、「100%」は<strong>天井に当たった数字</strong>、「64.6%」は<strong>まだ伸びしろのある数字</strong>です。同じ並びに見えて、情報量はまったく違います。</p>
+  </section>
+
+  <!-- ===== ① ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="h1-h">
+    <h2 class="section-title" id="h1-h" style="font-size:1.2rem;">① 同じベンチ、違う土俵 — 99.9%と62.7%</h2>
+    <div class="read-box">
+      <strong>結論: ARC-AGI-3 の数字は「どのハーネス（実行環境）で測ったか」まで読まないと比較できません。</strong>
+      OpenAIの発表は <strong>99.9%</strong>。ベンチマークを運営する ARC Prize 自身が公表した<strong>中立ハーネスでの値は 62.7%</strong> です。どちらも同じモデルの、同じベンチのスコアです。
+    </div>
+    <div class="table-wrap"><table class="cmp-table"><thead><tr><th>条件</th><th>スコア</th><th>コスト</th><th>中身</th></tr></thead><tbody>
+      <tr><td class="model-name">Standard harness（中立）</td><td class="price">62.7%</td><td class="price">$26,098</td><td>モデルが「持ち越すノート」を自分で選ぶ。全モデル共通の最小インターフェース</td></tr>
+      <tr><td class="model-name">Provider Adapter harness（OpenAI側）</td><td class="price">99.9%</td><td class="price">約$19K</td><td>非公開の推論状態をリクエスト間で保持し、長い会話は compaction で圧縮</td></tr>
+    </tbody></table></div>
+    <p class="source-note">出典: <a href="https://arcprize.org/blog/astra" target="_blank" rel="noopener">ARC Prize「OpenAI's GPT-6 Astra on ARC-AGI-3」</a>・<a href="https://arcprize.org/results/openai-gpt-6-astra" target="_blank" rel="noopener">ARC-AGI Results（個別ページ）</a>（2026-09-15確認）。OpenAI公式発表にも「ARC-AGI-3 は responses API ハーネスで実行し、現実の性能に合わせて2つの設定を変更した」と注記があります。</p>
+    <h3 style="font-size:1rem;margin:1.4rem 0 .5rem;">この差は何を意味するのか</h3>
+    <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.2em;line-height:1.85;">
+      <li><strong>同条件で比較できる数字は 62.7% vs GPT-5.6 Sol 7.8%。</strong>これでも約8倍の跳ね上がりで、ARC Prizeは「インタラクティブ推論における段階的な能力変化」と評価しています。派手な99.9%と7.8%を並べるのは、土俵が違う数字の比較です。</li>
+      <li><strong>ARC Prizeは今後、両ハーネスの結果をラベル付きでリーダーボードに併記すると明言。</strong>つまり「ハーネスを明記しないスコアは読めない」というのがベンチ運営者の公式見解です。</li>
+      <li><strong>差の中身はソフトウェア側の設計。</strong>Provider Adapter では集計実時間が約3.66倍速く、両ハーネスが解いた167ペアでトークンが49%減りました。同じモデルでも、推論状態を持ち越せるランタイムでは結果が変わります。自分のシステムが推論状態を保持できるかを確認せずに99.9%を当てにすると、期待を裏切られます。</li>
+      <li><strong>ARC Prizeは「このベンチを飽和させたことはAGIの証明ではない」と明言。</strong>ベンチを運営する側が結論を留保している点は、素直に重く読むべきです。</li>
+    </ul>
+    <p style="font-size:.86rem;color:var(--c-muted);">補足: ARC-AGI-3 は ARC Prize Foundation が2026-03-25に公開した初のインタラクティブ推論ベンチで、指示もルールも与えられない環境でエージェントが目標を獲得し、世界モデルを構築できるかを測ります。公開時はフロンティアモデルが軒並み1%未満、人間は全環境を解いていました（<a href="https://arcprize.org/arc-agi/3" target="_blank" rel="noopener">ARC-AGI-3 公式</a>）。</p>
+  </section>
+
+  <!-- ===== ② ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="h2-h">
+    <h2 class="section-title" id="h2-h" style="font-size:1.2rem;">② 満点は「強い」ではなく「もう測れない」— ExploitBench 100%</h2>
+    <div class="read-box">
+      <strong>結論: 100%は「他を圧倒した」ではなく「測定上限に到達した」という意味です。</strong>
+      ExploitBench は、実在ソフトウェアの脆弱性を見つけて<strong>実際に動くエクスプロイトに落とせるか</strong>を測るサイバー評価。Astra は満点（Sol 78.5%、Claude Fable 5.1 70%）で、これ以上差が付きません。
+    </div>
+    <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.2em;line-height:1.85;">
+      <li><strong>満点を取ったモデルの次に強いモデルは、同じベンチでは区別できません。</strong>次の比較軸は ExploitGym（Astra 42.4% / Sol 30.3%）や、後述の新規ベンチに移ります。ベンチの数字が消えるのは、能力が伸びたときだけではありません。</li>
+      <li><strong>汚染（学習データへの露出）の懸念が、ベンダー自身から出ています。</strong>過去の脆弱性に触れている可能性があるため、OpenAIは新規ベンチ2本でも評価を実施。満点の数字はこの留保つきで読む必要があります。</li>
+      <li><strong>OpenAIはこのモデルを Preparedness Framework で初めて「Critical」に分類しました。</strong>高度なサイバー能力は開放ではなく、アクセス制限（gated access）付きで提供されます。「最高性能」と「誰でも使える」は別の話です。</li>
+    </ul>
+    <p class="source-note">出典: <a href="https://openai.com/index/gpt-6-astra/" target="_blank" rel="noopener">OpenAI公式発表（GPT-6 Astra）</a>（2026-09-15確認）。評価は両モデルとも本番セーフガード無しで実施、との注記があります。</p>
+  </section>
+
+  <!-- ===== ③ ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="h3-h">
+    <h2 class="section-title" id="h3-h" style="font-size:1.2rem;">③ 未飽和のベンチがいちばん情報量が多い — Terminal-Bench Science 64.6%</h2>
+    <div class="read-box">
+      <strong>結論: 64.6% は「まだ誰も解き切っていない」ベンチの数字です。伸びしろと、導入判断の両方に使えます。</strong>
+      Terminal-Bench-Science 0.1 は、Stanford大学が主導し、Terminal-Bench / Harbor チームと各分野の専門家が作った科学ワークフローのベンチ。専門家が投稿・査読した<strong>70ワークフローを5領域（生命・物理・地球・数理・工学）</strong>で評価し、各タスク3試行、成果物（解析・シミュレーション・証明・コード・データ）で採点します。
+    </div>
+    <div class="table-wrap"><table class="cmp-table"><thead><tr><th>モデル</th><th>TB-Science 0.1（OpenAI公表）</th><th>中立リーダーボード（参照時点）</th></tr></thead><tbody>
+      <tr><td class="model-name">GPT-6 Astra</td><td class="price">64.6%</td><td>—</td></tr>
+      <tr><td class="model-name"><a href="/claude-fable-5-1/">Claude Fable 5.1</a></td><td class="price">52.6%</td><td>—</td></tr>
+      <tr><td class="model-name">GPT-5.6 Sol</td><td class="price">22.4%</td><td class="price">22.4%</td></tr>
+      <tr><td class="model-name">Claude Opus 5（中立条件のトップ）</td><td>—</td><td class="price">30.0%</td></tr>
+    </tbody></table></div>
+    <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.2em;line-height:1.85;">
+      <li><strong>OpenAI公表の64.6%は、OpenAI側の条件での値です。</strong>中立の公開リーダーボードのスナップショットでは、トップでも Claude Opus 5 の 30.0%。同じベンチでこれだけ違えば、数字だけを横並びにしても意味がありません。①で見た「土俵の問題」は、ここでも起きます。</li>
+      <li><strong>それでもこのベンチは難しく、だから使える数字です。</strong>一般のコーディング系ベンチで80%超を取るモデルでも、実際の科学ワークフローでは大半を落とします。つまり上位の差がそのまま能力差として現れ、飽和していない。</li>
+      <li><strong>OpenAIは低コスト設定の値も公表しています。</strong>Terminal-Bench Science 61.1%（約27%低コスト）、GPQA Diamond 94.9%（約37%低コスト）。推論エフォートを下げてもすぐには壊れない、という主張です（自己申告値）。</li>
+    </ul>
+    <p class="source-note">出典: <a href="https://openai.com/index/gpt-6-astra/" target="_blank" rel="noopener">OpenAI公式発表</a>・<a href="https://www.tbench.ai/news/terminal-bench-science-0-1" target="_blank" rel="noopener">Terminal-Bench-Science 0.1 発表</a>・<a href="https://github.com/harbor-framework/terminal-bench-science" target="_blank" rel="noopener">GitHub（体制・仕様）</a>・中立リーダーボードのミラー（<a href="https://benchlm.ai/benchmarks/terminal-bench-science" target="_blank" rel="noopener">BenchLM</a>、2026-09時点のスナップショット）（2026-09-15確認）。</p>
+  </section>
+
+  <!-- ===== 画像 ===== -->
+  <figure class="flow-fig">
+    <svg viewBox="0 0 800 320" width="100%" role="img" aria-labelledby="harnessFigTitle" style="display:block;">
+      <title id="harnessFigTitle">ARC-AGI-3: 同じモデル・同じベンチマーク &mdash; 標準ハーネス62.7% / OpenAIのProvider Adapter 99.9%</title>
+      <defs>
+        <linearGradient id="gPurple" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#6d28d9"/>
+          <stop offset="100%" stop-color="#a78bfa"/>
+        </linearGradient>
+      </defs>
+      <rect x="0" y="0" width="800" height="320" rx="14" fill="#14161f" stroke="#262a38"/>
+      <text x="36" y="46" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="19" font-weight="700" fill="#eef0f7">ARC-AGI-3: 同じモデル・同じベンチマーク</text>
+      <text x="36" y="70" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="13" fill="#8b90a3">違うのはハーネス、変わるのは数字。</text>
+      <text x="36" y="118" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="14" fill="#9aa0b4">標準ハーネス（中立）</text>
+      <rect x="36" y="130" width="301" height="32" rx="4" fill="#2f3a55"/>
+      <text x="349" y="152" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="17" font-weight="700" fill="#e8eaf2">62.7%</text>
+      <text x="412" y="152" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="12" fill="#8b90a3">$26,098</text>
+      <text x="36" y="196" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="14" fill="#9aa0b4">Provider Adapter ハーネス（OpenAI）</text>
+      <rect x="36" y="208" width="480" height="32" rx="4" fill="url(#gPurple)"/>
+      <text x="528" y="230" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="17" font-weight="700" fill="#e8eaf2">99.9%</text>
+      <text x="591" y="230" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="12" fill="#8b90a3">~$19K</text>
+      <line x1="36" y1="262" x2="516" y2="262" stroke="#2b2f3d" stroke-width="1"/>
+      <line x1="36" y1="262" x2="36" y2="268" stroke="#2b2f3d"/>
+      <line x1="276" y1="262" x2="276" y2="268" stroke="#2b2f3d"/>
+      <line x1="516" y1="262" x2="516" y2="268" stroke="#2b2f3d"/>
+      <text x="36" y="282" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11" fill="#6b7280">0%</text>
+      <text x="276" y="282" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11" fill="#6b7280">50%</text>
+      <text x="516" y="282" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11" fill="#6b7280">100%</text>
+      <text x="36" y="306" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="11" fill="#6b7280">出典: ARC Prize (2026-09-03)。両方とも ARC Prize 公表の結果。</text>
+    </svg>
+    <figcaption style="font-size:.78rem;color:var(--c-muted);margin-top:.5rem;">同じベンチ・同じモデル・違う数字。ハーネスの違いでこれだけ動きます（出典: <a href="https://arcprize.org/blog/astra" target="_blank" rel="noopener">ARC Prize</a>）。</figcaption>
+  </figure>
+
+  <!-- ===== ④ ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="h4-h">
+    <h2 class="section-title" id="h4-h" style="font-size:1.2rem;">④ 「1.05Mコンテキスト」は実務で何を意味するか</h2>
+    <div class="read-box">
+      <strong>結論: 1.05Mは「入る」という話、272K超の2倍ルールは「入れると高い」という話です。</strong>
+      1トークン≒英語0.75語で単純換算すると、1.05Mトークンは約78万語。<a href="/gpt-6/">GPT-6 Astra</a> の仕様（コンテキスト1,050,000 / 最大出力128,000 / 知識カットオフ2026-04-30）は OpenAI Developers のモデルページで確認できます。
+    </div>
+    <div class="table-wrap"><table class="cmp-table"><thead><tr><th>使い方</th><th>料金ルール</th><th>1リクエストの入力コスト</th></tr></thead><tbody>
+      <tr><td class="model-name">272Kトークン以下</td><td>標準レート（入力 $10 / 1M）</td><td class="price">≤ $2.72</td></tr>
+      <tr><td class="model-name">272Kトークン超（境界の外）</td><td>リクエスト全体が入力・キャッシュ2倍、出力1.5倍</td><td class="price">1.05M → $21.00</td></tr>
+      <tr><td class="model-name">同条件でキャッシュヒット（$1.00 / 1M の2倍）</td><td>キャッシュ読込は入力の10%（ただし2倍ルールは適用）</td><td class="price">1.05M → $2.10</td></tr>
+      <tr><td class="model-name">出力を使い切る（128K × $50 / 1M）</td><td>出力は入力の5倍単価</td><td class="price">$6.40（出力側）</td></tr>
+    </tbody></table></div>
+    <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.2em;line-height:1.85;">
+      <li><strong>境界は272Kトークン、そして「部分適用」ではありません。</strong>272Kを1トークンでも超えると、そのリクエスト全体が入力2倍・出力1.5倍。巨大な文脈を1回入れるだけで、入力コストが一気に跳ねます。</li>
+      <li><strong>キャッシュが効くのは「同じ長い前提を何度も使う」ときだけです。</strong>キャッシュ読込は入力の10%（$1.00 / 1M）、キャッシュ書込は入力の1.25倍（$12.50 / 1M）。使い捨ての巨大コンテキストは、キャッシュ設計が無いかぎり最も高い買い物になります。</li>
+      <li><strong>出力を長くする設計はコストに直撃します。</strong>出力$50 / 1Mは入力の5倍。128K出力を使い切れば1リクエスト$6.40で、これは272K以下の入力（最大$2.72）より高くつきます。長文を一括生成させるより、分割して必要な分だけ出させるほうが安く済みます。</li>
+      <li><strong>「1.05M入る」＝「1.05M入れるべき」ではありません。</strong>272K以下で設計できるなら定価、超えるなら2倍。この境界が、実務上の設計予算になります。試算は<a href="/calculator/">トークン計算機</a>でどうぞ。</li>
+    </ul>
+    <p class="source-note">出典: <a href="https://developers.openai.com/api/docs/models/gpt-6-astra" target="_blank" rel="noopener">OpenAI GPT-6 Astra Model Docs</a>（コンテキスト・最大出力・知識カットオフ・料金ルール、2026-09-15確認）。金額は公表単価からの単純計算で、実際の請求額は入力と出力の合計になります。</p>
+  </section>
+
+  <!-- ===== まとめ ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="sum-h">
+    <h2 class="section-title" id="sum-h" style="font-size:1.2rem;">この一行の読み方（まとめ）</h2>
+    <div class="tip-box">
+      <h3>数字を見たら、まず3つ確認する</h3>
+      <ul>
+        <li><strong>誰の土俵か</strong> — ベンダー自身のハーネスか、中立のハーネスか。ARC-AGI-3 は 99.9% と 62.7% で別物でした。</li>
+        <li><strong>天井に当たっているか</strong> — 満点・飽和は「差が付かない」状態。次の比較軸（ExploitGym、新規ベンチ）に移る合図です。</li>
+        <li><strong>同条件で比べた相手がいるか</strong> — 条件が違う数字を横に並べても順位は出ません。条件が揃うまで、ベンチは「読める」ようになりません。</li>
+      </ul>
+    </div>
+    <p style="font-size:.9rem;color:var(--c-muted);max-width:760px;">この一行の情報量は「99.9%」そのものより、<strong>「99.9%と62.7%の差」</strong>と<strong>「64.6%という未飽和の数字」</strong>のほうが大きい。前者は自分のランタイム設計の宿題を、後者は導入判断の材料を示しています。次に新しいモデルの発表を見たら、同じ3点を当ててみてください。</p>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="section" style="padding-top:0;">
+    <div style="background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-accent);border-radius:var(--r-lg);padding:1.5rem;text-align:center;">
+      <h3 style="font-size:1.1rem;margin-bottom:.75rem;">次に読む</h3>
+      <p style="color:var(--c-muted);font-size:.9rem;margin-bottom:1rem;">数字の条件が分かったら、次はコストです。<a href="/gpt-6/">GPT-6 Astra の料金・提供状況</a>、<a href="/claude-fable-5-1/">Claude Fable 5.1</a> との比較、実際の試算まで。</p>
+      <a href="/calculator/" style="display:inline-block;background:var(--c-accent);color:#fff;font-weight:600;padding:.65rem 1.5rem;border-radius:var(--r-md);">🧮 トークン計算機で試算する →</a>
+      <p style="margin-top:.8rem;font-size:.82rem;color:var(--c-muted);"><a href="/gpt-6/">GPT-6 Astra</a> · <a href="/pricing/">料金比較</a> · <a href="/timeline/">リリース年表</a> · <a href="/deepseek-v4-1-flash/">DeepSeek V4.1 Flash</a> · <a href="/glossary/prompt-cache/">プロンプトキャッシュ</a> · <a href="/glossary/">用語説明</a></p>
+    </div>
+  </section>
+
+  <div class="tip-box" style="border-left-color:var(--c-red);margin-bottom:2rem;">
+    <h3>⚠️ 免責事項</h3>
+    <ul>
+      <li>ベンチマーク数値は各ベンチ運営者・開発元の公表値であり、条件（ハーネス・試行回数・エフォート設定）が異なります。本ページは条件の違いを明記する方針で整理しています。</li>
+      <li>料金・仕様は2026-09-15に各社公式ページで確認したものです。予告なく変動します。契約前に必ず公式ページをご確認ください。</li>
+      <li>本ページのコスト換算は公表単価に基づく単純計算で、実際の請求額を保証するものではありません。</li>
+    </ul>
+  </div>
+</div></main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>運営: okamoちゃんねる</p><p><a href="/">ホーム</a> · <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a> · <a href="/timeline/">年表</a> · <a href="/glossary/">用語説明</a> · <a href="/gpt-6/">GPT-6 Astra</a> · <a href="/gpt-5-6-sol/">GPT-5.6 Sol</a></p></div><p class="footer-disclaimer">⚠️ 料金・仕様は予告なく変動します。契約前に必ず各社公式ページでご確認ください。本サイトは各社と提携していません。</p></div></footer>
+</body>
+</html>

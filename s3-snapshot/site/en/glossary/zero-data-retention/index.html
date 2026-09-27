@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Zero Data Retention (ZDR) Explained — Three Catch Points [Glossary #7] — LLM Data Hub</title>
+  <meta name="description" content="Zero data retention (ZDR) explained: why &quot;not stored&quot; is not &quot;always on&quot;, AWS Bedrock&#39;s four retention modes and their published exception lists, and how OpenAI, Anthropic, Google and Microsoft grant ZDR — quoted from their own documentation.">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/en/glossary/zero-data-retention/">
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/glossary/zero-data-retention/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/glossary/zero-data-retention/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/glossary/zero-data-retention/">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/en/glossary/zero-data-retention/">
+  <meta property="og:title" content="Zero Data Retention (ZDR) Explained — Three Catch Points">
+  <meta property="og:description" content="ZDR is a default, not always-on: exception models, explicit settings, and how it differs from ZOA and from training exclusion, across five providers (updated Sept 27, 2026).">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Zero Data Retention (ZDR) Explained — Three Catch Points [Glossary #7]","datePublished":"2026-09-27","dateModified":"2026-09-27","author":{"@type":"Organization","name":"LLM Data Hub"},"publisher":{"@type":"Organization","name":"okamo channel"},"url":"https://llm.okamomedia.tokyo/en/glossary/zero-data-retention/","inLanguage":"en"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://llm.okamomedia.tokyo/en/"},{"@type":"ListItem","position":2,"name":"Glossary","item":"https://llm.okamomedia.tokyo/en/glossary/"},{"@type":"ListItem","position":3,"name":"Zero data retention (ZDR)","item":"https://llm.okamomedia.tokyo/en/glossary/zero-data-retention/"}]}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .motto-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem;margin:1rem 0}
+    @media(max-width:640px){.motto-grid{grid-template-columns:1fr}}
+    .motto{border:1px solid var(--c-border);border-top:3px solid var(--c-accent);border-radius:var(--r-md);background:var(--c-surface);padding:.9rem 1rem}
+    .motto .w{font-family:var(--font-mono);font-size:1.25rem;font-weight:700;color:var(--c-accent);margin:0 0 .35rem}
+    .motto p{margin:0;font-size:.84rem;line-height:1.75;color:var(--c-muted)}
+    .motto strong{color:var(--c-text)}
+    .phrase-box{background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-accent);border-radius:var(--r-md);padding:1rem 1.15rem;margin:1.2rem 0}
+    .phrase-box .phrase{margin:0;font-size:1.02rem;font-weight:700;line-height:1.7}
+    .phrase-box .phrase-meta{margin:.5rem 0 0;font-size:.83rem;color:var(--c-muted);line-height:1.8}
+    .fig-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:var(--r-md)}
+    .fig-scroll svg{min-width:660px;width:100%;height:auto;display:block;border:1px solid var(--c-border);border-radius:var(--r-md);background:var(--c-surface)}
+    .scroll-hint{font-size:.74rem;color:var(--c-muted);margin:.35rem 0 0}
+    .axis-block{border:1px solid var(--c-border);border-radius:var(--r-md);background:var(--c-surface);padding:1rem 1.15rem;margin:1rem 0}
+    .axis-block h3{margin:0 0 .45rem;font-size:1rem}
+    .axis-block .op{font-family:var(--font-mono);font-size:.76rem;color:var(--c-accent);margin-bottom:.6rem}
+    .axis-block p{margin:.4rem 0 0;font-size:.86rem;line-height:1.8;color:var(--c-muted)}
+    .axis-block strong{color:var(--c-text)}
+    .faq-block{border-top:1px solid var(--c-border);padding:1rem 0 0;margin:1rem 0 0}
+    .faq-block:first-of-type{border-top:none}
+    .faq-block dt{margin:0;font-size:.95rem;font-weight:700;color:var(--c-text);line-height:1.7}
+    .faq-block dt::before{content:"Q. ";color:var(--c-accent);font-family:var(--font-mono);font-size:.82rem}
+    .faq-block dd{margin:.4rem 0 0;font-size:.87rem;line-height:1.85;color:var(--c-muted)}
+    .faq-block dd::before{content:"A. ";color:var(--c-accent);font-family:var(--font-mono);font-size:.82rem;font-weight:700}
+    .faq-block dd strong{color:var(--c-text)}
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/en/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="Main navigation"><a href="/en/" class="nav-link">Home</a><a href="/en/pricing/" class="nav-link">Pricing</a><a href="/en/calculator/" class="nav-link">Token Calculator</a><a href="/en/timeline/" class="nav-link">Release Timeline</a><a href="/en/china-ai/" class="nav-link">China AI</a><a href="/en/multimodal/" class="nav-link">Multimodal</a><a href="/en/mai/" class="nav-link">MS AI (MAI)</a><a href="/en/glossary/" class="nav-link active" aria-current="page">Glossary</a></nav></div></header>
+
+<main><div class="container">
+  <div class="section" style="padding-bottom:0;">
+    <h1 class="section-title" style="font-size:1.55rem;">Zero Data Retention (ZDR) Explained — Three Catch Points</h1>
+    <p class="section-sub" style="max-width:780px;">
+      <a href="/en/glossary/">Glossary</a> #7. When we added the <em>Amazon Bedrock data-handling</em> note to <a href="/en/china-ai/">China AI</a> on September 25, 2026, readers asked the obvious follow-up: <strong>“It says ZDR — so my data is never stored, right?”</strong> The answer is <strong>no</strong>.
+      This page takes <strong>ZDR (zero data retention)</strong> and <strong>ZOA (zero operator access)</strong> out of that vendor-specific context and treats them as <strong>shared industry vocabulary</strong>.
+      Sources are vendor documentation only. We also list the <strong>published exception lists of models that require retention</strong>.
+    </p>
+    <div class="phrase-box">
+      <p class="phrase">ZDR (zero data retention) means “we don’t store it.” But it is <strong>“not stored by default” — not “always on.”</strong></p>
+      <p class="phrase-meta">AWS writes it plainly: <em>“uses a zero data retention (ZDR) data security model. This means that <strong>by default</strong>, Amazon Bedrock does not store model inputs or outputs.”</em> The two words <strong>“by default”</strong> carry the whole argument. Three things trip people up: ① some models sit on an <strong>exception list</strong> that requires retention, ② a guarantee needs an <strong>explicit setting</strong>, and ③ “not stored”, “operators can’t see it” and “not used for training” are <strong>three different promises</strong>.</p>
+    </div>
+    <div class="updated-bar">
+      <span class="dot">●</span>
+      Last updated: <time datetime="2026-09-27">September 27, 2026</time>
+      &ensp;|&ensp; Policy: we publish only what we verified verbatim in vendor documentation. No “it is generally understood that” here
+    </div>
+  </div>
+
+  <section class="section" style="padding-top:1.5rem;" aria-labelledby="motto-h">
+    <h2 class="section-title" id="motto-h" style="font-size:1.2rem;">Remember three words: default, exception, explicit</h2>
+    <p class="section-sub">Almost all ZDR confusion collapses into these three words. You do not need to memorise the long version.</p>
+    <div class="motto-grid">
+      <div class="motto">
+        <p class="w">① Default</p>
+        <p><strong>Normally it is not stored.</strong> That is the default data security model. Assuming “everything is always stored” leads to over-engineering in the other direction.</p>
+      </div>
+      <div class="motto">
+        <p class="w">② Exception</p>
+        <p><strong>Some models must be retained.</strong> For abuse detection, some models are kept for up to 30 days. The scope differs by model &mdash; from <strong>classifier-flagged traffic only</strong> (Bedrock&rsquo;s OpenAI models) to <strong>all traffic with possible human review by AWS</strong> (the Claude Fable 5 models).</p>
+      </div>
+      <div class="motto">
+        <p class="w">③ Explicit</p>
+        <p><strong>If you need a guarantee, you state it.</strong> “It’s the default” is not a guarantee; a configuration value or a contract term is.</p>
+      </div>
+    </div>
+    <div class="tip-box">
+      <h3>📝 An analogy (not a technical definition)</h3>
+      <p style="font-size:.85rem;line-height:1.8;color:var(--c-muted);margin:0;">
+        The same reason evacuation drills use short mottos: <strong>if it is not short enough to recall, it will not be used under pressure</strong>. “Default, exception, explicit” plays that role here.
+        A motto is <strong>a memory aid, not a definition</strong>. In an actual contract, the wording in the vendor’s documentation governs.
+      </p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="fig-h">
+    <h2 class="section-title" id="fig-h" style="font-size:1.2rem;">Figure: ZDR governs step ③, storage</h2>
+    <figure style="margin:1rem 0 1.4rem;">
+      <div class="fig-scroll">
+      <svg viewBox="0 0 700 312" role="img" aria-labelledby="zdr-t zdr-d" xmlns="http://www.w3.org/2000/svg">
+        <title id="zdr-t">What ZDR and ZOA each cover</title>
+        <desc id="zdr-d">A three-step diagram: send input, process it, store it. ZOA covers the processing step, meaning no operators can see the content. ZDR covers the storage step, meaning nothing is stored by default. Not using data for training is a separate clause.</desc>
+        <g font-family="system-ui,-apple-system,sans-serif" font-size="12">
+          <rect x="18" y="46" width="196" height="112" rx="8" fill="#1b2030" stroke="#3a4256"/>
+          <text x="116" y="74" text-anchor="middle" fill="#e6e6e6" font-size="13" font-weight="700">① Send</text>
+          <text x="116" y="98" text-anchor="middle" fill="#9aa0aa">Prompts and files are</text>
+          <text x="116" y="116" text-anchor="middle" fill="#9aa0aa">sent to the provider</text>
+          <text x="116" y="142" text-anchor="middle" fill="#9aa0aa" font-size="11">This part is your action</text>
+
+          <rect x="248" y="46" width="196" height="112" rx="8" fill="#1b2030" stroke="#3a4256"/>
+          <text x="346" y="74" text-anchor="middle" fill="#e6e6e6" font-size="13" font-weight="700">② Process</text>
+          <text x="346" y="98" text-anchor="middle" fill="#9aa0aa">The model runs inference</text>
+          <text x="346" y="122" text-anchor="middle" fill="#6ea8fe" font-size="11" font-weight="700">ZOA covers this step</text>
+          <text x="346" y="140" text-anchor="middle" fill="#6ea8fe" font-size="11">No operator can see it</text>
+
+          <rect x="478" y="46" width="204" height="112" rx="8" fill="#1b2030" stroke="#3a4256"/>
+          <text x="580" y="74" text-anchor="middle" fill="#e6e6e6" font-size="13" font-weight="700">③ Store</text>
+          <text x="580" y="98" text-anchor="middle" fill="#9aa0aa">Does it stay on disk?</text>
+          <text x="580" y="122" text-anchor="middle" fill="#7ee787" font-size="11" font-weight="700">ZDR covers this step</text>
+          <text x="580" y="140" text-anchor="middle" fill="#7ee787" font-size="11">Not stored by default</text>
+
+          <path d="M218 102 L244 102" stroke="#5a6a88" stroke-width="2" marker-end="url(#a1)"/>
+          <path d="M448 102 L474 102" stroke="#5a6a88" stroke-width="2" marker-end="url(#a1)"/>
+          <defs><marker id="a1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#5a6a88"/></marker></defs>
+
+          <rect x="18" y="184" width="664" height="104" rx="8" fill="#20222a" stroke="#3a4256"/>
+          <text x="34" y="206" fill="#f0a35e" font-size="12" font-weight="700">A separate clause: “not used for training”</text>
+          <text x="34" y="227" fill="#9aa0aa" font-size="11">“Not stored” = ZDR. “Operators cannot see it” = ZOA. “Not used for training” = a training-use limit.</text>
+          <text x="34" y="245" fill="#9aa0aa" font-size="11">Three separate promises; one does not imply another.</text>
+          <text x="34" y="269" fill="#f0a35e" font-size="11">Exception: some models are retained up to 30 days for abuse detection; the scope differs by model</text>
+        </g>
+      </svg>
+      </div>
+      <p class="scroll-hint">← Scroll horizontally on narrow screens</p>
+      <figcaption style="font-size:.78rem;color:var(--c-muted);margin-top:.5rem;">Created by LLM Data Hub. A conceptual map of three terms, not a description of any provider’s implementation.</figcaption>
+    </figure>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="three-h">
+    <h2 class="section-title" id="three-h" style="font-size:1.2rem;">The most common mix-up: three separate promises</h2>
+
+    <div class="axis-block">
+      <h3>ZDR = zero data retention</h3>
+      <p class="op">about storage</p>
+      <p>Request and response data is <strong>not retained at rest</strong>. AWS verbatim: “by default, Amazon Bedrock does not store model inputs or outputs.” Data obviously still passes through memory while the request is processed.</p>
+    </div>
+
+    <div class="axis-block">
+      <h3>ZOA = zero operator access</h3>
+      <p class="op">about visibility</p>
+      <p><strong>No human operator at the provider can access the content.</strong> AWS verbatim: “no operators of the service can access model input or output.” This is a <strong>different axis from storage</strong>. And even under ZDR, automated safety checks keep running — Anthropic states it “still retains User Safety classifier results.”</p>
+    </div>
+
+    <div class="axis-block">
+      <h3>“Not used for training”</h3>
+      <p class="op">about training use</p>
+      <p>Your data is <strong>not used to train or improve the models</strong>. This is often the <strong>API default</strong> and is independent of ZDR. AWS: “will not use any inputs to or outputs from Amazon Bedrock to train …”. Google: “Google won’t use your data to train or fine-tune any AI/ML models without your prior permission or instruction.” <strong>Training exclusion frequently applies even without ZDR</strong> — which is exactly why the two get conflated.</p>
+    </div>
+
+    <div class="tip-box">
+      <h3>💡 Why does retention happen at all?</h3>
+      <p style="font-size:.85rem;line-height:1.8;color:var(--c-muted);margin:0;">
+        The reason is almost always <strong>abuse detection</strong>. Attacks that are invisible one request at a time (distributed jailbreak attempts, coordinated misuse) can only be found by <strong>comparing requests over a window of time</strong>. Hence the carve-out: retention for safety only, for a limited period.
+        That carve-out is what a <strong>retention-required model</strong> is &mdash; a model the provider keeps outside ZDR so that abuse detection can run. What is retained differs by model: flagged traffic only, or all traffic, and in one Bedrock case with possible human review. The published lists are below.
+      </p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="five-h">
+    <h2 class="section-title" id="five-h" style="font-size:1.2rem;">Five providers: default vs. gated changes everything</h2>
+    <p class="section-sub">“ZDR” can mean <strong>you get it with no action (default)</strong> or <strong>you must be approved (gated)</strong>. The table below uses only the wording in each vendor’s own documentation.</p>
+    <div class="table-wrap"><table><thead><tr><th>Provider</th><th>Default retention</th><th>How you get ZDR</th><th>What it does not cover (stated officially)</th></tr></thead><tbody>
+      <tr>
+        <td class="model-name">Amazon Bedrock</td>
+        <td>Documented as <strong>“by default … does not store”</strong> (ZOA/ZDR data security model)</td>
+        <td><strong>The default.</strong> For a guarantee, set the retention mode to <code>none</code> <strong>explicitly</strong> (account level or project level, per Region). The default for new accounts is <code>inherit</code>, which defers to a broader scope</td>
+        <td>Retention-required models (exception list below). Customers eligible for <strong>Enterprise Frontier Safeguards</strong> get ZDR <strong>only through December 31, 2026</strong></td>
+      </tr>
+      <tr>
+        <td class="model-name">OpenAI</td>
+        <td>Abuse-monitoring logs up to <strong>30 days</strong>. The Responses API also keeps application state for 30 days by default (<code>store</code> defaults to <code>true</code>)</td>
+        <td><strong>Gated.</strong> Only customers approved for <strong>Zero Data Retention or Modified Abuse Monitoring</strong> (not the default)</td>
+        <td>Coverage varies by endpoint. With ZDR enabled, <code>store</code> is <strong>always treated as false</strong> even if a request sets it to true</td>
+      </tr>
+      <tr>
+        <td class="model-name">Anthropic</td>
+        <td>Conversation content is <strong>not retained by default</strong> (official wording); the exception is <strong>Covered Models</strong>, which require 30-day retention. No training on your data by default</td>
+        <td><strong>On request, per organisation</strong> (via your account representative). Official wording: “ZDR is available on request” — there is no self-serve toggle</td>
+        <td>Claude Console (including playground), Claude Teams and Claude Enterprise chat interfaces, Claude for Excel, Claude Managed Agents (transcripts persist until deleted), and <strong>Covered Models</strong>. Even under ZDR, <strong>safety classifier results are retained</strong></td>
+      </tr>
+      <tr>
+        <td class="model-name">Google Cloud<br>(Gemini)</td>
+        <td>Prompts and responses are logged for a limited period for abuse detection on paid services</td>
+        <td><strong>Customer action required.</strong> Official wording: “To achieve zero data retention, customers must take specific actions” — ① opt out of abuse-monitoring logging ② disable data caching ③ set <code>store=false</code> explicitly</td>
+        <td>Grounding with Google Search and Maps: official docs state <strong>there is no way to disable</strong> the storage. For the Gemini Developer API, Google says workloads needing <strong>guaranteed ZDR should use Vertex AI</strong></td>
+      </tr>
+      <tr>
+        <td class="model-name">Microsoft Foundry<br>(Azure OpenAI)</td>
+        <td>For abuse monitoring, a sample of flagged prompts and completions may be retained in a store used for human review</td>
+        <td><strong>Gated</strong> (approval for <strong>modified abuse monitoring</strong>). Official wording: “If the customer has been approved for modified abuse monitoring … the data storage and human review process described above is not performed”</td>
+        <td>Even after approval, <strong>automated review continues</strong>: “However, automated review may still be conducted.” Stateful features such as Files, vector stores and Stored Completions are stored separately by design</td>
+      </tr>
+    </tbody></table></div>
+    <p style="font-size:.78rem;color:var(--c-muted);margin-top:.3rem;">※ Sources are the official documents listed at the bottom. The “does not cover” column is our summary of enumerated exclusions — always read the original.</p>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="exc-h">
+    <h2 class="section-title" id="exc-h" style="font-size:1.2rem;">The exception lists: models that require retention</h2>
+    <p class="section-sub">This is the core of the page. <strong>ZDR is decided not only by your contract but per model.</strong> Some models are <strong>excluded from ZDR</strong> and retained for abuse detection &mdash; and both the reason and the scope (flagged traffic only vs. all traffic, with or without possible human review) differ from model to model.</p>
+    <div class="table-wrap"><table><thead><tr><th>Provider</th><th>Models requiring retention</th><th>What actually happens</th></tr></thead><tbody>
+      <tr>
+        <td class="model-name">Amazon<br>Bedrock</td>
+        <td><strong>OpenAI:</strong> GPT-6 Astra, GPT-5.4, GPT-5.5, GPT-5.6 Sol / Terra / Luna, Daybreak Red: GPT-5.6 Cyber, Daybreak Blue: GPT-5.6 Sol<br><strong>Anthropic:</strong> Claude Fable 5 and Claude Fable 5.1</td>
+        <td>For the OpenAI models, only <strong>classifier-flagged traffic</strong> is retained for up to 30 days (eligible customers may request <strong>full ZDR via their AWS account team</strong>).<br>For Claude Fable 5 and 5.1, <strong>all traffic</strong> is retained up to 30 days, and flagged traffic is subject to <strong>possible human review by AWS</strong> (the <code>aws_review</code> mode is required)</td>
+      </tr>
+      <tr>
+        <td class="model-name">Anthropic<br>(direct / other clouds)</td>
+        <td><strong>Covered Models:</strong> Claude Fable 5.1, Mythos 5.1, Fable 5, Mythos 5</td>
+        <td>Verbatim: “These models require <strong>30-day data retention</strong> and are <strong>not available under ZDR</strong> unless expressly authorized by Anthropic.” You enable retention only for the workspace that needs those models; your other workspaces keep ZDR</td>
+      </tr>
+    </tbody></table></div>
+    <div class="tip-box">
+      <h3>📌 Models not on the exception list as of September 27, 2026</h3>
+      <p style="font-size:.85rem;line-height:1.8;color:var(--c-muted);margin:0;">
+        We fetched the Bedrock abuse-detection page <strong>the same day and read the full list</strong>. <strong>Kimi K3 and MiMo-V2.6 are not on it</strong> — meaning Bedrock imposes no retention requirement for them.
+        But <strong>the list grows</strong>. New frontier models get added, so check the official page <strong>once before signing and once after onboarding</strong>.
+      </p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="qa-h">
+    <h2 class="section-title" id="qa-h" style="font-size:1.2rem;">Practical checks: six common questions</h2>
+
+    <dl class="faq-block">
+      <dt>If a model is advertised as “ZDR-compatible”, is my data not stored?</dt>
+      <dd>No. “Compatible” usually means <strong>the option exists</strong>, not that it is on by default. OpenAI, Anthropic and Microsoft are <strong>gated or on request</strong>; Google requires <strong>customer action</strong>. Check <strong>both the setting and the contract</strong>.</dd>
+    </dl>
+
+    <dl class="faq-block">
+      <dt>If nothing is stored, does that mean no one can read it?</dt>
+      <dd>Different promise. <strong>Not stored = ZDR</strong>; <strong>operators cannot access it = ZOA</strong>. ZDR is about not writing to durable storage; it does not by itself prohibit access during processing. Verify both.</dd>
+    </dl>
+
+    <dl class="faq-block">
+      <dt>Is “not used for training” stronger than ZDR?</dt>
+      <dd>They are not comparable — <strong>they protect different things</strong>. One limits training use, the other limits retention. On most APIs the training exclusion is <strong>already the default</strong>, while retention is governed separately.</dd>
+    </dl>
+
+    <dl class="faq-block">
+      <dt>Which models become unavailable if I enable ZDR?</dt>
+      <dd>Only the <strong>retention-required models on the exception list</strong>. On Anthropic you enable retention <strong>only for the workspace</strong> that needs a Covered Model, leaving other workspaces on ZDR. On Bedrock it shows up as <code>none</code> being insufficient for those models, where <code>aws_review</code> is required.</dd>
+    </dl>
+
+    <dl class="faq-block">
+      <dt>ZDR is on, yet someone says data is still retained. Why?</dt>
+      <dd>Three usual causes. <strong>① Stateful features</strong> — stored responses, Files API, vector stores, agent session transcripts are <strong>retained by design</strong>. <strong>② Caching</strong> — Google keeps in-memory cached data for 24 hours and states this “does not violate zero data retention.” <strong>③ Safety classifier results</strong> — Anthropic states these are retained. Treat ZDR as covering <strong>the retention done for abuse monitoring</strong>, not every byte in the system.</dd>
+    </dl>
+
+    <dl class="faq-block">
+      <dt>Can a setting silently fail to apply?</dt>
+      <dd>Yes. Retention settings are <strong>per Region and per account, with <code>inherit</code> as the default</strong> for new accounts on Bedrock. Using an API key in another Region, or adding a project, puts you <strong>outside the scope you configured</strong>. Send one real request after onboarding, and again after any configuration change.</dd>
+    </dl>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="src-h">
+    <h2 class="section-title" id="src-h" style="font-size:1.2rem;">Sources (all verified September 27, 2026)</h2>
+    <ul style="font-size:.84rem;line-height:1.9;color:var(--c-muted);padding-left:1.2rem;">
+      <li>Amazon Bedrock, “Amazon Bedrock abuse detection” (ZOA/ZDR definitions and the exception list) — <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/abuse-detection.html" target="_blank" rel="noopener">docs.aws.amazon.com/.../abuse-detection.html</a></li>
+      <li>Amazon Bedrock, “Data retention” (definitions of <code>none</code>, <code>default</code>, <code>inherit</code>, <code>aws_review</code> and the configuration scope) — <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/data-retention.html" target="_blank" rel="noopener">docs.aws.amazon.com/.../data-retention.html</a></li>
+      <li>Amazon Bedrock, “Data protection” / AWS, “Amazon Bedrock FAQs” (no sharing with model providers; encryption at rest in-Region) — <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/data-protection.html" target="_blank" rel="noopener">data-protection.html</a> / <a href="https://aws.amazon.com/bedrock/faqs/" target="_blank" rel="noopener">aws.amazon.com/bedrock/faqs</a></li>
+      <li>OpenAI, “Data controls in the OpenAI platform” (30 days; ZDR / Modified Abuse Monitoring; <code>store</code> behaviour) — <a href="https://developers.openai.com/api/docs/guides/your-data" target="_blank" rel="noopener">developers.openai.com/api/docs/guides/your-data</a></li>
+      <li>Anthropic, “API and data retention” (ZDR on request; exclusions; Covered Models) — <a href="https://platform.claude.com/docs/en/manage-claude/api-and-data-retention" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/api-and-data-retention</a></li>
+      <li>Anthropic Privacy Center, “I have a zero data retention agreement with Anthropic. What products does it apply to?” / “Data retention practices for Covered Models” — <a href="https://privacy.claude.com/en/articles/8956058-i-have-a-zero-data-retention-agreement-with-anthropic-what-products-does-it-apply-to" target="_blank" rel="noopener">privacy.claude.com</a> / <a href="https://support.claude.com/en/articles/15425996-data-retention-practices-for-covered-models" target="_blank" rel="noopener">support.claude.com</a></li>
+      <li>Google Cloud, “Gemini Enterprise Agent Platform and zero data retention” (customer actions; features that cannot be disabled) — <a href="https://docs.cloud.google.com/gemini-enterprise-agent-platform/resources/zero-data-retention" target="_blank" rel="noopener">docs.cloud.google.com/.../zero-data-retention</a></li>
+      <li>Google AI for Developers, “Zero data retention in the Gemini Developer API” (points to Vertex AI; in-memory caching) — <a href="https://ai.google.dev/gemini-api/docs/zdr" target="_blank" rel="noopener">ai.google.dev/gemini-api/docs/zdr</a></li>
+      <li>Microsoft Learn, “Data, privacy, and security for Foundry Models sold by Azure in Microsoft Foundry” (modified abuse monitoring) — <a href="https://learn.microsoft.com/en-us/azure/foundry/responsible-ai/openai/data-privacy" target="_blank" rel="noopener">learn.microsoft.com/.../openai/data-privacy</a></li>
+    </ul>
+    <p style="font-size:.8rem;color:var(--c-muted);margin-top:.6rem;">Related: <a href="/en/glossary/">Glossary index</a> · <a href="/en/china-ai/">China AI (Bedrock data handling note)</a> · <a href="/en/glossary/harness/">Harness (#3)</a> · <a href="/en/glossary/benchmarks/">What benchmarks are (#5)</a> · <a href="/en/glossary/benchmark-orgs/">Who operates the benchmarks (#6)</a> · <a href="/en/glossary/prompt-cache/">Prompt cache (#2)</a></p>
+  </section>
+
+  <div class="tip-box" style="border-left-color:var(--c-red);margin-bottom:2rem;">
+    <h3>⚠️ Limits of this page</h3>
+    <ul>
+      <li>Everything here reflects vendor documentation <strong>as of September 27, 2026</strong>. Retention policies and exception lists <strong>change without notice</strong>.</li>
+      <li>The three-word summary and the “does not cover” column are <strong>our editorial framing</strong>, not a vendor taxonomy. Base contractual decisions on the original wording.</li>
+      <li>This page is <strong>not legal or compliance advice</strong>. Consult a professional for regulatory decisions.</li>
+      <li>We are not affiliated with any provider.</li>
+    </ul>
+  </div>
+</div></main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>Operated by okamo channel</p><p><a href="/en/">Home</a> · <a href="/en/pricing/">Pricing</a> · <a href="/en/calculator/">Calculator</a> · <a href="/en/timeline/">Timeline</a> · <a href="/en/glossary/">Glossary</a> · <a href="/en/gpt-6/">GPT-6 Astra</a></p></div><p class="footer-disclaimer">⚠️ Pricing and specifications may change without notice. Always verify on official pages. Not affiliated with any provider.</p></div></footer>
+</body>
+</html>

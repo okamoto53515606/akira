@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Claude Fable 5.1 — Anthropic新フラッグシップ（Mythosクラス）【料金・性能・比較】 — LLM Data Hub</title>
+  <meta name="description" content="Anthropic Claude Fable 5.1の最新料金（$10/$50・キャッシュ読込$0.25で実質最大45%減）・仕様（1Mコンテキスト・128K出力）・ベンチマーク（Terminal-Bench 55.8%・CursorBench 73.4%）・GPT-5.6 Sol/Claude Opus 5との比較を一次情報ベースで解説。姉妹モデルMythos 5.1の違いも。">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/claude-fable-5-1/">
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/claude-fable-5-1/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/claude-fable-5-1/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/claude-fable-5-1/">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/claude-fable-5-1/">
+  <meta property="og:title" content="Claude Fable 5.1 — Anthropic新フラッグシップ（Mythosクラス）">
+  <meta property="og:description" content="$10/$50・キャッシュ読込$0.25。1Mコンテキスト・128K出力。GPT-5.6 Sol/Claude Opus 5との比較を一次情報ベースで解説。">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Claude Fable 5.1 — Anthropic新フラッグシップ（Mythosクラス）【料金・性能・比較】","datePublished":"2026-09-01","dateModified":"2026-09-01","author":{"@type":"Organization","name":"LLM Data Hub"},"publisher":{"@type":"Organization","name":"okamoちゃんねる"},"url":"https://llm.okamomedia.tokyo/claude-fable-5-1/","inLanguage":"ja"}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .hero-fable{background:linear-gradient(135deg,#1a0f0a 0%,#2a1a12 50%,#0f1117 100%);border-bottom:1px solid var(--c-border);padding:3rem 1rem 2.5rem;text-align:center}.hero-fable .price-flag{display:inline-block;background:rgba(201,100,66,.15);border:1px solid rgba(201,100,66,.35);color:var(--c-anthropic);font-size:.82rem;font-weight:700;padding:.3rem .8rem;border-radius:100px;margin-bottom:1rem}.hero-fable h1{font-size:clamp(1.6rem,4.5vw,2.4rem);font-weight:800;line-height:1.2;margin-bottom:.75rem}.hero-fable h1 span{color:var(--c-anthropic)}.hero-fable .lead{font-size:1.05rem;color:var(--c-muted);max-width:680px;margin:0 auto 1.5rem}.hero-fable .quick-stats{display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;margin-top:1rem}.hero-fable .stat{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.75rem 1.25rem;text-align:center}.hero-fable .stat .val{font-family:var(--font-mono);font-size:1.25rem;font-weight:700;color:var(--c-anthropic)}.hero-fable .stat .lbl{font-size:.75rem;color:var(--c-muted);margin-top:.15rem}
+    .bench-table th:first-child{width:230px}.bench-table td{text-align:center}.bench-table td:first-child{text-align:left;font-weight:600}.bench-table .win{color:var(--c-green);font-weight:700}
+    .spec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.8rem;margin-bottom:1.5rem}.spec-item{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.9rem 1rem}.spec-item .spec-label{font-size:.75rem;color:var(--c-muted);font-weight:600;margin-bottom:.25rem}.spec-item .spec-value{font-family:var(--font-mono);font-size:1rem;font-weight:700}
+    .use-case-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.8rem;margin-bottom:1.5rem}.use-case-card{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:1rem}.use-case-card .icon{font-size:1.5rem;margin-bottom:.5rem}.use-case-card h4{font-size:.92rem;font-weight:700;margin-bottom:.35rem}.use-case-card p{font-size:.82rem;color:var(--c-muted);line-height:1.5}
+    .price-history{font-size:.86rem;color:var(--c-muted);line-height:1.8}.price-history .old{text-decoration:line-through;color:var(--c-red)}.price-history .arrow{color:var(--c-green);font-weight:700}
+    .mythos-note{background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-anthropic);border-radius:var(--r-md);padding:.9rem 1.1rem;margin:1rem 0;font-size:.86rem;color:var(--c-muted)}
+    @media(max-width:640px){.hero-fable .quick-stats{flex-direction:column;gap:.5rem}}
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="メインナビゲーション"><a href="/" class="nav-link">ホーム</a><a href="/pricing/" class="nav-link">料金比較</a><a href="/calculator/" class="nav-link">トークン計算機</a><a href="/timeline/" class="nav-link">リリース年表</a><a href="/china-ai/" class="nav-link">中国AI</a><a href="/multimodal/" class="nav-link">マルチモーダル</a><a href="/mai/" class="nav-link">MS AI (MAI)</a><a href="/glossary/" class="nav-link">用語説明</a></nav></div></header>
+
+<section class="hero-fable"><div class="container">
+  <p class="price-flag">🚀 2026年9月1日公開 — キャッシュ読込75%減（$1.00→$0.25）</p>
+  <h1>Claude Fable <span>5.1</span></h1>
+  <p class="lead">AnthropicのMythosクラス新フラッグシップ。コーディング・知識労働・長期間エージェントで新境地を開き、キャッシュ読込の値下げで実質最大約45%安に。</p>
+  <div class="quick-stats">
+    <div class="stat"><div class="val">$10.00</div><div class="lbl">入力 / 1M tokens</div></div>
+    <div class="stat"><div class="val">$50.00</div><div class="lbl">出力 / 1M tokens</div></div>
+    <div class="stat"><div class="val">$0.25</div><div class="lbl">キャッシュ読込 / 1M</div></div>
+    <div class="stat"><div class="val">1M</div><div class="lbl">コンテキストウィンドウ</div></div>
+    <div class="stat"><div class="val">128K</div><div class="lbl">最大出力トークン</div></div>
+  </div>
+</div></section>
+
+<main><div class="container">
+<div class="updated-bar" style="margin-top:2rem;"><span class="dot">●</span>最終更新: <time datetime="2026-09-01">2026年9月1日</time> | 出典: <a href="https://www.anthropic.com/claude-fable-and-mythos-5-1" target="_blank" rel="noopener">Anthropic発表</a> · <a href="https://platform.claude.com/docs/en/models/overview" target="_blank" rel="noopener">モデル概要</a> · <a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener">料金ページ</a> | <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a> · <a href="/claude-mythos-5-1/">Mythos 5.1</a></div>
+
+<!-- 料金 -->
+<section class="section" style="padding-top:0;" aria-labelledby="pricing-h">
+<h2 class="section-title" id="pricing-h" style="font-size:1.2rem;">料金（2026年9月1日公開時点）</h2>
+<p class="section-sub">Anthropic公式料金ページ（platform.claude.com）で裏取り済み。価格はすべてUSD/1Mトークン。</p>
+
+<div class="table-wrap"><table><thead><tr><th>区分</th><th>入力</th><th>5分キャッシュ書込</th><th>1時間キャッシュ書込</th><th>キャッシュ読込</th><th>出力</th><th>備考</th></tr></thead><tbody>
+<tr><td class="model-name">Standard</td><td class="price">$10.00</td><td class="price">$12.50</td><td class="price">$20.00</td><td class="price">$0.25</td><td class="price">$50.00</td><td>標準レート。1Mフラット</td></tr>
+</tbody></table></div>
+
+<div class="price-history">
+  <strong>料金の要点:</strong><br>
+  入力・出力・キャッシュ書込は Fable 5 と同額（$10/$50・5分書込$12.50・1時間書込$20）。<br>
+  <span class="arrow">キャッシュ読込のみ $1.00 → $0.25 に75%減</span>（基本入力の2.5%。他モデルの10%から引き下げ）<br>
+  * この値下げにより、典型的なワークロードで <strong>約25%減</strong>、高エージェント的ワークロード（ツール・コンテキスト多用）では <strong>最大約45%減</strong> をAnthropicは見込む。
+</div>
+
+<p class="source-note">一次情報: <a href="https://www.anthropic.com/claude-fable-and-mythos-5-1" target="_blank" rel="noopener">Anthropic発表（Cost and availability）</a> · <a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener">platform.claude.com 料金ページ</a>（2026-09-01確認）。Batch APIは50%割引（入力$5/出力$25）。</p>
+</section>
+
+<!-- 仕様 -->
+<section class="section" style="padding-top:0;" aria-labelledby="spec-h">
+<h2 class="section-title" id="spec-h" style="font-size:1.2rem;">モデル仕様</h2>
+<div class="spec-grid">
+  <div class="spec-item"><div class="spec-label">GAリリース</div><div class="spec-value">2026年9月1日</div></div>
+  <div class="spec-item"><div class="spec-label">知識カットオフ</div><div class="spec-value">2026年6月</div></div>
+  <div class="spec-item"><div class="spec-label">コンテキストウィンドウ</div><div class="spec-value">1,000,000トークン</div></div>
+  <div class="spec-item"><div class="spec-label">最大出力</div><div class="spec-value">128,000トークン</div></div>
+  <div class="spec-item"><div class="spec-label">入力モダリティ</div><div class="spec-value">テキスト＋画像</div></div>
+  <div class="spec-item"><div class="spec-label">出力モダリティ</div><div class="spec-value">テキスト</div></div>
+  <div class="spec-item"><div class="spec-label">Thinking</div><div class="spec-value">Adaptive（常時ON）</div></div>
+  <div class="spec-item"><div class="spec-label">デフォルトエフォート</div><div class="spec-value">high</div></div>
+  <div class="spec-item"><div class="spec-label">ツール利用</div><div class="spec-value">対応</div></div>
+  <div class="spec-item"><div class="spec-label">モデルID</div><div class="spec-value" style="font-size:.85rem;">claude-fable-5-1</div></div>
+</div>
+<p class="source-note">出典: <a href="https://platform.claude.com/docs/en/models/overview" target="_blank" rel="noopener">Claude Platform モデル概要</a>（2026-09-01確認）。全現行モデルでテキスト・画像入力、テキスト出力、多言語、視覚、ツール利用に対応。AWS Bedrock・Google Cloud（Vertex AI）・Microsoft Azure（Foundry）で提供。</p>
+</section>
+
+<!-- 性能 -->
+<section class="section" style="padding-top:0;" aria-labelledby="perf-h">
+<h2 class="section-title" id="perf-h" style="font-size:1.2rem;">性能 — Fable 5から大幅向上</h2>
+<p class="section-sub">Anthropic発表のベンチマーク（production safeguards有効で評価）。数値は各社公表値。</p>
+<div class="table-wrap bench-table"><table><thead><tr><th>ベンチマーク</th><th>Fable 5.1</th><th>Fable 5</th><th>Claude Opus 5</th><th>GPT-5.6 Sol</th></tr></thead><tbody>
+<tr><td>Agentic scientific research<br>Terminal-Bench-Science 0.1</td><td class="win">52.6%</td><td>24.7%</td><td>29.0%</td><td>22.4%</td></tr>
+<tr><td>Agentic coding<br>Terminal-Bench 4.0</td><td class="win">55.8%</td><td>42.0%</td><td>52.3%</td><td>37.3%</td></tr>
+<tr><td>Knowledge work<br>GDPval-AA v2</td><td class="win">1853</td><td>1723</td><td>1824</td><td>1711</td></tr>
+<tr><td>Computer use<br>OSWorld 2.0（partial）</td><td class="win">77.9%</td><td>72.9%</td><td>75.4%</td><td>—</td></tr>
+<tr><td>Multidisciplinary reasoning<br>Humanity's Last Exam（no tools）</td><td class="win">60.9%</td><td>57.8%</td><td>56.6%</td><td>—</td></tr>
+<tr><td>Business workflows<br>AutomationBench</td><td class="win">31.4%</td><td>17.1%</td><td>26.9%</td><td>19.6%</td></tr>
+<tr><td>Agentic coding<br>CursorBench 3.2.0</td><td class="win">73.4%</td><td>70.5%</td><td>70.0%</td><td>67.2%</td></tr>
+</tbody></table></div>
+<p style="font-size:.84rem;color:var(--c-muted);">Terminal-Bench-Scienceは Fable 5（24.7%）から倍以上に跳ね上がるのが最大の変化。科学研究タスクで「Anthropicが今回の発表の中心に据えた」領域。Mythos 5.1はTerminal-Bench 4.0で <strong>60.9%</strong>。HLE（ツール有）は65.0%。</p>
+<p class="source-note">出典: <a href="https://www.anthropic.com/claude-fable-and-mythos-5-1" target="_blank" rel="noopener">Anthropic発表</a>（2026-09-01確認）</p>
+</section>
+
+<!-- Fable vs Mythos -->
+<section class="section" style="padding-top:0;" aria-labelledby="mythos-h">
+<h2 class="section-title" id="mythos-h" style="font-size:1.2rem;">Fable 5.1 と Mythos 5.1 の違い</h2>
+<div class="mythos-note">
+  <strong>同一モデル・セーフガード違い。</strong>両者は同じ基盤モデルで、適用されるセーフガードの強度だけが異なります。<br><br>
+  <strong>Claude Fable 5.1</strong> — 一般提供。API・Claude.ai・Claude Code・Claude Coworkで全ユーザーが利用可能。<br>
+  <strong>Claude Mythos 5.1</strong> — トラステッドアクセス限定。サイバーセキュリティ（CVP）・ライフサイエンス（LSVP）の検証済み組織向けに、該当領域のセーフガードを緩和した版。詳細は <a href="/claude-mythos-5-1/">Mythos 5.1の個別ページ</a> へ。
+</div>
+</section>
+
+<!-- 競合比較 -->
+<section class="section" style="padding-top:0;" aria-labelledby="compare-h">
+<h2 class="section-title" id="compare-h" style="font-size:1.2rem;">競合フラッグシップとの料金比較</h2>
+<p class="section-sub">価格はすべてUSD/1Mトークン（標準レート）。キャッシュ読込の扱いがコスト差のポイント。</p>
+<div class="table-wrap"><table><thead><tr><th>モデル</th><th>提供元</th><th>入力</th><th>出力</th><th>キャッシュ読込</th><th>備考</th></tr></thead><tbody>
+<tr><td class="model-name">Claude Fable 5.1</td><td>Anthropic</td><td class="price">$10.00</td><td class="price">$50.00</td><td class="price">$0.25</td><td>新フラッグシップ（Mythosクラス）</td></tr>
+<tr><td class="model-name">Claude Opus 5</td><td>Anthropic</td><td class="price">$5.00</td><td class="price">$25.00</td><td class="price">$0.50</td><td>標準ワークロード向け。Fable 5.1の半額</td></tr>
+<tr><td class="model-name"><a href="/gpt-5-6-sol/">GPT-5.6 Sol</a></td><td>OpenAI</td><td class="price">$4.00</td><td class="price">$20.00</td><td class="price">$0.40</td><td>プロモ価格（〜2026-11-21）。絶対額では最安</td></tr>
+<tr><td class="model-name">Claude Fable 5</td><td>Anthropic</td><td class="price">$10.00</td><td class="price">$50.00</td><td class="price">$1.00</td><td>前世代。Fable 5.1はキャッシュ読込のみ75%減</td></tr>
+</tbody></table></div>
+<p style="font-size:.84rem;color:var(--c-muted);">💡 見方: Fable 5.1は「最高性能」を求める長期・難関エージェント向け。価格対性能なら<a href="/gpt-5-6-sol/">GPT-5.6 Sol</a>（$4/$20）やClaude Opus 5（$5/$25）が安価。エージェント的ワークロード（キャッシュ読込が支配的）ではFable 5.1の実効コストが最大約45%下がる点に注意。</p>
+<p class="source-note">出典: 各社公式料金ページ（2026-09-01確認）。詳細は<a href="/pricing/">料金比較ページ</a>を参照。</p>
+</section>
+
+<!-- ユースケース -->
+<section class="section" style="padding-top:0;" aria-labelledby="usecase-h">
+<h2 class="section-title" id="usecase-h" style="font-size:1.2rem;">こんな用途に最適</h2>
+<p class="section-sub">Fable 5.1は「長時間・難易度の高い推論・エージェント」で真価を発揮。</p>
+<div class="use-case-grid">
+  <div class="use-case-card"><div class="icon">💻</div><h4>長期間エージェント</h4><p>複数ステップ・長時間の自律実行。キャッシュ読込値下げでコスト効率が向上。</p></div>
+  <div class="use-case-card"><div class="icon">🐛</div><h4>難関コーディング・デバッグ</h4><p>稀なクラッシュの根本原因特定など、他モデルが見逃す不具合修正。</p></div>
+  <div class="use-case-card"><div class="icon">🔬</div><h4>科学研究・知識労働</h4><p>Terminal-Bench-ScienceでFable 5の倍以上。複雑な分析・仮説立案に。</p></div>
+  <div class="use-case-card"><div class="icon">🧠</div><h4>高難度の推論</h4><p>Humanity's Last Exam 60.9%（no tools）。学際的な難問解決に。</p></div>
+  <div class="use-case-card"><div class="icon">🖥️</div><h4>コンピュータ操作</h4><p>OSWorld 2.0 partial 77.9%。GUI操作を伴う自動化タスクに。</p></div>
+  <div class="use-case-card"><div class="icon">📊</div><h4>ビジネスワークフロー</h4><p>AutomationBench 31.4%（Fable 5の17.1%から約1.8倍）。定型業務の自律処理に。</p></div>
+</div>
+</section>
+
+<!-- 選び方 -->
+<section class="section" style="padding-top:0;" aria-labelledby="choice-h">
+<h2 class="section-title" id="choice-h" style="font-size:1.2rem;">Claudeシリーズの選び方</h2>
+<div class="table-wrap"><table><thead><tr><th>モデル</th><th>入力</th><th>出力</th><th>選ぶべき場面</th></tr></thead><tbody>
+<tr><td class="model-name" style="border-left:3px solid var(--c-anthropic);padding-left:.7rem;">Claude Fable 5.1 ⬅</td><td class="price">$10.00</td><td class="price">$50.00</td><td>最難関・長期間エージェント・科学研究（最高性能）</td></tr>
+<tr><td class="model-name">Claude Opus 5</td><td class="price">$5.00</td><td class="price">$25.00</td><td>標準的なコーディング・エージェント・企業業務</td></tr>
+<tr><td class="model-name">Claude Sonnet 5</td><td class="price">$2.00</td><td class="price">$10.00</td><td>速度×知能のバランス。大量処理・日常業務</td></tr>
+<tr><td class="model-name">Claude Haiku 4.5</td><td class="price">$1.00</td><td class="price">$5.00</td><td>高速・大量・分類。コスト最重視</td></tr>
+</tbody></table></div>
+<p style="font-size:.84rem;color:var(--c-muted);margin-top:.5rem;">💡 基本戦略: 通常はClaude Opus 5（$5/$25）で十分な場合が多い。Opus 5の高エフォートでも足りない「難関推論・長期間エージェント」にFable 5.1。サイバー・ライフサイエンスの専門用途でセーフガードが障壁になる場合は<a href="/claude-mythos-5-1/">Mythos 5.1</a>（要審査）。</p>
+</section>
+
+<!-- CTA -->
+<section class="section" style="padding-top:0;">
+<div style="background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-anthropic);border-radius:var(--r-lg);padding:1.5rem;text-align:center;">
+  <h3 style="font-size:1.1rem;margin-bottom:.75rem;">実際のコストを試算する</h3>
+  <p style="color:var(--c-muted);font-size:.9rem;margin-bottom:1rem;">Claude Fable 5.1を含む全モデルのトークンコストを一括計算。入力・出力トークン数を入れるだけ。</p>
+  <a href="/calculator/" style="display:inline-block;background:var(--c-anthropic);color:#fff;font-weight:600;padding:.65rem 1.5rem;border-radius:var(--r-md);">🧮 トークン計算機で試算する →</a>
+  <p style="margin-top:.8rem;font-size:.82rem;color:var(--c-muted);"><a href="/pricing/">📊 全モデル料金比較</a> · <a href="/claude-mythos-5-1/">🛡️ Claude Mythos 5.1</a> · <a href="/timeline/">🗓️ リリース年表</a> · <a href="https://www.anthropic.com/claude-fable-and-mythos-5-1" target="_blank" rel="noopener">🔗 Anthropic公式発表</a></p>
+</div>
+</section>
+
+<div class="tip-box" style="border-left-color:var(--c-red);margin-bottom:2rem;">
+  <h3>⚠️ 免責事項</h3>
+  <ul>
+    <li>料金・仕様はAnthropic公式ページ（platform.claude.com / anthropic.com）を2026-09-01に確認したものです。予告なく変動します。契約前に必ず公式ページをご確認ください。</li>
+    <li>本サイトは情報提供目的であり、特定プロバイダーの推薦・代理ではありません。</li>
+    <li>ベンチマーク数値はAnthropicの公表値であり、実際の使用感を保証するものではありません。</li>
+  </ul>
+</div>
+
+</div></main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>運営: okamoちゃんねる</p><p><a href="/">ホーム</a> · <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a> · <a href="/timeline/">年表</a> · <a href="/claude-mythos-5-1/">Mythos 5.1</a> · <a href="/gpt-5-6-sol/">GPT-5.6 Sol</a></p></div><p class="footer-disclaimer">⚠️ 料金・仕様は予告なく変動します。契約前に必ず各社公式ページでご確認ください。本サイトは各社と提携していません。</p></div></footer>
+</body>
+</html>

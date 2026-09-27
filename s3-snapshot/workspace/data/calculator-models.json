@@ -1,0 +1,375 @@
+{
+  "updated": "2026-09-27",
+  "source": "各プロバイダ公式料金ページでfact確認済み（詳細は /pricing/ の出典欄）",
+  "models": [
+    {
+      "name": "Claude Fable 5.1",
+      "provider": "anthropic",
+      "label": "Anthropic",
+      "input": 10.0,
+      "output": 50.0,
+      "note": "2026-09-01公開・cache読込$0.25",
+      "note_en": "Released 2026-09-01 · cache read $0.25"
+    },
+    {
+      "name": "Claude Opus 5.5",
+      "provider": "anthropic",
+      "label": "Anthropic",
+      "input": 4.0,
+      "output": 20.0,
+      "note": "2026-09-22公開・cache読込$0.20",
+      "note_en": "Released 2026-09-22 · cache read $0.20"
+    },
+    {
+      "name": "Claude Fable 5",
+      "provider": "anthropic",
+      "label": "Anthropic",
+      "input": 10.0,
+      "output": 50.0,
+      "note": "前世代",
+      "note_en": "Previous gen"
+    },
+    {
+      "name": "Claude Opus 5",
+      "provider": "anthropic",
+      "label": "Anthropic",
+      "input": 5.0,
+      "output": 25.0,
+      "note": "2026-07-24発表",
+      "note_en": "Released 2026-07-24"
+    },
+    {
+      "name": "Claude Opus 4.8",
+      "provider": "anthropic",
+      "label": "Anthropic",
+      "input": 5.0,
+      "output": 25.0,
+      "note": "",
+      "note_en": ""
+    },
+    {
+      "name": "Claude Sonnet 5",
+      "provider": "anthropic",
+      "label": "Anthropic",
+      "input": 2.0,
+      "output": 10.0,
+      "note": "$2/$10（恒久化）",
+      "note_en": "Permanent price"
+    },
+    {
+      "name": "Claude Sonnet 4.6",
+      "provider": "anthropic",
+      "label": "Anthropic",
+      "input": 3.0,
+      "output": 15.0,
+      "note": "",
+      "note_en": ""
+    },
+    {
+      "name": "Claude Haiku 4.5",
+      "provider": "anthropic",
+      "label": "Anthropic",
+      "input": 1.0,
+      "output": 5.0,
+      "note": "",
+      "note_en": ""
+    },
+    {
+      "name": "GPT-6 Astra",
+      "provider": "openai",
+      "label": "OpenAI",
+      "input": 10.0,
+      "output": 50.0,
+      "note": "2026-09-03発表・最上位モデル・cache読込$1.00",
+      "note_en": "New flagship (2026-09-03) · cache read $1.00"
+    },
+    {
+      "name": "GPT-6 Sol",
+      "provider": "openai",
+      "label": "OpenAI",
+      "input": 2.0,
+      "output": 10.0,
+      "note": "2026-09-22公開・cache入力$0.20",
+      "note_en": "Released 2026-09-22 · cached input $0.20"
+    },
+    {
+      "name": "GPT-6 Luna",
+      "provider": "openai",
+      "label": "OpenAI",
+      "input": 0.1,
+      "output": 0.5,
+      "note": "2026-09-22公開・cache入力$0.01",
+      "note_en": "Released 2026-09-22 · cached input $0.01"
+    },
+    {
+      "name": "GPT-5.6 Sol",
+      "provider": "openai",
+      "label": "OpenAI",
+      "input": 4.0,
+      "output": 20.0,
+      "note": "旧版（2026-09-22にGPT-6 Solへ後継）・cache読込$0.20",
+      "note_en": "Legacy — superseded by GPT-6 Sol on 2026-09-22 · cache read $0.20"
+    },
+    {
+      "name": "GPT-5.6 Terra",
+      "provider": "openai",
+      "label": "OpenAI",
+      "input": 2.0,
+      "output": 12.0,
+      "note": "7/30値下げ",
+      "note_en": "Price cut 7/30"
+    },
+    {
+      "name": "GPT-5.6 Luna",
+      "provider": "openai",
+      "label": "OpenAI",
+      "input": 0.2,
+      "output": 1.2,
+      "note": "旧版（2026-09-22にGPT-6 Lunaへ後継）・cache入力$0.02",
+      "note_en": "Legacy — superseded by GPT-6 Luna on 2026-09-22 · cached input $0.02"
+    },
+    {
+      "name": "GPT-5.5",
+      "provider": "openai",
+      "label": "OpenAI",
+      "input": 5.0,
+      "output": 30.0,
+      "note": "",
+      "note_en": ""
+    },
+    {
+      "name": "GPT-5.4",
+      "provider": "openai",
+      "label": "OpenAI",
+      "input": 2.5,
+      "output": 15.0,
+      "note": "",
+      "note_en": ""
+    },
+    {
+      "name": "GPT-5.4 mini",
+      "provider": "openai",
+      "label": "OpenAI",
+      "input": 0.75,
+      "output": 4.5,
+      "note": "",
+      "note_en": ""
+    },
+    {
+      "name": "GPT-5.4 nano",
+      "provider": "openai",
+      "label": "OpenAI",
+      "input": 0.2,
+      "output": 1.25,
+      "note": "",
+      "note_en": ""
+    },
+    {
+      "name": "Gemini 3.8 Flash",
+      "provider": "google",
+      "label": "Google",
+      "input": 0.75,
+      "output": 3.75,
+      "note": "導入価格(〜2026-12-31)・通常$1.50/$7.50",
+      "note_en": "Intro pricing (through 2026-12-31) · list $1.50/$7.50"
+    },
+    {
+      "name": "Gemini 3.7 Flash",
+      "provider": "google",
+      "label": "Google",
+      "input": 0.75,
+      "output": 3.75,
+      "note": "初回価格(〜12/31)",
+      "note_en": "Intro (until 12/31)"
+    },
+    {
+      "name": "Gemini 3.6 Flash",
+      "provider": "google",
+      "label": "Google",
+      "input": 0.75,
+      "output": 3.75,
+      "note": "初回価格(〜12/31)",
+      "note_en": "Intro (until 12/31)"
+    },
+    {
+      "name": "Gemini 3.5 Flash",
+      "provider": "google",
+      "label": "Google",
+      "input": 1.5,
+      "output": 9.0,
+      "note": "",
+      "note_en": ""
+    },
+    {
+      "name": "Gemini 3.5 Flash-Lite",
+      "provider": "google",
+      "label": "Google",
+      "input": 0.3,
+      "output": 2.5,
+      "note": "2026年7月GA",
+      "note_en": "GA July 2026"
+    },
+    {
+      "name": "Gemini 3.1 Pro Preview",
+      "provider": "google",
+      "label": "Google",
+      "input": 2.0,
+      "output": 12.0,
+      "note": "≤200K",
+      "note_en": "≤200K"
+    },
+    {
+      "name": "Gemini 3.1 Flash-Lite",
+      "provider": "google",
+      "label": "Google",
+      "input": 0.25,
+      "output": 1.5,
+      "note": "",
+      "note_en": ""
+    },
+    {
+      "name": "Gemini 2.5 Pro",
+      "provider": "google",
+      "label": "Google",
+      "input": 1.25,
+      "output": 10.0,
+      "note": "",
+      "note_en": ""
+    },
+    {
+      "name": "Gemini 2.5 Flash",
+      "provider": "google",
+      "label": "Google",
+      "input": 0.3,
+      "output": 2.5,
+      "note": "",
+      "note_en": ""
+    },
+    {
+      "name": "Gemini 2.5 Flash-Lite",
+      "provider": "google",
+      "label": "Google",
+      "input": 0.1,
+      "output": 0.4,
+      "note": "",
+      "note_en": ""
+    },
+    {
+      "name": "DeepSeek V4.1 Flash",
+      "provider": "deepseek",
+      "label": "DeepSeek",
+      "input": 0.15,
+      "output": 0.6,
+      "note": "オフピーク(cache miss)・2026-09-10リリース・ピークは平日のみ01-04/06-10 UTC",
+      "note_en": "Off-peak (cache miss) · released 2026-09-10 · peak=weekdays only 01-04/06-10 UTC"
+    },
+    {
+      "name": "DeepSeek V4.1 Flash",
+      "provider": "deepseek",
+      "label": "DeepSeek",
+      "input": 0.3,
+      "output": 1.2,
+      "note": "ピーク(cache miss)・旧名 deepseek-v4-flash / deepseek-v4-flash-vision-exp はこのモデルへルーティング（Flash価格で課金）",
+      "note_en": "Peak (cache miss) · legacy names deepseek-v4-flash / deepseek-v4-flash-vision-exp route here (billed at Flash price)"
+    },
+    {
+      "name": "DeepSeek V4 Pro",
+      "provider": "deepseek",
+      "label": "DeepSeek",
+      "input": 0.66,
+      "output": 1.98,
+      "note": "オフピーク(cache miss)・2026-09-14以降も提供継続（公式が告知）",
+      "note_en": "Off-peak (cache miss) · continues after 2026-09-14 per DeepSeek's notice"
+    },
+    {
+      "name": "DeepSeek V4 Pro",
+      "provider": "deepseek",
+      "label": "DeepSeek",
+      "input": 1.32,
+      "output": 3.96,
+      "note": "ピーク(cache miss)・提供継続・Vision非対応",
+      "note_en": "Peak (cache miss) · still available · no vision support"
+    },
+    {
+      "name": "Grok 4.7",
+      "provider": "other",
+      "label": "xAI",
+      "input": 2.0,
+      "output": 6.0,
+      "note": "2026-09-21公開・200K超は$4/$12",
+      "note_en": "Released 2026-09-21 · $4/$12 above 200K"
+    },
+    {
+      "name": "Grok 4.6",
+      "provider": "other",
+      "label": "xAI",
+      "input": 2.0,
+      "output": 6.0,
+      "note": "2026-08-12公開",
+      "note_en": "Released 2026-08-12"
+    },
+    {
+      "name": "GLM-5.3-Flash",
+      "provider": "other",
+      "label": "Zhipu/Z.ai",
+      "input": 0.15,
+      "output": 0.5,
+      "note": "プロモ終了(9/9)・list $0.15/$0.50",
+      "note_en": "Promo ended 9/9 · list $0.15/$0.50"
+    },
+    {
+      "name": "Qwen3.8-Flash",
+      "provider": "other",
+      "label": "Alibaba",
+      "input": 0.15,
+      "output": 0.47,
+      "note": "2026-08-26公開・国際版",
+      "note_en": "Released 2026-08-26 · intl"
+    },
+    {
+      "name": "Qwen3.8-Max",
+      "provider": "other",
+      "label": "Alibaba",
+      "input": 2.0,
+      "output": 6.0,
+      "note": "フラッグシップ",
+      "note_en": "Flagship"
+    },
+    {
+      "name": "Kimi K3",
+      "provider": "other",
+      "label": "Moonshot AI",
+      "input": 3.0,
+      "output": 15.0,
+      "note": "1Mコンテキスト・2026-09-18 Amazon Bedrock提供開始（cacheヒット$0.30）",
+      "note_en": "1M context · on Amazon Bedrock since 2026-09-18 · cached hit $0.30"
+    },
+    {
+      "name": "MiMo-V2.6-Pro",
+      "provider": "other",
+      "label": "Xiaomi",
+      "input": 0.435,
+      "output": 0.87,
+      "note": "2026-09-22発表・1Mコンテキスト・入力4モダリティ（cacheヒット$0.0036）",
+      "note_en": "Announced 2026-09-22 · 1M context · 4 input modalities (cached hit $0.0036)"
+    },
+    {
+      "name": "MiMo-V2.6-Flash",
+      "provider": "other",
+      "label": "Xiaomi",
+      "input": 0.14,
+      "output": 0.28,
+      "note": "同シリーズのバランス型・Batch APIは50%価格（cacheヒット$0.0028）",
+      "note_en": "Balanced model · Batch API at 50% (cached hit $0.0028)"
+    },
+    {
+      "name": "MiMo-V2.6-Pro-UltraSpeed",
+      "provider": "other",
+      "label": "Xiaomi",
+      "input": 4.35,
+      "output": 8.7,
+      "note": "Proの高速API版（単価10倍・最大20倍速）",
+      "note_en": "High-speed API variant of Pro (10x price, up to 20x faster)"
+    }
+  ]
+}

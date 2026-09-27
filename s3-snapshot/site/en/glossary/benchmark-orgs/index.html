@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Who Operates the Benchmarks — A Four-Step Way to Tell [Glossary #6] — LLM Data Hub</title>
+  <meta name="description" content="Who runs AI benchmarks? Trace a benchmark name to its operator in four steps: DeepSWE is Datacurve, OSWorld is XLANG Lab, GDPval is OpenAI, GDPval-AA is Artificial Analysis, AutomationBench is Zapier. Twelve benchmark operators, plus evaluator vs harness owner, in one table. Updated Sept 25, 2026.">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/en/glossary/benchmark-orgs/">
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/glossary/benchmark-orgs/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/glossary/benchmark-orgs/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/glossary/benchmark-orgs/">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/en/glossary/benchmark-orgs/">
+  <meta property="og:title" content="Who Operates the Benchmarks — A Four-Step Way to Tell">
+  <meta property="og:description" content="Four steps from a benchmark name to its operator, twelve benchmarks mapped, and the difference between operator, harness owner and score reporter (updated Sept 25, 2026).">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Who Operates the Benchmarks — A Four-Step Way to Tell [Glossary #6]","datePublished":"2026-09-25","dateModified":"2026-09-25","author":{"@type":"Organization","name":"LLM Data Hub"},"publisher":{"@type":"Organization","name":"okamo channel"},"url":"https://llm.okamomedia.tokyo/en/glossary/benchmark-orgs/","inLanguage":"en"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://llm.okamomedia.tokyo/en/"},{"@type":"ListItem","position":2,"name":"Glossary","item":"https://llm.okamomedia.tokyo/en/glossary/"},{"@type":"ListItem","position":3,"name":"Who operates the benchmarks","item":"https://llm.okamomedia.tokyo/en/glossary/benchmark-orgs/"}]}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .flow-list{list-style:none;counter-reset:step;padding:0;margin:1rem 0}
+    .flow-list li{position:relative;padding:.85rem 0 .85rem 3rem;border-bottom:1px dashed var(--c-border);font-size:.9rem;line-height:1.8;color:var(--c-muted)}
+    .flow-list li:last-child{border-bottom:none}
+    .flow-list li::before{counter-increment:step;content:counter(step);position:absolute;left:0;top:.85rem;width:2.1rem;height:2.1rem;border-radius:50%;background:var(--c-accent);color:#fff;font-family:var(--font-mono);font-size:.85rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+    .flow-list strong{color:var(--c-text)}
+    .phrase-box{background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-accent);border-radius:var(--r-md);padding:1rem 1.15rem;margin:1.2rem 0}
+    .phrase-box .phrase{margin:0;font-size:1.02rem;font-weight:700;line-height:1.7}
+    .phrase-box .phrase-meta{margin:.5rem 0 0;font-size:.83rem;color:var(--c-muted);line-height:1.8}
+    .qa-list{list-style:none;padding:0;counter-reset:qa;margin:1rem 0}
+    .qa-list li{position:relative;padding:.75rem 0 .75rem 2.4rem;border-bottom:1px dashed var(--c-border);font-size:.88rem;color:var(--c-muted);line-height:1.75}
+    .qa-list li:last-child{border-bottom:none}
+    .qa-list li::before{counter-increment:qa;content:counter(qa);position:absolute;left:0;top:.7rem;width:1.6rem;height:1.6rem;border-radius:50%;background:var(--c-surface2);border:1px solid var(--c-border);color:var(--c-accent);font-family:var(--font-mono);font-size:.78rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+    .qa-list strong{color:var(--c-text)}
+    .org-block{border:1px solid var(--c-border);border-radius:var(--r-md);background:var(--c-surface);padding:1rem 1.15rem;margin:1rem 0}
+    .org-block h3{margin:0 0 .5rem;font-size:1rem}
+    .org-block .op{font-family:var(--font-mono);font-size:.76rem;color:var(--c-accent);margin-bottom:.6rem}
+    .org-block dl{margin:0;font-size:.85rem;line-height:1.75}
+    .org-block dt{font-weight:700;color:var(--c-text);margin-top:.55rem;font-size:.82rem}
+    .org-block dd{margin:.1rem 0 0;color:var(--c-muted)}
+    .fig-fig{margin:1rem 0 1.4rem}.fig-fig svg{width:100%;height:auto;border:1px solid var(--c-border);border-radius:var(--r-md);background:var(--c-surface);display:block}
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/en/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="Main navigation"><a href="/en/" class="nav-link">Home</a><a href="/en/pricing/" class="nav-link">Pricing</a><a href="/en/calculator/" class="nav-link">Token Calculator</a><a href="/en/timeline/" class="nav-link">Release Timeline</a><a href="/en/china-ai/" class="nav-link">China AI</a><a href="/en/multimodal/" class="nav-link">Multimodal</a><a href="/en/mai/" class="nav-link">MS AI (MAI)</a><a href="/en/glossary/" class="nav-link active" aria-current="page">Glossary</a></nav></div></header>
+
+<main><div class="container">
+  <div class="section" style="padding-bottom:0;">
+    <h1 class="section-title" style="font-size:1.55rem;">Who operates the benchmarks — a four-step way to tell</h1>
+    <p class="section-sub" style="max-width:780px;">
+      <a href="/en/glossary/">Glossary</a> entry #6. <a href="/en/glossary/benchmarks/">Entry #5</a> gave you a tool for sorting benchmarks by (1) who operates them, (2) what they measure and (3) how they measure it.
+      This entry digs into <strong>part one</strong>. Readers told us the operator&#39;s name is often missing from the score table, and sometimes from the benchmark&#39;s own site.
+      So here is a <strong>fixed four-step procedure</strong> for getting from a benchmark name to the organisation behind it, plus a table mapping twelve benchmarks we quote on this site.
+    </p>
+    <div class="phrase-box">
+      <p class="phrase">What defines a benchmark is not the people who publish scores — it is <strong>the people who distribute the test</strong>. Same test, different distributor, different benchmark. On this page we call the party that <strong>authors, distributes and versions</strong> the test or evaluation framework the <em>operator</em>; the dataset author, harness owner and score reporter are sometimes different parties.</p>
+      <p class="phrase-meta">Concretely: <strong>GDPval and GDPval-AA share a dataset but are not the same number</strong>, because OpenAI runs one and Artificial Analysis runs the other. The four steps below will get you from an unfamiliar benchmark name to its operator in about five minutes.</p>
+    </div>
+    <div class="updated-bar">
+      <span class="dot">●</span>
+      Last updated: <time datetime="2026-09-25">September 25, 2026</time>
+      &ensp;|&ensp; Policy: operators are listed only where confirmed on an official site, paper or repository. Anything unconfirmed is flagged as such
+    </div>
+  </div>
+
+  <section class="section" style="padding-top:1.5rem;" aria-labelledby="steps-h">
+    <h2 class="section-title" id="steps-h" style="font-size:1.2rem;">The procedure — from benchmark name to operator in four steps</h2>
+    <ol class="flow-list">
+      <li><strong>Find the paper or the official repository.</strong> Skip the summary articles. Open the <strong>original paper (arXiv and similar) or the project repository (GitHub)</strong>. The repository owner is your first clue to the operator.<br>
+        <span style="font-family:var(--font-mono);font-size:.8rem;">Example: DeepSWE &rarr; <a href="https://github.com/datacurve-ai/deep-swe" target="_blank" rel="noopener">github.com/datacurve-ai/deep-swe</a> &rarr; owner <code>datacurve-ai</code> = Datacurve</span></li>
+      <li><strong>Work out what kind of organisation it is.</strong> A model vendor (OpenAI, Anthropic), an independent evaluator (Artificial Analysis, ARC Prize), a research lab (a university or non-profit), or a <strong>business-software company</strong> (Zapier, Cursor). This tells you how far the operator sits from the models being judged.</li>
+      <li><strong>Check who reported the score.</strong> The same benchmark can be published by the operator, by a vendor running its own setup, or quoted by a third party. If a vendor&#39;s page carries a note like <em>&ldquo;as reported by OpenAI&rdquo;</em>, that figure is <strong>the vendor&#39;s own measurement</strong>.</li>
+      <li><strong>Check whose harness ran it.</strong> A model-vendor harness and a third-party harness are different conditions — see <a href="/en/glossary/harness/">entry #3 on harnesses</a>. Only after this step can you judge whether two numbers are comparable.</li>
+    </ol>
+    <div class="tip-box">
+      <h3>💡 Shortcuts that save the five minutes</h3>
+      <ul>
+        <li>Repository owner names (<code>datacurve-ai</code>, <code>harbor-framework</code>, <code>xlang</code>) are usually <strong>abbreviations of the organisation</strong>. Searching the owner name lands on the official site.</li>
+        <li>If <strong>the organisation name is inside the benchmark name</strong>, you are done: <strong>GDPval-<em>AA</em></strong> (AA = Artificial Analysis), <strong>AutomationBench</strong> (published by Zapier on its own blog).</li>
+        <li>The reverse also holds: <strong>names with no organisation in them are the ones that need step one</strong>.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="map-h">
+    <h2 class="section-title" id="map-h" style="font-size:1.2rem;">Figure: who distributes, who runs, who reports</h2>
+    <figure class="fig-fig">
+      <svg viewBox="0 0 700 250" role="img" aria-labelledby="bfen-t bfen-d" xmlns="http://www.w3.org/2000/svg">
+        <title id="bfen-t">The three roles in a benchmark</title>
+        <desc id="bfen-d">Diagram showing three roles connected by arrows: the operator who writes and distributes the test, the harness owner who provides the execution environment, and the reporter who publishes the numbers.</desc>
+        <g font-family="system-ui,-apple-system,sans-serif" font-size="12">
+          <rect x="20" y="60" width="180" height="110" rx="8" fill="#1b2030" stroke="#3a4256"/>
+          <text x="110" y="86" text-anchor="middle" fill="#e6e6e6" font-size="13" font-weight="700">1. Operator</text>
+          <text x="110" y="108" text-anchor="middle" fill="#9aa0aa">Writes, distributes and</text>
+          <text x="110" y="126" text-anchor="middle" fill="#9aa0aa">versions the test</text>
+          <text x="110" y="150" text-anchor="middle" fill="#6ea8fe" font-size="11">Datacurve / XLANG Lab</text>
+          <text x="110" y="164" text-anchor="middle" fill="#6ea8fe" font-size="11">Zapier / ARC Prize</text>
+          <rect x="260" y="60" width="180" height="110" rx="8" fill="#1b2030" stroke="#3a4256"/>
+          <text x="350" y="86" text-anchor="middle" fill="#e6e6e6" font-size="13" font-weight="700">2. Harness owner</text>
+          <text x="350" y="108" text-anchor="middle" fill="#9aa0aa">Provides the tooling and</text>
+          <text x="350" y="126" text-anchor="middle" fill="#9aa0aa">environment that runs it</text>
+          <text x="350" y="150" text-anchor="middle" fill="#f0a35e" font-size="11">Claude Code / vendor setup</text>
+          <text x="350" y="164" text-anchor="middle" fill="#f0a35e" font-size="11">often vendor-owned</text>
+          <rect x="500" y="60" width="180" height="110" rx="8" fill="#1b2030" stroke="#3a4256"/>
+          <text x="590" y="86" text-anchor="middle" fill="#e6e6e6" font-size="13" font-weight="700">3. Reporter</text>
+          <text x="590" y="108" text-anchor="middle" fill="#9aa0aa">Publishes the resulting</text>
+          <text x="590" y="126" text-anchor="middle" fill="#9aa0aa">numbers</text>
+          <text x="590" y="150" text-anchor="middle" fill="#7ee787" font-size="11">change this and you</text>
+          <text x="590" y="164" text-anchor="middle" fill="#7ee787" font-size="11">cannot compare</text>
+          <path d="M205 115 L255 115" stroke="#5a6a88" stroke-width="2" marker-end="url(#aren)"/>
+          <path d="M445 115 L495 115" stroke="#5a6a88" stroke-width="2" marker-end="url(#aren)"/>
+          <defs><marker id="aren" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#5a6a88"/></marker></defs>
+          <text x="350" y="205" text-anchor="middle" fill="#e6e6e6" font-size="12">&ldquo;Same benchmark, so comparable&rdquo; only holds when all three line up</text>
+          <text x="350" y="228" text-anchor="middle" fill="#9aa0aa" font-size="11">AutomationBench: 1 Zapier, 2 Zapier, 3 Zapier — but it also appears in OpenAI&#39;s table, under OpenAI&#39;s conditions</text>
+        </g>
+      </svg>
+      <figcaption style="font-size:.78rem;color:var(--c-muted);margin-top:.5rem;">Created by LLM Data Hub. This is a way of thinking about the roles, not a statement of any benchmark&#39;s measured conditions.</figcaption>
+    </figure>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="orgs-h">
+    <h2 class="section-title" id="orgs-h" style="font-size:1.2rem;">Worked examples — benchmark and operator</h2>
+    <p class="section-sub">Focused on benchmarks that actually appeared in the September 2026 model releases (Claude Opus 5.5, GPT-6 Sol and GPT-6 Luna) and on the ones this site quotes elsewhere.</p>
+    <div class="table-wrap"><table><thead><tr><th>Benchmark</th><th>Operator</th><th>Category</th><th>Primary source</th></tr></thead><tbody>
+      <tr><td class="model-name">DeepSWE / DeepSWE 1.1</td><td><strong>Datacurve</strong></td><td>Independent evaluator</td><td><a href="https://github.com/datacurve-ai/deep-swe" target="_blank" rel="noopener">Official repository</a> (owner: datacurve-ai)</td></tr>
+      <tr><td class="model-name">Terminal-Bench 4.0</td><td><strong>Harbor + Laude Institute</strong></td><td>Research</td><td><a href="https://github.com/harbor-framework/terminal-bench" target="_blank" rel="noopener">Official repository</a> / <a href="https://arxiv.org/abs/2601.11868" target="_blank" rel="noopener">paper</a></td></tr>
+      <tr><td class="model-name">Terminal-Bench-Science 0.1</td><td><strong>Stanford + Laude Institute</strong></td><td>Research</td><td><a href="https://github.com/harbor-framework/terminal-bench-science" target="_blank" rel="noopener">Official repository</a></td></tr>
+      <tr><td class="model-name">OSWorld / OSWorld 2.0</td><td><strong>XLANG Lab</strong></td><td>Research</td><td><a href="https://osworld-v2.xlang.ai/" target="_blank" rel="noopener">Official site</a> / <a href="https://arxiv.org/abs/2404.07972" target="_blank" rel="noopener">paper</a></td></tr>
+      <tr><td class="model-name">GDPval</td><td><strong>OpenAI</strong></td><td>Model vendor</td><td><a href="https://openai.com/index/gdpval/" target="_blank" rel="noopener">Official page</a> / <a href="https://arxiv.org/abs/2510.04374" target="_blank" rel="noopener">paper</a></td></tr>
+      <tr><td class="model-name">GDPval-AA v2.1</td><td><strong>Artificial Analysis</strong></td><td>Independent evaluator</td><td><a href="https://artificialanalysis.ai/evaluations/gdpval-aa" target="_blank" rel="noopener">Official page</a> (dataset shared with GDPval, operator is not)</td></tr>
+      <tr><td class="model-name">AutomationBench 1.0.6</td><td><strong>Zapier</strong></td><td>Business-software company</td><td><a href="https://zapier.com/benchmarks" target="_blank" rel="noopener">Official page</a>; OpenAI&#39;s comparison table also states Zapier ran it</td></tr>
+      <tr><td class="model-name">FrontierCode 1.1</td><td><strong>Cognition</strong></td><td>Developer-tools company</td><td><a href="https://cognition.com/frontiercode" target="_blank" rel="noopener">Official page</a> (the link OpenAI cites)</td></tr>
+      <tr><td class="model-name">CursorBench 4.0</td><td><strong>Cursor</strong></td><td>Developer-tools company</td><td>Appears in both Anthropic&#39;s and OpenAI&#39;s comparison tables. <strong>The operator&#39;s own explainer page is unconfirmed.</strong></td></tr>
+      <tr><td class="model-name">Agents&#39; Last Exam V1</td><td><strong>agents-last-exam.org</strong> (official domain; operating entity not confirmed)</td><td>Independent evaluator</td><td><a href="https://agents-last-exam.org/" target="_blank" rel="noopener">Official site</a></td></tr>
+      <tr><td class="model-name">ARC-AGI-3</td><td><strong>ARC Prize</strong></td><td>Independent evaluator (non-profit)</td><td><a href="https://arcprize.org/" target="_blank" rel="noopener">arcprize.org</a> — the neutral-harness figure we discuss in <a href="/en/glossary/gpt-6-astra-benchmarks/">entry #1</a></td></tr>
+      <tr><td class="model-name">WANDR</td><td><strong>Perplexity</strong></td><td>AI company</td><td>Anthropic notes it <strong>ran this under modified conditions</strong> and that &ldquo;scores are not directly comparable&rdquo; to Perplexity&#39;s published setup</td></tr>
+    </tbody></table></div>
+    <p style="font-size:.78rem;color:var(--c-muted);margin-top:.3rem;">Sources: each benchmark&#39;s official site or repository, plus the notes in Anthropic&#39;s &ldquo;Introducing Claude Opus 5.5&rdquo; and OpenAI&#39;s &ldquo;Introducing GPT-6 Sol and Luna&rdquo; (verified 2026-09-25). <strong>CursorBench is flagged unconfirmed because we could not reach the operator&#39;s own explainer.</strong></p>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="three-h">
+    <h2 class="section-title" id="three-h" style="font-size:1.2rem;">Three ways the operator changes the number</h2>
+
+    <div class="org-block">
+      <h3>Case 1: same dataset, different operator, different number</h3>
+      <p class="op">GDPval (OpenAI) vs GDPval-AA (Artificial Analysis)</p>
+      <dl>
+        <dt>What differs</dt>
+        <dd>The dataset is shared, but <strong>the operator is not</strong> — scoring design and how models are run differ. Anthropic&#39;s Opus 5.5 announcement uses GDPval-AA v2.1, reporting Elo scores of 1,846 (Opus 5.5), 1,735 (Fable 5.1) and 1,708 (Opus 5).</dd>
+        <dt>How to read it</dt>
+        <dd>A number you find by searching &ldquo;GDPval&rdquo; and a number labelled &ldquo;GDPval-AA&rdquo; in an announcement are <strong>different numbers</strong>. Search with the suffix (-AA, -Verified, v2.1) included.</dd>
+      </dl>
+    </div>
+
+    <div class="org-block">
+      <h3>Case 2: a third-party operator, but vendor-side conditions</h3>
+      <p class="op">AutomationBench (Zapier)</p>
+      <dl>
+        <dt>What differs</dt>
+        <dd>Zapier both operates and runs it. But OpenAI&#39;s table specifies that the runs were performed <strong>without fallback models</strong>, so safeguard interventions counted as failures — a condition that pushes scores down. OpenAI also notes that <strong>the Claude Fable 5.1 datapoint understates its real cost</strong>, since it omits Opus 5 fallback spend that occurred on ~40% of tasks.</dd>
+        <dt>How to read it</dt>
+        <dd><strong>&ldquo;A third party operates it&rdquo; does not by itself mean &ldquo;fair&rdquo;.</strong> You still need to know who ran it and under what constraints.</dd>
+      </dl>
+    </div>
+
+    <div class="org-block">
+      <h3>Case 3: someone else&#39;s benchmark, your own conditions</h3>
+      <p class="op">WANDR (Perplexity)</p>
+      <dl>
+        <dt>What differs</dt>
+        <dd>Anthropic ran Perplexity&#39;s benchmark under <strong>modified conditions</strong> (offline web search and web fetch, programmatic tool calling, code execution, a <strong>980k-token task budget</strong>) and states plainly that &ldquo;this differs from Perplexity&#39;s published setup, <strong>scores are not directly comparable</strong>&rdquo; — then shows only models measured under identical conditions.</dd>
+        <dt>How to read it</dt>
+        <dd>This is <strong>an example of a good caveat</strong>. A table that says &ldquo;not comparable&rdquo; is more trustworthy than one that is silent. Where conditions are unstated, assume they may not be comparable.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="check-h">
+    <h2 class="section-title" id="check-h" style="font-size:1.2rem;">Checklist — when you meet a number in an announcement</h2>
+    <ol class="qa-list">
+      <li><strong>Is an organisation name inside the benchmark name?</strong> If not, go back to the paper or repository to find the operator.</li>
+      <li><strong>Is the operator a model vendor or a third party?</strong> A benchmark owned by a vendor cannot easily measure rivals under identical conditions.</li>
+      <li><strong>Is there an &ldquo;as reported by&rdquo; note?</strong> If so, the figure is <strong>that vendor&#39;s own measurement</strong>, not a re-run by the publisher.</li>
+      <li><strong>Whose harness is it?</strong> A vendor harness (e.g. Claude Code) can favour that vendor.</li>
+      <li><strong>Are the compared generations consistent?</strong> OpenAI states outright that it reported <strong>Claude Fable 5</strong> scores where Fable 5.1 scores were unavailable. Mixed generations cannot be lined up.</li>
+      <li><strong>Does it say &ldquo;not comparable&rdquo;?</strong> An explicit caveat is a plus, not a minus.</li>
+    </ol>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="src-h">
+    <h2 class="section-title" id="src-h" style="font-size:1.2rem;">Sources (all verified 2026-09-25)</h2>
+    <ul style="font-size:.84rem;line-height:1.9;color:var(--c-muted);padding-left:1.2rem;">
+      <li>Anthropic, &ldquo;Introducing Claude Opus 5.5&rdquo; — <a href="https://www.anthropic.com/claude-opus-5-5" target="_blank" rel="noopener">anthropic.com/claude-opus-5-5</a> (benchmark footnotes 1&ndash;4)</li>
+      <li>OpenAI, &ldquo;Introducing GPT-6 Sol and Luna&rdquo; — <a href="https://openai.com/index/introducing-gpt-6-sol-and-luna/" target="_blank" rel="noopener">openai.com/index/introducing-gpt-6-sol-and-luna</a></li>
+      <li>DeepSWE — <a href="https://github.com/datacurve-ai/deep-swe" target="_blank" rel="noopener">github.com/datacurve-ai/deep-swe</a> (Datacurve)</li>
+      <li>Terminal-Bench — <a href="https://github.com/harbor-framework/terminal-bench" target="_blank" rel="noopener">github.com/harbor-framework/terminal-bench</a> (Harbor + Laude Institute)</li>
+      <li>OSWorld — <a href="https://osworld-v2.xlang.ai/" target="_blank" rel="noopener">osworld-v2.xlang.ai</a> (XLANG Lab)</li>
+      <li>GDPval — <a href="https://openai.com/index/gdpval/" target="_blank" rel="noopener">openai.com/index/gdpval</a> (OpenAI) / GDPval-AA — <a href="https://artificialanalysis.ai/evaluations/gdpval-aa" target="_blank" rel="noopener">artificialanalysis.ai/evaluations/gdpval-aa</a> (Artificial Analysis)</li>
+      <li>AutomationBench — <a href="https://zapier.com/benchmarks" target="_blank" rel="noopener">zapier.com/benchmarks</a> (Zapier)</li>
+      <li>FrontierCode — <a href="https://cognition.com/frontiercode" target="_blank" rel="noopener">cognition.com/frontiercode</a> (Cognition)</li>
+      <li>Agents&#39; Last Exam — <a href="https://agents-last-exam.org/" target="_blank" rel="noopener">agents-last-exam.org</a></li>
+      <li>ARC-AGI-3 — <a href="https://arcprize.org/" target="_blank" rel="noopener">arcprize.org</a> (ARC Prize)</li>
+    </ul>
+    <p style="font-size:.8rem;color:var(--c-muted);margin-top:.6rem;">Related: <a href="/en/glossary/">all glossary entries</a> · <a href="/en/glossary/benchmarks/">What is a benchmark? (#5)</a> · <a href="/en/glossary/harness/">Harnesses (#3)</a> · <a href="/en/claude-opus-5-5/">Claude Opus 5.5</a> · <a href="/en/gpt-6-sol-luna/">GPT-6 Sol / Luna</a> · <a href="/en/timeline/">Release timeline</a></p>
+  </section>
+
+  <div class="tip-box" style="border-left-color:var(--c-red);margin-bottom:2rem;">
+    <h3>⚠️ Limits of this entry</h3>
+    <ul>
+      <li>Operators are as confirmed on official sites, papers and repositories <strong>as of September 25, 2026</strong>; benchmarks get transferred, renamed and re-versioned.</li>
+      <li>The category labels (independent evaluator, research, business-software company) are <strong>our own grouping</strong>, not an industry standard.</li>
+      <li>This page does <strong>not</strong> cover the scores or measurement conditions themselves — see each model&#39;s page for numbers.</li>
+      <li>This site is not affiliated with any provider.</li>
+    </ul>
+  </div>
+</div></main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>Operated by okamo channel</p><p><a href="/en/">Home</a> · <a href="/en/pricing/">Pricing</a> · <a href="/en/calculator/">Calculator</a> · <a href="/en/timeline/">Timeline</a> · <a href="/en/glossary/">Glossary</a> · <a href="/en/gpt-6/">GPT-6 Astra</a></p></div><p class="footer-disclaimer">⚠️ Pricing and specifications may change without notice. Always verify on official pages. Not affiliated with any provider.</p></div></footer>
+</body>
+</html>

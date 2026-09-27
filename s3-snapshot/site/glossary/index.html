@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>用語説明 — AI用語・フレーズを一次情報でかみくだく | LLM Data Hub</title>
+  <meta name="description" content="AIの料金表やニュースに出てくる用語を初心者向けにかみくだく解説です。ベンチマークの仕分け方（誰が・何を・どう測るか）、ハーネス、プロンプトキャッシュ、1Mコンテキストなど、各社の公式ドキュメントとベンチ運営者の公表資料で確認した内容だけを掲載します。">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/glossary/">
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/glossary/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/glossary/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/glossary/">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/glossary/">
+  <meta property="og:title" content="用語説明 — AI用語・フレーズを一次情報でかみくだく">
+  <meta property="og:description" content="「ベンチマークが多すぎて分からない」を、①誰が ②何を ③どう測るか の3つで解消。ベンチマーク／ハーネス／プロンプトキャッシュ／1Mコンテキストを1ページ1テーマで、出典つきに解説します。">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="メインナビゲーション"><a href="/" class="nav-link">ホーム</a><a href="/pricing/" class="nav-link">料金比較</a><a href="/calculator/" class="nav-link">トークン計算機</a><a href="/timeline/" class="nav-link">リリース年表</a><a href="/china-ai/" class="nav-link">中国AI</a><a href="/multimodal/" class="nav-link">マルチモーダル</a><a href="/mai/" class="nav-link">MS AI (MAI)</a><a href="/glossary/" class="nav-link active" aria-current="page">用語説明</a></nav></div></header>
+
+<main><div class="container">
+  <div class="section" style="padding-bottom:0;">
+    <h1 class="section-title" style="font-size:1.6rem;">用語説明 <span style="font-size:1rem;font-weight:500;color:var(--c-muted);">AIの用語・フレーズを一次情報でかみくだく</span></h1>
+    <p class="section-sub" style="max-width:760px;">
+      料金表やニュースに出てくる用語を、<strong>1ページにつき1テーマ</strong>で説明します。
+      「cache hitって何が安いの？」「この数字は何を測っているの？」「ベンチマークが多すぎて訳が分からない」——そんな疑問に、各社の公式ドキュメントや<strong>ベンチマーク運営者自身の公表資料</strong>まで戻って答えます。
+      数字の測定条件や料金ルールの境界線まで書くので、読み終わったあと<strong>そのまま実務で使える</strong>内容です。
+      <a href="/pricing/">料金比較</a>や<a href="/timeline/">リリース年表</a>が「データ」なら、こちらは「データの読み方」です。
+    </p>
+    <div class="updated-bar">
+      <span class="dot">●</span>
+      最終更新: <time datetime="2026-09-27">2026年9月27日</time>
+      &ensp;|&ensp; 方針: 一次情報（各社公式発表・ベンチ運営者の公表資料）で裏取りできる範囲のみ掲載
+    </div>
+  </div>
+
+  <section class="section" style="padding-top:1.5rem;" aria-labelledby="list-h">
+    <h2 class="section-title" id="list-h" style="font-size:1.2rem;">用語解説の一覧</h2>
+    <p class="section-sub">1ページにつき1テーマ。言葉の意味だけでなく、料金や条件の数字まで踏み込みます。</p>
+    <div class="card-grid">
+<article class="card">
+<div class="card-icon">🧭</div>
+<h3 class="card-title">ベンチマークとは — 「誰が・何を・どう測るか」で仕分ける</h3>
+<p class="card-desc">DeepSWE、GDPval-AA、Terminal-bench、OSWorld……<strong>多すぎて訳が分からない</strong>を解消します。ベンチ名を暗記するのをやめ、<strong>①誰が運営しているか ②何を測っているか ③どう測るか（ハーネス・設定）</strong>の3つで仕分ける手順を持ち帰る構成。6つのベンチを運営主体の公式リポジトリ・原論文で裏取りし、<strong>GDPvalとGDPval-AAがデータセット共通でも別の数字になる理由</strong>、ベンチ名と同名のモデル（DeepSWE-Preview）の混同まで扱います。</p>
+<a href="/glossary/benchmarks/" class="card-link">解説を読む →</a>
+</article>
+
+<article class="card">
+<div class="card-icon">📏</div>
+<h3 class="card-title">1Mコンテキストとは — 100万トークンで何が入るか、いくらになるか</h3>
+<p class="card-desc">1M＝100万トークンは英語で約75万語、音声なら約11時間ぶん。ただし<strong>長文の課金ルールは3社で大きく異なります</strong>。OpenAIは272K超でリクエスト全体が入力2倍・出力1.5倍、Googleは200K超で全トークンが高い単価、Anthropicは1Mでも標準単価のまま。境界を100トークン超えただけで請求が2倍になる試算（272,000トークン $2.72 → 272,100トークン $5.44）、10往復で入力が245,000トークンに積み上がる例、そして長い入力ほど精度が不安定になる「context rot」（Chroma・2025年7月・18モデル）まで、公式ページで確認した数字だけを掲載します。</p>
+<a href="/glossary/one-million-context/" class="card-link">解説を読む →</a>
+</article>
+
+      <article class="card">
+        <div class="card-icon">🧰</div>
+        <h3 class="card-title">ハーネス（harness）とは — 同じモデルでもベンチの数字が変わる理由</h3>
+        <p class="card-desc">ハーネスは「モデル以外の全部」。システムプロンプト・ツール・記憶・サンドボックス・試行回数・採点まで含み、同じモデル・同じベンチでもスコアを動かします。ARC-AGI-3で中立ハーネス62.7%／Provider Adapter 99.9%になった条件差（ARC Prize公表）、DeepSeek Harness公式ページの「Agent = Model + Harness」、Minimal modeが公式に「ベンチマーク用の最小環境」と書かれている点まで、出典つきで整理します。</p>
+        <a href="/glossary/harness/" class="card-link">解説を読む →</a>
+      </article>
+      <article class="card">
+        <div class="card-icon">🗄️</div>
+        <h3 class="card-title">プロンプトキャッシュとは — 「cache hit」の一行を料金で読み解く</h3>
+        <p class="card-desc">同じ入力なのに単価が50倍違う「cache hit」。仕組み（先頭一致）、書込1.25倍・読込0.1倍のルール、TTL（5分〜30分）、キャッシュされる最小トークン数（512〜4,096）を、OpenAI・Anthropic・Google・DeepSeekの公式ドキュメントで比較。8,000トークンの前置きを10回送った場合の試算（$0.80→$0.172）付き。</p>
+        <a href="/glossary/prompt-cache/" class="card-link">解説を読む →</a>
+      </article>
+      <article class="card">
+        <div class="card-icon">🧪</div>
+        <h3 class="card-title">GPT-6 Astra「ARC-AGI-3 99.9%・ExploitBench 100%」の読み方</h3>
+        <p class="card-desc">同じベンチでも中立ハーネスでは62.7%（ARC Prize公表）。満点は「もう測れない」の合図。未飽和のTerminal-Bench Science 64.6%がいちばん情報量が多い理由、そして1.05Mコンテキストの272Kトークン境界（超えるとリクエスト全体が入力2倍・出力1.5倍）と128K出力を使い切ったときの$6.40まで。</p>
+        <a href="/glossary/gpt-6-astra-benchmarks/" class="card-link">解説を読む →</a>
+      </article>
+      <article class="card">
+        <div class="card-icon">🏛️</div>
+        <h3 class="card-title">ベンチマークを運営している組織 — 「誰が測ったか」を見分ける4つの手順</h3>
+        <p class="card-desc">DeepSWEはDatacurve、OSWorldはXLANG Lab、GDPvalはOpenAI、GDPval-AAはArtificial Analysis、AutomationBenchはZapier——<strong>ベンチ名から運営組織にたどり着く手順を4ステップに固定</strong>しました。①原論文・公式リポジトリ ②組織の分類（ベンダー／独立評価／研究機関／業務ソフト企業） ③スコアの報告者は誰か ④ハーネス提供元。代表12ベンチの運営元一覧と、「第三者が運営＝公平ではない」3つの実例（GDPval-AA・AutomationBench・WANDR）付き。</p>
+        <a href="/glossary/benchmark-orgs/" class="card-link">解説を読む →</a>
+      </article>
+    </div>
+<article class="card">
+        <div class="card-icon">🔒</div>
+        <h3 class="card-title">ZDR（ゼロデータ保持）とは — 「保存しない」の3つの落とし穴</h3>
+        <p class="card-desc">ZDR は<strong>「既定で保存しない」であって「常時有効」ではありません</strong>。①<strong>保持が必要なモデルの例外リスト</strong>があり、②保証には<strong>明示指定</strong>が要り、③「保存しない」と「担当者が見られない（ZOA）」「学習に使わない」は<strong>別の約束</strong>です。AWS Bedrock の保持モード（none / default / inherit / aws_review）と設定単位、公開されている例外リスト（OpenAI系モデル・Claude Fable 5 / 5.1）、OpenAI・Anthropic・Google・Microsoft の入手方法（<strong>既定か審査制か</strong>）を、各社公式ドキュメントの逐語で比較します。用語説明 第7回。</p>
+        <a href="/glossary/zero-data-retention/" class="card-link">解説を読む →</a>
+      </article>
+    <div class="tip-box" style="margin-top:1.5rem;">
+      <h3>📌 このページの方針</h3>
+      <ul>
+        <li><strong>出典を明記する</strong> — 各社の公式ドキュメント・料金ページ・ベンチ運営者の公表資料のどこに書かれているかまで示します。</li>
+        <li><strong>料金ルールと測定条件の境界線を数字で示す</strong> — 「何トークンから単価が変わるか」「どのハーネスでの結果か」まで書きます。</li>
+        <li><strong>試算を載せる</strong> — 単価の一覧だけでなく、実際に送ったときの金額まで計算します。</li>
+        <li><strong>裏が取れないものは載せない</strong> — 確認できない数値は「未確認」と明記します。</li>
+        <li>1ページ1テーマ。読んで3分、そのまま実務で使える形にします。</li>
+      </ul>
+    </div>
+    <p style="font-size:.86rem;color:var(--c-muted);">関連: <a href="/glossary/benchmarks/">ベンチマークの仕分け方</a> · <a href="/glossary/harness/">ハーネス（harness）</a> · <a href="/glossary/prompt-cache/">プロンプトキャッシュ（cache hit）</a> · <a href="/glossary/one-million-context/">1Mコンテキスト</a> · <a href="/glossary/zero-data-retention/">ZDR（ゼロデータ保持）</a> · <a href="/gpt-6/">GPT-6 Astra 詳細</a> · <a href="/claude-fable-5-1/">Claude Fable 5.1 詳細</a> · <a href="/deepseek-v4-1-flash/">DeepSeek V4.1 Flash 実践ガイド</a> · <a href="/multimodal/">マルチモーダル対応一覧</a></p>
+  </section>
+</div></main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>運営: okamoちゃんねる</p><p><a href="/">ホーム</a> · <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a> · <a href="/timeline/">年表</a> · <a href="/glossary/">用語説明</a> · <a href="/gpt-6/">GPT-6 Astra</a></p></div><p class="footer-disclaimer">⚠️ 料金・仕様は予告なく変動します。契約前に必ず各社公式ページでご確認ください。本サイトは各社と提携していません。</p></div></footer>
+</body>
+</html>

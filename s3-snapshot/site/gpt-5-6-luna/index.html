@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GPT-5.6 Luna — 80%値下げで最強コスパ軽量モデルに【料金・性能・比較】 — LLM Data Hub</title>
+  <meta name="description" content="OpenAI GPT-5.6 Lunaの最新料金（$0.20/$1.20・2026年7月30日80%値下げ後）・仕様・性能・Gemini 3.1 Flash-LiteやClaude Haiku 4.5との比較・ユースケースを一次情報ベースで解説。1.05Mコンテキスト・128K出力対応の高スループットモデル。">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/gpt-5-6-luna/">
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/gpt-5-6-luna/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/gpt-5-6-luna/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/gpt-5-6-luna/">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/gpt-5-6-luna/">
+  <meta property="og:title" content="GPT-5.6 Luna — 80%値下げで最強コスパ軽量モデルに">
+  <meta property="og:description" content="OpenAI GPT-5.6 Lunaの最新料金（$0.20/$1.20）・性能・競合比較を一次情報ベースで解説。">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"GPT-5.6 Luna — 80%値下げで最強コスパ軽量モデルに【料金・性能・比較】","datePublished":"2026-08-07","dateModified":"2026-09-25","author":{"@type":"Organization","name":"LLM Data Hub"},"publisher":{"@type":"Organization","name":"okamoちゃんねる"},"url":"https://llm.okamomedia.tokyo/gpt-5-6-luna/","inLanguage":"ja"}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .hero-luna{background:linear-gradient(135deg,#0a1628 0%,#111d33 50%,#0f1117 100%);border-bottom:1px solid var(--c-border);padding:3rem 1rem 2.5rem;text-align:center}.hero-luna .price-flag{display:inline-block;background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.3);color:var(--c-green);font-size:.82rem;font-weight:700;padding:.3rem .8rem;border-radius:100px;margin-bottom:1rem}.hero-luna h1{font-size:clamp(1.6rem,4.5vw,2.4rem);font-weight:800;line-height:1.2;margin-bottom:.75rem}.hero-luna h1 span{color:var(--c-green)}.hero-luna .lead{font-size:1.05rem;color:var(--c-muted);max-width:640px;margin:0 auto 1.5rem}.hero-luna .quick-stats{display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;margin-top:1rem}.hero-luna .stat{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.75rem 1.25rem;text-align:center}.hero-luna .stat .val{font-family:var(--font-mono);font-size:1.25rem;font-weight:700;color:var(--c-green)}.hero-luna .stat .lbl{font-size:.75rem;color:var(--c-muted);margin-top:.15rem}
+    .compare-table th:first-child{width:200px}.compare-table td{text-align:center}.compare-table td:first-child{text-align:left;font-weight:600}.compare-table .winner{color:var(--c-green);font-weight:700}.compare-table .tie{color:var(--c-yellow)}
+    .spec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.8rem;margin-bottom:1.5rem}.spec-item{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.9rem 1rem}.spec-item .spec-label{font-size:.75rem;color:var(--c-muted);font-weight:600;margin-bottom:.25rem}.spec-item .spec-value{font-family:var(--font-mono);font-size:1rem;font-weight:700}
+    .use-case-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.8rem;margin-bottom:1.5rem}.use-case-card{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:1rem}.use-case-card .icon{font-size:1.5rem;margin-bottom:.5rem}.use-case-card h4{font-size:.92rem;font-weight:700;margin-bottom:.35rem}.use-case-card p{font-size:.82rem;color:var(--c-muted);line-height:1.5}
+    .price-history{font-size:.86rem;color:var(--c-muted);line-height:1.8}.price-history .old{text-decoration:line-through;color:var(--c-red)}.price-history .arrow{color:var(--c-green);font-weight:700}
+    .long-context-note{background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-yellow);border-radius:var(--r-md);padding:.8rem 1rem;margin:1rem 0;font-size:.84rem;color:var(--c-muted)}
+    @media(max-width:640px){.hero-luna .quick-stats{flex-direction:column;gap:.5rem}}
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="メインナビゲーション"><a href="/" class="nav-link">ホーム</a><a href="/pricing/" class="nav-link">料金比較</a><a href="/calculator/" class="nav-link">トークン計算機</a><a href="/timeline/" class="nav-link">リリース年表</a><a href="/china-ai/" class="nav-link">中国AI</a><a href="/multimodal/" class="nav-link">マルチモーダル</a><a href="/mai/" class="nav-link">MS AI (MAI)</a><a href="/glossary/" class="nav-link">用語説明</a></nav></div></header>
+
+<section class="hero-luna"><div class="container">
+  <p class="price-flag">💰 2026年7月30日 80%値下げ — $1.00→$0.20 / $6.00→$1.20</p>
+  <h1>GPT-5.6 <span>Luna</span></h1>
+  <p class="lead">OpenAIの最速・最安モデルが劇的値下げ。<a href="/gemini-3-1-flash-lite/" style="color:var(--c-blue);">Gemini 3.1 Flash-Lite</a>より安く、GPT-5.5超えの性能を1/25のコストで。</p>
+  <div class="quick-stats">
+    <div class="stat"><div class="val">$0.20</div><div class="lbl">入力 / 1M tokens</div></div>
+    <div class="stat"><div class="val">$1.20</div><div class="lbl">出力 / 1M tokens</div></div>
+    <div class="stat"><div class="val">1.05M</div><div class="lbl">コンテキストウィンドウ</div></div>
+    <div class="stat"><div class="val">128K</div><div class="lbl">最大出力トークン</div></div>
+  </div>
+</div></section>
+
+<main><div class="container">
+<div class="tip-box" style="border-left-color:var(--c-yellow);margin-top:2rem;">
+  <strong>⚠️ このモデルは旧世代になりました（2026年9月22日）。</strong>後継は <a href="/gpt-6-sol-luna/"><strong>GPT-6 Luna（$0.10/$0.50・半額）</strong></a> です。本ページの料金・仕様は<strong>GPT-5.6世代当時の記録</strong>として保存しています。新規導入を検討する場合は後継ページをご確認ください。
+</div>
+
+<div class="updated-bar" style="margin-top:2rem;"><span class="dot">●</span>最終更新: <time datetime="2026-09-25">2026年9月25日</time> | 出典: <a href="https://developers.openai.com/api/docs/models/gpt-5-6-luna" target="_blank" rel="noopener">OpenAI API Docs</a> · <a href="https://developers.openai.com/api/docs/pricing" target="_blank" rel="noopener">OpenAI料金ページ</a> | <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a> · <a href="/gemini-3-1-flash-lite/">Gemini 3.1 Flash-Lite</a></div>
+
+<!-- 料金 -->
+<section class="section" style="padding-top:0;" aria-labelledby="pricing-h">
+<h2 class="section-title" id="pricing-h" style="font-size:1.2rem;">料金（2026年7月30日改定）</h2>
+<p class="section-sub">OpenAI公式料金ページ（developers.openai.com）で裏取り済み。価格はすべてUSD/1Mトークン。</p>
+
+<div class="table-wrap"><table><thead><tr><th>区分</th><th>入力</th><th>キャッシュ入力</th><th>出力</th><th>備考</th></tr></thead><tbody>
+<tr><td class="model-name">Standard（Short context）</td><td class="price">$0.20</td><td class="price">$0.02</td><td class="price">$1.20</td><td>入力≤272Kトークン。標準レート</td></tr>
+<tr><td class="model-name">Long context</td><td class="price">$0.40</td><td class="price">$0.04</td><td class="price">$1.80</td><td>入力&gt;272Kトークン。入力2倍・出力1.5倍</td></tr>
+<tr><td class="model-name">Batch</td><td class="price">$0.10</td><td class="price">$0.01</td><td class="price">$0.60</td><td>Standardの50%オフ。完了まで最長24時間</td></tr>
+<tr><td class="model-name">Flex</td><td class="price">$0.10</td><td class="price">$0.01</td><td class="price">$0.60</td><td>低優先度。Standardの50%オフ</td></tr>
+</tbody></table></div>
+
+<div class="price-history">
+  <strong>料金履歴:</strong><br>
+  <span class="old">$1.00 / $6.00</span>（GA発表時・2026年7月9日）<br>
+  <span class="arrow">→ $0.20 / $1.20</span>（2026年7月30日 — 80%値下げ。発表からわずか21日後）<br>
+  * キャッシュ書込は標準入力の1.25倍（$0.25）。キャッシュ読込は標準入力の10%。最短キャッシュ保持: 30分。
+</div>
+
+<div class="long-context-note">
+  ⚠️ <strong>Short/Long contextの境界: 入力272Kトークン</strong>（OpenAI APIドキュメントで確認）。272Kトークンを超えるプロンプトは、キャッシュ入力も含めリクエスト全体にLong context料金が適用されます。
+</div>
+
+<p class="source-note">一次情報: <a href="https://developers.openai.com/api/docs/pricing" target="_blank" rel="noopener">developers.openai.com/api/docs/pricing</a> · <a href="https://developers.openai.com/api/docs/models/gpt-5-6-luna" target="_blank" rel="noopener">GPT-5.6 Luna モデルドキュメント</a>（2026-08-07確認）</p>
+</section>
+
+<!-- 仕様 -->
+<section class="section" style="padding-top:0;" aria-labelledby="spec-h">
+<h2 class="section-title" id="spec-h" style="font-size:1.2rem;">モデル仕様</h2>
+<div class="spec-grid">
+  <div class="spec-item"><div class="spec-label">GAリリース</div><div class="spec-value">2026年7月9日</div></div>
+  <div class="spec-item"><div class="spec-label">知識カットオフ</div><div class="spec-value">2026年2月16日</div></div>
+  <div class="spec-item"><div class="spec-label">コンテキストウィンドウ</div><div class="spec-value">1,050,000トークン</div></div>
+  <div class="spec-item"><div class="spec-label">最大出力</div><div class="spec-value">128,000トークン</div></div>
+  <div class="spec-item"><div class="spec-label">入力モダリティ</div><div class="spec-value">テキスト＋画像</div></div>
+  <div class="spec-item"><div class="spec-label">出力モダリティ</div><div class="spec-value">テキスト</div></div>
+  <div class="spec-item"><div class="spec-label">ツール利用</div><div class="spec-value">Function Calling ✓</div></div>
+  <div class="spec-item"><div class="spec-label">ティア</div><div class="spec-value">nano相当</div></div>
+  <div class="spec-item"><div class="spec-label">リージョン加算</div><div class="spec-value">+10%（対象リージョン）</div></div>
+  <div class="spec-item"><div class="spec-label">モデルID</div><div class="spec-value" style="font-size:.85rem;">gpt-5.6-luna</div></div>
+</div>
+<p class="source-note">出典: <a href="https://developers.openai.com/api/docs/models/gpt-5-6-luna" target="_blank" rel="noopener">OpenAI GPT-5.6 Luna ドキュメント</a> · <a href="https://openai.com/index/gpt-5-6/" target="_blank" rel="noopener">GPT-5.6 発表</a></p>
+</section>
+
+<!-- 性能 -->
+<section class="section" style="padding-top:0;" aria-labelledby="perf-h">
+<h2 class="section-title" id="perf-h" style="font-size:1.2rem;">性能 — 「nano」を超えて</h2>
+<p class="section-sub">nanoティア相当の位置づけながら、主要ベンチマークで前世代フラッグシップを上回ります。</p>
+<div class="tip-box">
+  <ul>
+    <li><strong>Artificial Analysis Quality Index: 51</strong> — 軽量モデルとしては高い総合スコアで上位層</li>
+    <li><strong>Agents' Last Exam:</strong> GPT-5.5超え。専門エージェントタスクではSolとわずか2.4ポイント差</li>
+    <li><strong>HealthBench Professional / DeepSWE:</strong> いずれもGPT-5.5超え</li>
+    <li><strong>コーディング:</strong> BenchLM 215モデル中6位</li>
+    <li><strong>画像評価（Roboflow）:</strong> 総合74.1%（16モデル中6位）</li>
+    <li><strong>vs Claude Fable 5:</strong> Agents' Last ExamでFable 5超え、推定タスク単価は約1/16</li>
+  </ul>
+</div>
+<p style="font-size:.84rem;color:var(--c-muted);">OpenAIはLunaを「1年前のフロンティア級性能を、タスク単価約6%・約9倍の速度で提供」と説明しています。</p>
+<p class="source-note">出典: <a href="https://artificialanalysis.ai/models/gpt-5-6-luna" target="_blank" rel="noopener">Artificial Analysis</a> · <a href="https://benchlm.ai/models/gpt-5-6-luna" target="_blank" rel="noopener">BenchLM.ai</a> · <a href="https://openai.com/index/gpt-5-6/" target="_blank" rel="noopener">OpenAI</a></p>
+</section>
+
+
+
+<!-- 競合比較 -->
+<section class="section" style="padding-top:0;" aria-labelledby="compare-h">
+<h2 class="section-title" id="compare-h" style="font-size:1.2rem;">競合軽量モデルとの料金比較</h2>
+<p class="section-sub">GPT-5.6 Lunaの80%値下げにより、主要軽量モデルの中で最も安価な部類に。価格はすべてUSD/1Mトークン（標準料金・Short context）。</p>
+
+<div class="table-wrap compare-table"><table><thead><tr><th>モデル</th><th>提供元</th><th>入力</th><th>出力</th><th>Lunaより</th><th>備考</th></tr></thead><tbody>
+<tr><td class="model-name">GPT-5.6 Luna</td><td>OpenAI</td><td class="price">$0.20</td><td class="price">$1.20</td><td>—</td><td>基準モデル</td></tr>
+<tr><td class="model-name">GPT-5.4 nano</td><td>OpenAI</td><td class="price">$0.20</td><td class="price">$1.25</td><td class="tie">入力同額</td><td>旧世代最軽量。Lunaの方が高性能</td></tr>
+<tr><td class="model-name">Gemini 3.5 Flash-Lite</td><td>Google</td><td class="price">$0.30</td><td class="price">$2.50</td><td class="winner">Luna安</td><td>Gemini 3.x最安。Lunaは入力33%安・出力52%安</td></tr>
+<tr><td class="model-name"><a href="/gemini-3-1-flash-lite/">Gemini 3.1 Flash-Lite</a></td><td>Google</td><td class="price">$0.25</td><td class="price">$1.50</td><td class="winner">Luna安</td><td><a href="/gemini-3-1-flash-lite/">詳細ページ</a>。Lunaは入力20%安・出力20%安</td></tr>
+<tr><td class="model-name">Gemini 2.5 Flash-Lite</td><td>Google</td><td class="price">$0.10</td><td class="price">$0.40</td><td class="tie">Gemini安</td><td>旧世代だが絶対額で安い。性能差大</td></tr>
+<tr><td class="model-name">Claude Haiku 4.5</td><td>Anthropic</td><td class="price">$1.00</td><td class="price">$5.00</td><td class="winner">Luna安</td><td>Lunaは入力80%安・出力76%安</td></tr>
+<tr><td class="model-name">DeepSeek V4.1 Flash</td><td>DeepSeek</td><td class="price">$0.15–$0.30</td><td class="price">$0.60–$1.20</td><td class="tie">オフピークは入力・出力ともDeepSeek安</td><td>ピーク/オフピーク制（8/16発効）。オフピークはピークの半額</td></tr>
+</tbody></table></div>
+<p style="font-size:.78rem;color:var(--c-muted);margin-top:.3rem;">※ DeepSeekは2026-09-10リリースの <strong>V4.1 Flash</strong> が現行（cache miss入力 オフピーク$0.15・ピーク$0.30、出力 オフピーク$0.60・ピーク$1.20）。V4 Flash は V4.1 Flash へ統合されましたが、V4 Pro は 2026-09-14 以降も提供継続（9/14 ルーティング予告は撤回済み）。オフピーク時は入力・出力ともGPT-5.6 Luna（$0.20/$1.20）より安い計算です。</p>
+<p class="source-note">出典: 各社公式料金ページ（2026-08-07確認）。詳細は<a href="/pricing/">料金比較ページ</a>を参照。<a href="/gemini-3-1-flash-lite/">Gemini 3.1 Flash-Liteの詳細はこちら →</a></p>
+</section>
+
+<!-- ユースケース -->
+<section class="section" style="padding-top:0;" aria-labelledby="usecase-h">
+<h2 class="section-title" id="usecase-h" style="font-size:1.2rem;">こんな用途に最適</h2>
+<p class="section-sub">高スループット・低コストが求められるワークロード全般。特に以下のシーンで真価を発揮。</p>
+<div class="use-case-grid">
+  <div class="use-case-card"><div class="icon">💬</div><h4>チャット・カスタマーサポート</h4><p>大量の会話をリアルタイム処理。低レイテンシと低コストを両立。</p></div>
+  <div class="use-case-card"><div class="icon">🏷️</div><h4>分類・タグ付け・抽出</h4><p>文書分類、感情分析、エンティティ抽出など定型的なNLPタスク。</p></div>
+  <div class="use-case-card"><div class="icon">🤖</div><h4>軽量エージェントワークフロー</h4><p>ツール呼出・Function Callingを使った自動化。GPT-5.5超えのエージェント性能。</p></div>
+  <div class="use-case-card"><div class="icon">✍️</div><h4>要約・下書き・校正</h4><p>大量文書の自動要約、メール下書き、文章校正などのテキスト処理。</p></div>
+  <div class="use-case-card"><div class="icon">🔄</div><h4>バッチ処理・データパイプライン</h4><p>Batch/Flexでさらに50%オフ。大規模データの夜間処理に。</p></div>
+  <div class="use-case-card"><div class="icon">🔍</div><h4>RAG・検索拡張生成</h4><p>1.05Mコンテキストを活かした大量文書の検索・質問応答。</p></div>
+</div>
+</section>
+
+<!-- 選び方 -->
+<section class="section" style="padding-top:0;" aria-labelledby="choice-h">
+<h2 class="section-title" id="choice-h" style="font-size:1.2rem;">GPT-5.6シリーズの選び方</h2>
+<div class="table-wrap"><table><thead><tr><th>モデル</th><th>入力</th><th>出力</th><th>選ぶべき場面</th></tr></thead><tbody>
+<tr><td class="model-name"><a href="/gpt-5-6-sol/">GPT-5.6 Sol</a></td><td class="price">$4.00</td><td class="price">$20.00</td><td>最難関タスク・長期エージェント・失敗コストが高い業務（プロモ〜11/21）</td></tr>
+<tr><td class="model-name">GPT-5.6 Terra</td><td class="price">$2.00</td><td class="price">$12.00</td><td>標準的なコーディング・分析・本番エージェント</td></tr>
+<tr><td class="model-name" style="border-left:3px solid var(--c-green);padding-left:.7rem;">GPT-5.6 Luna ⬅</td><td class="price">$0.20</td><td class="price">$1.20</td><td>高スループット・コスト重視・定型処理・1次レビュー</td></tr>
+</tbody></table></div>
+<p style="font-size:.84rem;color:var(--c-muted);margin-top:.5rem;">💡 基本戦略: Lunaでまず処理し、品質不足ならTerra→Solとエスカレーション。コスト最適化の鉄則。テキスト中心ならLuna、音声・動画を含むマルチモーダル処理なら<a href="/gemini-3-1-flash-lite/">Gemini 3.1 Flash-Lite</a>も有力な選択肢。</p>
+</section>
+
+<!-- CTA -->
+<section class="section" style="padding-top:0;">
+<div style="background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-accent);border-radius:var(--r-lg);padding:1.5rem;text-align:center;">
+  <h3 style="font-size:1.1rem;margin-bottom:.75rem;">実際のコストを試算する</h3>
+  <p style="color:var(--c-muted);font-size:.9rem;margin-bottom:1rem;">GPT-5.6 Lunaを含む全モデルのトークンコストを一括計算。入力・出力トークン数を入れるだけ。</p>
+  <a href="/calculator/" style="display:inline-block;background:var(--c-accent);color:#fff;font-weight:600;padding:.65rem 1.5rem;border-radius:var(--r-md);">🧮 トークン計算機で試算する →</a>
+  <p style="margin-top:.8rem;font-size:.82rem;color:var(--c-muted);"><a href="/pricing/">📊 全モデル料金比較</a> · <a href="/gemini-3-1-flash-lite/">⚡ Gemini 3.1 Flash-Liteと比較</a> · <a href="/timeline/">🗓️ リリース年表</a> · <a href="https://developers.openai.com/api/docs/pricing" target="_blank" rel="noopener">🔗 OpenAI公式料金ページ</a></p>
+</div>
+</section>
+
+<div class="tip-box" style="border-left-color:var(--c-red);margin-bottom:2rem;">
+  <h3>⚠️ 免責事項</h3>
+  <ul>
+    <li>料金はOpenAI公式ページ（developers.openai.com）を2026-08-07に確認したものです。予告なく変動します。契約前に必ず公式ページをご確認ください。</li>
+    <li>本サイトは情報提供目的であり、特定プロバイダーの推薦・代理ではありません。</li>
+    <li>ベンチマーク数値は各評価機関・OpenAIの公表値であり、実際の使用感を保証するものではありません。</li>
+  </ul>
+</div>
+
+</div></main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>運営: okamoちゃんねる</p><p><a href="/">ホーム</a> · <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a> · <a href="/timeline/">年表</a> · <a href="/gemini-3-1-flash-lite/">Gemini 3.1 Flash-Lite</a></p></div><p class="footer-disclaimer">⚠️ 料金・仕様は予告なく変動します。契約前に必ず各社公式ページでご確認ください。本サイトは各社と提携していません。</p></div></footer>
+</body>
+</html>

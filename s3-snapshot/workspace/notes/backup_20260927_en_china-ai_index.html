@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chinese AI Models Overview [DeepSeek, Qwen, GLM, Kimi, MiniMax] Sep 2026 — LLM Data Hub</title>
+  <meta name="description" content="A permanent overview of major Chinese LLMs — DeepSeek, Qwen (Alibaba), GLM (Zhipu/Z.ai), Kimi (Moonshot), MiniMax and more. Flagship models, indicative pricing and open-weight status, verified against primary sources. Includes an update log.">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/en/china-ai/">
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/china-ai/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/china-ai/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/china-ai/">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/en/china-ai/">
+  <meta property="og:title" content="Chinese AI Models Overview [DeepSeek, Qwen, GLM, Kimi, MiniMax] Sep 2026">
+  <meta property="og:description" content="Major Chinese LLMs (DeepSeek, Qwen, GLM, Kimi, MiniMax) overviewed from primary sources. Pricing, open-weight status and update log.">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Chinese AI Models Overview [DeepSeek, Qwen, GLM, Kimi, MiniMax] Sep 2026","datePublished":"2026-08-29","dateModified":"2026-09-25","author":{"@type":"Organization","name":"LLM Data Hub"},"publisher":{"@type":"Organization","name":"okamo channel"},"url":"https://llm.okamomedia.tokyo/en/china-ai/","inLanguage":"en"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://llm.okamomedia.tokyo/en/"},{"@type":"ListItem","position":2,"name":"Chinese AI Models Overview","item":"https://llm.okamomedia.tokyo/en/china-ai/"}]}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .lab-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1rem;margin-bottom:1.5rem}.lab-card{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:1.1rem 1.2rem}.lab-card h3{font-size:1rem;font-weight:700;margin-bottom:.3rem}.lab-card .lab-tag{font-size:.7rem;font-weight:700;background:rgba(167,139,250,.15);color:var(--c-accent2);border:1px solid rgba(167,139,250,.3);padding:.1rem .5rem;border-radius:100px;display:inline-block;margin-bottom:.5rem}.lab-card p{font-size:.84rem;color:var(--c-muted);line-height:1.6}
+    .changelog{list-style:none;padding:0;margin:0}.changelog li{display:flex;gap:.9rem;padding:.7rem 0;border-bottom:1px solid var(--c-border);font-size:.86rem}.changelog li:last-child{border-bottom:none}.changelog .cl-date{font-family:var(--font-mono);font-size:.8rem;color:var(--c-accent2);white-space:nowrap;font-weight:600;min-width:88px}.changelog .cl-text{color:var(--c-muted);line-height:1.6}
+    .note-bar{font-size:.8rem;color:var(--c-muted);background:var(--c-surface2);border:1px solid var(--c-border);border-radius:var(--r-sm);padding:.5rem .8rem;margin:.6rem 0}
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/en/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="Main navigation"><a href="/en/" class="nav-link">Home</a><a href="/en/pricing/" class="nav-link">Pricing</a><a href="/en/calculator/" class="nav-link">Token Calculator</a><a href="/en/timeline/" class="nav-link">Release Timeline</a><a href="/en/china-ai/" class="nav-link active" aria-current="page">China AI</a><a href="/en/multimodal/" class="nav-link">Multimodal</a><a href="/en/mai/" class="nav-link">MS AI (MAI)</a><a href="/en/glossary/" class="nav-link">Glossary</a></nav></div></header>
+
+<main><div class="container">
+<div class="section" style="padding-bottom:0;">
+<h1 class="section-title" style="font-size:1.55rem;">Chinese AI Models Overview <span style="font-size:1rem;font-weight:500;color:var(--c-muted);">[September 2026]</span></h1>
+<p class="section-sub" style="max-width:720px;">A <strong>permanent overview</strong> of major Chinese models — DeepSeek, Qwen (Alibaba), GLM (Zhipu/Z.ai), Kimi (Moonshot), MiniMax, StepFun and more. We prioritize primary sources (official announcements &amp; pricing pages); where official figures are unavailable, third-party reporting/evaluations are clearly attributed. No speculation or rumors. See <a href="/en/pricing/">Pricing Comparison</a> and the <a href="/en/deepseek-v4-pro/">DeepSeek guide</a>.</p>
+<div class="updated-bar"><span class="dot">●</span>Last updated: <time datetime="2026-09-25">September 25, 2026</time> (info retrieved 2026-09-25; Kimi K3 pricing and Bedrock data handling verified and added) | Primary-source links per entry</div>
+</div>
+
+<section class="section" style="padding-top:0;" aria-labelledby="overview-h">
+<h2 class="section-title" id="overview-h" style="font-size:1.2rem;">Why track Chinese AI</h2>
+<p class="section-sub">Open weights and aggressive pricing give these models outsized reach in both API and self-hosted use.</p>
+<div class="tip-box">
+  <ul>
+    <li><strong>Origin of the "DeepSeek Shock"</strong> — DeepSeek R1 (Jan 2025) shipped o1-class reasoning at low cost under an MIT license, resetting industry pricing and release strategy.</li>
+    <li><strong>The open-weight front line</strong> — Qwen, GLM, Kimi, MiniMax and DeepSeek have all released flagship-class open models, many under MIT / Apache 2.0-style licenses.</li>
+    <li><strong>Price competitiveness</strong> — DeepSeek's peak/off-peak model and low-cost Qwen/GLM flagships can cost a fraction of comparable Western models.</li>
+    <li><strong>Caveats</strong> — Self-reported benchmarks can diverge from independent evaluations. Check data-sovereignty, regional and ToS considerations too.</li>
+  </ul>
+</div>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="labs-h">
+<h2 class="section-title" id="labs-h" style="font-size:1.2rem;">Major labs &amp; flagships</h2>
+<div class="lab-grid">
+  <div class="lab-card"><span class="lab-tag">DeepSeek</span><h3>DeepSeek (深度求索)</h3><p>China's most prominent lab after the R1 "DeepSeek Shock." Current: <strong>V4.1 Flash</strong> (released 2026-09-10; 1M context, 384K output, native image input). V4 Flash and Vision Exp were consolidated into V4.1 Flash. <strong>V4 Pro keeps running after 9/14</strong> (the 9/14 routing notice was withdrawn). MIT license. Peak/off-peak pricing since 2026-08-16. <a href="/en/deepseek-v4-1-flash/">Guide</a> · <a href="/en/deepseek-v4-pro/">What changes</a> · <a href="/en/pricing/#dh">Pricing</a>.</p></div>
+  <div class="lab-card"><span class="lab-tag">Qwen / Alibaba</span><h3>Qwen (通义千问 / Alibaba Cloud)</h3><p>Alibaba's open-weight family. Flagship Qwen3.8-Max (GA 2026-08-03) is a 2.4T-parameter MoE with 1M context. Low-cost Qwen3.8-Flash (2026-08-26) is a 125B/6B active MoE previewing the Qwen4 architecture (open-weight Flash-Next on HF/ModelScope; check each model card for license terms). <a href="/en/qwen-3-8-flash/">Qwen3.8-Flash details</a>.</p></div>
+  <div class="lab-card"><span class="lab-tag">GLM / Zhipu</span><h3>GLM (Zhipu AI / Z.ai)</h3><p>Tsinghua-affiliated lab. GLM-5.2 (2026-06-16) is a 744B MoE under MIT; GLM-5.3 (2026-08-14) ships at the same price. GLM-5.3-Flash (2026-08-26) is a 320B/18B MoE, natively multimodal, at list $0.15/$0.50. First foundation-model AI to IPO (Hong Kong, Jan 2026). <a href="/en/glm-5-3-flash/">GLM 5.3 Flash details</a>.</p></div>
+  <div class="lab-card"><span class="lab-tag">Kimi / Moonshot</span><h3>Kimi (Moonshot AI / 月之暗面)</h3><p>Beijing startup. Kimi K3 (2026-07-16) is a 2.8T-parameter model with native vision and a 1M-token context, priced at <strong>$3.00 input / $15.00 output, with cached input at $0.30</strong> (Moonshot direct API) — Claude Sonnet territory rather than the budget tier. It is also served through third-party hosts such as OpenRouter, and became available on Amazon Bedrock in September 2026 (AWS blog, 2026-09-18). K2.6 (Apr 2026) is reported to match GPT-5.5 on SWE-bench Pro.</p>    <p class="note-bar"><strong>Data handling via Bedrock (Bedrock-wide policy):</strong> The Kimi K3 model card itself has no data-handling section (verified 2026-09-25); what applies when you call Kimi K3 through Bedrock is Bedrock-wide policy. AWS's abuse-detection doc states that "Amazon Bedrock uses a zero operator access (ZOA) data security model. This means no operators of the service can access model input or output," and that it "uses a zero data retention (ZDR) data security model. This means that by default, Amazon Bedrock does not store model inputs or outputs." Kimi K3 is not on the list of models that require retention (OpenAI GPT-6 Astra family, Claude Fable 5, etc.). The data protection doc explains that because model providers cannot access the AWS-side Model Deployment Accounts, "they don't have access to Amazon Bedrock logs or to customer prompts and completions," and the AWS FAQ answers that inputs and outputs "are not shared with any model providers" and that neither AWS nor third-party model providers "will not use any inputs to or outputs from Amazon Bedrock to train Amazon Nova, Amazon Titan, or any third-party models." Customer content is encrypted and stored in the AWS Region you are using. Retention policy is configurable at the account or project level per Region; for guaranteed zero retention, set <code>data_retention_mode: none</code> (<a href="https://docs.aws.amazon.com/bedrock/latest/userguide/data-retention.html" target="_blank" rel="noopener">data retention</a>). <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/model-card-moonshot-ai-kimi-k3.html" target="_blank" rel="noopener">Kimi K3 model card</a> / <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/abuse-detection.html" target="_blank" rel="noopener">abuse detection (ZOA/ZDR)</a> / <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/data-protection.html" target="_blank" rel="noopener">data protection</a> / <a href="https://aws.amazon.com/bedrock/faqs/" target="_blank" rel="noopener">AWS FAQ</a> (verified 2026-09-25)</p>
+  </div>
+  <div class="lab-card"><span class="lab-tag">MiniMax</span><h3>MiniMax</h3><p>M3 (May/June 2026) is a multimodal MoE with 1M context. M2.7 open-sourced 2026-04-12. Low-cost, agent-oriented models.</p></div>
+  <div class="lab-card"><span class="lab-tag">StepFun</span><h3>StepFun (阶跃星辰)</h3><p>A Chinese AI startup. Its official documentation splits pricing by model category, and one of those categories is <strong>&ldquo;Multimodal Reasoning Models&rdquo;</strong>, where as of 2026-09-23 it lists <strong>step-5-preview</strong> ($1.00 / $2.70) and <strong>step-3.7-flash</strong> ($0.20 / $1.15), with cached input at $0.05 and $0.04 respectively. The wider catalogue spans text-only, vision, speech and image generation &mdash; for speech, stepaudio-2.5-realtime ($1.50/$10.00) and step-audio-r1.5 ($1.43/$15.00), among others. <a href="#stepfun-h">See the pricing split</a>.</p></div>
+  <div class="lab-card"><span class="lab-tag">Others</span><h3>ByteDance Doubao / Baidu ERNIE / Tencent Hunyuan</h3><p>ByteDance's Doubao (豆包) is a leading consumer assistant (closed). Baidu's ERNIE 5.x is omnimodal (only ERNIE 4.5 is open-source). Tencent open-sourced Hunyuan-A13B.</p></div>
+</div>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="compare-h">
+<h2 class="section-title" id="compare-h" style="font-size:1.2rem;">Model pricing &amp; open weights (indicative)</h2>
+<p class="section-sub">USD per 1M tokens. DeepSeek verified on the <a href="/en/pricing/#dh">Pricing Comparison</a>. Others reflect published figures from official announcements/docs, with third-party reporting/evaluations attributed, as of 2026-08-29 (routers and regions may differ).</p>
+
+<div class="table-wrap"><table><thead><tr><th>Model</th><th>Provider</th><th>Input</th><th>Output</th><th>Open weights</th><th>Notes / source</th></tr></thead><tbody>
+<tr><td class="model-name">DeepSeek V4.1 Flash</td><td>DeepSeek</td><td class="price">$0.15 / $0.30<br><small>(off/peak)</small></td><td class="price">$0.60 / $1.20<br><small>(off/peak)</small></td><td>MIT</td><td>Cache miss. Released 2026-09-10. <a href="/en/deepseek-v4-1-flash/">Guide</a></td></tr>
+<tr><td class="model-name">DeepSeek V4 Pro<br><small>(live)</small></td><td>DeepSeek</td><td class="price">$0.66 / $1.32<br><small>(off/peak)</small></td><td class="price">$1.98 / $3.96<br><small>(off/peak)</small></td><td>MIT</td><td>Live. <strong>Continues after 9/14</strong> (routing notice withdrawn). <a href="/en/deepseek-v4-pro/">Continuation details</a></td></tr>
+
+<tr><td class="model-name">Qwen3.8-Max</td><td>Alibaba</td><td class="price">$2.00</td><td class="price">$6.00</td><td>Partial<br><small>(text: custom license)</small></td><td>2.4T MoE, 1M ctx. Launch pricing (<a href="https://www.marktechpost.com/2026/08/03/alibaba-qwen-releases-qwen3-8-max/" target="_blank" rel="noopener">MarkTechPost report</a>)</td></tr>
+<tr><td class="model-name">Qwen3.8-Flash <span class="badge badge-new">New</span></td><td>Alibaba</td><td class="price">$0.15</td><td class="price">$0.47</td><td>Open<br><small>(Flash-Next)</small></td><td>125B/6B active MoE, 256K→1M ctx, multimodal. Qwen4 preview. <a href="/en/qwen-3-8-flash/">Deep dive</a>. <a href="https://qwen.ai/blog?id=qwen3.8-flash-next" target="_blank" rel="noopener">Qwen blog</a></td></tr>
+<tr><td class="model-name">Qwen3.8-27B</td><td>Alibaba</td><td class="price">—</td><td class="price">—</td><td>TBD</td><td>Smaller self-hostable checkpoint (license: see official model card)</td></tr>
+<tr><td class="model-name">GLM-5.3-Flash <span class="badge badge-new">New</span></td><td>Zhipu (Z.ai)</td><td class="price">$0.15</td><td class="price">$0.50</td><td>MIT</td><td>320B/18B MoE, 1M ctx. List price (intro promo ended 9/9). <a href="/en/glm-5-3-flash/">Deep dive</a>. <a href="https://docs.z.ai/guides/overview/pricing" target="_blank" rel="noopener">z.ai docs</a></td></tr>
+<tr><td class="model-name">GLM-5.2 / 5.3</td><td>Zhipu (Z.ai)</td><td class="price">$1.40</td><td class="price">$4.40</td><td>MIT (5.2)</td><td>5.3 weights not public as of retrieval. <a href="https://docs.z.ai/guides/overview/pricing" target="_blank" rel="noopener">z.ai docs</a></td></tr>
+<tr><td class="model-name">Kimi K2.6</td><td>Moonshot</td><td class="price">$0.95</td><td class="price">$4.00</td><td>Modified MIT</td><td>Reported (<a href="https://miraflow.ai/blog/kimi-k2-6-explained-moonshot-ai-open-source-model-ties-gpt-5-5-coding" target="_blank" rel="noopener">Miraflow</a>). Said to match GPT-5.5 on SWE-bench Pro</td></tr>
+<tr><td class="model-name">Kimi K3</td><td>Moonshot</td><td class="price">$3.00</td><td class="price">$15.00</td><td>Open (2.8T)</td><td>Released 2026-07-16; among the largest open-weight models. Cached input $0.30 (90% off); cache writes $3.00 (5-min TTL) or $6.00 (1-hour TTL) — all Moonshot direct API pricing; third-party hosts such as Bedrock are priced separately. 1M context, native vision. Always reasons (<code>reasoning_effort=max</code>), so reasoning tokens bill as output. <a href="https://platform.kimi.ai/docs/pricing/chat-k3" target="_blank" rel="noopener">Official pricing</a> (verified 2026-09-25)</td></tr>
+<tr><td class="model-name">MiniMax M3</td><td>MiniMax</td><td class="price">$0.30</td><td class="price">$1.20</td><td>Open</td><td>List $0.60/$2.40 with "permanent 50% off" (<a href="https://developer.puter.com/tutorials/minimax-api-pricing/" target="_blank" rel="noopener">Puter</a>/<a href="https://artificialanalysis.ai/models/minimax-m3" target="_blank" rel="noopener">AA</a>)</td></tr>
+<tr><td class="model-name">step-5-preview <span class="badge badge-new">New</span></td><td>StepFun</td><td class="price">$1.00</td><td class="price">$2.70</td><td>&mdash;</td><td>Listed under the &ldquo;Multimodal Reasoning Models&rdquo; category of the official pricing table. Cache hit $0.05. <a href="https://platform.stepfun.ai/docs/en/guides/pricing/details" target="_blank" rel="noopener">StepFun docs</a></td></tr>
+<tr><td class="model-name">step-3.7-flash</td><td>StepFun</td><td class="price">$0.20</td><td class="price">$1.15</td><td>&mdash;</td><td>Lower-cost model in the same category. Cache hit $0.04. <a href="https://platform.stepfun.ai/docs/en/guides/pricing/details" target="_blank" rel="noopener">StepFun docs</a></td></tr>
+</tbody></table></div>
+
+<div class="note-bar">※ "—" = no confidently published unit price as of retrieval. Always confirm exact terms on each vendor's official pricing page (Alibaba Model Studio / Z.ai / MiniMax / DeepSeek, etc.). For cross-vendor comparison, see the <a href="/en/pricing/">Pricing Comparison</a>.</div>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="stepfun-h">
+<h2 class="section-title" id="stepfun-h" style="font-size:1.2rem;">StepFun's pricing split &mdash; the &ldquo;Multimodal Reasoning Models&rdquo; category</h2>
+<p class="section-sub">StepFun's documentation divides its price table by model category, and one of those categories is <strong>Multimodal Reasoning Models</strong>. Prices are USD per 1M tokens, with cached input billed separately (checked 2026-09-23).</p>
+<div class="table-wrap"><table><thead><tr><th>Model</th><th>Input<br>(cache miss)</th><th>Input<br>(cache hit)</th><th>Output</th><th>Note</th></tr></thead><tbody>
+<tr><td class="model-name">step-5-preview</td><td class="price">$1.00</td><td class="price">$0.05</td><td class="price">$2.70</td><td>The higher-end model in this category; cached input is 1/20 of the standard input rate</td></tr>
+<tr><td class="model-name">step-3.7-flash</td><td class="price">$0.20</td><td class="price">$0.04</td><td class="price">$1.15</td><td>The lower-cost model in this category</td></tr>
+</tbody></table></div>
+<div class="note-bar">※ StepFun's price table also has separate categories for text-only language models, vision models (step-1o-turbo-vision $0.36/$0.07/$1.15), audio models (stepaudio-2.5-realtime $1.50/$0.30/$10.00, stepaudio-2.5-chat $1.50/$0.30/$3.50, step-audio-r1.5 $1.43/$0.29/$15.00 and others), speech recognition (stepaudio-3-asr-max $0.40/hour and others) and image generation/editing (step-2x-large $0.02/image, step-image-edit-2 $0.003/image). The table above extracts the &ldquo;Multimodal Reasoning Models&rdquo; category only. Always confirm current pricing on the <a href="https://platform.stepfun.ai/docs/en/guides/pricing/details" target="_blank" rel="noopener">official StepFun documentation</a>.</div>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="deepseek-h">
+<h2 class="section-title" id="deepseek-h" style="font-size:1.2rem;">DeepSeek in depth</h2>
+<p class="section-sub">We maintain a hands-on guide for DeepSeek.</p>
+<div class="tip-box">
+  <ul>
+    <li><a href="/en/deepseek-v4-1-flash/">DeepSeek V4.1 Flash guide</a> — pricing, benchmarks, setup, FAQ.</li>
+    <li><a href="/en/deepseek-v4-pro/">DeepSeek V4 Pro: continuation details</a> — why V4 Pro keeps running and how it compares with V4.1 Flash.</li>
+    <li><a href="/en/pricing/#dh">DeepSeek pricing (peak/off-peak)</a> — current V4.1 Flash and V4 Pro rates, plus time-window details.</li>
+    <li><a href="/en/timeline/#deepseek-v4-pro-ga">Release timeline</a> — from R1 to V4 Pro GA.</li>
+  </ul>
+</div>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="log-h">
+<h2 class="section-title" id="log-h" style="font-size:1.2rem;">Update log</h2>
+<p class="section-sub">This page is updated continuously; newest entries appear first.</p>
+<div style="background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:1rem 1.25rem;">
+<ul class="changelog">
+  <li><span class="cl-date">2026-09-23</span><span class="cl-text">Added <strong>StepFun</strong> (阶跃星辰). Sourced <strong>step-5-preview ($1.00/$2.70)</strong> and <strong>step-3.7-flash ($0.20/$1.15)</strong> from the &ldquo;Multimodal Reasoning Models&rdquo; category of the official pricing table (platform.stepfun.ai) and added them to the comparison table. DeepSeek pricing re-verified (unchanged).</span></li>
+  <li><span class="cl-date">2026-09-09</span><span class="cl-text">GLM 5.3 Flash's 50% intro promo ($0.075/$0.25) ended; list price ($0.15/$0.50) now applies. <a href="/en/glm-5-3-flash/">Deep-dive</a>, pricing and calculator updated.</span></li>
+  <li><span class="cl-date">2026-09-01</span><span class="cl-text">Added Qwen3.8-Flash (Alibaba, released 2026-08-26): $0.15/$0.47 (international), 125B/6B active MoE, 256K→1M context, Qwen4 architecture preview — verified against qwen.ai/blog. New <a href="/en/qwen-3-8-flash/">deep-dive page</a>.</span></li>
+  <li><span class="cl-date">2026-08-31</span><span class="cl-text">Added GLM 5.3 Flash (Z.ai, released 2026-08-26): list $0.15/$0.50 (the 50% intro promo $0.075/$0.25 ended 9/9), 320B/18B MoE, 1M context, MIT — verified against docs.z.ai and the Z.ai blog. New <a href="/en/glm-5-3-flash/">deep-dive page</a>.</span></li>
+  <li><span class="cl-date">2026-09-25</span><span class="cl-text">Added Kimi K3 pricing, verified on the official pricing page ($3.00 input / $15.00 output / $0.30 cached input, 1M context, native vision), plus its Amazon Bedrock availability (AWS blog, 2026-09-18). Also added Kimi K3 data handling via Bedrock (ZOA/ZDR, not shared with model providers, not used for training — flagged as Bedrock-wide policy, not Kimi-specific).</span></li>
+  <li><span class="cl-date">2026-08-29</span><span class="cl-text">Page created. Added an overview of DeepSeek, Qwen, GLM, Kimi, MiniMax and other Chinese models, including DeepSeek peak/off-peak pricing and Qwen3.8-Max, GLM-5.x, Kimi K3, MiniMax M3 highlights, verified against primary sources.</span></li>
+</ul>
+</div>
+</section>
+
+<div class="tip-box" style="border-left-color:var(--c-red);margin-bottom:2rem;">
+  <h3>⚠️ Disclaimer</h3>
+  <ul>
+    <li>Pricing and specs prioritize official pages/announcements (with third-party reporting attributed) as of 2026-08-29 and may change without notice. Always check official pages before contracting.</li>
+    <li>Benchmark figures exist in both self-reported and independent forms and may diverge. This page lists only what could be verified.</li>
+    <li>This site is informational only. We are not affiliated with or endorsed by any provider. All trademarks belong to their owners.</li>
+  </ul>
+</div>
+
+</div></main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>Operated by okamo channel</p><p><a href="/en/">Home</a> · <a href="/en/pricing/">Pricing</a> · <a href="/en/calculator/">Calculator</a> · <a href="/en/timeline/">Timeline</a> · <a href="/en/deepseek-v4-pro/">DeepSeek Guide</a> · <a href="/en/gpt-5-6-sol/">GPT-5.6 Sol</a></p></div><p class="footer-disclaimer">⚠️ Pricing and specifications may change without notice. Always verify on official pages. Not affiliated with any provider.</p></div></footer>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Microsoft AI (MAI) Series Guide [September 2026] — Pricing, Models, API &amp; Timeline — LLM Data Hub</title>
+  <meta name="description" content="Microsoft's first-party MAI family: MAI-Image-2.6/2.6-Flash (image generation, starting prices), MAI-Transcribe-2 (speech, $0.10/hour), MAI-Thinking-1 (reasoning), plus pricing, API usage and a release timeline — verified against microsoft.ai and Azure Foundry. Updated September 19, 2026.">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/en/mai/">
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/mai/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/mai/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/mai/">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/en/mai/">
+  <meta property="og:title" content="Microsoft AI (MAI) Series Guide [September 2026]">
+  <meta property="og:description" content="Microsoft's first-party MAI models — image generation, speech recognition, reasoning, pricing, API usage and a release timeline, verified against primary sources.">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Microsoft AI (MAI) Series Guide [September 2026] — Pricing, Models, API & Timeline","datePublished":"2026-09-09","dateModified":"2026-09-19","author":{"@type":"Organization","name":"LLM Data Hub"},"publisher":{"@type":"Organization","name":"okamo channel"},"url":"https://llm.okamomedia.tokyo/en/mai/","inLanguage":"en"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://llm.okamomedia.tokyo/en/"},{"@type":"ListItem","position":2,"name":"Microsoft AI (MAI) Series","item":"https://llm.okamomedia.tokyo/en/mai/"}]}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .hero-mai{background:linear-gradient(135deg,#0a1f3c 0%,#10506b 50%,#141a24 100%);border-bottom:1px solid var(--c-border);padding:3rem 1rem 2.4rem;text-align:center}.hero-mai .price-flag{display:inline-block;background:rgba(56,205,255,.12);border:1px solid rgba(56,205,255,.35);color:#4cd6ff;font-size:.82rem;font-weight:700;padding:.3rem .8rem;border-radius:100px;margin-bottom:1rem}.hero-mai h1{font-size:clamp(1.6rem,4.5vw,2.4rem);font-weight:800;line-height:1.2;margin-bottom:.7rem}.hero-mai h1 span{color:#4cd6ff}.hero-mai .lead{font-size:1.02rem;color:var(--c-muted);max-width:680px;margin:0 auto 1.4rem}.hero-mai .quick-stats{display:flex;gap:1.1rem;flex-wrap:wrap;justify-content:center}.hero-mai .stat{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.7rem 1.1rem;text-align:center;min-width:120px}.hero-mai .stat .val{font-family:var(--font-mono);font-size:1.1rem;font-weight:700;color:#4cd6ff}.hero-mai .stat .lbl{font-size:.72rem;color:var(--c-muted);margin-top:.15rem}
+    @media(max-width:640px){.hero-mai .quick-stats{flex-direction:column;gap:.5rem}}
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/en/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="Main navigation"><a href="/en/" class="nav-link">Home</a><a href="/en/pricing/" class="nav-link">Pricing</a><a href="/en/calculator/" class="nav-link">Token Calculator</a><a href="/en/timeline/" class="nav-link">Release Timeline</a><a href="/en/china-ai/" class="nav-link">China AI</a><a href="/en/multimodal/" class="nav-link">Multimodal</a><a href="/en/mai/" class="nav-link active" aria-current="page">MS AI (MAI)</a><a href="/en/glossary/" class="nav-link">Glossary</a></nav></div></header>
+
+<section class="hero-mai"><div class="container">
+  <p class="price-flag">⚡ Microsoft's first-party model family — served on Foundry, also built into Copilot</p>
+  <h1>Microsoft AI <span>(MAI)</span> Series</h1>
+  <p class="lead">The foundation-model family Microsoft develops in-house to rebalance its OpenAI dependency. It ramped up in 2026 and now covers reasoning, coding, image generation, speech recognition and Voice.</p>
+  <div class="quick-stats">
+    <div class="stat"><div class="val">7+</div><div class="lbl">Model families</div></div>
+    <div class="stat"><div class="val">$0.10/hr</div><div class="lbl">MAI-Transcribe-2 (limited)</div></div>
+    <div class="stat"><div class="val">60 langs</div><div class="lbl">Transcribe-2 support</div></div>
+    <div class="stat"><div class="val">Apr 2026→</div><div class="lbl">Full rollout started</div></div>
+  </div>
+</div></section>
+
+<main><div class="container">
+<div class="updated-bar" style="margin-top:2rem;"><span class="dot">●</span>Last updated: <time datetime="2026-09-19">September 19, 2026</time> | Sources: <a href="https://microsoft.ai/blog/" target="_blank" rel="noopener">microsoft.ai blog</a> · <a href="https://azure.microsoft.com/en-us/pricing/details/ai-foundry-models/microsoft/" target="_blank" rel="noopener">Azure Foundry pricing</a> · <a href="https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure" target="_blank" rel="noopener">Microsoft Foundry docs</a> | <a href="/en/pricing/">Pricing</a> · <a href="/en/multimodal/">Multimodal</a> · <a href="/en/timeline/">Timeline</a></div>
+
+<p style="font-size:.9rem;color:var(--c-muted);margin-top:1rem;"><strong>MAI (Microsoft AI)</strong> is the family of foundation models Microsoft develops itself. They are hosted and billed through Azure's <strong>Microsoft Foundry</strong> (formerly Azure AI Foundry) and distributed <strong>Azure-first</strong>. They sit alongside OpenAI models (via Azure OpenAI) as a separate family that Microsoft develops and serves itself. Specific prices are shown in the table below; the goal is to give enterprises more choice on cost, licensing and data sovereignty.</p>
+
+<!-- Latest models -->
+<section class="section" style="padding-top:0;" aria-labelledby="latest-h">
+<h2 class="section-title" id="latest-h">Latest models (September 2026)</h2>
+<p class="section-sub">The two newest families confirmed on the microsoft.ai blog. Both can be tried via Microsoft Foundry / MAI Playground.</p>
+
+<div class="tip-box" style="margin-bottom:1rem;">
+  <h3 style="margin-bottom:.3rem;">🖼️ MAI-Image-2.6 / MAI-Image-2.6-Flash (image generation) — Sep 4, 2026</h3>
+  <p style="font-size:.88rem;color:var(--c-muted);margin:0;">Microsoft's strongest image models. They add multi-reference image editing (compose people, products, styles and scenes from multiple images), web grounding, dynamic aspect ratios, and support up to <strong>1.5K resolution</strong>. <strong>MAI-Image-2.6</strong> targets maximum precision/quality; <strong>MAI-Image-2.6-Flash</strong> delivers comparable quality for latency-sensitive, high-throughput workloads. Per Microsoft's announcement (as of Sep 4, 2026), MAI-Image-2.6 is <strong>No. 2</strong> on Arena for both text-to-image and image editing, and <strong>No. 1</strong> on Artificial Analysis for image editing. Microsoft reports 2.6-Flash is <strong>2.8× faster and 72% more efficient</strong> than GPT-Image-2-Medium. The blog lists <strong>$5 text input / $8 image input / $38 image output</strong> for MAI-Image-2.6 and <strong>$1.75 / $2.50 / $19</strong> for 2.6-Flash (starting prices as stated on the blog). Both are in <strong>Public Preview</strong>.</p>
+</div>
+<div class="tip-box" style="margin-bottom:1rem;border-left-color:var(--c-green);">
+  <h3 style="margin-bottom:.3rem;">🎙️ MAI-Transcribe-2 (speech recognition) — Sep 3, 2026</h3>
+  <p style="font-size:.88rem;color:var(--c-muted);margin:0;">Microsoft's blog title positions it as the "fastest, most accurate and cheapest speech recognition model in the world." Priced at <strong>$0.10 / hour (a limited-time offer through the end of the year)</strong>. It is <strong>No. 1</strong> on FLEURS across 60 languages (avg WER 5.2%) and <strong>No. 2</strong> on Artificial Analysis's AA-WER leaderboard (2.0%). Microsoft cites speeds (via Artificial Analysis) of 10× GPT-Transcribe, 7× Scribe v2, and 5× Gemini 3.5 Transcribe. Features include speaker diarization, word-level timestamps, keyword biasing, verbatim/clean transcription styles, code switching and automatic language identification.</p>
+</div>
+<p class="source-note">Sources: <a href="https://microsoft.ai/news/pushing-the-quality-cost-frontier-with-mai-image-2-6/" target="_blank" rel="noopener">Pushing the quality-cost frontier with MAI-Image-2.6 (2026-09-04)</a> · <a href="https://microsoft.ai/news/mai-transcribe-2-is-the-fastest-most-accurate-and-cheapest-speech-recognition-model-in-the-world/" target="_blank" rel="noopener">MAI-Transcribe-2 (2026-09-03)</a></p>
+</section>
+
+<!-- Pricing -->
+<section class="section" style="padding-top:0;" aria-labelledby="pricing-h">
+<h2 class="section-title" id="pricing-h">Model pricing (Azure Foundry, verified)</h2>
+<p class="section-sub">From the Microsoft Azure "Foundry Models pricing (Microsoft section)" in <strong>US dollars</strong>. Prices are USD per 1M tokens; image and speech models use special units — see notes. Verified 2026-09-09 (re-checked 2026-09-19: the 2.6 family is still absent from that table and existing rows are unchanged).</p>
+
+<div class="table-wrap"><table><thead><tr><th>Model</th><th>Input / 1M</th><th>Cached Input / 1M</th><th>Output / 1M</th><th>Category</th></tr></thead><tbody>
+<tr><td class="model-name">MAI-Thinking-1</td><td class="price">$2.00</td><td class="price">$0.20</td><td class="price">$8.00</td><td>Reasoning</td></tr>
+<tr><td class="model-name">MAI-Cyber-1 Flash</td><td class="price">$0.60</td><td class="price">$0.06</td><td class="price">$3.50</td><td>Cyber security (MDASH)</td></tr>
+<tr><td class="model-name">MAI-DS-R1</td><td class="price">$1.35</td><td class="price">—</td><td class="price">$5.40</td><td>DeepSeek R1 family (Regional $1.485/$5.94)</td></tr>
+<tr><td class="model-name">MAI-Image-2</td><td class="price">$5</td><td class="price">—</td><td class="price">$33</td><td>Image generation (Global)</td></tr>
+<tr><td class="model-name">MAI-Image-2-Efficient</td><td class="price">$5</td><td class="price">—</td><td class="price">$19.50</td><td>Image generation (41% lower cost)</td></tr>
+<tr><td class="model-name">MAI-Image-2.5</td><td class="price">Text $5 / Image $8</td><td class="price">—</td><td class="price">$47</td><td>Image generation</td></tr>
+<tr><td class="model-name">MAI-Image-2.5 Flash</td><td class="price">Text $1.75 / Image $1.75</td><td class="price">—</td><td class="price">$19.50</td><td>Image generation (fast)</td></tr>
+<tr><td class="model-name">MAI-Image-2.5 Pro</td><td class="price">Text $5 / Image $8</td><td class="price">—</td><td class="price">$106</td><td>Image generation (high quality)</td></tr>
+</tbody></table></div>
+
+<h3 style="font-size:1rem;margin:1.6rem 0 .5rem;">Reference prices: MAI-Image-2.6 / 2.6-Flash (from the official blog; not in the pricing table)</h3>
+<p style="font-size:.88rem;color:var(--c-muted);margin-bottom:.6rem;">
+  These two models are <strong>not in the verified table above</strong> (Azure Foundry Models pricing, Microsoft section) as of 2026-09-19.
+  So we publish the prices exactly as stated on the <a href="https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/mai-image-2-6-and-mai-image-2-6-flash-quality-and-speed-at-production-scale/4550970" target="_blank" rel="noopener">Microsoft Foundry blog post (2026-09-04)</a>.
+  All figures are <strong>starting prices</strong> and both models are in <strong>public preview</strong>.
+</p>
+<div class="table-wrap"><table><thead><tr><th>Model</th><th>Text input / 1M</th><th>Image input / 1M</th><th>Image output / 1M</th></tr></thead><tbody>
+<tr><td class="model-name">MAI-Image-2.6</td><td class="price">$5</td><td class="price">$8</td><td class="price">$38</td></tr>
+<tr><td class="model-name">MAI-Image-2.6-Flash</td><td class="price">$1.75</td><td class="price">$2.50</td><td class="price">$19</td></tr>
+</tbody></table></div>
+<div class="tip-box" style="margin-top:.8rem;">
+  <p style="font-size:.85rem;color:var(--c-muted);margin:0 0 .5rem;">Text input and image input are <strong>billed at different rates</strong> (image input costs more), and the output rate applies to <strong>image output</strong>. Against MAI-Image-2.5 in the verified table ($5 / $8 / $47), MAI-Image-2.6 comes in at $38 output and 2.6-Flash at $1.75 / $2.50 / $19.</p>
+  <p style="font-size:.85rem;color:var(--c-muted);margin:0;"><strong>Verbatim from the official blog (pricing paragraph):</strong> <span style="font-family:ui-monospace,Menlo,monospace;font-size:.78rem;">&quot;MAI-Image-2.6 and MAI-Image-2.6-Flash are available in public preview in Foundry. MAI-Image-2.6 pricing starts at $5 USD per 1M tokens for text input, $8 USD per 1M tokens for image input, and $38 USD per 1M tokens for image output. MAI-Image-2.6-Flash pricing starts at $1.75 USD per 1M tokens for text input, $2.50 USD per 1M tokens for image input, and $19 USD per 1M tokens for image output.&quot;</span></p>
+</div>
+
+<div class="thinking-note" style="border-left-color:var(--c-yellow);margin-top:1rem;">
+  ⚠️ <strong>Unverified / separately billed:</strong>
+  <ul style="margin:.4rem 0 0;padding-left:1.2rem;">
+    <li><strong>MAI-Image-2.6 / 2.6-Flash</strong> are still not in the verified Microsoft Foundry pricing table, so the figures above come from the <strong>official blog (starting prices, public preview)</strong>. In public preview, pricing and availability can move — confirm the current numbers in Foundry before contracting.</li>
+    <li><strong>MAI-Code family (MAI-Code-1-Flash / 1.1-Flash)</strong> are also absent from that table, so pricing is omitted.</li>
+    <li><strong>MAI-Voice family (MAI-Voice-1 / 2 / 2-Flash)</strong> are officially served via <a href="https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure" target="_blank" rel="noopener">Azure Speech in Foundry Tools</a> and billed via speech meters, not tokens (so not in this table).</li>
+  </ul>
+</div>
+
+<p class="source-note">Primary source: <a href="https://azure.microsoft.com/en-us/pricing/details/ai-foundry-models/microsoft/" target="_blank" rel="noopener">azure.microsoft.com/.../ai-foundry-models/microsoft/</a> (verified 2026-09-19) · MAI-Image-2.6 / 2.6-Flash pricing only: <a href="https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/mai-image-2-6-and-mai-image-2-6-flash-quality-and-speed-at-production-scale/4550970" target="_blank" rel="noopener">Microsoft Foundry Blog, MAI-Image-2.6 and MAI-Image-2.6-Flash</a> (2026-09-04; verified 2026-09-19)</p>
+</section>
+
+<!-- How to use -->
+<section class="section" style="padding-top:0;" aria-labelledby="api-h">
+<h2 class="section-title" id="api-h">How to use (API / access)</h2>
+<p class="section-sub">MAI models are primarily deployed and called via <strong>Azure AI Foundry / Microsoft Foundry</strong>. Some can also be tried in MAI Playground or via OpenRouter.</p>
+
+<div class="tip-box">
+  <ul>
+    <li><strong>Microsoft Foundry (ai.azure.com/catalog/models):</strong> pick a MAI model from the catalog and deploy it by <strong>model ID</strong>. Auth is Azure (API key / Entra ID, similar to Azure OpenAI).</li>
+    <li><strong>MAI Playground (playground.microsoft.ai):</strong> try models in the browser without an API key. Examples: <code>playground.microsoft.ai/chat?model=mai-image-2-6-flash</code> / <code>?model=mai-transcribe-2</code>.</li>
+    <li><strong>MAI-Transcribe-2 (speech):</strong> officially via <a href="https://learn.microsoft.com/en-us/azure/ai-services/speech-service/mai-transcribe" target="_blank" rel="noopener">Azure Speech MAI-Transcribe docs</a> (REST / SDK). On OpenRouter the model ID is <code>microsoft/mai-transcribe-2</code>.</li>
+    <li><strong>Image generation (MAI-Image-2.x):</strong> deploy as a text-to-image / image-editing model in Foundry. Multi-reference editing and web grounding are supported by the <strong>MAI-Image-2.6</strong> generation.</li>
+    <li><strong>Reasoning (MAI-Thinking-1):</strong> a reasoning model; note the cheap cached-input rate of $0.20.</li>
+  </ul>
+</div>
+<p style="font-size:.84rem;color:var(--c-muted);">⚠️ Exact request formats and parameters differ by model and may change, so <strong>always consult the official documentation</strong> (Learn / the specific Foundry model page). This guide intentionally does not include concrete API request bodies, as those were not verified against a primary source.</p>
+</section>
+
+<!-- Timeline -->
+<section class="section" style="padding-top:0;" aria-labelledby="timeline-h">
+<h2 class="section-title" id="timeline-h">MAI release timeline</h2>
+<p class="section-sub">Dates from the microsoft.ai blog, key highlights.</p>
+<div class="table-wrap"><table><thead><tr><th>Date</th><th>Milestone</th></tr></thead><tbody>
+<tr><td class="model-name">~Sep 2025</td><td>“Two in-house models” and “Introducing MAI-Image-1” (MAI-Image-1 debuts in LMArena top 10)</td></tr>
+<tr><td class="model-name">2026-04-02</td><td>“Announcing 3 new world class MAI models” = <strong>MAI-Image-2 / MAI-Transcribe-1 / MAI-Voice-1</strong> (available in Foundry)</td></tr>
+<tr><td class="model-name">2026-04-02</td><td>MAI-Image-2-Efficient (flagship quality, 41% lower cost)</td></tr>
+<tr><td class="model-name">May 2026</td><td>MAI-Transcribe-1.5 / MAI-Code-1-Flash announced</td></tr>
+<tr><td class="model-name">2026-06-02</td><td>Build 2026 “Building a hill-climbing machine: Launching seven new MAI models” = MAI-Image-2.5 / 2.5-Flash / Transcribe-1.5 / <strong>MAI-Thinking-1</strong> / Voice-2 / Voice-2-Flash / Code-1-Flash</td></tr>
+<tr><td class="model-name">Jul 2026</td><td>MAI-Cyber-1-Flash (MDASH, security) / MAI-Image-2.5-Pro &amp; MAI-Voice-2-Flash / MAI-Image-2.5 (No. 2 on Arena)</td></tr>
+<tr><td class="model-name">Aug 2026</td><td>MAI-Code-1.1-Flash (at a quarter of the cost) / MAI-Image-2.6 reaches No. 2 on Arena</td></tr>
+<tr><td class="model-name" style="border-left:3px solid var(--c-green);padding-left:.7rem;">2026-09-03 <span class="badge badge-new">New</span></td><td><strong>MAI-Transcribe-2</strong> (speech recognition, $0.10/hr limited)</td></tr>
+<tr><td class="model-name" style="border-left:3px solid var(--c-green);padding-left:.7rem;">2026-09-04 <span class="badge badge-new">New</span></td><td><strong>MAI-Image-2.6 / 2.6-Flash</strong> (image generation)</td></tr>
+</tbody></table></div>
+<p class="source-note">Source: <a href="https://microsoft.ai/blog/" target="_blank" rel="noopener">microsoft.ai/blog</a></p>
+</section>
+
+<!-- Key points -->
+<section class="section" style="padding-top:0;" aria-labelledby="notes-h">
+<h2 class="section-title" id="notes-h">Key things to know</h2>
+<div class="tip-box">
+  <ul>
+    <li><strong>First-party models:</strong> MAI is a separate lineage from OpenAI models (served via Azure OpenAI). It is offered to enterprises as a way to broaden options for data sovereignty and licensing.</li>
+    <li><strong>Azure-first:</strong> MAI models ship alongside open models from Google, Meta, Mistral, DeepSeek and others in the Foundry catalog (11,000+ models), using unified Azure billing and operations.</li>
+    <li><strong>Price examples:</strong> The reasoning model MAI-Thinking-1 is $2/$8 (cached input $0.20); image generation, e.g. MAI-Image-2.5 Flash, is $1.75/$19.50. The newest <strong>MAI-Image-2.6</strong> is $5 text input / $8 image input / $38 image output, and <strong>2.6-Flash</strong> is $1.75 / $2.50 / $19 (all starting prices, public preview, from the official blog).</li>
+    <li><strong>Broad modality coverage:</strong> Speech recognition (Transcribe), speech generation (Voice), image generation (Image), image understanding (VLM), coding (Code) and reasoning (Thinking) extend well beyond plain LLM text.</li>
+  </ul>
+</div>
+</section>
+
+<div class="tip-box" style="border-left-color:var(--c-red);margin-bottom:2rem;">
+  <h3>⚠️ Disclaimer</h3>
+  <ul>
+    <li>Pricing and specs were checked against Microsoft's official pages on 2026-09-19 (the verified pricing table was first checked on 2026-09-09) and are subject to change. Always verify on the <a href="https://azure.microsoft.com/en-us/pricing/details/ai-foundry-models/microsoft/" target="_blank" rel="noopener">official pricing page</a> and <a href="https://microsoft.ai/blog/" target="_blank" rel="noopener">official blog</a> before contracting.</li>
+    <li>Benchmarks (Arena / Artificial Analysis rankings, FLEURS WER, speed multiples, 2.8× faster etc.) are self-reported by Microsoft / Artificial Analysis and may diverge from independent evaluation.</li>
+    <li>MAI-Image-2.6 / 2.6-Flash pricing comes from the <strong>official blog (starting prices, public preview)</strong>, not from the verified pricing table. Prices for the MAI-Code and MAI-Voice families are omitted because no primary source figure exists.</li>
+    <li>This site is informational only; we are not affiliated with or endorsed by any provider. Microsoft and Azure are trademarks of Microsoft Corporation; MAI is a trademark of Microsoft AI.</li>
+  </ul>
+</div>
+
+</div></main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>Operated by okamo channel</p><p><a href="/en/">Home</a> · <a href="/en/pricing/">Pricing</a> · <a href="/en/calculator/">Calculator</a> · <a href="/en/timeline/">Timeline</a> · <a href="/en/china-ai/">China AI</a> · <a href="/en/mai/">MS AI (MAI)</a></p></div><p class="footer-disclaimer">⚠️ Pricing and specifications may change without notice. Always verify on official pages. Not affiliated with any provider.</p></div></footer>
+</body>
+</html>

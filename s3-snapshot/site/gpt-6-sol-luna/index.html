@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GPT-6 Sol / Luna — 半額になったGPT-6世代の実用2モデル【料金・ベンチ比較】 — LLM Data Hub</title>
+  <meta name="description" content="OpenAI GPT-6 Sol・GPT-6 Lunaの料金（Sol $2/$10・Luna $0.10/$0.50・キャッシュ入力90%割引）と1,050,000トークンのコンテキスト、公式ベンチ6項目を一次情報で解説。GPT-5.6 Sol/Lunaから50%値下げ。AutomationBench・DeepSWEは運営元が別である点も明記。2026年9月22日公開・2026年9月25日更新。">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/gpt-6-sol-luna/">
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/gpt-6-sol-luna/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/gpt-6-sol-luna/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/gpt-6-sol-luna/">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/gpt-6-sol-luna/">
+  <meta property="og:title" content="GPT-6 Sol / Luna — 半額になったGPT-6世代の実用2モデル">
+  <meta property="og:description" content="Sol $2/$10・Luna $0.10/$0.50・キャッシュ入力90%割引（2026年9月25日更新）。1,050,000コンテキストと公式ベンチ6項目を一次情報で整理。">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"GPT-6 Sol / Luna — 半額になったGPT-6世代の実用2モデル【料金・ベンチ比較】","datePublished":"2026-09-25","dateModified":"2026-09-25","author":{"@type":"Organization","name":"LLM Data Hub"},"publisher":{"@type":"Organization","name":"okamoちゃんねる"},"url":"https://llm.okamomedia.tokyo/gpt-6-sol-luna/","inLanguage":"ja"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"ホーム","item":"https://llm.okamomedia.tokyo/"},{"@type":"ListItem","position":2,"name":"GPT-6 Sol / Luna","item":"https://llm.okamomedia.tokyo/gpt-6-sol-luna/"}]}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .hero-g6{background:linear-gradient(135deg,#08111c 0%,#0f2033 50%,#0f1117 100%);border-bottom:1px solid var(--c-border);padding:3rem 1rem 2.5rem;text-align:center}.hero-g6 .price-flag{display:inline-block;background:rgba(74,158,255,.14);border:1px solid rgba(74,158,255,.38);color:#7cb8ff;font-size:.82rem;font-weight:700;padding:.3rem .8rem;border-radius:100px;margin-bottom:1rem}.hero-g6 h1{font-size:clamp(1.55rem,4.4vw,2.35rem);font-weight:800;line-height:1.2;margin-bottom:.75rem}.hero-g6 h1 span{color:#4a9eff}.hero-g6 .lead{font-size:1.05rem;color:var(--c-muted);max-width:680px;margin:0 auto 1.5rem}.hero-g6 .quick-stats{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;margin-top:1rem}.hero-g6 .stat{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.75rem 1.1rem;text-align:center}.hero-g6 .stat .val{font-family:var(--font-mono);font-size:1.15rem;font-weight:700;color:#4a9eff}.hero-g6 .stat .lbl{font-size:.75rem;color:var(--c-muted);margin-top:.15rem}
+    .compare-table th:first-child{width:200px}.compare-table td{text-align:center}.compare-table td:first-child{text-align:left;font-weight:600}.compare-table .winner{color:var(--c-green);font-weight:700}.compare-table .tie{color:var(--c-yellow)}
+    .spec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:.8rem;margin-bottom:1.5rem}.spec-item{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.9rem 1rem}.spec-item .spec-label{font-size:.75rem;color:var(--c-muted);font-weight:600;margin-bottom:.25rem}.spec-item .spec-value{font-family:var(--font-mono);font-size:1rem;font-weight:700}
+    .context-note{background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid #4a9eff;border-radius:var(--r-md);padding:.8rem 1rem;margin:1rem 0;font-size:.84rem;color:var(--c-muted)}
+    .fig-wrap{position:relative}.fig-scroll{overflow:visible}
+    .fig-fig{margin:1rem 0 1.4rem}.fig-fig svg{width:100%;height:auto;border:1px solid var(--c-border);border-radius:var(--r-md);background:var(--c-surface);display:block}
+    .fig-hint{display:none;font-size:.75rem;color:var(--c-muted);text-align:center;margin:.3rem 0 0}
+    @media (max-width:680px){.fig-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}.fig-scroll svg{min-width:600px}.fig-hint{display:block}.fig-wrap::before,.fig-wrap::after{content:"";position:absolute;top:0;bottom:0;width:36px;pointer-events:none;z-index:2}.fig-wrap::before{left:0;background:linear-gradient(to right,rgba(15,17,23,.95),rgba(15,17,23,0))}.fig-wrap::after{right:0;background:linear-gradient(to left,rgba(15,17,23,.95),rgba(15,17,23,0))}}
+    @media(max-width:640px){.hero-g6 .quick-stats{flex-direction:column;gap:.5rem}}
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="メインナビゲーション"><a href="/" class="nav-link">ホーム</a><a href="/pricing/" class="nav-link">料金比較</a><a href="/calculator/" class="nav-link">トークン計算機</a><a href="/timeline/" class="nav-link">リリース年表</a><a href="/china-ai/" class="nav-link">中国AI</a><a href="/multimodal/" class="nav-link">マルチモーダル</a><a href="/mai/" class="nav-link">MS AI (MAI)</a><a href="/glossary/" class="nav-link">用語説明</a></nav></div></header>
+
+<section class="hero-g6"><div class="container">
+  <p class="price-flag">⚡ 2026年9月22日公開 — GPT-5.6版から<strong>50%値下げ</strong></p>
+  <h1>GPT-6 <span>Sol</span> / <span>Luna</span></h1>
+  <p class="lead">OpenAIがGPT-6世代を広げる2モデル。<strong>GPT-5.6 Sol / Lunaと同じ名前を引き継ぎつつ、価格は半額</strong>になりました。「Astraの性能を、より速く安いティアへ配る」という位置づけです。<strong>名前が同じ旧世代と取り違えないよう注意してください。</strong></p>
+  <div class="quick-stats">
+    <div class="stat"><div class="val">$2 / $10</div><div class="lbl">Sol 入力/出力</div></div>
+    <div class="stat"><div class="val">$0.10 / $0.50</div><div class="lbl">Luna 入力/出力</div></div>
+    <div class="stat"><div class="val">1,050,000</div><div class="lbl">コンテキスト</div></div>
+    <div class="stat"><div class="val">90%割引</div><div class="lbl">キャッシュ入力</div></div>
+  </div>
+</div></section>
+
+<main><div class="container">
+<div class="updated-bar" style="margin-top:2rem;"><span class="dot">●</span>最終更新: <time datetime="2026-09-25">2026年9月25日</time> | 出典: <a href="https://openai.com/index/introducing-gpt-6-sol-and-luna/" target="_blank" rel="noopener">OpenAI公式発表</a> · <a href="https://developers.openai.com/api/docs/models/gpt-6-sol" target="_blank" rel="noopener">APIドキュメント（Sol）</a> · <a href="https://developers.openai.com/api/docs/models/gpt-6-luna" target="_blank" rel="noopener">APIドキュメント（Luna）</a> | <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a> · <a href="/gpt-6/">GPT-6 Astra</a></div>
+
+<section class="section" style="padding-top:2rem;" aria-labelledby="warn-h">
+<h2 class="section-title" id="warn-h" style="font-size:1.2rem;">最初に: 「Sol / Luna」は2世代あります</h2>
+<div class="context-note" style="border-left-color:var(--c-yellow);">
+  <p style="margin:0 0 .5rem;"><strong>2026年9月22日以降、「Sol」「Luna」という名前のモデルは2世代分存在します。</strong>検索結果や比較記事で混在しやすいので、まずここを押さえてください。</p>
+  <div class="table-wrap" style="margin:.6rem 0 0;"><table><thead><tr><th>世代</th><th>モデル名</th><th>料金（入力/出力）</th><th>当サイトのページ</th></tr></thead><tbody>
+  <tr><td class="model-name">旧（GPT-5.6世代）</td><td>GPT-5.6 Sol</td><td>$4 / $20</td><td><a href="/gpt-5-6-sol/">/gpt-5-6-sol/</a></td></tr>
+  <tr><td class="model-name">旧（GPT-5.6世代）</td><td>GPT-5.6 Luna</td><td>$0.20 / $1.20</td><td><a href="/gpt-5-6-luna/">/gpt-5-6-luna/</a></td></tr>
+  <tr><td class="model-name"><strong>新（GPT-6世代）</strong></td><td><strong>GPT-6 Sol</strong></td><td class="price"><strong>$2 / $10</strong></td><td><strong>本ページ</strong></td></tr>
+  <tr><td class="model-name"><strong>新（GPT-6世代）</strong></td><td><strong>GPT-6 Luna</strong></td><td class="price"><strong>$0.10 / $0.50</strong></td><td><strong>本ページ</strong></td></tr>
+  </tbody></table></div>
+  <p style="margin:.6rem 0 0;">OpenAIの表現は「reducing API prices for Sol and Luna by <strong>50% compared with their GPT-5.6 promotional pricing</strong>」＝<strong>同じ名前の前世代からの置き換え</strong>です。別モデルが併存しているのではなく、後継が旧価格を半額にしたという関係です。</p>
+</div>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="price-h">
+<h2 class="section-title" id="price-h" style="font-size:1.2rem;">料金（USD / 1Mトークン）</h2>
+<p class="section-sub">OpenAI公式発表の料金表と、OpenAI APIドキュメントのモデルページで確認。</p>
+<div class="table-wrap"><table><thead><tr><th>モデル</th><th>入力</th><th>出力</th><th>キャッシュ入力</th><th>前世代からの変化</th></tr></thead><tbody>
+<tr><td class="model-name">GPT-6 Sol</td><td class="price">$2.00</td><td class="price">$10.00</td><td class="price">$0.20</td><td class="winner">$4/$20 → 50%値下げ</td></tr>
+<tr><td class="model-name">GPT-6 Luna</td><td class="price">$0.10</td><td class="price">$0.50</td><td class="price">$0.01</td><td class="winner">$0.20/$1.20 → 50%値下げ</td></tr>
+</tbody></table></div>
+<p style="font-size:.78rem;color:var(--c-muted);margin-top:.3rem;">※ キャッシュ入力はAPIドキュメントの記載値です（Sol $0.20、Luna $0.01）。公式発表の本文には「<strong>discounts of 90% on cached input-token reads</strong>」とあり、$2.00の10%＝$0.20、$0.10の10%＝$0.01 と整合します。</p>
+<p class="source-note">一次情報: <a href="https://openai.com/index/introducing-gpt-6-sol-and-luna/" target="_blank" rel="noopener">OpenAI「Introducing GPT-6 Sol and Luna」</a>（料金表）· <a href="https://developers.openai.com/api/docs/models/gpt-6-sol" target="_blank" rel="noopener">developers.openai.com GPT-6 Sol</a> · <a href="https://developers.openai.com/api/docs/models/gpt-6-luna" target="_blank" rel="noopener">GPT-6 Luna</a>（2026-09-25確認）</p>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="fig-h">
+<h2 class="section-title" id="fig-h" style="font-size:1.2rem;">図: 世代ごとの単価</h2>
+<div class="fig-wrap">
+  <div class="fig-scroll">
+  <figure class="fig-fig" style="margin:0;">
+    <svg viewBox="0 0 640 250" role="img" aria-labelledby="g6fig-t g6fig-d" xmlns="http://www.w3.org/2000/svg">
+      <title id="g6fig-t">GPT-5.6世代とGPT-6世代のSol / Luna単価比較</title>
+      <desc id="g6fig-d">入力と出力の単価を1MトークンあたりUSDで比較した横棒グラフ。GPT-5.6 Solは入力4ドル出力20ドル、GPT-6 Solは入力2ドル出力10ドル。GPT-5.6 Lunaは入力0.2ドル出力1.2ドル、GPT-6 Lunaは入力0.1ドル出力0.5ドル。</desc>
+      <g font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="12" fill="#e6e6e6">
+        <text x="12" y="24" font-size="13" font-weight="700" fill="#4a9eff">Sol 系 — 出力 $ / 1M tokens</text>
+        <rect x="60" y="34" width="200" height="20" rx="3" fill="#3b5a7a"/><text x="268" y="49" fill="#9aa0aa">GPT-5.6 Sol &#8212; 入力$4 / 出力$20</text>
+        <rect x="60" y="60" width="100" height="20" rx="3" fill="#4a9eff"/><text x="168" y="75">GPT-6 Sol &#8212; 入力$2 / 出力$10（半額）</text>
+        <text x="12" y="118" font-size="13" font-weight="700" fill="#4a9eff">Luna 系 — 出力 $ / 1M tokens</text>
+        <rect x="60" y="128" width="40" height="20" rx="3" fill="#3b5a7a"/><text x="108" y="143" fill="#9aa0aa">GPT-5.6 Luna &#8212; 入力$0.20 / 出力$1.20</text>
+        <rect x="60" y="154" width="20" height="20" rx="3" fill="#4a9eff"/><text x="88" y="169">GPT-6 Luna &#8212; 入力$0.10 / 出力$0.50（半額）</text>
+        <text x="12" y="212" font-size="12" fill="#9aa0aa">※ 参考: GPT-6 Astra（上位モデル）は別ティア。GPT-6世代の安い2モデルが Sol / Luna です。</text>
+        <text x="12" y="234" font-size="12" fill="#9aa0aa">    Sol の出力$10は GPT-6 Astra より安く、Luna の入力$0.10は GPT-5.6 Luna の半額。</text>
+      </g>
+    </svg>
+    <figcaption style="font-size:.78rem;color:var(--c-muted);margin-top:.5rem;">出典: OpenAI公式発表の料金表（2026-09-25確認）。棒の長さは出力単価に比例（Sol系は$20、Luna系は$1.20を基準）。</figcaption>
+  </figure>
+  </div>
+  <p class="fig-hint">← 横にスクロールできます →</p>
+</div>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="spec-h">
+<h2 class="section-title" id="spec-h" style="font-size:1.2rem;">モデル仕様</h2>
+<div class="spec-grid">
+  <div class="spec-item"><div class="spec-label">コンテキスト（共通）</div><div class="spec-value">1,050,000 tokens</div></div>
+  <div class="spec-item"><div class="spec-label">最大出力（共通）</div><div class="spec-value">128,000 tokens</div></div>
+  <div class="spec-item"><div class="spec-label">知識カットオフ（Sol）</div><div class="spec-value">2026年4月20日</div></div>
+  <div class="spec-item"><div class="spec-label">知識カットオフ（Luna）</div><div class="spec-value">2026年5月18日</div></div>
+  <div class="spec-item"><div class="spec-label">モデルID</div><div class="spec-value" style="font-size:.85rem;">gpt-6-sol / gpt-6-luna</div></div>
+  <div class="spec-item"><div class="spec-label">提供先</div><div class="spec-value" style="font-size:.85rem;">ChatGPT Work / Codex / OpenAI API</div></div>
+</div>
+<h3 style="font-size:1rem;margin:1.4rem 0 .5rem;">提供状況（公式の逐語）</h3>
+<ul style="font-size:.88rem;line-height:1.9;color:var(--c-muted);padding-left:1.2rem;">
+  <li>「available in ChatGPT Work and Codex starting today for all Plus, Pro, Business, Enterprise, and Edu users」</li>
+  <li>「Free and Go users can access <strong>GPT-6 Luna</strong> in the desktop app」</li>
+  <li>「These models are <strong>not yet available in Chat</strong>」（＝通常のChatGPTチャットでは未提供）</li>
+  <li>ChatGPTへの展開は当日中に段階的に実施。表示されない場合は時間をおいて再確認するよう案内されています。</li>
+</ul>
+<p class="source-note">出典: <a href="https://developers.openai.com/api/docs/models/gpt-6-sol" target="_blank" rel="noopener">OpenAI APIドキュメント GPT-6 Sol</a> · <a href="https://developers.openai.com/api/docs/models/gpt-6-luna" target="_blank" rel="noopener">GPT-6 Luna</a> · <a href="https://openai.com/index/introducing-gpt-6-sol-and-luna/" target="_blank" rel="noopener">公式発表のAvailability節</a></p>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="bench-h">
+<h2 class="section-title" id="bench-h" style="font-size:1.2rem;">公式ベンチマーク6項目 — 運営元と条件つきで</h2>
+<p class="section-sub">OpenAI公式発表に掲載された数値です。OpenAIは各ベンチの出典を明示しており、<strong>第三者運営のベンチが半分以上</strong>を占めます。当サイトは「誰が運営しているか」を併記します。</p>
+<div class="table-wrap"><table><thead><tr><th>ベンチマーク</th><th>運営元</th><th>GPT-6 Sol の結果</th><th>GPT-6 Luna の結果</th></tr></thead><tbody>
+<tr><td class="model-name">AutomationBench 1.0.6</td><td><a href="https://zapier.com/benchmarks" target="_blank" rel="noopener">Zapier</a></td><td>(xhigh) <strong>33.2%</strong> / $0.27 per task</td><td>(high) 前世代比 +5.4pt・タスク単価58%減</td></tr>
+<tr><td class="model-name">Agents&#39; Last Exam V1</td><td><a href="https://agents-last-exam.org/" target="_blank" rel="noopener">agents-last-exam.org</a></td><td>(max) <strong>56.4%</strong>（Claude Opus 5 の最高スコア超え・コスト60%減）</td><td>—</td></tr>
+<tr><td class="model-name">FrontierCode 1.1 Main</td><td><a href="https://cognition.com/frontiercode" target="_blank" rel="noopener">Cognition</a></td><td>GPT-5.6 Sol から大幅改善、Fable 5.1 (xhigh) に並ぶ（はるかに低コスト）</td><td>—</td></tr>
+<tr><td class="model-name">DeepSWE 1.1</td><td><a href="https://deepswe.datacurve.ai/" target="_blank" rel="noopener">Datacurve</a></td><td>(max) <strong>68.8%</strong> — Fable 5 の最高69.9%と1.1pt差・コスト約80%減</td><td>(max) <strong>66.6%</strong> — Opus 5 / Fable 5 の medium相当</td></tr>
+<tr><td class="model-name">OSWorld 2.0（offline・partial）</td><td><a href="https://osworld-v2.xlang.ai/" target="_blank" rel="noopener">XLANG Lab</a></td><td>(xhigh) <strong>60.5%</strong> vs Claude Opus 5 (medium) 60.3%・コスト約80%減</td><td>(max) GPT-5.6 Sol (medium) 超え・コスト1/10</td></tr>
+<tr><td class="model-name">Factuality（社内評価）</td><td>OpenAI（社内）</td><td>前世代の<strong>約半分のミス</strong></td><td>高エフォート時、GPT-5.6 Sol と同等を<strong>約100分の1のコスト</strong>で</td></tr>
+</tbody></table></div>
+
+<h3 style="font-size:1rem;margin:1.6rem 0 .5rem;">各ベンチの条件（公式注記の逐語要約）</h3>
+<div class="table-wrap"><table><thead><tr><th>ベンチマーク</th><th>条件・注記</th></tr></thead><tbody>
+<tr><td class="model-name">AutomationBench 1.0.6</td><td>「AI agents are tested on end-to-end workflows using <strong>47 tools</strong> across sales, marketing, operations, support, finance, and HR」。比較表はSol (xhigh) 33.2% / $0.27、Astra (low) 30.3% / 3.9倍、Claude Opus 5 (max) 26.9% / 11.1倍、Fable 5.1 + Opus 5フォールバック (max) 31.4% / 8.9倍超。<strong>OpenAI自身の注記</strong>:「The datapoint for Claude Fable 5.1 understates its actual cost, as it omits the cost of the Opus 5 fallbacks, which occurred on <strong>~40% of tasks</strong>」。</td></tr>
+<tr><td class="model-name">Agents&#39; Last Exam V1</td><td>「long-horizon, economically valuable tasks spanning <strong>55 sub-industries</strong>」。企業の計算機上で行われる専門業務の大半をカバー。</td></tr>
+<tr><td class="model-name">FrontierCode 1.1 Main</td><td>「graded not only on correctness but also &ldquo;mergeability&rdquo;: e.g., test quality, scope discipline, code style, and adherence to codebase standards」＝正しさだけでなくマージ可能性を採点。</td></tr>
+<tr><td class="model-name">DeepSWE 1.1</td><td>「AI agents solve original, long-horizon software engineering tasks」＝オリジナルの長時間タスク。</td></tr>
+<tr><td class="model-name">OSWorld 2.0</td><td>「long-horizon computer-use workflows spanning everyday and professional tasks. We report the <strong>partial reward on the offline set from the v2026.08.08 release</strong>」＝オフライン版の部分報酬。</td></tr>
+<tr><td class="model-name">Factuality</td><td>「de-identified ChatGPT conversations where users had flagged a factual error」を基にした社内評価。OpenAIの注記:「These error-inducing conversations are <strong>not representative of typical usage</strong>」「Scores are not controlled for length」。</td></tr>
+</tbody></table></div>
+
+<div class="context-note" style="border-left-color:var(--c-yellow);">
+  ⚠️ <strong>比較相手の世代が揃っていない点に注意（公式注記）。</strong>逐語:「Evaluations of GPT were performed in our research environment or via our API... Evaluations of competitor models were taken from publicly available reports. <strong>Scores for Claude Fable 5 were reported when scores for Claude Fable 5.1 were unavailable.</strong>」＝<strong>一部のClaude比較値は「Fable 5」のもので、Fable 5.1ではありません。</strong>どちらの世代かはベンチごとに異なるため、数値をそのまま横並び比較しないでください。
+</div>
+<p class="source-note">出典: <a href="https://openai.com/index/introducing-gpt-6-sol-and-luna/" target="_blank" rel="noopener">OpenAI「Introducing GPT-6 Sol and Luna」</a>（各ベンチ節と注記・2026-09-25確認）</p>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="cache-h">
+<h2 class="section-title" id="cache-h" style="font-size:1.2rem;">もうひとつの本題: プロンプトキャッシュの改善</h2>
+<p class="section-sub">値下げと同じくらい実務に効くのが、GPT-6向けのキャッシュ改善です。OpenAIは「キャッシュ入力トークンの読み出しで<strong>90%割引</strong>」に加え、既定でキャッシュヒット率が上がるよう改善したと説明しています。</p>
+<div class="table-wrap"><table><thead><tr><th>機能</th><th>内容（公式発表より）</th></tr></thead><tbody>
+<tr><td class="model-name">モニタリング</td><td><strong>Prompt Caching Dashboard</strong>で入力のうちどれだけがキャッシュされたかを時系列で確認。</td></tr>
+<tr><td class="model-name">診断</td><td><strong>diagnostics tool</strong>がキャッシュの取り逃しを説明し、修正点を示す。</td></tr>
+<tr><td class="model-name">キャッシュを壊さず設定変更</td><td>推論エフォートの変更やツールの有効化/無効化をしても、<strong>以前のコンテキストがキャッシュ再利用のために保持される</strong>。</td></tr>
+<tr><td class="model-name">キャッシュ境界の指定</td><td>明示的なブレークポイントで、キャッシュするプレフィックスの終端を開発者が選べる。</td></tr>
+<tr><td class="model-name">実績（GitHub）</td><td>GitHubの報告として「過去数か月で、数十億リクエストにわたり<strong>新規処理が必要なプロンプトトークンの割合を50%以上削減</strong>」。</td></tr>
+</tbody></table></div>
+<p style="font-size:.78rem;color:var(--c-muted);margin-top:.3rem;">※ 「キャッシュを壊さずにエフォートを変えられる」は、エージェントのループで難易度に応じて推論の深さを変える運用と相性が良い変更です。仕組みの基礎は<a href="/glossary/prompt-cache/">用語説明「プロンプトキャッシュ」</a>で解説しています。</p>
+<p class="source-note">出典: <a href="https://openai.com/index/introducing-gpt-6-sol-and-luna/" target="_blank" rel="noopener">OpenAI「Introducing GPT-6 Sol and Luna」</a>（Improving caching節）</p>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="rel-h">
+<h2 class="section-title" id="rel-h" style="font-size:1.2rem;">GPT-6ファミリー内での位置づけ</h2>
+<div class="table-wrap"><table><thead><tr><th>モデル</th><th>料金（入力/出力・1M）</th><th>役割</th><th>当サイト</th></tr></thead><tbody>
+<tr><td class="model-name"><a href="/gpt-6/">GPT-6 Astra</a></td><td>$10 / $50</td><td>OpenAIは「continues to be our best model across the board」「Choose it when you want the best results and an uncompromising experience」と説明。<strong>最上位</strong>。</td><td>個別ページあり</td></tr>
+<tr><td class="model-name"><strong>GPT-6 Sol</strong></td><td class="price"><strong>$2 / $10</strong></td><td>難しい業務タスクを、より高い利用上限と低コストで。<strong>SolはGPT-6世代の中位</strong>。</td><td><strong>本ページ</strong></td></tr>
+<tr><td class="model-name"><strong>GPT-6 Luna</strong></td><td class="price"><strong>$0.10 / $0.50</strong></td><td>最安の実用ティア。Free / Goユーザーはデスクトップアプリで利用可。</td><td><strong>本ページ</strong></td></tr>
+<tr><td class="model-name"><a href="/gpt-5-6-sol/">GPT-5.6 Sol</a></td><td>$4 / $20</td><td>前世代。GPT-6 Solに置き換え。<strong>旧版</strong>。</td><td>個別ページあり（旧版注記済み）</td></tr>
+<tr><td class="model-name"><a href="/gpt-5-6-luna/">GPT-5.6 Luna</a></td><td>$0.20 / $1.20</td><td>前世代。GPT-6 Lunaに置き換え。<strong>旧版</strong>。</td><td>個別ページあり（旧版注記済み）</td></tr>
+</tbody></table></div>
+<p style="font-size:.78rem;color:var(--c-muted);margin-top:.3rem;">※ Astraの料金は当サイト<a href="/pricing/">料金比較ページ</a>で確認した $10/$50（キャッシュ読込 $1.00）です。Astraは今回の値下げ対象ではなく、GPT-6世代の中で最上位に位置づけられています。</p>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="align-h">
+<h2 class="section-title" id="align-h" style="font-size:1.2rem;">アラインメントと文体</h2>
+<div class="tip-box">
+  <ul>
+    <li><strong>GPT-5.6版より改善:</strong> 公式は「both Sol and Luna show improvements over their GPT-5.6 counterparts, including lower rates of misleading claims about their coding work」と説明。ただし「The evaluations below deliberately test challenging situations and <strong>do not measure failure rates in typical use</strong>」と注記されています。</li>
+    <li><strong>system card:</strong> 詳細は <a href="https://deploymentsafety.openai.com/gpt-6-astra" target="_blank" rel="noopener">deploymentsafety.openai.com/gpt-6-astra</a> に掲載（AstraのカードがGPT-6世代の安全評価を兼ねる構成）。</li>
+    <li><strong>文体はAstraから継承:</strong> 「more clarity, less jargon, fewer odd turns of phrase, fewer low-value details, and slightly shorter answers overall without losing substance」＝技術・コーディング会話での改善が大きいとしています。</li>
+  </ul>
+</div>
+<p class="source-note">出典: <a href="https://openai.com/index/introducing-gpt-6-sol-and-luna/" target="_blank" rel="noopener">OpenAI「Introducing GPT-6 Sol and Luna」</a>（Continuing to improve alignment節・Collaboration style節）</p>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="choice-h">
+<h2 class="section-title" id="choice-h" style="font-size:1.2rem;">選び方の目安</h2>
+<div class="tip-box">
+  <ul>
+    <li><strong>コストを最優先する量産処理:</strong> GPT-6 Luna（入力$0.10 / 出力$0.50）は、価格帯として低価格モデルの最前列です。<a href="/pricing/">料金比較</a>で他社の同価格帯と並べて確認してください。</li>
+    <li><strong>難しい業務タスクを回す:</strong> GPT-6 Sol。AutomationBenchではClaude Opus 5の約1/11のタスク単価で上回ったとOpenAIは主張しています。</li>
+    <li><strong>Lunaは「弱い」わけではない:</strong> DeepSWE 1.1でLuna (max) 66.6%は、Claude Opus 5 および Fable 5 の mediumエフォート相当。エフォートを上げれば実力が出るタイプです。</li>
+    <li><strong>旧世代ページとの混同注意:</strong> 検索から来た場合は、URLが <code>/gpt-5-6-sol/</code>・<code>/gpt-5-6-luna/</code>（旧）か <code>/gpt-6-sol-luna/</code>（新）かを必ず確認してください。旧世代ページは当時の価格のまま保存しています。</li>
+    <li><strong>上位の精度が必要なら:</strong> GPT-6 Astra が最上位です。<a href="/gpt-6/">GPT-6 Astra のページ</a>も参照してください。</li>
+  </ul>
+</div>
+</section>
+
+<section class="section" style="padding-top:0;">
+<div style="background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid #4a9eff;border-radius:var(--r-lg);padding:1.5rem;text-align:center;">
+  <h3 style="font-size:1.1rem;margin-bottom:.75rem;">Sol と Luna、どちらが安いか計算する</h3>
+  <p style="color:var(--c-muted);font-size:.9rem;margin-bottom:1rem;">入力・出力トークン数を入れると、全モデルのコストを一括で試算できます。</p>
+  <a href="/calculator/" style="display:inline-block;background:var(--c-accent);color:#fff;font-weight:600;padding:.65rem 1.5rem;border-radius:var(--r-md);">🧮 トークン計算機で試算する →</a>
+  <p style="margin-top:.8rem;font-size:.82rem;color:var(--c-muted);"><a href="/pricing/">📊 全モデル料金比較</a> · <a href="/gpt-6/">🤖 GPT-6 Astra</a> · <a href="/claude-opus-5-5/">🆚 Claude Opus 5.5</a> · <a href="/timeline/">🗓️ リリース年表</a></p>
+</div>
+</section>
+
+<div class="tip-box" style="border-left-color:var(--c-red);margin-bottom:2rem;">
+  <h3>⚠️ 免責事項</h3>
+  <ul>
+    <li>料金・仕様はOpenAI公式発表およびOpenAI APIドキュメントを2026-09-25に確認したものです。予告なく変動します。契約前に必ず公式ページをご確認ください。</li>
+    <li>ベンチマーク数値はOpenAIの公表値で、<strong>競合モデルの数値は各社の公開レポートからの引用</strong>です。また<strong>一部のClaude比較値は「Fable 5」のもので、Fable 5.1とは別世代</strong>です。条件が同一とは限らず、実際の使用感を保証するものではありません。</li>
+    <li>本サイトは情報提供目的であり、特定プロバイダーの推薦・代理ではありません。</li>
+  </ul>
+</div>
+
+</div></main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>運営: okamoちゃんねる</p><p><a href="/">ホーム</a> · <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a> · <a href="/timeline/">年表</a> · <a href="/gpt-6/">GPT-6 Astra</a> · <a href="/claude-opus-5-5/">Claude Opus 5.5</a></p></div><p class="footer-disclaimer">⚠️ 料金・仕様は予告なく変動します。契約前に必ず各社公式ページでご確認ください。本サイトは各社と提携していません。</p></div></footer>
+</body>
+</html>

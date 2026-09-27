@@ -1,0 +1,503 @@
+{
+  "schema_note": "LLM Data Hub の料金データ単一の真実（SOT）。HTMLの料金表・ページ本文を更新したら必ずここも更新し、tools/verify_price_consistency.py でサイト全体を検証する。金額はすべて USD / 1Mトークン。",
+  "site": "https://llm.okamomedia.tokyo",
+  "last_verified": "2026-09-27",
+  "sources": {
+    "deepseek_pricing": "https://api-docs.deepseek.com/quick_start/pricing",
+    "deepseek_news": "https://api-docs.deepseek.com/news/news260910",
+    "deepseek_updates": "https://api-docs.deepseek.com/updates/",
+    "xai_pricing": "https://docs.x.ai/developers/pricing",
+    "anthropic_opus55": "https://www.anthropic.com/claude-opus-5-5",
+    "openai_gpt6": "https://openai.com/index/introducing-gpt-6-sol-and-luna/",
+    "moonshot_kimi_k3": "https://platform.kimi.ai/docs/pricing/chat-k3",
+    "xiaomi_mimo_v26": "https://mimo.xiaomi.com/mimo-v2-6",
+    "xiaomi_mimo_model_page": "https://mimo.mi.com/models/en-US/mimo-v2.6-flash"
+  },
+  "models": {
+    "deepseek-v4.1-flash": {
+      "name_ja": "DeepSeek V4.1 Flash",
+      "name_en": "DeepSeek V4.1 Flash",
+      "api_model_id": "deepseek-flash",
+      "provider": "DeepSeek",
+      "status": "current",
+      "released": "2026-09-10",
+      "price": {
+        "cache_hit_input_offpeak": 0.003,
+        "cache_hit_input_peak": 0.006,
+        "cache_miss_input_offpeak": 0.15,
+        "cache_miss_input_peak": 0.3,
+        "output_offpeak": 0.6,
+        "output_peak": 1.2
+      },
+      "pages": [
+        "/deepseek-v4-1-flash/",
+        "/en/deepseek-v4-1-flash/"
+      ]
+    },
+    "deepseek-v4-pro": {
+      "name_ja": "DeepSeek V4 Pro",
+      "name_en": "DeepSeek V4 Pro",
+      "api_model_id": "deepseek-v4-pro",
+      "provider": "DeepSeek",
+      "status": "current",
+      "price": {
+        "cache_hit_input_offpeak": 0.022,
+        "cache_hit_input_peak": 0.044,
+        "cache_miss_input_offpeak": 0.66,
+        "cache_miss_input_peak": 1.32,
+        "output_offpeak": 1.98,
+        "output_peak": 3.96
+      },
+      "pages": [
+        "/deepseek-v4-pro/",
+        "/en/deepseek-v4-pro/"
+      ],
+      "note": "2026-09-13 時点で提供中。公式料金ページの注記(2)と Change Log が「ユーザーの要望を受け、2026-09-14 以降も DeepSeek V4 Pro の API サービス提供を継続する。課金方法は変更しない」と告知し、2026-09-14 13:00 JST からの V4.1 Flash へのルーティング予告は撤回された。"
+    },
+    "deepseek-v4-flash": {
+      "name_ja": "DeepSeek V4 Flash",
+      "name_en": "DeepSeek V4 Flash",
+      "provider": "DeepSeek",
+      "status": "retired",
+      "retired_note": "V4.1 Flash へ統合（2026-09-10）。旧プロモ価格 $0.14/$0.28 も廃止済み。",
+      "price": {
+        "cache_miss_input_offpeak": 0.22,
+        "cache_miss_input_peak": 0.44,
+        "output_offpeak": 0.66,
+        "output_peak": 1.32
+      }
+    },
+    "deepseek-v4-flash-vision-exp": {
+      "name_ja": "DeepSeek V4 Flash Vision Exp",
+      "name_en": "DeepSeek V4 Flash Vision Exp",
+      "api_model_id": "deepseek-v4-flash-vision-exp",
+      "provider": "DeepSeek",
+      "status": "retired",
+      "retired_note": "画像入力は V4.1 Flash（deepseek-flash）がネイティブ対応。実験モデルは統合。"
+    },
+    "claude-opus-5-5": {
+      "name_ja": "Claude Opus 5.5",
+      "name_en": "Claude Opus 5.5",
+      "api_model_id": "claude-opus-5-5",
+      "provider": "Anthropic",
+      "status": "current",
+      "released": "2026-09-22",
+      "price": {
+        "cache_hit_input": 0.2,
+        "cache_miss_input": 4.0,
+        "output": 20.0,
+        "cache_write_input": 5.0,
+        "fast_mode_input": 8.0,
+        "fast_mode_output": 40.0
+      },
+      "context": "1,000,000",
+      "max_output": "128,000",
+      "pages": [
+        "/claude-opus-5-5/",
+        "/en/claude-opus-5-5/"
+      ],
+      "sources": [
+        "https://www.anthropic.com/claude-opus-5-5",
+        "https://www.anthropic.com/pricing"
+      ],
+      "note": "Opus 5($5/$25, cache read $0.50)からの値下げ。thinking無効化不可・effortで深さ調整。キャッシュ書込は5分TTL $5.00（1h TTLは$10.00＝2倍）。2026-09-25確認",
+      "verified": "2026-09-25"
+    },
+    "gpt-6-sol": {
+      "name_ja": "GPT-6 Sol",
+      "name_en": "GPT-6 Sol",
+      "api_model_id": "gpt-6-sol",
+      "provider": "OpenAI",
+      "status": "current",
+      "released": "2026-09-22",
+      "price": {
+        "cache_hit_input": 0.2,
+        "cache_miss_input": 2.0,
+        "output": 10.0
+      },
+      "context": "1,050,000",
+      "max_output": "128,000",
+      "pages": [
+        "/gpt-6-sol-luna/",
+        "/en/gpt-6-sol-luna/"
+      ],
+      "sources": [
+        "https://openai.com/index/introducing-gpt-6-sol-and-luna/",
+        "https://platform.openai.com/docs/pricing"
+      ],
+      "note": "GPT-5.6 Sol($4/$20)の後継。キャッシュ入力は90%割引。知識カットオフ2026年4月。GPT-5.6 Sol/Lunaのページは旧世代の記録として保持（単価を更新しない）",
+      "verified": "2026-09-25"
+    },
+    "gpt-6-luna": {
+      "name_ja": "GPT-6 Luna",
+      "name_en": "GPT-6 Luna",
+      "api_model_id": "gpt-6-luna",
+      "provider": "OpenAI",
+      "status": "current",
+      "released": "2026-09-22",
+      "price": {
+        "cache_hit_input": 0.01,
+        "cache_miss_input": 0.1,
+        "output": 0.5
+      },
+      "context": "1,050,000",
+      "max_output": "128,000",
+      "pages": [
+        "/gpt-6-sol-luna/",
+        "/en/gpt-6-sol-luna/"
+      ],
+      "sources": [
+        "https://openai.com/index/introducing-gpt-6-sol-and-luna/",
+        "https://platform.openai.com/docs/pricing"
+      ],
+      "note": "GPT-5.6 Luna($0.20/$1.20)の後継。キャッシュ入力は90%割引。知識カットオフ2026年5月",
+      "verified": "2026-09-25"
+    },
+    "kimi-k3": {
+      "name_ja": "Kimi K3",
+      "name_en": "Kimi K3",
+      "api_model_id": "kimi-k3",
+      "provider": "Moonshot AI",
+      "status": "current",
+      "released": "2026-07-16",
+      "price": {
+        "cache_hit_input": 0.3,
+        "cache_miss_input": 3.0,
+        "output": 15.0,
+        "cache_write_5min": 3.0,
+        "cache_write_1h": 6.0
+      },
+      "context": "1,048,576",
+      "max_output": null,
+      "pages": [
+        "/china-ai/",
+        "/en/china-ai/"
+      ],
+      "sources": [
+        "https://platform.kimi.ai/docs/pricing/chat-k3"
+      ],
+      "note": "常時thinking（reasoning_effort=max固定）で推論トークンも出力課金。ネイティブvision。2026-09にAmazon Bedrockでも提供開始（AWS公式ブログ 2026-09-18）。2026-09-25に公式料金ページで確認",
+      "verified": "2026-09-25"
+    },
+    "mimo-v2.6-pro": {
+      "provider": "Xiaomi",
+      "status": "current",
+      "released": "2026-09-22",
+      "context": "1,000,000",
+      "max_output": null,
+      "modalities": {
+        "input": [
+          "text",
+          "image",
+          "video",
+          "audio"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "pages": [
+        "/china-ai/",
+        "/en/china-ai/"
+      ],
+      "sources": [
+        "https://mimo.xiaomi.com/mimo-v2-6",
+        "https://mimo.mi.com/models/en-US/mimo-v2.6-flash"
+      ],
+      "verified": "2026-09-27",
+      "name_ja": "MiMo-V2.6-Pro",
+      "name_en": "MiMo-V2.6-Pro",
+      "api_model_id": "mimo-v2.6-pro",
+      "price": {
+        "cache_hit_input": 0.0036,
+        "cache_miss_input": 0.435,
+        "output": 0.87
+      },
+      "note": "2026-09-22発表。ネイティブ・オムニモーダル（入力: text/image/video/audio、出力: text）。料金はV2.5から据え置き。cache書込は期間限定で無料。公式主張: AA Intelligence Index v4.3で46.32。"
+    },
+    "mimo-v2.6-flash": {
+      "provider": "Xiaomi",
+      "status": "current",
+      "released": "2026-09-22",
+      "context": "1,000,000",
+      "max_output": null,
+      "modalities": {
+        "input": [
+          "text",
+          "image",
+          "video",
+          "audio"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "pages": [
+        "/china-ai/",
+        "/en/china-ai/"
+      ],
+      "sources": [
+        "https://mimo.xiaomi.com/mimo-v2-6",
+        "https://mimo.mi.com/models/en-US/mimo-v2.6-flash"
+      ],
+      "verified": "2026-09-27",
+      "name_ja": "MiMo-V2.6-Flash",
+      "name_en": "MiMo-V2.6-Flash",
+      "api_model_id": "mimo-v2.6-flash",
+      "price": {
+        "cache_hit_input": 0.0028,
+        "cache_miss_input": 0.14,
+        "output": 0.28
+      },
+      "note": "同シリーズのバランス型。Proと同じ1Mコンテキスト・4入力モダリティ。Batch APIはリアルタイムAPIの50%価格（公式ドキュメント記載）。"
+    },
+    "mimo-v2.6-pro-ultraspeed": {
+      "provider": "Xiaomi",
+      "status": "current",
+      "released": "2026-09-22",
+      "context": "1,000,000",
+      "max_output": null,
+      "modalities": {
+        "input": [
+          "text",
+          "image",
+          "video",
+          "audio"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "pages": [
+        "/china-ai/",
+        "/en/china-ai/"
+      ],
+      "sources": [
+        "https://mimo.xiaomi.com/mimo-v2-6",
+        "https://mimo.mi.com/models/en-US/mimo-v2.6-flash"
+      ],
+      "verified": "2026-09-27",
+      "name_ja": "MiMo-V2.6-Pro-UltraSpeed",
+      "name_en": "MiMo-V2.6-Pro-UltraSpeed",
+      "api_model_id": "mimo-v2.6-pro-ultraspeed",
+      "price": {
+        "cache_hit_input": 0.036,
+        "cache_miss_input": 4.35,
+        "output": 8.7
+      },
+      "note": "Proと同じ重みを高速提供するAPI提供バリアント（最大20倍の出力速度）。単価はPro比10倍。重みの公開は未確認。"
+    }
+  },
+  "stale_price_patterns": [
+    "$0.14",
+    "$0.28",
+    "$0.22",
+    "$0.44",
+    "$0.87",
+    "$0.435"
+  ],
+  "stale_policy": {
+    "note": "上記パターンは DeepSeek の退役済み単価（V4 Flash 統合前のプロモ/旧価格）。以下のファイルでは《履歴・参考値》として意図的に残すため許容する。それ以外のファイルで見つかったら更新漏れ（要修正）。V4 Pro の現行単価 $0.66/$1.32/$0.022/$0.044/$1.98/$3.96 は 2026-09-13 の提供継続告知により現行値へ復帰したため、退役パターンから除外した。",
+    "allow": {
+      "/deepseek-v4-pro/": "V4 Pro 現行ページ（履歴・参考値の併記）",
+      "/en/deepseek-v4-pro/": "V4 Pro 現行ページ（履歴・参考値の併記）",
+      "/timeline/": "リリース年表（履歴）",
+      "/en/timeline/": "リリース年表（履歴）",
+      "/pricing/": "V4 Pro は現行行、V4 Flash の旧プロモ価格は廃止と明記",
+      "/en/pricing/": "V4 Pro は現行行、V4 Flash の旧プロモ価格は廃止と明記"
+    }
+  },
+  "current_price_signatures": [
+    "$0.15",
+    "$0.003",
+    "deepseek-flash",
+    "$2.00",
+    "$10.00",
+    "$0.10",
+    "$0.50",
+    "$4.00",
+    "$20.00",
+    "$0.20",
+    "$0.01",
+    "$3.00",
+    "$15.00",
+    "$0.30",
+    "claude-opus-5-5",
+    "gpt-6-sol",
+    "gpt-6-luna",
+    "kimi-k3",
+    "$0.435",
+    "$0.14/$0.28",
+    "mimo-v2.6-pro"
+  ],
+  "current_price_signatures_note": "現行 DeepSeek の単価・API名シグネチャ。DeepSeek の金額に言及しているのにこれが1つも無いページは更新漏れの疑い。V4 Pro 現行単価も有効値。",
+  "family_needles": [
+    "V4.1 Flash",
+    "V4 Pro",
+    "V4 Flash",
+    "deepseek-flash",
+    "deepseek-v4"
+  ],
+  "mai_image_pricing": {
+    "last_verified": "2026-09-19",
+    "note": "Microsoft の画像生成モデル MAI-Image-2.6 / 2.6-Flash の料金。Azure Foundry Models pricing (Microsoft セクション) には 2026-09-19 時点で未掲載のため、値は Microsoft Foundry 公式ブログ（2026-09-04）の記載。すべて starts_at（最低価格）・public preview。単位は USD / 1M トークン、入力はテキストと画像で別単価、出力は画像出力。",
+    "source": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/mai-image-2-6-and-mai-image-2-6-flash-quality-and-speed-at-production-scale/4550970",
+    "pages": [
+      "/mai/",
+      "/en/mai/"
+    ],
+    "models": {
+      "mai-image-2.6": {
+        "text_input": 5.0,
+        "image_input": 8.0,
+        "image_output": 38.0,
+        "availability": "public preview",
+        "verified_table": false
+      },
+      "mai-image-2.6-flash": {
+        "text_input": 1.75,
+        "image_input": 2.5,
+        "image_output": 19.0,
+        "availability": "public preview",
+        "verified_table": false
+      }
+    },
+    "previous_generation_for_reference": {
+      "mai-image-2.5": {
+        "text_input": 5.0,
+        "image_input": 8.0,
+        "image_output": 47.0,
+        "source": "Azure Foundry Models pricing (Microsoft), verified 2026-09-19"
+      },
+      "mai-image-2.5-flash": {
+        "text_input": 1.75,
+        "image_input": 1.75,
+        "image_output": 19.5,
+        "source": "Azure Foundry Models pricing (Microsoft), verified 2026-09-19"
+      }
+    },
+    "not_in_calculator": "画像生成は「トークン入力/出力」の2欄では表現できない（テキスト入力・画像入力・画像出力の3系統）ため、/data/models.json（トークン計算機）には追加していない。2026-09-19の判断。"
+  },
+  "prompt_caching": {
+    "last_verified": "2026-09-23",
+    "source_snapshot": "cache/cache-pricing-rules-2026-09-17.md",
+    "page_ja": "/glossary/prompt-cache/",
+    "page_en": "/en/glossary/prompt-cache/",
+    "sources": {
+      "openai": "https://platform.openai.com/docs/guides/prompt-caching",
+      "anthropic": "https://platform.claude.com/docs/en/build-with-claude/prompt-caching",
+      "google": "https://ai.google.dev/gemini-api/docs/caching",
+      "deepseek": "https://api-docs.deepseek.com/guides/kv_cache"
+    },
+    "providers": {
+      "openai": {
+        "write_multiplier": 1.25,
+        "read_multiplier": 0.1,
+        "ttl": "30分（GPT-5.6以降 prompt_cache_options.ttl の対応値は \"30m\" のみ＝既定）",
+        "min_cacheable_tokens": null,
+        "note": "最小長はモデル依存・自動。書込倍率1.25×（標準入力比）、読込0.1×＝最大90%引き。"
+      },
+      "anthropic": {
+        "write_multiplier_5m": 1.25,
+        "write_multiplier_1h": 2.0,
+        "read_multiplier": 0.1,
+        "read_multiplier_fable5_1_mythos5_1": 0.025,
+        "ttl": "既定5分（利用のたび無料更新）／1時間は追加料金",
+        "min_cacheable_tokens": {
+          "fable5.1_mythos5.1_opus5_fable5_mythos5": 512,
+          "other": 2048,
+          "haiku4.5": 4096
+        },
+        "note": "書込はブレイクポイントで発生、前方探索は20ブロック。"
+      },
+      "google": {
+        "write_multiplier": null,
+        "read_multiplier": 0.1,
+        "ttl": "明示キャッシュはTTL指定可",
+        "min_cacheable_tokens": {
+          "3.x_flash_2.5_successors_3.1_pro_preview": 4096,
+          "2.5_flash_pro": 2048
+        },
+        "note": "暗黙キャッシュは Gemini 2.5 以降で既定有効（ヒット時は自動値引き）。明示キャッシュは保存料金が別建て。"
+      },
+      "deepseek": {
+        "write_multiplier": null,
+        "read_multiplier": 0.02,
+        "ttl": "自動（既定で有効・コード変更不要）",
+        "min_cacheable_tokens": 64,
+        "note": "Context Caching on Disk。書込料金の記載なし＝初回は cache miss（通常入力）として課金。cache hit は cache miss の1/50（オフピーク同士の比較）。"
+      }
+    },
+    "cache_prices_usd_per_1m": {
+      "gpt-6-astra": {
+        "standard_input": 10.0,
+        "cache_read": 1.0,
+        "cache_write": 12.5,
+        "output": 50.0
+      },
+      "claude-fable-5-1": {
+        "standard_input": 10.0,
+        "cache_read": 0.25,
+        "cache_write_5m": 12.5,
+        "cache_write_1h": 20.0,
+        "output": 50.0
+      },
+      "gemini-3-8-flash": {
+        "standard_input": 0.75,
+        "cache_read": 0.075,
+        "explicit_cache_storage_per_1m_per_hour": 0.5,
+        "output": 3.75,
+        "note": "2026-12-31までの初回価格。2027-01-01以降は $1.50 / $0.15。"
+      },
+      "deepseek-v4.1-flash": {
+        "standard_input_offpeak": 0.15,
+        "cache_read_offpeak": 0.003,
+        "cache_write": null,
+        "note": "オフピーク。ピークは $0.30 / $0.006。"
+      },
+      "grok-4.6": {
+        "standard_input": 2.0,
+        "cache_read": 0.5,
+        "output": 6.0
+      },
+      "glm-5.3-flash": {
+        "standard_input": 0.15,
+        "cache_read": 0.03,
+        "output": 0.5,
+        "note": "キャッシュ保存は期間限定無料。"
+      },
+      "mai-thinking-1": {
+        "standard_input": 2.0,
+        "cache_read": 0.2,
+        "output": 8.0,
+        "note": "Azure Foundry Global。"
+      },
+      "grok-4.7": {
+        "standard_input": 2.0,
+        "cache_read": 0.5,
+        "output": 6.0,
+        "long_context_above_200k": {
+          "input": 4.0,
+          "cache_read": 1.0,
+          "output": 12.0
+        },
+        "note": "2026-09-21公開。200K超は長文料金。Fast variant は2倍。Batch割引対象外。"
+      }
+    },
+    "worked_example": {
+      "assumption": "8,000トークンの共通前置きを10リクエスト送る（出力は無視、書込は初回のみ、2〜10回目は全て cache hit）",
+      "gpt-6-astra": {
+        "no_cache": 0.8,
+        "with_cache": 0.172
+      },
+      "claude-fable-5-1": {
+        "no_cache": 0.8,
+        "with_cache": 0.118
+      },
+      "deepseek-v4.1-flash": {
+        "no_cache": 0.012,
+        "with_cache": 0.0014
+      }
+    }
+  }
+}

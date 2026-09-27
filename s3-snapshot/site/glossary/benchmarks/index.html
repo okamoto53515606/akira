@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ベンチマークとは — 「誰が・何を・どう測るか」で仕分ける | LLM Data Hub</title>
+  <meta name="description" content="DeepSWE、GDPval-AA、Terminal-Bench、OSWorld……ベンチマークが多すぎて訳が分からない、を解消します。①誰が運営しているか ②何を測っているか ③どう測るか（ハーネス・設定）の3つで仕分け、6つのベンチを運営主体の公式サイト・原論文で裏取りして整理。GDPvalとGDPval-AAのように同じ名前でも別物になる理由も解説します。">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/glossary/benchmarks/">
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/glossary/benchmarks/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/glossary/benchmarks/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/glossary/benchmarks/">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/glossary/benchmarks/">
+  <meta property="og:title" content="ベンチマークとは — 「誰が・何を・どう測るか」で仕分ける">
+  <meta property="og:description" content="ベンチ名の羅列ではなく、①運営主体 ②測っている対象 ③測り方（ハーネス）で仕分ける。DeepSWE／GDPval・GDPval-AA／Terminal-Bench・Terminal-Bench-Science／OSWorld を運営者の公式資料・原論文で裏取りして整理します。">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"ベンチマークとは — 「誰が・何を・どう測るか」で仕分ける","datePublished":"2026-09-23","dateModified":"2026-09-23","author":{"@type":"Organization","name":"LLM Data Hub"},"publisher":{"@type":"Organization","name":"okamoちゃんねる"},"url":"https://llm.okamomedia.tokyo/glossary/benchmarks/","inLanguage":"ja","about":"AIベンチマークの運営主体・測定対象・測定方法（ハーネス）による分類と、数字を比較するときの確認手順"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"ホーム","item":"https://llm.okamomedia.tokyo/"},{"@type":"ListItem","position":2,"name":"用語説明","item":"https://llm.okamomedia.tokyo/glossary/"},{"@type":"ListItem","position":3,"name":"ベンチマークとは","item":"https://llm.okamomedia.tokyo/glossary/benchmarks/"}]}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .phrase-box{background:linear-gradient(135deg,#12162a 0%,#1a1d35 55%,#0f1117 100%);border:1px solid var(--c-border);border-left:3px solid var(--c-accent2);border-radius:var(--r-lg);padding:1.2rem 1.3rem;margin:1.2rem 0 1.6rem}
+    .phrase-box .phrase{font-size:1.02rem;font-weight:700;line-height:1.75;margin-bottom:.6rem}
+    .phrase-box .phrase-meta{font-size:.8rem;color:var(--c-muted);line-height:1.7}
+    .num-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:.8rem;margin:1rem 0 1.6rem}
+    .num-card{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.9rem 1rem}
+    .num-card .k{font-family:var(--font-mono);font-size:.74rem;color:var(--c-muted);font-weight:600;letter-spacing:.02em}
+    .num-card .v{font-family:var(--font-mono);font-size:1.05rem;font-weight:700;margin:.15rem 0 .2rem}
+    .num-card .d{font-size:.8rem;color:var(--c-muted);line-height:1.6}
+    .read-box{background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-green);border-radius:var(--r-md);padding:1rem 1.2rem;margin:1rem 0 1.6rem;font-size:.88rem;color:var(--c-muted)}
+    .read-box strong{color:var(--c-text)}
+    .flow-fig{margin:1rem 0 1.4rem}
+    .flow-fig svg{width:100%;height:auto;border:1px solid var(--c-border);border-radius:var(--r-md);background:var(--c-surface);display:block}
+    /* 横長の図はスマホでは文字が小さくなりすぎるため、680px以下は横スクロールで読みやすさを保つ */
+    .fig-wrap{position:relative}
+    .fig-scroll{overflow:visible}
+    @media (max-width:680px){
+      .fig-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:.2rem}
+      .fig-scroll svg{min-width:620px}
+      /* スクロール可能サイン: 左右の端をフェードさせ、まだ先があることを示す */
+      .fig-wrap::before,.fig-wrap::after{content:"";position:absolute;top:0;bottom:0;width:40px;pointer-events:none;z-index:2}
+      .fig-wrap::before{left:0;background:linear-gradient(to right,rgba(15,17,23,.95),rgba(15,17,23,0))}
+      .fig-wrap::after{right:0;background:linear-gradient(to left,rgba(15,17,23,.95),rgba(15,17,23,0))}
+      .fig-hint{display:block}
+    }
+    .fig-hint{display:none;font-size:.75rem;color:var(--c-muted);text-align:center;margin:.3rem 0 0}
+    .fig-hint .ar{color:var(--c-accent)}
+    .bench-table{width:100%;border-collapse:collapse;font-size:.84rem;margin:.6rem 0 .4rem}
+    .bench-table th,.bench-table td{border:1px solid var(--c-border);padding:.6rem .7rem;vertical-align:top;line-height:1.65}
+    .bench-table thead th{background:var(--c-surface2);font-size:.8rem;text-align:left;white-space:nowrap}
+    .bench-table td.bn{font-family:var(--font-mono);font-size:.8rem;font-weight:700;white-space:nowrap}
+    .bench-table tbody tr:nth-child(even){background:rgba(255,255,255,.015)}
+    .table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+    .table-scroll table{min-width:720px}
+    .cmp-table th,.cmp-table td{font-size:.85rem}
+    .quote-box{background:#11131c;border:1px solid var(--c-border);border-left:3px solid var(--c-accent2);border-radius:var(--r-md);padding:.9rem 1.1rem;margin:1rem 0;font-size:.86rem;color:var(--c-muted);line-height:1.8}
+    .quote-box .en{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82rem;color:var(--c-text);display:block;margin-bottom:.35rem}
+    .qa-list{counter-reset:qa;list-style:none;padding:0;margin:1rem 0 1.6rem}
+    .qa-list li{position:relative;padding:.75rem 0 .75rem 2.4rem;border-bottom:1px dashed var(--c-border);font-size:.88rem;color:var(--c-muted);line-height:1.75}
+    .qa-list li:last-child{border-bottom:none}
+    .qa-list li::before{counter-increment:qa;content:counter(qa);position:absolute;left:0;top:.7rem;width:1.6rem;height:1.6rem;border-radius:50%;background:var(--c-surface2);border:1px solid var(--c-border);color:var(--c-accent);font-family:var(--font-mono);font-size:.78rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+    .qa-list strong{color:var(--c-text)}
+    .bench-block{border:1px solid var(--c-border);border-radius:var(--r-md);background:var(--c-surface);padding:1rem 1.15rem;margin:1rem 0}
+    .bench-block h3{margin:0 0 .5rem;font-size:1rem}
+    .bench-block .op{font-family:var(--font-mono);font-size:.76rem;color:var(--c-accent);margin-bottom:.6rem}
+    .bench-block dl{margin:0;font-size:.85rem;line-height:1.75}
+    .bench-block dt{font-weight:700;color:var(--c-text);margin-top:.55rem;font-size:.82rem}
+    .bench-block dd{margin:.1rem 0 0;color:var(--c-muted)}
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="メインナビゲーション"><a href="/" class="nav-link">ホーム</a><a href="/pricing/" class="nav-link">料金比較</a><a href="/calculator/" class="nav-link">トークン計算機</a><a href="/timeline/" class="nav-link">リリース年表</a><a href="/china-ai/" class="nav-link">中国AI</a><a href="/multimodal/" class="nav-link">マルチモーダル</a><a href="/mai/" class="nav-link">MS AI (MAI)</a><a href="/glossary/" class="nav-link">用語説明</a></nav></div></header>
+
+<main><div class="container">
+  <div class="section" style="padding-bottom:0;">
+    <h1 class="section-title" style="font-size:1.55rem;">ベンチマークとは — 「誰が・何を・どう測るか」で仕分ける</h1>
+    <p class="section-sub" style="max-width:760px;">
+      <a href="/glossary/">用語説明</a> 第5回。今回のテーマは <strong>ベンチマーク</strong> です。
+      きっかけは読者からの素直な疑問でした——「<strong>開発者による実測では、DeepSWE、GDPval-AA、Terminal-bench、OSWorld など複数のベンチマーク</strong>」と書いてあっても、<strong>誰が具体的に何を計測しているのか分からない。ベンチマークが多すぎて訳が分からない</strong>。
+      そこでこのページでは、<strong>ベンチ名を暗記するのをやめます</strong>。代わりに<strong>①誰が運営しているか ②何を測っているか ③どう測るか（ハーネス・設定）</strong>という3つの質問で仕分ける道具を持ち帰ってもらいます。
+      第3回の<a href="/glossary/harness/">ハーネス（harness）</a>と対になる内容です。
+    </p>
+    <div class="phrase-box">
+      <p class="phrase">「同じベンチ名でも、運営・版・ハーネス・設定が違えば、数字は比較できない」</p>
+      <p class="phrase-meta">このページを貫く一行です。ベンチマークの名前は<strong>テストのタイトル</strong>にすぎません。同じタイトルでも、出題する人が違い、採点する人が違い、受験者に渡す道具が違えば、点数は別物になります。実際に <strong>GDPval と GDPval-AA はデータセットは同じでも、運営と測り方が違うため別の数字</strong>として扱う必要があります（後半で詳しく扱います）。</p>
+    </div>
+    <div class="updated-bar">
+      <span class="dot">●</span>
+      最終更新: <time datetime="2026-09-23">2026年9月23日</time>
+      &ensp;|&ensp; 方針: 運営主体の公式サイト・原論文で確認できた範囲のみ掲載。確認できないものは載せません
+    </div>
+  </div>
+
+  <section class="section" style="padding-top:1.5rem;" aria-labelledby="why-h">
+    <h2 class="section-title" id="why-h" style="font-size:1.2rem;">なぜ「多すぎて分からない」と感じるのか</h2>
+    <p style="max-width:820px;font-size:.92rem;line-height:1.85;">
+      理由はシンプルで、<strong>ベンチマークは「モデルを比較するため」ではなく「特定の能力を測るため」に、測りたい人がそれぞれ作っている</strong>からです。
+      コーディングを測りたい会社、実務の経済価値を測りたい研究所、ターミナル操作を測りたい大学のグループ——目的が違えば、当然テストの形も違います。
+      にもかかわらず、ニュースでは全部が「ベンチマークのスコア」という同じ言葉で並べられます。ここで情報が潰れてしまうわけです。
+    </p>
+    <p style="max-width:820px;font-size:.92rem;line-height:1.85;">
+      だから覚えるべきはベンチ名の一覧ではなく、<strong>「この数字は誰の・何の・どう測った数字か」を引き出す手順</strong>です。次の図がその全体像です。
+    </p>
+
+    <figure class="flow-fig">
+      <div class="fig-wrap">
+        <div class="fig-scroll">
+          <svg viewBox="0 0 800 236" role="img" aria-labelledby="fig-bm-title fig-bm-desc" xmlns="http://www.w3.org/2000/svg">
+            <title id="fig-bm-title">ベンチマークの数字を仕分ける3つの質問</title>
+            <desc id="fig-bm-desc">ベンチ名だけでは数字の意味は決まらない。①誰が運営しているか ②何を測っているか ③どう測っているか（ハーネス・設定）の3つを確認して初めて数字の意味が決まる。同じベンチ名でも運営・版・ハーネス・設定が違えば比較できない。</desc>
+
+            <!-- step 1 -->
+            <rect x="12" y="26" width="176" height="98" rx="10" fill="#22263a" stroke="#2e3250"/>
+            <text x="100" y="50" text-anchor="middle" font-family="monospace" font-size="10" fill="#8891b5">ベンチ名</text>
+            <text x="100" y="78" text-anchor="middle" font-size="16" font-weight="700" fill="#e2e4f0">DeepSWE</text>
+            <text x="100" y="102" text-anchor="middle" font-size="10.5" fill="#8891b5">これはタイトルにすぎない</text>
+
+            <path d="M192 75 L206 75" stroke="#6c8eff" stroke-width="2" marker-end="url(#arw)"/>
+            <defs><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#6c8eff"/></marker></defs>
+
+            <!-- step 2 -->
+            <rect x="212" y="26" width="176" height="98" rx="10" fill="#1a1d27" stroke="#2e3250"/>
+            <text x="300" y="50" text-anchor="middle" font-family="monospace" font-size="10" fill="#6c8eff">① 誰が</text>
+            <text x="300" y="78" text-anchor="middle" font-size="14" font-weight="700" fill="#e2e4f0">運営主体</text>
+            <text x="300" y="102" text-anchor="middle" font-size="10.5" fill="#8891b5">企業か、研究機関か、コミュニティか</text>
+
+            <path d="M392 75 L406 75" stroke="#6c8eff" stroke-width="2" marker-end="url(#arw)"/>
+
+            <!-- step 3 -->
+            <rect x="412" y="26" width="176" height="98" rx="10" fill="#1a1d27" stroke="#2e3250"/>
+            <text x="500" y="50" text-anchor="middle" font-family="monospace" font-size="10" fill="#a78bfa">② 何を</text>
+            <text x="500" y="78" text-anchor="middle" font-size="14" font-weight="700" fill="#e2e4f0">測っている対象</text>
+            <text x="500" y="102" text-anchor="middle" font-size="10.5" fill="#8891b5">コード／実務／ターミナル／GUI</text>
+
+            <path d="M592 75 L606 75" stroke="#6c8eff" stroke-width="2" marker-end="url(#arw)"/>
+
+            <!-- step 4 -->
+            <rect x="612" y="26" width="176" height="98" rx="10" fill="#1a1d27" stroke="#2e3250"/>
+            <text x="700" y="50" text-anchor="middle" font-family="monospace" font-size="10" fill="#34d399">③ どう測るか</text>
+            <text x="700" y="78" text-anchor="middle" font-size="14" font-weight="700" fill="#e2e4f0">ハーネス・設定</text>
+            <text x="700" y="102" text-anchor="middle" font-size="10.5" fill="#8891b5">環境・道具・試行回数・判定基準</text>
+
+            <!-- bottom band -->
+            <rect x="12" y="146" width="776" height="72" rx="10" fill="#12162a" stroke="#2e3250" stroke-dasharray="4 4"/>
+            <text x="400" y="174" text-anchor="middle" font-size="12" font-weight="700" fill="#e2e4f0">この3つが決まって、初めて「73%」の意味が決まる</text>
+            <text x="400" y="198" text-anchor="middle" font-size="10.5" fill="#8891b5">同じベンチ名でも、運営・版（1.0 / 2.0 / Verified など）・ハーネス・設定が違えば、数字は比較できない</text>
+          </svg>
+        </div>
+      </div>
+      <p class="fig-hint"><span class="ar">←</span> 横にスクロールできます <span class="ar">→</span></p>
+      <figcaption style="font-size:.78rem;color:var(--c-muted);margin-top:.5rem;">ベンチマークの数字を読むときの手順です。<strong>ベンチ名は入口にすぎず、意味を決めるのは運営主体・測定対象・測り方の3つ</strong>です。下段の帯は「注意」ではなく「前提条件」——数字を語る際には、この4点（運営・版・ハーネス・設定）を必ずセットで添える必要があります。</figcaption>
+    </figure>
+
+    <div class="read-box">
+      <strong>この記事のゴール:</strong> 読み終わったときに、ニュースで「モデルAはベンチマークXで73%」と見ても、
+      <strong>「誰が運営するXの、どの版を、どんなハーネスで走らせた73%なのか」</strong>を自分で確認できるようになること。数字を信じる／疑うの前に、<strong>出どころを特定できる</strong>状態を目指します。
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:.5rem;" aria-labelledby="table-h">
+    <h2 class="section-title" id="table-h" style="font-size:1.2rem;">6つのベンチを3つの質問で仕分ける</h2>
+    <p class="section-sub">よく並べて語られる6つを、同じフォーマットで整理しました。全部、運営主体の公式リポジトリ・公式サイト・原論文で確認した内容です（確認日 2026年9月23日）。</p>
+    <div class="table-scroll">
+      <table class="bench-table">
+        <thead>
+          <tr><th>ベンチマーク</th><th>① 誰が（運営）</th><th>② 何を（測定対象）</th><th>③ どう測るか（ハーネス・判定）</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="bn">DeepSWE</td>
+            <td>Datacurve（datacurve-ai）</td>
+            <td>ソフトウェアエンジニアリング。長い工程（long-horizon）のコーディング作業</td>
+            <td>113タスク・5言語（TypeScript / Go / Python / JavaScript / Rust）。分離環境でエージェントを走らせ、<strong>プログラムベースの検証器</strong>で採点。タスクは既存のマージ済みPRからの流用ではなく書き下ろし（学習データ汚染への対策）</td>
+          </tr>
+          <tr>
+            <td class="bn">GDPval</td>
+            <td>OpenAI</td>
+            <td>実務の経済価値があるタスク（44職種 / 米GDP上位9セクター）</td>
+            <td>1,320タスク。成果物は文書・スライド・図表・表計算など。参照ファイルと文脈が添付される。<strong>人間の専門家によるブラインドのペアワイズ比較</strong>で採点</td>
+          </tr>
+          <tr>
+            <td class="bn">GDPval-AA</td>
+            <td>Artificial Analysis</td>
+            <td>GDPval と同じデータセット（OpenAIのGDPval）を、<strong>別の運営が別の測り方で</strong></td>
+            <td>v2.1。シェルアクセスとWeb閲覧を渡した<strong>エージェントループ（Stirrup）</strong>で解かせ、Eloレーティングで順位化</td>
+          </tr>
+          <tr>
+            <td class="bn">Terminal-Bench</td>
+            <td>Harbor + Laude Institute</td>
+            <td>ターミナル（コマンドライン）での操作・作業</td>
+            <td>分離コンテナ内でエージェントが<strong>実シェルを操作</strong>し、停止後に検証スイートを実行。<strong>全テスト通過のときだけ「解決」</strong>と判定され、スコアは解決タスクの割合。継続型でタグ付きリリースを公開</td>
+          </tr>
+          <tr>
+            <td class="bn">Terminal-Bench-Science</td>
+            <td>Stanford + Laude Institute（コミュニティ型）</td>
+            <td>科学研究の実務ワークフロー（生命・物理・地球・数理・工学）</td>
+            <td>専門家が作成・レビューした70タスク。判定は<strong>タスクの著者自身が書いた検証テスト</strong>。1タスクあたり8時間のエージェント枠という長い設定</td>
+          </tr>
+          <tr>
+            <td class="bn">OSWorld</td>
+            <td>XLANG Lab（香港大学）ほか</td>
+            <td>GUI・OS操作（実際のPC上でのオフィス作業）</td>
+            <td>VM上の<strong>実コンピュータ環境</strong>で369タスク。各タスクが「初期状態のセットアップ」と「実行ベースの評価スクリプト」を持つ</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:.78rem;color:var(--c-muted);margin-top:.3rem;">※ 表中の数値・構成はいずれも運営主体の一次資料に基づきます。ただし<strong>各ベンチのタスク数は版によって変わります</strong>（例: Terminal-Benchは2.0で89タスク、OSWorldは1.0で369タスク、2.0では108タスク）。数字を引用するときは<strong>版までセットで</strong>書いてください。</p>
+  </section>
+
+  <section class="section" style="padding-top:.5rem;" aria-labelledby="detail-h">
+    <h2 class="section-title" id="detail-h" style="font-size:1.2rem;">1つずつ、「誰が・何を・どう測るか」を確認する</h2>
+    <p class="section-sub">上の表を、運営主体の一次情報でたどり直します。逐語（原文の英語）と当サイトの解釈は書き分けています。</p>
+
+    <div class="bench-block">
+      <h3>DeepSWE — 「既存の正解」を排除したコーディング測定</h3>
+      <p class="op">運営: Datacurve（GitHub org: datacurve-ai）</p>
+      <dl>
+        <dt>公式の説明（逐語）</dt>
+        <dd>
+          <div class="quote-box">
+            <span class="en">"DeepSWE is a benchmark for measuring frontier coding agents on original, long-horizon software engineering tasks drawn from active open-source repositories. The benchmark includes 113 tasks across TypeScript, Go, Python, JavaScript, and Rust, with isolated environments and program-based verifiers."</span>
+            — <a href="https://github.com/datacurve-ai/deep-swe" target="_blank" rel="noopener">github.com/datacurve-ai/deep-swe</a>（2026-09-23確認）
+          </div>
+        </dd>
+        <dt>何を測っているか</dt>
+        <dd>「<strong>実際のオープンソースリポジトリで、長い工程のソフトウェアエンジニアリング作業をやり切れるか</strong>」です。1問1答の知識ではなく、複数ファイルにまたがる実装・修正を扱います。</dd>
+        <dt>どう測るか（ここが要点）</dt>
+        <dd>タスクは<strong>書き下ろし</strong>で、既存のマージ済みプルリクエストから流用していません。つまり<strong>モデルが学習中に答えを見ている可能性を減らしている</strong>のが設計の主眼です（汚染対策）。採点は特定の模範解答との一致ではなく、<strong>振る舞いを確認する手書きの検証器</strong>で行います。Datacurve はこの検証器と人間の採点者の不一致率が 1.4% だったと報告しており、これは隠れたテストスイートとの一致で採点する方式（同社の比較では SWE-bench Pro で 32.4%）より小さい数字です。</dd>
+        <dt>混同しやすい別物</dt>
+        <dd><strong>「DeepSWE-Preview」はこのベンチマークとは別物</strong>です。あちらは Agentica と Together AI が公開した 32B のオープンウェイト<strong>モデル</strong>（コーディングエージェント用）で、ベンチマークの名前ではありません。「DeepSWE」で検索すると両方が出てくるので、<strong>ベンチマークの話かモデルの話かを最初に切り分ける</strong>必要があります。</dd>
+      </dl>
+      <p class="source-note" style="font-size:.78rem;">出典: <a href="https://github.com/datacurve-ai/deep-swe" target="_blank" rel="noopener">GitHub datacurve-ai/deep-swe</a> · <a href="https://venturebeat.com/technology/deepswe-blows-up-the-ai-coding-leaderboard-crowns-gpt-5-5-and-finds-claude-opus-exploiting-a-benchmark-loophole" target="_blank" rel="noopener">VentureBeat 報道</a> · <a href="https://www.therundown.ai/tools/deep-swe" target="_blank" rel="noopener">DeepSWE-Preview の説明（別物）</a></p>
+    </div>
+
+    <div class="bench-block">
+      <h3>GDPval — 「人がお金を払う仕事」を測る</h3>
+      <p class="op">運営: OpenAI</p>
+      <dl>
+        <dt>何を測っているか</dt>
+        <dd>学術的な試験問題ではなく、<strong>実務の成果物</strong>です。原論文は「米GDP上位9セクター・44職種をカバーし、大半の米国労働統計局の作業活動を包含する」と説明しています。成果物は文書・スライド・図表・スプレッドシート・マルチメディアに及び、<strong>単純なテキストプロンプトではなく参照ファイルと文脈が添付される</strong>点が特徴です。</dd>
+        <dt>どう測るか</dt>
+        <dd>1,320タスク。品質・速度・コストを<strong>人間の専門家との比較</strong>で評価し、採点は専門家によるブラインドのペアワイズ比較で行います。220タスクのゴールドサブセットが公開され、自動採点サービスも提供されています（evals.openai.com）。</dd>
+        <dt>注意点（OpenAI自身の記載）</dt>
+        <dd>原論文は<strong>「GDPvalは初期段階であり、多くの経済的タスクのニュアンスを反映していない」</strong>と明記しています。また現行版は1回限り（one-shot）の設計で、複数回の下書きを通じて改善するケースは捉えられません。</dd>
+      </dl>
+      <p class="source-note" style="font-size:.78rem;">出典: <a href="https://openai.com/index/gdpval/" target="_blank" rel="noopener">openai.com/index/gdpval</a> · 原論文 <a href="https://arxiv.org/abs/2510.04374" target="_blank" rel="noopener">arXiv:2510.04374</a>（初版 2025年10月5日） · <a href="https://evals.openai.com/" target="_blank" rel="noopener">OpenAI Evals</a></p>
+    </div>
+
+    <div class="bench-block" style="border-left:3px solid var(--c-yellow);">
+      <h3>GDPval-AA — <strong>同じデータセットの「別の測り方」</strong></h3>
+      <p class="op">運営: Artificial Analysis（データセットは OpenAI の GDPval）</p>
+      <dl>
+        <dt>ここが「訳が分からない」の正体</dt>
+        <dd>名前が似ているので同じものだと思われがちですが、<strong>運営も測り方も別</strong>です。データセットだけが共通で、走らせ方が違います。Artificial Analysis の説明（逐語）は "GDPval-AA v2.1 is Artificial Analysis' evaluation framework for OpenAI's GDPval dataset" です。</dd>
+        <dt>どう測るか</dt>
+        <dd>同社は "Models are given shell access and web browsing capabilities in an agentic loop via <strong>Stirrup</strong> to solve tasks, with Elo ratings derived from blind pairwise comparisons." と説明しています。つまり<strong>シェルとWeb閲覧を渡したエージェントループ</strong>でタスクを解かせ、ブラインドのペア比較からEloを出します。OpenAI 側が人間の専門家の採点を使うのに対し、こちらは<strong>エージェントに道具を渡してEloで並べる</strong>——同じタスクでも測っている構図が違います。</dd>
+        <dt>だから何が言えるか</dt>
+        <dd>「GDPval と GDPval-AA のスコアを並べて優劣を語る」ことはできません。<strong>データセットが同じでさえ、運営とハーネスが違えば数字の意味は別</strong>です。これがこのページの中心メッセージの実例です。</dd>
+      </dl>
+      <p class="source-note" style="font-size:.78rem;">出典: <a href="https://artificialanalysis.ai/evaluations/gdpval-aa" target="_blank" rel="noopener">artificialanalysis.ai — GDPval-AA v2.1</a>（2026-09-23確認）</p>
+    </div>
+
+    <div class="bench-block">
+      <h3>Terminal-Bench — ターミナルで「やり切れたか」を測る</h3>
+      <p class="op">運営: Harbor + Laude Institute（プロジェクトリード: Ryan Marten）</p>
+      <dl>
+        <dt>何を測っているか</dt>
+        <dd>コマンドライン上で完結する作業を、<strong>エージェントが最後まで実行できるか</strong>です。原論文（Terminal-Bench 2.0）は「実ワークフローに着想を得た、難しく厳選された89タスク」と説明しています。</dd>
+        <dt>どう測るか</dt>
+        <dd>タスクは<strong>分離されたコンテナ</strong>の中で、自然言語の指示から始まります。エージェントは実シェルを操作し、出力を見て、必要なら何度でもやり直せます。エージェントが止まった後に<strong>検証スイートを最終状態に対して実行</strong>し、<strong>すべての検証テストが通ったときだけ「解決」</strong>と数えます。スコアは解決したタスクの割合です。<br>つまり単発の生成物ではなく、<strong>エラーから回復する力・ドキュメントを読む力・想定外の出力に適応する力</strong>がそのまま点数に出ます。</dd>
+        <dt>版に注意</dt>
+        <dd>継続型のベンチマークで、タグ付きリリースが公開され続けています。<strong>「Terminal-Benchで○%」と書くときは版（2.0 / 2.1 / 4.0 など）まで添える</strong>必要があります。</dd>
+      </dl>
+      <p class="source-note" style="font-size:.78rem;">出典: <a href="https://github.com/harbor-framework/terminal-bench" target="_blank" rel="noopener">GitHub harbor-framework/terminal-bench</a>（"Terminal-Bench is hosted by Harbor and Laude Institute."） · 原論文 <a href="https://arxiv.org/abs/2601.11868" target="_blank" rel="noopener">arXiv:2601.11868</a></p>
+    </div>
+
+    <div class="bench-block">
+      <h3>Terminal-Bench-Science — 「研究者の実務」に振り切った派生版</h3>
+      <p class="op">運営: Stanford + Laude Institute（コミュニティ型）。主導: Steven Dillmann・Sanmi Koyejo・Ludwig Schmidt ほか</p>
+      <dl>
+        <dt>何を測っているか</dt>
+        <dd>一般のターミナル操作ではなく、<strong>科学研究の実務ワークフロー</strong>です。生命・物理・地球・数理・工学の5領域にわたります。公式リポジトリは "Terminal-Bench-Science currently contains 70 expert-curated tasks across five broad scientific domains and is growing toward 100+ tasks." と記載しています。</dd>
+        <dt>どう測るか</dt>
+        <dd>タスクは<strong>領域の専門家が作成し、レビューします</strong>。採点は<strong>そのタスクの著者自身が書いた検証テスト</strong>です。第三者ベンチマークを回した評価では、Terminal-Bench 2.1 が1タスクあたり15〜60分のエージェント枠であるのに対し、こちらは<strong>1タスクに8時間の枠</strong>が与えられ、最大4 vCPU・16GBまで要求できるとされています。<strong>「同じTerminal-Benchの名前がついていても、測っている難易度と時間スケールが別物」</strong>という好例です。</dd>
+        <dt>だから何が言えるか</dt>
+        <dd>汎用のコーディング能力が高くても、科学的ワークフローでは伸びしがたい——という<strong>「テストが違えば順位も変わる」</strong>ことを示す指標として読むのが適切です。</dd>
+      </dl>
+      <p class="source-note" style="font-size:.78rem;">出典: <a href="https://github.com/harbor-framework/terminal-bench-science" target="_blank" rel="noopener">GitHub harbor-framework/terminal-bench-science</a> · <a href="https://snorkel.ai/leaderboard/terminal-bench-science/" target="_blank" rel="noopener">Snorkel AI（主導メンバー）</a> · <a href="https://www.vals.ai/benchmarks/terminal-bench-science" target="_blank" rel="noopener">vals.ai（実行条件）</a></p>
+    </div>
+
+    <div class="bench-block">
+      <h3>OSWorld — 「本物のPC」でGUIを操作できるか</h3>
+      <p class="op">運営: XLANG Lab（香港大学）ほか（Salesforce Research・CMU・University of Waterloo が参加）</p>
+      <dl>
+        <dt>何を測っているか</dt>
+        <dd>テキストやコードではなく、<strong>実際のコンピュータ上のGUI操作</strong>です。公式サイトの記載（逐語）は "We also create a benchmark of <strong>369 real-world computer tasks</strong> in OSWorld with reliable, reproducible setup and evaluation scripts." です。</dd>
+        <dt>どう測るか</dt>
+        <dd>VM上の<strong>実環境</strong>でタスクを実行します。各タスクは「詳細な初期状態のセットアップ」と「実行ベースの評価スクリプト」を持ち、判定はエージェントの操作後の状態に対して機械的に行われます。<br>原論文が示した水準は、<strong>人間が72.36%以上を達成できる一方、当時の最良モデルは12.24%</strong>——主な失敗要因は<strong>GUIの接地（grounding）と操作知識</strong>でした。（この数値は原論文＝2024年時点の測定であり、現在のモデルの水準ではありません。）</dd>
+        <dt>版に注意</dt>
+        <dd>公式サイトは「8つのGoogle Driveタスクはネットワーク依存のため手動設定が必要、もしくは除外可能（361タスク）」と注記しています。また <strong>OSWorld-Verified</strong> では300件以上の不具合が修正され、<strong>OSWorld 2.0</strong> は108タスク・7職域の長horizon版として別に公開されています。<strong>1.0の369タスクと2.0の108タスクは別物</strong>です。</dd>
+      </dl>
+      <p class="source-note" style="font-size:.78rem;">出典: <a href="https://osworld-v1.xlang.ai/" target="_blank" rel="noopener">osworld-v1.xlang.ai</a> · 原論文 <a href="https://arxiv.org/abs/2404.07972" target="_blank" rel="noopener">arXiv:2404.07972</a>（NeurIPS 2024） · <a href="https://xlang.ai/blog/osworld-verified" target="_blank" rel="noopener">OSWorld-Verified</a> · <a href="https://osworld-v2.xlang.ai/" target="_blank" rel="noopener">OSWorld 2.0</a></p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:.5rem;" aria-labelledby="check-h">
+    <h2 class="section-title" id="check-h" style="font-size:1.2rem;">次にベンチの数字を見たら、この5つを確認する</h2>
+    <p class="section-sub">暗記は不要です。<strong>この順番で確認するだけ</strong>で、数字の重みが変わります。</p>
+    <ol class="qa-list">
+      <li><strong>誰が運営しているか</strong> — モデルを作った会社自身か、第三者か。自己申告の数値と第三者計測の数値は、同じ「73%」でも意味が違います。</li>
+      <li><strong>どの版か</strong> — 1.0 / 2.0 / Verified / v2.1 などの版が違えば、タスクの母集団が違います。版を書いていないスコアは、そもそも比較の土台に載せられません。</li>
+      <li><strong>何を測っているか</strong> — コードか、実務の成果物か、ターミナル操作か、GUI操作か。測っていない能力について、そのスコアは何も語りません。</li>
+      <li><strong>どう測ったか（ハーネスと設定）</strong> — エージェントに何を渡したか、試行回数、時間制限、判定が「振る舞い」か「模範解答との一致」か。ここが違うと<strong>同じモデル・同じベンチでもスコアが動きます</strong>（<a href="/glossary/harness/">ハーネス</a>参照）。</li>
+      <li><strong>数字が何を数えているか</strong> — 「達成率」なのか「Eloレーティング」なのか。Eloは相対順位、達成率は絶対値で、足し算も引き算もできません。</li>
+    </ol>
+    <div class="tip-box" style="margin-top:1rem;">
+      <h3>💡 このサイトでの扱い</h3>
+      <p style="font-size:.88rem;">LLM Data Hub では、モデルを紹介するときも<strong>「誰のハーネスでの結果か」まで書く</strong>方針を取っています。ベンチマークのスコアを並べるだけの表は作りません。また、集計サイトがミラーした数値や検索スニペット由来の伝聞は、事実として扱いません。<a href="/glossary/gpt-6-astra-benchmarks/">第1回（GPT-6 Astra のベンチマークの読み方）</a>で扱った「Standard harness 62.7%」と「Provider Adapter 99.9%」が、まさにこの問題の実例です。</p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:.5rem;" aria-labelledby="rel-h">
+    <h2 class="section-title" id="rel-h" style="font-size:1.2rem;">関連する用語説明</h2>
+    <div class="card-grid">
+      <article class="card">
+        <div class="card-icon">🧰</div>
+        <h3 class="card-title">ハーネス（harness）とは — 同じモデルでもベンチの数字が変わる理由</h3>
+        <p class="card-desc">このページの③「どう測るか」を掘り下げた回です。ハーネスは「モデル以外の全部」。システムプロンプト・ツール・記憶・サンドボックス・試行回数・採点まで含み、同じモデル・同じベンチでもスコアを動かします。<strong>このページとセットで読むと、③の判定基準が具体的になります。</strong></p>
+        <a href="/glossary/harness/" class="card-link">解説を読む →</a>
+      </article>
+      <article class="card">
+        <div class="card-icon">🧪</div>
+        <h3 class="card-title">GPT-6 Astra「ARC-AGI-3 99.9%・ExploitBench 100%」の読み方</h3>
+        <p class="card-desc">同じベンチでも中立ハーネスでは62.7%（ARC Prize公表）。満点は「もう測れない」の合図です。未飽和のベンチがいちばん情報量が多い理由を、実例で確認できます。</p>
+        <a href="/glossary/gpt-6-astra-benchmarks/" class="card-link">解説を読む →</a>
+      </article>
+      <article class="card">
+        <div class="card-icon">📏</div>
+        <h3 class="card-title">1Mコンテキストとは — 100万トークンで何が入るか、いくらになるか</h3>
+        <p class="card-desc">ベンチマークと同じく「数字の読み方」がテーマ。長文の課金ルールは3社で大きく異なり、境界を100トークン超えただけで請求が2倍になる例もあります。</p>
+        <a href="/glossary/one-million-context/" class="card-link">解説を読む →</a>
+      </article>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:.5rem;" aria-labelledby="src-h">
+    <h2 class="section-title" id="src-h" style="font-size:1.2rem;">出典一覧（すべて2026年9月23日確認）</h2>
+    <ul style="font-size:.84rem;line-height:1.9;color:var(--c-muted);padding-left:1.2rem;">
+      <li>DeepSWE — <a href="https://github.com/datacurve-ai/deep-swe" target="_blank" rel="noopener">github.com/datacurve-ai/deep-swe</a>（運営: Datacurve）</li>
+      <li>GDPval — <a href="https://openai.com/index/gdpval/" target="_blank" rel="noopener">openai.com/index/gdpval</a> / 原論文 <a href="https://arxiv.org/abs/2510.04374" target="_blank" rel="noopener">arXiv:2510.04374</a>（OpenAI）</li>
+      <li>GDPval-AA — <a href="https://artificialanalysis.ai/evaluations/gdpval-aa" target="_blank" rel="noopener">artificialanalysis.ai/evaluations/gdpval-aa</a>（Artificial Analysis）</li>
+      <li>Terminal-Bench — <a href="https://github.com/harbor-framework/terminal-bench" target="_blank" rel="noopener">github.com/harbor-framework/terminal-bench</a> / 原論文 <a href="https://arxiv.org/abs/2601.11868" target="_blank" rel="noopener">arXiv:2601.11868</a>（Harbor + Laude Institute）</li>
+      <li>Terminal-Bench-Science — <a href="https://github.com/harbor-framework/terminal-bench-science" target="_blank" rel="noopener">github.com/harbor-framework/terminal-bench-science</a>（Stanford + Laude Institute）</li>
+      <li>OSWorld — <a href="https://osworld-v1.xlang.ai/" target="_blank" rel="noopener">osworld-v1.xlang.ai</a> / 原論文 <a href="https://arxiv.org/abs/2404.07972" target="_blank" rel="noopener">arXiv:2404.07972</a> / <a href="https://xlang.ai/blog/osworld-verified" target="_blank" rel="noopener">OSWorld-Verified</a> / <a href="https://osworld-v2.xlang.ai/" target="_blank" rel="noopener">OSWorld 2.0</a>（XLANG Lab）</li>
+    </ul>
+    <p style="font-size:.8rem;color:var(--c-muted);margin-top:.6rem;">関連: <a href="/glossary/">用語説明 一覧</a> · <a href="/glossary/harness/">ハーネス（harness）</a> · <a href="/glossary/gpt-6-astra-benchmarks/">GPT-6 Astra のベンチマークの読み方</a> · <a href="/glossary/one-million-context/">1Mコンテキスト</a> · <a href="/timeline/">リリース年表</a></p>
+  </section>
+</div></main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>運営: okamoちゃんねる</p><p><a href="/">ホーム</a> · <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a> · <a href="/timeline/">年表</a> · <a href="/glossary/">用語説明</a> · <a href="/gpt-6/">GPT-6 Astra</a></p></div><p class="footer-disclaimer">⚠️ 料金・仕様は予告なく変動します。契約前に必ず各社公式ページでご確認ください。本サイトは各社と提携していません。</p></div></footer>
+</body>
+</html>

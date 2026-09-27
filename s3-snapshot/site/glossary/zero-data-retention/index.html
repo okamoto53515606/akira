@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ZDR（ゼロデータ保持）とは — 「保存しない」の3つの落とし穴 — LLM Data Hub</title>
+  <meta name="description" content="ZDR（ゼロデータ保持）は「既定」であって常時有効ではありません。保持が必要なモデルの例外リストがあり、保証には明示指定が要ります。ZOA（ゼロオペレーターアクセス）との違い、「学習に使わない」との違い、AWS Bedrock・OpenAI・Anthropic・Google・Microsoftの5社の入手方法を公式ドキュメントで比較。用語説明 第7回。2026年9月27日更新。">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/glossary/zero-data-retention/">
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/glossary/zero-data-retention/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/glossary/zero-data-retention/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/glossary/zero-data-retention/">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/glossary/zero-data-retention/">
+  <meta property="og:title" content="ZDR（ゼロデータ保持）とは — 「保存しない」の3つの落とし穴">
+  <meta property="og:description" content="ZDRは「既定」で「常時有効」ではない。例外モデル・明示指定・ZOAとの違い・5社の入手方法を1枚で整理（2026年9月27日更新）。">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"ZDR（ゼロデータ保持）とは — 「保存しない」の3つの落とし穴","datePublished":"2026-09-27","dateModified":"2026-09-27","author":{"@type":"Organization","name":"LLM Data Hub"},"publisher":{"@type":"Organization","name":"okamoちゃんねる"},"url":"https://llm.okamomedia.tokyo/glossary/zero-data-retention/","inLanguage":"ja"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"ホーム","item":"https://llm.okamomedia.tokyo/"},{"@type":"ListItem","position":2,"name":"用語説明","item":"https://llm.okamomedia.tokyo/glossary/"},{"@type":"ListItem","position":3,"name":"ZDR（ゼロデータ保持）","item":"https://llm.okamomedia.tokyo/glossary/zero-data-retention/"}]}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .motto-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem;margin:1rem 0}
+    @media(max-width:640px){.motto-grid{grid-template-columns:1fr}}
+    .motto{border:1px solid var(--c-border);border-top:3px solid var(--c-accent);border-radius:var(--r-md);background:var(--c-surface);padding:.9rem 1rem}
+    .motto .w{font-family:var(--font-mono);font-size:1.25rem;font-weight:700;color:var(--c-accent);margin:0 0 .35rem}
+    .motto p{margin:0;font-size:.84rem;line-height:1.75;color:var(--c-muted)}
+    .motto strong{color:var(--c-text)}
+    .phrase-box{background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-accent);border-radius:var(--r-md);padding:1rem 1.15rem;margin:1.2rem 0}
+    .phrase-box .phrase{margin:0;font-size:1.02rem;font-weight:700;line-height:1.7}
+    .phrase-box .phrase-meta{margin:.5rem 0 0;font-size:.83rem;color:var(--c-muted);line-height:1.8}
+    .fig-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:var(--r-md)}
+    .fig-scroll svg{min-width:660px;width:100%;height:auto;display:block;border:1px solid var(--c-border);border-radius:var(--r-md);background:var(--c-surface)}
+    .scroll-hint{font-size:.74rem;color:var(--c-muted);margin:.35rem 0 0}
+    .axis-block{border:1px solid var(--c-border);border-radius:var(--r-md);background:var(--c-surface);padding:1rem 1.15rem;margin:1rem 0}
+    .axis-block h3{margin:0 0 .45rem;font-size:1rem}
+    .axis-block .op{font-family:var(--font-mono);font-size:.76rem;color:var(--c-accent);margin-bottom:.6rem}
+    .axis-block p{margin:.4rem 0 0;font-size:.86rem;line-height:1.8;color:var(--c-muted)}
+    .axis-block strong{color:var(--c-text)}
+    .faq-block{border-top:1px solid var(--c-border);padding:1rem 0 0;margin:1rem 0 0}
+    .faq-block:first-of-type{border-top:none}
+    .faq-block dt{margin:0;font-size:.95rem;font-weight:700;color:var(--c-text);line-height:1.7}
+    .faq-block dt::before{content:"Q. ";color:var(--c-accent);font-family:var(--font-mono);font-size:.82rem}
+    .faq-block dd{margin:.4rem 0 0;font-size:.87rem;line-height:1.85;color:var(--c-muted)}
+    .faq-block dd::before{content:"A. ";color:var(--c-accent);font-family:var(--font-mono);font-size:.82rem;font-weight:700}
+    .faq-block dd strong{color:var(--c-text)}
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="メインナビゲーション"><a href="/" class="nav-link">ホーム</a><a href="/pricing/" class="nav-link">料金比較</a><a href="/calculator/" class="nav-link">トークン計算機</a><a href="/timeline/" class="nav-link">リリース年表</a><a href="/china-ai/" class="nav-link">中国AI</a><a href="/multimodal/" class="nav-link">マルチモーダル</a><a href="/mai/" class="nav-link">MS AI (MAI)</a><a href="/glossary/" class="nav-link active" aria-current="page">用語説明</a></nav></div></header>
+
+<main><div class="container">
+  <div class="section" style="padding-bottom:0;">
+    <h1 class="section-title" style="font-size:1.55rem;">ZDR（ゼロデータ保持）とは — 「保存しない」の3つの落とし穴</h1>
+    <p class="section-sub" style="max-width:780px;">
+      <a href="/glossary/">用語説明</a> 第7回。2026年9月25日に<a href="/china-ai/">中国AI</a>へ「Amazon Bedrock 経由のデータ取扱い」を追記したとき、読者から<strong>「ZDRって書いてあるけど、じゃあずっと保存されないの？」</strong>という質問が来ました。答えは<strong>「いいえ」</strong>です。
+      このページは、そこで出てきた <strong>ZDR（ゼロデータ保持）</strong>と<strong>ZOA（ゼロオペレーターアクセス）</strong>を、ベンダー固有の話ではなく<strong>業界共通の用語</strong>として独立させたものです。
+      一次情報は各社の公式ドキュメントだけ。5社の入手方法と、実際に公開されている<strong>保持必須モデルの例外リスト</strong>まで並べます。
+    </p>
+    <div class="phrase-box">
+      <p class="phrase">ZDR（ゼロデータ保持）＝「保存しない」。ただし<strong>「既定で保存しない」であって、「常時有効」ではありません</strong>。</p>
+      <p class="phrase-meta">AWSは公式ドキュメントで <em>“uses a zero data retention (ZDR) data security model. This means that <strong>by default</strong>, Amazon Bedrock does not store model inputs or outputs.”</em> と書いています。<strong>“by default”</strong>の2語がすべてです。① 保持が必要なモデルの<strong>例外リスト</strong>があり、② 保証が欲しければ<strong>明示指定</strong>が要り、③ 「保存しない」と「担当者が見られない」「学習に使わない」は<strong>別の話</strong>——この3点でつまずきます。</p>
+    </div>
+    <div class="updated-bar">
+      <span class="dot">●</span>
+      最終更新: <time datetime="2026-09-27">2026年9月27日</time>
+      &ensp;|&ensp; 方針: 各社の公式ドキュメントで逐語を確認できた内容のみ掲載。「一般にこう言われている」は書きません
+    </div>
+  </div>
+
+  <section class="section" style="padding-top:1.5rem;" aria-labelledby="motto-h">
+    <h2 class="section-title" id="motto-h" style="font-size:1.2rem;">3語で覚える — 「既定・例外・明示」</h2>
+    <p class="section-sub">ZDR の混乱は、ほぼこの3語に集約できます。長い説明を覚える必要はありません。</p>
+    <div class="motto-grid">
+      <div class="motto">
+        <p class="w">① 既定</p>
+        <p><strong>ふつうは保存しない。</strong>これが既定のデータセキュリティモデルです。「毎回保存されている」と思い込むと、逆に過剰な対策になります。</p>
+      </div>
+      <div class="motto">
+        <p class="w">② 例外</p>
+        <p><strong>保存が必要なモデルがある。</strong>不正利用検知のため、一部のモデルは最大30日保持されます。範囲はモデルごとに違い、<strong>「分類器がフラグを立てた通信のみ」</strong>（BedrockのOpenAI系）から<strong>「全通信＋AWSの担当者による人間レビューの可能性」</strong>（Claude Fable 5系）まで幅があります。<strong>モデル単位</strong>で決まります。</p>
+      </div>
+      <div class="motto">
+        <p class="w">③ 明示</p>
+        <p><strong>保証が要るなら、こちらから指定する。</strong>「既定だから大丈夫」ではなく、設定値や契約で<strong>明示</strong>して初めて保証になります。</p>
+      </div>
+    </div>
+    <div class="tip-box">
+      <h3>📝 たとえ話（技術的な定義ではありません）</h3>
+      <p style="font-size:.85rem;line-height:1.8;color:var(--c-muted);margin:0;">
+        避難の標語と同じで、<strong>覚えられる短さ</strong>にしないと現場では使えません。「押さない・駆けない・しゃべらない」に相当するのが、上の<strong>「既定・例外・明示」</strong>です。
+        ただし標語は<strong>記憶の道具であって定義ではありません</strong>。実際の契約では、各社の公式ドキュメントの文面が正になります。
+      </p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="fig-h">
+    <h2 class="section-title" id="fig-h" style="font-size:1.2rem;">図: ZDR は「③ 保存する」の話</h2>
+    <figure style="margin:1rem 0 1.4rem;">
+      <div class="fig-scroll">
+      <svg viewBox="0 0 700 312" role="img" aria-labelledby="zdr-t zdr-d" xmlns="http://www.w3.org/2000/svg">
+        <title id="zdr-t">ZDRとZOAの守備範囲</title>
+        <desc id="zdr-d">入力を送る、処理する、保存する、の3段階を示した図。ZOAは処理の段階で事業者の担当者が中身を見られないことを指し、ZDRは保存の段階で既定では保存しないことを指す。学習に使わないことは別の条項である。</desc>
+        <g font-family="system-ui,-apple-system,sans-serif" font-size="12">
+          <rect x="18" y="46" width="196" height="112" rx="8" fill="#1b2030" stroke="#3a4256"/>
+          <text x="116" y="74" text-anchor="middle" fill="#e6e6e6" font-size="13" font-weight="700">① 送る</text>
+          <text x="116" y="98" text-anchor="middle" fill="#9aa0aa">プロンプトとファイルを</text>
+          <text x="116" y="116" text-anchor="middle" fill="#9aa0aa">事業者に送信する</text>
+          <text x="116" y="142" text-anchor="middle" fill="#9aa0aa" font-size="11">ここは利用者の操作</text>
+
+          <rect x="248" y="46" width="196" height="112" rx="8" fill="#1b2030" stroke="#3a4256"/>
+          <text x="346" y="74" text-anchor="middle" fill="#e6e6e6" font-size="13" font-weight="700">② 処理する</text>
+          <text x="346" y="98" text-anchor="middle" fill="#9aa0aa">モデルが推論する</text>
+          <text x="346" y="122" text-anchor="middle" fill="#6ea8fe" font-size="11" font-weight="700">ZOA の守備範囲</text>
+          <text x="346" y="140" text-anchor="middle" fill="#6ea8fe" font-size="11">事業者の担当者は見られない</text>
+
+          <rect x="478" y="46" width="204" height="112" rx="8" fill="#1b2030" stroke="#3a4256"/>
+          <text x="580" y="74" text-anchor="middle" fill="#e6e6e6" font-size="13" font-weight="700">③ 保存する</text>
+          <text x="580" y="98" text-anchor="middle" fill="#9aa0aa">ディスクに残るか</text>
+          <text x="580" y="122" text-anchor="middle" fill="#7ee787" font-size="11" font-weight="700">ZDR の守備範囲</text>
+          <text x="580" y="140" text-anchor="middle" fill="#7ee787" font-size="11">既定では保存しない</text>
+
+          <path d="M218 102 L244 102" stroke="#5a6a88" stroke-width="2" marker-end="url(#a1)"/>
+          <path d="M448 102 L474 102" stroke="#5a6a88" stroke-width="2" marker-end="url(#a1)"/>
+          <defs><marker id="a1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#5a6a88"/></marker></defs>
+
+          <rect x="18" y="184" width="664" height="104" rx="8" fill="#20222a" stroke="#3a4256"/>
+          <text x="34" y="206" fill="#f0a35e" font-size="12" font-weight="700">別の条項（ZDR とは独立）: 「学習に使わない」</text>
+          <text x="34" y="227" fill="#9aa0aa" font-size="11">「保存しない」＝ZDR、「担当者が見られない」＝ZOA、「学習に使わない」＝訓練利用の制限。</text>
+          <text x="34" y="245" fill="#9aa0aa" font-size="11">3つは別々の約束で、片方が片方を保証しません。</text>
+          <text x="34" y="269" fill="#f0a35e" font-size="11">例外: 不正利用検知のため一部モデルは最大30日保持（範囲はモデルごとに異なる）</text>
+        </g>
+      </svg>
+      </div>
+      <p class="scroll-hint">← 横にスクロールできます（幅の狭い画面）</p>
+      <figcaption style="font-size:.78rem;color:var(--c-muted);margin-top:.5rem;">当サイト作成。3つの概念の守備範囲を示した整理図で、各社の実際の実装を示すものではありません。</figcaption>
+    </figure>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="three-h">
+    <h2 class="section-title" id="three-h" style="font-size:1.2rem;">いちばん多い誤解 — 「保存しない」「見られない」「学習に使わない」は別物</h2>
+
+    <div class="axis-block">
+      <h3>ZDR = ゼロデータ保持（Zero Data Retention）</h3>
+      <p class="op">保存しない、の話</p>
+      <p>リクエストとレスポンスを<strong>保存（at rest で保持）しない</strong>こと。AWSの逐語は「by default, Amazon Bedrock does not store model inputs or outputs」。処理の途中でメモリ上を通ることは、当然あります。</p>
+    </div>
+
+    <div class="axis-block">
+      <h3>ZOA = ゼロオペレーターアクセス（Zero Operator Access）</h3>
+      <p class="op">見られない、の話</p>
+      <p>事業者の<strong>人間（オペレーター）が中身にアクセスできない</strong>こと。AWSの逐語は「no operators of the service can access model input or output」。<strong>「保存しない」と「見られない」は別の軸</strong>です。逆に、ZDR を契約していても「機械による不正利用チェック」は動き続けます（Anthropicは「still retains User Safety classifier results」と明記）。</p>
+    </div>
+
+    <div class="axis-block">
+      <h3>「学習に使わない」</h3>
+      <p class="op">訓練利用の話</p>
+      <p>送ったデータを<strong>モデルの訓練・改善に使わない</strong>こと。これは<strong>APIの既定</strong>であることが多く、ZDR とは独立しています。AWSは「will not use any inputs to or outputs from Amazon Bedrock to train ...」、Googleは「Google won't use your data to train or fine-tune any AI/ML models without your prior permission or instruction」と公式に明記しています。<strong>ZDR が無くても訓練には使われない</strong>ことが多い、という点が混乱の元です。</p>
+    </div>
+
+    <div class="tip-box">
+      <h3>💡 なぜ「保存」が起きるのか</h3>
+      <p style="font-size:.85rem;line-height:1.8;color:var(--c-muted);margin:0;">
+        理由はほぼ<strong>不正利用（abuse）の検知</strong>です。1件ずつ見ても分からない攻撃（分散した脱獄の試行など）は、<strong>一定期間ためてから比較しないと見つかりません</strong>。だから「安全性のためだけに、限られた期間だけ保持する」という例外が生まれます。
+        これが<strong>「保持必須モデル」</strong>の正体です。ただし保持される範囲はモデルごとに異なり、分類器がフラグを立てた通信のみのことも、全通信のこともあり、AWSの担当者による人間レビューが付く場合もあります。このページの後半で、実際に公開されている例外リストを並べます。
+      </p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="five-h">
+    <h2 class="section-title" id="five-h" style="font-size:1.2rem;">5社の ZDR — 「既定」か「審査制」かで全然ちがう</h2>
+    <p class="section-sub">同じ「ZDR」でも、<strong>何もしなくても効く（既定）</strong>のか、<strong>申請して承認されないと効かない</strong>のかが違います。公式ドキュメントの記述だけで表にしました。</p>
+    <div class="table-wrap"><table><thead><tr><th>事業者</th><th>既定の保持</th><th>ZDR の入手方法</th><th>効かない範囲（公式に明記）</th></tr></thead><tbody>
+      <tr>
+        <td class="model-name">Amazon Bedrock</td>
+        <td>公式が「<strong>既定で保存しない</strong>」と明記（ZOA/ZDRデータセキュリティモデル）</td>
+        <td><strong>既定</strong>。ただし保証が要るなら保持モードを <code>none</code> に<strong>明示指定</strong>（アカウント単位／プロジェクト単位、リージョンごと）。新規アカウントの既定は <code>inherit</code>（上位スコープに従う）</td>
+        <td>保持必須モデル（下の例外リスト）。<strong>Enterprise Frontier Safeguards</strong> の対象顧客は <strong>2026年12月31日まで</strong>が ZDR</td>
+      </tr>
+      <tr>
+        <td class="model-name">OpenAI</td>
+        <td>不正利用監視ログを<strong>最大30日</strong>。Responses API は応答状態も30日が既定（<code>store</code> が既定 <code>true</code>）</td>
+        <td><strong>審査制</strong>。「Zero Data Retention または Modified Abuse Monitoring の承認」を得た顧客のみ（既定では効かない）</td>
+        <td>エンドポイント単位で対象／対象外がある。ZDR 有効時は <code>store</code> が<strong>常に false 扱い</strong>（true をリクエストしても無視）</td>
+      </tr>
+      <tr>
+        <td class="model-name">Anthropic</td>
+        <td><strong>既定では会話コンテンツを保持しない</strong>（公式逐語「Conversation content ... is not retained by default」）。例外は <strong>Covered Models</strong>（30日保持）。訓練には既定で使わない</td>
+        <td><strong>申請制・組織単位</strong>（担当窓口経由）。公式に「ZDR is available on request」＝セルフサービスのトグルは無い</td>
+        <td>Claude Console（playground含む）／Claude Teams・Enterprise のチャットUI／Claude for Excel／Claude Managed Agents（セッションを消すまで保持）／<strong>Covered Models</strong>。ZDR でも<strong>安全分類器の結果は保持</strong></td>
+      </tr>
+      <tr>
+        <td class="model-name">Google Cloud<br>（Gemini）</td>
+        <td>不正利用検知のためプロンプトと応答を一定期間ログ（有償サービス）</td>
+        <td><strong>利用者側の作業が必要</strong>。公式に「To achieve zero data retention, customers must take specific actions」。① 不正利用ログの除外 ② データキャッシュの無効化 ③ <code>store=false</code> の明示</td>
+        <td>Grounding with Google Search／Maps は<strong>無効化する方法が無い</strong>と公式明記。Gemini Developer API については「保証された ZDR や企業向け契約が必要なら <strong>Vertex AI を使え</strong>」と公式が案内</td>
+      </tr>
+      <tr>
+        <td class="model-name">Microsoft Foundry<br>（Azure OpenAI）</td>
+        <td>不正利用監視のため、フラグが立ったプロンプトと応答をサンプルして人間レビュー用データストアに保持することがある</td>
+        <td><strong>審査制</strong>（<strong>modified abuse monitoring</strong> の承認）。公式の逐語は「If the customer has been approved for modified abuse monitoring ... the data storage and human review process described above is not performed」</td>
+        <td>承認後も<strong>自動レビューは継続</strong>（逐語「However, automated review may still be conducted」）。Files・vector store・Stored Completions などのステートフル機能は別途保存される</td>
+      </tr>
+    </tbody></table></div>
+    <p style="font-size:.78rem;color:var(--c-muted);margin-top:.3rem;">※ 出典: 各社の公式ドキュメント（下の出典一覧）。「効かない範囲」は当サイトの整理で、原文の列挙を要約したものです。原文は必ず各リンク先で確認してください。</p>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="exc-h">
+    <h2 class="section-title" id="exc-h" style="font-size:1.2rem;">例外リスト — 実際に公開されている「保持必須モデル」</h2>
+    <p class="section-sub">ここが本ページの核心です。<strong>ZDR は契約したかどうかではなく、モデル単位でも決まります。</strong>不正利用検知のため保持が必須のモデルは、<strong>ZDR の対象外</strong>になります。保持される範囲はモデルごとに異なり、フラグ付き通信のみ／全通信、AWSの担当者による人間レビューの有無まで幅があります。</p>
+    <div class="table-wrap"><table><thead><tr><th>提供元</th><th>保持が必要なモデル</th><th>実際に起きること</th></tr></thead><tbody>
+      <tr>
+        <td class="model-name">Amazon<br>Bedrock</td>
+        <td><strong>OpenAI</strong> GPT-6 Astra / GPT-5.4 / GPT-5.5 / GPT-5.6 Sol・Terra・Luna / Daybreak Red: GPT-5.6 Cyber / Daybreak Blue: GPT-5.6 Sol<br><strong>Anthropic</strong> Claude Fable 5 / Fable 5.1</td>
+        <td>OpenAI系は<strong>分類器がフラグを立てた通信のみ</strong>最大30日保持（適格な顧客は AWS アカウントチーム経由で<strong>完全な ZDR を申請可能</strong>）。<br>Claude Fable 5 / 5.1 は<strong>全通信</strong>を最大30日保持、フラグ付きは<strong>AWS の担当者による人間レビューの可能性あり</strong>（保持モード <code>aws_review</code> が必須）</td>
+      </tr>
+      <tr>
+        <td class="model-name">Anthropic<br>（直販・他クラウド）</td>
+        <td><strong>Covered Models</strong>: Claude Fable 5.1 / Mythos 5.1 / Fable 5 / Mythos 5</td>
+        <td>逐語「These models require <strong>30-day data retention</strong> and are <strong>not available under ZDR</strong> unless expressly authorized by Anthropic.」＝ZDR 契約があっても、そのワークスペースだけ保持を有効化する必要がある（他のワークスペースは ZDR のまま）</td>
+      </tr>
+    </tbody></table></div>
+    <div class="tip-box">
+      <h3>📌 2026年9月27日時点で、例外リストに入っていないモデル</h3>
+      <p style="font-size:.85rem;line-height:1.8;color:var(--c-muted);margin:0;">
+        Bedrock の例外リストを<strong>当日に実取得して全文確認</strong>した範囲では、<strong>Kimi K3 と MiMo-V2.6 は含まれていません</strong>（＝Bedrock 経由では保持必須の条件が課されていない）。
+        ただし<strong>リストは追記されます</strong>。新しいフロンティアモデルが追加されたときにここが更新されるので、<strong>契約前と導入後に一度ずつ</strong>公式ページを見るのが安全です。
+      </p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="qa-h">
+    <h2 class="section-title" id="qa-h" style="font-size:1.2rem;">実務チェック — よくある6つの質問</h2>
+
+    <dl class="faq-block">
+      <dt>「ZDR対応」と書いてあれば、保存されないと考えていい？</dt>
+      <dd>いいえ。<strong>「対応」は「その設定を選べる」の意味</strong>であることが多く、既定で有効とは限りません。OpenAI・Anthropic・Microsoft は<strong>審査制または申請制</strong>、Google は<strong>利用者側の作業が必須</strong>です。<strong>設定値と契約の両方</strong>を確認してください。</dd>
+    </dl>
+
+    <dl class="faq-block">
+      <dt>「保存しない」なら、担当者が中身を読むこともない？</dt>
+      <dd>別の話です。<strong>保存しない＝ZDR</strong>、<strong>担当者が読めない＝ZOA</strong>。ZDR は「ディスクに残さない」約束で、処理中のアクセスを禁じるものではありません。両方を確認する必要があります。</dd>
+    </dl>
+
+    <dl class="faq-block">
+      <dt>「学習に使わない」と ZDR はどちらが強い？</dt>
+      <dd>比べられません。<strong>守っている対象が違います</strong>。「学習に使わない」は訓練利用の制限、「ZDR」は保存の制限です。多くのAPIでは<strong>訓練利用の制限は既定で付いています</strong>が、保存は別枠で残ります。</dd>
+    </dl>
+
+    <dl class="faq-block">
+      <dt>ZDR を有効にすると、どのモデルが使えなくなる？</dt>
+      <dd><strong>保持必須モデル（例外リスト）だけ</strong>です。Anthropic の場合、Covered Models を使うには<strong>そのワークスペースだけ</strong>保持を有効化します（他のワークスペースは ZDR のまま）。Bedrock の例では <code>none</code> では使えず <code>aws_review</code> が必要、という形で現れます。</dd>
+    </dl>
+
+    <dl class="faq-block">
+      <dt>ZDR を有効にしたのに、データが残っていると言われた。なぜ？</dt>
+      <dd>3つの候補があります。<strong>① ステートフル機能を使っている</strong>（応答の保存、ファイルAPI、ベクターストア、エージェントのセッションなどは<strong>設計上保存される</strong>）、<strong>② キャッシュが残っている</strong>（Googleはメモリ上のキャッシュを24時間保持。これは「ZDRに違反しない」と公式に説明）、<strong>③ 安全分類器の結果が保持される</strong>（Anthropicは明記）。<strong>ZDR が覆うのは「不正利用監視のための保存」だけ</strong>と考えると整理できます。</dd>
+    </dl>
+
+    <dl class="faq-block">
+      <dt>設定したつもりで効いていない、という事故は起きる？</dt>
+      <dd>起きます。<strong>設定はリージョン単位・アカウント単位で、上位スコープに従う <code>inherit</code> が既定</strong>だからです（Bedrock）。APIキーを別リージョンで使う、別プロジェクトを追加する、といった操作で<strong>「設定した範囲の外」が出ます</strong>。導入時と、構成を変えたときに<strong>実際に1リクエスト投げて確認</strong>するのが確実です。</dd>
+    </dl>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="src-h">
+    <h2 class="section-title" id="src-h" style="font-size:1.2rem;">出典一覧（すべて2026年9月27日確認）</h2>
+    <ul style="font-size:.84rem;line-height:1.9;color:var(--c-muted);padding-left:1.2rem;">
+      <li>Amazon Bedrock「Amazon Bedrock abuse detection」（ZOA/ZDRの定義と例外リスト） — <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/abuse-detection.html" target="_blank" rel="noopener">docs.aws.amazon.com/.../abuse-detection.html</a></li>
+      <li>Amazon Bedrock「Data retention」（<code>none</code>／<code>default</code>／<code>inherit</code>／<code>aws_review</code> の定義と設定単位） — <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/data-retention.html" target="_blank" rel="noopener">docs.aws.amazon.com/.../data-retention.html</a></li>
+      <li>Amazon Bedrock「Data protection」／ AWS「Amazon Bedrock FAQs」（提供元と非共有・リージョン内での暗号化保存） — <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/data-protection.html" target="_blank" rel="noopener">data-protection.html</a> ／ <a href="https://aws.amazon.com/bedrock/faqs/" target="_blank" rel="noopener">aws.amazon.com/bedrock/faqs</a></li>
+      <li>OpenAI「Data controls in the OpenAI platform」（30日・ZDR/Modified Abuse Monitoring・<code>store</code> の扱い） — <a href="https://developers.openai.com/api/docs/guides/your-data" target="_blank" rel="noopener">developers.openai.com/api/docs/guides/your-data</a></li>
+      <li>Anthropic「API and data retention」（ZDRは申請制・対象外の列挙・Covered Models） — <a href="https://platform.claude.com/docs/en/manage-claude/api-and-data-retention" target="_blank" rel="noopener">platform.claude.com/docs/en/manage-claude/api-and-data-retention</a></li>
+      <li>Anthropic Privacy Center「I have a zero data retention agreement with Anthropic. What products does it apply to?」／「Data retention practices for Covered Models」 — <a href="https://privacy.claude.com/en/articles/8956058-i-have-a-zero-data-retention-agreement-with-anthropic-what-products-does-it-apply-to" target="_blank" rel="noopener">privacy.claude.com</a> ／ <a href="https://support.claude.com/en/articles/15425996-data-retention-practices-for-covered-models" target="_blank" rel="noopener">support.claude.com</a></li>
+      <li>Google Cloud「Gemini Enterprise Agent Platform and zero data retention」（利用者側の作業・無効化できない機能） — <a href="https://docs.cloud.google.com/gemini-enterprise-agent-platform/resources/zero-data-retention" target="_blank" rel="noopener">docs.cloud.google.com/.../zero-data-retention</a></li>
+      <li>Google AI for Developers「Zero data retention in the Gemini Developer API」（Vertex AI への案内・メモリ内キャッシュ） — <a href="https://ai.google.dev/gemini-api/docs/zdr" target="_blank" rel="noopener">ai.google.dev/gemini-api/docs/zdr</a></li>
+      <li>Microsoft Learn「Data, privacy, and security for Foundry Models sold by Azure in Microsoft Foundry」（modified abuse monitoring） — <a href="https://learn.microsoft.com/en-us/azure/foundry/responsible-ai/openai/data-privacy" target="_blank" rel="noopener">learn.microsoft.com/.../openai/data-privacy</a></li>
+    </ul>
+    <p style="font-size:.8rem;color:var(--c-muted);margin-top:.6rem;">関連: <a href="/glossary/">用語説明 一覧</a> · <a href="/china-ai/">中国AI（Bedrock 経由のデータ取扱いを追記）</a> · <a href="/glossary/harness/">ハーネス（第3回）</a> · <a href="/glossary/benchmarks/">ベンチマークとは（第5回）</a> · <a href="/glossary/benchmark-orgs/">ベンチマークを運営している組織（第6回）</a> · <a href="/glossary/prompt-cache/">プロンプトキャッシュ（第2回）</a></p>
+  </section>
+
+  <div class="tip-box" style="border-left-color:var(--c-red);margin-bottom:2rem;">
+    <h3>⚠️ この記事の限界</h3>
+    <ul>
+      <li>内容は<strong>2026年9月27日時点</strong>で各社の公式ドキュメントに書かれていたことです。保持ポリシーと例外リストは<strong>予告なく更新されます</strong>。</li>
+      <li>「効かない範囲」「3語で覚える」は<strong>当サイトの整理</strong>であり、各社の公式な分類ではありません。契約判断は必ず原文と契約書で行ってください。</li>
+      <li>本ページは<strong>法務・コンプライアンス上の助言ではありません</strong>。規制対応の判断は専門家にご確認ください。</li>
+      <li>当サイトは特定プロバイダーと提携していません。</li>
+    </ul>
+  </div>
+</div></main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>運営: okamoちゃんねる</p><p><a href="/">ホーム</a> · <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a> · <a href="/timeline/">年表</a> · <a href="/glossary/">用語説明</a> · <a href="/gpt-6/">GPT-6 Astra</a></p></div><p class="footer-disclaimer">⚠️ 料金・仕様は予告なく変動します。契約前に必ず各社公式ページでご確認ください。本サイトは各社と提携していません。</p></div></footer>
+</body>
+</html>

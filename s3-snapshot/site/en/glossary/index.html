@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Glossary — AI terms, explained from primary sources | LLM Data Hub</title>
+  <meta name="description" content="AI pricing and benchmark terms explained one per page: benchmark scores, agent harnesses, prompt caching and 1M-token context, each traced to primary sources.">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/en/glossary/">
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/glossary/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/glossary/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/glossary/">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/en/glossary/">
+  <meta property="og:title" content="Glossary — AI terms, explained from primary sources">
+  <meta property="og:description" content="&ldquo;Too many benchmarks to make sense of&rdquo; solved with three questions: who runs it, what it measures, how. Benchmarks, harnesses, prompt caching and 1M-token context, one term per page, with sources.">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/en/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="Main navigation"><a href="/en/" class="nav-link">Home</a><a href="/en/pricing/" class="nav-link">Pricing</a><a href="/en/calculator/" class="nav-link">Token Calculator</a><a href="/en/timeline/" class="nav-link">Release Timeline</a><a href="/en/china-ai/" class="nav-link">China AI</a><a href="/en/multimodal/" class="nav-link">Multimodal</a><a href="/en/mai/" class="nav-link">MS AI (MAI)</a><a href="/en/glossary/" class="nav-link active" aria-current="page">Glossary</a></nav></div></header>
+
+<main><div class="container">
+  <div class="section" style="padding-bottom:0;">
+    <h1 class="section-title" style="font-size:1.6rem;">Glossary <span style="font-size:1rem;font-weight:500;color:var(--c-muted);">AI terms, explained from primary sources</span></h1>
+    <p class="section-sub" style="max-width:760px;">
+      The terms that show up in pricing tables and announcements, explained <strong>one term per page</strong>.
+      What exactly is cheaper about a &ldquo;cache hit&rdquo;? What is a benchmark score actually measuring? Which is it when
+      <strong>there are too many benchmarks to make sense of</strong>? We answer by going back to each vendor's own documentation and to
+      <strong>the benchmark operators' own publications</strong>, and we keep the conditions and pricing boundaries in so the answer is
+      <strong>usable the same day</strong>. Where the <a href="/en/pricing/">pricing tables</a> and <a href="/en/timeline/">release timeline</a>
+      are the data, this is how to read the data.
+    </p>
+    <div class="updated-bar">
+      <span class="dot">●</span>
+      Last updated: <time datetime="2026-09-27">September 27, 2026</time>
+      &ensp;|&ensp; Policy: only figures we can trace to primary sources (vendor announcements, benchmark operators' own publications)
+    </div>
+  </div>
+
+  <section class="section" style="padding-top:1.5rem;" aria-labelledby="list-h">
+    <h2 class="section-title" id="list-h" style="font-size:1.2rem;">Entries</h2>
+    <p class="section-sub">One term per page. We do not stop at definitions — we go into the rates, conditions and boundaries behind them.</p>
+    <div class="card-grid">
+<article class="card">
+<div class="card-icon">🧭</div>
+<h3 class="card-title">What is a benchmark? Sorting them by who, what and how</h3>
+<p class="card-desc">DeepSWE, GDPval-AA, Terminal-bench, OSWorld — <strong>too many to make sense of</strong>. So instead of memorising names, this entry hands you a procedure built on three questions: <strong>who operates it, what it measures, and how it measures it (harness and settings)</strong>. Six benchmarks are traced to their operator's own repository or paper, including <strong>why GDPval and GDPval-AA share a dataset yet are not the same number</strong>, and the name collision between the DeepSWE benchmark and the same-named 32B model.</p>
+<a href="/en/glossary/benchmarks/" class="card-link">Read the entry →</a>
+</article>
+
+<article class="card">
+<div class="card-icon">📏</div>
+<h3 class="card-title">What is a 1M-token context window? What fits, and what it costs</h3>
+<p class="card-desc">A million tokens is roughly 750,000 English words, or about 11 hours of audio — but <strong>the three big vendors bill long input very differently</strong>. OpenAI doubles the entire request past 272K (2x input, 1.5x output); Google moves every token to the higher rate past 200K; Anthropic stays at standard pricing all the way to 1M. Includes the arithmetic (272,000 tokens $2.72 versus 272,100 tokens $5.44), a ten-turn example where 245,000 input tokens carry only 38,000 tokens of new information, and Chroma's July 2025 &ldquo;Context Rot&rdquo; findings across 18 models.</p>
+<a href="/en/glossary/one-million-context/" class="card-link">Read the entry →</a>
+</article>
+
+      <article class="card">
+        <div class="card-icon">🧰</div>
+        <h3 class="card-title">What is an agent harness? Why the same model scores differently</h3>
+        <p class="card-desc">A harness is everything that is not the model: system prompt, tools, memory, sandbox, retries and scoring. That is why the same model on the same benchmark can score differently. On ARC-AGI-3 it was 62.7% under ARC Prize's neutral harness versus 99.9% under OpenAI's Provider Adapter harness. Includes DeepSeek Harness's own line &ldquo;Agent = Model + Harness&rdquo; and its Minimal mode, which the vendor describes as being for benchmarking models in a minimal environment — all with sources.</p>
+        <a href="/en/glossary/harness/" class="card-link">Read the entry →</a>
+      </article>
+      <article class="card">
+        <div class="card-icon">🗄️</div>
+        <h3 class="card-title">What is prompt caching? Reading &ldquo;cache hit&rdquo; in dollars</h3>
+        <p class="card-desc">The same input can cost 50x less as a cache hit. How prefix matching works, why writes bill at 1.25x while reads bill at 0.1x, the TTLs (5 to 30 minutes) and the minimum cacheable lengths (512 to 4,096 tokens) across OpenAI, Anthropic, Google and DeepSeek — plus what 8,000 tokens sent 10 times really costs ($0.80 versus $0.172).</p>
+        <a href="/en/glossary/prompt-cache/" class="card-link">Read the entry →</a>
+      </article>
+      <article class="card">
+        <div class="card-icon">🧪</div>
+        <h3 class="card-title">GPT-6 Astra: how to read "ARC-AGI-3 99.9%, ExploitBench 100%"</h3>
+        <p class="card-desc">The same benchmark scores 62.7% under ARC Prize's neutral harness. A perfect score means the test can no longer separate models. Why the unsaturated Terminal-Bench Science 64.6% carries the most information, plus the 272K-token boundary of the 1.05M context window (past it, the entire request is billed at 2x input and 1.5x output) and what a full 128K output actually costs.</p>
+        <a href="/en/glossary/gpt-6-astra-benchmarks/" class="card-link">Read the entry →</a>
+      </article>
+      <article class="card">
+        <div class="card-icon">🏛️</div>
+        <h3 class="card-title">Who operates the benchmarks — a four-step way to tell</h3>
+        <p class="card-desc">DeepSWE is Datacurve, OSWorld is XLANG Lab, GDPval is OpenAI, GDPval-AA is Artificial Analysis, AutomationBench is Zapier — this entry fixes a <strong>four-step procedure for getting from a benchmark name to the organisation behind it</strong>: (1) the paper or official repository, (2) how to classify the operator (vendor, independent evaluator, research lab, business-software company), (3) who reported the score, (4) whose harness ran it. Includes a table of twelve benchmarks and three worked examples of why &ldquo;a third party operates it&rdquo; does not mean &ldquo;fair&rdquo;.</p>
+        <a href="/en/glossary/benchmark-orgs/" class="card-link">Read the entry →</a>
+      </article>
+    </div>
+<article class="card">
+        <div class="card-icon">🔒</div>
+        <h3 class="card-title">Zero data retention (ZDR) — three catch points</h3>
+        <p class="card-desc">ZDR means <strong>&ldquo;not stored by default&rdquo;, not &ldquo;always on&rdquo;</strong>. Three things trip people up: ① there is an <strong>exception list of models that require retention</strong>, ② a guarantee needs an <strong>explicit setting</strong>, and ③ &ldquo;not stored&rdquo;, ZOA (operators cannot see it) and &ldquo;not used for training&rdquo; are <strong>three separate promises</strong>. Includes Bedrock's retention modes (none / default / inherit / aws_review) and their scope, the published exception lists (OpenAI models and Claude Fable 5 / 5.1), and whether OpenAI, Anthropic, Google and Microsoft give you ZDR <strong>by default or only by approval</strong> — quoted from their own docs. Glossary #7.</p>
+        <a href="/en/glossary/zero-data-retention/" class="card-link">Read the entry →</a>
+      </article>
+    <div class="tip-box" style="margin-top:1.5rem;">
+      <h3>📌 How this works</h3>
+      <ul>
+        <li><strong>Sources named</strong> — we point to where in the vendor's documentation, pricing page or the benchmark operator's own publication the figure lives.</li>
+        <li><strong>Boundaries as numbers</strong> — the token count at which a rate changes, and whose harness a score came from.</li>
+        <li><strong>Worked arithmetic</strong> — not just unit rates, but what you actually pay when you send the request.</li>
+        <li><strong>Nothing unverified</strong> — figures we cannot confirm are labelled as unconfirmed rather than published as fact.</li>
+        <li>One term per page. A three-minute read you can use the same day.</li>
+      </ul>
+    </div>
+    <p style="font-size:.86rem;color:var(--c-muted);">See also: <a href="/en/glossary/benchmarks/">Sorting benchmarks</a> · <a href="/en/glossary/harness/">Agent harnesses</a> · <a href="/en/glossary/prompt-cache/">Prompt caching (cache hits)</a> · <a href="/en/glossary/one-million-context/">1M-token context</a> · <a href="/en/glossary/zero-data-retention/">Zero data retention (ZDR)</a> · <a href="/en/gpt-6/">GPT-6 Astra</a> · <a href="/en/claude-fable-5-1/">Claude Fable 5.1</a> · <a href="/en/deepseek-v4-1-flash/">DeepSeek V4.1 Flash guide</a> · <a href="/en/multimodal/">Multimodal support list</a></p>
+  </section>
+</div></main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>Operated by okamoちゃんねる</p><p><a href="/en/">Home</a> · <a href="/en/pricing/">Pricing</a> · <a href="/en/calculator/">Calculator</a> · <a href="/en/timeline/">Timeline</a> · <a href="/en/glossary/">Glossary</a> · <a href="/en/gpt-6/">GPT-6 Astra</a></p></div><p class="footer-disclaimer">⚠️ Prices and specifications change without notice. Always confirm on the vendor's official page before you commit. This site is not affiliated with any provider.</p></div></footer>
+</body>
+</html>

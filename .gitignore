@@ -222,3 +222,7 @@ __marimo__/
 *_sample.py
 gcp-workload-config*
 akira-llm-site
+
+# S3スナップショット（docs/self-improvement-loop.md から実物を見るためのコピー）は
+# 上の parts/ などの除外を適用せず、そのまま載せる
+!s3-snapshot/workspace/parts/

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Qwen3.8-Flash — Alibaba's Qwen4 Preview, Low-Cost Multimodal Model [Pricing, Benchmarks &amp; Comparison] — LLM Data Hub</title>
+  <meta name="description" content="Alibaba Qwen3.8-Flash (Qwen3.8-Flash-Next): pricing (input $0.15 / output $0.47), specs (125B/6B active MoE, 256K→1M context, 64K output), benchmarks and competitor comparisons. An early preview of the Qwen4 architecture. Verified against primary sources.">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/en/qwen-3-8-flash/">
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/qwen-3-8-flash/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/qwen-3-8-flash/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/qwen-3-8-flash/">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/en/qwen-3-8-flash/">
+  <meta property="og:title" content="Qwen3.8-Flash — Alibaba's Qwen4 Preview, Low-Cost Multimodal Model">
+  <meta property="og:description" content="Alibaba Qwen3.8-Flash pricing (input $0.15 / output $0.47), specs, and competitor comparison. An early Qwen4 architecture preview.">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Qwen3.8-Flash — Alibaba's Qwen4 Preview, Low-Cost Multimodal Model [Pricing, Benchmarks & Comparison]","datePublished":"2026-09-01","dateModified":"2026-09-13","author":{"@type":"Organization","name":"LLM Data Hub"},"publisher":{"@type":"Organization","name":"okamo channel"},"url":"https://llm.okamomedia.tokyo/en/qwen-3-8-flash/","inLanguage":"en"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://llm.okamomedia.tokyo/en/"},{"@type":"ListItem","position":2,"name":"Qwen3.8-Flash","item":"https://llm.okamomedia.tokyo/en/qwen-3-8-flash/"}]}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .hero-qwen{background:linear-gradient(135deg,#14103a 0%,#2a2160 50%,#0f1117 100%);border-bottom:1px solid var(--c-border);padding:3rem 1rem 2.5rem;text-align:center}.hero-qwen .price-flag{display:inline-block;background:rgba(97,92,237,.16);border:1px solid rgba(97,92,237,.4);color:#a5a0ff;font-size:.82rem;font-weight:700;padding:.3rem .8rem;border-radius:100px;margin-bottom:1rem}.hero-qwen h1{font-size:clamp(1.6rem,4.5vw,2.4rem);font-weight:800;line-height:1.2;margin-bottom:.75rem}.hero-qwen h1 span{color:#a5a0ff}.hero-qwen .lead{font-size:1.05rem;color:var(--c-muted);max-width:640px;margin:0 auto 1.5rem}.hero-qwen .quick-stats{display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;margin-top:1rem}.hero-qwen .stat{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.75rem 1.25rem;text-align:center}.hero-qwen .stat .val{font-family:var(--font-mono);font-size:1.25rem;font-weight:700;color:#a5a0ff}.hero-qwen .stat .lbl{font-size:.75rem;color:var(--c-muted);margin-top:.15rem}
+    .compare-table th:first-child{width:200px}.compare-table td{text-align:center}.compare-table td:first-child{text-align:left;font-weight:600}.compare-table .winner{color:var(--c-green);font-weight:700}.compare-table .tie{color:var(--c-yellow)}
+    .spec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.8rem;margin-bottom:1.5rem}.spec-item{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.9rem 1rem}.spec-item .spec-label{font-size:.75rem;color:var(--c-muted);font-weight:600;margin-bottom:.25rem}.spec-item .spec-value{font-family:var(--font-mono);font-size:1rem;font-weight:700}
+    .use-case-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.8rem;margin-bottom:1.5rem}.use-case-card{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:1rem}.use-case-card .icon{font-size:1.5rem;margin-bottom:.5rem}.use-case-card h4{font-size:.92rem;font-weight:700;margin-bottom:.35rem}.use-case-card p{font-size:.82rem;color:var(--c-muted);line-height:1.5}
+    .thinking-note{background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid #615ced;border-radius:var(--r-md);padding:.8rem 1rem;margin:1rem 0;font-size:.84rem;color:var(--c-muted)}
+    @media(max-width:640px){.hero-qwen .quick-stats{flex-direction:column;gap:.5rem}}
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/en/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="Main navigation"><a href="/en/" class="nav-link">Home</a><a href="/en/pricing/" class="nav-link">Pricing</a><a href="/en/calculator/" class="nav-link">Token Calculator</a><a href="/en/timeline/" class="nav-link">Release Timeline</a><a href="/en/china-ai/" class="nav-link">China AI</a><a href="/en/multimodal/" class="nav-link">Multimodal</a><a href="/en/mai/" class="nav-link">MS AI (MAI)</a><a href="/en/glossary/" class="nav-link">Glossary</a></nav></div></header>
+
+<section class="hero-qwen"><div class="container">
+  <p class="price-flag">🧬 Qwen4 architecture preview — $0.15 in / $0.47 out</p>
+  <h1>Qwen3.8 <span>Flash</span></h1>
+  <p class="lead">Alibaba (Qwen)'s low-cost, multimodal MoE model. With just 6B active parameters, it beats Qwen3.7-Plus on coding, agentic and office benchmarks. An open-weight counterpart (Flash-Next) previewing the next-generation "Qwen4" architecture ships alongside it.</p>
+  <div class="quick-stats">
+    <div class="stat"><div class="val">$0.15</div><div class="lbl">Input / 1M tokens</div></div>
+    <div class="stat"><div class="val">$0.47</div><div class="lbl">Output / 1M tokens</div></div>
+    <div class="stat"><div class="val">256K→1M</div><div class="lbl">Context window</div></div>
+    <div class="stat"><div class="val">64K</div><div class="lbl">Max output tokens</div></div>
+  </div>
+</div></section>
+
+<main><div class="container">
+<div class="updated-bar" style="margin-top:2rem;"><span class="dot">●</span>Last updated: <time datetime="2026-09-13">September 13, 2026</time> | Sources: <a href="https://qwen.ai/blog?id=qwen3.8-flash-next" target="_blank" rel="noopener">Qwen Official Blog</a> · <a href="https://www.qwencloud.com/models/qwen3.8-flash" target="_blank" rel="noopener">QwenCloud Model Page</a> · <a href="https://huggingface.co/Qwen/Qwen3.8-Flash-Next" target="_blank" rel="noopener">Hugging Face</a> | <a href="/en/pricing/">All Pricing</a> · <a href="/en/calculator/">Calculator</a></div>
+
+<!-- Pricing -->
+<section class="section" style="padding-top:0;" aria-labelledby="pricing-h">
+<h2 class="section-title" id="pricing-h" style="font-size:1.2rem;">Pricing (QwenCloud, international)</h2>
+<p class="section-sub">Pricing for the production Qwen3.8-Flash as stated on Qwen's official blog (qwen.ai/blog, 2026-08-26). All prices in USD per 1M tokens.</p>
+
+<div class="table-wrap"><table><thead><tr><th>Model</th><th>Input</th><th>Output</th><th>Notes</th></tr></thead><tbody>
+<tr><td class="model-name">Qwen3.8-Flash (production API)</td><td class="price">$0.15</td><td class="price">$0.47</td><td>Production SKU <code>qwen3.8-flash</code>. 1M context, official built-in tools</td></tr>
+<tr><td class="model-name">Qwen3.8-Flash-Next (open-weight)</td><td class="price">—</td><td class="price">—</td><td>Weights free on Hugging Face / ModelScope (self-host)</td></tr>
+<tr><td class="model-name"><a href="/en/china-ai/">Qwen3.8-Max</a></td><td class="price">$2.00</td><td class="price">$6.00</td><td>Flagship (2.4T MoE). ~13× Flash price</td></tr>
+</tbody></table></div>
+
+<div class="thinking-note">
+  💡 <strong>Pricing note:</strong> Qwen's official blog states "0.15 USD input / 0.47 USD output". However, the official X post (@Alibaba_Qwen) lists "$0.16 / $0.47", and mainland-China pricing is 1 CNY / 3 CNY (~$0.149 / $0.447, per Reuters). Always confirm final rates on the QwenCloud pricing page before contracting.
+</div>
+
+<div class="thinking-note" style="border-left-color:var(--c-yellow);">
+  ⚠️ <strong>Context differs by variant:</strong> the open-weight Flash-Next natively supports 262,144 (256K) tokens, extensible to 1M with YaRN. The production API Qwen3.8-Flash ships with 1M context by default (per the official blog). Self-hosting and API use differ in available context length.
+</div>
+
+<p class="source-note">Primary source: <a href="https://qwen.ai/blog?id=qwen3.8-flash-next" target="_blank" rel="noopener">qwen.ai/blog?id=qwen3.8-flash-next</a> (verified 2026-09-01)</p>
+</section>
+
+<!-- Specs -->
+<section class="section" style="padding-top:0;" aria-labelledby="spec-h">
+<h2 class="section-title" id="spec-h" style="font-size:1.2rem;">Model Specifications</h2>
+<div class="spec-grid">
+  <div class="spec-item"><div class="spec-label">Release Date</div><div class="spec-value">Aug 26, 2026</div></div>
+  <div class="spec-item"><div class="spec-label">Model ID (API)</div><div class="spec-value" style="font-size:.85rem;">qwen3.8-flash</div></div>
+  <div class="spec-item"><div class="spec-label">Context Window</div><div class="spec-value">256K native → 1M (API: 1M default)</div></div>
+  <div class="spec-item"><div class="spec-label">Max Output</div><div class="spec-value">64K tokens</div></div>
+  <div class="spec-item"><div class="spec-label">Parameters</div><div class="spec-value">125B total / 6B active (+51B N-gram)</div></div>
+  <div class="spec-item"><div class="spec-label">Input Modalities</div><div class="spec-value">Text + Image (+ video understanding)</div></div>
+  <div class="spec-item"><div class="spec-label">Output Modality</div><div class="spec-value">Text</div></div>
+  <div class="spec-item"><div class="spec-label">Architecture</div><div class="spec-value">GDN + QSA hybrid (sparse MoE)</div></div>
+  <div class="spec-item"><div class="spec-label">Reasoning Effort</div><div class="spec-value">low / medium / xhigh (3 levels)</div></div>
+  <div class="spec-item"><div class="spec-label">License</div><div class="spec-value">Open-weight (HF / ModelScope)</div></div>
+  <div class="spec-item"><div class="spec-label">Provider</div><div class="spec-value">Alibaba (Qwen)</div></div>
+</div>
+<p class="source-note">Sources: <a href="https://qwen.ai/blog?id=qwen3.8-flash-next" target="_blank" rel="noopener">Qwen blog "Qwen3.8-Flash-Next: A New Architecture, Towards Ultimate Cost-Efficiency"</a> · <a href="https://huggingface.co/Qwen/Qwen3.8-Flash-Next" target="_blank" rel="noopener">HuggingFace: Qwen/Qwen3.8-Flash-Next</a> (verified 2026-09-01)</p>
+</section>
+
+<!-- Performance -->
+<section class="section" style="padding-top:0;" aria-labelledby="perf-h">
+<h2 class="section-title" id="perf-h" style="font-size:1.2rem;">Performance — Beats Qwen3.7-Plus with 6B active</h2>
+<p class="section-sub">Figures below are self-reported by Qwen's official blog (2026-08-26) and may diverge from independent evaluations.</p>
+<div class="tip-box">
+  <ul>
+    <li><strong>Coding:</strong> SWE-bench Pro 62.5 (Claude Opus 4.6 Max 53.4, Qwen3.7-Plus 55.8, DeepSeek-V4-Flash 56.0). DeepSWE 1.1 at 58.7 (Qwen3.7-Plus 16.5).</li>
+    <li><strong>Office &amp; agents:</strong> CoWorkBench 73.9 (Claude Opus 4.6 68.2), JobBench 55.7 (Qwen3.7-Plus 27.6).</li>
+    <li><strong>Tool use:</strong> Toolathlon Verified (Pass@1) 73.5 (Qwen3.7-Plus 50.6, DeepSeek-V4-Flash 70.3).</li>
+    <li><strong>Multimodal:</strong> AndroidWorld 84.5 (Claude Opus 4.6 62.0), LVBench 76.6 (Claude Opus 4.6 63.0), RealWorldQA 88.5 (Claude Opus 4.6 73.9).</li>
+    <li><strong>General reasoning:</strong> GPQA Diamond 91.7 (Claude Opus 4.6 91.3), LiveCodeBench v6 91.9 (Claude Opus 4.6 88.8).</li>
+    <li><strong>vs Qwen3.7-Plus:</strong> ~1/9 the training cost while outperforming it on major coding, office and agentic benchmarks.</li>
+  </ul>
+</div>
+<p style="font-size:.84rem;color:var(--c-muted);">Qwen positions the model as "a new architecture towards ultimate cost-efficiency." Via QSA (Qwen Sparse Attention), the Attention Kernel is up to 7.6× (Prefill) and 4.9× (Decode) faster at 1M tokens, and under a 90% Prefix Cache hit rate it reports 8.6× the Prefill throughput of Qwen3.7-Plus. Qwen released the weights early "so that the community can examine the architecture before the full Qwen4 model family is built on top of them." The production model now powers QwenWork's "Standard" mode.</p>
+<p class="source-note">Source: <a href="https://qwen.ai/blog?id=qwen3.8-flash-next" target="_blank" rel="noopener">Qwen official blog</a> (verified 2026-09-01)</p>
+</section>
+
+<!-- Competitor Comparison -->
+<section class="section" style="padding-top:0;" aria-labelledby="compare-h">
+<h2 class="section-title" id="compare-h" style="font-size:1.2rem;">Competitor Price Comparison</h2>
+<p class="section-sub">Comparison against low-cost Chinese and lightweight models. USD per 1M tokens (standard text, no cache).</p>
+
+<div class="table-wrap compare-table"><table><thead><tr><th>Model</th><th>Provider</th><th>Input</th><th>Output</th><th>vs Flash</th><th>Notes</th></tr></thead><tbody>
+<tr><td class="model-name">Qwen3.8-Flash</td><td>Alibaba</td><td class="price">$0.15</td><td class="price">$0.47</td><td>—</td><td>Baseline. Multimodal, Qwen4 preview</td></tr>
+<tr><td class="model-name"><a href="/en/glm-5-3-flash/">GLM-5.3-Flash</a></td><td>Zhipu (Z.ai)</td><td class="price">$0.15</td><td class="price">$0.50</td><td class="winner">GLM cheaper</td><td>List price (intro promo ended 9/9)</td></tr>
+<tr><td class="model-name"><a href="/en/gpt-5-6-luna/">GPT-5.6 Luna</a></td><td>OpenAI</td><td class="price">$0.20</td><td class="price">$1.20</td><td class="winner">Qwen cheaper</td><td>Qwen 25% cheaper input, 61% cheaper output</td></tr>
+<tr><td class="model-name">Gemini 3.1 Flash-Lite</td><td>Google</td><td class="price">$0.25</td><td class="price">$1.50</td><td class="winner">Qwen cheaper</td><td>Qwen 40% cheaper input, 69% cheaper output</td></tr>
+<tr><td class="model-name">DeepSeek V4.1 Flash</td><td>DeepSeek</td><td class="price">$0.15–$0.30</td><td class="price">$0.60–$1.20</td><td class="tie">Close</td><td>Peak/off-peak. Same off-peak input; Qwen cheaper on output</td></tr>
+<tr><td class="model-name">Qwen3.8-Max</td><td>Alibaba</td><td class="price">$2.00</td><td class="price">$6.00</td><td class="winner">Flash cheaper</td><td>Flagship. Flash ~1/13 the price</td></tr>
+</tbody></table></div>
+<p style="font-size:.78rem;color:var(--c-muted);margin-top:.3rem;">* GLM-5.3-Flash is at list price $0.15/$0.50 (the 50% intro promo ended 9/9). DeepSeek's current model is <strong>V4.1 Flash</strong> (released 2026-09-10) with peak/off-peak pricing: cache-miss input $0.15 off-peak / $0.30 peak, output $0.60 off-peak / $1.20 peak. V4 Pro keeps running after 2026-09-14 (DeepSeek withdrew the 9/14 routing notice) and its rates remain current. Qwen3.8-Flash is the international (USD) rate from the official blog.</p>
+<p class="source-note">Sources: official pricing pages / blogs from each provider (verified 2026-09-01). See <a href="/en/pricing/">full pricing comparison</a>. <a href="/en/glm-5-3-flash/">GLM 5.3 Flash details →</a></p>
+</section>
+
+<!-- Use Cases -->
+<section class="section" style="padding-top:0;" aria-labelledby="usecase-h">
+<h2 class="section-title" id="usecase-h" style="font-size:1.2rem;">Ideal Use Cases</h2>
+<p class="section-sub">Low cost × long context × multimodal workloads.</p>
+<div class="use-case-grid">
+  <div class="use-case-card"><div class="icon">💻</div><h4>Coding &amp; Agents</h4><p>SWE-bench Pro 62.5, DeepSWE 58.7. Works directly with Claude Code, Codex and Qoder CLI.</p></div>
+  <div class="use-case-card"><div class="icon">📄</div><h4>Office &amp; Document Workflows</h4><p>CoWorkBench 73.9, JobBench 55.7. Finance, legal, medical and productivity tasks.</p></div>
+  <div class="use-case-card"><div class="icon">🔧</div><h4>Tool Use &amp; Function Calling</h4><p>Toolathlon 73.5. OpenAI-compatible (Chat Completions / Responses) plus Anthropic-compatible protocols.</p></div>
+  <div class="use-case-card"><div class="icon">🖼️</div><h4>Multimodal Understanding</h4><p>Image and video input. AndroidWorld 84.5, LVBench 76.6 — strong on long video and GUI tasks.</p></div>
+  <div class="use-case-card"><div class="icon">🌐</div><h4>Local Self-Hosting</h4><p>Open weights on HF / ModelScope. Only 6B active enables memory-efficient inference.</p></div>
+  <div class="use-case-card"><div class="icon">🏗️</div><h4>Early Qwen4 Evaluation</h4><p>Preview the next-gen architecture (GDN + QSA) early — informing future Qwen4 adoption decisions.</p></div>
+</div>
+</section>
+
+<!-- Selection Guide -->
+<section class="section" style="padding-top:0;" aria-labelledby="choice-h">
+<h2 class="section-title" id="choice-h" style="font-size:1.2rem;">Qwen 3.8 Family Selection Guide</h2>
+<div class="table-wrap"><table><thead><tr><th>Model</th><th>Input</th><th>Output</th><th>When to Use</th></tr></thead><tbody>
+<tr><td class="model-name">Qwen3.8-Max</td><td class="price">$2.00</td><td class="price">$6.00</td><td>Hardest tasks, flagship quality</td></tr>
+<tr><td class="model-name" style="border-left:3px solid #615ced;padding-left:.7rem;">Qwen3.8-Flash ⬅</td><td class="price">$0.15</td><td class="price">$0.47</td><td>Cost-sensitive, high-throughput, multimodal, coding</td></tr>
+<tr><td class="model-name">Qwen3.8-27B</td><td class="price">—</td><td class="price">—</td><td>Local inference, small dense model (license: see official model card)</td></tr>
+</tbody></table></div>
+<p style="font-size:.84rem;color:var(--c-muted);margin-top:.5rem;">💡 Strategy: Handle routine coding, agentic, document and multimodal work with Flash; escalate only the hardest tasks to Qwen3.8-Max.</p>
+</section>
+
+<!-- CTA -->
+<section class="section" style="padding-top:0;">
+<div style="background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid #615ced;border-radius:var(--r-lg);padding:1.5rem;text-align:center;">
+  <h3 style="font-size:1.1rem;margin-bottom:.75rem;">Estimate Your Actual Costs</h3>
+  <p style="color:var(--c-muted);font-size:.9rem;margin-bottom:1rem;">Compare token costs for Qwen3.8-Flash and all major models. Just enter your token counts.</p>
+  <a href="/en/calculator/" style="display:inline-block;background:var(--c-accent);color:#fff;font-weight:600;padding:.65rem 1.5rem;border-radius:var(--r-md);">🧮 Open Token Calculator →</a>
+  <p style="margin-top:.8rem;font-size:.82rem;color:var(--c-muted);"><a href="/en/pricing/">📊 Full Pricing Comparison</a> · <a href="/en/china-ai/">🇨🇳 China AI Overview</a> · <a href="/en/timeline/">🗓️ Release Timeline</a> · <a href="https://www.qwencloud.com/models/qwen3.8-flash" target="_blank" rel="noopener">🔗 QwenCloud Model Page</a></p>
+</div>
+</section>
+
+<div class="tip-box" style="border-left-color:var(--c-red);margin-bottom:2rem;">
+  <h3>⚠️ Disclaimer</h3>
+  <ul>
+    <li>Pricing verified against Qwen's official blog (qwen.ai/blog) on 2026-09-01. Subject to change without notice. Always check the QwenCloud pricing page before contracting.</li>
+    <li>Pricing differs between the official blog ($0.15/$0.47) and official X post ($0.16/$0.47); mainland China is priced in CNY (1/3). Rates may vary by region and contract terms.</li>
+    <li>Benchmark figures are self-reported by Qwen's official blog and may diverge from independent evaluations. Your mileage may vary.</li>
+    <li>This site is informational only. We are not affiliated with or endorsed by any provider. Qwen and Alibaba are trademarks of Alibaba Group.</li>
+  </ul>
+</div>
+
+</div></main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>Operated by okamo channel</p><p><a href="/en/">Home</a> · <a href="/en/pricing/">Pricing</a> · <a href="/en/calculator/">Calculator</a> · <a href="/en/timeline/">Timeline</a> · <a href="/en/china-ai/">China AI</a> · <a href="/en/glm-5-3-flash/">GLM 5.3 Flash</a></p></div><p class="footer-disclaimer">⚠️ Pricing and specifications may change without notice. Always verify on official pages. Not affiliated with any provider.</p></div></footer>
+</body>
+</html>

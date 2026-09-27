@@ -1,0 +1,32 @@
+<!-- parts: 説明図（ARC-AGI-3 ハーネス差）。SVGインライン・%%禁止（%はそのまま書く）。 -->
+<figure class="flow-fig">
+    <svg viewBox="0 0 800 320" width="100%" role="img" aria-labelledby="harnessFigTitle" style="display:block;">
+      <title id="harnessFigTitle">ARC-AGI-3: same model, same benchmark &mdash; 62.7% under the neutral harness vs 99.9% under OpenAI's Provider Adapter</title>
+      <defs>
+        <linearGradient id="gPurple" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#6d28d9"/>
+          <stop offset="100%" stop-color="#a78bfa"/>
+        </linearGradient>
+      </defs>
+      <rect x="0" y="0" width="800" height="320" rx="14" fill="#14161f" stroke="#262a38"/>
+      <text x="36" y="46" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="19" font-weight="700" fill="#eef0f7">ARC-AGI-3: same model, same benchmark</text>
+      <text x="36" y="70" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="13" fill="#8b90a3">Different harness, different number.</text>
+      <text x="36" y="118" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="14" fill="#9aa0b4">Standard harness (neutral)</text>
+      <rect x="36" y="130" width="301" height="32" rx="4" fill="#2f3a55"/>
+      <text x="349" y="152" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="17" font-weight="700" fill="#e8eaf2">62.7%</text>
+      <text x="412" y="152" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="12" fill="#8b90a3">$26,098</text>
+      <text x="36" y="196" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="14" fill="#9aa0b4">Provider Adapter harness (OpenAI)</text>
+      <rect x="36" y="208" width="480" height="32" rx="4" fill="url(#gPurple)"/>
+      <text x="528" y="230" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="17" font-weight="700" fill="#e8eaf2">99.9%</text>
+      <text x="591" y="230" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="12" fill="#8b90a3">~$19K</text>
+      <line x1="36" y1="262" x2="516" y2="262" stroke="#2b2f3d" stroke-width="1"/>
+      <line x1="36" y1="262" x2="36" y2="268" stroke="#2b2f3d"/>
+      <line x1="276" y1="262" x2="276" y2="268" stroke="#2b2f3d"/>
+      <line x1="516" y1="262" x2="516" y2="268" stroke="#2b2f3d"/>
+      <text x="36" y="282" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11" fill="#6b7280">0%</text>
+      <text x="276" y="282" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11" fill="#6b7280">50%</text>
+      <text x="516" y="282" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11" fill="#6b7280">100%</text>
+      <text x="36" y="306" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="11" fill="#6b7280">Source: ARC Prize (2026-09-03). Both rows are ARC Prize's own published results.</text>
+    </svg>
+    <figcaption style="font-size:.78rem;color:var(--c-muted);margin-top:.5rem;">Same benchmark, same model, two numbers. The harness moves the result this far (source: <a href="https://arcprize.org/blog/astra" target="_blank" rel="noopener">ARC Prize</a>).</figcaption>
+  </figure>

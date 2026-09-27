@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GPT-6 Astra — OpenAI新世代フラッグシップ【料金・性能・提供状況】 — LLM Data Hub</title>
+  <meta name="description" content="OpenAI GPT-6 Astraの最新料金（$10/$50・キャッシュ読込$1.00・Long context・Fast mode）・仕様・性能・提供状況（Daybreak/Trusted Accessから順次展開）を一次情報ベースで解説。1.05Mコンテキスト・128K出力・Computer Use特化の新フラッグシップ。">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/gpt-6/">
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/gpt-6/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/gpt-6/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/gpt-6/">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/gpt-6/">
+  <meta property="og:title" content="GPT-6 Astra — OpenAI新世代フラッグシップ【料金・性能・提供状況】">
+  <meta property="og:description" content="OpenAI GPT-6 Astraの最新料金（$10/$50）・性能・提供状況・競合比較を一次情報ベースで解説。">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"GPT-6 Astra — OpenAI新世代フラッグシップ【料金・性能・提供状況】","datePublished":"2026-09-03","dateModified":"2026-09-15","author":{"@type":"Organization","name":"LLM Data Hub"},"publisher":{"@type":"Organization","name":"okamoちゃんねる"},"url":"https://llm.okamomedia.tokyo/gpt-6/","inLanguage":"ja"}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .hero-astra{background:linear-gradient(135deg,#0b0a1f 0%,#17123a 45%,#0f1117 100%);border-bottom:1px solid var(--c-border);padding:3rem 1rem 2.5rem;text-align:center}.hero-astra .price-flag{display:inline-block;background:rgba(139,92,246,.14);border:1px solid rgba(139,92,246,.4);color:#c4b5fd;font-size:.82rem;font-weight:700;padding:.3rem .8rem;border-radius:100px;margin-bottom:1rem}.hero-astra h1{font-size:clamp(1.6rem,4.5vw,2.4rem);font-weight:800;line-height:1.2;margin-bottom:.75rem}.hero-astra h1 span{color:#a78bfa}.hero-astra .lead{font-size:1.05rem;color:var(--c-muted);max-width:680px;margin:0 auto 1.5rem}.hero-astra .quick-stats{display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;margin-top:1rem}.hero-astra .stat{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.75rem 1.25rem;text-align:center}.hero-astra .stat .val{font-family:var(--font-mono);font-size:1.25rem;font-weight:700;color:#a78bfa}.hero-astra .stat .lbl{font-size:.75rem;color:var(--c-muted);margin-top:.15rem}
+    .compare-table th:first-child{width:200px}.compare-table td{text-align:center}.compare-table td:first-child{text-align:left;font-weight:600}.compare-table .winner{color:var(--c-green);font-weight:700}.compare-table .tie{color:var(--c-yellow)}
+    .spec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.8rem;margin-bottom:1.5rem}.spec-item{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.9rem 1rem}.spec-item .spec-label{font-size:.75rem;color:var(--c-muted);font-weight:600;margin-bottom:.25rem}.spec-item .spec-value{font-family:var(--font-mono);font-size:1rem;font-weight:700}
+    .use-case-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.8rem;margin-bottom:1.5rem}.use-case-card{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:1rem}.use-case-card .icon{font-size:1.5rem;margin-bottom:.5rem}.use-case-card h4{font-size:.92rem;font-weight:700;margin-bottom:.35rem}.use-case-card p{font-size:.82rem;color:var(--c-muted);line-height:1.5}
+    .avail-note{background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid #a78bfa;border-radius:var(--r-md);padding:.8rem 1rem;margin:1rem 0;font-size:.84rem;color:var(--c-muted)}
+    .price-history{font-size:.86rem;color:var(--c-muted);line-height:1.8}
+    @media(max-width:640px){.hero-astra .quick-stats{flex-direction:column;gap:.5rem}}
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="メインナビゲーション"><a href="/" class="nav-link">ホーム</a><a href="/pricing/" class="nav-link">料金比較</a><a href="/calculator/" class="nav-link">トークン計算機</a><a href="/timeline/" class="nav-link">リリース年表</a><a href="/china-ai/" class="nav-link">中国AI</a><a href="/multimodal/" class="nav-link">マルチモーダル</a><a href="/mai/" class="nav-link">MS AI (MAI)</a><a href="/glossary/" class="nav-link">用語説明</a></nav></div></header>
+
+<section class="hero-astra"><div class="container">
+  <p class="price-flag">✨ 新フラッグシップ — Standard $10/$50（2026-09-03 発表）</p>
+  <h1>GPT-6 <span>Astra</span></h1>
+  <p class="lead">OpenAIが「世界で最も知能が高く、アライメントされたモデル」と位置づける新世代フラッグシップ。<a href="/gpt-5-6-sol/" style="color:var(--c-blue);">GPT-5.6 Sol</a>の後継で、Computer Use・コーディング・サイバーセキュリティ・科学・専門業務で最高水準。</p>
+  <div class="quick-stats">
+    <div class="stat"><div class="val">$10.00</div><div class="lbl">入力 / 1M tokens</div></div>
+    <div class="stat"><div class="val">$50.00</div><div class="lbl">出力 / 1M tokens</div></div>
+    <div class="stat"><div class="val">1.05M</div><div class="lbl">コンテキストウィンドウ</div></div>
+    <div class="stat"><div class="val">128K</div><div class="lbl">最大出力トークン</div></div>
+  </div>
+</div></section>
+
+<main><div class="container">
+<div class="updated-bar" style="margin-top:2rem;"><span class="dot">●</span>最終更新: <time datetime="2026-09-15">2026年9月15日</time> | 出典: <a href="https://openai.com/index/gpt-6-astra/" target="_blank" rel="noopener">OpenAI公式発表</a> · <a href="https://developers.openai.com/api/docs/models/gpt-6-astra" target="_blank" rel="noopener">OpenAI Model Docs</a> · <a href="https://developers.openai.com/api/docs/pricing" target="_blank" rel="noopener">OpenAI料金ページ</a> | <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a> · <a href="/gpt-5-6-sol/">GPT-5.6 Sol</a></div>
+
+<!-- 提供状況 -->
+<section class="section" style="padding-top:0;" aria-labelledby="avail-h">
+<h2 class="section-title" id="avail-h" style="font-size:1.2rem;">提供状況（段階的ロールアウト）</h2>
+<div class="avail-note">
+  ⏳ <strong>2026-09-03時点は限定的な組織（Daybreak Access / Trusted Access Program）への展開が開始。</strong>OpenAI API・ChatGPT Plus/Pro/Business/Enterprise・Microsoft Azure・Amazon Bedrock へは「今後数日以内」に順次展開。Pro/Business/Enterprise には上位版 <strong>GPT-6 Astra Pro</strong> も提供。Enterprise はデフォルトで無効（管理者が有効化）。Zero Data Retention（対象API顧客）対応。
+  <br><br>✅ <strong>2026-09-15 追記: OpenAI の開発者向けモデルドキュメントに 1,050,000 コンテキスト・最大出力 128,000・$10/$50 が掲載されており、API 向けモデルとして提供されています（2026-09-15確認）。</strong>実際の利用可否やアクセス範囲はアカウント権限・gated access の条件に依存する場合があります。ChatGPT 各プランへの展開時期もプランごとに異なるため、公式の提供状況をご確認ください。
+</div>
+<p class="source-note">出典: <a href="https://openai.com/index/gpt-6-astra/" target="_blank" rel="noopener">OpenAI公式発表（GPT-6 Astra: A new generation of intelligence）</a>（2026-09-04確認）</p>
+</section>
+
+<!-- 料金 -->
+<section class="section" style="padding-top:0;" aria-labelledby="pricing-h">
+<h2 class="section-title" id="pricing-h" style="font-size:1.2rem;">料金（Standard $10/$50・2026-09-04確認）</h2>
+<p class="section-sub">OpenAI公式モデルドキュメント（developers.openai.com）で裏取り済み。価格はすべてUSD/1Mトークン。</p>
+
+<div class="table-wrap"><table><thead><tr><th>区分</th><th>入力</th><th>キャッシュ入力</th><th>キャッシュ書込</th><th>出力</th><th>備考</th></tr></thead><tbody>
+<tr><td class="model-name">Standard（Short context）</td><td class="price">$10.00</td><td class="price">$1.00</td><td class="price">$12.50</td><td class="price">$50.00</td><td>入力≤272Kトークン。標準レート</td></tr>
+<tr><td class="model-name">Standard（Long context）</td><td class="price">$20.00</td><td class="price">$2.00</td><td class="price">$25.00</td><td class="price">$75.00</td><td>入力&gt;272Kトークン。入力2倍・出力1.5倍</td></tr>
+<tr><td class="model-name">Batch / Flex</td><td class="price">$5.00</td><td class="price">$0.50</td><td class="price">$6.25</td><td class="price">$25.00</td><td>Standardの50%オフ</td></tr>
+<tr><td class="model-name">Fast mode（Short context）</td><td class="price">$20.00</td><td class="price">$2.00</td><td class="price">$25.00</td><td class="price">$100.00</td><td>最大2倍の速度。Standardの2倍（Long context時はLong料金に倍率適用）</td></tr>
+</tbody></table></div>
+
+<div class="price-history">
+  <strong>価格の位置づけ:</strong> GPT-6 Astra は <a href="/gpt-5-6-sol/">GPT-5.6 Sol</a>（プロモ $4/$20）の上位世代で、Sol と比べ入力2.5倍・出力2.5倍。キャッシュ読込は入力の10%（$1.00）、キャッシュ書込は入力の1.25倍（$12.50）。Long context は入力・キャッシュが2倍、出力が1.5倍。
+</div>
+
+<div class="long-context-note" style="background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-yellow);border-radius:var(--r-md);padding:.8rem 1rem;margin:1rem 0;font-size:.84rem;color:var(--c-muted);">
+  ⚠️ <strong>Short/Long contextの境界: 入力272Kトークン</strong>。272Kトークンを超えるプロンプトはリクエスト全体にLong context料金が適用（入力・キャッシュ2倍、出力1.5倍）。
+</div>
+
+<p class="source-note">一次情報: <a href="https://developers.openai.com/api/docs/models/gpt-6-astra" target="_blank" rel="noopener">GPT-6 Astra モデルドキュメント</a> · <a href="https://developers.openai.com/api/docs/pricing" target="_blank" rel="noopener">developers.openai.com/api/docs/pricing</a>（2026-09-15確認）</p>
+</section>
+
+<!-- 仕様 -->
+<section class="section" style="padding-top:0;" aria-labelledby="spec-h">
+<h2 class="section-title" id="spec-h" style="font-size:1.2rem;">モデル仕様</h2>
+<div class="spec-grid">
+  <div class="spec-item"><div class="spec-label">発表</div><div class="spec-value">2026-09-03</div></div>
+  <div class="spec-item"><div class="spec-label">知識カットオフ</div><div class="spec-value">2026-04-30</div></div>
+  <div class="spec-item"><div class="spec-label">コンテキストウィンドウ</div><div class="spec-value">1,050,000</div></div>
+  <div class="spec-item"><div class="spec-label">最大出力</div><div class="spec-value">128,000</div></div>
+  <div class="spec-item"><div class="spec-label">入力モダリティ</div><div class="spec-value">テキスト + 画像</div></div>
+  <div class="spec-item"><div class="spec-label">出力モダリティ</div><div class="spec-value">テキスト</div></div>
+  <div class="spec-item"><div class="spec-label">推論エフォート</div><div class="spec-value">low〜max（5段階）</div></div>
+  <div class="spec-item"><div class="spec-label">ツール呼出</div><div class="spec-value">Function Calling ✓</div></div>
+  <div class="spec-item"><div class="spec-label">ファインチューニング</div><div class="spec-value">非対応</div></div>
+  <div class="spec-item"><div class="spec-label">モデルID</div><div class="spec-value" style="font-size:.85rem;">gpt-6-astra</div></div>
+</div>
+<p class="source-note">出典: <a href="https://developers.openai.com/api/docs/models/gpt-6-astra" target="_blank" rel="noopener">OpenAI GPT-6 Astra Model Docs</a>（2026-09-04確認）。<code>reasoning.effort</code> は low / medium / high / xhigh / max をサポート。音声・動画は非対応（画像は入力のみ）。Responses API で Web search・File search・画像生成・Code interpreter・Hosted Shell・Apply Patch・Skills・Computer Use・MCP・Tool search をフルサポート。</p>
+</section>
+
+<!-- 性能 -->
+<section class="section" style="padding-top:0;" aria-labelledby="perf-h">
+<h2 class="section-title" id="perf-h" style="font-size:1.2rem;">性能 — 主要ベンチマークで新記録</h2>
+<p class="section-sub">OpenAIはGPT-6 Astraを「Computer Use・ブラウジング・ソフトウェアエンジニアリング・サイバーセキュリティ・科学・専門業務で最高水準」と位置づけ。以下は公式発表（2026-09-03）の数値。</p>
+<div class="tip-box">
+  <ul>
+    <li><strong>FrontierMath Tier 4 (v2): 97.6%</strong> — 数学の難問で新記録（GPT-5.6 Sol 83.0%、Claude Fable 5.1 87.8%）。</li>
+    <li><strong>ARC-AGI-3: 99.9%</strong> — OpenAIのProvider Adapterハーネスでの公表値（GPT-5.6 Sol 7.8%）。ARC Prizeの中立Standard harnessでは同じモデルが62.7%。同財団は「このベンチの飽和はAGIの証明ではない」と明記している。</li>
+    <li><strong>ExploitBench: 100.0%</strong> — 脆弱性エクスプロイト開発で満点（Sol 78.5%）。</li>
+    <li><strong>Terminal-Bench Science 0.1: 64.6%</strong> — 科学ワークフロー（Sol 22.4%、Claude Fable 5.1 52.6%）。</li>
+    <li><strong>Agents' Last Exam: 59.3%</strong> — 複雑な専門タスク（Claude Opus 5 55.5%、Sol 53.6%）。</li>
+    <li><strong>OSWorld 2.0: 72.6%</strong> — Computer Use（Sol 65.7%）。約47%短い時間で達成。</li>
+    <li><strong>Terminal-Bench 4.0: 57.9%</strong> — ターミナル型エージェント（Sol 37.3%、Claude Fable 5.1 55.8%）。</li>
+    <li><strong>GPQA Diamond: 96.0%</strong> — 大学院レベルの科学推論（Sol 94.6%）。</li>
+    <li><strong>Artificial Analysis Intelligence Index v4.1.1: 61.2</strong> — 総合指標。</li>
+  </ul>
+</div>
+<p style="font-size:.84rem;color:var(--c-muted);">OpenAIは多くのベンチマークを最大エフォート設定で評価。低コスト設定でも Sol の最高スコアを上回るケース（GPQA 94.9% vs 94.6%・推定APIコスト約37%減）があると説明しています。ベンチマーク数値は公表値であり、実使用感を保証するものではありません。</p>
+<p class="source-note">出典: <a href="https://openai.com/index/gpt-6-astra/" target="_blank" rel="noopener">OpenAI公式発表（GPT-6 Astra）</a>（2026-09-04確認）</p>
+<p style="font-size:.86rem;color:var(--c-muted);">📘 この数値の読み方（同じベンチでも中立ハーネスでは62.7%、満点の意味、272Kトークン超の料金ルール）は <a href="/glossary/gpt-6-astra-benchmarks/">用語説明: GPT-6 Astra「ARC-AGI-3 99.9%・ExploitBench 100%」の読み方</a> で解説しています。</p>
+</section>
+
+<!-- 競合比較 -->
+<section class="section" style="padding-top:0;" aria-labelledby="compare-h">
+<h2 class="section-title" id="compare-h" style="font-size:1.2rem;">競合フラッグシップとの料金比較</h2>
+<p class="section-sub">すべてUSD/1Mトークン（標準・Short context）。GPT-6 Astra は最上位ティアの料金帯。価格はすべて Standard（プロモ含む表記は備考参照）。</p>
+
+<div class="table-wrap compare-table"><table><thead><tr><th>モデル</th><th>提供元</th><th>入力</th><th>出力</th><th>Astraより</th><th>備考</th></tr></thead><tbody>
+<tr><td class="model-name">GPT-6 Astra</td><td>OpenAI</td><td class="price">$10.00</td><td class="price">$50.00</td><td>—</td><td>新フラッグシップ（基準）</td></tr>
+<tr><td class="model-name"><a href="/claude-fable-5-1/">Claude Fable 5.1</a></td><td>Anthropic</td><td class="price">$10.00</td><td class="price">$50.00</td><td class="tie">同額</td><td>Mythosクラス。<a href="/claude-fable-5-1/">詳細ページ</a></td></tr>
+<tr><td class="model-name">Claude Opus 5</td><td>Anthropic</td><td class="price">$5.00</td><td class="price">$25.00</td><td class="winner">Opus安</td><td>Opusは入力50%安・出力50%安</td></tr>
+<tr><td class="model-name"><a href="/gpt-5-6-sol/">GPT-5.6 Sol</a></td><td>OpenAI</td><td class="price">$4.00</td><td class="price">$20.00</td><td class="winner">Sol安</td><td>プロモ価格（〜11/21）。前世代フラッグシップ</td></tr>
+<tr><td class="model-name">GPT-5.5</td><td>OpenAI</td><td class="price">$5.00</td><td class="price">$30.00</td><td class="winner">5.5安</td><td>旧フラッグシップ</td></tr>
+<tr><td class="model-name"><a href="/grok-4-6/">Grok 4.6</a></td><td>xAI</td><td class="price">$2.00</td><td class="price">$6.00</td><td class="winner">Grok安</td><td>絶対額で最安帯のフラッグシップ級</td></tr>
+<tr><td class="model-name"><a href="/gemini-3-8-flash/">Gemini 3.8 Flash</a></td><td>Google</td><td class="price">$0.75</td><td class="price">$3.75</td><td class="winner">Gemini安</td><td>Flash帯（異なるティア）。初回価格（〜12/31）</td></tr>
+</tbody></table></div>
+<p style="font-size:.78rem;color:var(--c-muted);margin-top:.3rem;">※ GPT-6 Astra は最上位ティアの料金帯。コスト重視なら <a href="/gpt-5-6-sol/">Sol</a>（$4/$20・プロモ）や <a href="/gemini-3-8-flash/">Gemini 3.8 Flash</a>（$0.75/$3.75）が有力。OpenAIは「Astraはタスクあたりの出力トークンが少なく、タスク単価ベースでは割高に見えにくい」と説明していますが、公開データでは検証が限定的です。</p>
+<p class="source-note">出典: 各社公式料金ページ（2026-09-04確認）。詳細は<a href="/pricing/">料金比較ページ</a>を参照。</p>
+</section>
+
+<!-- ユースケース -->
+<section class="section" style="padding-top:0;" aria-labelledby="usecase-h">
+<h2 class="section-title" id="usecase-h" style="font-size:1.2rem;">こんな用途に最適</h2>
+<p class="section-sub">最上位の推論・Computer Use能力が求められる、失敗コストの高いワークロード向け。</p>
+<div class="use-case-grid">
+  <div class="use-case-card"><div class="icon">🖥️</div><h4>Computer Use / ブラウザ操作</h4><p>フォーム入力・CRM更新・カレンダー整理など、GUIを横断する自動化。OSWorld 72.6%。</p></div>
+  <div class="use-case-card"><div class="icon">💻</div><h4>ソフトウェアエンジニアリング</h4><p>Terminal-Bench 4.0で57.9%。Codexと組み合わせた長期コーディング・リファクタ。</p></div>
+  <div class="use-case-card"><div class="icon">🔬</div><h4>科学研究・数学</h4><p>FrontierMath 97.6%・GPQA 96.0%。素数ギャップ問題など未解決問題の解決を支援。</p></div>
+  <div class="use-case-card"><div class="icon">🛡️</div><h4>サイバーセキュリティ（防御）</h4><p>ExploitBench満点級。安全なコードレビュー・パッチング用途（高度な攻撃系タスクは拒否）。</p></div>
+  <div class="use-case-card"><div class="icon">📊</div><h4>専門業務・文書生成</h4><p>テンプレート準拠のスライド・スプレッドシート・文書。BenchCAD 95.9%。</p></div>
+  <div class="use-case-card"><div class="icon">🤖</div><h4>長期・自律エージェント</h4><p>MCP・Computer Use・ツール呼出を駆使したマルチステップ自動化。</p></div>
+</div>
+</section>
+
+<!-- 選び方 -->
+<section class="section" style="padding-top:0;" aria-labelledby="choice-h">
+<h2 class="section-title" id="choice-h" style="font-size:1.2rem;">OpenAI フラッグシップの選び方</h2>
+<div class="table-wrap"><table><thead><tr><th>モデル</th><th>入力</th><th>出力</th><th>選ぶべき場面</th></tr></thead><tbody>
+<tr><td class="model-name" style="border-left:3px solid #a78bfa;padding-left:.7rem;">GPT-6 Astra ⬅</td><td class="price">$10.00</td><td class="price">$50.00</td><td>最難関タスク・Computer Use・科学研究・失敗コストが高い業務</td></tr>
+<tr><td class="model-name"><a href="/gpt-5-6-sol/">GPT-5.6 Sol</a></td><td class="price">$4.00</td><td class="price">$20.00</td><td>高精度推論を低コストで（プロモ〜11/21）。コスパ最優先のフラッグシップ用途</td></tr>
+<tr><td class="model-name">GPT-5.6 Terra</td><td class="price">$2.00</td><td class="price">$12.00</td><td>標準的なコーディング・分析・本番エージェント</td></tr>
+<tr><td class="model-name"><a href="/gpt-5-6-luna/">GPT-5.6 Luna</a></td><td class="price">$0.20</td><td class="price">$1.20</td><td>高スループット・コスト重視・定型処理・1次レビュー</td></tr>
+</tbody></table></div>
+<p style="font-size:.84rem;color:var(--c-muted);margin-top:.5rem;">💡 基本戦略: <a href="/gpt-5-6-luna/">Luna</a>→Terra→<a href="/gpt-5-6-sol/">Sol</a>とエスカレーションし、GPT-6 Astra は最難関タスク・Computer Use・科学研究の最終手段として温存するのがコスト最適化の鉄則。</p>
+</section>
+
+<!-- CTA -->
+<section class="section" style="padding-top:0;">
+<div style="background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-accent);border-radius:var(--r-lg);padding:1.5rem;text-align:center;">
+  <h3 style="font-size:1.1rem;margin-bottom:.75rem;">実際のコストを試算する</h3>
+  <p style="color:var(--c-muted);font-size:.9rem;margin-bottom:1rem;">GPT-6 Astra を含む全モデルのトークンコストを一括計算。入力・出力トークン数を入れるだけ。</p>
+  <a href="/calculator/" style="display:inline-block;background:var(--c-accent);color:#fff;font-weight:600;padding:.65rem 1.5rem;border-radius:var(--r-md);">🧮 トークン計算機で試算する →</a>
+  <p style="margin-top:.8rem;font-size:.82rem;color:var(--c-muted);"><a href="/pricing/">📊 全モデル料金比較</a> · <a href="/gpt-5-6-sol/">⚡ GPT-5.6 Solと比較</a> · <a href="/timeline/">🗓️ リリース年表</a> · <a href="https://developers.openai.com/api/docs/pricing" target="_blank" rel="noopener">🔗 OpenAI公式料金ページ</a></p>
+</div>
+</section>
+
+<div class="tip-box" style="border-left-color:var(--c-red);margin-bottom:2rem;">
+  <h3>⚠️ 免責事項</h3>
+  <ul>
+    <li>料金はOpenAI公式ページ（developers.openai.com）を2026-09-04に確認したものです。予告なく変動します。契約前に必ず公式ページをご確認ください。</li>
+    <li>GPT-6 Astra は2026-09-03時点で限定的な組織への展開開始。API・ChatGPTプランへの一般展開は「今後数日以内」で、本ページ確認時点ではまだ広く利用できない可能性があります。</li>
+    <li>ベンチマーク数値はOpenAIの公表値であり、実際の使用感を保証するものではありません。</li>
+    <li>本サイトは情報提供目的であり、特定プロバイダーの推薦・代理ではありません。</li>
+  </ul>
+</div>
+
+</div></main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>運営: okamoちゃんねる</p><p><a href="/">ホーム</a> · <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a> · <a href="/timeline/">年表</a> · <a href="/gpt-5-6-sol/">GPT-5.6 Sol</a> · <a href="/gpt-5-6-luna/">GPT-5.6 Luna</a></p></div><p class="footer-disclaimer">⚠️ 料金・仕様は予告なく変動します。契約前に必ず各社公式ページでご確認ください。本サイトは各社と提携していません。</p></div></footer>
+</body>
+</html>

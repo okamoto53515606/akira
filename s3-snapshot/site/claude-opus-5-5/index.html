@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Claude Opus 5.5 — Claude 5.5世代の第一弾【料金・ベンチマーク・比較】 — LLM Data Hub</title>
+  <meta name="description" content="Anthropic Claude Opus 5.5の料金（入力$4・出力$20・キャッシュ読込$0.20・Fast $8/$40）・1Mコンテキスト・公式ベンチマーク9項目を一次情報で解説。Fable 5.1と同等性能でOpus 5より40%安いという主張の中身と、誰のハーネスでの測定かを明記。2026年9月22日公開。2026年9月25日更新。">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/claude-opus-5-5/">
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/claude-opus-5-5/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/claude-opus-5-5/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/claude-opus-5-5/">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/claude-opus-5-5/">
+  <meta property="og:title" content="Claude Opus 5.5 — Claude 5.5世代の第一弾">
+  <meta property="og:description" content="料金は入力$4・出力$20・キャッシュ読込$0.20（2026年9月25日更新）。1Mコンテキスト・公式ベンチ9項目・ハーネス注記まで一次情報で整理。">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Claude Opus 5.5 — Claude 5.5世代の第一弾【料金・ベンチマーク・比較】","datePublished":"2026-09-25","dateModified":"2026-09-25","author":{"@type":"Organization","name":"LLM Data Hub"},"publisher":{"@type":"Organization","name":"okamoちゃんねる"},"url":"https://llm.okamomedia.tokyo/claude-opus-5-5/","inLanguage":"ja"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"ホーム","item":"https://llm.okamomedia.tokyo/"},{"@type":"ListItem","position":2,"name":"Claude Opus 5.5","item":"https://llm.okamomedia.tokyo/claude-opus-5-5/"}]}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .hero-opus{background:linear-gradient(135deg,#1a0f0a 0%,#2b1710 50%,#0f1117 100%);border-bottom:1px solid var(--c-border);padding:3rem 1rem 2.5rem;text-align:center}.hero-opus .price-flag{display:inline-block;background:rgba(217,119,87,.16);border:1px solid rgba(217,119,87,.4);color:#e8a184;font-size:.82rem;font-weight:700;padding:.3rem .8rem;border-radius:100px;margin-bottom:1rem}.hero-opus h1{font-size:clamp(1.6rem,4.5vw,2.4rem);font-weight:800;line-height:1.2;margin-bottom:.75rem}.hero-opus h1 span{color:#d97757}.hero-opus .lead{font-size:1.05rem;color:var(--c-muted);max-width:660px;margin:0 auto 1.5rem}.hero-opus .quick-stats{display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;margin-top:1rem}.hero-opus .stat{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.75rem 1.25rem;text-align:center}.hero-opus .stat .val{font-family:var(--font-mono);font-size:1.25rem;font-weight:700;color:#d97757}.hero-opus .stat .lbl{font-size:.75rem;color:var(--c-muted);margin-top:.15rem}
+    .compare-table th:first-child{width:210px}.compare-table td{text-align:center}.compare-table td:first-child{text-align:left;font-weight:600}.compare-table .winner{color:var(--c-green);font-weight:700}.compare-table .tie{color:var(--c-yellow)}
+    .spec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.8rem;margin-bottom:1.5rem}.spec-item{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.9rem 1rem}.spec-item .spec-label{font-size:.75rem;color:var(--c-muted);font-weight:600;margin-bottom:.25rem}.spec-item .spec-value{font-family:var(--font-mono);font-size:1rem;font-weight:700}
+    .context-note{background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid #d97757;border-radius:var(--r-md);padding:.8rem 1rem;margin:1rem 0;font-size:.84rem;color:var(--c-muted)}
+    .fig-wrap{position:relative}.fig-scroll{overflow:visible}
+    .fig-fig{margin:1rem 0 1.4rem}.fig-fig svg{width:100%;height:auto;border:1px solid var(--c-border);border-radius:var(--r-md);background:var(--c-surface);display:block}
+    .fig-hint{display:none;font-size:.75rem;color:var(--c-muted);text-align:center;margin:.3rem 0 0}
+    @media (max-width:680px){.fig-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}.fig-scroll svg{min-width:600px}.fig-hint{display:block}.fig-wrap::before,.fig-wrap::after{content:"";position:absolute;top:0;bottom:0;width:36px;pointer-events:none;z-index:2}.fig-wrap::before{left:0;background:linear-gradient(to right,rgba(15,17,23,.95),rgba(15,17,23,0))}.fig-wrap::after{right:0;background:linear-gradient(to left,rgba(15,17,23,.95),rgba(15,17,23,0))}}
+    @media(max-width:640px){.hero-opus .quick-stats{flex-direction:column;gap:.5rem}}
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="メインナビゲーション"><a href="/" class="nav-link">ホーム</a><a href="/pricing/" class="nav-link">料金比較</a><a href="/calculator/" class="nav-link">トークン計算機</a><a href="/timeline/" class="nav-link">リリース年表</a><a href="/china-ai/" class="nav-link">中国AI</a><a href="/multimodal/" class="nav-link">マルチモーダル</a><a href="/mai/" class="nav-link">MS AI (MAI)</a><a href="/glossary/" class="nav-link">用語説明</a></nav></div></header>
+
+<section class="hero-opus"><div class="container">
+  <p class="price-flag">🚀 2026年9月22日公開 — Claude 5.5世代の第一弾・Opus 5比 20%値下げ</p>
+  <h1>Claude <span>Opus 5.5</span></h1>
+  <p class="lead">Anthropicが「Claude 5.5ファミリー」の最初のモデルとして公開。公式の主張は「<strong>多くの作業でFable 5.1と同等の性能を、Opus 5より40%安いコストで</strong>」。新世代の値下げ競争の火付け役になったモデルです。</p>
+  <div class="quick-stats">
+    <div class="stat"><div class="val">$4.00</div><div class="lbl">入力 / 1M tokens</div></div>
+    <div class="stat"><div class="val">$20.00</div><div class="lbl">出力 / 1M tokens</div></div>
+    <div class="stat"><div class="val">$0.20</div><div class="lbl">キャッシュ読込</div></div>
+    <div class="stat"><div class="val">1M</div><div class="lbl">コンテキスト</div></div>
+  </div>
+</div></section>
+
+<main><div class="container">
+<div class="updated-bar" style="margin-top:2rem;"><span class="dot">●</span>最終更新: <time datetime="2026-09-25">2026年9月25日</time> | 出典: <a href="https://www.anthropic.com/claude-opus-5-5" target="_blank" rel="noopener">Anthropic公式発表</a> · <a href="https://platform.claude.com/docs/en/models/overview" target="_blank" rel="noopener">Models overview（仕様）</a> · <a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener">公式料金ドキュメント</a> | <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a> · <a href="/claude-fable-5-1/">Fable 5.1</a></div>
+
+<section class="section" style="padding-top:2rem;" aria-labelledby="tl-h">
+<h2 class="section-title" id="tl-h" style="font-size:1.2rem;">まず結論 — 何が新しいのか</h2>
+<div class="context-note" style="border-left-color:var(--c-green);">
+  <ul style="margin:0;padding-left:1.1rem;line-height:1.9;">
+    <li><strong>位置づけは「Opus 5の後継」であり、Fable 5.1の下位互換ではありません。</strong>Anthropicは「many work で Fable 5.1 と同等」「typical workload で Opus 5 より40%安い」と説明しています。</li>
+    <li><strong>値下げが本題。</strong>入力$5→$4、出力$25→$20、キャッシュ読込$0.50→$0.20（60%減）。エージェント型コーディングではキャッシュ読込が請求の大半を占めるため、ここへの効きが大きいと説明されています。</li>
+    <li><strong>「thinkingを切れない」仕様変更。</strong>Opus 5.5は思考モードをオフにできず、<code>effort</code>パラメータ（low / medium / high…）で深さだけを調整します。既定は medium（公式のグラフ注記に「default effort (medium)」と明記）。</li>
+    <li><strong>同世代のSonnet 5.5・Haiku 5.5は「coming weeks」</strong>＝この時点では未提供です。</li>
+  </ul>
+</div>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="price-h">
+<h2 class="section-title" id="price-h" style="font-size:1.2rem;">料金（2026年9月22日公開時点・USD/1Mトークン）</h2>
+<p class="section-sub">Anthropic公式発表の料金表と公式料金ドキュメントで確認。当サイトの<a href="/pricing/">料金比較</a>と同じく「標準料金」ベースです。</p>
+<div class="table-wrap"><table><thead><tr><th>項目</th><th>Claude Opus 5.5</th><th>Claude Opus 5（前世代）</th><th>Fable 5.1（上位・参考）</th></tr></thead><tbody>
+<tr><td class="model-name">入力</td><td class="price">$4.00</td><td>$5.00</td><td>$10.00</td></tr>
+<tr><td class="model-name">出力</td><td class="price">$20.00</td><td>$25.00</td><td>$50.00</td></tr>
+<tr><td class="model-name">キャッシュ読込（cache hit）</td><td class="price">$0.20</td><td>$0.50</td><td>$0.25</td></tr>
+<tr><td class="model-name">キャッシュ書込（5分TTL）</td><td class="price">$5.00</td><td>$6.25</td><td>—</td></tr>
+</tbody></table></div>
+<p style="font-size:.78rem;color:var(--c-muted);margin-top:.3rem;">※ Fable 5.1の行は公式料金ドキュメントに記載の単価です。Fable 5.1はキャッシュ読込が標準入力の<strong>2.5%</strong>（$0.25）、Opus 5.5は<strong>5%</strong>（$0.20）。「入力単価はOpus 5.5が安いが、キャッシュ読込の割引率はFable 5.1が深い」という関係になります。</p>
+
+<h3 style="font-size:1rem;margin:1.6rem 0 .5rem;">Fast mode（Claude Code / Claude Platform 限定）</h3>
+<div class="table-wrap"><table><thead><tr><th>モード</th><th>入力</th><th>出力</th><th>速度</th></tr></thead><tbody>
+<tr><td class="model-name">標準</td><td class="price">$4.00</td><td class="price">$20.00</td><td>基準</td></tr>
+<tr><td class="model-name">Fast mode</td><td class="price">$8.00</td><td class="price">$40.00</td><td>最大 2.5倍</td></tr>
+</tbody></table></div>
+<p style="font-size:.78rem;color:var(--c-muted);margin-top:.3rem;">※ Fast modeの料金は「200k入力トークン超のリクエストを含め、コンテキストウィンドウ全体に適用される」と公式料金ドキュメントに記載されています。</p>
+
+<div class="context-note">
+  💡 <strong>コスト削減の主張は「単価」ではなく「単価×トークン量」の話です。</strong>Anthropic自身が「Opus 5.5 は Opus 5 より供給に必要な計算量が少なく、料金にそれが反映されている」とし、<strong>「uses fewer tokens per task（1タスクあたりのトークン消費が少ない）」</strong>と書いています。40%という数字はこの2つを掛け合わせた結果です。単価だけを見て「Opus 5の方が安い場面がある」と結論しないよう注意してください。
+</div>
+<p class="source-note">一次情報: <a href="https://www.anthropic.com/claude-opus-5-5" target="_blank" rel="noopener">anthropic.com/claude-opus-5-5</a>（Pricing表）· <a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener">platform.claude.com 料金ドキュメント</a>（2026-09-25確認）</p>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="fig-h">
+<h2 class="section-title" id="fig-h" style="font-size:1.2rem;">図: 単価の位置関係</h2>
+<div class="fig-wrap">
+  <div class="fig-scroll">
+  <figure class="fig-fig" style="margin:0;">
+    <svg viewBox="0 0 640 260" role="img" aria-labelledby="ofig-t ofig-d" xmlns="http://www.w3.org/2000/svg">
+      <title id="ofig-t">Claude Opus 5.5・Opus 5・Fable 5.1の単価比較</title>
+      <desc id="ofig-d">入力・出力・キャッシュ読込の単価を1MトークンあたりUSDで並べた横棒グラフ。Opus 5.5は入力4ドル・出力20ドル、Opus 5は入力5ドル・出力25ドル、Fable 5.1は入力10ドル・出力50ドル。</desc>
+      <g font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="12" fill="#e6e6e6">
+        <text x="12" y="26" font-size="13" font-weight="700" fill="#d97757">入力 $ / 1M tokens</text>
+        <rect x="150" y="12" width="120" height="18" rx="3" fill="#d97757"/><text x="280" y="26" fill="#e6e6e6">Opus 5.5 &#8212; $4.00</text>
+        <rect x="150" y="38" width="150" height="18" rx="3" fill="#8a5a45"/><text x="310" y="52" fill="#9aa0aa">Opus 5 &#8212; $5.00</text>
+        <rect x="150" y="64" width="300" height="18" rx="3" fill="#5f4a3e"/><text x="460" y="78" fill="#9aa0aa">Fable 5.1 &#8212; $10.00</text>
+        <text x="12" y="118" font-size="13" font-weight="700" fill="#d97757">出力 $ / 1M tokens</text>
+        <rect x="150" y="104" width="78" height="18" rx="3" fill="#d97757"/><text x="238" y="118" fill="#e6e6e6">Opus 5.5 &#8212; $20</text>
+        <rect x="150" y="130" width="98" height="18" rx="3" fill="#8a5a45"/><text x="258" y="144" fill="#9aa0aa">Opus 5 &#8212; $25</text>
+        <rect x="150" y="156" width="196" height="18" rx="3" fill="#5f4a3e"/><text x="356" y="170" fill="#9aa0aa">Fable 5.1 &#8212; $50</text>
+        <text x="12" y="210" font-size="13" font-weight="700" fill="#d97757">キャッシュ読込 $ / 1M tokens</text>
+        <rect x="150" y="196" width="30" height="18" rx="3" fill="#d97757"/><text x="190" y="210" fill="#e6e6e6">Opus 5.5 &#8212; $0.20（入力の5%）</text>
+        <rect x="150" y="222" width="62" height="18" rx="3" fill="#8a5a45"/><text x="222" y="236" fill="#9aa0aa">Opus 5 &#8212; $0.50</text>
+        <text x="330" y="236" fill="#9aa0aa">Fable 5.1 &#8212; $0.25（入力の2.5%・割引率は最大）</text>
+      </g>
+    </svg>
+    <figcaption style="font-size:.78rem;color:var(--c-muted);margin-top:.5rem;">出典: Anthropic公式発表の料金表／公式料金ドキュメント（2026-09-25確認）。棒の長さは入力$10・出力$50を基準に比例。数値は1MトークンあたりUSD。</figcaption>
+  </figure>
+  </div>
+  <p class="fig-hint">← 横にスクロールできます →</p>
+</div>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="spec-h">
+<h2 class="section-title" id="spec-h" style="font-size:1.2rem;">モデル仕様</h2>
+<div class="spec-grid">
+  <div class="spec-item"><div class="spec-label">公開日</div><div class="spec-value">2026-09-22</div></div>
+  <div class="spec-item"><div class="spec-label">コンテキスト</div><div class="spec-value">1M tokens</div></div>
+  <div class="spec-item"><div class="spec-label">最大出力</div><div class="spec-value">128K tokens</div></div>
+  <div class="spec-item"><div class="spec-label">知識カットオフ</div><div class="spec-value">2026年6月</div></div>
+  <div class="spec-item"><div class="spec-label">思考モード</div><div class="spec-value">常時オン（オフ不可）</div></div>
+  <div class="spec-item"><div class="spec-label">推論エフォート</div><div class="spec-value">low / medium / high …（既定 medium）</div></div>
+  <div class="spec-item"><div class="spec-label">モデルID</div><div class="spec-value" style="font-size:.85rem;">claude-opus-5-5</div></div>
+  <div class="spec-item"><div class="spec-label">提供先</div><div class="spec-value" style="font-size:.85rem;">Claude Platform / AWS / Google Cloud / Azure</div></div>
+</div>
+<p class="source-note">出典: <a href="https://platform.claude.com/docs/en/models/overview" target="_blank" rel="noopener">Claude Platform Docs「Models overview」</a>（Context window 1M / Max output 128K / Reliable knowledge cutoff Jun 2026 / Training data cutoff Jun 2026）· <a href="https://www.anthropic.com/claude-opus-5-5" target="_blank" rel="noopener">Anthropic公式発表</a>（提供先・thinking仕様）。</p>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="bench-h">
+<h2 class="section-title" id="bench-h" style="font-size:1.2rem;">公式ベンチマーク9項目 — ただし「誰のハーネスか」を必ず読む</h2>
+<p class="section-sub">Anthropic公式発表の表より。<strong>特に注記がない限り、Opus 5.5の数値は adaptive thinking・max effort</strong> での結果です（公式の逐語:「Unless otherwise noted, all Claude Opus 5.5 results use adaptive thinking at max effort」）。</p>
+<div class="table-wrap compare-table"><table><thead><tr><th>ベンチマーク</th><th>Opus 5.5</th><th>Fable 5.1</th><th>Opus 5</th><th>GPT-6 Astra</th><th>GPT-5.6 Sol</th></tr></thead><tbody>
+<tr><td class="model-name">Terminal-Bench 4.0（エージェント型コーディング）</td><td class="price">66.4%</td><td>55.8%</td><td>52.3%</td><td>57.9%</td><td>37.3%</td></tr>
+<tr><td class="model-name">FrontierCode v1.1 (Main)</td><td class="price">54.4%</td><td>50.3%</td><td>48.0%</td><td>53.3%</td><td>47.5%</td></tr>
+<tr><td class="model-name">CursorBench 4.0</td><td class="price">57.8%</td><td>51.8%</td><td>46.6%</td><td>—</td><td>41.7%</td></tr>
+<tr><td class="model-name">GDPval-AA v2.1（実務・Elo）</td><td class="price">1,846</td><td>1,735</td><td>1,708</td><td>1,542</td><td>1,588</td></tr>
+<tr><td class="model-name">AutomationBench（業務ワークフロー）</td><td class="price">40.0%</td><td>31.4%</td><td>26.9%</td><td>41.4%</td><td>28.8%</td></tr>
+<tr><td class="model-name">Humanity's Last Exam（ツール使用）</td><td class="price">67.7%</td><td>65.6%</td><td>63.6%</td><td>57.2%</td><td>—</td></tr>
+<tr><td class="model-name">Terminal-Bench-Science 0.1</td><td class="price">58.7%</td><td>52.6%</td><td>29.0%</td><td>64.6%</td><td>22.4%</td></tr>
+<tr><td class="model-name">OSWorld 2.0（computer use・partial）</td><td class="price">81.8%</td><td>80.7%</td><td>74.0%</td><td>—</td><td>—</td></tr>
+<tr><td class="model-name">Chartography（ツール使用）</td><td class="price">89.0%</td><td>88.4%</td><td>83.4%</td><td>—</td><td>—</td></tr>
+</tbody></table></div>
+
+<h3 style="font-size:1rem;margin:1.6rem 0 .5rem;">「誰が測ったか」の内訳（ここが本質）</h3>
+<div class="table-wrap"><table><thead><tr><th>ベンチマーク</th><th>実施・報告した主体</th><th>ハーネス・条件（公式注記の逐語要約）</th></tr></thead><tbody>
+<tr><td class="model-name">Terminal-Bench 4.0</td><td>Anthropic（自社setup）<br>＋公開リーダーボード</td><td>公開リーダーボードは<strong>Claude Codeハーネス</strong>・5 trials/task でOpus 5を51.8%、Anthropic自社setupは52.3%（ノイズ範囲内）。Opus 5.5は<strong>xhigh effort</strong>、GPT-6 Astraは<strong>high effort</strong>（各モデルの最高スコア）。標準誤差 ±2.6pt。GPT-6 AstraとGPT-5.6 Solの値は<strong>OpenAIの報告値</strong>を引用。</td></tr>
+<tr><td class="model-name">Terminal-Bench-Science 0.1</td><td>Anthropic＋公開リーダーボード</td><td>公開リーダーボードは3 trials/task・Claude CodeハーネスでOpus 5を30.0%、自社setupは29.0%。標準誤差 ±3.5〜5pt。GPT-6 Astraの値は<strong>OpenAI報告値</strong>。</td></tr>
+<tr><td class="model-name">AutomationBench</td><td><strong>Zapierが実施・報告</strong></td><td>フォールバックモデル無しで実行したため、safeguardによる介入が「失敗」として扱われ、実際より低いスコアになる条件。Opus 5.5はZapierの早期アクセス評価、Opus 5・GPT-5.6 Sol・GPT-6 AstraはZapierの公開リーダーボード。</td></tr>
+<tr><td class="model-name">GDPval-AA v2.1</td><td>Anthropicが<strong>Artificial Analysisの評価</strong>を引用</td><td>公式の説明は「Artificial Analysis's GDPval-AA v2.1 … real-world professional work across 44 occupations」。44職種の実務タスクをEloで採点。</td></tr>
+<tr><td class="model-name">CursorBench 4.0 / FrontierCode v1.1</td><td>Anthropic（自社setup）</td><td>グラフ注記に「at default effort (medium)」の数値も併記（FrontierCode 54.6%、CursorBench 52.5%）。表の数値は最高スコア、グラフは既定エフォート、と条件が異なります。</td></tr>
+<tr><td class="model-name">WANDR（表外・グラフのみ）</td><td><strong>Perplexity</strong>のベンチをAnthropicが独自条件で実行</td><td>公式注記:「Claude models were run with offline versions of the web search and web fetch tools, programmatic tool calling, code execution, and a <strong>980k-token task budget</strong>. This differs from Perplexity's published setup, <strong>scores are not directly comparable</strong>」。同じ条件で測ったモデルだけを並べているとのこと。</td></tr>
+</tbody></table></div>
+
+<div class="context-note" style="border-left-color:var(--c-yellow);">
+  ⚠️ <strong>この表の読み方:</strong> ①<strong>GPT-6 Astraの列はOpenAIの自己申告値</strong>で、Anthropicが測り直したものではありません（公式注記に「as reported by OpenAI」と明記）。②Terminal-Bench-Scienceでは<strong>Astraが64.6%でOpus 5.5（58.7%）を上回って</strong>います。Anthropicは「Opus 5.5が全項目で首位」とは主張しておらず、<strong>「大半のベンチで首位を取った」</strong>という書き方にとどめています。③AutomationBenchは<strong>Opus 5.5がAstra（41.4%）に次ぐ2位</strong>です。
+</div>
+
+<div class="context-note">
+  🔍 <strong>「ベンチマークの点差は実世界の差を表しにくくなっている」とAnthropic自身が書いています。</strong>逐語:「at these levels of capability we've found that benchmark margins have become a less reliable guide to real-world differences. In our own use, the gap between Opus 5.5 and Claude Fable 5.1 is narrower than these scores suggest」。数値だけで優劣を決めるべきではない、という当事者の注意書きです。ベンチの運営主体の違いは<a href="/glossary/benchmark-orgs/">用語説明 第6回「ベンチマークを運営している組織」</a>で整理しています。
+</div>
+<p class="source-note">出典: <a href="https://www.anthropic.com/claude-opus-5-5" target="_blank" rel="noopener">Anthropic「Introducing Claude Opus 5.5」</a>（ベンチマーク表と脚注1〜4・2026-09-25確認）</p>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="eff-h">
+<h2 class="section-title" id="eff-h" style="font-size:1.2rem;">「効率」の主張の中身</h2>
+<p class="section-sub">性能表より、コスト面の説明の方が具体的です。公式発表に載っている数字をそのまま拾います。</p>
+<div class="table-wrap"><table><thead><tr><th>比較</th><th>内容（公式発表の記載）</th></tr></thead><tbody>
+<tr><td class="model-name">Opus 5.5 vs Opus 5</td><td>典型ワークロードで<strong>コスト40%減</strong>。出力生成速度は<strong>30%以上高速</strong>。</td></tr>
+<tr><td class="model-name">Terminal-Bench 4.0</td><td>既定エフォートのOpus 5.5が、<strong>最大エフォートのOpus 5を約1/5のコストで上回る</strong>。GPT-6 Astraとは<strong>約40%のコストで同等</strong>。</td></tr>
+<tr><td class="model-name">CursorBench 4.0</td><td>GPT-5.6 Solの最高スコアを<strong>11ポイント上回り、コストは約1/3</strong>。</td></tr>
+<tr><td class="model-name">内部テスト（200,000行のコードベース監査）</td><td>Opus 5.5は3時間未満、Opus 5は20時間超で、しかもOpus 5は<strong>2.5倍のトークン</strong>を消費。</td></tr>
+<tr><td class="model-name">HAProxyのC→Rust書き換え（内部テスト）</td><td>Opus 5.5は9.5時間・Fable 5.1は12時間。Opus 5.5の方が<strong>51%安い</strong>。</td></tr>
+</tbody></table></div>
+<p style="font-size:.78rem;color:var(--c-muted);margin-top:.3rem;">※ いずれもAnthropicの内部テスト／ベンダー報告であり、第三者が追試した数値ではありません。</p>
+<p class="source-note">出典: <a href="https://www.anthropic.com/claude-opus-5-5" target="_blank" rel="noopener">Anthropic「Introducing Claude Opus 5.5」</a></p>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="safe-h">
+<h2 class="section-title" id="safe-h" style="font-size:1.2rem;">安全性 — セーフガードと「評価を自覚している」という限界</h2>
+<div class="table-wrap"><table><thead><tr><th>項目</th><th>内容（公式の記載）</th></tr></thead><tbody>
+<tr><td class="model-name">外部評価</td><td>公開前に <strong>Frontier Design</strong> と <strong>METR</strong> が評価。</td></tr>
+<tr><td class="model-name">サイバー</td><td>Fable 5.1と同クラスのセーフガード。<strong>大半のサイバーセキュリティタスクはOpus 4.8にルーティング</strong>（透過的にフォールバック）。</td></tr>
+<tr><td class="model-name">生物</td><td>Fable 5.1と同じ生物分野セーフガード。<strong>検証済み組織向けの Life Sciences Verification Program</strong> で解除申請が可能。</td></tr>
+<tr><td class="model-name">蒸留（distillation）対策</td><td>Fable 5.1で導入した<strong>preserved thinking</strong>を継承。<strong>2026年8月31日以降に作成されたAPIアカウント</strong>が対象。</td></tr>
+<tr><td class="model-name">新しい制御テスト</td><td>境界を越えようと試みた頻度が<strong>Opus 5 / Mythos 5.1 比で約85%少ない</strong>。全試行が低severityで、モデル自身が申告したと説明。</td></tr>
+<tr><td class="model-name">データ保持</td><td>従来のOpus同様、<strong>zero data retention</strong>で利用可能。EU AI Act対応のウォーターマークあり。</td></tr>
+</tbody></table></div>
+<div class="context-note" style="border-left-color:var(--c-red);">
+  ⚠️ <strong>限界も公式が明記しています。</strong>逐語:「We see signs that Opus 5.5 often suspects it is being evaluated, which challenges our ability to assess how it will act in the vast variety of real-world settings it is deployed in」。<strong>「評価されていると気づいている兆候がある」＝事前評価の限界</strong>という当事者の指摘です。無人でエージェントを走らせる場合は、この点を前提に自前のガードレールを併用してください。
+</div>
+<p class="source-note">出典: <a href="https://www.anthropic.com/claude-opus-5-5" target="_blank" rel="noopener">Anthropic「Introducing Claude Opus 5.5」</a>（Safety節）</p>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="rel-h">
+<h2 class="section-title" id="rel-h" style="font-size:1.2rem;">既存ページとの関係（当サイト内）</h2>
+<p class="section-sub">当サイトが追っているClaude系モデルとの位置づけを整理します。<strong>同一モデルの別名ではありません</strong>。</p>
+<div class="table-wrap"><table><thead><tr><th>モデル</th><th>当サイトの扱い</th><th>関係</th></tr></thead><tbody>
+<tr><td class="model-name"><a href="/claude-fable-5-1/">Claude Fable 5.1</a></td><td>個別ページあり</td><td><strong>別モデル（上位・高価）</strong>。入力$10/出力$50。Opus 5.5はFable 5.1と同等性能を低コストで、という立ち位置。</td></tr>
+<tr><td class="model-name"><a href="/claude-mythos-5-1/">Claude Mythos 5.1</a></td><td>個別ページあり</td><td><strong>別モデル（検証済み組織向けのトラステッドアクセス版）</strong>。Opus 5.5のサイバー/生物セーフガードはFable 5.1系と同クラスで、解除には検証プログラムが必要。</td></tr>
+<tr><td class="model-name">Claude Opus 5.5</td><td><strong>本ページ（新規）</strong></td><td>Claude 5.5ファミリーの第一弾。Opus 5の後継。<strong>Sonnet 5.5 / Haiku 5.5は未提供</strong>。</td></tr>
+<tr><td class="model-name">Claude Opus 5 / Opus 4.8</td><td>個別ページなし</td><td>Opus 5は前世代（$5/$25）。Opus 4.8はサイバー分野のフォールバック先として登場。</td></tr>
+</tbody></table></div>
+<p style="font-size:.78rem;color:var(--c-muted);margin-top:.3rem;">※ 当サイトに <code>/claude-opus-5/</code> や <code>/claude-sonnet-5-5/</code> のページは存在しません（2026-09-25時点）。リンク切れ防止のため、存在しないページへは内部リンクを張っていません。</p>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="choice-h">
+<h2 class="section-title" id="choice-h" style="font-size:1.2rem;">向いている場面 / 注意すべき場面</h2>
+<div class="tip-box">
+  <ul>
+    <li><strong>長時間のエージェント型コーディング:</strong> キャッシュ読込が$0.20と安く、公式の説明でも「agentic と coding のコストの大半はキャッシュ読込」とされているため、リポジトリ文脈を繰り返し送る構成と相性が良いです。</li>
+    <li><strong>思考を切れない前提で設計する:</strong> 無効化できないため、簡単なタスクでも出力トークンを消費します。相手が単純作業なら<code>effort</code>を下げるか、より軽いモデルを使う判断が必要です。</li>
+    <li><strong>サイバー/生物の業務は要注意:</strong> セーフガードでOpus 4.8やOpus 5へ透過的にフォールバックします。同じタスクでも<strong>別モデルが応答している可能性</strong>があり、検証プログラムへの申請がない限りベンチの数値どおりの性能は出ません。</li>
+    <li><strong>精度最優先なら:</strong> Terminal-Bench-ScienceではGPT-6 Astraが64.6%と上回っています。領域によって優劣が入れ替わるため、用途別の確認を推奨します。</li>
+    <li><strong>値下げ競争の起点:</strong> 公開の直後にOpenAIがGPT-6 Sol / Lunaを約半額で発表しており、<a href="/gpt-6-sol-luna/">当サイトのGPT-6 Sol / Luna解説</a>と併せて読むと、2026年9月の値下げ合戦が立体的に見えます。</li>
+  </ul>
+</div>
+</section>
+
+<section class="section" style="padding-top:0;">
+<div style="background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid #d97757;border-radius:var(--r-lg);padding:1.5rem;text-align:center;">
+  <h3 style="font-size:1.1rem;margin-bottom:.75rem;">実際のコストを試算する</h3>
+  <p style="color:var(--c-muted);font-size:.9rem;margin-bottom:1rem;">Claude Opus 5.5を含む主要モデルのトークンコストを一括計算できます。</p>
+  <a href="/calculator/" style="display:inline-block;background:var(--c-accent);color:#fff;font-weight:600;padding:.65rem 1.5rem;border-radius:var(--r-md);">🧮 トークン計算機で試算する →</a>
+  <p style="margin-top:.8rem;font-size:.82rem;color:var(--c-muted);"><a href="/pricing/">📊 全モデル料金比較</a> · <a href="/gpt-6-sol-luna/">🆚 GPT-6 Sol / Luna</a> · <a href="/claude-fable-5-1/">🤖 Fable 5.1 詳細</a> · <a href="/timeline/">🗓️ リリース年表</a></p>
+</div>
+</section>
+
+<div class="tip-box" style="border-left-color:var(--c-red);margin-bottom:2rem;">
+  <h3>⚠️ 免責事項</h3>
+  <ul>
+    <li>料金・仕様はAnthropic公式発表および公式ドキュメントを2026-09-25に確認したものです。予告なく変動します。契約前に必ず公式ページをご確認ください。</li>
+    <li>ベンチマーク数値はベンダー報告を含みます。<strong>GPT-6 Astra / GPT-5.6 Solの値はOpenAIの報告値の引用</strong>で、Anthropicが測り直したものではありません。測定条件が同一とは限らず、実際の使用感を保証するものではありません。</li>
+    <li>本サイトは情報提供目的であり、特定プロバイダーの推薦・代理ではありません。</li>
+  </ul>
+</div>
+
+</div></main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>運営: okamoちゃんねる</p><p><a href="/">ホーム</a> · <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a> · <a href="/timeline/">年表</a> · <a href="/claude-fable-5-1/">Claude Fable 5.1</a> · <a href="/gpt-6-sol-luna/">GPT-6 Sol / Luna</a></p></div><p class="footer-disclaimer">⚠️ 料金・仕様は予告なく変動します。契約前に必ず各社公式ページでご確認ください。本サイトは各社と提携していません。</p></div></footer>
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ベンチマークを運営している組織 — 「誰が測ったか」を見分ける4つの手順 — LLM Data Hub</title>
+  <meta name="description" content="DeepSWEはDatacurve、OSWorldはXLANG Lab、GDPvalはOpenAI、GDPval-AAはArtificial Analysis、AutomationBenchはZapier——AIベンチマークの運営元・評価機関・作成者をベンチ名から見分ける手順を、運営元の公式リポジトリ・原論文で確認して整理。ハーネス提供元とスコア報告者の違いも解説。用語説明 第6回。2026年9月25日更新。">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/glossary/benchmark-orgs/">
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/glossary/benchmark-orgs/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/glossary/benchmark-orgs/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/glossary/benchmark-orgs/">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/glossary/benchmark-orgs/">
+  <meta property="og:title" content="ベンチマークを運営している組織 — 「誰が測ったか」を見分ける4つの手順">
+  <meta property="og:description" content="ベンチ名から運営組織を特定する手順と、代表的なベンチの運営元一覧。ハーネス提供元との違いも1枚で整理（2026年9月25日更新）。">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"ベンチマークを運営している組織 — 「誰が測ったか」を見分ける4つの手順","datePublished":"2026-09-25","dateModified":"2026-09-25","author":{"@type":"Organization","name":"LLM Data Hub"},"publisher":{"@type":"Organization","name":"okamoちゃんねる"},"url":"https://llm.okamomedia.tokyo/glossary/benchmark-orgs/","inLanguage":"ja"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"ホーム","item":"https://llm.okamomedia.tokyo/"},{"@type":"ListItem","position":2,"name":"用語説明","item":"https://llm.okamomedia.tokyo/glossary/"},{"@type":"ListItem","position":3,"name":"ベンチマークを運営している組織","item":"https://llm.okamomedia.tokyo/glossary/benchmark-orgs/"}]}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .flow-list{list-style:none;counter-reset:step;padding:0;margin:1rem 0}
+    .flow-list li{position:relative;padding:.85rem 0 .85rem 3rem;border-bottom:1px dashed var(--c-border);font-size:.9rem;line-height:1.8;color:var(--c-muted)}
+    .flow-list li:last-child{border-bottom:none}
+    .flow-list li::before{counter-increment:step;content:counter(step);position:absolute;left:0;top:.85rem;width:2.1rem;height:2.1rem;border-radius:50%;background:var(--c-accent);color:#fff;font-family:var(--font-mono);font-size:.85rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+    .flow-list strong{color:var(--c-text)}
+    .phrase-box{background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-accent);border-radius:var(--r-md);padding:1rem 1.15rem;margin:1.2rem 0}
+    .phrase-box .phrase{margin:0;font-size:1.02rem;font-weight:700;line-height:1.7}
+    .phrase-box .phrase-meta{margin:.5rem 0 0;font-size:.83rem;color:var(--c-muted);line-height:1.8}
+    .qa-list{list-style:none;padding:0;counter-reset:qa;margin:1rem 0}
+    .qa-list li{position:relative;padding:.75rem 0 .75rem 2.4rem;border-bottom:1px dashed var(--c-border);font-size:.88rem;color:var(--c-muted);line-height:1.75}
+    .qa-list li:last-child{border-bottom:none}
+    .qa-list li::before{counter-increment:qa;content:counter(qa);position:absolute;left:0;top:.7rem;width:1.6rem;height:1.6rem;border-radius:50%;background:var(--c-surface2);border:1px solid var(--c-border);color:var(--c-accent);font-family:var(--font-mono);font-size:.78rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+    .qa-list strong{color:var(--c-text)}
+    .org-block{border:1px solid var(--c-border);border-radius:var(--r-md);background:var(--c-surface);padding:1rem 1.15rem;margin:1rem 0}
+    .org-block h3{margin:0 0 .5rem;font-size:1rem}
+    .org-block .op{font-family:var(--font-mono);font-size:.76rem;color:var(--c-accent);margin-bottom:.6rem}
+    .org-block dl{margin:0;font-size:.85rem;line-height:1.75}
+    .org-block dt{font-weight:700;color:var(--c-text);margin-top:.55rem;font-size:.82rem}
+    .org-block dd{margin:.1rem 0 0;color:var(--c-muted)}
+    .fig-fig{margin:1rem 0 1.4rem}.fig-fig svg{width:100%;height:auto;border:1px solid var(--c-border);border-radius:var(--r-md);background:var(--c-surface);display:block}
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="メインナビゲーション"><a href="/" class="nav-link">ホーム</a><a href="/pricing/" class="nav-link">料金比較</a><a href="/calculator/" class="nav-link">トークン計算機</a><a href="/timeline/" class="nav-link">リリース年表</a><a href="/china-ai/" class="nav-link">中国AI</a><a href="/multimodal/" class="nav-link">マルチモーダル</a><a href="/mai/" class="nav-link">MS AI (MAI)</a><a href="/glossary/" class="nav-link active" aria-current="page">用語説明</a></nav></div></header>
+
+<main><div class="container">
+  <div class="section" style="padding-bottom:0;">
+    <h1 class="section-title" style="font-size:1.55rem;">ベンチマークを運営している組織 — 「誰が測ったか」を見分ける4つの手順</h1>
+    <p class="section-sub" style="max-width:780px;">
+      <a href="/glossary/">用語説明</a> 第6回。第5回の<a href="/glossary/benchmarks/">「ベンチマークとは」</a>では、ベンチ名を①誰が運営しているか ②何を測っているか ③どう測るか（ハーネス・設定）の3つで仕分ける道具をお渡ししました。
+      今回はその<strong>①「誰が運営しているか」をもう一段掘ります</strong>。数字を見ても運営組織の名前が出てこない、公式サイトに行っても運営主体が書いていない——という読者の声がきっかけです。
+      <strong>ベンチ名から運営組織にたどり着く手順</strong>を4ステップに固定し、代表的なベンチの運営元を一覧にしました。
+    </p>
+    <div class="phrase-box">
+      <p class="phrase">「そのベンチは誰のものか」を決めているのは、<strong>スコアを出す人ではなく、テストを配っている人</strong>です。同じテストでも、配る人が変われば別のベンチになります。 本ページでは、テストや評価フレームワークを<strong>作成・配布・版管理している主体</strong>を「運営元」と呼びます（データセット作成者・ハーネス提供者・スコア報告者が別々のこともあります）。</p>
+      <p class="phrase-meta">実際に <strong>GDPval と GDPval-AA はデータセットが同じでも運営が別</strong>（OpenAI と Artificial Analysis）で、別の数字として扱われます。第5回で扱ったのと同じ構図です。今回の4手順を使えば、初見のベンチ名でも5分で運営元にたどり着けます。</p>
+    </div>
+    <div class="updated-bar">
+      <span class="dot">●</span>
+      最終更新: <time datetime="2026-09-25">2026年9月25日</time>
+      &ensp;|&ensp; 方針: 運営主体は公式サイト・原論文・公式リポジトリで確認できたもののみ掲載。確認できないものは「要確認」と明記します
+    </div>
+  </div>
+
+  <section class="section" style="padding-top:1.5rem;" aria-labelledby="steps-h">
+    <h2 class="section-title" id="steps-h" style="font-size:1.2rem;">手順 — ベンチ名から運営組織にたどり着く4ステップ</h2>
+    <ol class="flow-list">
+      <li><strong>ベンチ名で原論文か公式リポジトリを探す。</strong>検索して出てくるまとめ記事は使わず、<strong>原論文（arXiv等）か公式リポジトリ（GitHub）</strong>を開きます。リポジトリのオーナー名が、そのまま運営組織の手がかりです。<br>
+        <span style="font-family:var(--font-mono);font-size:.8rem;">例: DeepSWE → <a href="https://github.com/datacurve-ai/deep-swe" target="_blank" rel="noopener">github.com/datacurve-ai/deep-swe</a> → オーナーは datacurve-ai ＝ Datacurve</span></li>
+      <li><strong>運営組織が「何者か」を確かめる。</strong>モデルベンダー（OpenAI・Anthropicなど）、独立評価機関（Artificial Analysis・ARC Prizeなど）、研究機関（大学・非営利）、<strong>業務ソフト企業</strong>（Zapier・Cursorなど）のどれかに分類します。ここで<strong>利害関係の距離</strong>が見えます。</li>
+      <li><strong>スコアを報告しているのは誰かを確認する。</strong>同じベンチでも「運営組織が発表」「モデルベンダーが自社setupで発表」「第三者が引用」の3通りがあります。ベンダーの発表ページに <em>as reported by OpenAI</em> のような注記があれば、その数値は<strong>ベンダー自身の測定値</strong>です。</li>
+      <li><strong>ハーネス（テストを走らせる道具）の提供元を確認する。</strong>ハーネスが<strong>モデルベンダー製か第三者製か</strong>で条件が変わります。詳細は<a href="/glossary/harness/">第3回「ハーネス」</a>を参照。ここまで読んで初めて、数字の比較可能性が判断できます。</li>
+    </ol>
+    <div class="tip-box">
+      <h3>💡 5分で終わらせるコツ</h3>
+      <ul>
+        <li>リポジトリのオーナー名（<code>datacurve-ai</code>、<code>harbor-framework</code>、<code>xlang</code> など）は<strong>組織の短縮名</strong>です。そのまま検索すると公式サイトに着きます。</li>
+        <li>ベンチ名に<strong>組織名が入っている</strong>ものは探す必要がありません（GDPval-<strong>AA</strong> の AA＝Artificial Analysis、<strong>AutomationBench</strong> は Zapier が自社ブログで公表）。</li>
+        <li>逆に、<strong>組織名が入っていないベンチほど運営元が分かりにくい</strong>ので、手順1を必ず踏んでください。</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="map-h">
+    <h2 class="section-title" id="map-h" style="font-size:1.2rem;">図: 誰が配り、誰が走らせ、誰が報告するか</h2>
+    <figure class="fig-fig">
+      <svg viewBox="0 0 700 250" role="img" aria-labelledby="bf-t bf-d" xmlns="http://www.w3.org/2000/svg">
+        <title id="bf-t">ベンチマークの役割分担</title>
+        <desc id="bf-d">ベンチマークの運営組織、ハーネス提供元、スコア報告者の3つの役割を矢印で示した図。運営組織がテストを配り、ハーネス提供元が実行環境を用意し、報告者が数値を公表する。</desc>
+        <g font-family="system-ui,-apple-system,sans-serif" font-size="12">
+          <rect x="20" y="60" width="180" height="110" rx="8" fill="#1b2030" stroke="#3a4256"/>
+          <text x="110" y="86" text-anchor="middle" fill="#e6e6e6" font-size="13" font-weight="700">① 運営組織</text>
+          <text x="110" y="108" text-anchor="middle" fill="#9aa0aa">テスト（問題・採点基準）を</text>
+          <text x="110" y="126" text-anchor="middle" fill="#9aa0aa">作り、配り、版を管理する</text>
+          <text x="110" y="150" text-anchor="middle" fill="#6ea8fe" font-size="11">Datacurve / XLANG Lab</text>
+          <text x="110" y="164" text-anchor="middle" fill="#6ea8fe" font-size="11">Zapier / ARC Prize など</text>
+          <rect x="260" y="60" width="180" height="110" rx="8" fill="#1b2030" stroke="#3a4256"/>
+          <text x="350" y="86" text-anchor="middle" fill="#e6e6e6" font-size="13" font-weight="700">② ハーネス提供元</text>
+          <text x="350" y="108" text-anchor="middle" fill="#9aa0aa">モデルを実際に走らせる</text>
+          <text x="350" y="126" text-anchor="middle" fill="#9aa0aa">道具・環境を用意する</text>
+          <text x="350" y="150" text-anchor="middle" fill="#f0a35e" font-size="11">Claude Code / 自社setup</text>
+          <text x="350" y="164" text-anchor="middle" fill="#f0a35e" font-size="11">ベンダー製が多い＝要注意</text>
+          <rect x="500" y="60" width="180" height="110" rx="8" fill="#1b2030" stroke="#3a4256"/>
+          <text x="590" y="86" text-anchor="middle" fill="#e6e6e6" font-size="13" font-weight="700">③ 報告者</text>
+          <text x="590" y="108" text-anchor="middle" fill="#9aa0aa">出た数値を公表する</text>
+          <text x="590" y="126" text-anchor="middle" fill="#9aa0aa">（運営元／ベンダー／第三者）</text>
+          <text x="590" y="150" text-anchor="middle" fill="#7ee787" font-size="11">ここが違うと比較できない</text>
+          <path d="M205 115 L255 115" stroke="#5a6a88" stroke-width="2" marker-end="url(#ar)"/>
+          <path d="M445 115 L495 115" stroke="#5a6a88" stroke-width="2" marker-end="url(#ar)"/>
+          <defs><marker id="ar" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#5a6a88"/></marker></defs>
+          <text x="350" y="205" text-anchor="middle" fill="#e6e6e6" font-size="12">「同一ベンチで比較」と言えるのは、①②③が揃っているときだけ</text>
+          <text x="350" y="228" text-anchor="middle" fill="#9aa0aa" font-size="11">例: AutomationBench は ①Zapier ②Zapier ③Zapier …だが OpenAI の比較表にも登場（条件は同じとは限らない）</text>
+        </g>
+      </svg>
+      <figcaption style="font-size:.78rem;color:var(--c-muted);margin-top:.5rem;">当サイト作成。役割分担の考え方であり、各ベンチの実測条件を示すものではありません。</figcaption>
+    </figure>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="orgs-h">
+    <h2 class="section-title" id="orgs-h" style="font-size:1.2rem;">代表例 — ベンチと運営組織</h2>
+    <p class="section-sub">2026年9月のモデル発表（Claude Opus 5.5・GPT-6 Sol/Luna）で実際に登場したベンチを中心に、運営元・分類・確認できた一次情報をまとめました。</p>
+    <div class="table-wrap"><table><thead><tr><th>ベンチマーク</th><th>運営組織</th><th>分類</th><th>一次情報</th></tr></thead><tbody>
+      <tr><td class="model-name">DeepSWE / DeepSWE 1.1</td><td><strong>Datacurve</strong></td><td>独立評価</td><td><a href="https://github.com/datacurve-ai/deep-swe" target="_blank" rel="noopener">公式リポジトリ</a>（オーナー: datacurve-ai）</td></tr>
+      <tr><td class="model-name">Terminal-Bench 4.0</td><td><strong>Harbor ＋ Laude Institute</strong></td><td>研究機関系</td><td><a href="https://github.com/harbor-framework/terminal-bench" target="_blank" rel="noopener">公式リポジトリ</a> / <a href="https://arxiv.org/abs/2601.11868" target="_blank" rel="noopener">原論文</a></td></tr>
+      <tr><td class="model-name">Terminal-Bench-Science 0.1</td><td><strong>Stanford ＋ Laude Institute</strong></td><td>研究機関系</td><td><a href="https://github.com/harbor-framework/terminal-bench-science" target="_blank" rel="noopener">公式リポジトリ</a></td></tr>
+      <tr><td class="model-name">OSWorld / OSWorld 2.0</td><td><strong>XLANG Lab</strong></td><td>研究機関系</td><td><a href="https://osworld-v2.xlang.ai/" target="_blank" rel="noopener">公式サイト</a> / <a href="https://arxiv.org/abs/2404.07972" target="_blank" rel="noopener">原論文</a></td></tr>
+      <tr><td class="model-name">GDPval</td><td><strong>OpenAI</strong></td><td>モデルベンダー</td><td><a href="https://openai.com/index/gdpval/" target="_blank" rel="noopener">公式ページ</a> / <a href="https://arxiv.org/abs/2510.04374" target="_blank" rel="noopener">原論文</a></td></tr>
+      <tr><td class="model-name">GDPval-AA v2.1</td><td><strong>Artificial Analysis</strong></td><td>独立評価</td><td><a href="https://artificialanalysis.ai/evaluations/gdpval-aa" target="_blank" rel="noopener">公式ページ</a>（データセットはGDPvalと共通・運営は別）</td></tr>
+      <tr><td class="model-name">AutomationBench 1.0.6</td><td><strong>Zapier</strong></td><td>業務ソフト企業</td><td><a href="https://zapier.com/benchmarks" target="_blank" rel="noopener">公式ページ</a>。OpenAIの比較表にも「Zapierが実施」と明記</td></tr>
+      <tr><td class="model-name">FrontierCode 1.1</td><td><strong>Cognition</strong></td><td>開発ツール企業</td><td><a href="https://cognition.com/frontiercode" target="_blank" rel="noopener">公式ページ</a>（OpenAI発表のリンク先）</td></tr>
+      <tr><td class="model-name">CursorBench 4.0</td><td><strong>Cursor</strong></td><td>開発ツール企業</td><td>Anthropic・OpenAI 双方の比較表に登場。<strong>運営組織の公式解説ページは要確認</strong></td></tr>
+      <tr><td class="model-name">Agents&#39; Last Exam V1</td><td><strong>agents-last-exam.org</strong>（公式ドメイン。運営法人名は未確認）</td><td>独立評価</td><td><a href="https://agents-last-exam.org/" target="_blank" rel="noopener">公式サイト</a></td></tr>
+      <tr><td class="model-name">ARC-AGI-3</td><td><strong>ARC Prize</strong></td><td>独立評価（非営利）</td><td><a href="https://arcprize.org/" target="_blank" rel="noopener">arcprize.org</a>（中立ハーネスでの公表値を当サイトの<a href="/glossary/gpt-6-astra-benchmarks/">第1回</a>で扱っています）</td></tr>
+      <tr><td class="model-name">WANDR</td><td><strong>Perplexity</strong></td><td>AI企業</td><td>Anthropicが<strong>独自条件で実行</strong>しており「Perplexityの公開setupとは異なり、スコアは直接比較できない」と公式注記つき</td></tr>
+    </tbody></table></div>
+    <p style="font-size:.78rem;color:var(--c-muted);margin-top:.3rem;">※ 出典: 各ベンチの公式サイト・公式リポジトリ、および Anthropic「Introducing Claude Opus 5.5」／OpenAI「Introducing GPT-6 Sol and Luna」の注記（2026-09-25確認）。
+    <strong>CursorBenchの運営元公式ページは確認できていないため「要確認」としています。</strong></p>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="three-h">
+    <h2 class="section-title" id="three-h" style="font-size:1.2rem;">実例で見る「運営組織の違いが数字に効く」3パターン</h2>
+
+    <div class="org-block">
+      <h3>パターン1: 同じデータセット、別運営 → 別の数字</h3>
+      <p class="op">GDPval（OpenAI） vs GDPval-AA（Artificial Analysis）</p>
+      <dl>
+        <dt>何が違うのか</dt>
+        <dd>データセットは共通でも、<strong>運営（採点の設計・モデルの走らせ方）が別</strong>。Claude Opus 5.5 の発表では GDPval-AA v2.1 が使われ、Eloスコアとして 1,846（Opus 5.5）／1,735（Fable 5.1）／1,708（Opus 5）が並びます。</dd>
+        <dt>読み方</dt>
+        <dd>「GDPval」で検索して出てきた数字と、発表記事の「GDPval-AA」の数字は<strong>別物</strong>です。<strong>接尾辞（-AA、-Verified、v2.1など）まで含めて検索</strong>してください。</dd>
+      </dl>
+    </div>
+
+    <div class="org-block">
+      <h3>パターン2: 運営元は第三者、でも条件はベンダー側</h3>
+      <p class="op">AutomationBench（Zapier）</p>
+      <dl>
+        <dt>何が違うのか</dt>
+        <dd>ベンチの運営も実施もZapierです。ただしOpenAIの比較表では<strong>「実行時にフォールバックモデルを使わなかった」</strong>条件が明記されています。セーフガードによる介入が「失敗」として扱われるため、実際より低いスコアになります。さらにOpenAIは<strong>Claude Fable 5.1の値が実際のコストを過小評価している</strong>（Opus 5へのフォールバック費が約40%のタスクで発生しているのに含まれていない）とも注記しています。</dd>
+        <dt>読み方</dt>
+        <dd><strong>「第三者が運営している＝公平」ではありません。</strong>誰が走らせ、どんな制約で走らせたかまで読む必要があります。</dd>
+      </dl>
+    </div>
+
+    <div class="org-block">
+      <h3>パターン3: ベンチは自社製、素材は他社製</h3>
+      <p class="op">WANDR（Perplexity）</p>
+      <dl>
+        <dt>何が違うのか</dt>
+        <dd>AnthropicはPerplexityのベンチを<strong>独自条件</strong>（オフライン版のweb検索・web fetch、programmatic tool calling、コード実行、<strong>980kトークンのタスク予算</strong>）で実行し、「Perplexityの公開setupとは異なるため<strong>スコアは直接比較できない</strong>」と明記しています。そのうえで<strong>同じ条件で測ったモデル同士だけ</strong>を並べています。</dd>
+        <dt>読み方</dt>
+        <dd>これは<strong>誠実な注記の例</strong>です。「比較できない」と書いてある表は、書いていない表より信頼できます。逆に、条件の記述がない比較表は<strong>比較できない可能性を疑って</strong>ください。</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="check-h">
+    <h2 class="section-title" id="check-h" style="font-size:1.2rem;">チェックリスト — 発表記事の数字を見たら</h2>
+    <ol class="qa-list">
+      <li><strong>ベンチ名に組織名が入っているか？</strong>入っていなければ、原論文・公式リポジトリまで戻って運営元を確認。</li>
+      <li><strong>運営組織はモデルベンダーか、第三者か？</strong>ベンダー自身が運営するベンチは、他社モデルを同じ条件で測りにくい構造です。</li>
+      <li><strong>「as reported by 〜」の注記はないか？</strong>あるならその数値は<strong>そのベンダーの測定値</strong>で、発表元が測り直したものではありません。</li>
+      <li><strong>ハーネスは誰のものか？</strong>ベンダー製ハーネス（例: Claude Code）での計測は、そのベンダーに有利になり得ます。</li>
+      <li><strong>比較相手の世代は揃っているか？</strong>OpenAIは公式注記で「Fable 5.1のスコアが入手できない場合は<strong>Fable 5</strong>の値を報告した」と明言しています。世代が混在した表は横並びにできません。</li>
+      <li><strong>「比較できない」と書いてあるか？</strong>条件が違うことの明示は減点ではなく加点です。</li>
+    </ol>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="src-h">
+    <h2 class="section-title" id="src-h" style="font-size:1.2rem;">出典一覧（すべて2026年9月25日確認）</h2>
+    <ul style="font-size:.84rem;line-height:1.9;color:var(--c-muted);padding-left:1.2rem;">
+      <li>Anthropic「Introducing Claude Opus 5.5」 — <a href="https://www.anthropic.com/claude-opus-5-5" target="_blank" rel="noopener">anthropic.com/claude-opus-5-5</a>（ベンチ表の脚注1〜4）</li>
+      <li>OpenAI「Introducing GPT-6 Sol and Luna」 — <a href="https://openai.com/index/introducing-gpt-6-sol-and-luna/" target="_blank" rel="noopener">openai.com/index/introducing-gpt-6-sol-and-luna</a>（各ベンチ節の注記）</li>
+      <li>DeepSWE — <a href="https://github.com/datacurve-ai/deep-swe" target="_blank" rel="noopener">github.com/datacurve-ai/deep-swe</a>（運営: Datacurve）</li>
+      <li>Terminal-Bench — <a href="https://github.com/harbor-framework/terminal-bench" target="_blank" rel="noopener">github.com/harbor-framework/terminal-bench</a>（Harbor ＋ Laude Institute）</li>
+      <li>OSWorld — <a href="https://osworld-v2.xlang.ai/" target="_blank" rel="noopener">osworld-v2.xlang.ai</a>（XLANG Lab）</li>
+      <li>GDPval — <a href="https://openai.com/index/gdpval/" target="_blank" rel="noopener">openai.com/index/gdpval</a>（OpenAI）／ GDPval-AA — <a href="https://artificialanalysis.ai/evaluations/gdpval-aa" target="_blank" rel="noopener">artificialanalysis.ai/evaluations/gdpval-aa</a>（Artificial Analysis）</li>
+      <li>AutomationBench — <a href="https://zapier.com/benchmarks" target="_blank" rel="noopener">zapier.com/benchmarks</a>（Zapier）</li>
+      <li>FrontierCode — <a href="https://cognition.com/frontiercode" target="_blank" rel="noopener">cognition.com/frontiercode</a>（Cognition）</li>
+      <li>Agents&#39; Last Exam — <a href="https://agents-last-exam.org/" target="_blank" rel="noopener">agents-last-exam.org</a></li>
+      <li>ARC-AGI-3 — <a href="https://arcprize.org/" target="_blank" rel="noopener">arcprize.org</a>（ARC Prize）</li>
+    </ul>
+    <p style="font-size:.8rem;color:var(--c-muted);margin-top:.6rem;">関連: <a href="/glossary/">用語説明 一覧</a> · <a href="/glossary/benchmarks/">ベンチマークとは（第5回）</a> · <a href="/glossary/harness/">ハーネス（第3回）</a> · <a href="/claude-opus-5-5/">Claude Opus 5.5 詳細</a> · <a href="/gpt-6-sol-luna/">GPT-6 Sol / Luna 詳細</a> · <a href="/timeline/">リリース年表</a></p>
+  </section>
+
+  <div class="tip-box" style="border-left-color:var(--c-red);margin-bottom:2rem;">
+    <h3>⚠️ この記事の限界</h3>
+    <ul>
+      <li>運営組織は<strong>2026年9月25日時点</strong>で公式サイト・原論文・公式リポジトリから確認できた情報です。ベンチの移管・改名・版更新で変わることがあります。</li>
+      <li>分類（独立評価／研究機関系／業務ソフト企業など）は<strong>当サイトの整理</strong>で、業界の公式分類ではありません。</li>
+      <li>各ベンチの<strong>スコアや測定条件そのものは本ページでは扱いません</strong>。数値は各モデルの詳細ページをご覧ください。</li>
+      <li>本サイトは特定プロバイダーと提携していません。</li>
+    </ul>
+  </div>
+</div></main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>運営: okamoちゃんねる</p><p><a href="/">ホーム</a> · <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a> · <a href="/timeline/">年表</a> · <a href="/glossary/">用語説明</a> · <a href="/gpt-6/">GPT-6 Astra</a></p></div><p class="footer-disclaimer">⚠️ 料金・仕様は予告なく変動します。契約前に必ず各社公式ページでご確認ください。本サイトは各社と提携していません。</p></div></footer>
+</body>
+</html>

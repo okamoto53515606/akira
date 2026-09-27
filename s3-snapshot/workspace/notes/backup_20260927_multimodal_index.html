@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>マルチモーダル対応LLM一覧【画像・音声・動画・PDF・Officeの可否と料金】2026年9月版 — LLM Data Hub</title>
+  <meta name="description" content="Gemini・GPT・Claude・Qwen・GLM・Grok・DeepSeekの画像・音声・動画・PDF・DOCX・XLSX・PPTX入力可否と料金を公式一次情報ベースで一覧。ClaudeのPDF対応や、API直では扱えないOffice形式も明記。2026年9月23日更新。">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/multimodal/">
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/multimodal/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/multimodal/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/multimodal/">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/multimodal/">
+  <meta property="og:title" content="マルチモーダル対応LLM一覧【画像・音声・動画のIn/Out可否と料金】">
+  <meta property="og:description" content="Gemini 3.8 Live・3.8 Flash・GPT-6 Astra・Claude・Qwen・GLM・Grok・DeepSeekのマルチモーダル対応と料金を公式一次情報で一覧。">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"マルチモーダル対応LLM一覧【画像・音声・動画・PDF・Officeの可否と料金】","datePublished":"2026-09-05","dateModified":"2026-09-23","author":{"@type":"Organization","name":"LLM Data Hub"},"publisher":{"@type":"Organization","name":"okamoちゃんねる"},"url":"https://llm.okamomedia.tokyo/multimodal/","inLanguage":"ja"}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .compare-table th:first-child{width:220px}.compare-table td{text-align:center;font-size:.85rem}.compare-table td:first-child{text-align:left;font-weight:600}.compare-table .yes{color:var(--c-green);font-weight:700}.compare-table .no{color:var(--c-red);font-weight:600}.compare-table .warn{color:var(--c-yellow);font-weight:600}.compare-table .price{font-family:var(--font-mono)}
+    .modal-note{background:var(--c-surface2);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.9rem 1.1rem;margin-bottom:1.25rem;font-size:.86rem;line-height:1.7}
+    .modal-note strong{color:var(--c-accent)}
+    .spec-grid{align-items:start}
+    .quick-stats{display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;margin-top:1rem}
+    .stat{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.75rem 1.25rem;text-align:center}
+    .stat .val{font-family:var(--font-mono);font-size:1.25rem;font-weight:700;color:var(--c-blue)}
+    .stat .lbl{font-size:.75rem;color:var(--c-muted);margin-top:.15rem}
+    .spec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.8rem;margin-bottom:1.5rem}
+    .spec-item{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.9rem 1rem}
+    .spec-item .spec-label{font-size:.75rem;color:var(--c-muted);font-weight:600;margin-bottom:.25rem}
+    .spec-item .spec-value{font-family:var(--font-mono);font-size:1rem;font-weight:700}
+    .price-note{background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-blue);border-radius:var(--r-md);padding:.8rem 1rem;margin:1rem 0;font-size:.84rem;color:var(--c-muted)}
+    .matrix-table{border-collapse:separate;border-spacing:0;min-width:0}
+    .matrix-table thead th{background:var(--c-surface2);font-size:.82rem;color:var(--c-text);white-space:nowrap}
+    .matrix-table td.mods{vertical-align:middle;padding:.55rem .5rem;text-align:left}
+    .chips{display:flex;flex-wrap:wrap;align-items:center;gap:.35rem}
+    .mod{display:inline-flex;align-items:center;justify-content:center;width:1.7rem;height:1.7rem;font-size:1.05rem;line-height:1;border-radius:7px;background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.35)}
+    .mod-group{display:inline-flex;align-items:center;flex-wrap:wrap;gap:.28rem;padding:.18rem .4rem .18rem .22rem;border-radius:8px;background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.4)}
+    .mod-group .mod{width:1.45rem;height:1.45rem;font-size:.95rem;background:transparent;border:0}
+    .mod-group .note{font-size:.68rem;font-weight:600;color:var(--c-yellow);line-height:1.3;white-space:nowrap}
+    .none{color:var(--c-muted);font-weight:500}
+    .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+    .matrix-table .src{display:block;font-size:.7rem;font-weight:500;margin-top:.2rem;line-height:1.45}
+    .matrix-table .src a{color:var(--c-muted)}
+    .matrix-table .src a:hover{color:var(--c-text)}
+    .legend-box{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:1rem 1.15rem;margin:1rem 0 1.25rem;font-size:.86rem;line-height:1.7}
+    .legend-box h3{font-size:.95rem;margin-bottom:.55rem}
+    .legend-box ul{padding-left:1.15em;margin:0}
+    .legend-box li{margin-bottom:.45rem}
+    .source-list{font-size:.84rem;line-height:1.7}
+    .source-list li{margin-bottom:.45rem}
+    .icon-key{display:flex;flex-wrap:wrap;gap:.4rem .85rem;font-size:.8rem;color:var(--c-muted);margin:.35rem 0 1rem}
+    .icon-key span{white-space:nowrap;display:inline-flex;align-items:center;gap:.28rem}
+    .mod svg{display:block}
+    .mod-img{color:#34d399}
+    .mod-pdf{width:auto;min-width:2.05rem;padding:0 .18rem;background:rgba(225,29,72,.1);border-color:rgba(225,29,72,.45)}
+    .mod-group .mod-pdf{padding:0}
+
+    @media(max-width:600px){.quick-stats{flex-direction:column;gap:.5rem}.mod-group .note{white-space:normal}}
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="メインナビゲーション"><a href="/" class="nav-link">ホーム</a><a href="/pricing/" class="nav-link">料金比較</a><a href="/calculator/" class="nav-link">トークン計算機</a><a href="/timeline/" class="nav-link">リリース年表</a><a href="/china-ai/" class="nav-link">中国AI</a><a href="/multimodal/" class="nav-link active" aria-current="page">マルチモーダル</a><a href="/mai/" class="nav-link">MS AI (MAI)</a><a href="/glossary/" class="nav-link">用語説明</a></nav></div></header>
+
+<section class="hero"><div class="container">
+  <p class="hero-badge">🌐 モダリティ別 In / Out 対応可否＋料金を一覧</p>
+  <h1>マルチモーダル対応 <span>LLM 一覧</span></h1>
+  <p class="lead">「どのモデルが画像・音声・動画を<strong>入力</strong>できて、<strong>出力</strong>できるのか、いくらかかるのか」を迷わずに分かる早見ページ。サイトに掲載している主要LLMを、公式料金ページ・公式ドキュメントの一次情報だけで整理しています。</p>
+  <div class="quick-stats">
+    <div class="stat"><div class="val">13</div><div class="lbl">掲載モデル</div></div>
+    <div class="stat"><div class="val">音声2倍</div><div class="lbl">Gemini 3.1系の音声入力課金</div></div>
+    <div class="stat"><div class="val">別モデル</div><div class="lbl">ライブ・画像生成・TTS</div></div>
+  </div>
+</div></section>
+
+<main><div class="container">
+<div class="updated-bar" style="margin-top:2rem;"><span class="dot">●</span>最終更新: <time datetime="2026-09-23">2026年9月23日</time> | 出典: <a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">Google AI 料金ページ</a> · <a href="https://developers.openai.com/api/docs/models/gpt-6-astra" target="_blank" rel="noopener">OpenAI GPT-6 Astra Docs</a> · <a href="https://platform.claude.com/docs/ja/build-with-claude/pdf-support" target="_blank" rel="noopener">Claude PDFサポート</a> · <a href="https://api-docs.deepseek.com/" target="_blank" rel="noopener">DeepSeek API Docs</a> ほか各社公式 | <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a></div>
+
+<!-- 対応マトリクス -->
+<section class="section" style="padding-top:0;" aria-labelledby="matrix-h">
+<h2 class="section-title" id="matrix-h" style="font-size:1.2rem;">主要LLM マルチモーダル対応マトリクス</h2>
+<p class="section-sub">全モデル共通で<b>テキスト入出力は対応</b>。表はテキスト以外だけ。列は「入力」「出力」の2本。<b>出ているアイコンがそのモデルが扱える形式</b>。注記付きは条件付き（下の説明）。アイコンが無いものは非対応。$は <em>USD / 1M tokens</em>（テキスト基準の標準料金）。</p><p class="icon-key"><span><svg class="ico-img" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><rect x="1.1" y="2.2" width="13.8" height="11.6" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.35"/><circle cx="5.3" cy="6.2" r="1.35" fill="currentColor"/><path d="M2.3 12.6l3.9-4.1 2.3 2.3 2.3-2.9 3.2 4.7H2.3z" fill="currentColor"/></svg> 画像</span><span>🔊 音声</span><span>🎬 動画</span><span><svg class="ico-pdf" viewBox="0 0 28 16" width="28" height="16" aria-hidden="true"><rect width="28" height="16" rx="3" fill="#e11d48"/><text x="14" y="11.6" text-anchor="middle" font-size="8.2" font-weight="800" font-family="ui-sans-serif,system-ui,-apple-system,sans-serif" fill="#fff">PDF</text></svg> PDF</span><span>📝 DOCX</span><span>📊 XLSX</span><span>📑 PPTX</span></p>
+
+<div class="table-wrap matrix-wrap"><table class="compare-table matrix-table"><thead><tr><th>モデル</th><th>入力</th><th>出力</th><th>入力$/M</th><th>出力$/M</th></tr></thead><tbody>
+<tr><td class="model-name"><a href="/gemini-3-8-flash/">Gemini 3.8 Flash</a><br><small>Google</small><span class="src"><a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">料金</a> · <a href="https://ai.google.dev/gemini-api/docs/document-processing" target="_blank" rel="noopener">Document</a></span></td><td class="mods"><div class="chips"><span class="mod mod-img" title="画像"><svg class="ico-img" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><rect x="1.1" y="2.2" width="13.8" height="11.6" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.35"/><circle cx="5.3" cy="6.2" r="1.35" fill="currentColor"/><path d="M2.3 12.6l3.9-4.1 2.3 2.3 2.3-2.9 3.2 4.7H2.3z" fill="currentColor"/></svg><span class="sr">画像</span></span><span class="mod" title="音声"><span aria-hidden="true">🔊</span><span class="sr">音声</span></span><span class="mod" title="動画"><span aria-hidden="true">🎬</span><span class="sr">動画</span></span><span class="mod mod-pdf" title="PDF"><svg class="ico-pdf" viewBox="0 0 28 16" width="28" height="16" aria-hidden="true"><rect width="28" height="16" rx="3" fill="#e11d48"/><text x="14" y="11.6" text-anchor="middle" font-size="8.2" font-weight="800" font-family="ui-sans-serif,system-ui,-apple-system,sans-serif" fill="#fff">PDF</text></svg><span class="sr">PDF</span></span><span class="mod-group"><span class="mod" title="DOCX"><span aria-hidden="true">📝</span><span class="sr">DOCX</span></span><span class="mod" title="XLSX"><span aria-hidden="true">📊</span><span class="sr">XLSX</span></span><span class="mod" title="PPTX"><span aria-hidden="true">📑</span><span class="sr">PPTX</span></span><span class="note">テキスト抽出</span></span></div></td><td class="mods"><span class="none">—</span></td><td class="price">$0.75→$1.50</td><td class="price">$3.75→$7.50</td></tr>
+<tr><td class="model-name"><a href="/gemini-3-7-flash/">Gemini 3.7 Flash</a><br><small>Google</small><span class="src"><a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">料金</a> · <a href="https://ai.google.dev/gemini-api/docs/document-processing" target="_blank" rel="noopener">Document</a></span></td><td class="mods"><div class="chips"><span class="mod mod-img" title="画像"><svg class="ico-img" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><rect x="1.1" y="2.2" width="13.8" height="11.6" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.35"/><circle cx="5.3" cy="6.2" r="1.35" fill="currentColor"/><path d="M2.3 12.6l3.9-4.1 2.3 2.3 2.3-2.9 3.2 4.7H2.3z" fill="currentColor"/></svg><span class="sr">画像</span></span><span class="mod" title="音声"><span aria-hidden="true">🔊</span><span class="sr">音声</span></span><span class="mod" title="動画"><span aria-hidden="true">🎬</span><span class="sr">動画</span></span><span class="mod mod-pdf" title="PDF"><svg class="ico-pdf" viewBox="0 0 28 16" width="28" height="16" aria-hidden="true"><rect width="28" height="16" rx="3" fill="#e11d48"/><text x="14" y="11.6" text-anchor="middle" font-size="8.2" font-weight="800" font-family="ui-sans-serif,system-ui,-apple-system,sans-serif" fill="#fff">PDF</text></svg><span class="sr">PDF</span></span><span class="mod-group"><span class="mod" title="DOCX"><span aria-hidden="true">📝</span><span class="sr">DOCX</span></span><span class="mod" title="XLSX"><span aria-hidden="true">📊</span><span class="sr">XLSX</span></span><span class="mod" title="PPTX"><span aria-hidden="true">📑</span><span class="sr">PPTX</span></span><span class="note">テキスト抽出</span></span></div></td><td class="mods"><span class="none">—</span></td><td class="price">$0.75→$1.50</td><td class="price">$3.75→$7.50</td></tr>
+<tr><td class="model-name"><a href="/gemini-3-1-flash-lite/">Gemini 3.1 Flash-Lite</a><br><small>Google</small><span class="src"><a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">料金</a>（音声は2倍）</span></td><td class="mods"><div class="chips"><span class="mod mod-img" title="画像"><svg class="ico-img" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><rect x="1.1" y="2.2" width="13.8" height="11.6" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.35"/><circle cx="5.3" cy="6.2" r="1.35" fill="currentColor"/><path d="M2.3 12.6l3.9-4.1 2.3 2.3 2.3-2.9 3.2 4.7H2.3z" fill="currentColor"/></svg><span class="sr">画像</span></span><span class="mod" title="音声"><span aria-hidden="true">🔊</span><span class="sr">音声</span></span><span class="mod" title="動画"><span aria-hidden="true">🎬</span><span class="sr">動画</span></span><span class="mod mod-pdf" title="PDF"><svg class="ico-pdf" viewBox="0 0 28 16" width="28" height="16" aria-hidden="true"><rect width="28" height="16" rx="3" fill="#e11d48"/><text x="14" y="11.6" text-anchor="middle" font-size="8.2" font-weight="800" font-family="ui-sans-serif,system-ui,-apple-system,sans-serif" fill="#fff">PDF</text></svg><span class="sr">PDF</span></span><span class="mod-group"><span class="mod" title="DOCX"><span aria-hidden="true">📝</span><span class="sr">DOCX</span></span><span class="mod" title="XLSX"><span aria-hidden="true">📊</span><span class="sr">XLSX</span></span><span class="mod" title="PPTX"><span aria-hidden="true">📑</span><span class="sr">PPTX</span></span><span class="note">テキスト抽出</span></span></div></td><td class="mods"><span class="none">—</span></td><td class="price">$0.25</td><td class="price">$1.50</td></tr>
+<tr><td class="model-name"><a href="/gpt-6/">GPT-6 Astra</a><br><small>OpenAI</small><span class="src"><a href="https://developers.openai.com/api/docs/models/gpt-6-astra" target="_blank" rel="noopener">Model docs</a>（入力 text/image）</span></td><td class="mods"><div class="chips"><span class="mod mod-img" title="画像"><svg class="ico-img" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><rect x="1.1" y="2.2" width="13.8" height="11.6" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.35"/><circle cx="5.3" cy="6.2" r="1.35" fill="currentColor"/><path d="M2.3 12.6l3.9-4.1 2.3 2.3 2.3-2.9 3.2 4.7H2.3z" fill="currentColor"/></svg><span class="sr">画像</span></span></div></td><td class="mods"><div class="chips"><span class="mod-group"><span class="mod mod-img" title="画像"><svg class="ico-img" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><rect x="1.1" y="2.2" width="13.8" height="11.6" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.35"/><circle cx="5.3" cy="6.2" r="1.35" fill="currentColor"/><path d="M2.3 12.6l3.9-4.1 2.3 2.3 2.3-2.9 3.2 4.7H2.3z" fill="currentColor"/></svg><span class="sr">画像</span></span><span class="note">ツール経由</span></span></div></td><td class="price">$10</td><td class="price">$50</td></tr>
+<tr><td class="model-name"><a href="/gpt-5-6-sol/">GPT-5.6 Sol</a><br><small>OpenAI</small><span class="src"><a href="https://developers.openai.com/api/docs/models/gpt-5.6-sol" target="_blank" rel="noopener">Model docs</a></span></td><td class="mods"><div class="chips"><span class="mod mod-img" title="画像"><svg class="ico-img" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><rect x="1.1" y="2.2" width="13.8" height="11.6" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.35"/><circle cx="5.3" cy="6.2" r="1.35" fill="currentColor"/><path d="M2.3 12.6l3.9-4.1 2.3 2.3 2.3-2.9 3.2 4.7H2.3z" fill="currentColor"/></svg><span class="sr">画像</span></span></div></td><td class="mods"><div class="chips"><span class="mod-group"><span class="mod mod-img" title="画像"><svg class="ico-img" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><rect x="1.1" y="2.2" width="13.8" height="11.6" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.35"/><circle cx="5.3" cy="6.2" r="1.35" fill="currentColor"/><path d="M2.3 12.6l3.9-4.1 2.3 2.3 2.3-2.9 3.2 4.7H2.3z" fill="currentColor"/></svg><span class="sr">画像</span></span><span class="note">ツール経由</span></span></div></td><td class="price">$4</td><td class="price">$20</td></tr>
+<tr><td class="model-name"><a href="/gpt-5-6-luna/">GPT-5.6 Luna</a><br><small>OpenAI</small><span class="src"><a href="https://developers.openai.com/api/docs/models/gpt-5.6-luna" target="_blank" rel="noopener">Model docs</a></span></td><td class="mods"><div class="chips"><span class="mod mod-img" title="画像"><svg class="ico-img" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><rect x="1.1" y="2.2" width="13.8" height="11.6" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.35"/><circle cx="5.3" cy="6.2" r="1.35" fill="currentColor"/><path d="M2.3 12.6l3.9-4.1 2.3 2.3 2.3-2.9 3.2 4.7H2.3z" fill="currentColor"/></svg><span class="sr">画像</span></span></div></td><td class="mods"><div class="chips"><span class="mod-group"><span class="mod mod-img" title="画像"><svg class="ico-img" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><rect x="1.1" y="2.2" width="13.8" height="11.6" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.35"/><circle cx="5.3" cy="6.2" r="1.35" fill="currentColor"/><path d="M2.3 12.6l3.9-4.1 2.3 2.3 2.3-2.9 3.2 4.7H2.3z" fill="currentColor"/></svg><span class="sr">画像</span></span><span class="note">ツール経由</span></span></div></td><td class="price">$0.20</td><td class="price">$1.20</td></tr>
+<tr><td class="model-name"><a href="/claude-fable-5-1/">Claude Fable 5.1</a><br><small>Anthropic</small><span class="src"><a href="https://platform.claude.com/docs/ja/build-with-claude/pdf-support" target="_blank" rel="noopener">PDFサポート</a></span></td><td class="mods"><div class="chips"><span class="mod mod-img" title="画像"><svg class="ico-img" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><rect x="1.1" y="2.2" width="13.8" height="11.6" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.35"/><circle cx="5.3" cy="6.2" r="1.35" fill="currentColor"/><path d="M2.3 12.6l3.9-4.1 2.3 2.3 2.3-2.9 3.2 4.7H2.3z" fill="currentColor"/></svg><span class="sr">画像</span></span><span class="mod mod-pdf" title="PDF"><svg class="ico-pdf" viewBox="0 0 28 16" width="28" height="16" aria-hidden="true"><rect width="28" height="16" rx="3" fill="#e11d48"/><text x="14" y="11.6" text-anchor="middle" font-size="8.2" font-weight="800" font-family="ui-sans-serif,system-ui,-apple-system,sans-serif" fill="#fff">PDF</text></svg><span class="sr">PDF</span></span></div></td><td class="mods"><span class="none">—</span></td><td class="price">$10</td><td class="price">$50</td></tr>
+<tr><td class="model-name"><a href="/claude-mythos-5-1/">Claude Mythos 5.1</a><br><small>Anthropic</small><span class="src"><a href="https://platform.claude.com/docs/ja/build-with-claude/pdf-support" target="_blank" rel="noopener">PDFサポート</a></span></td><td class="mods"><div class="chips"><span class="mod mod-img" title="画像"><svg class="ico-img" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><rect x="1.1" y="2.2" width="13.8" height="11.6" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.35"/><circle cx="5.3" cy="6.2" r="1.35" fill="currentColor"/><path d="M2.3 12.6l3.9-4.1 2.3 2.3 2.3-2.9 3.2 4.7H2.3z" fill="currentColor"/></svg><span class="sr">画像</span></span><span class="mod mod-pdf" title="PDF"><svg class="ico-pdf" viewBox="0 0 28 16" width="28" height="16" aria-hidden="true"><rect width="28" height="16" rx="3" fill="#e11d48"/><text x="14" y="11.6" text-anchor="middle" font-size="8.2" font-weight="800" font-family="ui-sans-serif,system-ui,-apple-system,sans-serif" fill="#fff">PDF</text></svg><span class="sr">PDF</span></span></div></td><td class="mods"><span class="none">—</span></td><td class="price">$10</td><td class="price">$50</td></tr>
+<tr><td class="model-name"><a href="/qwen-3-8-flash/">Qwen3.8-Flash</a><br><small>Alibaba</small><span class="src"><a href="https://www.qwencloud.com/models/qwen3.8-flash" target="_blank" rel="noopener">QwenCloud</a>（画像・動画理解）</span></td><td class="mods"><div class="chips"><span class="mod mod-img" title="画像"><svg class="ico-img" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><rect x="1.1" y="2.2" width="13.8" height="11.6" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.35"/><circle cx="5.3" cy="6.2" r="1.35" fill="currentColor"/><path d="M2.3 12.6l3.9-4.1 2.3 2.3 2.3-2.9 3.2 4.7H2.3z" fill="currentColor"/></svg><span class="sr">画像</span></span><span class="mod" title="動画"><span aria-hidden="true">🎬</span><span class="sr">動画</span></span></div></td><td class="mods"><span class="none">—</span></td><td class="price">$0.15</td><td class="price">$0.47</td></tr>
+<tr><td class="model-name"><a href="/glm-5-3-flash/">GLM 5.3 Flash</a><br><small>Z.ai</small><span class="src"><a href="https://docs.z.ai/guides/vlm/glm-5.3-flash" target="_blank" rel="noopener">GLM docs</a>（Video/Image。Fileはツール経由のため非掲載）</span></td><td class="mods"><div class="chips"><span class="mod mod-img" title="画像"><svg class="ico-img" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><rect x="1.1" y="2.2" width="13.8" height="11.6" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.35"/><circle cx="5.3" cy="6.2" r="1.35" fill="currentColor"/><path d="M2.3 12.6l3.9-4.1 2.3 2.3 2.3-2.9 3.2 4.7H2.3z" fill="currentColor"/></svg><span class="sr">画像</span></span><span class="mod" title="動画"><span aria-hidden="true">🎬</span><span class="sr">動画</span></span></div></td><td class="mods"><span class="none">—</span></td><td class="price">$0.15</td><td class="price">$0.50</td></tr>
+<tr><td class="model-name"><a href="/grok-4-6/">Grok 4.6</a><br><small>xAI</small><span class="src"><a href="https://docs.x.ai/developers/models/grok-4.6" target="_blank" rel="noopener">Model docs</a>（Text, Image）</span></td><td class="mods"><div class="chips"><span class="mod mod-img" title="画像"><svg class="ico-img" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><rect x="1.1" y="2.2" width="13.8" height="11.6" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.35"/><circle cx="5.3" cy="6.2" r="1.35" fill="currentColor"/><path d="M2.3 12.6l3.9-4.1 2.3 2.3 2.3-2.9 3.2 4.7H2.3z" fill="currentColor"/></svg><span class="sr">画像</span></span></div></td><td class="mods"><span class="none">—</span></td><td class="price">$2</td><td class="price">$6</td></tr>
+<tr><td class="model-name"><a href="/deepseek-v4-1-flash/">DeepSeek V4.1 Flash</a><br><small>DeepSeek</small><span class="src"><a href="https://api-docs.deepseek.com/guides/vision" target="_blank" rel="noopener">Vision</a> · <a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">料金</a>（旧V4 ProはVision非対応）</span></td><td class="mods"><div class="chips"><span class="mod mod-img" title="画像"><svg class="ico-img" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><rect x="1.1" y="2.2" width="13.8" height="11.6" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.35"/><circle cx="5.3" cy="6.2" r="1.35" fill="currentColor"/><path d="M2.3 12.6l3.9-4.1 2.3 2.3 2.3-2.9 3.2 4.7H2.3z" fill="currentColor"/></svg><span class="sr">画像</span></span></div></td><td class="mods"><span class="none">—</span></td><td class="price">$0.15→$0.30</td><td class="price">$0.60→$1.20</td></tr>
+</tbody></table></div>
+
+<p class="source-note">一次情報に基づく対応可否（2026-09-06確認）。この表は<b>APIへバイナリを直接渡せる形式だけ</b>を載せます（確実にOKなもののみ）。ツールでテキスト化して渡す方式はどのモデルでも可能なので非掲載です。Qwen3.8-Flashは公式が画像・動画理解を明記しているのでアイコンを出しています。音声・PDF・Officeの直読みは同ページで確認できないため非表示。ClaudeのPDFは公式の視覚理解なので掲載、DOCX/XLSXは事前変換が必要なので非表示。</p>
+
+<div class="legend-box" id="yellow-legend">
+<h3>注記の意味</h3>
+<ul>
+  <li><strong>Gemini の DOCX / XLSX / PPTX = テキスト抽出。</strong>公式 <a href="https://ai.google.dev/gemini-api/docs/document-processing" target="_blank" rel="noopener">Document understanding</a> は <b>PDFだけ視覚理解</b>（レイアウト・チャート・表を画像として見る）。Word / Excel / PowerPoint はテキストを抜き出して渡す扱いで、PDFと同じ視覚解析ではない。ファイルを送れても「PDF相当」ではない。</li>
+  <li><strong>GPT-6 Astra / GPT-5.6 Sol / Luna の画像出力 = ツール経由。</strong>公式モデルページの本体出力はテキスト。画像を出すには Responses API の <b>image generation tool（GPT-Image 2.0）</b> を別途呼ぶ。モデルがピクセルを直接返すわけではない。</li>
+  <li><strong>GLM 5.3 Flash の PDF / Office は非掲載。</strong>公式 How to Use が明示するネイティブ入力は <b>image_url（画像）</b>と動画。Input Modality の File や Office成果物は「ツールを呼んで文書を処理・作成する」作業で、バイナリ直読みではない。テキスト化ツールを渡せば他モデルでも同じなので、この表では非対応とする。</li>
+</ul>
+</div>
+
+<h3 id="sources-h" style="font-size:1.05rem;margin:1.25rem 0 .6rem;">一次情報（公式URL）</h3>
+<ul class="source-list">
+  <li>Google 料金: <a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">ai.google.dev/gemini-api/docs/pricing</a> — Gemini 3.8/3.7 Flash は導入価格 $0.75/$3.75（〜2026-12-31）、以降 $1.50/$7.50。3.1 Flash-Lite は text/image/video $0.25、audio $0.50。</li>
+  <li>Google 文書: <a href="https://ai.google.dev/gemini-api/docs/document-processing" target="_blank" rel="noopener">Document understanding</a> — PDFは視覚理解。PDF以外はテキスト抽出。</li>
+  <li>OpenAI GPT-6 Astra: <a href="https://developers.openai.com/api/docs/models/gpt-6-astra" target="_blank" rel="noopener">developers.openai.com/.../gpt-6-astra</a> — Input modalities: text, image。$10 / $50。</li>
+  <li>OpenAI GPT-5.6 Sol: <a href="https://developers.openai.com/api/docs/models/gpt-5.6-sol" target="_blank" rel="noopener">gpt-5.6-sol</a> · Luna: <a href="https://developers.openai.com/api/docs/models/gpt-5.6-luna" target="_blank" rel="noopener">gpt-5.6-luna</a></li>
+  <li>Anthropic PDF: <a href="https://platform.claude.com/docs/ja/build-with-claude/pdf-support" target="_blank" rel="noopener">PDFサポート</a> — 全アクティブモデルがPDF対応。xlsx/docxは事前変換が必要。</li>
+  <li>Qwen3.8-Flash: <a href="https://www.qwencloud.com/models/qwen3.8-flash" target="_blank" rel="noopener">qwencloud.com/models/qwen3.8-flash</a> — 「Non-Real-Time Image Understanding」「Non-Real-Time Video Understanding」。料金は公式ブログ <a href="https://qwen.ai/blog?id=qwen3.8-flash-next" target="_blank" rel="noopener">qwen.ai/blog</a>（入力 $0.15 / 出力 $0.47）。</li>
+  <li>Z.ai GLM-5.3-Flash: <a href="https://docs.z.ai/guides/vlm/glm-5.3-flash" target="_blank" rel="noopener">docs.z.ai/.../glm-5.3-flash</a> — How to Use: <code>image_url</code>。File / Office成果物はツール呼び出し（バイナリ直読みではないので非掲載）。</li>
+  <li>xAI Grok 4.6: <a href="https://docs.x.ai/developers/models/grok-4.6" target="_blank" rel="noopener">docs.x.ai/.../grok-4.6</a> — Modalities: Text, Image → Text。$2 / $6。音声・動画は別API。</li>
+  <li>DeepSeek Vision: <a href="https://api-docs.deepseek.com/guides/vision" target="_blank" rel="noopener">Vision</a> — <code>deepseek-flash</code>（V4.1 Flash）がネイティブ対応（2026-09-10〜）。旧 <code>deepseek-v4-flash-vision-exp</code> は V4.1 Flash へ統合。V4 Pro は Vision 非対応のまま提供継続。料金: <a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">Models &amp; Pricing</a>。</li>
+</ul>
+</section>
+
+<!-- モダリティ別課金の注意点 -->
+<section class="section" style="padding-top:0;" aria-labelledby="billing-h">
+<h2 class="section-title" id="billing-h" style="font-size:1.2rem;">モダリティ別の課金ルール全モデル共通の注意点</h2>
+<p class="section-sub">同じ「1M tokens」でも、モダリティによって単価が変わる・トークン換算される、というのが最大の落とし穴。主要ポイントをまとめます。</p>
+
+<div class="modal-note">
+  <strong>① 画像・動画・PDFは「トークン換算」される。</strong>Geminiでは画像・動画・PDFは標準入力単価でトークン換算、PDF（DOCUMENTモダリティ）は画像トークン単価で課金。動画が長いと入力トークンが膨らむが、<strong>モデルが実際に処理した入力トークンとして課金</strong>されます。動画は再生時間の長さと単純に比例するわけではなく、モデルがサンプリングした映像・音声などの処理量に応じて入力トークン数が変わるため、同じ長さでも内容や設定によって料金が変わります（Googleの video understanding では長尺動画の入力トークンを実際の再生時間ベースより最大約88%削減できる仕組みがあります）。
+</div>
+
+<div class="modal-note">
+  <strong>② 音声入力はモデルにより「2倍課金」される。</strong>Gemini 3.1 Flash-Lite（$0.25→音声 $0.50）、Gemini 3 Flash（$0.50→$1.00）、Gemini 2.5 Flash（$0.30→$1.00）、2.5 Flash-Lite（$0.10→$0.30）のように<strong>音声だけがテキスト等の2〜3倍</strong>。一方 <strong>Gemini 3.5 Flash-Lite・3.6/3.7/3.8 Flash は音声も標準単価と同額</strong>（3.8公式料金表はモダリティ別の区分を設けず一律）。音声入力の単価はモデルごとに異なり、<strong>すべてのGeminiモデルに共通する仕様ではありません</strong>。音声中心のワークロードはモデル選定が肝心。
+</div>
+
+<div class="modal-note">
+  <strong>③ Gemini 3.8/3.7/3.6 Flash の初回価格（$0.75/$3.75）は2026-12-31まで。</strong>2027-01-01以降は $1.50/$7.50 へ倍額化。画像・音声・動画入力も含めてこの標準単価で課金。予算は標準価格ベースで設計を。
+</div>
+
+<div class="modal-note">
+  <strong>④ ライブ（リアルタイム）・画像生成・音声生成（TTS）はコアモデルとは別モデル。</strong>下のセクション参照。コアLLMは「入力は多モダリティ、出力はテキスト」が現在の主流で、テキスト以外を<strong>出力</strong>するには専用モデルを使う。
+</div>
+</section>
+
+<!-- ライブ・生成は別モデル -->
+<section class="section" style="padding-top:0;" aria-labelledby="dedicated-h">
+<h2 class="section-title" id="dedicated-h" style="font-size:1.2rem;">ライブストリーミング・音声/画像/動画生成は「別モデル」に分化</h2>
+<p class="section-sub">コアLLMの出力がテキストのみなのは、テキスト以外の出力を専門のモデルに分離しているため。用途別に覚えてください。</p>
+
+<div class="table-wrap"><table class="compare-table"><thead><tr><th>用途</th><th>モデル例</th><th>In / Out</th><th>料金（USD）</th><th>出典</th></tr></thead><tbody>
+<tr><td class="model-name">リアルタイム音声対話<br><small>Live / Realtime</small><span class="badge badge-new">New</span></td><td><strong>Gemini 3.8 Live</strong><br><strong>Gemini 3.8 Live Extended Thinking</strong><br>Gemini 3.1 Flash Live Preview<br>Gemini 2.5 Flash Native Audio</td><td>音声⇄音声</td><td class="price">3.8 Live / 3.8 Live Extended Thinking / 3.1 Flash Live Preview（3モデル同一料金表）:<br>入力 text $0.75・音声 $3.00（$0.005/分）・画像動画 $1.00（$0.002/分）<br>出力 text $4.50・音声 $12.00（$0.018/分）<br><small>出力には思考トークンを含む</small></td><td><a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">Google 料金</a> · <a href="https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-8-live-gemini-3-8-live-extended-thinking/" target="_blank" rel="noopener">公式ブログ</a></td></tr>
+<tr><td class="model-name">リアルタイム音声対話<br><small>OpenAI Realtime / Audio</small></td><td>gpt-realtime-2.1<br>gpt-audio-1.5</td><td>音声⇄音声（ネイティブ）</td><td class="price">Realtime: text $4/$24・audio $32/$64<br>Audio: text $2.5/$10・audio $32/$64</td><td><a href="https://developers.openai.com/api/docs/models/gpt-realtime-2.1" target="_blank" rel="noopener">OpenAI Realtime</a> · <a href="https://developers.openai.com/api/docs/models/gpt-audio-1.5" target="_blank" rel="noopener">Audio</a></td></tr>
+<tr><td class="model-name">画像生成・編集</td><td>Gemini 3.1 Flash Image（Nano Banana 2）<br>Gemini 3 Pro Image（Nano Banana Pro）</td><td>画像→画像</td><td class="price">Flash Image: 出力画像$60/M（1K画像=$0.067）・Pro Image: $120/M</td><td><a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">Google</a></td></tr>
+<tr><td class="model-name">音声生成（TTS）</td><td>Gemini 3.1 Flash TTS Preview</td><td>テキスト→音声</td><td class="price">入力 text $1.00 / 出力 audio $20.00</td><td><a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">Google</a></td></tr>
+<tr><td class="model-name">動画生成</td><td>Gemini Omni 1.1 Flash / Veo 3.1</td><td>テキスト/画像→動画</td><td class="price">Omni: video出力 5,792tok/秒（720p）≒$0.10/秒・Veo: $0.40/秒</td><td><a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">Google</a></td></tr>
+</tbody></table></div>
+<div class="note-bar">🔊 <strong>Gemini 3.8 Live / 3.8 Live Extended Thinking を追記（2026-09-23）:</strong> Google は2026-09-15の公式ブログで<strong>Gemini 3.8 Live</strong>と<strong>Gemini 3.8 Live Extended Thinking</strong>を発表しました。会話の途中で<strong>97言語を自動判別して切り替える</strong>音声対話モデルで、Extended Thinking は<strong>会話を止めずにバックグラウンドで推論とツール実行を進める</strong>モードです。生成された音声には SynthID のウォーターマークが入ります（Google公式ブログ）。料金は Google AI の公式料金ページで確認でき、<strong>3.8 Live・3.8 Live Extended Thinking・3.1 Flash Live Preview の3モデルが1つの料金表にまとめられています</strong>（上表のとおり。テキスト入出力 $0.75/$4.50、音声は入力 $3.00・$0.005/分、出力 $12.00・$0.018/分、画像・動画入力 $1.00・$0.002/分）。出典: <a href="https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-8-live-gemini-3-8-live-extended-thinking/" target="_blank" rel="noopener">Google公式ブログ（2026-09-15）</a> · <a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">Gemini API 料金ページ</a></div>
+<p class="source-note">🎤 <strong>OpenAI系は要注意:</strong> GPT-6 Astra や GPT-5.6 系本体は音声・動画入力に非対応ですが、<strong>gpt-realtime-2.1・gpt-audio-1.5</strong>（音声 in/out ネイティブ）や <strong>Responses API の画像生成ツール（GPT-Image 2.0）</strong>で音声・画像の生成・対話を実現できます。単体のモデル名で選ぶのではなく、<em>「入力したいモダリティ」と「出力したいモダリティ」</em>をセットで考えるのがポイント。</p>
+</section>
+
+<!-- 用途別まとめ -->
+<section class="section" style="padding-top:0;" aria-labelledby="usecase-h">
+<h2 class="section-title" id="usecase-h" style="font-size:1.2rem;">「この入力・出力をしたい」ときのモデル選び</h2>
+<p class="section-sub">マルチモーダルが絡む典型的なパターンで、どのモデルを選べばいいかを一言で。</p>
+<div class="spec-grid">
+  <div class="spec-item"><div class="spec-label">画像を「理解」して回答</div><div class="spec-value">ほぼ全モデル対応。コスパなら <a href="/qwen-3-8-flash/">Qwen3.8-Flash</a>・<a href="/glm-5-3-flash/">GLM 5.3 Flash</a>、品質なら <a href="/gpt-6/">GPT-6 Astra</a></div></div>
+  <div class="spec-item"><div class="spec-label">音声（会話）を入力したい</div><div class="spec-value"><a href="/gemini-3-8-flash/">Gemini 3.8/3.7 Flash</a> が音声入力を標準単価で受ける。音声中心なら <a href="/gemini-3-1-flash-lite/">3.1 Flash-Lite</a> は2倍課金に注意</div></div>
+  <div class="spec-item"><div class="spec-label">動画を理解して要約・分析</div><div class="spec-value"><a href="/gemini-3-8-flash/">Gemini 3.8 Flash</a>（動画+音声対応）。<a href="/qwen-3-8-flash/">Qwen3.8-Flash</a>も公式に Non-Real-Time Video Understanding を記載（音声入力は非対応）。</div></div>
+  <div class="spec-item"><div class="spec-label">Office文書（PDF/PPTX/DOCX/XLSX）を扱う</div><div class="spec-value">バイナリ直読みできるのは <a href="/gemini-3-8-flash/">Gemini</a>のPDF（視覚）と <a href="/claude-fable-5-1/">Claude</a>のPDF。DOCX/XLSX/PPTX はGeminiでもテキスト抽出。GLMのOfficeはツール経由なので他モデルと同列に置かない。</div></div>
+  <div class="spec-item"><div class="spec-label">リアルタイム音声対話（speech-to-speech）</div><div class="spec-value">Gemini 3.8 Live / 3.8 Live Extended Thinking（背景推論つき）/ gpt-realtime-2.1（いずれも専用モデル）</div></div>
+  <div class="spec-item"><div class="spec-label">画像・音声・動画を「生成」したい</div><div class="spec-value">Gemini Nano Banana 2 / 3.1 Flash TTS / Veo 3.1（いずれも専用モデル）</div></div>
+</div>
+
+<div class="price-note" style="border-left-color:var(--c-blue);margin-top:1.5rem;">
+  💡 <strong>コストを計算したいなら:</strong> テキスト・画像・音声・動画のトークン単価を入力するだけで、各モデルのコストをUSD＋円で一括比較できる <a href="/calculator/">トークンコスト計算機</a> があります。マルチモーダル入力はモデルごとのトークン単価で見積もれます。
+</div>
+</section>
+
+<p class="source-note" style="margin-top:2rem;">本ページの掲載情報は各社公式料金ページ・公式ドキュメント（<a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">Google AI</a> · <a href="https://ai.google.dev/gemini-api/docs/document-processing" target="_blank" rel="noopener">Google Document understanding</a> · <a href="https://developers.openai.com/api/docs/pricing" target="_blank" rel="noopener">OpenAI</a> · <a href="https://platform.claude.com/docs/ja/build-with-claude/pdf-support" target="_blank" rel="noopener">Anthropic PDFサポート</a> · <a href="https://www.qwencloud.com/models/qwen3.8-flash" target="_blank" rel="noopener">QwenCloud</a> · <a href="https://docs.x.ai/developers/models/grok-4.6" target="_blank" rel="noopener">xAI</a> · <a href="https://api-docs.deepseek.com/guides/vision" target="_blank" rel="noopener">DeepSeek Vision</a> · <a href="https://docs.z.ai/guides/vlm/glm-5.3-flash" target="_blank" rel="noopener">Z.ai</a>）を2026-09-06に確認して作成しています。料金・対応可否は予告なく変動するため、ご利用前に必ず公式ページをご確認ください。</p>
+
+</div></main>
+
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>運営: okamoちゃんねる</p><p><a href="/">ホーム</a> · <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a> · <a href="/multimodal/">マルチモーダル</a> · <a href="/timeline/">年表</a> · <a href="/china-ai/">中国AI</a></p></div><p class="footer-disclaimer">⚠️ 本サイトの料金情報は各社公式ページを参照して作成していますが、料金は予告なく変動します。契約前に必ず公式ページをご確認ください。本サイトは各社と提携していません。</p></div></footer>
+</body>
+</html>

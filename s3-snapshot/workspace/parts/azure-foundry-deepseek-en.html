@@ -1,0 +1,151 @@
+      <!-- ===== Azure AI Foundry ===== -->
+      <section class="section" style="padding-top:0;" aria-labelledby="azure-heading">
+        <h2 class="section-title" id="azure-heading" style="font-size:1.2rem;">Run it on Azure AI Foundry (DeepSeek-V4-Flash-0731)</h2>
+        <p class="section-sub">
+          Beyond DeepSeek's own API, you can deploy DeepSeek models through Microsoft Azure's <strong>Azure AI Foundry (Microsoft Foundry)</strong>.
+          This walkthrough deploys <code>DeepSeek-V4-Flash-0731</code>, which Azure sells as a "Direct from Azure" model, using the <strong>Azure CLI, then verifies the endpoint with curl</strong>.
+        </p>
+
+        <div class="screenshot-note">
+          ℹ️ <strong>How <code>DeepSeek-V4-Flash-0731</code> relates to V4.1 Flash</strong>:
+          <code>-0731</code> is the <strong>previous generation</strong> (released 2026-07-31; same architecture and size as V4-Flash-Preview, re-post-trained).
+          On DeepSeek's own API the V4 Flash generation was retired into V4.1 Flash, but <strong>Azure AI Foundry still offers <code>DeepSeek-V4-Flash-0731</code> as a Preview model</strong> (as of 2026-09-13).
+          The Azure-side details come from Microsoft Learn. The command sequence was <strong>verified in practice by the operator (okamo channel) in September 2026</strong>.
+        </div>
+
+        <h3 style="font-size:1rem;margin:1.5rem 0 .6rem;">Prerequisites</h3>
+        <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.3em;">
+          <li style="margin-bottom:.35rem;">An Azure subscription with permission to create resources. Registering a resource provider requires <strong>Owner</strong> at the subscription level.</li>
+          <li style="margin-bottom:.35rem;">The Azure CLI (<code>az</code>). The <code>az cognitiveservices</code> commands ship in the CLI core, so no extra extension is needed on Azure CLI 2.60 or later.</li>
+          <li>You are signed in to the target subscription via <code>az login</code>.</li>
+        </ul>
+
+        <h3 style="font-size:1rem;margin:1.5rem 0 .6rem;">Placeholders used below</h3>
+        <div class="table-wrap">
+          <table class="spec-table">
+            <caption style="display:none;">Placeholders used in the commands</caption>
+            <thead><tr><th>Placeholder</th><th>What to supply</th></tr></thead>
+            <tbody>
+              <tr><td class="model-name"><code>&lt;SUBSCRIPTION_ID_OR_NAME&gt;</code></td><td>The ID or name of the Azure subscription to use</td></tr>
+              <tr><td class="model-name"><code>&lt;RESOURCE_GROUP&gt;</code></td><td>Resource group name (for example <code>rg-deepseek</code>)</td></tr>
+              <tr><td class="model-name"><code>&lt;LOCATION&gt;</code></td><td>Region (for example <code>eastus</code>). Availability differs per model — check the model catalog in the Azure portal</td></tr>
+              <tr><td class="model-name"><code>&lt;ACCOUNT_NAME&gt;</code></td><td>Azure AI Services account name. Must be <strong>globally unique</strong> (for example <code>dsflash0731</code>). The same value is reused for <code>--custom-domain</code></td></tr>
+              <tr><td class="model-name"><code>&lt;DEPLOYMENT_NAME&gt;</code></td><td>Deployment name (your choice). <strong>The <code>model</code> field in API calls takes the deployment name, not the model name</strong> (for example <code>deepseek-0731</code>)</td></tr>
+              <tr><td class="model-name"><code>&lt;MODEL_VERSION&gt;</code></td><td>The model version string. <strong>Read the actual value from the <code>az cognitiveservices account list-models</code> call below</strong> — this page does not assert it</td></tr>
+              <tr><td class="model-name"><code>&lt;API_KEY&gt;</code></td><td>The Azure AI Services account key (fetched from the CLI in the steps below)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 style="font-size:1rem;margin:1.5rem 0 .6rem;">Step 0 — Prepare the Azure CLI and register the resource provider</h3>
+        <p style="font-size:.86rem;color:var(--c-muted);">Doing this first avoids the <code>MissingSubscriptionRegistration</code> error later on.</p>
+        <pre class="cmd"><code># Check the Azure CLI version (2.60 or later recommended)
+az version
+
+# Sign in if needed
+az login
+
+# Select the target subscription
+az account set --subscription "&lt;SUBSCRIPTION_ID_OR_NAME&gt;"
+
+# Register the resource provider (prevents MissingSubscriptionRegistration)
+az provider register --namespace Microsoft.CognitiveServices
+
+# Check registration state (may take a few minutes to reach Succeeded)
+az provider show --namespace Microsoft.CognitiveServices --query registrationState -o tsv</code></pre>
+
+        <h3 style="font-size:1rem;margin:1.5rem 0 .6rem;">Step 1 — Create a resource group</h3>
+        <pre class="cmd"><code>az group create \
+  --name "&lt;RESOURCE_GROUP&gt;" \
+  --location "&lt;LOCATION&gt;"</code></pre>
+
+        <h3 style="font-size:1rem;margin:1.5rem 0 .6rem;">Step 2 — Create the Azure AI Services account</h3>
+        <p style="font-size:.86rem;color:var(--c-muted);">Passing <code>--custom-domain</code> makes later endpoints take the form <code>https://&lt;ACCOUNT_NAME&gt;.openai.azure.com/</code>.</p>
+        <pre class="cmd"><code>az cognitiveservices account create \
+  --name "&lt;ACCOUNT_NAME&gt;" \
+  --resource-group "&lt;RESOURCE_GROUP&gt;" \
+  --kind AIServices \
+  --sku S0 \
+  --location "&lt;LOCATION&gt;" \
+  --custom-domain "&lt;ACCOUNT_NAME&gt;" \
+  --assign-identity \
+  --allow-project-management true \
+  --yes</code></pre>
+
+        <h3 style="font-size:1rem;margin:1.5rem 0 .6rem;">Step 3 — Deploy DeepSeek-V4-Flash-0731</h3>
+        <p style="font-size:.86rem;color:var(--c-muted);">First list the available models and versions, then deploy with those values.</p>
+        <pre class="cmd"><code># List deployable DeepSeek models and their versions
+az cognitiveservices account list-models \
+  -n "&lt;ACCOUNT_NAME&gt;" -g "&lt;RESOURCE_GROUP&gt;" \
+  --query "[?contains(name,'DeepSeek')].{name:name,format:format,version:version}" -o table
+
+# Deploy the model (GlobalStandard SKU, starting capacity 1)
+az cognitiveservices account deployment create \
+  --name "&lt;ACCOUNT_NAME&gt;" \
+  --resource-group "&lt;RESOURCE_GROUP&gt;" \
+  --deployment-name "&lt;DEPLOYMENT_NAME&gt;" \
+  --model-name "DeepSeek-V4-Flash-0731" \
+  --model-version "&lt;MODEL_VERSION&gt;" \
+  --model-format "DeepSeek" \
+  --sku-name "GlobalStandard" \
+  --sku-capacity 1</code></pre>
+        <p style="font-size:.8rem;color:var(--c-muted);">
+          💡 <code>--sku-capacity</code> consumes quota measured in Tokens Per Minute (thousands). If capacity is insufficient the deployment can fail with
+          <code>InsufficientQuota</code> — adjust the value, or request a quota increase in the Azure portal.
+        </p>
+
+        <h3 style="font-size:1rem;margin:1.5rem 0 .6rem;">Step 4 — Export the connection settings</h3>
+        <pre class="cmd"><code># Endpoint (OpenAI-compatible) and API key
+export AZURE_AI_ENDPOINT="https://&lt;ACCOUNT_NAME&gt;.openai.azure.com/openai/v1/"
+export AZURE_AI_API_KEY="$(az cognitiveservices account keys list \
+  --name "&lt;ACCOUNT_NAME&gt;" \
+  --resource-group "&lt;RESOURCE_GROUP&gt;" \
+  --query key1 -o tsv)"
+
+# The API "model" field takes the deployment name
+export DEPLOYMENT_NAME="&lt;DEPLOYMENT_NAME&gt;"</code></pre>
+
+        <h3 style="font-size:1rem;margin:1.5rem 0 .6rem;">Step 5 — Verify connectivity with curl</h3>
+        <pre class="cmd"><code>curl -sS "$AZURE_AI_ENDPOINT/chat/completions" \
+  -H "Content-Type: application/json" \
+  -H "api-key: $AZURE_AI_API_KEY" \
+  -X POST \
+  -d '{
+    "model": "'"$DEPLOYMENT_NAME"'",
+    "messages": [
+      { "role": "user", "content": "Reply with just OK." }
+    ]
+  }'</code></pre>
+        <p style="font-size:.84rem;color:var(--c-muted);">
+          ✅ A JSON response means the endpoint is live. Note that <code>model</code> must be the deployment name — passing the model name <code>DeepSeek-V4-Flash-0731</code> can return a 404.
+          If you would rather not export the key, use <code>-H "api-key: &lt;API_KEY&gt;"</code> inline.
+          For Entra ID (formerly Azure AD) authentication, Microsoft's tutorial shows obtaining a token with scope <code>https://ai.azure.com/.default</code> via <code>DefaultAzureCredential</code>.
+        </p>
+
+        <div class="warn-box">
+          <h2>⚠️ If you hit <code>MissingSubscriptionRegistration</code></h2>
+          <p style="margin-bottom:.5rem;">It looks like this (HTTP 409 / Conflict). It simply means the <code>Microsoft.CognitiveServices</code> resource provider is not registered on the subscription — nothing is wrong with your resource request.</p>
+          <pre class="cmd"><code>MissingSubscriptionRegistration
+The subscription is not registered to use namespace 'Microsoft.CognitiveServices'.</code></pre>
+          <ul style="margin-top:.5rem;">
+            <li><strong>Fix 1 (CLI)</strong>: run <code>az provider register --namespace Microsoft.CognitiveServices</code> and wait until <code>az provider show --namespace Microsoft.CognitiveServices --query registrationState -o tsv</code> reports <code>Registered</code> (this can take a few minutes).</li>
+            <li><strong>Fix 2 (portal)</strong>: Azure portal → Subscriptions → Resource providers → select <code>Microsoft.CognitiveServices</code> → Register.</li>
+            <li><strong>Permissions</strong>: registration requires <strong>Owner on the subscription</strong>. Ask an administrator if you lack it.</li>
+            <li>Official troubleshooting: <a href="https://learn.microsoft.com/en-us/azure/azure-resource-manager/troubleshooting/error-register-resource-provider" target="_blank" rel="noopener">Register a resource provider</a></li>
+          </ul>
+        </div>
+
+        <div class="screenshot-note" style="margin-top:1.2rem;">
+          ⚠️ <strong>We deliberately do not publish Azure-side pricing.</strong>
+          Azure AI Foundry prices DeepSeek models on its own schedule, separate from DeepSeek's peak/off-peak API rates. We have not confirmed a primary-source rate specific to <code>DeepSeek-V4-Flash-0731</code>, so please check the
+          <a href="https://azure.microsoft.com/en-us/pricing/details/ai-foundry-models/deepseek/" target="_blank" rel="noopener">Azure Foundry Models pricing page</a> or the Azure portal before you commit.
+        </div>
+
+        <p style="font-size:.78rem;color:var(--c-muted);">
+          Sources: <a href="https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure?pivots=azure-direct-others" target="_blank" rel="noopener">Microsoft Learn — Foundry Models sold by Azure</a> (DeepSeek-V4-Flash-0731 is Preview; input 1M, output 384K, tool calling supported),
+          <a href="https://learn.microsoft.com/en-us/azure/foundry/foundry-models/how-to/quickstart-create-resources" target="_blank" rel="noopener">Create and configure resources for Microsoft Foundry Models</a>, and
+          <a href="https://learn.microsoft.com/en-us/azure/foundry/foundry-models/tutorials/get-started-deepseek-r1" target="_blank" rel="noopener">Get started with a DeepSeek model in Foundry Models</a> (retrieved 2026-09-13).
+          The command sequence was verified in practice by the operator (okamo channel) as of September 2026.
+        </p>
+      </section>
+

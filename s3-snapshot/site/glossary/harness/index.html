@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ハーネス（harness）とは — 同じモデルでもベンチの数字が変わる理由 | LLM Data Hub</title>
+  <meta name="description" content="ハーネスとは「モデルを動かす側の足回り」のこと。システムプロンプト・ツール・試行回数・サンドボックス・記憶・採点まで含み、同じモデルでも数字が変わります。ARC Prize公表のStandard harness 62.7%とProvider Adapter 99.9%（モデル設定も max/high で異なる）という条件差、DeepSeek Harnessの公式記載をもとに、初心者向けにかみくだきます。">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/glossary/harness/">
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/glossary/harness/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/glossary/harness/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/glossary/harness/">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/glossary/harness/">
+  <meta property="og:title" content="ハーネス（harness）とは — 同じモデルでもベンチの数字が変わる理由">
+  <meta property="og:description" content="ハーネスは「モデル以外の全部」。ARC-AGI-3ではStandard harness 62.7%（Astra max）とProvider Adapter 99.9%（Astra high）。その条件差の中身と、DeepSeek Harnessの公式記載を出典つきで解説します。">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"ハーネス（harness）とは — 同じモデルでもベンチの数字が変わる理由","datePublished":"2026-09-19","dateModified":"2026-09-19","author":{"@type":"Organization","name":"LLM Data Hub"},"publisher":{"@type":"Organization","name":"okamoちゃんねる"},"url":"https://llm.okamomedia.tokyo/glossary/harness/","inLanguage":"ja","about":"エージェントのハーネス（モデルを動かす側の足回り）と、ベンチマーク数値がハーネス依存になる理由"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"ホーム","item":"https://llm.okamomedia.tokyo/"},{"@type":"ListItem","position":2,"name":"用語説明","item":"https://llm.okamomedia.tokyo/glossary/"},{"@type":"ListItem","position":3,"name":"ハーネス（harness）とは","item":"https://llm.okamomedia.tokyo/glossary/harness/"}]}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .phrase-box{background:linear-gradient(135deg,#12162a 0%,#1a1d35 55%,#0f1117 100%);border:1px solid var(--c-border);border-left:3px solid var(--c-accent2);border-radius:var(--r-lg);padding:1.2rem 1.3rem;margin:1.2rem 0 1.6rem}
+    .phrase-box .phrase{font-size:1.02rem;font-weight:700;line-height:1.75;margin-bottom:.6rem}
+    .phrase-box .phrase-meta{font-size:.8rem;color:var(--c-muted);line-height:1.7}
+    .num-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:.8rem;margin:1rem 0 1.6rem}
+    .num-card{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.9rem 1rem}
+    .num-card .k{font-family:var(--font-mono);font-size:.74rem;color:var(--c-muted);font-weight:600;letter-spacing:.02em}
+    .num-card .v{font-family:var(--font-mono);font-size:1.05rem;font-weight:700;margin:.15rem 0 .2rem}
+    .num-card .d{font-size:.8rem;color:var(--c-muted);line-height:1.6}
+    .read-box{background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-green);border-radius:var(--r-md);padding:1rem 1.2rem;margin:1rem 0 1.6rem;font-size:.88rem;color:var(--c-muted)}
+    .read-box strong{color:var(--c-text)}
+    .flow-fig{margin:1rem 0 1.4rem}
+    .flow-fig svg{width:100%;height:auto;border:1px solid var(--c-border);border-radius:var(--r-md);background:var(--c-surface)}
+    .fig-scroll{overflow:visible}
+    /* 幅800pxの図はスマホでは文字が小さくなりすぎるため、680px以下は横スクロールで読みやすさを保つ */
+    @media (max-width:680px){.fig-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:.2rem}.fig-scroll svg{min-width:620px}}
+    .cmp-table th,.cmp-table td{font-size:.85rem}
+    .quote-box{background:#11131c;border:1px solid var(--c-border);border-left:3px solid var(--c-accent2);border-radius:var(--r-md);padding:.9rem 1.1rem;margin:1rem 0;font-size:.86rem;color:var(--c-muted);line-height:1.8}
+    .quote-box .en{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82rem;color:var(--c-text);display:block;margin-bottom:.35rem}
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="メインナビゲーション"><a href="/" class="nav-link">ホーム</a><a href="/pricing/" class="nav-link">料金比較</a><a href="/calculator/" class="nav-link">トークン計算機</a><a href="/timeline/" class="nav-link">リリース年表</a><a href="/china-ai/" class="nav-link">中国AI</a><a href="/multimodal/" class="nav-link">マルチモーダル</a><a href="/mai/" class="nav-link">MS AI (MAI)</a><a href="/glossary/" class="nav-link">用語説明</a></nav></div></header>
+
+<main><div class="container">
+  <div class="section" style="padding-bottom:0;">
+    <h1 class="section-title" style="font-size:1.55rem;">ハーネス（harness）とは — 「モデルを動かす側」の総体</h1>
+    <p class="section-sub" style="max-width:760px;">
+      <a href="/glossary/">用語説明</a> 第3回。今回のテーマは <strong>ハーネス（harness）</strong> です。
+      第1回で扱った「同じベンチでも Standard harness（中立的な条件）では62.7%」という一行——<strong>なぜ同じモデル・同じベンチなのに、数字が変わるのか</strong>。
+      その答えがこの言葉に入っています。用語の定義から始めて、最後には「次にベンチの数字を見たときに何を確認すればいいか」まで持って帰れる形にします。
+    </p>
+    <div class="phrase-box">
+      <p class="phrase">「Agent = Model + Harness」</p>
+      <p class="phrase-meta">出典: <a href="https://www.deepseek.com/harness/en/" target="_blank" rel="noopener">DeepSeek Harness 公式ページ</a>（2026-09-19確認）。DeepSeek が自社のエージェント基盤 <strong>DeepSeek Harness</strong> のキャッチコピーとして置いている一行です。つまり<strong>「エージェント = モデル + ハーネス」</strong>。モデルだけではエージェントにならない、という宣言です。</p>
+    </div>
+    <div class="updated-bar">
+      <span class="dot">●</span>
+      最終更新: <time datetime="2026-09-19">2026年9月19日</time>
+      &ensp;|&ensp; 一次情報: <a href="https://www.deepseek.com/harness/en/" target="_blank" rel="noopener">DeepSeek Harness</a>・<a href="https://arcprize.org/blog/astra" target="_blank" rel="noopener">ARC Prize（GPT-6 Astra on ARC-AGI-3）</a>
+      &ensp;|&ensp; 確認日: 2026-09-19
+    </div>
+  </div>
+
+  <!-- ===== 1. 結論 ===== -->
+  <section class="section" style="padding-top:1.5rem;" aria-labelledby="def-h">
+    <h2 class="section-title" id="def-h" style="font-size:1.2rem;">結論 — ハーネスは「モデル以外の全部」</h2>
+    <div class="read-box">
+      <strong>ハーネスとは、モデルを実際に働かせるために外側に用意する足回りの総体です。</strong>
+      システムプロンプト、渡すツール、何回まで試させるか、どんなサンドボックスで動かすか、前の会話をどう持ち越すか、そして<strong>その結果をどう採点するか</strong>まで含みます。
+      モデルの重み（学習済みのパラメータ）は1つも変えないのに、この足回りだけでベンチのスコアは大きく動きます。
+    </div>
+    <p style="font-size:.9rem;color:var(--c-muted);max-width:760px;">
+      <strong>なお、ハーネスは料金（APIの単価）そのものを変える話ではありません。</strong>単価は各社の料金表で決まり、ハーネスは「同じ単価で何ができるか（スコア・速度・トークン消費）」に効く設計の話です。
+      エンジニアリングの現場では「モデルを替える」「プロンプトを直す」が話題になりがちですが、実際に数字を動かしているのは<strong>その外側の設計</strong>であることが多い——だからこの言葉が単独の用語として使われます。
+      「どのモデルか」だけでなく「どのハーネスか」まで言わないと、性能の話が噛み合わないのです。
+    </p>
+  </section>
+
+  <!-- ===== 2. 頭脳と身体 ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="brain-h">
+    <h2 class="section-title" id="brain-h" style="font-size:1.2rem;">まずイメージ — モデルは「頭脳」、ハーネスは「身体・道具・段取り」</h2>
+    <p class="section-sub" style="max-width:760px;">DeepSeek の公式ページは、この関係を短い一文で書いています。</p>
+    <div class="quote-box">
+      <span class="en">"The model is the soul of an agent." / "A harness lets an agent understand its environment, use tools, and keep working in real-world settings."</span>
+      モデルはエージェントの魂（中身）。そしてハーネスは、そのエージェントが<strong>環境を理解し、ツールを使い、実世界で動き続けられるようにする</strong>もの——という説明です。
+      <br><span style="font-size:.8rem;">※ 公式ページの英文逐語。和訳は当サイトによるものです。</span>
+    </div>
+    <div class="num-grid">
+      <div class="num-card"><div class="k">モデル</div><div class="v">頭脳</div><div class="d">考える力そのもの。重みは学習で決まり、こちらでは変えられない</div></div>
+      <div class="num-card"><div class="k">ハーネス</div><div class="v">身体・道具・段取り</div><div class="d">何を見せ、何を使わせ、何回試させ、どう数えるか。ここは設計できる</div></div>
+      <div class="num-card"><div class="k">だから数字が動く</div><div class="v">同じ頭脳でも</div><div class="d">走るコースと審判が違えば、記録は変わる</div></div>
+    </div>
+  </section>
+
+  <!-- ===== 3. 中身 ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="parts-h">
+    <h2 class="section-title" id="parts-h" style="font-size:1.2rem;">ハーネスに入っているもの（公式の一覧）</h2>
+    <p class="section-sub" style="max-width:760px;">「足回り」と言われても幅が広すぎるので、実際に何が入っているかを見ます。DeepSeek Harness の公式ページは、エージェントの能力はすべてプラグインとして実装されると説明し、具体的な項目を挙げています。</p>
+    <div class="quote-box">
+      <span class="en">"Plugins provide every agent capability, including models, tools, skills, sessions, sandboxes, storage, loops, scheduling, and the UI."</span>
+      プラグインが、モデル・ツール・スキル・セッション・サンドボックス・ストレージ・ループ・スケジューリング・UI という<strong>エージェントの能力すべて</strong>を提供する——という記載です（英文逐語。和訳は当サイトによるもの）。
+    </div>
+    <div class="table-wrap"><table class="cmp-table"><thead><tr><th>ハーネスの構成要素</th><th>何を決めているか</th><th>数字が動く理由</th></tr></thead><tbody>
+      <tr><td class="model-name">システムプロンプト</td><td>モデルに何を見せ、どんな役割と制約を与えるか</td><td>同じモデルでも、指示が変われば方針が変わる</td></tr>
+      <tr><td class="model-name">ツール</td><td>使える外部機能（ファイル編集・シェル・検索・API など）</td><td>道具が増えれば解ける問題が増える。減らせば測る条件が変わる</td></tr>
+      <tr><td class="model-name">スキル・手順</td><td>作業の型（チェックリスト・定型手順）を先に与えるか</td><td>手順が与えられると、探索のムダが減る</td></tr>
+      <tr><td class="model-name">セッション・記憶</td><td>前のやり取りや中間結果をどう持ち越すか</td><td>持ち越せる前提の設計なら、長い課題でも精度が落ちにくい</td></tr>
+      <tr><td class="model-name">サンドボックス</td><td>どの環境で実行するか（隔離・権限・ネットワーク）</td><td>環境が違えば試せる操作そのものが変わる</td></tr>
+      <tr><td class="model-name">ループ・試行回数</td><td>何回まで考え直させ・やり直させるか</td><td>回数を増やせば成功率は上がる。上限は結果に直結する</td></tr>
+      <tr><td class="model-name">スケジューリング</td><td>複数の処理やサブエージェントをどう順序立てるか</td><td>段取り次第で完了までの時間と手数が変わる</td></tr>
+      <tr><td class="model-name">記録（ログ）</td><td>入力・推論・ツール呼び出しをどう保存するか</td><td>再現できなければ、改善も検証もできない</td></tr>
+      <tr><td class="model-name">採点・評価</td><td>結果をどう数えるか（正解判定・部分点・打ち切り）</td><td>数え方が変われば、同じ実行でもスコアが変わる</td></tr>
+    </tbody></table></div>
+    <p class="source-note">上段の引用以外の項目は、DeepSeek Harness の公式記載（models / tools / skills / sessions / sandboxes / storage / loops / scheduling / UI）を日本語で整理したものです。「採点・評価」はベンチマークを実施する側の設計要素として当サイトが補足しました（DeepSeek Harness の記載項目ではありません）。</p>
+  </section>
+
+  <!-- ===== 4. 具体例 ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="arc-h">
+    <h2 class="section-title" id="arc-h" style="font-size:1.2rem;">なぜ数字が変わるのか — ARC-AGI-3 の実例（測定条件つき）</h2>
+    <p class="section-sub" style="max-width:760px;">抽象論だと腹落ちしないので、実例を1つ見ます。<strong>同じモデル</strong>（GPT-6 Astra）・<strong>同じベンチマーク</strong>（ARC-AGI-3）で、ハーネス条件が異なる2つの公表値です。ただし<strong>モデル設定も Astra (max) と Astra (high) で異なります</strong>。したがって、62.7% と 99.9% の差を<strong>ハーネスだけの効果と断定することはできません</strong>。</p>
+    <div class="table-wrap"><table class="cmp-table"><thead><tr><th>ハーネス（測定条件）</th><th>モデル設定</th><th>スコア</th><th>コスト</th><th>何をしているか</th></tr></thead><tbody>
+      <tr><td class="model-name">Standard harness<br>（ARC Prize の中立ハーネス＝全モデル共通の最小インターフェース）</td><td class="price">Astra (max)</td><td class="price">62.7%</td><td class="price">$26K</td><td>モデルが持ち越すノートを自分で選ぶ。全モデル共通の最小インターフェース</td></tr>
+      <tr><td class="model-name">Provider Adapter harness<br>（OpenAI 側のハーネス）</td><td class="price">Astra (high)</td><td class="price">99.9%</td><td class="price">$19K</td><td>リクエストをまたいで非公開の推論状態（reasoning state）を保持し、長い会話は圧縮する</td></tr>
+    </tbody></table></div>
+    <div class="quote-box">
+      <strong>Standard harness（中立）の逐語:</strong>
+      <span class="en">"Standard harness enables a model to carry forward notes it chooses to keep with it throughout the environment."</span>
+      <strong>Provider Adapter harness の逐語:</strong>
+      <span class="en">"The Provider Adapter harness preserves opaque reasoning state between requests and uses compaction for longer conversations, allowing the model to reuse prior work."</span>
+      <span style="font-size:.8rem;">※ いずれも ARC Prize ブログ（2026-09-19確認）の英文逐語。和訳は当サイトによるもの。</span>
+    </div>
+    <div class="read-box">
+      <strong>差の中身は「何を持ち越せるか」です。</strong>
+      Standard harness（中立）は、モデルが<strong>自分で選んだノート</strong>だけを持ち越します。一方の Provider Adapter は、<strong>リクエストをまたいで推論状態そのものを保持</strong>し、長い会話は圧縮して再利用します。
+      モデルの重みは同じでも、<strong>持ち越せる記憶の量と質が違います</strong>——これが 62.7% と 99.9% を分けた<strong>主な条件差</strong>です（ただしモデル設定も max / high で異なるため、差のすべてがハーネス起因と断定はできません）。
+    </div>
+    <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.2em;line-height:1.85;">
+      <li><strong>どちらも「その条件での」最高値です。</strong>ARC Prize は両方を SOTA（最先端）と扱っています。片方が誇張で片方が正しい、という話ではありません。</li>
+      <li><strong>同条件で比べられる相手も公表されています。</strong>ARC Prize は同じ Standard harness 上での比較として <strong>GPT-5.6 Sol 7.8%</strong> も示しています（2026-09-15確認）。同じ土俵で見れば約8倍の差で、これも大きな前進です。条件の違う 99.9% と 7.8% を並べると、比較の意味が失われます。</li>
+      <li><strong>ベンチ運営者自身が「条件をラベルで明記する」と宣言しています。</strong>下記の逐語のとおりです。</li>
+    </ul>
+    <div class="quote-box">
+      <span class="en">"Going forward, we will report both Standard harness and Provider Adapter harness results on the ARC-AGI leaderboard, with each evaluation condition clearly labeled."</span>
+      今後は ARC-AGI のリーダーボードに<strong>両方のハーネスの結果を、評価条件をラベル付けして</strong>併記する——という宣言です（ARC Prize ブログ、2026-09-19確認）。当サイトの解釈では、<strong>ハーネス名の書かれていないスコアは比較条件を判断しにくい</strong>ため、数字を見るときは「どの構成の結果か」まで確認したいところです。
+    </div>
+    <p class="source-note">出典: <a href="https://arcprize.org/blog/astra" target="_blank" rel="noopener">ARC Prize「OpenAI's GPT-6 Astra on ARC-AGI-3」</a>（2026-09-19確認）・<a href="https://arcprize.org/results/openai-gpt-6-astra" target="_blank" rel="noopener">ARC-AGI Results（個別ページ）</a>。スコアとコストは ARC Prize 公表値で、当サイトによる再計算ではありません。同じハーネスアーキテクチャの背景は<a href="/glossary/gpt-6-astra-benchmarks/">第1回の解説</a>も参照してください。</p>
+  </section>
+
+  <!-- ===== 5. 具体物 ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="dsh-h">
+    <h2 class="section-title" id="dsh-h" style="font-size:1.2rem;">具体的には何のこと？ — DeepSeek Harness という実物</h2>
+    <p class="section-sub" style="max-width:760px;">「ハーネス」は概念名なので、実物があったほうが分かります。DeepSeek は <strong>DeepSeek Harness</strong> というエージェント基盤を <strong>developer preview</strong>（開発者プレビュー）で公開しており、ソースコードも同時に公開されています。公式ページに書かれている範囲で、何を提供するツールなのかを見てみます。</p>
+    <div class="table-wrap"><table class="cmp-table"><thead><tr><th>公式ページの記載</th><th>意味</th></tr></thead><tbody>
+      <tr><td class="model-name">すべてがプラグイン</td><td>モデル・ツール・スキル・セッション・サンドボックス・ストレージ・ループ・スケジューリング・UI が、差し替え・組み替えできる部品として提供される</td></tr>
+      <tr><td class="model-name">Cordis カーネル</td><td>プラグインの装着・取り外し・依存関係を管理する中核。エージェントの能力はプラグイン側に住む</td></tr>
+      <tr><td class="model-name">設定で組み替え</td><td>ソースコードを変えずに、構成ファイルの指定だけで能力を選ぶ・入れ替える・拡張できる</td></tr>
+      <tr><td class="model-name">実行の記録</td><td>モデルが見たもの（システムプロンプト・推論・ツール呼び出しと結果・サブエージェントの割り当て・コンテキスト注入）が追記専用のセッションログに全部残る。再開・分岐・検索・再生が同じ記録の上で動く</td></tr>
+    </tbody></table></div>
+    <h3 style="font-size:1rem;margin:1.4rem 0 .5rem;">実行モードが4つある — ここが「ハーネス差」の実物</h3>
+    <p style="font-size:.88rem;color:var(--c-muted);line-height:1.85;max-width:760px;">公式ページには実行モードが4つ載っています。同じモデルを使っても、<strong>渡す道具立てを変えれば測定条件が変わる</strong>ことを、ベンダー自身が機能として用意している形です。</p>
+    <div class="num-grid">
+      <div class="num-card"><div class="k">Standard mode</div><div class="v">全部入り</div><div class="d">ファイル編集・シェル・ファイル/Web検索・スキル・計画・ゴール・サブエージェント・ワークフロー</div></div>
+      <div class="num-card"><div class="k">Code mode</div><div class="v">コードで束ねる</div><div class="d">Standard の能力を SDK 経由で公開し、モデルが TypeScript プログラム1本に多段の操作をまとめる</div></div>
+      <div class="num-card"><div class="k">Minimal mode</div><div class="v">2ツールだけ</div><div class="d">シェルとファイル編集の2つだけ。公式ページは「<strong>最小環境でモデルをベンチマークするため</strong>」と明記</div></div>
+      <div class="num-card"><div class="k">Creator mode</div><div class="v">ハーネスを作る</div><div class="d">Standard の能力に加えて、実行時の中身の検査・プラグインの実験・プリセット作成の支援</div></div>
+    </div>
+    <div class="read-box">
+      <strong>注目すべきは Minimal mode の存在です。</strong>
+      DeepSeek は公式ページで、Minimal mode を「<strong>最小環境でモデルをベンチマークするため</strong>（for benchmarking models in a minimal environment）」と説明しています。つまり<strong>ツールを絞った状態で測るモードが、ハーネス側の機能として用意されている</strong>。
+      「ハーネスを変えれば数字が変わる」というのは、批判ではなく<strong>前提</strong>として扱われている、ということです。
+    </div>
+    <p class="source-note">出典: <a href="https://www.deepseek.com/harness/en/" target="_blank" rel="noopener">DeepSeek Harness 公式ページ</a>（2026-09-19確認、developer preview）。本文中の英語は公式ページの逐語、日本語は当サイトによる整理です。リポジトリは <a href="https://github.com/deepseek-ai/deepseek-harness" target="_blank" rel="noopener">github.com/deepseek-ai/deepseek-harness</a>。当サイトは DeepSeek と提携しておらず、特定製品の推薦ではありません。</p>
+  </section>
+
+  <!-- ===== 図解 ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="fig-h">
+    <h2 class="section-title" id="fig-h" style="font-size:1.2rem;">図で整理 — モデルの外側がハーネス</h2>
+    <figure class="flow-fig">
+      <div class="fig-scroll">
+      <svg viewBox="0 0 800 380" width="100%" role="img" aria-labelledby="harnFigTitle" style="display:block;">
+        <title id="harnFigTitle">ハーネスの構成: 中央のモデル（頭脳）の外側に、システムプロンプト・ツール・スキル・記憶・サンドボックス・試行回数といった足回りが並ぶ。同じモデルでもこの外側が変われば結果は変わる（例: ARC-AGI-3 で Standard harness 62.7%（モデル設定 max）、Provider Adapter harness 99.9%（モデル設定 high））</title>
+        <rect x="0" y="0" width="800" height="380" rx="14" fill="#14161f" stroke="#262a38"/>
+        <text x="36" y="44" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="18" font-weight="700" fill="#eef0f7">ハーネス = モデルの外側の足回り</text>
+        <text x="36" y="68" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12.5" fill="#8b90a3">同じモデル（頭脳）でも、外側の部品が変われば結果は変わる</text>
+        <rect x="20" y="86" width="760" height="220" rx="12" fill="none" stroke="#3a3f52" stroke-width="1.5" stroke-dasharray="6 5"/>
+        <text x="34" y="108" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" font-weight="700" fill="#a78bfa">ハーネス（モデルの外側・ここを設計できる）</text>
+        <rect x="36" y="122" width="226" height="40" rx="6" fill="#1b1f2c" stroke="#3a3f52"/>
+        <text x="52" y="147" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="13" fill="#e8eaf2">システムプロンプト</text>
+        <rect x="287" y="122" width="226" height="40" rx="6" fill="#1b1f2c" stroke="#3a3f52"/>
+        <text x="303" y="147" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="13" fill="#e8eaf2">ツール・検索</text>
+        <rect x="538" y="122" width="226" height="40" rx="6" fill="#1b1f2c" stroke="#3a3f52"/>
+        <text x="554" y="147" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="13" fill="#e8eaf2">スキル・手順</text>
+        <rect x="320" y="176" width="160" height="64" rx="10" fill="#2f3a55" stroke="#4b5570"/>
+        <text x="400" y="203" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="14" font-weight="700" fill="#eef0f7">モデル（頭脳）</text>
+        <text x="400" y="223" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="11" fill="#9aa0b4">ここは同じ</text>
+        <rect x="36" y="254" width="226" height="40" rx="6" fill="#1b1f2c" stroke="#3a3f52"/>
+        <text x="52" y="279" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="13" fill="#e8eaf2">記憶・セッション</text>
+        <rect x="287" y="254" width="226" height="40" rx="6" fill="#1b1f2c" stroke="#3a3f52"/>
+        <text x="303" y="279" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="13" fill="#e8eaf2">サンドボックス</text>
+        <rect x="538" y="254" width="226" height="40" rx="6" fill="#1b1f2c" stroke="#3a3f52"/>
+        <text x="554" y="279" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="13" fill="#e8eaf2">試行回数・ループ</text>
+        <text x="36" y="336" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12.5" fill="#9aa0b4">この外側には、採点・評価（どう数えるか）も含まれます。</text>
+        <text x="36" y="360" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="11" fill="#6b7280">例: ARC-AGI-3 — Standard 62.7% (max) / Provider Adapter 99.9% (high)、いずれも ARC Prize 公表値</text>
+      </svg>
+      <figcaption style="font-size:.78rem;color:var(--c-muted);margin-top:.5rem;">中央のモデルは変えられませんが、その外側（ハーネス）は設計できます。構成要素は <a href="https://www.deepseek.com/harness/en/" target="_blank" rel="noopener">DeepSeek Harness 公式ページ</a>の記載項目をもとに整理しました。スコアは ARC Prize 公表値で、Standard harness はモデル設定 max、Provider Adapter harness は high と条件が異なります。</figcaption>
+      </div>
+    </figure>
+  </section>
+
+  <!-- ===== 6. 比喩 ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="analogy-h">
+    <h2 class="section-title" id="analogy-h" style="font-size:1.2rem;">生活に置き換えると — 同じ選手でも、点数は変わる</h2>
+    <div class="read-box">
+      <strong>同じ選手が試合に出ても、コート・審判・ルール解釈が違えば点数は変わります。</strong>
+      選手の実力（＝モデル）は同じ。けれど、コートの広さ、使える道具、審判が何をファウルと取るか、交代のルール——これらが違えば、同じ選手の得点は別物になります。
+      <strong>ハーネスは、この「コート＋審判＋ルール＋道具」のセット</strong>です。選手を変えずに点数を上げる方法があるのと同じで、モデルを変えずに数字を上げる設計がハーネスにはあります。
+    </div>
+    <div class="table-wrap"><table class="cmp-table"><thead><tr><th>スポーツでの例</th><th>AIエージェントでの対応物</th></tr></thead><tbody>
+      <tr><td class="model-name">選手の実力</td><td>モデル（学習済みの重み。こちらでは変えられない）</td></tr>
+      <tr><td class="model-name">コートの広さ・ボール</td><td>サンドボックス・使えるツール</td></tr>
+      <tr><td class="model-name">審判とルール解釈</td><td>採点・評価（どこまでを正解と数えるか）</td></tr>
+      <tr><td class="model-name">交代・タイムアウトの回数</td><td>試行回数・ループの上限</td></tr>
+      <tr><td class="model-name">監督の指示と作戦ボード</td><td>システムプロンプト・スキル・手順</td></tr>
+      <tr><td class="model-name">前の試合の記録を持ち込めるか</td><td>セッション・記憶の持ち越し（ARC-AGI-3 の 62.7% と 99.9% を分けた点）</td></tr>
+    </tbody></table></div>
+    <p style="font-size:.88rem;color:var(--c-muted);max-width:760px;">この比喩で持ち帰ってほしいのは1点です。<strong>「点数が高い／低い」を語るとき、選手の話をしているのか、コートと審判の話をしているのかを分ける。</strong>ベンチの数字を読むときの基本は、これに尽きます。</p>
+  </section>
+
+  <!-- ===== 7. 実務 ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="use-h">
+    <h2 class="section-title" id="use-h" style="font-size:1.2rem;">実務では、どう使うか</h2>
+    <div class="tip-box">
+      <h3>数字を見たときの3つの確認</h3>
+      <ul>
+        <li><strong>誰のハーネスか</strong> — ベンダー自身のハーネスか、中立的な第三者（ベンチ運営者）のハーネスか。ARC-AGI-3 は 62.7% と 99.9% で別物でした。</li>
+        <li><strong>そのハーネスは自分の構成に近いか</strong> — 推論状態を持ち越せる前提のスコアは、持ち越せない構成では再現しません。逆も同じです。</li>
+        <li><strong>採点と上限は何か</strong> — 試行回数・打ち切り条件・部分点の扱い。ここが違う数字は横に並べても順位になりません。</li>
+      </ul>
+    </div>
+    <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.2em;line-height:1.85;">
+      <li><strong>自社のエージェントを速くしたいとき、まず疑うのはハーネスです。</strong>モデルを替えるより、渡すツールを絞る・持ち越す記憶の設計を直す・試行回数を見直すほうが効く場合があります。実際 ARC-AGI-3 の2つのハーネスは、同じモデルで条件を変えただけで別の結果になっています。</li>
+      <li><strong>再現できない改善は改善ではありません。</strong>DeepSeek Harness が「モデルが見たものすべてを追記専用ログに残す」ことを主要機能にしているのは、ハーネス側の変更を検証可能にするためです。自社で組むときも、記録の設計は後回しにしないほうが安全です。</li>
+      <li><strong>料金表の数字とは別物として扱ってください。</strong>ハーネスは性能（スコア・時間・トークン消費）に効く設計の話で、APIの単価そのものを変えるものではありません。<a href="/pricing/">料金比較</a>は単価、こちらは「同じ単価で何ができるか」の話です。</li>
+    </ul>
+  </section>
+
+  <!-- ===== 8. まとめ ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="sum-h">
+    <h2 class="section-title" id="sum-h" style="font-size:1.2rem;">まとめ — ひと言でいうと</h2>
+    <div class="tip-box">
+      <h3>ハーネス＝モデル以外の全部</h3>
+      <ul>
+        <li>モデルは「頭脳」。<strong>ハーネスは、それを働かせるための身体・道具・段取り・審判</strong>です。</li>
+        <li>含まれるもの: システムプロンプト、ツール、スキル、セッション・記憶、サンドボックス、ループ・試行回数、スケジューリング、記録、採点・評価。</li>
+        <li>だから<strong>同じモデル・同じベンチでも数字が変わります</strong>。ARC-AGI-3 では Standard harness 62.7%（Astra max）／Provider Adapter harness 99.9%（Astra high）と公表されています（ARC Prize）。モデル設定も異なるため、差のすべてがハーネス起因とは言えません。</li>
+        <li>ベンチの数字を読むときは、<strong>「どのモデルか」より先に「どのハーネスか」</strong>を確認してください。</li>
+      </ul>
+    </div>
+    <p style="font-size:.9rem;color:var(--c-muted);max-width:760px;">
+      この言葉が便利なのは、性能の議論を「モデルの良し悪し」から「<strong>自分の構成の設計</strong>」に引き戻してくれる点です。同じモデルを使っていても、ハーネス次第で結果は変わります。次にベンチの数字を見たら、まずハーネス名を探してみてください。
+    </p>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="section" style="padding-top:0;">
+    <div style="background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-accent);border-radius:var(--r-lg);padding:1.5rem;text-align:center;">
+      <h3 style="font-size:1.1rem;margin-bottom:.75rem;">次に読む</h3>
+      <p style="color:var(--c-muted);font-size:.9rem;margin-bottom:1rem;">ハーネスの話が出てくる実例は<a href="/glossary/gpt-6-astra-benchmarks/">第1回（ベンチ数値の読み方）</a>に、キャッシュ単価の読み方は<a href="/glossary/prompt-cache/">第2回（プロンプトキャッシュ）</a>にあります。</p>
+      <a href="/glossary/" style="display:inline-block;background:var(--c-accent);color:#fff;font-weight:600;padding:.65rem 1.5rem;border-radius:var(--r-md);">🧪 用語説明の一覧へ →</a>
+      <p style="margin-top:.8rem;font-size:.82rem;color:var(--c-muted);"><a href="/glossary/">用語説明</a> ・ <a href="/glossary/gpt-6-astra-benchmarks/">ベンチ数値の読み方</a> ・ <a href="/glossary/prompt-cache/">プロンプトキャッシュ</a> ・ <a href="/pricing/">料金比較</a> ・ <a href="/timeline/">リリース年表</a></p>
+    </div>
+  </section>
+
+  <div class="tip-box" style="border-left-color:var(--c-red);margin-bottom:2rem;">
+    <h3>⚠️ 免責事項</h3>
+    <ul>
+      <li>引用・数値は2026-09-19に一次情報（DeepSeek 公式ページ、ARC Prize ブログ）で確認したものです。ARC-AGI-3 のスコアとコストは ARC Prize の公表値で、当サイトの測定ではありません。</li>
+      <li>公式の英文は逐語で引用し、和訳は当サイトによるものです。原文と和訳が食い違う場合は原文を優先してください。</li>
+      <li>DeepSeek Harness は developer preview であり、提供内容・API は今後変わります。導入前に公式ページ・リポジトリをご確認ください。</li>
+      <li>本サイトは各社と提携しておらず、特定プロバイダーの推薦・代理ではありません。</li>
+    </ul>
+  </div>
+</div></main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>運営: okamoちゃんねる</p><p><a href="/">ホーム</a> · <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a> · <a href="/timeline/">年表</a> · <a href="/glossary/">用語説明</a> · <a href="/gpt-6/">GPT-6 Astra</a></p></div><p class="footer-disclaimer">⚠️ 料金・仕様は予告なく変動します。契約前に必ず各社公式ページでご確認ください。本サイトは各社と提携していません。</p></div></footer>
+</body>
+</html>

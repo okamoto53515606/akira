@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>プロンプトキャッシュとは — cache hit・cache miss・書込の違いを料金で理解 | LLM Data Hub</title>
+  <meta name="description" content="プロンプトキャッシュを初心者向けに整理。cache hit（読込）とcache miss、キャッシュ書込の単価、TTL、キャッシュされる最小トークン数をOpenAI・Anthropic・Google・DeepSeekの一次情報で比較し、10回送ったときの削減額まで試算します。">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/glossary/prompt-cache/">
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/glossary/prompt-cache/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/glossary/prompt-cache/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/glossary/prompt-cache/">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/glossary/prompt-cache/">
+  <meta property="og:title" content="プロンプトキャッシュとは — cache hit・cache miss・書込の違いを料金で理解">
+  <meta property="og:description" content="DeepSeekでは同じ入力でも単価が50倍違う「cache hit」。仕組み・TTL・最小トークン数・書込の1.25倍ルールを4社の一次情報で比較。">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"プロンプトキャッシュとは — cache hit・cache miss・書込の違いを料金で理解","datePublished":"2026-09-17","dateModified":"2026-09-17","author":{"@type":"Organization","name":"LLM Data Hub"},"publisher":{"@type":"Organization","name":"okamoちゃんねる"},"url":"https://llm.okamomedia.tokyo/glossary/prompt-cache/","inLanguage":"ja","about":"プロンプトキャッシュ（cache hit / cache miss / cache write）の仕組みと料金ルール"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"ホーム","item":"https://llm.okamomedia.tokyo/"},{"@type":"ListItem","position":2,"name":"用語説明","item":"https://llm.okamomedia.tokyo/glossary/"},{"@type":"ListItem","position":3,"name":"プロンプトキャッシュとは","item":"https://llm.okamomedia.tokyo/glossary/prompt-cache/"}]}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .phrase-box{background:linear-gradient(135deg,#12162a 0%,#1a1d35 55%,#0f1117 100%);border:1px solid var(--c-border);border-left:3px solid var(--c-accent2);border-radius:var(--r-lg);padding:1.2rem 1.3rem;margin:1.2rem 0 1.6rem}
+    .phrase-box .phrase{font-size:1.02rem;font-weight:700;line-height:1.75;margin-bottom:.6rem}
+    .phrase-box .phrase-meta{font-size:.8rem;color:var(--c-muted);line-height:1.7}
+    .num-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:.8rem;margin:1rem 0 1.6rem}
+    .num-card{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.9rem 1rem}
+    .num-card .k{font-family:var(--font-mono);font-size:.74rem;color:var(--c-muted);font-weight:600;letter-spacing:.02em}
+    .num-card .v{font-family:var(--font-mono);font-size:1.05rem;font-weight:700;margin:.15rem 0 .2rem}
+    .num-card .d{font-size:.8rem;color:var(--c-muted);line-height:1.6}
+    .read-box{background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-green);border-radius:var(--r-md);padding:1rem 1.2rem;margin:1rem 0 1.6rem;font-size:.88rem;color:var(--c-muted)}
+    .read-box strong{color:var(--c-text)}
+    .flow-fig{margin:1rem 0 1.4rem}
+    .flow-fig svg{width:100%;height:auto;border:1px solid var(--c-border);border-radius:var(--r-md);background:var(--c-surface)}
+    .cmp-table th,.cmp-table td{font-size:.85rem}
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="メインナビゲーション"><a href="/" class="nav-link">ホーム</a><a href="/pricing/" class="nav-link">料金比較</a><a href="/calculator/" class="nav-link">トークン計算機</a><a href="/timeline/" class="nav-link">リリース年表</a><a href="/china-ai/" class="nav-link">中国AI</a><a href="/multimodal/" class="nav-link">マルチモーダル</a><a href="/mai/" class="nav-link">MS AI (MAI)</a><a href="/glossary/" class="nav-link">用語説明</a></nav></div></header>
+
+<main><div class="container">
+  <div class="section" style="padding-bottom:0;">
+    <h1 class="section-title" style="font-size:1.55rem;">プロンプトキャッシュとは — 「cache hit」の一行を料金で読み解く</h1>
+    <p class="section-sub" style="max-width:760px;">
+      <a href="/glossary/">用語説明</a> 第2回。料金表やニュースに出てくる用語を、一次情報まで戻して分解します。
+      今回のテーマは <strong>プロンプトキャッシュ</strong>。DeepSeekの公式料金ページにあるこの一行から始めます。
+      <strong>同じ入力なのに、単価が50倍違う</strong>——理由を説明できるでしょうか。
+    </p>
+    <div class="phrase-box">
+      <p class="phrase">「入力（cache hit）$0.003 / 1Mトークン」</p>
+      <p class="phrase-meta">出典: DeepSeek 公式料金ページ（V4.1 Flash＝<code>deepseek-flash</code>、2026-09-17確認）— 同じ表の「入力（cache miss）」はオフピーク $0.15 / 1M。つまり <strong>cache hit は cache miss の 1/50</strong> です。<a href="/deepseek-v4-1-flash/">料金の詳細</a></p>
+    </div>
+    <div class="updated-bar">
+      <span class="dot">●</span>
+      最終更新: <time datetime="2026-09-17">2026年9月17日</time>
+      &ensp;|&ensp; 一次情報: <a href="https://platform.openai.com/docs/guides/prompt-caching" target="_blank" rel="noopener">OpenAI Prompt caching</a>・<a href="https://platform.claude.com/docs/en/build-with-claude/prompt-caching" target="_blank" rel="noopener">Anthropic Prompt caching</a>・<a href="https://ai.google.dev/gemini-api/docs/caching" target="_blank" rel="noopener">Gemini Context caching</a>・<a href="https://api-docs.deepseek.com/guides/kv_cache" target="_blank" rel="noopener">DeepSeek Context Caching</a>
+      &ensp;|&ensp; 確認日: 2026-09-17
+    </div>
+  </div>
+
+  <!-- ===== 言葉の整理 ===== -->
+  <section class="section" style="padding-top:1.5rem;" aria-labelledby="words-h">
+    <h2 class="section-title" id="words-h" style="font-size:1.2rem;">まず3つの言葉に分ける</h2>
+    <p class="section-sub" style="max-width:760px;">料金表に出てくるのは、この3つだけです。用語が分かれれば、あとは単価を当てはめるだけになります。</p>
+    <div class="num-grid">
+      <div class="num-card"><div class="k">cache miss（キャッシュミス）</div><div class="v">通常の入力単価</div><div class="d">キャッシュに無かった入力。初回のリクエストは必ずこれ</div></div>
+      <div class="num-card"><div class="k">cache hit（キャッシュヒット）</div><div class="v">割引単価</div><div class="d">前回と同じ前置きがキャッシュに残っていた入力。安い側</div></div>
+      <div class="num-card"><div class="k">cache write（キャッシュ書込）</div><div class="v">1.25〜2倍</div><div class="d">キャッシュに保存するときの課金。ここが「高い側」になる</div></div>
+    </div>
+    <div class="read-box">
+      <strong>結論: プロンプトキャッシュは「割引」ではなく「前払い」です。</strong>
+      初回に少し割高な書込を払い、2回目以降の読込で回収する構造。だから<strong>1回しか送らないプロンプトでは、キャッシュは損</strong>になります。この非対称性が、実務でいちばん誤解されるポイントです。
+    </div>
+  </section>
+
+  <!-- ===== 仕組み ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="how-h">
+    <h2 class="section-title" id="how-h" style="font-size:1.2rem;">仕組み — 「先頭から一致した部分」だけが再利用される</h2>
+    <div class="read-box">
+      <strong>結論: キャッシュが効くのは、プロンプトの先頭から連続して一致した部分だけです。</strong>
+      プロバイダは入力トークンを先頭から順に照合し、前回と同じ並びが続く範囲を再計算せずに使い回します。<strong>動的な値（日時・ユーザーID・今回の質問）を先頭に置くと、そこで一致が切れて毎回 miss</strong> になります。
+    </div>
+    <figure class="flow-fig">
+      <svg viewBox="0 0 800 360" width="100%" role="img" aria-labelledby="pcFigTitle" style="display:block;">
+        <title id="pcFigTitle">プロンプトキャッシュの仕組み: 先頭の共通部分は1回目に書き込まれ（1.25倍）、2回目以降は読み出し（0.1倍）で安くなる。10リクエストで $0.80 が $0.172 になる例</title>
+        <rect x="0" y="0" width="800" height="360" rx="14" fill="#14161f" stroke="#262a38"/>
+        <text x="36" y="44" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="18" font-weight="700" fill="#eef0f7">プロンプトキャッシュの仕組み</text>
+        <text x="36" y="68" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12.5" fill="#8b90a3">同じ前置きを毎回送るなら、2回目からは安い。例: GPT-6 Astra（入力 $10 / cache hit $1.00 / cache write $12.50、1Mトークンあたり）</text>
+        <text x="36" y="104" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12.5" fill="#9aa0b4">プロンプトの構造</text>
+        <rect x="36" y="114" width="430" height="38" rx="5" fill="#2f3a55"/>
+        <text x="52" y="138" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="13" fill="#e8eaf2">共通の前置き（システム指示・資料）8,000トークン</text>
+        <rect x="472" y="114" width="292" height="38" rx="5" fill="#3a2f55"/>
+        <text x="488" y="138" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="13" fill="#e8eaf2">今回の質問（毎回変わる）</text>
+        <rect x="36" y="176" width="354" height="72" rx="8" fill="#1b1f2c" stroke="#3a3f52"/>
+        <text x="52" y="199" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12.5" fill="#8b90a3">1回目（キャッシュに無い）</text>
+        <text x="52" y="222" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="14" font-weight="700" fill="#eef0f7">書込 cache write 1.25×</text>
+        <text x="52" y="240" font-family="ui-monospace,Menlo,monospace" font-size="12" fill="#9aa0b4">$12.50 / 1M</text>
+        <rect x="410" y="176" width="354" height="72" rx="8" fill="#15251f" stroke="#2f5f45"/>
+        <text x="426" y="199" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12.5" fill="#8b90a3">2回目以降（先頭が一致する）</text>
+        <text x="426" y="222" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="14" font-weight="700" fill="#7ee2a8">読込 cache hit 0.1×</text>
+        <text x="426" y="240" font-family="ui-monospace,Menlo,monospace" font-size="12" fill="#9aa0b4">$1.00 / 1M</text>
+        <text x="36" y="286" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12.5" fill="#9aa0b4">10リクエスト分の入力コスト（8,000トークンの前置きを毎回送る場合）</text>
+        <text x="36" y="313" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" fill="#6b7280">キャッシュなし</text>
+        <rect x="150" y="300" width="480" height="16" rx="4" fill="#3a3f52"/>
+        <text x="640" y="313" font-family="ui-monospace,Menlo,monospace" font-size="12" fill="#c9cee0">$0.80</text>
+        <text x="36" y="343" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" fill="#6b7280">キャッシュあり</text>
+        <rect x="150" y="330" width="103" height="16" rx="4" fill="#2f7d5b"/>
+        <text x="263" y="343" font-family="ui-monospace,Menlo,monospace" font-size="12" fill="#7ee2a8">$0.172（約78%減）</text>
+      </svg>
+      <figcaption style="font-size:.78rem;color:var(--c-muted);margin-top:.5rem;">先頭の共通部分だけがキャッシュ対象。1回目は1.25倍で書き込み、2回目以降は0.1倍で読み出します（単価はOpenAI GPT-6 Astraの例）。</figcaption>
+    </figure>
+    <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.2em;line-height:1.85;">
+      <li><strong>「先頭から一致」は4社に共通する考え方です。</strong>OpenAIはプロンプトのプレフィックス（先頭部分）の再計算を避けると説明し、Anthropicは「プロンプト全体（ツール・システム・メッセージ）のプレフィックス」をキャッシュすると明記しています。Geminiも公式ドキュメントで「大きく共通な内容をプロンプトの先頭に置く」「近い時間に同じ前置きで送る」ことを推奨しています。</li>
+      <li><strong>後ろは自由に変えられます。</strong>前置き（システム指示・参照資料・ツール定義）を固定し、可変部分を最後に置く。これだけでヒット率が変わります。</li>
+      <li><strong>ヒットしたかどうかは応答から確認できます。</strong>OpenAIは <code>usage.input_tokens_details.cached_tokens</code> と <code>cache_write_tokens</code>、Anthropicは <code>cache_read_input_tokens</code> と <code>cache_creation_input_tokens</code>、Geminiは <code>usage.total_cached_tokens</code> を返します。まず実測してから最適化するのが順序です。</li>
+    </ul>
+  </section>
+
+  <!-- ===== ルール比較 ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="rules-h">
+    <h2 class="section-title" id="rules-h" style="font-size:1.2rem;">プロバイダ別のルール（一次情報）</h2>
+    <p class="section-sub" style="max-width:760px;">「キャッシュ」と一口に言っても、書き込みの課金・保持時間・キャッシュされる最小の長さが各社で違います。ここは公式ドキュメントの記載をそのまま並べます。</p>
+    <div class="table-wrap"><table class="cmp-table"><thead><tr><th>プロバイダ</th><th>書込の課金</th><th>読込（cache hit）</th><th>保持時間（TTL）</th><th>キャッシュされる最小長</th></tr></thead><tbody>
+      <tr><td class="model-name">OpenAI<br>（GPT-5.6以降）</td><td>1.25×（標準入力比）</td><td>0.1×＝最大90%引き</td><td>30分（<code>prompt_cache_options.ttl</code> の対応値は "30m" のみ＝既定）</td><td>—（モデル依存・自動）</td></tr>
+      <tr><td class="model-name">Anthropic<br>（Claude）</td><td>5分TTL: 1.25×<br>1時間TTL: 2×</td><td>0.1×<br>※Fable 5.1 / Mythos 5.1 は <strong>0.025×</strong></td><td>既定5分（使われるたび無料で更新）／1時間は追加料金</td><td>512トークン（Fable 5.1・Mythos 5.1・Opus 5）／2,048（その他）／4,096（Haiku 4.5）</td></tr>
+      <tr><td class="model-name">Google<br>（Gemini）</td><td>明示キャッシュは保存料金が別建て</td><td>入力の10%</td><td>暗黙キャッシュは自動／明示キャッシュはTTLを指定</td><td>4,096（3.x Flash系・3.1 Pro Preview）／2,048（2.5系）</td></tr>
+      <tr><td class="model-name">DeepSeek</td><td>書込の課金記載なし（初回は通常入力として課金）</td><td>cache miss の 1/50</td><td>自動（既定で有効・コード変更不要）</td><td>—（先頭一致の単位で自動）</td></tr>
+    </tbody></table></div>
+    <p class="source-note">出典: <a href="https://platform.openai.com/docs/guides/prompt-caching" target="_blank" rel="noopener">OpenAI Prompt caching</a>・<a href="https://platform.claude.com/docs/en/build-with-claude/prompt-caching" target="_blank" rel="noopener">Anthropic Prompt caching（最小トークン数・乗数）</a>・<a href="https://ai.google.dev/gemini-api/docs/caching" target="_blank" rel="noopener">Gemini Context caching（暗黙キャッシュはGemini 2.5以降で既定有効・最小トークン数）</a>・<a href="https://api-docs.deepseek.com/guides/kv_cache" target="_blank" rel="noopener">DeepSeek Context Caching</a>（いずれも2026-09-17確認）。Anthropicの主な乗数は「5分書込=1.25倍／1時間書込=2倍／読込=0.1倍（ヒットとリフレッシュ）」で、Fable 5.1・Mythos 5.1のみ読込が0.025倍と明記されています。</p>
+  </section>
+
+  <!-- ===== 実額 ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="real-h">
+    <h2 class="section-title" id="real-h" style="font-size:1.2rem;">実額で並べる（USD / 1Mトークン）</h2>
+    <div class="table-wrap"><table class="cmp-table"><thead><tr><th>モデル</th><th>通常入力</th><th>cache hit</th><th>キャッシュ書込</th></tr></thead><tbody>
+      <tr><td class="model-name"><a href="/gpt-6/">GPT-6 Astra</a></td><td class="price">$10.00</td><td class="price">$1.00</td><td class="price">$12.50</td></tr>
+      <tr><td class="model-name"><a href="/claude-fable-5-1/">Claude Fable 5.1</a></td><td class="price">$10.00</td><td class="price">$0.25</td><td class="price">$12.50（5分）/ $20（1時間）</td></tr>
+      <tr><td class="model-name"><a href="/gemini-3-8-flash/">Gemini 3.8 Flash</a>（〜12/31）</td><td class="price">$0.75</td><td class="price">$0.075</td><td class="price">保存 $0.50 / 1M / 時間</td></tr>
+      <tr><td class="model-name"><a href="/deepseek-v4-1-flash/">DeepSeek V4.1 Flash</a>（オフピーク）</td><td class="price">$0.15</td><td class="price">$0.003</td><td class="price">なし（初回は通常入力）</td></tr>
+      <tr><td class="model-name"><a href="/grok-4-6/">Grok 4.6</a></td><td class="price">$2.00</td><td class="price">$0.50</td><td class="price">—</td></tr>
+      <tr><td class="model-name"><a href="/glm-5-3-flash/">GLM-5.3-Flash</a></td><td class="price">$0.15</td><td class="price">$0.03</td><td class="price">保存は期間限定無料</td></tr>
+      <tr><td class="model-name"><a href="/mai/">MAI-Thinking-1</a>（Azure Global）</td><td class="price">$2.00</td><td class="price">$0.20</td><td class="price">—</td></tr>
+    </tbody></table></div>
+    <p class="source-note">各社公式料金ページの値（当サイトで検証済み）。詳細と出典URLは<a href="/pricing/">料金比較</a>に掲載しています。Geminiは初回価格（2026年12月31日まで）で、2027年1月1日以降は $1.50 / $0.15 に上がります。</p>
+  </section>
+
+  <!-- ===== 試算 ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="calc-h">
+    <h2 class="section-title" id="calc-h" style="font-size:1.2rem;">10回送ったら、いくら変わるか（試算）</h2>
+    <p class="section-sub" style="max-width:760px;">条件: 8,000トークンの共通の前置きを、<strong>10リクエスト</strong>で毎回同じ順序で送る。出力は無視。書込は1回目のみ発生し、2〜10回目はすべて cache hit すると仮定します。</p>
+    <div class="table-wrap"><table class="cmp-table"><thead><tr><th>モデル</th><th>キャッシュなし</th><th>キャッシュあり</th><th>差</th></tr></thead><tbody>
+      <tr><td class="model-name">GPT-6 Astra（$10 / $1.00 / $12.50）</td><td class="price">$0.80</td><td class="price">$0.172</td><td class="price">約78%減</td></tr>
+      <tr><td class="model-name">Claude Fable 5.1（$10 / $0.25 / $12.50）</td><td class="price">$0.80</td><td class="price">$0.118</td><td class="price">約85%減</td></tr>
+      <tr><td class="model-name">DeepSeek V4.1 Flash（$0.15 / $0.003・オフピーク）</td><td class="price">$0.012</td><td class="price">$0.0014</td><td class="price">約88%減</td></tr>
+    </tbody></table></div>
+    <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.2em;line-height:1.85;">
+      <li><strong>計算の中身（GPT-6 Astra）:</strong> キャッシュなしは 8,000 × 10 = 80,000トークン × $10 / 1M = $0.80。キャッシュありは、1回目の書込 8,000 × $12.50 / 1M = $0.10 と、2〜10回目の読込 72,000 × $1.00 / 1M = $0.072 の合計 $0.172 です。</li>
+      <li><strong>書込の1.25倍は、2回目以降で回収されます。</strong>再利用が2回以上あれば、書込の割増（0.25倍ぶん）は読込の割引（0.9倍ぶん）で消えます。逆に<strong>1回しか送らないなら、$12.50 / 1M を払うだけ損</strong>です。</li>
+      <li><strong>削減率が高い＝安い、ではありません。</strong>DeepSeekは削減率88%でも総額は$0.0014、GPT-6 Astraは78%でも$0.172と、100倍以上違います。比較するときは割引率ではなく総額で見てください。</li>
+      <li><strong>出力は割引の対象外です。</strong>キャッシュできるのは入力だけ。出力が長いワークロードでは、体感の削減率は表より小さくなります。総額の試算は<a href="/calculator/">トークン計算機</a>でどうぞ（計算機はキャッシュなしの標準レートで計算します）。</li>
+    </ul>
+    <p class="source-note">単価は各社公式ページの公表値、試算は当サイトによる単純計算です。実際の請求額はキャッシュのヒット状況・TTLの切れ方・出力トークン数で変わります。</p>
+  </section>
+
+  <!-- ===== 誤解 ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="miss-h">
+    <h2 class="section-title" id="miss-h" style="font-size:1.2rem;">ありがちな誤解4つ</h2>
+    <div class="read-box">
+      <strong>① 「キャッシュは自動だから、何もしなくても安くなる」</strong>
+      自動で有効なのは事実です（OpenAIは既定で有効、Geminiは2.5以降で既定有効、DeepSeekも全ユーザーで有効）。ただし<strong>ヒットするかどうかは、プロンプトの先頭が一致するかにかかっています</strong>。先頭にタイムスタンプや乱数を入れると、自動有効でも毎回 miss になります。
+    </div>
+    <div class="read-box">
+      <strong>② 「書込は無料で、読込だけ安くなる」</strong>
+      逆です。<strong>書込は1.25倍（Anthropicの1時間TTLなら2倍）</strong>で、読込が0.1倍。OpenAIのドキュメントも「再利用されると分かっているときに書込コストを払う価値がある」と書いています。使い捨ての長文コンテキストは、キャッシュ設計がないかぎり最も高くつきます。
+    </div>
+    <div class="read-box">
+      <strong>③ 「短いプロンプトでもキャッシュされる」</strong>
+      <strong>最小の長さを下回ると、そもそもキャッシュされません。</strong>Anthropicは512 / 2,048 / 4,096トークン（モデル別）、Geminiは4,096トークン（3.x Flash系）と明記しています。短い指示文をいくら使い回しても、cache hit は発生しません。
+    </div>
+    <div class="read-box">
+      <strong>④ 「キャッシュが効けば、費用は同じ割合で下がる」</strong>
+      下がるのは<strong>入力のうちキャッシュに載った部分だけ</strong>です。出力単価はそのまま。さらにTTLが切れれば次のリクエストは miss に戻ります（Anthropicの既定は5分、OpenAIのGPT-5.6以降は30分）。「安くなる前提」で設計するときは、TTLとリクエスト間隔を必ずセットで確認してください。
+    </div>
+  </section>
+
+  <!-- ===== まとめ ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="sum-h">
+    <h2 class="section-title" id="sum-h" style="font-size:1.2rem;">まとめ — 料金表でこの3つを見る</h2>
+    <div class="tip-box">
+      <h3>「cache hit」を見つけたら</h3>
+      <ul>
+        <li><strong>通常入力との倍率</strong> — 0.1倍か、0.025倍か、1/50か。ここがキャッシュの価値です。</li>
+        <li><strong>書込の倍率とTTL</strong> — 1.25倍・2倍、5分・30分・1時間。ここが「元が取れるか」を決めます。</li>
+        <li><strong>最小トークン数</strong> — 512〜4,096。ここを下回ると効果はゼロです。</li>
+      </ul>
+    </div>
+    <p style="font-size:.9rem;color:var(--c-muted);max-width:760px;">プロンプトキャッシュは、<strong>「同じ前置きを何度も送る設計」への報酬</strong>です。逆に言えば、プロンプトの組み立てを変えるだけで請求額が動く領域でもあります。エージェントのように同じシステム指示・ツール定義・参照資料を毎ターン送る構成ほど、効き方が大きくなります。</p>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="section" style="padding-top:0;">
+    <div style="background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-accent);border-radius:var(--r-lg);padding:1.5rem;text-align:center;">
+      <h3 style="font-size:1.1rem;margin-bottom:.75rem;">次に読む</h3>
+      <p style="color:var(--c-muted);font-size:.9rem;margin-bottom:1rem;">単価の一覧は<a href="/pricing/">料金比較</a>、実際の試算は<a href="/calculator/">トークン計算機</a>へ。個別モデルの実例は<a href="/deepseek-v4-1-flash/">DeepSeek V4.1 Flash</a>・<a href="/gpt-6/">GPT-6 Astra</a>で確認できます。</p>
+      <a href="/pricing/" style="display:inline-block;background:var(--c-accent);color:#fff;font-weight:600;padding:.65rem 1.5rem;border-radius:var(--r-md);">📊 料金比較表を見る →</a>
+      <p style="margin-top:.8rem;font-size:.82rem;color:var(--c-muted);"><a href="/glossary/">用語説明</a> · <a href="/glossary/gpt-6-astra-benchmarks/">ベンチ数値の読み方</a> · <a href="/calculator/">トークン計算機</a> · <a href="/timeline/">リリース年表</a> · <a href="/mai/">MS AI (MAI)</a></p>
+    </div>
+  </section>
+
+  <div class="tip-box" style="border-left-color:var(--c-red);margin-bottom:2rem;">
+    <h3>⚠️ 免責事項</h3>
+    <ul>
+      <li>料金・仕様は2026-09-17に各社公式ページ・公式ドキュメントで確認したものです。予告なく変動します。契約前に必ず公式ページをご確認ください。</li>
+      <li>本ページの試算は公表単価に基づく単純計算で、実際の請求額を保証するものではありません。キャッシュのヒット状況はワークロードによって変わります。</li>
+      <li>キャッシュの実装・既定値・乗数は各社が変更する可能性があります。実装前に各社の最新ドキュメントをご確認ください。</li>
+    </ul>
+  </div>
+</div></main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>運営: okamoちゃんねる</p><p><a href="/">ホーム</a> · <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a> · <a href="/timeline/">年表</a> · <a href="/glossary/">用語説明</a> · <a href="/gpt-6/">GPT-6 Astra</a></p></div><p class="footer-disclaimer">⚠️ 料金・仕様は予告なく変動します。契約前に必ず各社公式ページでご確認ください。本サイトは各社と提携していません。</p></div></footer>
+</body>
+</html>

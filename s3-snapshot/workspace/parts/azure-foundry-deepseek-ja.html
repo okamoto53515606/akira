@@ -1,0 +1,151 @@
+      <!-- ===== Azure AI Foundry で動かす ===== -->
+      <section class="section" style="padding-top:0;" aria-labelledby="azure-heading">
+        <h2 class="section-title" id="azure-heading" style="font-size:1.2rem;">Azure AI Foundry で動かす（DeepSeek-V4-Flash-0731）</h2>
+        <p class="section-sub">
+          DeepSeek 自社 API だけでなく、Microsoft Azure の <strong>Azure AI Foundry（Microsoft Foundry）</strong> 経由でも DeepSeek 系モデルをデプロイできます。
+          ここでは Azure が「Direct from Azure」として販売している <code>DeepSeek-V4-Flash-0731</code> を、<strong>Azure CLI でデプロイして curl で疎通確認するまで</strong>の手順を示します。
+        </p>
+
+        <div class="screenshot-note">
+          ℹ️ <strong><code>DeepSeek-V4-Flash-0731</code> と V4.1 Flash の関係</strong>:
+          <code>-0731</code> は V4.1 Flash の<strong>ひとつ前の世代</strong>（2026-07-31 リリース・V4-Flash-Preview と同じアーキテクチャ／サイズで再事後学習したもの）です。
+          DeepSeek 自社 API では V4 Flash 系は退役して V4.1 Flash に統合されましたが、<strong>Azure AI Foundry では <code>DeepSeek-V4-Flash-0731</code> が現在も Preview モデルとして提供されています</strong>（2026-09-13 時点）。
+          Azure 側の仕様は Microsoft Learn の記載に基づきます。コマンド列の流れは<strong>運営者（okamoちゃんねる）が 2026年9月時点で動作確認済み</strong>のものです。
+        </div>
+
+        <h3 style="font-size:1rem;margin:1.5rem 0 .6rem;">前提</h3>
+        <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.3em;">
+          <li style="margin-bottom:.35rem;">Azure サブスクリプション（リソースを作成できる権限があること。リソースプロバイダー登録には <strong>Owner</strong> 権限が必要です）</li>
+          <li style="margin-bottom:.35rem;">Azure CLI（<code>az</code>）。<code>az cognitiveservices</code> 系コマンドは core に同梱されているため、Azure CLI 2.60 以降であれば追加拡張は不要です</li>
+          <li><code>az login</code> で対象サブスクリプションにログイン済みであること</li>
+        </ul>
+
+        <h3 style="font-size:1rem;margin:1.5rem 0 .6rem;">使うプレースホルダ</h3>
+        <div class="table-wrap">
+          <table class="spec-table">
+            <caption style="display:none;">コマンド内のプレースホルダ一覧</caption>
+            <thead><tr><th>プレースホルダ</th><th>意味・指定する値</th></tr></thead>
+            <tbody>
+              <tr><td class="model-name"><code>&lt;SUBSCRIPTION_ID_OR_NAME&gt;</code></td><td>使う Azure サブスクリプションの ID または名前</td></tr>
+              <tr><td class="model-name"><code>&lt;RESOURCE_GROUP&gt;</code></td><td>リソースグループ名（例: <code>rg-deepseek</code>）</td></tr>
+              <tr><td class="model-name"><code>&lt;LOCATION&gt;</code></td><td>リージョン（例: <code>eastus</code>）。モデルによって提供リージョンが異なるため、Azure ポータルのモデルカタログで確認してください</td></tr>
+              <tr><td class="model-name"><code>&lt;ACCOUNT_NAME&gt;</code></td><td>Azure AI Services アカウント名。<strong>全世界で一意</strong>にする必要があります（例: <code>dsflash0731</code>）。<code>--custom-domain</code> にも同じ値を使います</td></tr>
+              <tr><td class="model-name"><code>&lt;DEPLOYMENT_NAME&gt;</code></td><td>デプロイ名（任意）。<strong>API 呼び出しの <code>model</code> に指定するのはモデル名ではなく、このデプロイ名です</strong>（例: <code>deepseek-0731</code>）</td></tr>
+              <tr><td class="model-name"><code>&lt;MODEL_VERSION&gt;</code></td><td>モデルのバージョン文字列。<strong>実値は次の <code>az cognitiveservices account list-models</code> で確認してください</strong>（本ページでは断定しません）</td></tr>
+              <tr><td class="model-name"><code>&lt;API_KEY&gt;</code></td><td>Azure AI Services アカウントのキー（手順内で CLI から取得します）</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 style="font-size:1rem;margin:1.5rem 0 .6rem;">STEP 0 — Azure CLI の準備とリソースプロバイダー登録</h3>
+        <p style="font-size:.86rem;color:var(--c-muted);">最初にこれを済ませておくと、後の手順で <code>MissingSubscriptionRegistration</code> エラーに当たりません。</p>
+        <pre class="cmd"><code># Azure CLI のバージョン確認（2.60 以降を推奨）
+az version
+
+# 未ログインならログイン
+az login
+
+# 使うサブスクリプションを選択
+az account set --subscription "&lt;SUBSCRIPTION_ID_OR_NAME&gt;"
+
+# リソースプロバイダーを登録（MissingSubscriptionRegistration 対策）
+az provider register --namespace Microsoft.CognitiveServices
+
+# 登録状態を確認（Succeeded になるまで数分かかることがあります）
+az provider show --namespace Microsoft.CognitiveServices --query registrationState -o tsv</code></pre>
+
+        <h3 style="font-size:1rem;margin:1.5rem 0 .6rem;">STEP 1 — リソースグループを作成</h3>
+        <pre class="cmd"><code>az group create \
+  --name "&lt;RESOURCE_GROUP&gt;" \
+  --location "&lt;LOCATION&gt;"</code></pre>
+
+        <h3 style="font-size:1rem;margin:1.5rem 0 .6rem;">STEP 2 — Azure AI Services アカウントを作成</h3>
+        <p style="font-size:.86rem;color:var(--c-muted);"><code>--custom-domain</code> を指定すると、以降のエンドポイントが <code>https://&lt;ACCOUNT_NAME&gt;.openai.azure.com/</code> の形式になります。</p>
+        <pre class="cmd"><code>az cognitiveservices account create \
+  --name "&lt;ACCOUNT_NAME&gt;" \
+  --resource-group "&lt;RESOURCE_GROUP&gt;" \
+  --kind AIServices \
+  --sku S0 \
+  --location "&lt;LOCATION&gt;" \
+  --custom-domain "&lt;ACCOUNT_NAME&gt;" \
+  --assign-identity \
+  --allow-project-management true \
+  --yes</code></pre>
+
+        <h3 style="font-size:1rem;margin:1.5rem 0 .6rem;">STEP 3 — DeepSeek-V4-Flash-0731 をデプロイ</h3>
+        <p style="font-size:.86rem;color:var(--c-muted);">まず利用可能なモデルとバージョンを確認し、その値でデプロイします。</p>
+        <pre class="cmd"><code># デプロイ可能な DeepSeek 系モデルとバージョンを確認
+az cognitiveservices account list-models \
+  -n "&lt;ACCOUNT_NAME&gt;" -g "&lt;RESOURCE_GROUP&gt;" \
+  --query "[?contains(name,'DeepSeek')].{name:name,format:format,version:version}" -o table
+
+# モデルをデプロイ（SKU は GlobalStandard、容量は 1 から開始）
+az cognitiveservices account deployment create \
+  --name "&lt;ACCOUNT_NAME&gt;" \
+  --resource-group "&lt;RESOURCE_GROUP&gt;" \
+  --deployment-name "&lt;DEPLOYMENT_NAME&gt;" \
+  --model-name "DeepSeek-V4-Flash-0731" \
+  --model-version "&lt;MODEL_VERSION&gt;" \
+  --model-format "DeepSeek" \
+  --sku-name "GlobalStandard" \
+  --sku-capacity 1</code></pre>
+        <p style="font-size:.8rem;color:var(--c-muted);">
+          💡 <code>--sku-capacity</code> はクォータ（Tokens Per Minute、千トークン単位）として消費されます。容量が足りないと
+          <code>InsufficientQuota</code> でデプロイに失敗することがあるため、その場合は値を調整するか、Azure ポータルでクォータの増加を申請してください。
+        </p>
+
+        <h3 style="font-size:1rem;margin:1.5rem 0 .6rem;">STEP 4 — 接続情報を環境変数に入れる</h3>
+        <pre class="cmd"><code># エンドポイント（OpenAI 互換）と API キーを取得
+export AZURE_AI_ENDPOINT="https://&lt;ACCOUNT_NAME&gt;.openai.azure.com/openai/v1/"
+export AZURE_AI_API_KEY="$(az cognitiveservices account keys list \
+  --name "&lt;ACCOUNT_NAME&gt;" \
+  --resource-group "&lt;RESOURCE_GROUP&gt;" \
+  --query key1 -o tsv)"
+
+# API 呼び出しの model に入れるのはデプロイ名
+export DEPLOYMENT_NAME="&lt;DEPLOYMENT_NAME&gt;"</code></pre>
+
+        <h3 style="font-size:1rem;margin:1.5rem 0 .6rem;">STEP 5 — curl で疎通確認</h3>
+        <pre class="cmd"><code>curl -sS "$AZURE_AI_ENDPOINT/chat/completions" \
+  -H "Content-Type: application/json" \
+  -H "api-key: $AZURE_AI_API_KEY" \
+  -X POST \
+  -d '{
+    "model": "'"$DEPLOYMENT_NAME"'",
+    "messages": [
+      { "role": "user", "content": "Reply with just OK." }
+    ]
+  }'</code></pre>
+        <p style="font-size:.84rem;color:var(--c-muted);">
+          ✅ 応答 JSON が返れば疎通完了です。<code>model</code> にデプロイ名を渡している点に注意してください（モデル名 <code>DeepSeek-V4-Flash-0731</code> を渡すと 404 などになることがあります）。
+          環境変数にキーを置きたくない場合は <code>-H "api-key: &lt;API_KEY&gt;"</code> を直接指定します。
+          Entra ID（旧 Azure AD）で認証する場合は、公式チュートリアルにあるとおり <code>DefaultAzureCredential</code> 等でスコープ <code>https://ai.azure.com/.default</code> のトークンを取得する方式も使えます。
+        </p>
+
+        <div class="warn-box">
+          <h2>⚠️ <code>MissingSubscriptionRegistration</code> が出たら</h2>
+          <p style="margin-bottom:.5rem;">次のようなエラーです（HTTP 409 / Conflict）。<strong>サブスクリプションで <code>Microsoft.CognitiveServices</code> リソースプロバイダーが未登録</strong>なだけなので、リソース作成側の問題ではありません。</p>
+          <pre class="cmd"><code>MissingSubscriptionRegistration
+The subscription is not registered to use namespace 'Microsoft.CognitiveServices'.</code></pre>
+          <ul style="margin-top:.5rem;">
+            <li><strong>対処1（CLI）</strong>: <code>az provider register --namespace Microsoft.CognitiveServices</code> を実行し、<code>az provider show --namespace Microsoft.CognitiveServices --query registrationState -o tsv</code> が <code>Registered</code> になるまで待ちます（数分かかることがあります）。</li>
+            <li><strong>対処2（ポータル）</strong>: Azure ポータル →「サブスクリプション」→「リソースプロバイダー」→ <code>Microsoft.CognitiveServices</code> を選び「登録」。</li>
+            <li><strong>権限</strong>: 登録には<strong>サブスクリプションの Owner 権限</strong>が必要です。権限が無い場合は管理者に依頼してください。</li>
+            <li>公式のトラブルシューティング: <a href="https://learn.microsoft.com/en-us/azure/azure-resource-manager/troubleshooting/error-register-resource-provider" target="_blank" rel="noopener">Register a resource provider</a></li>
+          </ul>
+        </div>
+
+        <div class="screenshot-note" style="margin-top:1.2rem;">
+          ⚠️ <strong>Azure 側の料金は本ページに掲載していません。</strong>
+          Azure AI Foundry の DeepSeek 系モデルの単価は、DeepSeek 自社 API の peak/off-peak 単価とは別体系です。当サイトで一次情報（<code>DeepSeek-V4-Flash-0731</code> に特定した確定値）を確認できていないため、
+          ご契約前に <a href="https://azure.microsoft.com/en-us/pricing/details/ai-foundry-models/deepseek/" target="_blank" rel="noopener">Azure の Foundry Models 料金ページ</a>または Azure ポータルで必ずご確認ください。
+        </div>
+
+        <p style="font-size:.78rem;color:var(--c-muted);">
+          出典: <a href="https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure?pivots=azure-direct-others" target="_blank" rel="noopener">Microsoft Learn — Foundry Models sold by Azure</a>（DeepSeek-V4-Flash-0731 は Preview / 入力 1M・出力 384K・ツール呼び出し対応）、
+          <a href="https://learn.microsoft.com/en-us/azure/foundry/foundry-models/how-to/quickstart-create-resources" target="_blank" rel="noopener">Create and configure resources for Microsoft Foundry Models</a>、
+          <a href="https://learn.microsoft.com/en-us/azure/foundry/foundry-models/tutorials/get-started-deepseek-r1" target="_blank" rel="noopener">Get started with a DeepSeek model in Foundry Models</a>（2026-09-13 取得）。
+          コマンド列の流れは運営者（okamoちゃんねる）が 2026年9月時点に動作確認済みです。
+        </p>
+      </section>
+

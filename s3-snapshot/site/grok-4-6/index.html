@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Grok 4.6 — コード・エージェント特化のxAI最新フラッグシップ【料金・性能・比較】 — LLM Data Hub</title>
+  <meta name="description" content="xAI Grok 4.6の最新料金（標準$2/$6・fast variant 2倍）・500Kコンテキスト・公式ベンチマーク・GPT-5.6 Sol/Claude Opus 5/Gemini 3.7 Flashとの比較を一次情報ベースで解説。2026年8月12日公開。">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/grok-4-6/">
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/grok-4-6/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/grok-4-6/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/grok-4-6/">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/grok-4-6/">
+  <meta property="og:title" content="Grok 4.6 — コード・エージェント特化のxAI最新フラッグシップ">
+  <meta property="og:description" content="xAI Grok 4.6の料金（$2/$6・fast 2倍）・500Kコンテキスト・性能・競合比較を一次情報ベースで解説。">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Grok 4.6 — コード・エージェント特化のxAI最新フラッグシップ【料金・性能・比較】","datePublished":"2026-08-17","dateModified":"2026-09-23","author":{"@type":"Organization","name":"LLM Data Hub"},"publisher":{"@type":"Organization","name":"okamoちゃんねる"},"url":"https://llm.okamomedia.tokyo/grok-4-6/","inLanguage":"ja"}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .hero-grok{background:linear-gradient(135deg,#0b0b12 0%,#1a1a2b 50%,#0f1117 100%);border-bottom:1px solid var(--c-border);padding:3rem 1rem 2.5rem;text-align:center}.hero-grok .price-flag{display:inline-block;background:rgba(139,92,246,.14);border:1px solid rgba(139,92,246,.35);color:#a78bfa;font-size:.82rem;font-weight:700;padding:.3rem .8rem;border-radius:100px;margin-bottom:1rem}.hero-grok h1{font-size:clamp(1.6rem,4.5vw,2.4rem);font-weight:800;line-height:1.2;margin-bottom:.75rem}.hero-grok h1 span{color:#a78bfa}.hero-grok .lead{font-size:1.05rem;color:var(--c-muted);max-width:640px;margin:0 auto 1.5rem}.hero-grok .quick-stats{display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;margin-top:1rem}.hero-grok .stat{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.75rem 1.25rem;text-align:center}.hero-grok .stat .val{font-family:var(--font-mono);font-size:1.25rem;font-weight:700;color:#a78bfa}.hero-grok .stat .lbl{font-size:.75rem;color:var(--c-muted);margin-top:.15rem}
+    .compare-table th:first-child{width:200px}.compare-table td{text-align:center}.compare-table td:first-child{text-align:left;font-weight:600}.compare-table .winner{color:var(--c-green);font-weight:700}.compare-table .tie{color:var(--c-yellow)}
+    .spec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.8rem;margin-bottom:1.5rem}.spec-item{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.9rem 1rem}.spec-item .spec-label{font-size:.75rem;color:var(--c-muted);font-weight:600;margin-bottom:.25rem}.spec-item .spec-value{font-family:var(--font-mono);font-size:1rem;font-weight:700}
+    .use-case-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.8rem;margin-bottom:1.5rem}.use-case-card{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:1rem}.use-case-card .icon{font-size:1.5rem;margin-bottom:.5rem}.use-case-card h4{font-size:.92rem;font-weight:700;margin-bottom:.35rem}.use-case-card p{font-size:.82rem;color:var(--c-muted);line-height:1.5}
+    .context-note{background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid #a78bfa;border-radius:var(--r-md);padding:.8rem 1rem;margin:1rem 0;font-size:.84rem;color:var(--c-muted)}
+    @media(max-width:640px){.hero-grok .quick-stats{flex-direction:column;gap:.5rem}}
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="メインナビゲーション"><a href="/" class="nav-link">ホーム</a><a href="/pricing/" class="nav-link">料金比較</a><a href="/calculator/" class="nav-link">トークン計算機</a><a href="/timeline/" class="nav-link">リリース年表</a><a href="/china-ai/" class="nav-link">中国AI</a><a href="/multimodal/" class="nav-link">マルチモーダル</a><a href="/mai/" class="nav-link">MS AI (MAI)</a><a href="/glossary/" class="nav-link">用語説明</a></nav></div></header>
+
+<section class="hero-grok"><div class="container">
+  <p class="price-flag">🚀 2026年8月12日公開 — 標準 $2/$6・fast variant 2倍</p>
+  <h1>Grok <span>4.6</span></h1>
+  <p class="lead">xAI（SpaceXAI）の最新フラッグシップ。コード・エージェント・ナレッジワーク特化で、人工分析「AA Intelligence Index」ではGPT-5.6 Solと並ぶ61を記録。標準料金は前世代Grok 4.5と同じ$2/$6に据え置き。</p>
+  <div class="quick-stats">
+    <div class="stat"><div class="val">$2.00</div><div class="lbl">入力 / 1M tokens</div></div>
+    <div class="stat"><div class="val">$6.00</div><div class="lbl">出力 / 1M tokens</div></div>
+    <div class="stat"><div class="val">500K</div><div class="lbl">コンテキストウィンドウ</div></div>
+    <div class="stat"><div class="val">Text+Image</div><div class="lbl">入力モダリティ</div></div>
+  </div>
+</div></section>
+
+<main><div class="container">
+<div class="context-note" style="border-left-color:var(--c-accent);margin-bottom:1rem;">🆕 後継の <strong>Grok 4.7</strong>（2026-09-21公開・同じ $2/$6）が登場しました。 <a href="/grok-4-7/">Grok 4.7の料金・ベンチマークを見る →</a></div>
+<div class="updated-bar" style="margin-top:2rem;"><span class="dot">●</span>最終更新: <time datetime="2026-09-23">2026年9月23日</time> | 出典: <a href="https://x.ai/news/grok-4-6" target="_blank" rel="noopener">xAI公式発表</a> · <a href="https://docs.x.ai/developers/models/grok-4.6" target="_blank" rel="noopener">docs.x.ai モデル仕様</a> · <a href="https://docs.x.ai/developers/pricing" target="_blank" rel="noopener">docs.x.ai 料金表</a> | <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a> · <a href="/gemini-3-7-flash/">Gemini 3.7 Flash</a></div>
+
+<!-- 料金 -->
+<section class="section" style="padding-top:0;" aria-labelledby="pricing-h">
+<h2 class="section-title" id="pricing-h" style="font-size:1.2rem;">料金（2026年8月12日公開時点）</h2>
+<p class="section-sub">docs.x.ai のAPI料金表で確認。全額USD/1Mトークン。標準料金はGrok 4.5と同額（$2/$6）で据え置き。</p>
+
+<div class="table-wrap"><table><thead><tr><th>ティア</th><th>入力</th><th>キャッシュ入力</th><th>出力</th><th>備考</th></tr></thead><tbody>
+<tr><td class="model-name">Standard（ショート &lt;200K）</td><td class="price">$2.00</td><td class="price">$0.50</td><td class="price">$6.00</td><td>デフォルト料金</td></tr>
+<tr><td class="model-name">Long context（≥200K）</td><td class="price">$4.00</td><td class="price">$1.00</td><td class="price">$12.00</td><td>200K超でリクエスト全体に適用</td></tr>
+<tr><td class="model-name">Fast variant</td><td class="price">$4.00</td><td class="price">—</td><td class="price">$12.00</td><td>低レイテンシ優先。標準の2倍</td></tr>
+</tbody></table></div>
+
+<div class="context-note">
+  ⚠️ <strong>200Kトークンの長文境界:</strong> プロンプトが200Kトークンに達すると、そのリクエストの<strong>全トークン</strong>に長文料金（$4/$12）が適用されます（docs.x.ai に明記）。エージェントループでツール出力が積み重なるワークロードは、この境界を越えると請求が急増するため注意。
+</div>
+
+<div class="context-note" style="border-left-color:var(--c-yellow);">
+  💡 <strong>キャッシュ入力で実質コスト削減:</strong> キャッシュ入力は$0.50（標準入力の75%割引）。エージェントやチャットで同じシステムプロンプト・リポジトリ文脈を再送する構成では、キャッシュ活用が請求額を大きく左右する。<strong>Batch API割引はgrok-4.6には無し</strong>（docs.x.aiのBatch割引対象はgrok-4.3/4.20系のみ）。ツール呼出は別途課金（例: web_search $5/1k calls、file_search $2.50/1k calls）。
+</div>
+
+<p class="source-note">一次情報: <a href="https://docs.x.ai/developers/pricing" target="_blank" rel="noopener">docs.x.ai/developers/pricing</a> · <a href="https://docs.x.ai/developers/models/grok-4.6" target="_blank" rel="noopener">docs.x.ai Grok 4.6</a> · <a href="https://x.ai/news/grok-4-6" target="_blank" rel="noopener">x.ai/news/grok-4-6</a>（「Pricing starts at $2 per million input tokens and $6 per million output tokens. Additionally, there is a fast variant which is twice the price.」2026-08-17確認）</p>
+</section>
+
+<!-- 仕様 -->
+<section class="section" style="padding-top:0;" aria-labelledby="spec-h">
+<h2 class="section-title" id="spec-h" style="font-size:1.2rem;">モデル仕様</h2>
+<div class="spec-grid">
+  <div class="spec-item"><div class="spec-label">GA公開</div><div class="spec-value">2026-08-12</div></div>
+  <div class="spec-item"><div class="spec-label">知識カットオフ</div><div class="spec-value">2026-02-01</div></div>
+  <div class="spec-item"><div class="spec-label">コンテキスト</div><div class="spec-value">500,000 tokens</div></div>
+  <div class="spec-item"><div class="spec-label">入力モダリティ</div><div class="spec-value">テキスト + 画像</div></div>
+  <div class="spec-item"><div class="spec-label">出力モダリティ</div><div class="spec-value">テキスト</div></div>
+  <div class="spec-item"><div class="spec-label">ツール呼出</div><div class="spec-value">Function Calling ✓</div></div>
+  <div class="spec-item"><div class="spec-label">構造化出力</div><div class="spec-value">対応</div></div>
+  <div class="spec-item"><div class="spec-label">推論</div><div class="spec-value">設定可能（reasoning_effort）</div></div>
+  <div class="spec-item"><div class="spec-label">リージョン</div><div class="spec-value">us-east-1 / us-west-2</div></div>
+  <div class="spec-item"><div class="spec-label">モデルID</div><div class="spec-value" style="font-size:.85rem;">grok-4.6</div></div>
+</div>
+<p class="source-note">出典: <a href="https://docs.x.ai/developers/models/grok-4.6" target="_blank" rel="noopener">docs.x.ai Grok 4.6</a> · <a href="https://x.ai/news/grok-4-6" target="_blank" rel="noopener">xAI公式発表</a>（知識カットオフはdocs.x.ai「The knowledge cut-off date of Grok 4.6 is February 1, 2026.」より）</p>
+</section>
+
+<!-- 性能 -->
+<section class="section" style="padding-top:0;" aria-labelledby="perf-h">
+<h2 class="section-title" id="perf-h" style="font-size:1.2rem;">性能 — GPT-5.6 Solと並ぶ知能指数、前世代から大幅向上</h2>
+<p class="section-sub">xAI公式発表のベンチマーク表より。Grok 4.5からの事後学習強化で、コーディング・エージェント・ナレッジワーク全般で向上。</p>
+<div class="tip-box">
+  <ul>
+    <li><strong>AA Intelligence Index: 61</strong> — 人工分析の総合知能指数でGPT-5.6 Sol Max（61）と並び、Grok 4.5 High（56）を上回る。Fable 5 Maxは62。</li>
+    <li><strong>GDPVal-AA v2: 1753</strong> — ナレッジワークのEloスコアでGrok 4.5（1526）から大幅向上。</li>
+    <li><strong>CursorBench v3.2: 69.9%</strong> — GPT-5.6 Sol（67.2%）を上回る。</li>
+    <li><strong>DeepSWE v1.1: 65.9%</strong> — 長期間ソフトウェアエンジニアリングでGrok 4.5（54%）から大きく改善（GPT-5.6 Solは73%）。</li>
+    <li><strong>FrontierCode v1.1 (Extended): 61.3%</strong> — プロダクションコード品質でGrok 4.5（56.6%）超え。</li>
+    <li><strong>APEX-Agents: 57.5%</strong> — エージェントタスクでGrok 4.5（47.1%）から+10pt超。</li>
+    <li><strong>AA-Briefcase: 1577</strong> — Grok 4.5（1313）から大きく改善。</li>
+  </ul>
+</div>
+<p style="font-size:.84rem;color:var(--c-muted);">xAIはGrok 4.6を「コードおよびその他すべてにおけるフラッグシップモデル（agentic tool calling、最小限の幻覚、設定可能な推論）」と位置づけ。第三者モデルのスコアは各社公表の最良値を使用しており、テスト条件が必ずしも同一ではない点に留意。</p>
+<p class="source-note">出典: <a href="https://x.ai/news/grok-4-6" target="_blank" rel="noopener">xAI: Introducing Grok 4.6</a>（Evals表）</p>
+</section>
+
+<!-- 競合比較 -->
+<section class="section" style="padding-top:0;" aria-labelledby="compare-h">
+<h2 class="section-title" id="compare-h" style="font-size:1.2rem;">競合フラッグシップとの料金比較</h2>
+<p class="section-sub">$2/$6はフラッグシップ帯では最安水準。価格はすべてUSD/1Mトークン（標準料金・ショートコンテキスト）。</p>
+
+<div class="table-wrap compare-table"><table><thead><tr><th>モデル</th><th>提供元</th><th>入力</th><th>出力</th><th>Grok 4.6より</th><th>備考</th></tr></thead><tbody>
+<tr><td class="model-name">Grok 4.6</td><td>xAI</td><td class="price">$2.00</td><td class="price">$6.00</td><td>—</td><td>基準モデル</td></tr>
+<tr><td class="model-name">GPT-5.6 Sol</td><td>OpenAI</td><td class="price">$5.00</td><td class="price">$30.00</td><td class="winner">Grok安</td><td>Grokは入力60%安・出力80%安</td></tr>
+<tr><td class="model-name">Claude Opus 5</td><td>Anthropic</td><td class="price">$5.00</td><td class="price">$25.00</td><td class="winner">Grok安</td><td>Grokは入力60%安・出力76%安</td></tr>
+<tr><td class="model-name">GPT-5.6 Terra</td><td>OpenAI</td><td class="price">$2.00</td><td class="price">$12.00</td><td class="tie">入力同額</td><td>Grokは出力半額</td></tr>
+<tr><td class="model-name">Gemini 3.1 Pro Preview</td><td>Google</td><td class="price">$2.00</td><td class="price">$12.00</td><td class="tie">入力同額</td><td>Grokは出力半額</td></tr>
+<tr><td class="model-name">Claude Sonnet 5</td><td>Anthropic</td><td class="price">$2.00</td><td class="price">$10.00</td><td class="tie">入力同額</td><td>Grokは出力40%安（Sonnet 5は〜8/31導入価格）</td></tr>
+<tr><td class="model-name"><a href="/gemini-3-7-flash/">Gemini 3.7 Flash</a></td><td>Google</td><td class="price">$0.75</td><td class="price">$3.75</td><td class="winner">Gemini安</td><td>初回価格（〜12/31）。Flash帯でGrokより低価格</td></tr>
+<tr><td class="model-name">Grok 4.5</td><td>xAI</td><td class="price">$2.00</td><td class="price">$6.00</td><td class="tie">同額</td><td>前世代。キャッシュ入力は$0.30</td></tr>
+</tbody></table></div>
+<p style="font-size:.78rem;color:var(--c-muted);margin-top:.3rem;">※ Grok 4.6は$2/$6とフラッグシップ帯では低価格だが、より低コストの軽量モデル（<a href="/gpt-5-6-luna/">GPT-5.6 Luna</a> $0.20/$1.20やGemini 3.1 Flash-Lite $0.25/$1.50）とは用途が異なる。高難度のコーディング・エージェント向けフラッグシップとして位置づけられている。</p>
+<p class="source-note">出典: 各社公式料金ページ（2026-08-17確認）。詳細は<a href="/pricing/">料金比較ページ</a>を参照。<a href="/gemini-3-7-flash/">Gemini 3.7 Flashの詳細はこちら →</a></p>
+</section>
+
+<!-- ユースケース -->
+<section class="section" style="padding-top:0;" aria-labelledby="usecase-h">
+<h2 class="section-title" id="usecase-h" style="font-size:1.2rem;">こんな用途に最適</h2>
+<p class="section-sub">長期間エージェント・高難度コーディング・ナレッジワークを中心に。</p>
+<div class="use-case-grid">
+  <div class="use-case-card"><div class="icon">💻</div><h4>コーディング・コードレビュー</h4><p>CursorBench/DeepSWEで高スコア。プロダクションコード生成・リファクタ・レビュー。</p></div>
+  <div class="use-case-card"><div class="icon">🤖</div><h4>長期間エージェント</h4><p>多数のステップにまたがる調査・分析・コードベース横断タスク。自己検証も。</p></div>
+  <div class="use-case-card"><div class="icon">📊</div><h4>ナレッジワーク・リサーチ</h4><p>不慣れな領域の調査、情報整理、構造化。GDPVal-AA/AA-Briefcaseで高評価。</p></div>
+  <div class="use-case-card"><div class="icon">🎨</div><h4>インタラクティブ/ビジュアル制作</h4><p>製品アイデアを初回パスでアプリ構造＋ビジュアル言語に落とし込み。</p></div>
+  <div class="use-case-card"><div class="icon">🛠️</div><h4>ツール連携・Function Calling</h4><p>構造化出力・reasoning_effort制御・MCP連携。エージェント型自動化に。</p></div>
+  <div class="use-case-card"><div class="icon">🔍</div><h4>RAG・文書検索</h4><p>500Kコンテキスト＋コレクション検索（$2.50/1k calls）で大量文書の質問応答。</p></div>
+</div>
+</section>
+
+<!-- 選び方 -->
+<section class="section" style="padding-top:0;" aria-labelledby="choice-h">
+<h2 class="section-title" id="choice-h" style="font-size:1.2rem;">Grok 4.6を選ぶべき場面</h2>
+<div class="tip-box">
+  <ul>
+    <li><strong>フラッグシップ性能を$2/$6で:</strong> GPT-5.6 Sol（$5/$30）やClaude Opus 5（$5/$25）より低価格で同等帯の知能指数。コストあたり性能を重視するなら有力。</li>
+    <li><strong>長文200Kの壁に注意:</strong> エージェントでツール出力が積み重なり200Kを越えると$4/$12へ倍増。キャッシュ（$0.50）とreasoning_effortでコスト制御を。</li>
+    <li><strong>軽量ワークロードは別モデル:</strong> 高スループット・低単価が必要なら<a href="/gpt-5-6-luna/">GPT-5.6 Luna</a>（$0.20/$1.20）や<a href="/gemini-3-1-flash-lite/">Gemini 3.1 Flash-Lite</a>（$0.25/$1.50）を検討。</li>
+  </ul>
+</div>
+</section>
+
+<!-- CTA -->
+<section class="section" style="padding-top:0;">
+<div style="background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-accent);border-radius:var(--r-lg);padding:1.5rem;text-align:center;">
+  <h3 style="font-size:1.1rem;margin-bottom:.75rem;">実際のコストを試算する</h3>
+  <p style="color:var(--c-muted);font-size:.9rem;margin-bottom:1rem;">Grok 4.6を含む全モデルのトークンコストを一括計算。入力・出力トークン数を入れるだけ。</p>
+  <a href="/calculator/" style="display:inline-block;background:var(--c-accent);color:#fff;font-weight:600;padding:.65rem 1.5rem;border-radius:var(--r-md);">🧮 トークン計算機で試算する →</a>
+  <p style="margin-top:.8rem;font-size:.82rem;color:var(--c-muted);"><a href="/pricing/">📊 全モデル料金比較</a> · <a href="/gemini-3-7-flash/">⚡ Gemini 3.7 Flashと比較</a> · <a href="/timeline/">🗓️ リリース年表</a> · <a href="https://docs.x.ai/developers/pricing" target="_blank" rel="noopener">🔗 xAI公式料金ページ</a></p>
+</div>
+</section>
+
+<div class="tip-box" style="border-left-color:var(--c-red);margin-bottom:2rem;">
+  <h3>⚠️ 免責事項</h3>
+  <ul>
+    <li>料金はdocs.x.ai公式ページを2026-08-17に確認したものです。予告なく変動します。契約前に必ず公式ページをご確認ください。</li>
+    <li>本サイトは情報提供目的であり、特定プロバイダーの推薦・代理ではありません。</li>
+    <li>ベンチマーク数値はxAIの公表値であり、実際の使用感を保証するものではありません。</li>
+  </ul>
+</div>
+
+</div></main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>運営: okamoちゃんねる</p><p><a href="/">ホーム</a> · <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a> · <a href="/timeline/">年表</a> · <a href="/gpt-5-6-luna/">GPT-5.6 Luna</a> · <a href="/gemini-3-7-flash/">Gemini 3.7 Flash</a></p></div><p class="footer-disclaimer">⚠️ 料金・仕様は予告なく変動します。契約前に必ず各社公式ページでご確認ください。本サイトは各社と提携していません。</p></div></footer>
+</body>
+</html>

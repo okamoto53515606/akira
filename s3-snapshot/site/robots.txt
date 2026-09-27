@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /*.bak
+Allow: /
+
+Sitemap: https://llm.okamomedia.tokyo/sitemap.xml

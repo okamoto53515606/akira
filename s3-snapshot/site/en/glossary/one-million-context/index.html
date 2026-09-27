@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What Is a 1M-Token Context Window? What Fits, and What It Costs | LLM Data Hub</title>
+<meta name="description" content="A 1M-token context window explained: what a million tokens holds (750,000 English words, or 11 hours of audio), and how differently vendors bill long input. OpenAI doubles the whole request past 272K, Google charges every token at the higher rate past 200K, Anthropic stays standard at 1M.">
+<link rel="canonical" href="https://llm.okamomedia.tokyo/en/glossary/one-million-context/">
+<link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/glossary/one-million-context/">
+<link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/glossary/one-million-context/">
+<link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/glossary/one-million-context/">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://llm.okamomedia.tokyo/en/glossary/one-million-context/">
+<meta property="og:title" content="What Is a 1M-Token Context Window? What Fits, and What It Costs">
+<meta property="og:description" content="One million tokens is about 750,000 English words, or roughly 11 hours of audio. But long-input billing differs sharply: OpenAI doubles the entire request past 272K, Google charges every token at the higher rate past 200K, and Anthropic stays at standard pricing. Plus why longer input gets less reliable.">
+<meta property="og:site_name" content="LLM Data Hub">
+<meta name="twitter:card" content="summary">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"What Is a 1M-Token Context Window? What Fits, and What It Costs","datePublished":"2026-09-21","dateModified":"2026-09-21","author":{"@type":"Organization","name":"LLM Data Hub"},"publisher":{"@type":"Organization","name":"okamoちゃんねる"},"url":"https://llm.okamomedia.tokyo/en/glossary/one-million-context/","inLanguage":"en","about":"What a 1M-token context window means, the capacity it represents, how vendors differ on long-context pricing, and why performance degrades with longer input"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://llm.okamomedia.tokyo/en/"},{"@type":"ListItem","position":2,"name":"Glossary","item":"https://llm.okamomedia.tokyo/en/glossary/"},{"@type":"ListItem","position":3,"name":"What is a 1M-token context window?","item":"https://llm.okamomedia.tokyo/en/glossary/one-million-context/"}]}</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+<link rel="stylesheet" href="/assets/style.css">
+<style>
+    .phrase-box{background:linear-gradient(135deg,#12162a 0%,#1a1d35 55%,#0f1117 100%);border:1px solid var(--c-border);border-left:3px solid var(--c-accent2);border-radius:var(--r-lg);padding:1.2rem 1.3rem;margin:1.2rem 0 1.6rem}
+    .phrase-box .phrase{font-size:1.02rem;font-weight:700;line-height:1.75;margin-bottom:.6rem}
+    .phrase-box .phrase-meta{font-size:.8rem;color:var(--c-muted);line-height:1.7}
+    .num-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:.8rem;margin:1rem 0 1.6rem}
+    .num-card{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.9rem 1rem}
+    .num-card .k{font-family:var(--font-mono);font-size:.74rem;color:var(--c-muted);font-weight:600;letter-spacing:.02em}
+    .num-card .v{font-family:var(--font-mono);font-size:1.05rem;font-weight:700;margin:.15rem 0 .2rem}
+    .num-card .d{font-size:.8rem;color:var(--c-muted);line-height:1.6}
+    .read-box{background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-green);border-radius:var(--r-md);padding:1rem 1.2rem;margin:1rem 0 1.6rem;font-size:.88rem;color:var(--c-muted)}
+    .read-box strong{color:var(--c-text)}
+    .flow-fig{margin:1rem 0 1.4rem}
+    .flow-fig svg{width:100%;height:auto;border:1px solid var(--c-border);border-radius:var(--r-md);background:var(--c-surface)}
+    .fig-scroll{overflow:visible}
+    /* An 800px-wide figure makes text too small on phones, so below 680px we scroll it horizontally instead */
+    @media (max-width:680px){.fig-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:.2rem}.fig-scroll svg{min-width:620px}}
+    .cmp-table th,.cmp-table td{font-size:.85rem}
+    .quote-box{background:#11131c;border:1px solid var(--c-border);border-left:3px solid var(--c-accent2);border-radius:var(--r-md);padding:.9rem 1.1rem;margin:1rem 0;font-size:.86rem;color:var(--c-muted);line-height:1.8}
+    .quote-box .en{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82rem;color:var(--c-text);display:block;margin-bottom:.35rem}
+</style>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/en/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="Main navigation"><a href="/en/" class="nav-link">Home</a><a href="/en/pricing/" class="nav-link">Pricing</a><a href="/en/calculator/" class="nav-link">Token Calculator</a><a href="/en/timeline/" class="nav-link">Release Timeline</a><a href="/en/china-ai/" class="nav-link">China AI</a><a href="/en/multimodal/" class="nav-link">Multimodal</a><a href="/en/mai/" class="nav-link">MS AI (MAI)</a><a href="/en/glossary/" class="nav-link">Glossary</a></nav></div></header>
+
+<main><div class="container">
+  <div class="section" style="padding-bottom:0;">
+    <h1 class="section-title" style="font-size:1.55rem;">What is a 1M-token context window? The limit, the price step, and the accuracy ceiling</h1>
+    <p class="section-sub" style="max-width:760px;">
+      <a href="/en/glossary/">Glossary</a> entry 4. This one covers the <strong>1M-token context window</strong>.
+      &ldquo;Up to one million tokens&rdquo; quietly mixes up <strong>two different claims</strong>: how much actually fits (capacity), and what it costs once you put it there (billing).
+      Billing turns out to work <strong>very differently at OpenAI, Google and Anthropic</strong>: OpenAI and Google raise the rate across the whole request once you cross the line, while Anthropic stays on standard pricing for its 1M models. And a bigger window does not mean the model reads all of it equally well.
+      We keep the numbers and the sources in, so you can work out what it means for your own workload.
+    </p>
+    <div class="phrase-box">
+      <p class="phrase">&ldquo;Supports 1M&rdquo; does not mean &ldquo;uses 1M well, at the same price&rdquo;</p>
+      <p class="phrase-meta">A context window sets the <strong>physical ceiling</strong>. Whether the tokens inside are treated evenly, and whether they are billed at a flat rate, are two separate questions. This entry exists to keep those three things apart.</p>
+    </div>
+        <div class="read-box" style="border-left-color:var(--c-accent);">
+      <strong>A picture first.</strong> A 1M context window is like being lent a <strong>very large desk</strong>. But the more you pile on it, the harder the right page is to find — and the size of the desk is tied to the shipping fee. Past a certain weight it is not just the excess that costs more: <strong>the whole shipment does</strong>. That is how OpenAI and Google structure their tiers; Anthropic is closer to &quot;bigger desk, same shipping fee.&quot;
+    </div>
+    <div class="updated-bar">
+      <span class="dot">●</span>
+      Last updated: <time datetime="2026-09-21">September 21, 2026</time>
+      &ensp;|&ensp; Primary sources: <a href="https://developers.openai.com/api/docs/models/gpt-6-astra" target="_blank" rel="noopener">OpenAI (GPT-6 Astra model page)</a> · <a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">Gemini API pricing</a> · <a href="https://platform.claude.com/docs/en/build-with-claude/context-windows" target="_blank" rel="noopener">Anthropic (Context windows)</a> · <a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">DeepSeek (Models &amp; Pricing)</a> · <a href="https://cloud.google.com/vertex-ai/generative-ai/pricing" target="_blank" rel="noopener">Google Cloud (pricing footnotes)</a>
+      &ensp;|&ensp; Checked 2026-09-21
+    </div>
+  </div>
+
+  <!-- ===== 1. Definition ===== -->
+  <section class="section" style="padding-top:1.5rem;" aria-labelledby="def-h">
+    <h2 class="section-title" id="def-h" style="font-size:1.2rem;">Short version: the ceiling is capacity, the bill is a separate rule</h2>
+    <div class="read-box">
+      <strong>A context window is the maximum amount of information a model can look at in a single request.</strong>
+      A 1M (one million) token window means the system prompt, the conversation history, the documents you paste in and the tool outputs can all add up to one million tokens in one call.
+    </div>
+    <div class="read-box">
+      <strong>But &ldquo;up to a million tokens fit&rdquo; is not the same as &ldquo;up to a million tokens cost the same.&rdquo;</strong>
+      The long-input rules differ by vendor. Short version first:
+      <ul style="padding-left:1.2em;margin:.5rem 0 0;">
+        <li><strong>OpenAI</strong>: above 272K tokens, <strong>the whole request is billed at 2x input and 1.5x output</strong> — not just the excess.</li>
+        <li><strong>Google</strong>: above 200K tokens, <strong>all tokens are charged at the long-context rate</strong>.</li>
+        <li><strong>Anthropic</strong>: <strong>standard pricing all the way to 1M</strong> — the docs state a 900k-token request bills at the same per-token rate as a 9k-token one.</li>
+      </ul>
+      So the same million tokens sent to three vendors produce three different bills.
+    </div>
+    <p style="font-size:.9rem;color:var(--c-muted);max-width:760px;">
+      Three different numbers get mixed into the phrase &ldquo;1M context&rdquo;: <strong>(1) the input limit</strong>, <strong>(2) the output limit</strong>, and <strong>(3) the long-context pricing threshold</strong>. GPT-6 Astra, for example, carries <span style="font-family:var(--font-mono)">1,050,000 / 128,000 / 272K</span> — three separate figures. This entry keeps them apart.
+    </p>
+  </section>
+
+  <!-- ===== 2. What fits ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="what-h">
+    <h2 class="section-title" id="what-h" style="font-size:1.2rem;">What a million tokens actually holds</h2>
+    <p class="section-sub" style="max-width:760px;">&ldquo;One million&rdquo; is hard to picture, so here is what it looks like in familiar units. <strong>A token is not a character</strong>, so treat these as rough guidance only.</p>
+    <div class="num-grid">
+      <div class="num-card"><div class="k">English text</div><div class="v">~750,000 words</div><div class="d">Using the simple 1 token ≈ 0.75 words convention: <strong>about 1,500 pages</strong> at 500 words a page, or seven to eight 100,000-word technical books</div></div>
+      <div class="num-card"><div class="k">Japanese text</div><div class="v">Fewer characters</div><div class="d">Japanese tends to use more tokens per equivalent sentence than English, so fewer characters fit in the same 1M. Exact counts depend on the tokenizer — measure with the <a href="/en/calculator/">calculator</a></div></div>
+      <div class="num-card"><div class="k">Audio (Gemini basis)</div><div class="v">~11 hours</div><div class="d">Gemini states 25 tokens per second of audio. 1,000,000 ÷ 25 = 40,000 seconds = <strong>about 11.1 hours</strong> (our arithmetic)</div></div>
+      <div class="num-card"><div class="k">Images / PDFs (Claude)</div><div class="v">up to 600</div><div class="d">Anthropic states a single request can include up to 600 images or PDF pages (100 for 200k-token models)</div></div>
+    </div>
+    <div class="quote-box">
+      <strong>Anthropic, verbatim:</strong>
+      <span class="en">"A single request can include up to 600 images or PDF pages (100 for models with a 200k-token context window)."</span>
+    </div>
+    <p class="source-note">Sources: <a href="https://platform.claude.com/docs/en/build-with-claude/context-windows" target="_blank" rel="noopener">Claude Platform Docs, &ldquo;Context windows&rdquo;</a> and <a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">Gemini API pricing</a> (audio token conversion), both checked 2026-09-21. The word-count conversion is ours. <strong>Converting characters to tokens varies by model and tokenizer</strong>, so always estimate from measured token counts — our <a href="/en/calculator/">calculator</a> takes real token counts as input for exactly that reason.</p>
+  </section>
+
+  <!-- ===== 3. Limits ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="limit-h">
+    <h2 class="section-title" id="limit-h" style="font-size:1.2rem;">The ceilings, as the vendors themselves state them</h2>
+    <p class="section-sub" style="max-width:760px;">A 1M window is no longer one vendor's specialty. Here are the current ceilings, written the way each vendor writes them.</p>
+    <div class="table-wrap"><table class="cmp-table"><thead><tr><th>Provider / model</th><th>Input limit</th><th>Output limit</th><th>Long-input billing</th><th>Source (checked 2026-09-21)</th></tr></thead><tbody>
+      <tr><td class="model-name">OpenAI<br>GPT-6 Astra</td><td class="price">1,050,000</td><td class="price">128,000</td><td>Past 272K, <strong>the whole request goes to 2x input and 1.5x output</strong></td><td><a href="https://developers.openai.com/api/docs/models/gpt-6-astra" target="_blank" rel="noopener">OpenAI model page</a></td></tr>
+      <tr><td class="model-name">Anthropic<br>Claude Fable 5 / Sonnet 5 and other 1M models</td><td class="price">1,000,000</td><td class="price">128,000</td><td><strong>Standard pricing</strong> — no long-context premium</td><td><a href="https://platform.claude.com/docs/en/build-with-claude/context-windows" target="_blank" rel="noopener">Context windows</a> / <a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener">Pricing</a></td></tr>
+      <tr><td class="model-name">Google<br>Gemini 3.1 Pro Preview</td><td class="price">1,048,576</td><td class="price">65,536</td><td>Past 200K, <strong>every token moves to the higher rate</strong></td><td><a href="https://ai.google.dev/gemini-api/docs/models/gemini-3.1-pro-preview" target="_blank" rel="noopener">Gemini model page</a> / <a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">pricing</a></td></tr>
+      <tr><td class="model-name">DeepSeek<br>deepseek-flash / deepseek-v4-pro</td><td class="price">1M</td><td class="price">384K (max)</td><td>No tiered long-context pricing stated on the official table</td><td><a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">Models &amp; Pricing</a></td></tr>
+    </tbody></table></div>
+    <div class="read-box">
+      <strong>Anthropic's wording is the interesting one here.</strong>
+      Their docs state that across 1M-token models, <strong>1M is the default (no beta header needed) and long-context requests are billed at standard pricing</strong>. The pricing page goes further.
+    </div>
+    <div class="quote-box">
+      <span class="en">"Claude 4.6 and later models and Claude Mythos Preview include the full 1M token context window at standard pricing. (A 900k-token request is billed at the same per-token rate as a 9k-token request.) Prompt caching and batch processing discounts apply at standard rates across the full context window."</span>
+      In other words, <strong>a long request does not raise the per-token rate</strong>. Prompt caching and batch discounts also apply at standard rates across the whole window.
+    </div>
+    <p class="source-note">Sources: <a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener">Claude Platform Docs, &ldquo;Pricing&rdquo;</a> and <a href="https://platform.claude.com/docs/en/build-with-claude/context-windows" target="_blank" rel="noopener">&ldquo;Context windows&rdquo;</a> (checked 2026-09-21). Anthropic's own list of 1M models reads: Claude Fable 5.1, Mythos 5.1, Fable 5, Mythos 5, Opus 5, Opus 4.8, Opus 4.7, Opus 4.6, Sonnet 5, Sonnet 4.6 and Mythos Preview — and other models such as Sonnet 4.5 have a 200k window, so check the official table before you build on it.</p>
+  </section>
+
+  <!-- ===== 4. The step in money ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="cliff-h">
+    <h2 class="section-title" id="cliff-h" style="font-size:1.2rem;">What crossing the threshold costs, in dollars</h2>
+    <p class="section-sub" style="max-width:760px;">&ldquo;The whole request at 2x&rdquo; reads like a minor footnote. In money it looks like this. Every figure below is a plain <strong>tokens x rate</strong> calculation and excludes caching, batch discounts, cache writes and minimum charges. GPT-6 Astra bills standard input at <strong>$10 per 1M tokens</strong>, and <strong>$20 per 1M</strong> past 272K.</p>
+    <div class="table-wrap"><table class="cmp-table"><thead><tr><th>Input tokens</th><th>Rate applied</th><th>Input charge</th><th>Change from the row above</th></tr></thead><tbody>
+      <tr><td class="price">272,000</td><td>Standard $10 / 1M</td><td class="price">$2.72</td><td>—</td></tr>
+      <tr><td class="price">272,100</td><td>Long $20 / 1M</td><td class="price">$5.44</td><td class="price">+$2.72 (roughly 2x)</td></tr>
+      <tr><td class="price">500,000</td><td>Long $20 / 1M</td><td class="price">$10.00</td><td class="price">—</td></tr>
+      <tr><td class="price">1,000,000</td><td>Long $20 / 1M</td><td class="price">$20.00</td><td class="price">—</td></tr>
+    </tbody></table></div>
+    <div class="read-box">
+      <strong>Overshooting the threshold by 100 tokens roughly doubles the input charge.</strong>
+      A hundred tokens is a few hundred characters. <strong>One extra line in the prompt can double the bill</strong> — that is what a pricing step means.
+      Where the same request also produces output, output carries 1.5x too ($50 to $75 per 1M), so the gap in the total bill widens further: input alone roughly doubles, but the total multiple depends on the input/output mix.
+      <br><br>
+      Google's table has the same shape: Gemini 3.1 Pro bills input at $2.00 per 1M up to 200K and $4.00 per 1M above it. <strong>199,000 tokens costs $0.398; 201,000 tokens costs $0.804</strong> (our arithmetic). Again, <strong>the whole prompt moves to the higher rate, not just the excess</strong>.
+    </div>
+    <div class="quote-box">
+      <strong>Google's footnote, verbatim:</strong>
+      <span class="en">"If a query input context is longer than 200K tokens, all tokens (input and output) are charged at long context rates."</span>
+      Read alongside the tier table ($2.00 for prompts &lt;= 200k tokens, $4.00 for prompts &gt; 200k tokens) that confirms the design: <strong>it is not just the excess that moves, the whole request does</strong>. Output follows the same pattern ($12 rising to $18).
+    </div>
+    <p class="source-note">Rates from the <a href="https://developers.openai.com/api/docs/models/gpt-6-astra" target="_blank" rel="noopener">OpenAI model page</a> (verbatim: <span style="font-family:var(--font-mono);font-size:.8rem">"Prompts with more than 272K input tokens are priced at 2x input and cache rates and 1.5x output for the full request."</span>) and <a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">Gemini API pricing</a> (checked 2026-09-21). The Google footnote is quoted verbatim from <a href="https://cloud.google.com/vertex-ai/generative-ai/pricing" target="_blank" rel="noopener">Google Cloud's Generative AI pricing page</a> (checked 2026-09-21). Google's own pages vary between "longer than 200K" and "longer than or equal to 200K" depending on the surface, so confirm the rate table for the API and region you use. Dollar figures are our plain multiplication (tokens × rate) and exclude caching, cache writes and batch discounts. <strong>The 272K threshold is specific to GPT-6 Astra</strong> — it is not an OpenAI-wide number, so check each model's own page.</p>
+  </section>
+
+  <!-- ===== 5. Growth ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="grow-h">
+    <h2 class="section-title" id="grow-h" style="font-size:1.2rem;">The second trap: input piles up as a conversation grows</h2>
+    <p class="section-sub" style="max-width:760px;">You do not have to reach the ceiling for costs to rise. Chat APIs are usually <strong>stateless</strong> — the server does not remember the conversation — so <strong>every turn resends everything from the start</strong>.</p>
+    <div class="table-wrap"><table class="cmp-table"><thead><tr><th>Setting</th><th>Value</th></tr></thead><tbody>
+      <tr><td class="model-name">Fixed prefix (system prompt + documents)</td><td class="price">8,000 tokens</td></tr>
+      <tr><td class="model-name">Added per turn</td><td class="price">3,000 tokens</td></tr>
+      <tr><td class="model-name">Turns</td><td class="price">10</td></tr>
+      <tr><td class="model-name">Rate (GPT-6 Astra, no caching)</td><td class="price">$10 / 1M</td></tr>
+    </tbody></table></div>
+    <div class="read-box">
+      <strong>Ten turns send 245,000 input tokens in total — $2.45.</strong>
+      That is <span style="font-family:var(--font-mono)">8,000×10 + 3,000×(1+2+…+10) = 80,000 + 165,000 = 245,000</span>.
+      The genuinely new information was 8,000 + 3,000×10 = 38,000 tokens ($0.38). <strong>More than six times that amount was spent re-sending the same prefix.</strong>
+      <br><br>
+      And it scales with the <strong>square</strong> of the turn count. At 100 turns the total input sent is about 15.95 million tokens ($159.50) — without ever touching the 1M ceiling.
+      <br><br>
+      <strong>Two ways out: send less, and cache what you resend.</strong> Pass only the parts that matter, and put the unchanging prefix in a prompt cache. Where a fixed prefix is sent repeatedly, the cache is the single biggest lever on the bill (see <a href="/en/glossary/prompt-cache/">entry 2 on prompt caching</a>).
+    </div>
+    <p class="source-note">Dollar figures are our plain arithmetic (total input tokens × rate). Real bills also involve prompt caching, batch discounts and cache-write charges, so read these as upper-bound estimates. Separately, Anthropic documents <strong>context compaction</strong> (beta), which &ldquo;automatically summarizes older context as conversations approach limits, increasing effective context length&rdquo; (<a href="https://www.anthropic.com/news/claude-sonnet-4-6" target="_blank" rel="noopener">Anthropic announcement</a>, checked 2026-09-21). Summarise-and-fold is a design direction several vendors are moving toward.</p>
+  </section>
+
+  <!-- ===== 6. Context rot ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="rot-h">
+    <h2 class="section-title" id="rot-h" style="font-size:1.2rem;">The third trap: &ldquo;it fits&rdquo; is not &ldquo;it is used evenly&rdquo;</h2>
+    <p class="section-sub" style="max-width:760px;">Fill the window to the brim and will the model use all of it? Chroma's July 2025 technical report <strong>&ldquo;Context Rot&rdquo;</strong> evaluated 18 models (GPT-4.1, Claude 4, Gemini 2.5, Qwen3 and others) and found that <strong>performance gets less reliable as input grows</strong>.</p>
+    <div class="quote-box">
+      <span class="en">"models do not use their context uniformly; instead, their performance grows increasingly unreliable as input length grows."</span>
+      <strong>A 1M context window is not a promise of 1M tokens of dependable performance.</strong>
+    </div>
+    <div class="table-wrap"><table class="cmp-table"><thead><tr><th>Experiment</th><th>Condition</th><th>Result (same report)</th></tr></thead><tbody>
+      <tr><td class="model-name">LongMemEval<br>(answering from a long chat history)</td><td>Full input of <span class="price">113,000 tokens</span> versus a <strong>focused prompt of about 300 tokens</strong> carrying only the relevant parts</td><td>&ldquo;Across all models, we see <strong>significantly higher performance on focused prompts</strong>&rdquo; — adding irrelevant context adds a retrieval step and degrades reliability</td></tr>
+      <tr><td class="model-name">Distractors</td><td>Zero to four plausible-but-wrong statements placed near the needle</td><td>&ldquo;<strong>Even a single distractor reduces performance</strong> relative to the baseline, and adding four compounds this degradation further&rdquo; — and each distractor differs in impact</td></tr>
+      <tr><td class="model-name">Haystack structure</td><td>Logically ordered text versus the same sentences randomly shuffled</td><td>Counterintuitively, <strong>shuffled haystacks scored better</strong>: models are sensitive to the logical flow of context</td></tr>
+      <tr><td class="model-name">Repeated words</td><td>Reproduce 25 to 10,000 repeated words with one unique word inserted</td><td>Performance <strong>degrades consistently across all models</strong> as length grows; position accuracy is highest when the unique word comes early</td></tr>
+    </tbody></table></div>
+    <div class="read-box">
+      <strong>The report's conclusion is about presentation, not just presence.</strong>
+      <span style="font-family:var(--font-mono);font-size:.8rem;display:block;margin:.4rem 0">"Whether relevant information is present in a model's context is not all that matters; what matters more is how that information is presented."</span>
+      Which means &ldquo;it fits, so include it&rdquo; is not automatically a win for accuracy either.
+    </div>
+    <p class="source-note">Source: <a href="https://www.trychroma.com/research/context-rot" target="_blank" rel="noopener">Chroma, &ldquo;Context Rot: How Increasing Input Tokens Impacts LLM Performance&rdquo;</a> (checked 2026-09-21). <strong>That evaluation ran on models current in July 2025</strong> (GPT-4.1, Claude 4, Gemini 2.5, Qwen3 generations). We have not verified whether the current September 2026 models show the same effect at the same strength — read it as a result from that period.</p>
+  </section>
+
+  <!-- ===== Figure ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="fig-h">
+    <h2 class="section-title" id="fig-h" style="font-size:1.2rem;">The picture: the ceiling, the price step and the accuracy ceiling are three different lines</h2>
+    <figure class="flow-fig">
+      <div class="fig-scroll">
+      <svg viewBox="0 0 800 360" width="100%" role="img" aria-labelledby="ctxFigTitleEn" style="display:block;">
+        <title id="ctxFigTitleEn">Three numbers behind a 1M context window: the input ceiling (GPT-6 Astra 1,050,000 tokens), the long-context price step (past 272K the entire request is billed at 2x input), and the range where accuracy stays stable, which is narrower still. Crossing the price step makes the bill jump</title>
+        <rect x="0" y="0" width="800" height="360" rx="14" fill="#14161f" stroke="#262a38"/>
+        <text x="36" y="42" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="18" font-weight="700" fill="#eef0f7">&ldquo;1M&rdquo; hides three different lines</text>
+        <text x="36" y="66" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12.5" fill="#8b90a3">Example: GPT-6 Astra (input 1,050,000 / long-context step 272K / output 128,000)</text>
+        <rect x="40" y="96" width="720" height="34" rx="6" fill="#232a3d" stroke="#3a3f52"/>
+        <rect x="40" y="96" width="187" height="34" rx="6" fill="#2f3a55" stroke="#4b5570"/>
+        <text x="52" y="118" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" font-weight="700" fill="#eef0f7">Standard rate</text>
+        <rect x="227" y="96" width="533" height="34" rx="6" fill="#4a2f3d" stroke="#6b4552"/>
+        <text x="243" y="118" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" font-weight="700" fill="#f0d7de">Long-context rate (entire request: 2x input, 1.5x output)</text>
+        <line x1="227" y1="86" x2="227" y2="140" stroke="#e8eaf2" stroke-width="2"/>
+        <text x="227" y="158" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" font-weight="700" fill="#e8eaf2">272K step</text>
+        <text x="227" y="176" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="11" fill="#9aa0b4">one token past this doubles the whole prompt</text>
+        <line x1="760" y1="86" x2="760" y2="140" stroke="#e8eaf2" stroke-width="2"/>
+        <text x="760" y="158" text-anchor="end" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" font-weight="700" fill="#e8eaf2">1,050,000</text>
+        <text x="760" y="176" text-anchor="end" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="11" fill="#9aa0b4">hard input ceiling</text>
+        <rect x="40" y="206" width="720" height="30" rx="6" fill="#1b1f2c" stroke="#3a3f52"/>
+        <rect x="40" y="206" width="300" height="30" rx="6" fill="#243a2f" stroke="#3f6b52"/>
+        <text x="52" y="226" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" font-weight="700" fill="#d7f0e0">Range where accuracy stays steadier</text>
+        <text x="352" y="226" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="11.5" fill="#9aa0b4">performance grows less reliable as input grows (Chroma, July 2025, 18 models)</text>
+        <text x="40" y="268" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12.5" fill="#9aa0b4">At the same 113,000 tokens, focused prompts scored significantly higher than full ones.</text>
+        <text x="40" y="290" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12.5" fill="#9aa0b4">A single distractor already lowers performance; four compound the damage.</text>
+        <text x="40" y="322" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="11.5" fill="#6b7280">Sources: OpenAI model page / ai.google.dev pricing / Anthropic Context windows / Chroma Context Rot (checked 2026-09-21)</text>
+        <text x="40" y="342" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="11" fill="#6b7280">Figures are vendor-published values as we read them. The accuracy band is conceptual, not a measured threshold.</text>
+      </svg>
+      <figcaption style="font-size:.78rem;color:var(--c-muted);margin-top:.5rem;">The top band is <strong>billing</strong>; the bottom band is a <strong>conceptual sketch of the accuracy trend</strong>, not a safe ceiling. Fitting inside the window does not mean getting even quality. Thresholds differ per model, so check each vendor's page.</figcaption>
+      </div>
+    </figure>
+  </section>
+
+  <!-- ===== 7. Analogy ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="analogy-h">
+    <h2 class="section-title" id="analogy-h" style="font-size:1.2rem;">Everyday version: a huge desk and a shipping charge</h2>
+    <div class="read-box">
+      <strong>A 1M context window is like being handed an enormous desk. But the more you pile on it, the longer it takes to find the page you need.</strong>
+      And the awkward part is that <strong>the size of the desk is tied to the shipping fee</strong>. Past a certain weight, it is not the excess that gets charged more — <strong>the whole shipment goes up</strong>. That is how OpenAI and Google structure long-context pricing. Anthropic's approach is closer to &ldquo;a bigger desk, same shipping fee.&rdquo; Same word, different design.
+    </div>
+    <div class="table-wrap"><table class="cmp-table"><thead><tr><th>In everyday terms</th><th>In context-window terms</th></tr></thead><tbody>
+      <tr><td class="model-name">The size of the desk</td><td>The input limit (1M tokens and so on)</td></tr>
+      <tr><td class="model-name">Total weight you can pile on</td><td>System prompt + history + documents + tool output combined</td></tr>
+      <tr><td class="model-name">The weight where shipping jumps</td><td>The long-context threshold (272K, 200K and so on)</td></tr>
+      <tr><td class="model-name">A huge desk where you still cannot find the page</td><td>Performance degrading with longer input (context rot)</td></tr>
+      <tr><td class="model-name">Bringing every box to every meeting</td><td>Stateless APIs re-billing the entire input on every turn</td></tr>
+    </tbody></table></div>
+    <p style="font-size:.88rem;color:var(--c-muted);max-width:760px;">One takeaway: <strong>a bigger desk is not automatically a bargain.</strong> How much you pile on, how you arrange it, and where the price step sits are the three things worth checking together.</p>
+  </section>
+
+  <!-- ===== 8. In practice ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="use-h">
+    <h2 class="section-title" id="use-h" style="font-size:1.2rem;">How to use this at work</h2>
+    <div class="tip-box">
+      <h3>Three checks before you send a long prompt</h3>
+      <ul>
+        <li><strong>Where is the step, and does it apply to the whole request or just the excess?</strong> — GPT-6 Astra: past 272K, <u>the whole request</u> doubles on input and goes 1.5x on output. Gemini: past 200K, <u>all tokens</u> move to the higher rate. Anthropic: standard pricing to 1M. Getting this wrong can distort an estimate by more than 2x.</li>
+        <li><strong>Do you need to send all of it?</strong> — In the LongMemEval comparison, a 113,000-token full prompt was clearly beaten by a roughly 300-token focused one. Retrieving first and sending less tends to be both cheaper and more accurate.</li>
+        <li><strong>Is the repeated prefix cached?</strong> — Of $2.45 spent over ten turns, most was re-sending the same prefix. Put the unchanging part in a <a href="/en/glossary/prompt-cache/">prompt cache</a>.</li>
+      </ul>
+    </div>
+    <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.2em;line-height:1.85;">
+      <li><strong>Do not choose a provider on the ceiling number alone.</strong> The same &ldquo;1M&rdquo; comes with different long-context rules, different output limits and different cache treatment. Read this alongside the <a href="/en/pricing/">pricing comparison</a>.</li>
+      <li><strong>Test it on your own task.</strong> Needle in a Haystack — hiding one fact in a long document — is a retrieval test, not a test of interpreting ambiguous instructions. A high score there does not transfer automatically to your workload.</li>
+      <li><strong>Plan to fold, not to fill.</strong> Anthropic documents context compaction, which summarises older context as a conversation approaches its limit. Designing for summarise-and-drop is often more stable than designing for a permanently full window.</li>
+      <li><strong>Always read a context figure next to a rate card.</strong> Every dollar figure here is our own arithmetic; caching, batch discounts and cache writes change the real number.</li>
+    </ul>
+  </section>
+
+  <!-- ===== 9. Summary ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="sum-h">
+    <h2 class="section-title" id="sum-h" style="font-size:1.2rem;">In one sentence</h2>
+    <div class="tip-box">
+      <h3>A 1M context window is a capacity claim — price and accuracy are separate stories</h3>
+      <ul>
+        <li>1M tokens is roughly <strong>750,000 English words, or about 11 hours of audio</strong>. Japanese typically needs more tokens for the same sentence.</li>
+        <li><strong>Long-input billing differs sharply.</strong> OpenAI doubles the whole request past 272K; Google moves every token to the higher rate past 200K; Anthropic stays on standard pricing at 1M.</li>
+        <li>Crossing the step makes the bill jump: <strong>272,000 tokens $2.72 versus 272,100 tokens $5.44</strong> (GPT-6 Astra, our arithmetic).</li>
+        <li><strong>Costs grow even before you reach the ceiling.</strong> Ten turns send 245,000 input tokens while adding only 38,000 tokens of new information.</li>
+        <li>And <strong>fitting is not the same as being used evenly</strong> — published research found performance degrading as input length grows.</li>
+      </ul>
+    </div>
+    <p style="font-size:.9rem;color:var(--c-muted);max-width:760px;">
+      The easiest way to misread this term is to let the headline number travel on its own. What actually changes your outcome is <strong>the price step just below the ceiling</strong>, and <strong>the accuracy ceiling well below that</strong>. Next time you see &ldquo;supports a 1M context window,&rdquo; look for the rate step and the cache rules in the same paragraph.
+    </p>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="section" style="padding-top:0;">
+    <div style="background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-accent);border-radius:var(--r-lg);padding:1.5rem;text-align:center;">
+      <h3 style="font-size:1.1rem;margin-bottom:.75rem;">Next</h3>
+      <p style="color:var(--c-muted);font-size:.9rem;margin-bottom:1rem;">The rate difference when you resend a prefix is in <a href="/en/glossary/prompt-cache/">entry 2 (prompt caching)</a>, and how to read benchmark numbers is in <a href="/en/glossary/gpt-6-astra-benchmarks/">entry 1</a>. Current rates are in the <a href="/en/pricing/">pricing comparison</a>.</p>
+      <a href="/en/glossary/" style="display:inline-block;background:var(--c-accent);color:#fff;font-weight:600;padding:.65rem 1.5rem;border-radius:var(--r-md);">🧪 Back to the glossary →</a>
+      <p style="margin-top:.8rem;font-size:.82rem;color:var(--c-muted);"><a href="/en/glossary/">Glossary</a> · <a href="/en/glossary/prompt-cache/">Prompt caching</a> · <a href="/en/glossary/gpt-6-astra-benchmarks/">Reading benchmark numbers</a> · <a href="/en/pricing/">Pricing</a> · <a href="/en/calculator/">Token calculator</a></p>
+    </div>
+  </section>
+
+  <div class="tip-box" style="border-left-color:var(--c-red);margin-bottom:2rem;">
+    <h3>⚠️ Disclaimer</h3>
+    <ul>
+      <li>Rates, limits and quotations were checked against primary sources (OpenAI, Google, Anthropic and DeepSeek official pages) on 2026-09-21. Pricing and specifications change without notice — always confirm on the vendor's page before you commit.</li>
+      <li>Every dollar figure is our own plain arithmetic (tokens × rate) and excludes caching, batch discounts, cache writes and minimum charges. Real invoices will differ.</li>
+      <li>The finding that performance degrades with longer input comes from Chroma's July 2025 report (18 models; the GPT-4.1, Claude 4, Gemini 2.5 and Qwen3 generations). We have not verified whether current models show the same effect at the same strength.</li>
+      <li>Thresholds such as 272K are model-specific. Do not apply the figures here to other models.</li>
+      <li>Vendor wording is quoted verbatim; the surrounding explanation is ours. Where the two differ, the vendor's wording governs.</li>
+      <li>We are not affiliated with any provider, and this is not a recommendation of any product.</li>
+    </ul>
+  </div>
+</div></main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>Operated by okamoちゃんねる</p><p><a href="/en/">Home</a> · <a href="/en/pricing/">Pricing</a> · <a href="/en/calculator/">Calculator</a> · <a href="/en/timeline/">Timeline</a> · <a href="/en/glossary/">Glossary</a> · <a href="/en/gpt-6/">GPT-6 Astra</a></p></div><p class="footer-disclaimer">⚠️ Prices and specifications change without notice. Always confirm on the vendor's official page before you commit. This site is not affiliated with any provider.</p></div></footer>
+</body>
+</html>

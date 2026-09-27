@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Claude Mythos 5.1 — Trusted-Access Variant for Vetted Organizations [vs Fable 5.1] — LLM Data Hub</title>
+  <meta name="description" content="Anthropic Claude Mythos 5.1: availability, access programs (CVP/LSVP), differences from Fable 5.1, and benchmarks (Terminal-Bench 4.0 60.9%). A restricted model for vetted cybersecurity and life-sciences organizations. Verified primary sources.">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/en/claude-mythos-5-1/">
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/claude-mythos-5-1/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/claude-mythos-5-1/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/claude-mythos-5-1/">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/en/claude-mythos-5-1/">
+  <meta property="og:title" content="Claude Mythos 5.1 — Trusted-Access Variant for Vetted Organizations">
+  <meta property="og:description" content="Same model as Fable 5.1, different safeguards. CVP/LSVP only, US organizations. Terminal-Bench 4.0 60.9%.">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Claude Mythos 5.1 — Trusted-Access Variant for Vetted Organizations [vs Fable 5.1]","datePublished":"2026-09-01","dateModified":"2026-09-01","author":{"@type":"Organization","name":"LLM Data Hub"},"publisher":{"@type":"Organization","name":"okamo channel"},"url":"https://llm.okamomedia.tokyo/en/claude-mythos-5-1/","inLanguage":"en"}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .hero-mythos{background:linear-gradient(135deg,#0d1117 0%,#1a1424 50%,#0f1117 100%);border-bottom:1px solid var(--c-border);padding:3rem 1rem 2.5rem;text-align:center}.hero-mythos .price-flag{display:inline-block;background:rgba(167,139,250,.15);border:1px solid rgba(167,139,250,.35);color:var(--c-accent2);font-size:.82rem;font-weight:700;padding:.3rem .8rem;border-radius:100px;margin-bottom:1rem}.hero-mythos h1{font-size:clamp(1.6rem,4.5vw,2.4rem);font-weight:800;line-height:1.2;margin-bottom:.75rem}.hero-mythos h1 span{color:var(--c-accent2)}.hero-mythos .lead{font-size:1.05rem;color:var(--c-muted);max-width:680px;margin:0 auto 1.5rem}.hero-mythos .quick-stats{display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;margin-top:1rem}.hero-mythos .stat{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.75rem 1.25rem;text-align:center}.hero-mythos .stat .val{font-family:var(--font-mono);font-size:1.25rem;font-weight:700;color:var(--c-accent2)}.hero-mythos .stat .lbl{font-size:.75rem;color:var(--c-muted);margin-top:.15rem}
+    .access-card{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:1.1rem 1.25rem;margin-bottom:.8rem}.access-card h4{font-size:.95rem;font-weight:700;margin-bottom:.4rem}.access-card p{font-size:.86rem;color:var(--c-muted);line-height:1.6}
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/en/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="Main navigation"><a href="/en/" class="nav-link">Home</a><a href="/en/pricing/" class="nav-link">Pricing</a><a href="/en/calculator/" class="nav-link">Token Calculator</a><a href="/en/timeline/" class="nav-link">Release Timeline</a><a href="/en/china-ai/" class="nav-link">China AI</a><a href="/en/multimodal/" class="nav-link">Multimodal</a><a href="/en/mai/" class="nav-link">MS AI (MAI)</a><a href="/en/glossary/" class="nav-link">Glossary</a></nav></div></header>
+
+<section class="hero-mythos"><div class="container">
+  <p class="price-flag">🛡️ Released September 1, 2026 — trusted access only</p>
+  <h1>Claude Mythos <span>5.1</span></h1>
+  <p class="lead">The same model as Fable 5.1 with different safeguards — a variant with relaxed cybersecurity and life-sciences safeguards for vetted organizations.</p>
+  <div class="quick-stats">
+    <div class="stat"><div class="val">Same as Fable 5.1</div><div class="lbl">Underlying model</div></div>
+    <div class="stat"><div class="val">1M</div><div class="lbl">Context window</div></div>
+    <div class="stat"><div class="val">128K</div><div class="lbl">Max output tokens</div></div>
+    <div class="stat"><div class="val">Restricted</div><div class="lbl">Availability (US orgs)</div></div>
+  </div>
+</div></section>
+
+<main><div class="container">
+<div class="updated-bar" style="margin-top:2rem;"><span class="dot">●</span>Last updated: <time datetime="2026-09-01">September 1, 2026</time> | Source: <a href="https://www.anthropic.com/claude-fable-and-mythos-5-1" target="_blank" rel="noopener">Anthropic announcement</a> | <a href="/en/claude-fable-5-1/">Fable 5.1 deep dive</a></div>
+
+<!-- Overview -->
+<section class="section" style="padding-top:0;" aria-labelledby="overview-h">
+<h2 class="section-title" id="overview-h" style="font-size:1.2rem;">Difference from Fable 5.1</h2>
+<p class="section-sub">Mythos 5.1 is not a "smarter" standalone model — it is <strong>the same underlying model as Fable 5.1</strong> with different safeguards applied.</p>
+<div class="table-wrap"><table><thead><tr><th></th><th>Claude Fable 5.1</th><th>Claude Mythos 5.1</th></tr></thead><tbody>
+<tr><td class="model-name">Underlying model</td><td>Same</td><td>Same</td></tr>
+<tr><td class="model-name">Availability</td><td>General (API, Claude.ai, etc.)</td><td>Trusted access only</td></tr>
+<tr><td class="model-name">Safeguards</td><td>Standard (production)</td><td>Relaxed in cyber &amp; life sciences</td></tr>
+<tr><td class="model-name">Eligibility</td><td>All users</td><td>Vetted orgs (currently US only)</td></tr>
+<tr><td class="model-name">API ID</td><td>claude-fable-5-1</td><td>No public API (application required)</td></tr>
+</tbody></table></div>
+<p class="source-note">Source: <a href="https://www.anthropic.com/claude-fable-and-mythos-5-1" target="_blank" rel="noopener">Anthropic announcement</a> (verified 2026-09-01). "Claude Fable 5.1 and Claude Mythos 5.1 are the same model, but with different levels of safeguards."</p>
+</section>
+
+<!-- Access Programs -->
+<section class="section" style="padding-top:0;" aria-labelledby="access-h">
+<h2 class="section-title" id="access-h" style="font-size:1.2rem;">Trusted Access Programs</h2>
+<p class="section-sub">Access to Mythos 5.1 is rolling out through the verification programs below — LSVP is already underway, while CVP will add Mythos-class support soon.</p>
+<div class="access-card"><h4>🔐 Cyber Verification Program (CVP)</h4><p>Currently provides access to certain Opus- and Sonnet-class models with reduced cyber safeguards for defensive security work. Mythos-class models will be added in the near future. <a href="https://portal.anthropic.com/programs/cvp" target="_blank" rel="noopener">Apply to join the CVP →</a></p></div>
+<div class="access-card"><h4>🧬 Life Sciences Verification Program (LSVP)</h4><p>Lets life-sciences professionals use Mythos 5.1 with safeguards designed for professional R&amp;D (all other safeguards remain). Enrolled its first participants in partnership with the US government; plans to expand to the broader life-sciences community.</p></div>
+<p style="font-size:.84rem;color:var(--c-muted);">※ Currently limited to <strong>US organizations</strong>. Anthropic is coordinating with the US government to expand to a broader set of domestic and international partners.</p>
+<p class="source-note">Source: <a href="https://www.anthropic.com/claude-fable-and-mythos-5-1" target="_blank" rel="noopener">Anthropic announcement (Trusted access for Claude Mythos 5.1)</a></p>
+</section>
+
+<!-- Performance -->
+<section class="section" style="padding-top:0;" aria-labelledby="perf-h">
+<h2 class="section-title" id="perf-h" style="font-size:1.2rem;">Performance &amp; Specs</h2>
+<p class="section-sub">Since the underlying model is identical to Fable 5.1, specs (1M context, 128K output) are shared. Safeguard differences produce small gaps on some benchmarks.</p>
+<div class="table-wrap"><table><thead><tr><th>Benchmark</th><th>Mythos 5.1</th><th>Fable 5.1</th></tr></thead><tbody>
+<tr><td>Agentic coding — Terminal-Bench 4.0</td><td class="price">60.9%</td><td class="price">55.8%</td></tr>
+</tbody></table></div>
+<p style="font-size:.84rem;color:var(--c-muted);">Anthropic attributes this gap to tasks where earlier, less precise cyber safeguards intervened, and expects the difference to shrink with today's safeguard improvements.</p>
+<p class="source-note">Source: <a href="https://www.anthropic.com/claude-fable-and-mythos-5-1" target="_blank" rel="noopener">Anthropic announcement</a> (verified 2026-09-01). See the <a href="/en/claude-fable-5-1/">Fable 5.1 page</a> for full specs.</p>
+</section>
+
+<!-- Pricing -->
+<section class="section" style="padding-top:0;" aria-labelledby="pricing-h">
+<h2 class="section-title" id="pricing-h" style="font-size:1.2rem;">Pricing</h2>
+<p class="section-sub">Mythos 5.1 is a limited-availability model, but its pricing is published on Anthropic's official pricing page (platform.claude.com). Standard rates match Fable 5.1.</p>
+<div class="table-wrap"><table><thead><tr><th>Tier</th><th>Input</th><th>5m Cache Write</th><th>1h Cache Write</th><th>Cache Read</th><th>Output</th><th>Notes</th></tr></thead><tbody>
+<tr><td class="model-name">Standard</td><td class="price">$10.00</td><td class="price">$12.50</td><td class="price">$20.00</td><td class="price">$0.25</td><td class="price">$50.00</td><td>Same as Fable 5.1. Batch $5/$25</td></tr>
+</tbody></table></div>
+<div class="tip-box" style="border-left-color:var(--c-accent2);">
+  <h3>📌 Access requires trusted-access vetting</h3>
+  <ul>
+    <li>Pricing is public, but <strong>Mythos 5.1 is not freely available as a standard self-service API</strong>. Access requires vetting/invitation through CVP or LSVP.</li>
+  </ul>
+</div>
+<p class="source-note">Source: <a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener">platform.claude.com/docs/en/about-claude/pricing</a> (verified 2026-09-01; listed as "Claude Mythos 5.1 (limited availability)")</p>
+</section>
+
+<!-- Claude Security -->
+<section class="section" style="padding-top:0;" aria-labelledby="security-h">
+<h2 class="section-title" id="security-h" style="font-size:1.2rem;">Claude Security is now powered by Mythos 5.1</h2>
+<p style="font-size:.9rem;color:var(--c-muted);">Anthropic's Claude Security product — which scans codebases for vulnerabilities and suggests patches for human review — is now also powered by <strong>Claude Mythos 5.1</strong>. Direct Mythos 5.1 access is limited to vetted cyberdefenders and life-science professionals; check Anthropic's guidance for Claude Security availability and terms.</p>
+<p class="source-note">Source: <a href="https://www.anthropic.com/claude-fable-and-mythos-5-1" target="_blank" rel="noopener">Anthropic announcement</a> (verified 2026-09-01)</p>
+</section>
+
+<!-- CTA -->
+<section class="section" style="padding-top:0;">
+<div style="background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-anthropic);border-radius:var(--r-lg);padding:1.5rem;text-align:center;">
+  <h3 style="font-size:1.1rem;margin-bottom:.75rem;">General users: use Fable 5.1</h3>
+  <p style="color:var(--c-muted);font-size:.9rem;margin-bottom:1rem;">Mythos 5.1 requires an application. For normal coding and knowledge work, the generally available Fable 5.1 is what you want.</p>
+  <a href="/en/claude-fable-5-1/" style="display:inline-block;background:var(--c-anthropic);color:#fff;font-weight:600;padding:.65rem 1.5rem;border-radius:var(--r-md);">→ Claude Fable 5.1 deep dive</a>
+  <p style="margin-top:.8rem;font-size:.82rem;color:var(--c-muted);"><a href="/en/pricing/">📊 Full Pricing Comparison</a> · <a href="/en/timeline/">🗓️ Release Timeline</a> · <a href="https://www.anthropic.com/claude-fable-and-mythos-5-1" target="_blank" rel="noopener">🔗 Anthropic Announcement</a></p>
+</div>
+</section>
+
+<div class="tip-box" style="border-left-color:var(--c-red);margin-bottom:2rem;">
+  <h3>⚠️ Disclaimer</h3>
+  <ul>
+    <li>Information verified against Anthropic's official pages (anthropic.com / platform.claude.com) on 2026-09-01. Subject to change without notice.</li>
+    <li>Mythos 5.1 eligibility and pricing are application-based; confirm directly with Anthropic.</li>
+    <li>This site is informational only. Not affiliated with any provider.</li>
+  </ul>
+</div>
+
+</div></main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>Operated by okamo channel</p><p><a href="/en/">Home</a> · <a href="/en/pricing/">Pricing</a> · <a href="/en/calculator/">Calculator</a> · <a href="/en/timeline/">Timeline</a> · <a href="/en/claude-fable-5-1/">Fable 5.1</a></p></div><p class="footer-disclaimer">⚠️ Pricing and specifications may change without notice. Always verify on official pages. Not affiliated with any provider.</p></div></footer>
+</body>
+</html>

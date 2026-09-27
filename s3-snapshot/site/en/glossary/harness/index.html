@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>What Is an Agent Harness? Why the Same Model Scores Differently | LLM Data Hub</title>
+  <meta name="description" content="A harness is everything around the model: system prompts, tools, skills, retries, sandboxes, memory and scoring. The same model scored 62.7% under ARC Prize's Standard harness and 99.9% under OpenAI's Provider Adapter harness. What a harness is, what it contains, and why the numbers move — with primary sources.">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/en/glossary/harness/">
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/glossary/harness/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/glossary/harness/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/glossary/harness/">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/en/glossary/harness/">
+  <meta property="og:title" content="What Is an Agent Harness? Why the Same Model Scores Differently">
+  <meta property="og:description" content="A harness is everything around the model. On ARC-AGI-3 the same model scored 62.7% under a neutral harness and 99.9% under a provider harness. What is inside a harness, and why the numbers move.">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"What Is an Agent Harness? Why the Same Model Scores Differently","datePublished":"2026-09-19","dateModified":"2026-09-19","author":{"@type":"Organization","name":"LLM Data Hub"},"publisher":{"@type":"Organization","name":"okamo channel"},"url":"https://llm.okamomedia.tokyo/en/glossary/harness/","inLanguage":"en","about":"Agent harnesses: what they contain, and why benchmark scores depend on the harness that produced them"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://llm.okamomedia.tokyo/en/"},{"@type":"ListItem","position":2,"name":"Glossary","item":"https://llm.okamomedia.tokyo/en/glossary/"},{"@type":"ListItem","position":3,"name":"What is an agent harness?","item":"https://llm.okamomedia.tokyo/en/glossary/harness/"}]}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .phrase-box{background:linear-gradient(135deg,#12162a 0%,#1a1d35 55%,#0f1117 100%);border:1px solid var(--c-border);border-left:3px solid var(--c-accent2);border-radius:var(--r-lg);padding:1.2rem 1.3rem;margin:1.2rem 0 1.6rem}
+    .phrase-box .phrase{font-size:1.02rem;font-weight:700;line-height:1.75;margin-bottom:.6rem}
+    .phrase-box .phrase-meta{font-size:.8rem;color:var(--c-muted);line-height:1.7}
+    .num-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:.8rem;margin:1rem 0 1.6rem}
+    .num-card{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.9rem 1rem}
+    .num-card .k{font-family:var(--font-mono);font-size:.74rem;color:var(--c-muted);font-weight:600;letter-spacing:.02em}
+    .num-card .v{font-family:var(--font-mono);font-size:1.05rem;font-weight:700;margin:.15rem 0 .2rem}
+    .num-card .d{font-size:.8rem;color:var(--c-muted);line-height:1.6}
+    .read-box{background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-green);border-radius:var(--r-md);padding:1rem 1.2rem;margin:1rem 0 1.6rem;font-size:.88rem;color:var(--c-muted)}
+    .read-box strong{color:var(--c-text)}
+    .flow-fig{margin:1rem 0 1.4rem}
+    .flow-fig svg{width:100%;height:auto;border:1px solid var(--c-border);border-radius:var(--r-md);background:var(--c-surface)}
+    .fig-scroll{overflow:visible}
+    /* 幅800pxの図はスマホでは文字が小さくなりすぎるため、680px以下は横スクロールで読みやすさを保つ */
+    @media (max-width:680px){.fig-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:.2rem}.fig-scroll svg{min-width:620px}}
+    .cmp-table th,.cmp-table td{font-size:.85rem}
+    .quote-box{background:#11131c;border:1px solid var(--c-border);border-left:3px solid var(--c-accent2);border-radius:var(--r-md);padding:.9rem 1.1rem;margin:1rem 0;font-size:.86rem;color:var(--c-muted);line-height:1.8}
+    .quote-box .en{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82rem;color:var(--c-text);display:block;margin-bottom:.35rem}
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/en/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="Main navigation"><a href="/en/" class="nav-link">Home</a><a href="/en/pricing/" class="nav-link">Pricing</a><a href="/en/calculator/" class="nav-link">Token Calculator</a><a href="/en/timeline/" class="nav-link">Release Timeline</a><a href="/en/china-ai/" class="nav-link">China AI</a><a href="/en/multimodal/" class="nav-link">Multimodal</a><a href="/en/mai/" class="nav-link">MS AI (MAI)</a><a href="/en/glossary/" class="nav-link">Glossary</a></nav></div></header>
+
+<main><div class="container">
+  <div class="section" style="padding-bottom:0;">
+    <h1 class="section-title" style="font-size:1.55rem;">What is an agent harness? The model is not the whole agent</h1>
+    <p class="section-sub" style="max-width:760px;">
+      <a href="/en/glossary/">Glossary</a> entry 3. This one covers the <strong>harness</strong>.
+      Entry 1 left a line hanging: the same benchmark scores 62.7% under ARC Prize's neutral (Standard) harness. Why would the
+      <strong>same model on the same benchmark</strong> produce two different numbers? That is what a harness explains.
+      We start from the definition and end with something you can use the next time you read a benchmark score.
+    </p>
+    <div class="phrase-box">
+      <p class="phrase">&ldquo;Agent = Model + Harness&rdquo;</p>
+      <p class="phrase-meta">Source: <a href="https://www.deepseek.com/harness/en/" target="_blank" rel="noopener">DeepSeek Harness official page</a> (checked 2026-09-19). DeepSeek put this line at the top of the page for its agent platform, <strong>DeepSeek Harness</strong>. Read it literally: an agent is a model <em>plus</em> a harness. A model on its own is not an agent.</p>
+    </div>
+    <div class="updated-bar">
+      <span class="dot">●</span>
+      Last updated: <time datetime="2026-09-19">September 19, 2026</time>
+      &ensp;|&ensp; Primary sources: <a href="https://www.deepseek.com/harness/en/" target="_blank" rel="noopener">DeepSeek Harness</a> · <a href="https://arcprize.org/blog/astra" target="_blank" rel="noopener">ARC Prize (GPT-6 Astra on ARC-AGI-3)</a>
+      &ensp;|&ensp; Checked 2026-09-19
+    </div>
+  </div>
+
+  <!-- ===== 1. Definition ===== -->
+  <section class="section" style="padding-top:1.5rem;" aria-labelledby="def-h">
+    <h2 class="section-title" id="def-h" style="font-size:1.2rem;">Short version: a harness is everything that is not the model</h2>
+    <div class="read-box">
+      <strong>A harness is the whole set of plumbing you put around a model to make it actually work.</strong>
+      The system prompt, which tools it can call, how many attempts it gets, what sandbox it runs in, how earlier turns are carried forward,
+      and <strong>how the result is scored</strong>. None of that touches the model's weights, and all of it moves the score.
+    </div>
+    <p style="font-size:.9rem;color:var(--c-muted);max-width:760px;">
+      <strong>One thing this is not: a pricing story.</strong> A harness does not change the per-token rate your vendor charges — it changes what you get for that rate (score, latency, token consumption).
+      In practice, teams talk about swapping models or rewriting prompts. Very often the thing moving the numbers is the design
+      <strong>around</strong> the model. That is why &ldquo;harness&rdquo; is used as a term in its own right: without naming the harness,
+      two people comparing benchmark scores are usually not comparing the same thing at all.
+    </p>
+  </section>
+
+  <!-- ===== 2. Brain / body ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="brain-h">
+    <h2 class="section-title" id="brain-h" style="font-size:1.2rem;">The mental model: the model is the brain, the harness is the body and the kit</h2>
+    <p class="section-sub" style="max-width:760px;">DeepSeek's own page puts the relationship in two short sentences.</p>
+    <div class="quote-box">
+      <span class="en">"The model is the soul of an agent." / "A harness lets an agent understand its environment, use tools, and keep working in real-world settings."</span>
+      The model is the soul of the agent; the harness is what lets that agent understand its environment, use tools, and keep working in real-world settings.
+    </div>
+    <div class="num-grid">
+      <div class="num-card"><div class="k">Model</div><div class="v">The brain</div><div class="d">The reasoning capability itself. Its weights come from training and are not yours to edit</div></div>
+      <div class="num-card"><div class="k">Harness</div><div class="v">Body, tools, plan</div><div class="d">What it sees, what it can use, how many tries it gets, how results are counted. All designable</div></div>
+      <div class="num-card"><div class="k">So numbers move</div><div class="v">Same brain</div><div class="d">A different course and a different referee produce a different record</div></div>
+    </div>
+  </section>
+
+  <!-- ===== 3. Contents ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="parts-h">
+    <h2 class="section-title" id="parts-h" style="font-size:1.2rem;">What is inside a harness (from the vendor's own list)</h2>
+    <p class="section-sub" style="max-width:760px;">&ldquo;Plumbing&rdquo; is too vague to be useful, so here is the parts list. DeepSeek Harness says every agent capability is implemented as a plugin, and names them.</p>
+    <div class="quote-box">
+      <span class="en">"Plugins provide every agent capability, including models, tools, skills, sessions, sandboxes, storage, loops, scheduling, and the UI."</span>
+      Plugins supply every agent capability — models, tools, skills, sessions, sandboxes, storage, loops, scheduling and the UI.
+    </div>
+    <div class="table-wrap"><table class="cmp-table"><thead><tr><th>Harness component</th><th>What it decides</th><th>Why the number moves</th></tr></thead><tbody>
+      <tr><td class="model-name">System prompt</td><td>What the model is shown, and what role and constraints it gets</td><td>Different instructions, same model, different behaviour</td></tr>
+      <tr><td class="model-name">Tools</td><td>Which external capabilities are available (file editing, shell, search, APIs)</td><td>More tools can solve more tasks; fewer tools change what is being measured</td></tr>
+      <tr><td class="model-name">Skills and procedures</td><td>Whether a workflow or checklist is handed over up front</td><td>A given procedure removes exploration overhead</td></tr>
+      <tr><td class="model-name">Sessions and memory</td><td>How prior turns and intermediate results are carried forward</td><td>If carry-over is assumed, long tasks lose less accuracy</td></tr>
+      <tr><td class="model-name">Sandbox</td><td>Where it executes (isolation, permissions, network)</td><td>A different environment changes which actions are even possible</td></tr>
+      <tr><td class="model-name">Loops and retries</td><td>How many times it may reconsider or retry</td><td>More attempts raise the success rate; the cap is part of the result</td></tr>
+      <tr><td class="model-name">Scheduling</td><td>How parallel work and subagents are ordered</td><td>Sequencing changes time and step count</td></tr>
+      <tr><td class="model-name">Logging</td><td>How inputs, reasoning and tool calls are recorded</td><td>What you cannot replay, you cannot improve or verify</td></tr>
+      <tr><td class="model-name">Scoring and evaluation</td><td>How results are counted (pass/fail, partial credit, cut-offs)</td><td>Change the counting and the same run scores differently</td></tr>
+    </tbody></table></div>
+    <p class="source-note">Everything except the quoted list is our plain-language expansion of DeepSeek Harness's own items (models, tools, skills, sessions, sandboxes, storage, loops, scheduling, UI). &ldquo;Scoring and evaluation&rdquo; is our addition as a benchmark-side design element; it is not a DeepSeek Harness item.</p>
+  </section>
+
+  <!-- ===== 4. Worked example ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="arc-h">
+    <h2 class="section-title" id="arc-h" style="font-size:1.2rem;">Why the numbers move: ARC-AGI-3, with the conditions attached</h2>
+    <p class="section-sub" style="max-width:760px;">Abstract advice is hard to act on, so here is one measured case. <strong>Same model</strong> (GPT-6 Astra), <strong>same benchmark</strong> (ARC-AGI-3), two published results under different harnesses. The <strong>model setting also differs — Astra (max) versus Astra (high)</strong> — so the gap between 62.7% and 99.9% <strong>cannot be attributed to the harness alone</strong>.</p>
+    <div class="table-wrap"><table class="cmp-table"><thead><tr><th>Harness (measurement condition)</th><th>Model setting</th><th>Score</th><th>Cost</th><th>What it does</th></tr></thead><tbody>
+      <tr><td class="model-name">Standard harness<br>(ARC Prize's neutral harness = the same minimal interface for every model)</td><td class="price">Astra (max)</td><td class="price">62.7%</td><td class="price">$26K</td><td>The model carries forward notes it chooses to keep; the same minimal interface for every model</td></tr>
+      <tr><td class="model-name">Provider Adapter harness<br>(OpenAI's)</td><td class="price">Astra (high)</td><td class="price">99.9%</td><td class="price">$19K</td><td>Preserves opaque reasoning state between requests, and uses compaction for longer conversations so the model can reuse prior work</td></tr>
+    </tbody></table></div>
+    <div class="quote-box">
+      <strong>Standard harness, verbatim:</strong>
+      <span class="en">"Standard harness enables a model to carry forward notes it chooses to keep with it throughout the environment."</span>
+      <strong>Provider Adapter harness, verbatim:</strong>
+      <span class="en">"The Provider Adapter harness preserves opaque reasoning state between requests and uses compaction for longer conversations, allowing the model to reuse prior work."</span>
+      <span style="font-size:.8rem;">Both quoted from the ARC Prize blog (checked 2026-09-19).</span>
+    </div>
+    <div class="read-box">
+      <strong>The difference is what can be carried forward.</strong>
+      Under the neutral harness the model carries only <strong>notes it chose itself</strong>. Under the Provider Adapter it <strong>preserves reasoning state across requests</strong> and compacts long conversations for reuse.
+      Same weights, different memory. That is the <strong>main condition separating</strong> 62.7% from 99.9% — though the model setting differs too (max versus high), so not all of the gap is the harness.
+    </div>
+    <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.2em;line-height:1.85;">
+      <li><strong>Both are state of the art under their own conditions.</strong> ARC Prize treats both as SOTA. This is not a case of one number being inflated and the other being correct.</li>
+      <li><strong>A like-for-like comparison exists too.</strong> ARC Prize also published <strong>7.8% for GPT-5.6 Sol</strong> on the same Standard harness (checked 2026-09-15). That is roughly an eightfold step on one playing field. Putting 99.9% next to 7.8% compares two different harnesses.</li>
+      <li><strong>The benchmark operator itself has committed to labelling.</strong> See the quote below.</li>
+    </ul>
+    <div class="quote-box">
+      <span class="en">"Going forward, we will report both Standard harness and Provider Adapter harness results on the ARC-AGI leaderboard, with each evaluation condition clearly labeled."</span>
+      Going forward, both harness results will be reported on the ARC-AGI leaderboard with each evaluation condition clearly labelled (ARC Prize blog, checked 2026-09-19). Our reading is that <strong>a score with no harness name makes the comparison conditions hard to judge</strong>, so it is worth checking which configuration a number came from.
+    </div>
+    <p class="source-note">Sources: <a href="https://arcprize.org/blog/astra" target="_blank" rel="noopener">ARC Prize, &ldquo;OpenAI's GPT-6 Astra on ARC-AGI-3&rdquo;</a> (checked 2026-09-19) and <a href="https://arcprize.org/results/openai-gpt-6-astra" target="_blank" rel="noopener">the ARC-AGI results page</a>. Scores and costs are ARC Prize's published figures, not our own measurement. Background on the same harness architecture is in <a href="/en/glossary/gpt-6-astra-benchmarks/">entry 1</a>.</p>
+  </section>
+
+  <!-- ===== 5. Concrete product ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="dsh-h">
+    <h2 class="section-title" id="dsh-h" style="font-size:1.2rem;">What does that look like in practice? DeepSeek Harness</h2>
+    <p class="section-sub" style="max-width:760px;">&ldquo;Harness&rdquo; is an abstract term, so a real one helps. DeepSeek ships <strong>DeepSeek Harness</strong> in <strong>developer preview</strong>, with the source code released at the same time. Here is only what its official page states.</p>
+    <div class="table-wrap"><table class="cmp-table"><thead><tr><th>What the page says</th><th>What it means</th></tr></thead><tbody>
+      <tr><td class="model-name">Everything is a plugin</td><td>Models, tools, skills, sessions, sandboxes, storage, loops, scheduling and the UI are all swappable, recomposable parts</td></tr>
+      <tr><td class="model-name">Cordis kernel</td><td>Handles mounting, unmounting and dependencies of plugins; the agent's capabilities live in the plugins</td></tr>
+      <tr><td class="model-name">Compose with configuration</td><td>Select, swap or extend any capability in configuration, without changing the harness source code</td></tr>
+      <tr><td class="model-name">Every run is traceable</td><td>Everything the model sees is recorded in an append-only session log: system prompts, reasoning, tool calls and results, subagent scheduling, context injections. Resume, fork, search and replay all work on that same event stream</td></tr>
+    </tbody></table></div>
+    <h3 style="font-size:1rem;margin:1.4rem 0 .5rem;">Four runtime modes — and one of them is explicitly for benchmarking</h3>
+    <p style="font-size:.88rem;color:var(--c-muted);line-height:1.85;max-width:760px;">The page lists four runtime modes. All four run the same kind of model; what differs is the kit handed to it. That is a harness difference, shipped as a feature.</p>
+    <div class="num-grid">
+      <div class="num-card"><div class="k">Standard mode</div><div class="v">Full kit</div><div class="d">File editing, shell, file and web search, skills, planning, goals, subagents and workflows</div></div>
+      <div class="num-card"><div class="k">Code mode</div><div class="v">Orchestrate in code</div><div class="d">Standard capabilities exposed through a Code Mode SDK, so the model can combine multi-step operations in one TypeScript program</div></div>
+      <div class="num-card"><div class="k">Minimal mode</div><div class="v">Two tools only</div><div class="d">A persistent bash tool and a file editor. The page states this is <strong>for benchmarking models in a minimal environment</strong></div></div>
+      <div class="num-card"><div class="k">Creator mode</div><div class="v">Build a harness</div><div class="d">Standard capabilities plus runtime inspection, plugin experiments and preset-authoring guidance</div></div>
+    </div>
+    <div class="read-box">
+      <strong>The interesting part is Minimal mode.</strong>
+      DeepSeek describes it as a two-tool agent <strong>for benchmarking models in a minimal environment</strong>. In other words, a stripped-down harness exists as a first-class feature precisely because
+      <strong>the harness changes what you measure</strong>. That is not a criticism of anyone's benchmark — it is a design assumption the vendor builds on.
+    </div>
+    <p class="source-note">Source: <a href="https://www.deepseek.com/harness/en/" target="_blank" rel="noopener">DeepSeek Harness official page</a> (checked 2026-09-19; developer preview). Quoted phrases are the page's own words; the rest is our summary. Repository: <a href="https://github.com/deepseek-ai/deepseek-harness" target="_blank" rel="noopener">github.com/deepseek-ai/deepseek-harness</a>. We are not affiliated with DeepSeek and this is not a product recommendation.</p>
+  </section>
+
+  <!-- ===== Figure ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="fig-h">
+    <h2 class="section-title" id="fig-h" style="font-size:1.2rem;">The picture: the harness is what sits outside the model</h2>
+    <figure class="flow-fig">
+      <div class="fig-scroll">
+      <svg viewBox="0 0 800 380" width="100%" role="img" aria-labelledby="harnFigTitleEn" style="display:block;">
+        <title id="harnFigTitleEn">A harness sits outside the model: system prompt, tools, skills, memory, sandbox and retries surround the model at the centre. Same model, different surroundings, different result (ARC-AGI-3: 62.7% under the Standard harness at model setting max, 99.9% under the Provider Adapter harness at setting high)</title>
+        <rect x="0" y="0" width="800" height="380" rx="14" fill="#14161f" stroke="#262a38"/>
+        <text x="36" y="44" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="18" font-weight="700" fill="#eef0f7">Harness = everything outside the model</text>
+        <text x="36" y="68" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12.5" fill="#8b90a3">Same model (the brain), different surroundings, different result</text>
+        <rect x="20" y="86" width="760" height="220" rx="12" fill="none" stroke="#3a3f52" stroke-width="1.5" stroke-dasharray="6 5"/>
+        <text x="34" y="108" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" font-weight="700" fill="#a78bfa">HARNESS (outside the model; this is what you design)</text>
+        <rect x="36" y="122" width="226" height="40" rx="6" fill="#1b1f2c" stroke="#3a3f52"/>
+        <text x="52" y="147" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="13" fill="#e8eaf2">System prompt</text>
+        <rect x="287" y="122" width="226" height="40" rx="6" fill="#1b1f2c" stroke="#3a3f52"/>
+        <text x="303" y="147" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="13" fill="#e8eaf2">Tools and search</text>
+        <rect x="538" y="122" width="226" height="40" rx="6" fill="#1b1f2c" stroke="#3a3f52"/>
+        <text x="554" y="147" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="13" fill="#e8eaf2">Skills, procedures</text>
+        <rect x="320" y="176" width="160" height="64" rx="10" fill="#2f3a55" stroke="#4b5570"/>
+        <text x="400" y="203" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="14" font-weight="700" fill="#eef0f7">Model (brain)</text>
+        <text x="400" y="223" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="11" fill="#9aa0b4">unchanged</text>
+        <rect x="36" y="254" width="226" height="40" rx="6" fill="#1b1f2c" stroke="#3a3f52"/>
+        <text x="52" y="279" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="13" fill="#e8eaf2">Sessions, memory</text>
+        <rect x="287" y="254" width="226" height="40" rx="6" fill="#1b1f2c" stroke="#3a3f52"/>
+        <text x="303" y="279" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="13" fill="#e8eaf2">Sandbox</text>
+        <rect x="538" y="254" width="226" height="40" rx="6" fill="#1b1f2c" stroke="#3a3f52"/>
+        <text x="554" y="279" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="13" fill="#e8eaf2">Loops, retries</text>
+        <text x="36" y="336" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12.5" fill="#9aa0b4">Scoring and evaluation — how results are counted — belong here too.</text>
+        <text x="36" y="360" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="11" fill="#6b7280">Example: ARC-AGI-3 — Standard 62.7% (max) / Provider Adapter 99.9% (high), both published by ARC Prize</text>
+      </svg>
+      <figcaption style="font-size:.78rem;color:var(--c-muted);margin-top:.5rem;">The model in the middle is fixed; the ring around it is designable. Components follow the list on the <a href="https://www.deepseek.com/harness/en/" target="_blank" rel="noopener">DeepSeek Harness page</a>. Scores are ARC Prize figures; the Standard harness was run at model setting max and the Provider Adapter at high.</figcaption>
+      </div>
+    </figure>
+  </section>
+
+  <!-- ===== 6. Analogy ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="analogy-h">
+    <h2 class="section-title" id="analogy-h" style="font-size:1.2rem;">Everyday version: the same player, a different score</h2>
+    <div class="read-box">
+      <strong>The same player scores differently when the court, the referee and the rulebook change.</strong>
+      The player's ability (the model) does not change. But the size of the court, the equipment allowed, what the referee calls a foul, how many substitutions are permitted — change those and the same player's score is a different number.
+      <strong>The harness is that whole set: court, referee, rules and equipment.</strong> Just as you can raise a score without replacing the player, you can move the numbers without swapping the model.
+    </div>
+    <div class="table-wrap"><table class="cmp-table"><thead><tr><th>In sport</th><th>In an AI agent</th></tr></thead><tbody>
+      <tr><td class="model-name">The player's ability</td><td>The model (trained weights; not yours to edit)</td></tr>
+      <tr><td class="model-name">Court size, the ball</td><td>Sandbox, available tools</td></tr>
+      <tr><td class="model-name">The referee and the rulebook</td><td>Scoring and evaluation (what counts as correct)</td></tr>
+      <tr><td class="model-name">Substitutions and timeouts</td><td>Retries and loop limits</td></tr>
+      <tr><td class="model-name">The coach's game plan</td><td>System prompt, skills, procedures</td></tr>
+      <tr><td class="model-name">Carrying last game's notes in</td><td>Sessions and memory — the thing that separated 62.7% from 99.9% on ARC-AGI-3</td></tr>
+    </tbody></table></div>
+    <p style="font-size:.88rem;color:var(--c-muted);max-width:760px;">One takeaway from the analogy: when a score is discussed, separate <strong>the player's story from the court-and-referee story</strong>. That is most of what reading a benchmark requires.</p>
+  </section>
+
+  <!-- ===== 7. In practice ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="use-h">
+    <h2 class="section-title" id="use-h" style="font-size:1.2rem;">How to use this at work</h2>
+    <div class="tip-box">
+      <h3>Three checks when you see a score</h3>
+      <ul>
+        <li><strong>Whose harness?</strong> The vendor's own, or a neutral one run by the benchmark operator. On ARC-AGI-3 that was 62.7% versus 99.9%.</li>
+        <li><strong>Is that harness close to your setup?</strong> A score that assumes reasoning state can be carried across requests will not reproduce in a setup that cannot carry it. And vice versa.</li>
+        <li><strong>What are the scoring and the limits?</strong> Retry caps, cut-offs, partial credit. Numbers measured under different rules do not make a ranking.</li>
+      </ul>
+    </div>
+    <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.2em;line-height:1.85;">
+      <li><strong>When your agent is not good enough, suspect the harness first.</strong> Tightening the toolset, fixing how memory is carried, or revisiting retry limits can beat swapping the model. ARC-AGI-3 is the same model under two harnesses producing two very different results.</li>
+      <li><strong>An improvement you cannot replay is not an improvement.</strong> DeepSeek makes &ldquo;everything the model sees is recorded in an append-only session log&rdquo; a headline feature precisely so harness changes can be verified. If you build your own, do not defer logging.</li>
+      <li><strong>This is separate from pricing.</strong> A harness affects performance — score, latency, token consumption — not the per-token rate itself. The <a href="/en/pricing/">pricing tables</a> cover rates; this entry is about what you get for them.</li>
+    </ul>
+  </section>
+
+  <!-- ===== 8. Summary ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="sum-h">
+    <h2 class="section-title" id="sum-h" style="font-size:1.2rem;">In one sentence</h2>
+    <div class="tip-box">
+      <h3>A harness is everything that is not the model</h3>
+      <ul>
+        <li>The model is the brain. <strong>The harness is the body, the tools, the plan and the referee</strong> that put it to work.</li>
+        <li>It includes: system prompt, tools, skills, sessions and memory, sandbox, loops and retries, scheduling, logging, scoring and evaluation.</li>
+        <li>That is why <strong>the same model on the same benchmark produces different numbers</strong>. On ARC-AGI-3, ARC Prize published 62.7% under the Standard harness (Astra max) and 99.9% under the Provider Adapter harness (Astra high). The settings differ as well, so not all of that gap is the harness.</li>
+        <li>When you read a benchmark, check <strong>which harness</strong> before you check which model.</li>
+      </ul>
+    </div>
+    <p style="font-size:.9rem;color:var(--c-muted);max-width:760px;">
+      The term is useful because it moves the discussion from &ldquo;is this a good model&rdquo; back to &ldquo;<strong>how is my setup designed</strong>&rdquo;. Same model, different harness, different result. Next time you see a score, look for the harness name first.
+    </p>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="section" style="padding-top:0;">
+    <div style="background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-accent);border-radius:var(--r-lg);padding:1.5rem;text-align:center;">
+      <h3 style="font-size:1.1rem;margin-bottom:.75rem;">Next</h3>
+      <p style="color:var(--c-muted);font-size:.9rem;margin-bottom:1rem;">The worked example that introduces harnesses is <a href="/en/glossary/gpt-6-astra-benchmarks/">entry 1 (how to read benchmark numbers)</a>; cache pricing is <a href="/en/glossary/prompt-cache/">entry 2 (prompt caching)</a>.</p>
+      <a href="/en/glossary/" style="display:inline-block;background:var(--c-accent);color:#fff;font-weight:600;padding:.65rem 1.5rem;border-radius:var(--r-md);">🧪 All glossary entries →</a>
+      <p style="margin-top:.8rem;font-size:.82rem;color:var(--c-muted);"><a href="/en/glossary/">Glossary</a> ・ <a href="/en/glossary/gpt-6-astra-benchmarks/">How to read benchmark numbers</a> ・ <a href="/en/glossary/prompt-cache/">Prompt caching</a> ・ <a href="/en/pricing/">Pricing</a> ・ <a href="/en/timeline/">Release timeline</a></p>
+    </div>
+  </section>
+
+  <div class="tip-box" style="border-left-color:var(--c-red);margin-bottom:2rem;">
+    <h3>⚠️ Disclaimer</h3>
+    <ul>
+      <li>Quotes and figures were checked against primary sources (DeepSeek's official page, the ARC Prize blog) on 2026-09-19. ARC-AGI-3 scores and costs are ARC Prize's published figures, not our measurements.</li>
+      <li>Vendor statements are quoted verbatim; the surrounding explanation is ours. Where the two differ, the vendor's wording governs.</li>
+      <li>DeepSeek Harness is in developer preview; features and APIs will change. Check the official page and repository before adopting it.</li>
+      <li>We are not affiliated with any provider, and this is not a recommendation of any product.</li>
+    </ul>
+  </div>
+</div></main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>Operated by okamoちゃんねる</p><p><a href="/en/">Home</a> · <a href="/en/pricing/">Pricing</a> · <a href="/en/calculator/">Calculator</a> · <a href="/en/timeline/">Timeline</a> · <a href="/en/glossary/">Glossary</a> · <a href="/en/gpt-6/">GPT-6 Astra</a></p></div><p class="footer-disclaimer">⚠️ Prices and specifications change without notice. Always confirm on the vendor's official page before you commit. This site is not affiliated with any provider.</p></div></footer>
+</body>
+</html>

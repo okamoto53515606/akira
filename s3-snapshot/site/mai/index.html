@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Microsoft AI (MAI) シリーズ特集【2026年9月版】料金・モデル・API・年表 — LLM Data Hub</title>
+  <meta name="description" content="Microsoftの自社開発LLM「MAI」シリーズを解説。最新のMAI-Image-2.6/2.6-Flash（画像生成）、MAI-Transcribe-2（音声認識・$0.10/時）、MAI-Thinking-1（推論）などのモデル・料金・APIの使い方・リリース年表を一次情報（microsoft.ai / Azure Foundry）で整理。MAI-Image-2.6/2.6-Flashのstarts at価格も掲載。2026年9月19日更新。">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/mai/">
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/mai/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/mai/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/mai/">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/mai/">
+  <meta property="og:title" content="Microsoft AI (MAI) シリーズ特集【2026年9月版】">
+  <meta property="og:description" content="Microsoftの自社開発LLM「MAI」シリーズ。画像生成・音声認識・推論などのモデル、料金、APIの使い方、リリース年表を一次情報で整理。">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Microsoft AI (MAI) シリーズ特集【2026年9月版】料金・モデル・API・年表","datePublished":"2026-09-09","dateModified":"2026-09-19","author":{"@type":"Organization","name":"LLM Data Hub"},"publisher":{"@type":"Organization","name":"okamoちゃんねる"},"url":"https://llm.okamomedia.tokyo/mai/","inLanguage":"ja"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"ホーム","item":"https://llm.okamomedia.tokyo/"},{"@type":"ListItem","position":2,"name":"Microsoft AI (MAI) シリーズ","item":"https://llm.okamomedia.tokyo/mai/"}]}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .hero-mai{background:linear-gradient(135deg,#0a1f3c 0%,#10506b 50%,#141a24 100%);border-bottom:1px solid var(--c-border);padding:3rem 1rem 2.4rem;text-align:center}.hero-mai .price-flag{display:inline-block;background:rgba(56,205,255,.12);border:1px solid rgba(56,205,255,.35);color:#4cd6ff;font-size:.82rem;font-weight:700;padding:.3rem .8rem;border-radius:100px;margin-bottom:1rem}.hero-mai h1{font-size:clamp(1.6rem,4.5vw,2.4rem);font-weight:800;line-height:1.2;margin-bottom:.7rem}.hero-mai h1 span{color:#4cd6ff}.hero-mai .lead{font-size:1.02rem;color:var(--c-muted);max-width:680px;margin:0 auto 1.4rem}.hero-mai .quick-stats{display:flex;gap:1.1rem;flex-wrap:wrap;justify-content:center}.hero-mai .stat{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.7rem 1.1rem;text-align:center;min-width:120px}.hero-mai .stat .val{font-family:var(--font-mono);font-size:1.1rem;font-weight:700;color:#4cd6ff}.hero-mai .stat .lbl{font-size:.72rem;color:var(--c-muted);margin-top:.15rem}
+    .mai-badge{color:#4cd6ff;font-size:1.1rem}
+    @media(max-width:640px){.hero-mai .quick-stats{flex-direction:column;gap:.5rem}}
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="メインナビゲーション"><a href="/" class="nav-link">ホーム</a><a href="/pricing/" class="nav-link">料金比較</a><a href="/calculator/" class="nav-link">トークン計算機</a><a href="/timeline/" class="nav-link">リリース年表</a><a href="/china-ai/" class="nav-link">中国AI</a><a href="/multimodal/" class="nav-link">マルチモーダル</a><a href="/mai/" class="nav-link active" aria-current="page">MS AI (MAI)</a><a href="/glossary/" class="nav-link">用語説明</a></nav></div></header>
+
+<section class="hero-mai"><div class="container">
+  <p class="price-flag">⚡ Microsoft の自社開発モデルファミリー — Foundry で提供、Copilot にも統合</p>
+  <h1>Microsoft AI <span>(MAI)</span> シリーズ</h1>
+  <p class="lead">OpenAI への依存を再調整するため、Microsoft が自社で開発した基盤モデル群。2026年に本格展開し、推論・コーディング・画像生成・音声認識・Voice をカバー。</p>
+  <div class="quick-stats">
+    <div class="stat"><div class="val">7+</div><div class="lbl">モデルファミリー</div></div>
+    <div class="stat"><div class="val">$0.10/時</div><div class="lbl">MAI-Transcribe-2（限定）</div></div>
+    <div class="stat"><div class="val">60言語</div><div class="lbl">Transcribe-2 対応</div></div>
+    <div class="stat"><div class="val">2026-04〜</div><div class="lbl">本格展開開始</div></div>
+  </div>
+</div></section>
+
+<main><div class="container">
+<div class="updated-bar" style="margin-top:2rem;"><span class="dot">●</span>最終更新: <time datetime="2026-09-19">2026年9月19日</time> | 出典: <a href="https://microsoft.ai/blog/" target="_blank" rel="noopener">microsoft.ai blog</a> · <a href="https://azure.microsoft.com/en-us/pricing/details/ai-foundry-models/microsoft/" target="_blank" rel="noopener">Azure Foundry 料金表</a> · <a href="https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure" target="_blank" rel="noopener">Microsoft Foundry ドキュメント</a> | <a href="/pricing/">料金比較</a> · <a href="/multimodal/">マルチモーダル</a> · <a href="/timeline/">年表</a></div>
+
+<p style="font-size:.9rem;color:var(--c-muted);margin-top:1rem;"><strong>MAI（Microsoft AI）</strong>は、Microsoft が自社で開発する基盤モデル群です。Azure の <strong>Microsoft Foundry</strong>（旧 Azure AI Foundry）でホスト・課金され、<strong>Azure-first</strong> で配布されます。OpenAI モデル（Azure OpenAI 経由）とは別に、Microsoft 自身が開発・提供する基盤モデルファミリーとして位置づけられます。具体的な価格は下記の料金表の通りで、エンタープライズ向けのコスト・ライセンス・データ主権の選択肢を広げることが狙いです。</p>
+
+<!-- 最新モデル -->
+<section class="section" style="padding-top:0;" aria-labelledby="latest-h">
+<h2 class="section-title" id="latest-h">最新モデル（2026年9月）</h2>
+<p class="section-sub">microsoft.ai 公式ブログで確認できる最も新しい2系統。どちらも Microsoft Foundry / MAI Playground で試せます。</p>
+
+<div class="tip-box" style="margin-bottom:1rem;">
+  <h3 style="margin-bottom:.3rem;">🖼️ MAI-Image-2.6 / MAI-Image-2.6-Flash（画像生成）— 2026-09-04</h3>
+  <p style="font-size:.88rem;color:var(--c-muted);margin:0;">MAI の最強画像モデル。マルチ参照画像編集（複数画像から人物・商品・スタイル・シーンを合成）、Web グラウンディング、動的アスペクト比、最大 <strong>1.5K 解像度</strong>に対応。<strong>MAI-Image-2.6</strong> は最高精度・画質、<strong>MAI-Image-2.6-Flash</strong> は同水準の品質を低遅延・高スループットで提供する位置づけ。Microsoft 公式発表（2026-09-04時点）では Arena で text-to-image・画像編集とも <strong>No.2</strong>、Artificial Analysis で画像編集 <strong>No.1</strong>。2.6-Flash は GPT-Image-2-Medium 比で <strong>2.8倍高速・72%高効率</strong> とされています。料金は公式ブログに <strong>テキスト入力 $5 / 画像入力 $8 / 画像出力 $38</strong>（2.6-Flash は $1.75 / $2.50 / $19、いずれも starts at）と記載されています。両方とも <strong>Public Preview</strong> で提供中。</p>
+</div>
+<div class="tip-box" style="margin-bottom:1rem;border-left-color:var(--c-green);">
+  <h3 style="margin-bottom:.3rem;">🎙️ MAI-Transcribe-2（音声認識）— 2026-09-03</h3>
+  <p style="font-size:.88rem;color:var(--c-muted);margin:0;">Microsoft のブログタイトルでは「世界で最も速く・正確で・安い音声認識モデル」と位置づけ。価格は <strong>$0.10 / 時間（年末までの限定オファー）</strong>。FLEURS 60言語で <strong>No.1</strong>（平均 WER 5.2%）、Artificial Analysis AA-WER で <strong>No.2</strong>（2.0%）。人工分析ベースの速度で GPT-Transcribe の10倍・Scribe v2 の7倍・Gemini 3.5 Transcribe の5倍。話者分離・単語タイムスタンプ・キーワードバイアス・verbatim/clean の文字起こしスタイル・コードスイッチングなどに対応。</p>
+</div>
+<p class="source-note">出典: <a href="https://microsoft.ai/news/pushing-the-quality-cost-frontier-with-mai-image-2-6/" target="_blank" rel="noopener">Pushing the quality-cost frontier with MAI-Image-2.6（2026-09-04）</a> · <a href="https://microsoft.ai/news/mai-transcribe-2-is-the-fastest-most-accurate-and-cheapest-speech-recognition-model-in-the-world/" target="_blank" rel="noopener">MAI-Transcribe-2（2026-09-03）</a></p>
+</section>
+
+<!-- 料金 -->
+<section class="section" style="padding-top:0;" aria-labelledby="pricing-h">
+<h2 class="section-title" id="pricing-h">モデル別・料金（Azure Foundry 確認済み）</h2>
+<p class="section-sub">Microsoft Azure「Foundry Models pricing（Microsoft セクション）」の <strong>USドル建て</strong>料金。単価は USD / 1Mトークン。画像・音声のモデルはトークン表記が特殊な点に注意。確認日 2026-09-09（2026-09-19に再確認。MAI-Image-2.6 系は依然として同表に未掲載、既存行の単価に変更なし）。</p>
+
+<div class="table-wrap"><table><thead><tr><th>モデル</th><th>入力 / 1M</th><th>キャッシュ入力 / 1M</th><th>出力 / 1M</th><th>分類</th></tr></thead><tbody>
+<tr><td class="model-name">MAI-Thinking-1</td><td class="price">$2.00</td><td class="price">$0.20</td><td class="price">$8.00</td><td>推論</td></tr>
+<tr><td class="model-name">MAI-Cyber-1 Flash</td><td class="price">$0.60</td><td class="price">$0.06</td><td class="price">$3.50</td><td>サイバー防御（MDASH）</td></tr>
+<tr><td class="model-name">MAI-DS-R1</td><td class="price">$1.35</td><td class="price">—</td><td class="price">$5.40</td><td>DeepSeek R1 系（Regional $1.485/$5.94）</td></tr>
+<tr><td class="model-name">MAI-Image-2</td><td class="price">$5</td><td class="price">—</td><td class="price">$33</td><td>画像生成（Global）</td></tr>
+<tr><td class="model-name">MAI-Image-2-Efficient</td><td class="price">$5</td><td class="price">—</td><td class="price">$19.50</td><td>画像生成（41%低コスト）</td></tr>
+<tr><td class="model-name">MAI-Image-2.5</td><td class="price">Text $5 / Image $8</td><td class="price">—</td><td class="price">$47</td><td>画像生成</td></tr>
+<tr><td class="model-name">MAI-Image-2.5 Flash</td><td class="price">Text $1.75 / Image $1.75</td><td class="price">—</td><td class="price">$19.50</td><td>画像生成（高速）</td></tr>
+<tr><td class="model-name">MAI-Image-2.5 Pro</td><td class="price">Text $5 / Image $8</td><td class="price">—</td><td class="price">$106</td><td>画像生成（高品質）</td></tr>
+</tbody></table></div>
+
+<h3 style="font-size:1rem;margin:1.6rem 0 .5rem;">参考価格: MAI-Image-2.6 / 2.6-Flash（公式ブログの記載・Azure料金表には未掲載）</h3>
+<p style="font-size:.88rem;color:var(--c-muted);margin-bottom:.6rem;">
+  この2モデルは、上の確認済み料金表（Azure Foundry Models pricing・Microsoft セクション）には<strong>まだ掲載されていません</strong>（2026-09-19に再確認）。
+  そのため <a href="https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/mai-image-2-6-and-mai-image-2-6-flash-quality-and-speed-at-production-scale/4550970" target="_blank" rel="noopener">MAI-Image-2.6 and MAI-Image-2.6-Flash（2026-09-04）</a> に書かれている価格を、そのまま掲載します。
+  表記はすべて <strong>starts at（最低価格）</strong>、提供は <strong>public preview</strong> です。
+</p>
+<div class="table-wrap"><table><thead><tr><th>モデル</th><th>テキスト入力 / 1M</th><th>画像入力 / 1M</th><th>画像出力 / 1M</th></tr></thead><tbody>
+<tr><td class="model-name">MAI-Image-2.6</td><td class="price">$5</td><td class="price">$8</td><td class="price">$38</td></tr>
+<tr><td class="model-name">MAI-Image-2.6-Flash</td><td class="price">$1.75</td><td class="price">$2.50</td><td class="price">$19</td></tr>
+</tbody></table></div>
+<div class="tip-box" style="margin-top:.8rem;">
+  <p style="font-size:.85rem;color:var(--c-muted);margin:0 0 .5rem;">入力は<strong>テキストと画像で単価が別</strong>（画像入力のほうが高い）。出力の単価は<strong>画像出力</strong>に対するものです。上の確認済み料金表にある MAI-Image-2.5（$5 / $8 / $47）と比べると、2.6 は出力が $38、2.6-Flash は $1.75 / $2.50 / $19 です。</p>
+  <p style="font-size:.85rem;color:var(--c-muted);margin:0;"><strong>公式ブログの原文（価格部分の逐語）:</strong> <span style="font-family:ui-monospace,Menlo,monospace;font-size:.78rem;">&quot;MAI-Image-2.6 and MAI-Image-2.6-Flash are available in public preview in Foundry. MAI-Image-2.6 pricing starts at $5 USD per 1M tokens for text input, $8 USD per 1M tokens for image input, and $38 USD per 1M tokens for image output. MAI-Image-2.6-Flash pricing starts at $1.75 USD per 1M tokens for text input, $2.50 USD per 1M tokens for image input, and $19 USD per 1M tokens for image output.&quot;</span></p>
+</div>
+
+<div class="thinking-note" style="border-left-color:var(--c-yellow);margin-top:1rem;">
+  ⚠️ <strong>未確認・別課金のもの:</strong>
+  <ul style="margin:.4rem 0 0;padding-left:1.2rem;">
+    <li><strong>MAI-Image-2.6 / 2.6-Flash</strong>は Microsoft Foundry の確認済み料金表にまだ未掲載のため、上記のとおり<strong>公式ブログの記載価格（starts at・public preview）</strong>として掲載しています。public preview 中は価格・提供条件が動くため、契約前に Foundry の最新表示をご確認ください。</li>
+    <li><strong>MAI-Code 系（MAI-Code-1-Flash / 1.1-Flash）</strong>も同表に無いため価格は未掲載。</li>
+    <li><strong>MAI-Voice 系（MAI-Voice-1 / 2 / 2-Flash）</strong>は <a href="https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure" target="_blank" rel="noopener">Azure Speech in Foundry Tools</a> 経由が公式で、トークンではなく音声メーターで課金（この表に無し）。</li>
+  </ul>
+</div>
+
+<p class="source-note">一次情報: <a href="https://azure.microsoft.com/en-us/pricing/details/ai-foundry-models/microsoft/" target="_blank" rel="noopener">azure.microsoft.com/.../ai-foundry-models/microsoft/</a>（確認 2026-09-19）· MAI-Image-2.6 / 2.6-Flash の価格のみ <a href="https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/mai-image-2-6-and-mai-image-2-6-flash-quality-and-speed-at-production-scale/4550970" target="_blank" rel="noopener">Microsoft Foundry Blog「MAI-Image-2.6 and MAI-Image-2.6-Flash」</a>（2026-09-04付・確認 2026-09-19）</p>
+</section>
+
+<!-- 使い方 -->
+<section class="section" style="padding-top:0;" aria-labelledby="api-h">
+<h2 class="section-title" id="api-h">使い方（API / アクセス方法）</h2>
+<p class="section-sub">MAI は主に <strong>Azure AI Foundry / Microsoft Foundry</strong> 経由でモデルをデプロイして呼び出します。一部は MAI Playground や OpenRouter でも試せます。</p>
+
+<div class="tip-box">
+  <ul>
+    <li><strong>Microsoft Foundry（ai.azure.com/catalog/models）:</strong> カタログから MAI モデルを選び、<strong>model ID</strong> を指定してデプロイ。認証は Azure（Azure OpenAI と同様の API キー / Entra ID）。</li>
+    <li><strong>MAI Playground（playground.microsoft.ai）:</strong> API キー無しでブラウザから試せる。例: <code>playground.microsoft.ai/chat?model=mai-image-2-6-flash</code> / <code>?model=mai-transcribe-2</code>。</li>
+    <li><strong>MAI-Transcribe-2（音声認識）:</strong> 公式は <a href="https://learn.microsoft.com/en-us/azure/ai-services/speech-service/mai-transcribe" target="_blank" rel="noopener">Azure Speech の MAI-Transcribe ドキュメント</a>（REST / SDK）。OpenRouter ではモデルID <code>microsoft/mai-transcribe-2</code>。</li>
+    <li><strong>画像生成（MAI-Image-2.x）:</strong> Foundry の画像生成モデルとして text-to-image / image-editing をデプロイ。マルチ参照編集・Web グラウンディングは <strong>MAI-Image-2.6</strong> 系が対応。</li>
+    <li><strong>推論（MAI-Thinking-1）:</strong> 推論モデル。キャッシュ入力が0.20と安いのが特徴。</li>
+  </ul>
+</div>
+<p style="font-size:.84rem;color:var(--c-muted);">⚠️ 正確なリクエスト形式・パラメータはモデルごとに異なり、かつ変更され得るため、<strong>必ず公式ドキュメント</strong>（Learn / Foundry の各モデルページ）を参照してください。本ページでは具体的な API リクエストのボディまでは記載しません（一次情報での裏取りができていないため）。</p>
+</section>
+
+<!-- 年表 -->
+<section class="section" style="padding-top:0;" aria-labelledby="timeline-h">
+<h2 class="section-title" id="timeline-h">MAI リリース年表</h2>
+<p class="section-sub">microsoft.ai blog の記事から日付を整理。主要なもの。</p>
+<div class="table-wrap"><table><thead><tr><th>日付</th><th>出来事</th></tr></thead><tbody>
+<tr><td class="model-name">2025-09頃</td><td>「Two in-house models」「Introducing MAI-Image-1」（MAI-Image-1、LMArena トップ10入り）</td></tr>
+<tr><td class="model-name">2026-04-02</td><td>「Announcing 3 new world class MAI models」＝ <strong>MAI-Image-2 / MAI-Transcribe-1 / MAI-Voice-1</strong>（Foundry で提供開始）</td></tr>
+<tr><td class="model-name">2026-04-02</td><td>MAI-Image-2-Efficient（フラッグシップ品質・41%低コスト）</td></tr>
+<tr><td class="model-name">2026-05</td><td>MAI-Transcribe-1.5 / MAI-Code-1-Flash を発表</td></tr>
+<tr><td class="model-name">2026-06-02</td><td>Build 2026「Building a hill-climbing machine: Launching seven new MAI models」＝ MAI-Image-2.5 / 2.5-Flash / Transcribe-1.5 / <strong>MAI-Thinking-1</strong> / Voice-2 / Voice-2-Flash / Code-1-Flash</td></tr>
+<tr><td class="model-name">2026-07</td><td>MAI-Cyber-1-Flash（MDASH 防御用途）/ MAI-Image-2.5-Pro・MAI-Voice-2-Flash / MAI-Image-2.5（Arena No.2）</td></tr>
+<tr><td class="model-name">2026-08</td><td>MAI-Code-1.1-Flash（4分の1のコスト）/ MAI-Image-2.6 が Arena No.2 に</td></tr>
+<tr><td class="model-name" style="border-left:3px solid var(--c-green);padding-left:.7rem;">2026-09-03 <span class="badge badge-new">New</span></td><td><strong>MAI-Transcribe-2</strong>（音声認識・$0.10/時 限定）</td></tr>
+<tr><td class="model-name" style="border-left:3px solid var(--c-green);padding-left:.7rem;">2026-09-04 <span class="badge badge-new">New</span></td><td><strong>MAI-Image-2.6 / 2.6-Flash</strong>（画像生成）</td></tr>
+</tbody></table></div>
+<p class="source-note">出典: <a href="https://microsoft.ai/blog/" target="_blank" rel="noopener">microsoft.ai/blog</a></p>
+</section>
+
+<!-- ポイント -->
+<section class="section" style="padding-top:0;" aria-labelledby="notes-h">
+<h2 class="section-title" id="notes-h">押さえておきたいポイント</h2>
+<div class="tip-box">
+  <ul>
+    <li><strong>Microsoft の自社開発モデル</strong>であり、OpenAI モデル（Azure OpenAI 経由）とは別系統。データ主権・ライセンスの選択肢を広げるものとして、企業向けに提案されています。</li>
+    <li><strong>Azure-first</strong>: 他社（Google・Meta・Mistral・DeepSeek 等）のオープンモデルと並んで Foundry カタログ（11,000+モデル）に搭載され、統一された Azure 課金・運用の一部として使えます。</li>
+    <li><strong>価格の例</strong>: 推論モデル MAI-Thinking-1 は $2/$8（キャッシュ $0.20）、画像生成は MAI-Image-2.5 Flash が $1.75/$19.50。最新の <strong>MAI-Image-2.6</strong> はテキスト入力 $5・画像入力 $8・画像出力 $38、<strong>2.6-Flash</strong> は $1.75 / $2.50 / $19（いずれも starts at・public preview、公式ブログ記載）。</li>
+    <li><strong>モダリティの広がり</strong>: 音声認識（Transcribe）・音声生成（Voice）・画像生成（Image）・画像理解（VLM 系）・コード（Code）・推論（Thinking）と、LLM以外の周辺分野までカバー。</li>
+  </ul>
+</div>
+</section>
+
+<div class="tip-box" style="border-left-color:var(--c-red);margin-bottom:2rem;">
+  <h3>⚠️ 免責事項</h3>
+  <ul>
+    <li>料金・仕様は Microsoft の公式ページを 2026-09-19 に確認したものです（確認済み料金表の初回確認は 2026-09-09）。予告なく変動します。契約前に必ず <a href="https://azure.microsoft.com/en-us/pricing/details/ai-foundry-models/microsoft/" target="_blank" rel="noopener">公式料金ページ</a>・<a href="https://microsoft.ai/blog/" target="_blank" rel="noopener">公式ブログ</a> をご確認ください。</li>
+    <li>ベンチマーク（Arena / Artificial Analysis 順位、FLEURS WER、速度倍率、2.8倍高速等）は Microsoft・Artificial Analysis の自己公表値であり、独立評価と差が出る場合があります。</li>
+    <li>MAI-Image-2.6 / 2.6-Flash の価格は、確認済み料金表ではなく <strong>Microsoft Foundry 公式ブログの記載（starts at・public preview）</strong>です。MAI-Code 系・MAI-Voice 系の価格は一次情報に無いため未掲載です。</li>
+    <li>本サイトは情報提供目的であり、特定プロバイダーの推薦・代理ではありません。Microsoft・Azure は Microsoft Corporation、MAI は Microsoft AI の商標です。</li>
+  </ul>
+</div>
+
+</div></main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>運営: okamoちゃんねる</p><p><a href="/">ホーム</a> · <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a> · <a href="/timeline/">年表</a> · <a href="/china-ai/">中国AI</a> · <a href="/mai/">MS AI (MAI)</a></p></div><p class="footer-disclaimer">⚠️ 料金・仕様は予告なく変動します。契約前に必ず各社公式ページでご確認ください。本サイトは各社と提携していません。</p></div></footer>
+</body>
+</html>

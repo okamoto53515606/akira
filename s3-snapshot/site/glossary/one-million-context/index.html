@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>1Mコンテキストとは — 100万トークンで何が入るか、いくらになるか | LLM Data Hub</title>
+  <meta name="description" content="1M（100万）トークンのコンテキストウィンドウとは何か。何が入るかの目安、そして3社で全く違う長文の課金ルールを公式ページで比較します。OpenAI GPT-6 Astraは272K超でリクエスト全体が入力2倍・出力1.5倍、Googleは200K超で全トークンが高い単価、Anthropicは1Mでも標準単価のまま。会話が伸びると入力が二乗で増える試算付き。">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/glossary/one-million-context/">
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/glossary/one-million-context/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/glossary/one-million-context/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/glossary/one-million-context/">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/glossary/one-million-context/">
+  <meta property="og:title" content="1Mコンテキストとは — 100万トークンで何が入るか、いくらになるか">
+  <meta property="og:description" content="1Mトークンは約75万語、音声なら約11時間ぶん。ただし長文の課金ルールは3社で全く違います。OpenAIは272K超でリクエスト全体が2倍、Googleは200K超で全トークンが高い単価、Anthropicは1Mでも標準単価。会話1回ごとに入力が積み上がる費用も試算します。">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"1Mコンテキストとは — 100万トークンで何が入るか、いくらになるか","datePublished":"2026-09-21","dateModified":"2026-09-21","author":{"@type":"Organization","name":"LLM Data Hub"},"publisher":{"@type":"Organization","name":"okamoちゃんねる"},"url":"https://llm.okamomedia.tokyo/glossary/one-million-context/","inLanguage":"ja","about":"1Mトークンのコンテキストウィンドウの意味、何が入るかの目安、各社の長文課金ルールの違い、長い入力で精度が落ちる現象"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"ホーム","item":"https://llm.okamomedia.tokyo/"},{"@type":"ListItem","position":2,"name":"用語説明","item":"https://llm.okamomedia.tokyo/glossary/"},{"@type":"ListItem","position":3,"name":"1Mコンテキストとは","item":"https://llm.okamomedia.tokyo/glossary/one-million-context/"}]}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .phrase-box{background:linear-gradient(135deg,#12162a 0%,#1a1d35 55%,#0f1117 100%);border:1px solid var(--c-border);border-left:3px solid var(--c-accent2);border-radius:var(--r-lg);padding:1.2rem 1.3rem;margin:1.2rem 0 1.6rem}
+    .phrase-box .phrase{font-size:1.02rem;font-weight:700;line-height:1.75;margin-bottom:.6rem}
+    .phrase-box .phrase-meta{font-size:.8rem;color:var(--c-muted);line-height:1.7}
+    .num-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:.8rem;margin:1rem 0 1.6rem}
+    .num-card{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.9rem 1rem}
+    .num-card .k{font-family:var(--font-mono);font-size:.74rem;color:var(--c-muted);font-weight:600;letter-spacing:.02em}
+    .num-card .v{font-family:var(--font-mono);font-size:1.05rem;font-weight:700;margin:.15rem 0 .2rem}
+    .num-card .d{font-size:.8rem;color:var(--c-muted);line-height:1.6}
+    .read-box{background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-green);border-radius:var(--r-md);padding:1rem 1.2rem;margin:1rem 0 1.6rem;font-size:.88rem;color:var(--c-muted)}
+    .read-box strong{color:var(--c-text)}
+    .flow-fig{margin:1rem 0 1.4rem}
+    .flow-fig svg{width:100%;height:auto;border:1px solid var(--c-border);border-radius:var(--r-md);background:var(--c-surface)}
+    .fig-scroll{overflow:visible}
+    /* 幅800pxの図はスマホでは文字が小さくなりすぎるため、680px以下は横スクロールで読みやすさを保つ */
+    @media (max-width:680px){.fig-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:.2rem}.fig-scroll svg{min-width:620px}}
+    .cmp-table th,.cmp-table td{font-size:.85rem}
+    .quote-box{background:#11131c;border:1px solid var(--c-border);border-left:3px solid var(--c-accent2);border-radius:var(--r-md);padding:.9rem 1.1rem;margin:1rem 0;font-size:.86rem;color:var(--c-muted);line-height:1.8}
+    .quote-box .en{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82rem;color:var(--c-text);display:block;margin-bottom:.35rem}
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="メインナビゲーション"><a href="/" class="nav-link">ホーム</a><a href="/pricing/" class="nav-link">料金比較</a><a href="/calculator/" class="nav-link">トークン計算機</a><a href="/timeline/" class="nav-link">リリース年表</a><a href="/china-ai/" class="nav-link">中国AI</a><a href="/multimodal/" class="nav-link">マルチモーダル</a><a href="/mai/" class="nav-link">MS AI (MAI)</a><a href="/glossary/" class="nav-link">用語説明</a></nav></div></header>
+
+<main><div class="container">
+  <div class="section" style="padding-bottom:0;">
+    <h1 class="section-title" style="font-size:1.55rem;">1Mコンテキストとは — 100万トークンで何が入るか、いくらになるか</h1>
+    <p class="section-sub" style="max-width:760px;">
+      <a href="/glossary/">用語説明</a> 第4回。今回のテーマは <strong>1Mコンテキスト</strong> です。
+      「100万トークンまで入ります」と書いてあっても、そこには<strong>2つの別の話</strong>が混ざっています。1つは<strong>何が入るのか</strong>（容量の話）、もう1つは<strong>入れたらいくらになるのか</strong>（料金の話）。
+      そして料金のほうは、<strong>OpenAI・Google・Anthropic の3社で設計が大きく違います</strong>（OpenAI と Google は境界を超えると全体の単価が上がり、Anthropic は対象の1Mモデルで標準単価のままです）。しかも長く入れれば賢くなるわけでもありません。
+      数字と出典を並べながら、最後には「自分の使い方だとどうなるか」まで持って帰れる形にします。
+    </p>
+    <div class="phrase-box">
+      <p class="phrase">「1Mトークンまで入る」＝「100万トークンぶん賢く使える」ではない</p>
+      <p class="phrase-meta">コンテキストウィンドウは<strong>物理的な上限（入るかどうか）</strong>を決めるだけで、<strong>その中身を均等に扱えるか</strong>や<strong>入れた分が定額か</strong>は別問題です。今回の記事はこの3つを切り分けるのが目的です。</p>
+    </div>
+        <div class="read-box" style="border-left-color:var(--c-accent);">
+      <strong>まずイメージから。</strong>1Mコンテキストは、<strong>ものすごく広い机を借りる</strong>ようなものです。ただし積むほど目的の書類を探しにくくなり、しかも<strong>机の広さと運賃が連動しています</strong>。ある量を超えると「その分だけ」ではなく<strong>「今回の荷物ぜんぶ」の運賃が倍になる</strong>——これが OpenAI と Google の段階課金です。Anthropic は「机が広くなっても運賃は同じ」という方式です。
+    </div>
+    <div class="updated-bar">
+      <span class="dot">●</span>
+      最終更新: <time datetime="2026-09-21">2026年9月21日</time>
+      &ensp;|&ensp; 一次情報: <a href="https://developers.openai.com/api/docs/models/gpt-6-astra" target="_blank" rel="noopener">OpenAI（GPT-6 Astra モデルページ）</a>・<a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">Gemini API 料金ページ</a>・<a href="https://platform.claude.com/docs/en/build-with-claude/context-windows" target="_blank" rel="noopener">Anthropic（Context windows）</a>・<a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">DeepSeek（Models &amp; Pricing）</a>・<a href="https://cloud.google.com/vertex-ai/generative-ai/pricing" target="_blank" rel="noopener">Google Cloud（料金・脚注）</a>
+      &ensp;|&ensp; 確認日: 2026-09-21
+    </div>
+  </div>
+
+  <!-- ===== 1. 定義 ===== -->
+  <section class="section" style="padding-top:1.5rem;" aria-labelledby="def-h">
+    <h2 class="section-title" id="def-h" style="font-size:1.2rem;">結論 — 上限は「入る量」、課金は「入れた瞬間のルール」</h2>
+    <div class="read-box">
+      <strong>コンテキストウィンドウは、モデルが1回のリクエストで同時に見られる情報量の上限です。</strong>
+      ここが1M（100万）トークンということは、システムプロンプト・会話履歴・貼り付けた資料・ツールの出力など、<strong>すべてを合計して100万トークンまで1回で渡せる</strong>という意味です。
+    </div>
+    <div class="read-box">
+      <strong>ただし「100万まで入る」ことと「100万まで同じ値段」は別の話です。</strong>
+      長文の扱いは3社でルールが違います。要点だけ先に置くと——
+      <ul style="padding-left:1.2em;margin:.5rem 0 0;">
+        <li><strong>OpenAI</strong>: 272K（27.2万）トークンを超えると、<strong>リクエスト全体が入力2倍・出力1.5倍</strong>。超えた分だけではありません。</li>
+        <li><strong>Google</strong>: 200K（20万）トークンを超えると、<strong>すべてのトークンが高い方の単価</strong>で課金されます。</li>
+        <li><strong>Anthropic</strong>: 1Mでも<strong>標準単価のまま</strong>（900Kのリクエストも9Kと同じ単価、と公式に明記）。</li>
+      </ul>
+      同じ「1Mコンテキスト」でも、<strong>同じ100万トークンを送ったときの請求額が全く違う</strong>ということです。
+    </div>
+    <p style="font-size:.9rem;color:var(--c-muted);max-width:760px;">
+      なお、この言葉が料金表で使われるときは3つの数字が紛れ込みがちです。<strong>①入力の上限</strong>（コンテキストウィンドウ）、<strong>②出力の上限</strong>（max output tokens）、<strong>③長文課金の境界</strong>。
+      たとえば GPT-6 Astra は<span style="font-family:var(--font-mono)">1,050,000 / 128,000 / 272K</span> の3つが別々に存在します。この記事ではこの3つを区別して扱います。
+    </p>
+  </section>
+
+  <!-- ===== 2. 何が入るか ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="what-h">
+    <h2 class="section-title" id="what-h" style="font-size:1.2rem;">1Mトークンとは、実際どれくらいか</h2>
+    <p class="section-sub" style="max-width:760px;">「100万」と言われても実感がないので、身近な単位に置き換えます。<strong>トークンは文字数とは違う</strong>ので、あくまで目安として見てください。</p>
+    <div class="num-grid">
+      <div class="num-card"><div class="k">English text</div><div class="v">約75万語</div><div class="d">1トークン≒0.75語の単純換算。1ページ500語なら<strong>約1,500ページ</strong>、10万語の技術書なら7〜8冊ぶん</div></div>
+      <div class="num-card"><div class="k">日本語テキスト</div><div class="v">英語より少ない</div><div class="d">同じ文でも日本語はトークン数が英語より多くなりがちで、入る文字数は減ります。正確な数はトークナイザ依存のため<a href="/calculator/">計算機</a>で実測を</div></div>
+      <div class="num-card"><div class="k">音声（Gemini換算）</div><div class="v">約11時間</div><div class="d">Gemini は音声1秒＝25トークンと案内しているため、1,000,000÷25＝40,000秒＝<strong>約11.1時間</strong>ぶん（当サイトの単純計算）</div></div>
+      <div class="num-card"><div class="k">画像・PDF（Claude）</div><div class="v">最大600枚</div><div class="d">Anthropic は「1リクエストに最大600枚の画像またはPDFページ」と明記（200Kのモデルは100枚）</div></div>
+    </div>
+    <div class="quote-box">
+      <strong>Anthropic 公式ドキュメントの逐語:</strong>
+      <span class="en">"A single request can include up to 600 images or PDF pages (100 for models with a 200k-token context window)."</span>
+      1回のリクエストに画像・PDFを最大600枚まで——という記載です（和訳は当サイトによるもの）。
+    </div>
+    <p class="source-note">出典: <a href="https://platform.claude.com/docs/en/build-with-claude/context-windows" target="_blank" rel="noopener">Claude Platform Docs「Context windows」</a>（2026-09-21確認）・<a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">Gemini API 料金ページ</a>（音声トークンの換算、2026-09-21確認）。英語の語数換算は当サイトによる概算です。<strong>文字数からトークン数への換算はモデルとトークナイザで変わる</strong>ため、見積もりは必ず実測値で行ってください（<a href="/calculator/">トークン計算機</a>は実測トークン数をそのまま入力する方式です）。</p>
+  </section>
+
+  <!-- ===== 3. 上限値の比較 ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="limit-h">
+    <h2 class="section-title" id="limit-h" style="font-size:1.2rem;">主要モデルの上限値（公式表記のまま）</h2>
+    <p class="section-sub" style="max-width:760px;">「1M」は今や特定の1社の専売ではありません。主要どころの上限値を、各社の公式ページの表記どおりに並べます。</p>
+    <div class="table-wrap"><table class="cmp-table"><thead><tr><th>プロバイダー / モデル</th><th>入力の上限</th><th>出力の上限</th><th>長文の課金</th><th>出典（確認日 2026-09-21）</th></tr></thead><tbody>
+      <tr><td class="model-name">OpenAI<br>GPT-6 Astra</td><td class="price">1,050,000</td><td class="price">128,000</td><td>272K超で<strong>リクエスト全体が入力2倍・出力1.5倍</strong></td><td><a href="https://developers.openai.com/api/docs/models/gpt-6-astra" target="_blank" rel="noopener">OpenAI モデルページ</a></td></tr>
+      <tr><td class="model-name">Anthropic<br>Claude Fable 5 / Sonnet 5 ほか1Mモデル</td><td class="price">1,000,000</td><td class="price">128,000</td><td><strong>標準単価のまま</strong>（追加料金なし）</td><td><a href="https://platform.claude.com/docs/en/build-with-claude/context-windows" target="_blank" rel="noopener">Context windows</a> / <a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener">Pricing</a></td></tr>
+      <tr><td class="model-name">Google<br>Gemini 3.1 Pro Preview</td><td class="price">1,048,576</td><td class="price">65,536</td><td>200K超で<strong>全トークンが高い単価</strong></td><td><a href="https://ai.google.dev/gemini-api/docs/models/gemini-3.1-pro-preview" target="_blank" rel="noopener">Gemini モデルページ</a> / <a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">料金ページ</a></td></tr>
+      <tr><td class="model-name">DeepSeek<br>deepseek-flash / deepseek-v4-pro</td><td class="price">1M</td><td class="price">384K（最大）</td><td>公式料金表に長文の段階課金の記載なし</td><td><a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">Models &amp; Pricing</a></td></tr>
+    </tbody></table></div>
+    <div class="read-box">
+      <strong>注目したいのは、Anthropic の書き方です。</strong>
+      公式ドキュメントには「1Mトークンのコンテキストウィンドウを持つモデルでは、<strong>1Mが既定値でベータヘッダーは不要。長文リクエストも標準価格で課金される</strong>」と明記されています。料金ページにはもっと踏み込んだ一文があります。
+    </div>
+    <div class="quote-box">
+      <span class="en">"Claude 4.6 and later models and Claude Mythos Preview include the full 1M token context window at standard pricing. (A 900k-token request is billed at the same per-token rate as a 9k-token request.) Prompt caching and batch processing discounts apply at standard rates across the full context window."</span>
+      1Mのコンテキストを<strong>標準価格で</strong>含む。<strong>900Kトークンのリクエストも9Kトークンと同じ単価</strong>——という逐語です（和訳は当サイトによるもの）。つまり Anthropic では、<strong>長文だから単価が上がることはありません</strong>。プロンプトキャッシュとバッチの割引も、コンテキスト全体に標準レートで適用されると書かれています。
+    </div>
+    <p class="source-note">出典: <a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener">Claude Platform Docs「Pricing」</a>／<a href="https://platform.claude.com/docs/en/build-with-claude/context-windows" target="_blank" rel="noopener">「Context windows」</a>（いずれも2026-09-21確認）。Anthropic 側の1M対象モデルの逐語列挙は Claude Fable 5.1 / Mythos 5.1 / Fable 5 / Mythos 5 / Opus 5 / Opus 4.8 / Opus 4.7 / Opus 4.6 / Sonnet 5 / Sonnet 4.6 / Mythos Preview です（Sonnet 4.5 など200Kのモデルもあるため、実装時は必ず公式表で確認してください）。</p>
+  </section>
+
+  <!-- ===== 4. 段差を金額で見る ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="cliff-h">
+    <h2 class="section-title" id="cliff-h" style="font-size:1.2rem;">境界線をまたぐと、いくらになるのか（試算）</h2>
+    <p class="section-sub" style="max-width:760px;">「リクエスト全体が2倍」というルールは、文章で読むと軽く見えます。金額にするとこうなります。以下はすべて<strong>入力トークン数 × 単価</strong>の単純試算で、キャッシュ利用・バッチ割引・キャッシュ書込・最低課金は含みません。GPT-6 Astra の通常入力単価は <strong>$10 / 100万トークン</strong>、272K超では<strong>2倍の $20 / 100万トークン</strong>です。</p>
+    <div class="table-wrap"><table class="cmp-table"><thead><tr><th>入力トークン数</th><th>適用される単価</th><th>入力の請求額</th><th>直前からの増分</th></tr></thead><tbody>
+      <tr><td class="price">272,000</td><td>標準 $10 / 1M</td><td class="price">$2.72</td><td>—</td></tr>
+      <tr><td class="price">272,100</td><td>長文 $20 / 1M</td><td class="price">$5.44</td><td class="price">+$2.72（約2倍）</td></tr>
+      <tr><td class="price">500,000</td><td>長文 $20 / 1M</td><td class="price">$10.00</td><td class="price">—</td></tr>
+      <tr><td class="price">1,000,000</td><td>長文 $20 / 1M</td><td class="price">$20.00</td><td class="price">—</td></tr>
+    </tbody></table></div>
+    <div class="read-box">
+      <strong>境界線を100トークン超えただけで、入力の請求額が約2倍になります。</strong>
+      100トークンは日本語で数百文字ぶんです。<strong>「あと1行足すかどうか」で請求が倍変わる</strong>——これが段階課金の意味です。
+      同じリクエストで出力も発生する場合、出力側にも1.5倍（$50 → $75 / 1M）がかかるため、<strong>請求総額の差はさらに広がります</strong>。入力だけを見れば約2倍ですが、総額の倍率は入力と出力の比率によって変わります。
+      <br><br>
+      Google 側も同じ形です。Gemini 3.1 Pro の入力は 200K以下が $2.00 / 1M、200K超が $4.00 / 1M。<strong>199,000トークンなら $0.398、201,000トークンなら $0.804</strong>（いずれも当サイトの単純計算）で、やはり<strong>超えた分だけでなく全体の単価が上がります</strong>。
+    </div>
+    <div class="quote-box">
+      <strong>Google 側の脚注の逐語:</strong>
+      <span class="en">"If a query input context is longer than 200K tokens, all tokens (input and output) are charged at long context rates."</span>
+      入力コンテキストが200Kトークンを超えると、<strong>すべてのトークン（入力も出力も）が長文の単価で課金される</strong>——という脚注です（和訳は当サイトによるもの）。表の「$2.00, prompts &lt;= 200k tokens / $4.00, prompts &gt; 200k tokens」という書き方と合わせて読むと、<strong>超えた分だけではなく、そのリクエストの全体が高い単価に移る</strong>という設計だと分かります。出力側も同じ扱い（$12 → $18）です。
+    </div>
+    <p class="source-note">単価の出典: <a href="https://developers.openai.com/api/docs/models/gpt-6-astra" target="_blank" rel="noopener">OpenAI モデルページ</a>（逐語: <span style="font-family:var(--font-mono);font-size:.8rem">"Prompts with more than 272K input tokens are priced at 2x input and cache rates and 1.5x output for the full request."</span>）・<a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">Gemini API 料金ページ</a>（2026-09-21確認）。Google の脚注は <a href="https://cloud.google.com/vertex-ai/generative-ai/pricing" target="_blank" rel="noopener">Google Cloud（Generative AI の料金ページ）</a>の逐語です（2026-09-21確認。ページ内では「200K tokens より長い場合」と記載。Google 側はページや提供経路によって「200K 超」と「200K 以上」で表記が揺れるため、実際の請求前に利用する API・リージョンの料金表をご確認ください）。金額は当サイトの単純計算（入力トークン数 × 単価）で、キャッシュ利用・バッチ割引・キャッシュ書込は含みません。<strong>272K という境界値は GPT-6 Astra 固有のもので、OpenAI の全モデル共通ではありません。</strong>モデルごとに公式ページで確認してください。</p>
+  </section>
+
+  <!-- ===== 5. 会話が伸びると増える ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="grow-h">
+    <h2 class="section-title" id="grow-h" style="font-size:1.2rem;">もう1つの落とし穴 — 会話が伸びると入力が積み上がる</h2>
+    <p class="section-sub" style="max-width:760px;">上限に届かなくても、費用は静かに増えます。APIは基本的に<strong>ステートレス</strong>（サーバー側が会話を覚えていない）ため、<strong>毎回、会話の最初から全部を送り直す</strong>必要があるからです。</p>
+    <div class="table-wrap"><table class="cmp-table"><thead><tr><th>条件</th><th>値</th></tr></thead><tbody>
+      <tr><td class="model-name">固定の前置き（システムプロンプト＋資料）</td><td class="price">8,000トークン</td></tr>
+      <tr><td class="model-name">1往復ごとに増える量</td><td class="price">3,000トークン</td></tr>
+      <tr><td class="model-name">往復数</td><td class="price">10往復</td></tr>
+      <tr><td class="model-name">単価（GPT-6 Astra・キャッシュなし）</td><td class="price">$10 / 1M</td></tr>
+    </tbody></table></div>
+    <div class="read-box">
+      <strong>10往復で、送った入力の合計は245,000トークン（$2.45）になります。</strong>
+      内訳は <span style="font-family:var(--font-mono)">8,000×10 ＋ 3,000×(1+2+…+10) ＝ 80,000 ＋ 165,000 ＝ 245,000</span>。
+      実際に新しい情報として増えたのは 8,000 ＋ 3,000×10 ＝ 38,000トークン（$0.38）だけです。<strong>6倍以上を「同じ前置きの再送」に払っている</strong>計算になります。
+      <br><br>
+      しかもこの増え方は<strong>往復数の二乗で効いてきます</strong>。100往復なら送る入力の合計は1,595万トークン（$159.50）です。1Mの上限に一度も触れていないのに、です。
+      <br><br>
+      <strong>対策は「減らす」と「キャッシュする」の2つです。</strong>本当に必要な部分だけを渡す、そして<strong>変わらない前置きはプロンプトキャッシュに載せる</strong>。同じ前置きを繰り返し送る使い方では、キャッシュの有無が請求額を大きく変えます（仕組みと単価差は<a href="/glossary/prompt-cache/">第2回の解説</a>にまとめています）。
+    </div>
+    <p class="source-note">金額は当サイトの単純計算です（入力トークン数の合計 × 単価）。実際の課金ではプロンプトキャッシュ・バッチ割引・キャッシュ書込の料金が別途適用されるため、金額は上限側の目安としてお読みください。なお Anthropic は公式に<strong>コンテキスト圧縮（context compaction、ベータ）</strong>を用意しており、「会話が上限に近づくと古いコンテキストを自動要約し、実効的なコンテキスト長を増やす」と説明しています（<a href="https://www.anthropic.com/news/claude-sonnet-4-6" target="_blank" rel="noopener">Anthropic 公式発表</a>、2026-09-21確認）。上限に近づいたら要約して畳む、という設計も各社で進んでいます。</p>
+  </section>
+
+  <!-- ===== 6. 入る≠使える ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="rot-h">
+    <h2 class="section-title" id="rot-h" style="font-size:1.2rem;">3つめの落とし穴 — 「入る」と「均等に使える」は別</h2>
+    <p class="section-sub" style="max-width:760px;">上限いっぱいまで入れれば、その全部を使ってくれるのでしょうか。<strong>長い入力を与えるほど性能が不安定になる</strong>という結果が公表されています。Chroma が2025年7月に公開した技術レポート「Context Rot（コンテキスト腐敗）」は、18モデル（GPT-4.1、Claude 4、Gemini 2.5、Qwen3 など）を対象に検証しています。</p>
+    <div class="quote-box">
+      <span class="en">"models do not use their context uniformly; instead, their performance grows increasingly unreliable as input length grows."</span>
+      モデルはコンテキストを均一には使わず、<strong>入力が長くなるほど性能は不安定になる</strong>——という報告です（英文逐語。和訳は当サイトによるもの）。<strong>「100万トークン」は、性能が出る100万トークンという約束ではありません。</strong>
+    </div>
+    <div class="table-wrap"><table class="cmp-table"><thead><tr><th>実験</th><th>条件</th><th>結果（同レポート）</th></tr></thead><tbody>
+      <tr><td class="model-name">LongMemEval<br>（長い会話から答える）</td><td>全文入力 <span class="price">113,000トークン</span> と、<strong>関係する部分だけを抜いた約300トークン</strong>を比較</td><td>「全モデルで、絞った入力のほうが<strong>大幅に高い性能</strong>」。無関係な文脈を足すことが、<strong>検索のステップを1つ増やす</strong>ことになるため</td></tr>
+      <tr><td class="model-name">邪魔者（distractor）の影響</td><td>正解の周りに、紛らわしい記述を0〜4個置く</td><td>「<strong>邪魔者が1つでもあれば性能は下がり、4つ重なるとさらに悪化する</strong>」。しかも邪魔者ごとに影響度が違う</td></tr>
+      <tr><td class="model-name">文章の並び順</td><td>論理的な流れを保った文章 vs 文をランダムに入れ替えた文章</td><td>「<strong>入れ替えたほうが成績が良い</strong>」という直感に反する結果。「モデルは文脈の論理的な流れに敏感に反応する」ため</td></tr>
+      <tr><td class="model-name">繰り返し語の再現</td><td>同じ語を25〜10,000語並べ、1語だけ違う語を混ぜて正確に写させる</td><td>入力が長くなるほど<strong>全モデルで一貫して性能が低下</strong>。位置が後ろになるほど正しく置けない</td></tr>
+    </tbody></table></div>
+    <div class="read-box">
+      <strong>レポートの結論は「どう見せるか」の話です。</strong>
+      <span style="font-family:var(--font-mono);font-size:.8rem;display:block;margin:.4rem 0">"Whether relevant information is present in a model's context is not all that matters; what matters more is how that information is presented."</span>
+      必要な情報が<strong>入っているかどうか</strong>より、<strong>どう見せているか</strong>のほうが重要——という一文です（和訳は当サイトによるもの）。「大きいから入れておく」は、精度の面でも得とは限りません。
+    </div>
+    <p class="source-note">出典: <a href="https://www.trychroma.com/research/context-rot" target="_blank" rel="noopener">Chroma「Context Rot: How Increasing Input Tokens Impacts LLM Performance」</a>（2026-09-21確認）。<strong>この検証は2025年7月時点のモデル（GPT-4.1・Claude 4・Gemini 2.5・Qwen3 世代）で行われたものです。</strong>2026年9月時点の最新モデルで同じ傾向が同じ強さで出るかは、当サイトでは確認できていません。当時の結果として読んでください。</p>
+  </section>
+
+  <!-- ===== 図解 ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="fig-h">
+    <h2 class="section-title" id="fig-h" style="font-size:1.2rem;">図で整理 — 上限・課金の境界・実効的な使いやすさは別物</h2>
+    <figure class="flow-fig">
+      <div class="fig-scroll">
+      <svg viewBox="0 0 800 360" width="100%" role="img" aria-labelledby="ctxFigTitle" style="display:block;">
+        <title id="ctxFigTitle">1Mコンテキストの3つの数字: 入力の上限（GPT-6 Astra 1,050,000トークン）、長文課金の境界（272K超でリクエスト全体が入力2倍）、そして実際に精度が出る範囲はさらに狭い。境界をまたぐと金額が跳ね上がる</title>
+        <rect x="0" y="0" width="800" height="360" rx="14" fill="#14161f" stroke="#262a38"/>
+        <text x="36" y="42" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="18" font-weight="700" fill="#eef0f7">「1M」とひとことで言っても、3つの線がある</text>
+        <text x="36" y="66" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12.5" fill="#8b90a3">例: GPT-6 Astra（入力上限 1,050,000 / 長文境界 272K / 出力上限 128,000）</text>
+        <rect x="40" y="96" width="720" height="34" rx="6" fill="#232a3d" stroke="#3a3f52"/>
+        <rect x="40" y="96" width="187" height="34" rx="6" fill="#2f3a55" stroke="#4b5570"/>
+        <text x="52" y="118" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" font-weight="700" fill="#eef0f7">標準単価</text>
+        <rect x="227" y="96" width="533" height="34" rx="6" fill="#4a2f3d" stroke="#6b4552"/>
+        <text x="243" y="118" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" font-weight="700" fill="#f0d7de">長文単価（リクエスト全体が入力2倍・出力1.5倍）</text>
+        <line x1="227" y1="86" x2="227" y2="140" stroke="#e8eaf2" stroke-width="2"/>
+        <text x="227" y="158" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" font-weight="700" fill="#e8eaf2">272K の境界</text>
+        <text x="227" y="176" text-anchor="middle" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="11" fill="#9aa0b4">ここを1トークン超えると全体が2倍</text>
+        <line x1="760" y1="86" x2="760" y2="140" stroke="#e8eaf2" stroke-width="2"/>
+        <text x="760" y="158" text-anchor="end" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" font-weight="700" fill="#e8eaf2">1,050,000</text>
+        <text x="760" y="176" text-anchor="end" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="11" fill="#9aa0b4">入力の物理的な上限</text>
+        <rect x="40" y="206" width="720" height="30" rx="6" fill="#1b1f2c" stroke="#3a3f52"/>
+        <rect x="40" y="206" width="300" height="30" rx="6" fill="#243a2f" stroke="#3f6b52"/>
+        <text x="52" y="226" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12" font-weight="700" fill="#d7f0e0">精度が安定しやすい範囲（目安）</text>
+        <text x="352" y="226" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="11.5" fill="#9aa0b4">入力が長くなるほど性能は不安定になる（Chroma, 2025年7月・18モデル）</text>
+        <text x="40" y="268" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12.5" fill="#9aa0b4">同じ 113,000 トークンでも、全文を渡すより必要な部分（約300トークン）だけを渡したほうが「大幅に高い性能」。</text>
+        <text x="40" y="290" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="12.5" fill="#9aa0b4">邪魔者が1つ入るだけで下がり、4つでさらに悪化する。</text>
+        <text x="40" y="322" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="11.5" fill="#6b7280">出典: OpenAI モデルページ / Ai.google.dev 料金ページ / Anthropic Context windows / Chroma Context Rot（確認日 2026-09-21）</text>
+        <text x="40" y="342" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="11" fill="#6b7280">数値は各社公表値と当サイトの整理。精度の範囲は概念図で、具体的なしきい値を示すものではありません。</text>
+      </svg>
+      <figcaption style="font-size:.78rem;color:var(--c-muted);margin-top:.5rem;">上段の帯は<strong>課金の境界</strong>、下段は<strong>精度の傾向を示す概念図</strong>（安全な上限を示すものではありません）です。上限まで入れられることと、その範囲で同じ品質が出ることは別です。境界値はモデルごとに異なるため、必ず各社の公式ページで確認してください。</figcaption>
+      </div>
+    </figure>
+  </section>
+
+  <!-- ===== 7. 生活に置き換える ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="analogy-h">
+    <h2 class="section-title" id="analogy-h" style="font-size:1.2rem;">生活に置き換えると — 大きな机と、荷物の重さ</h2>
+    <div class="read-box">
+      <strong>「1Mコンテキスト」は、巨大な机を貸してもらうようなものです。ただし荷物を積めば積むほど、必要な書類を探し出すのが遅くなります。</strong>
+      さらに厄介なのは、<strong>机の広さと運賃が連動している</strong>点です。ある荷物量を超えると、<strong>「その分だけ」ではなく「今回の荷物ぜんぶ」の運賃が倍になる</strong>——これが OpenAI や Google の段階課金です。
+      Anthropic は「机が広くなっても運賃は同じ」という方式です。同じ「1M」でも、料金の設計思想が違うということです。
+    </div>
+    <div class="table-wrap"><table class="cmp-table"><thead><tr><th>生活での例</th><th>コンテキストウィンドウでの対応物</th></tr></thead><tbody>
+      <tr><td class="model-name">机の広さ</td><td>入力の上限（1Mトークンなど）</td></tr>
+      <tr><td class="model-name">机に置ける荷物の総量</td><td>システムプロンプト＋会話履歴＋資料＋ツール出力の合計</td></tr>
+      <tr><td class="model-name">運賃が跳ねる重さの境目</td><td>長文課金の境界（272K / 200K など）</td></tr>
+      <tr><td class="model-name">机は広いのに探しものが出てこない</td><td>長い入力で精度が不安定になる現象（context rot）</td></tr>
+      <tr><td class="model-name">毎回ぜんぶ持ってくる</td><td>ステートレスなAPIでは入力が毎回まるごと課金対象になる</td></tr>
+    </tbody></table></div>
+    <p style="font-size:.88rem;color:var(--c-muted);max-width:760px;">この比喩で持ち帰ってほしいのは1点です。<strong>「広い机＝たくさん積めば得」ではありません。</strong>積む量・積み方・運賃の境目の3つをセットで見るのが、コンテキストの設計です。</p>
+  </section>
+
+  <!-- ===== 8. 実務 ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="use-h">
+    <h2 class="section-title" id="use-h" style="font-size:1.2rem;">実務では、どう使うか</h2>
+    <div class="tip-box">
+      <h3>長い入力を設計するときの3つの確認</h3>
+      <ul>
+        <li><strong>長文の境界はどこか、超えたら「全体」か「超過分」か</strong> — GPT-6 Astra は 272K超で<u>リクエスト全体</u>が入力2倍・出力1.5倍。Gemini は 200K超で<u>全トークン</u>が高い単価。Anthropic は1Mまで標準単価。ここを取り違えると見積もりが倍以上ずれます。</li>
+        <li><strong>本当に全部を渡す必要があるか</strong> — 113,000トークンの全文入力と、必要な約300トークンだけの入力を比べた実験では、後者が大幅に上でした。検索で絞ってから渡すほうが、安くて精度も高い、という方向です。</li>
+        <li><strong>繰り返し送る前置きはキャッシュに載っているか</strong> — 10往復で$2.45のうち大半は「同じ前置きの再送」でした。変わらない部分は<a href="/glossary/prompt-cache/">プロンプトキャッシュ</a>に載せるのが基本です。</li>
+      </ul>
+    </div>
+    <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.2em;line-height:1.85;">
+      <li><strong>上限値だけを見てプランを決めない。</strong>同じ「1M」でも、<strong>長文の課金ルール・出力の上限・キャッシュの扱い</strong>が違います。3社を横並びで比較するなら<a href="/pricing/">料金比較</a>と合わせて読んでください。</li>
+      <li><strong>自社のタスクで確かめる。</strong>長文ベンチの代表格である Needle in a Haystack（長い文書に1つだけ事実を埋めて探させる形式）は単純な検索のテストで、実務の「曖昧な指示を解釈する」負荷を再現しません。<strong>点数が高くても、自分の用途で同じとは限りません。</strong></li>
+      <li><strong>「上限に近づいたら畳む」設計も選択肢。</strong>Anthropic は会話が上限に近づくと古いコンテキストを自動要約する仕組み（コンテキスト圧縮、ベータ）を案内しています。満杯まで積む前提で組むより、要約して捨てる前提のほうが安定する場合があります。</li>
+      <li><strong>数字は必ず単価表とセットで確認してください。</strong>本記事の金額はすべて当サイトの単純計算です。割引（キャッシュ・バッチ）やキャッシュ書込の料金を入れると実額は変わります。</li>
+    </ul>
+  </section>
+
+  <!-- ===== 9. まとめ ===== -->
+  <section class="section" style="padding-top:0;" aria-labelledby="sum-h">
+    <h2 class="section-title" id="sum-h" style="font-size:1.2rem;">まとめ — ひと言でいうと</h2>
+    <div class="tip-box">
+      <h3>1Mコンテキストは「容量」の話。料金と精度は別の話</h3>
+      <ul>
+        <li>1M＝100万トークンは、<strong>英語で約75万語、音声なら約11時間ぶん</strong>の目安。日本語は同じ文でもトークン数が多くなります。</li>
+        <li><strong>長文の課金ルールは3社で大きく異なります。</strong>OpenAI は272K超で<strong>リクエスト全体が入力2倍・出力1.5倍</strong>、Google は200K超で<strong>全トークンが高い単価</strong>、Anthropic は<strong>1Mでも標準単価</strong>。</li>
+        <li>境界線をまたぐと金額が跳ねます。<strong>272,000トークン $2.72 → 272,100トークン $5.44</strong>（GPT-6 Astra、当サイト試算）。</li>
+        <li>しかも<strong>上限に届かなくても費用は増えます</strong>。10往復で送る入力は合計245,000トークン、実際に増えたのは38,000トークンぶんだけ。</li>
+        <li>そして<strong>「入る」＝「均等に使える」ではありません</strong>。長い入力ほど性能は不安定になる、という検証結果が公開されています。</li>
+      </ul>
+    </div>
+    <p style="font-size:.9rem;color:var(--c-muted);max-width:760px;">
+      この用語がいちばん誤解されやすいのは、「1M」という<strong>上限の数字だけが独り歩きする</strong>点です。実際に効いてくるのは、<strong>その上限の手前にある課金の境界線</strong>と、<strong>その上限よりずっと手前にある精度の限界</strong>のほうです。次に「1Mコンテキスト対応」という文字を見たら、単価表の段差と、キャッシュの扱いを確認してみてください。
+    </p>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="section" style="padding-top:0;">
+    <div style="background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-accent);border-radius:var(--r-lg);padding:1.5rem;text-align:center;">
+      <h3 style="font-size:1.1rem;margin-bottom:.75rem;">次に読む</h3>
+      <p style="color:var(--c-muted);font-size:.9rem;margin-bottom:1rem;">前置きを繰り返し送るときの単価差は<a href="/glossary/prompt-cache/">第2回（プロンプトキャッシュ）</a>に、ベンチ数値の読み方は<a href="/glossary/gpt-6-astra-benchmarks/">第1回（ベンチ数値の読み方）</a>にまとめています。実際の単価は<a href="/pricing/">料金比較</a>で確認できます。</p>
+      <a href="/glossary/" style="display:inline-block;background:var(--c-accent);color:#fff;font-weight:600;padding:.65rem 1.5rem;border-radius:var(--r-md);">🧪 用語説明の一覧へ →</a>
+      <p style="margin-top:.8rem;font-size:.82rem;color:var(--c-muted);"><a href="/glossary/">用語説明</a> ・ <a href="/glossary/prompt-cache/">プロンプトキャッシュ</a> ・ <a href="/glossary/gpt-6-astra-benchmarks/">ベンチ数値の読み方</a> ・ <a href="/pricing/">料金比較</a> ・ <a href="/calculator/">トークン計算機</a></p>
+    </div>
+  </section>
+
+  <div class="tip-box" style="border-left-color:var(--c-red);margin-bottom:2rem;">
+    <h3>⚠️ 免責事項</h3>
+    <ul>
+      <li>単価・上限値・引用は2026-09-21に一次情報（OpenAI / Google / Anthropic / DeepSeek の公式ページ）で確認したものです。料金と仕様は予告なく変わります。契約前に必ず各社公式ページをご確認ください。</li>
+      <li>金額の試算はすべて当サイトによる単純計算（トークン数 × 単価）で、キャッシュ利用・バッチ割引・キャッシュ書込・最低課金は含みません。実際の請求額とは異なります。</li>
+      <li>長文で性能が不安定になるという検証結果は、Chroma が2025年7月に公開したレポート（18モデル、当時のGPT-4.1・Claude 4・Gemini 2.5・Qwen3 世代）によるものです。2026年9月時点の最新モデルで同じ傾向が同じ強さで出るかは確認できていません。</li>
+      <li>272K などの境界値はモデルごとに異なります。本文の数値を他モデルに当てはめないでください。</li>
+      <li>公式の英文は逐語で引用し、和訳は当サイトによるものです。原文と和訳が食い違う場合は原文を優先してください。</li>
+      <li>本サイトは各社と提携しておらず、特定プロバイダーの推薦・代理ではありません。</li>
+    </ul>
+  </div>
+</div></main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>運営: okamoちゃんねる</p><p><a href="/">ホーム</a> · <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a> · <a href="/timeline/">年表</a> · <a href="/glossary/">用語説明</a> · <a href="/gpt-6/">GPT-6 Astra</a></p></div><p class="footer-disclaimer">⚠️ 料金・仕様は予告なく変動します。契約前に必ず各社公式ページでご確認ください。本サイトは各社と提携していません。</p></div></footer>
+</body>
+</html>

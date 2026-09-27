@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Claude Opus 5.5 — First of the Claude 5.5 Family [Pricing &amp; Benchmarks] — LLM Data Hub</title>
+  <meta name="description" content="Claude Opus 5.5: $4 input / $20 output / $0.20 cache read, Fast mode $8/$40, 1M context, 128K max output. All nine official benchmarks plus who ran each harness. Released Sept 22, 2026. Updated Sept 25, 2026.">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/en/claude-opus-5-5/">
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/claude-opus-5-5/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/claude-opus-5-5/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/claude-opus-5-5/">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/en/claude-opus-5-5/">
+  <meta property="og:title" content="Claude Opus 5.5 — First of the Claude 5.5 Family">
+  <meta property="og:description" content="$4 input / $20 output / $0.20 cache read (updated Sept 25, 2026). 1M context, 128K max output, nine official benchmarks, harness notes.">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Claude Opus 5.5 — First of the Claude 5.5 Family [Pricing & Benchmarks]","datePublished":"2026-09-25","dateModified":"2026-09-25","author":{"@type":"Organization","name":"LLM Data Hub"},"publisher":{"@type":"Organization","name":"okamo channel"},"url":"https://llm.okamomedia.tokyo/en/claude-opus-5-5/","inLanguage":"en"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://llm.okamomedia.tokyo/en/"},{"@type":"ListItem","position":2,"name":"Claude Opus 5.5","item":"https://llm.okamomedia.tokyo/en/claude-opus-5-5/"}]}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .hero-opus{background:linear-gradient(135deg,#1a0f0a 0%,#2b1710 50%,#0f1117 100%);border-bottom:1px solid var(--c-border);padding:3rem 1rem 2.5rem;text-align:center}.hero-opus .price-flag{display:inline-block;background:rgba(217,119,87,.16);border:1px solid rgba(217,119,87,.4);color:#e8a184;font-size:.82rem;font-weight:700;padding:.3rem .8rem;border-radius:100px;margin-bottom:1rem}.hero-opus h1{font-size:clamp(1.6rem,4.5vw,2.4rem);font-weight:800;line-height:1.2;margin-bottom:.75rem}.hero-opus h1 span{color:#d97757}.hero-opus .lead{font-size:1.05rem;color:var(--c-muted);max-width:660px;margin:0 auto 1.5rem}.hero-opus .quick-stats{display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;margin-top:1rem}.hero-opus .stat{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.75rem 1.25rem;text-align:center}.hero-opus .stat .val{font-family:var(--font-mono);font-size:1.25rem;font-weight:700;color:#d97757}.hero-opus .stat .lbl{font-size:.75rem;color:var(--c-muted);margin-top:.15rem}
+    .compare-table th:first-child{width:210px}.compare-table td{text-align:center}.compare-table td:first-child{text-align:left;font-weight:600}.compare-table .winner{color:var(--c-green);font-weight:700}.compare-table .tie{color:var(--c-yellow)}
+    .spec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.8rem;margin-bottom:1.5rem}.spec-item{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.9rem 1rem}.spec-item .spec-label{font-size:.75rem;color:var(--c-muted);font-weight:600;margin-bottom:.25rem}.spec-item .spec-value{font-family:var(--font-mono);font-size:1rem;font-weight:700}
+    .context-note{background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid #d97757;border-radius:var(--r-md);padding:.8rem 1rem;margin:1rem 0;font-size:.84rem;color:var(--c-muted)}
+    .fig-wrap{position:relative}.fig-scroll{overflow:visible}
+    .fig-fig{margin:1rem 0 1.4rem}.fig-fig svg{width:100%;height:auto;border:1px solid var(--c-border);border-radius:var(--r-md);background:var(--c-surface);display:block}
+    .fig-hint{display:none;font-size:.75rem;color:var(--c-muted);text-align:center;margin:.3rem 0 0}
+    @media (max-width:680px){.fig-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}.fig-scroll svg{min-width:600px}.fig-hint{display:block}.fig-wrap::before,.fig-wrap::after{content:"";position:absolute;top:0;bottom:0;width:36px;pointer-events:none;z-index:2}.fig-wrap::before{left:0;background:linear-gradient(to right,rgba(15,17,23,.95),rgba(15,17,23,0))}.fig-wrap::after{right:0;background:linear-gradient(to left,rgba(15,17,23,.95),rgba(15,17,23,0))}}
+    @media(max-width:640px){.hero-opus .quick-stats{flex-direction:column;gap:.5rem}}
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/en/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="Main navigation"><a href="/en/" class="nav-link">Home</a><a href="/en/pricing/" class="nav-link">Pricing</a><a href="/en/calculator/" class="nav-link">Token Calculator</a><a href="/en/timeline/" class="nav-link">Release Timeline</a><a href="/en/china-ai/" class="nav-link">China AI</a><a href="/en/multimodal/" class="nav-link">Multimodal</a><a href="/en/mai/" class="nav-link">MS AI (MAI)</a><a href="/en/glossary/" class="nav-link">Glossary</a></nav></div></header>
+
+<section class="hero-opus"><div class="container">
+  <p class="price-flag">🚀 Released September 22, 2026 — first of the Claude 5.5 family, 20% cheaper than Opus 5</p>
+  <h1>Claude <span>Opus 5.5</span></h1>
+  <p class="lead">Anthropic&#39;s first model in the new Claude 5.5 family. The official claim is that it <strong>performs at the level of Claude Fable 5.1 on most work while costing 40% less to run than Opus 5</strong> — the shot that started September 2026&#39;s price-cutting race.</p>
+  <div class="quick-stats">
+    <div class="stat"><div class="val">$4.00</div><div class="lbl">Input / 1M tokens</div></div>
+    <div class="stat"><div class="val">$20.00</div><div class="lbl">Output / 1M tokens</div></div>
+    <div class="stat"><div class="val">$0.20</div><div class="lbl">Cache read</div></div>
+    <div class="stat"><div class="val">1M</div><div class="lbl">Context window</div></div>
+  </div>
+</div></section>
+
+<main><div class="container">
+<div class="updated-bar" style="margin-top:2rem;"><span class="dot">●</span>Last updated: <time datetime="2026-09-25">September 25, 2026</time> | Sources: <a href="https://www.anthropic.com/claude-opus-5-5" target="_blank" rel="noopener">Anthropic announcement</a> &middot; <a href="https://platform.claude.com/docs/en/models/overview" target="_blank" rel="noopener">Models overview</a> &middot; <a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener">official pricing docs</a> | <a href="/en/pricing/">Pricing</a> &middot; <a href="/en/calculator/">Calculator</a> &middot; <a href="/en/claude-fable-5-1/">Fable 5.1</a></div>
+
+<section class="section" style="padding-top:2rem;" aria-labelledby="tl-h">
+<h2 class="section-title" id="tl-h" style="font-size:1.2rem;">The short version</h2>
+<div class="context-note" style="border-left-color:var(--c-green);">
+  <ul style="margin:0;padding-left:1.1rem;line-height:1.9;">
+    <li><strong>It replaces Opus 5; it is not a cut-down Fable 5.1.</strong> Anthropic says it matches Fable 5.1 on most work and is 40% cheaper than Opus 5 on typical workloads.</li>
+    <li><strong>The price cut is the headline.</strong> Input $5&rarr;$4, output $25&rarr;$20, cache reads $0.50&rarr;$0.20 (a 60% cut). Anthropic says cache reads make up the majority of agentic and coding work costs.</li>
+    <li><strong>Thinking can no longer be disabled.</strong> Depth is controlled with an <code>effort</code> parameter (low / medium / high&hellip;). The default is medium — the announcement&#39;s chart notes say &ldquo;at default effort (medium)&rdquo;.</li>
+    <li><strong>Sonnet 5.5 and Haiku 5.5 &ldquo;will follow in the coming weeks&rdquo;</strong> — not available at launch.</li>
+  </ul>
+</div>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="price-h">
+<h2 class="section-title" id="price-h" style="font-size:1.2rem;">Pricing (USD per 1M tokens)</h2>
+<p class="section-sub">Taken from the pricing table in Anthropic&#39;s announcement and the official pricing documentation — the same standard, pay-per-token basis we use on our <a href="/en/pricing/">pricing comparison</a>.</p>
+<div class="table-wrap"><table><thead><tr><th>Item</th><th>Claude Opus 5.5</th><th>Claude Opus 5</th><th>Fable 5.1 (for reference)</th></tr></thead><tbody>
+<tr><td class="model-name">Input</td><td class="price">$4.00</td><td>$5.00</td><td>$10.00</td></tr>
+<tr><td class="model-name">Output</td><td class="price">$20.00</td><td>$25.00</td><td>$50.00</td></tr>
+<tr><td class="model-name">Cache read (cache hit)</td><td class="price">$0.20</td><td>$0.50</td><td>$0.25</td></tr>
+<tr><td class="model-name">Cache write (5-minute TTL)</td><td class="price">$5.00</td><td>$6.25</td><td>&mdash;</td></tr>
+</tbody></table></div>
+<p style="font-size:.78rem;color:var(--c-muted);margin-top:.3rem;">Note the nuance: on Fable 5.1 a cache hit costs <strong>2.5%</strong> of the standard input price ($0.25); on Opus 5.5 it costs <strong>5%</strong> ($0.20). Opus 5.5 has the cheaper headline input rate, while Fable 5.1 keeps the deeper cache discount.</p>
+
+<h3 style="font-size:1rem;margin:1.6rem 0 .5rem;">Fast mode (Claude Code and the Claude Platform)</h3>
+<div class="table-wrap"><table><thead><tr><th>Mode</th><th>Input</th><th>Output</th><th>Speed</th></tr></thead><tbody>
+<tr><td class="model-name">Standard</td><td class="price">$4.00</td><td class="price">$20.00</td><td>baseline</td></tr>
+<tr><td class="model-name">Fast mode</td><td class="price">$8.00</td><td class="price">$40.00</td><td>up to 2.5x</td></tr>
+</tbody></table></div>
+<p style="font-size:.78rem;color:var(--c-muted);margin-top:.3rem;">Fast mode pricing &ldquo;applies across the full context window, including requests over 200k input tokens&rdquo; per Anthropic&#39;s pricing docs.</p>
+
+<div class="context-note">
+  💡 <strong>The 40% claim is about tokens per task as well as price per token.</strong> Anthropic writes that Opus 5.5 &ldquo;requires less compute to serve than Opus 5&rdquo; and <strong>&ldquo;uses fewer tokens per task&rdquo;</strong>. The saving is the product of both. Don&#39;t read the table alone and conclude the older model is cheaper for your workload.
+</div>
+<p class="source-note">Primary sources: <a href="https://www.anthropic.com/claude-opus-5-5" target="_blank" rel="noopener">anthropic.com/claude-opus-5-5</a> (Pricing table) &middot; <a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener">platform.claude.com pricing docs</a> (verified 2026-09-25)</p>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="fig-h">
+<h2 class="section-title" id="fig-h" style="font-size:1.2rem;">Figure: how the rates line up</h2>
+<div class="fig-wrap">
+  <div class="fig-scroll">
+  <figure class="fig-fig" style="margin:0;">
+    <svg viewBox="0 0 640 260" role="img" aria-labelledby="ofig-en-t ofig-en-d" xmlns="http://www.w3.org/2000/svg">
+      <title id="ofig-en-t">Unit prices for Claude Opus 5.5, Opus 5 and Fable 5.1</title>
+      <desc id="ofig-en-d">Horizontal bar chart of input, output and cache-read prices per 1M tokens in USD. Opus 5.5 is $4 input and $20 output, Opus 5 is $5 and $25, Fable 5.1 is $10 and $50.</desc>
+      <g font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="12" fill="#e6e6e6">
+        <text x="12" y="26" font-size="13" font-weight="700" fill="#d97757">Input $ / 1M tokens</text>
+        <rect x="150" y="12" width="120" height="18" rx="3" fill="#d97757"/><text x="280" y="26">Opus 5.5 &#8212; $4.00</text>
+        <rect x="150" y="38" width="150" height="18" rx="3" fill="#8a5a45"/><text x="310" y="52" fill="#9aa0aa">Opus 5 &#8212; $5.00</text>
+        <rect x="150" y="64" width="300" height="18" rx="3" fill="#5f4a3e"/><text x="460" y="78" fill="#9aa0aa">Fable 5.1 &#8212; $10.00</text>
+        <text x="12" y="118" font-size="13" font-weight="700" fill="#d97757">Output $ / 1M tokens</text>
+        <rect x="150" y="104" width="78" height="18" rx="3" fill="#d97757"/><text x="238" y="118">Opus 5.5 &#8212; $20</text>
+        <rect x="150" y="130" width="98" height="18" rx="3" fill="#8a5a45"/><text x="258" y="144" fill="#9aa0aa">Opus 5 &#8212; $25</text>
+        <rect x="150" y="156" width="196" height="18" rx="3" fill="#5f4a3e"/><text x="356" y="170" fill="#9aa0aa">Fable 5.1 &#8212; $50</text>
+        <text x="12" y="210" font-size="13" font-weight="700" fill="#d97757">Cache read $ / 1M tokens</text>
+        <rect x="150" y="196" width="30" height="18" rx="3" fill="#d97757"/><text x="190" y="210">Opus 5.5 &#8212; $0.20 (5% of input)</text>
+        <rect x="150" y="222" width="62" height="18" rx="3" fill="#8a5a45"/><text x="222" y="236" fill="#9aa0aa">Opus 5 &#8212; $0.50</text>
+        <text x="330" y="236" fill="#9aa0aa">Fable 5.1 &#8212; $0.25 (2.5% of input)</text>
+      </g>
+    </svg>
+    <figcaption style="font-size:.78rem;color:var(--c-muted);margin-top:.5rem;">Source: pricing table in Anthropic&#39;s announcement and the official pricing docs (verified 2026-09-25). Bar lengths are proportional to the $10 input / $50 output maximum. All figures are USD per 1M tokens.</figcaption>
+  </figure>
+  </div>
+  <p class="fig-hint">&larr; scroll horizontally &rarr;</p>
+</div>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="spec-h">
+<h2 class="section-title" id="spec-h" style="font-size:1.2rem;">Specifications</h2>
+<div class="spec-grid">
+  <div class="spec-item"><div class="spec-label">Release date</div><div class="spec-value">2026-09-22</div></div>
+  <div class="spec-item"><div class="spec-label">Context window</div><div class="spec-value">1M tokens</div></div>
+  <div class="spec-item"><div class="spec-label">Max output</div><div class="spec-value">128K tokens</div></div>
+  <div class="spec-item"><div class="spec-label">Knowledge cutoff</div><div class="spec-value">June 2026</div></div>
+  <div class="spec-item"><div class="spec-label">Thinking mode</div><div class="spec-value">Always on (cannot be disabled)</div></div>
+  <div class="spec-item"><div class="spec-label">Reasoning effort</div><div class="spec-value">low / medium / high&hellip; (default medium)</div></div>
+  <div class="spec-item"><div class="spec-label">Model ID</div><div class="spec-value" style="font-size:.85rem;">claude-opus-5-5</div></div>
+  <div class="spec-item"><div class="spec-label">Availability</div><div class="spec-value" style="font-size:.85rem;">Claude Platform / AWS / Google Cloud / Azure</div></div>
+</div>
+<p class="source-note">Sources: <a href="https://platform.claude.com/docs/en/models/overview" target="_blank" rel="noopener">Claude Platform Docs, Models overview</a> (context window 1M, max output 128K, reliable knowledge cutoff Jun 2026, training data cutoff Jun 2026) &middot; <a href="https://www.anthropic.com/claude-opus-5-5" target="_blank" rel="noopener">Anthropic announcement</a> (availability, thinking behaviour).</p>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="bench-h">
+<h2 class="section-title" id="bench-h" style="font-size:1.2rem;">Nine official benchmarks — and who actually ran each harness</h2>
+<p class="section-sub">From the table in Anthropic&#39;s announcement. <strong>Unless otherwise noted, every Opus 5.5 figure uses adaptive thinking at max effort</strong> (verbatim: &ldquo;Unless otherwise noted, all Claude Opus 5.5 results use adaptive thinking at max effort&rdquo;).</p>
+<div class="table-wrap compare-table"><table><thead><tr><th>Benchmark</th><th>Opus 5.5</th><th>Fable 5.1</th><th>Opus 5</th><th>GPT-6 Astra</th><th>GPT-5.6 Sol</th></tr></thead><tbody>
+<tr><td class="model-name">Terminal-Bench 4.0 (agentic coding)</td><td class="price">66.4%</td><td>55.8%</td><td>52.3%</td><td>57.9%</td><td>37.3%</td></tr>
+<tr><td class="model-name">FrontierCode v1.1 (Main)</td><td class="price">54.4%</td><td>50.3%</td><td>48.0%</td><td>53.3%</td><td>47.5%</td></tr>
+<tr><td class="model-name">CursorBench 4.0</td><td class="price">57.8%</td><td>51.8%</td><td>46.6%</td><td>&mdash;</td><td>41.7%</td></tr>
+<tr><td class="model-name">GDPval-AA v2.1 (Elo)</td><td class="price">1,846</td><td>1,735</td><td>1,708</td><td>1,542</td><td>1,588</td></tr>
+<tr><td class="model-name">AutomationBench (business workflows)</td><td class="price">40.0%</td><td>31.4%</td><td>26.9%</td><td>41.4%</td><td>28.8%</td></tr>
+<tr><td class="model-name">Humanity&#39;s Last Exam (with tools)</td><td class="price">67.7%</td><td>65.6%</td><td>63.6%</td><td>57.2%</td><td>&mdash;</td></tr>
+<tr><td class="model-name">Terminal-Bench-Science 0.1</td><td class="price">58.7%</td><td>52.6%</td><td>29.0%</td><td>64.6%</td><td>22.4%</td></tr>
+<tr><td class="model-name">OSWorld 2.0 (computer use, partial)</td><td class="price">81.8%</td><td>80.7%</td><td>74.0%</td><td>&mdash;</td><td>&mdash;</td></tr>
+<tr><td class="model-name">Chartography (with tools)</td><td class="price">89.0%</td><td>88.4%</td><td>83.4%</td><td>&mdash;</td><td>&mdash;</td></tr>
+</tbody></table></div>
+
+<h3 style="font-size:1rem;margin:1.6rem 0 .5rem;">Who measured what (this is the important part)</h3>
+<div class="table-wrap"><table><thead><tr><th>Benchmark</th><th>Run and reported by</th><th>Harness and conditions</th></tr></thead><tbody>
+<tr><td class="model-name">Terminal-Bench 4.0</td><td>Anthropic&#39;s own setup, plus the public leaderboard</td><td>Public leaderboard uses the <strong>Claude Code harness</strong>, 5 trials/task, and reports Opus 5 at 51.8%; Anthropic&#39;s setup reproduces it at 52.3% (within noise). Opus 5.5 was run at <strong>xhigh effort</strong> and GPT-6 Astra at <strong>high effort</strong> — each model&#39;s highest score. Standard error &plusmn;2.6 pts. GPT-6 Astra and GPT-5.6 Sol figures are <strong>as reported by OpenAI</strong>.</td></tr>
+<tr><td class="model-name">Terminal-Bench-Science 0.1</td><td>Anthropic&#39;s setup, plus the public leaderboard</td><td>Public leaderboard uses 3 trials/task and the Claude Code harness, reporting Opus 5 at 30.0% versus 29.0% on Anthropic&#39;s setup. Standard error &plusmn;3.5&ndash;5 pts. GPT-6 Astra figure is <strong>as reported by OpenAI</strong>.</td></tr>
+<tr><td class="model-name">AutomationBench</td><td><strong>Zapier ran and reported it</strong></td><td>Runs were performed <strong>without fallback models</strong>, so safeguard interventions counted as failures — a condition that understates the real-world score. Opus 5.5 comes from Zapier&#39;s early-access evaluation; Opus 5, GPT-5.6 Sol and GPT-6 Astra come from Zapier&#39;s public leaderboard.</td></tr>
+<tr><td class="model-name">GDPval-AA v2.1</td><td>Artificial Analysis&#39; evaluation, quoted by Anthropic</td><td>Anthropic describes it as &ldquo;Artificial Analysis&#39;s GDPval-AA v2.1 &hellip; real-world professional work across 44 occupations&rdquo;, scored in Elo.</td></tr>
+<tr><td class="model-name">CursorBench 4.0 / FrontierCode v1.1</td><td>Anthropic&#39;s own setup</td><td>Chart notes also give figures &ldquo;at default effort (medium)&rdquo; — FrontierCode 54.6%, CursorBench 52.5%. So the table shows max-effort scores while the charts show default-effort scores: different conditions.</td></tr>
+<tr><td class="model-name">WANDR (chart only, not in the table)</td><td>Perplexity&#39;s benchmark, run by Anthropic under modified conditions</td><td>Verbatim note: &ldquo;Claude models were run with offline versions of the web search and web fetch tools, programmatic tool calling, code execution, and a <strong>980k-token task budget</strong>. This differs from Perplexity&#39;s published setup, <strong>scores are not directly comparable</strong>&rdquo;. Only models scored under identical conditions are shown.</td></tr>
+</tbody></table></div>
+
+<div class="context-note" style="border-left-color:var(--c-yellow);">
+  ⚠️ <strong>How to read the table.</strong> ① The <strong>GPT-6 Astra column is OpenAI&#39;s self-reported figure</strong> — Anthropic did not re-run it (&ldquo;as reported by OpenAI&rdquo;). ② On Terminal-Bench-Science, <strong>Astra scores 64.6% against Opus 5.5&#39;s 58.7%</strong>. Anthropic does not claim a clean sweep; it says Opus 5.5 &ldquo;leads in agentic coding, computer use, and knowledge work&rdquo;. ③ On AutomationBench, <strong>Opus 5.5 is second to Astra (41.4%)</strong>.
+</div>
+<div class="context-note">
+  🔍 <strong>Anthropic itself warns that benchmark margins are getting less meaningful.</strong> Verbatim: &ldquo;at these levels of capability we&#39;ve found that benchmark margins have become a less reliable guide to real-world differences. In our own use, the gap between Opus 5.5 and Claude Fable 5.1 is narrower than these scores suggest.&rdquo; For who runs each of these benchmarks, see <a href="/en/glossary/benchmark-orgs/">Glossary #6: the organisations behind the benchmarks</a>.
+</div>
+<p class="source-note">Source: <a href="https://www.anthropic.com/claude-opus-5-5" target="_blank" rel="noopener">Anthropic, &ldquo;Introducing Claude Opus 5.5&rdquo;</a> (benchmark table and footnotes 1&ndash;4, verified 2026-09-25)</p>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="eff-h">
+<h2 class="section-title" id="eff-h" style="font-size:1.2rem;">What the efficiency claims mean</h2>
+<div class="table-wrap"><table><thead><tr><th>Comparison</th><th>What the announcement says</th></tr></thead><tbody>
+<tr><td class="model-name">Opus 5.5 vs Opus 5</td><td><strong>40% lower cost</strong> on typical workloads; output generated <strong>more than 30% faster</strong>.</td></tr>
+<tr><td class="model-name">Terminal-Bench 4.0</td><td>Opus 5.5 at default effort beats Opus 5 at max effort for about <strong>one fifth of the cost</strong>, and matches GPT-6 Astra at about <strong>40% of the cost</strong>.</td></tr>
+<tr><td class="model-name">CursorBench 4.0</td><td>Beats GPT-5.6 Sol&#39;s top score by <strong>11 points for about a third of the cost</strong>.</td></tr>
+<tr><td class="model-name">Internal test: 200,000-line codebase audit</td><td>Opus 5.5 finished in under three hours; Opus 5 took over 20 hours and used <strong>2.5x as many tokens</strong>.</td></tr>
+<tr><td class="model-name">Internal test: HAProxy C&rarr;Rust rewrite</td><td>Opus 5.5 finished in 9.5 hours versus 12 for Fable 5.1, and cost <strong>51% less</strong>.</td></tr>
+</tbody></table></div>
+<p style="font-size:.78rem;color:var(--c-muted);margin-top:.3rem;">All of these are vendor-run internal tests, not independent reproductions.</p>
+<p class="source-note">Source: <a href="https://www.anthropic.com/claude-opus-5-5" target="_blank" rel="noopener">Anthropic, &ldquo;Introducing Claude Opus 5.5&rdquo;</a></p>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="safe-h">
+<h2 class="section-title" id="safe-h" style="font-size:1.2rem;">Safety: safeguards, and a stated limit of the evidence</h2>
+<div class="table-wrap"><table><thead><tr><th>Item</th><th>What the announcement says</th></tr></thead><tbody>
+<tr><td class="model-name">External evaluation</td><td>Tested before release by <strong>Frontier Design</strong> and <strong>METR</strong>.</td></tr>
+<tr><td class="model-name">Cybersecurity</td><td>Same class of safeguards as Fable 5.1; <strong>most cybersecurity tasks are re-routed to Opus 4.8</strong>, transparently.</td></tr>
+<tr><td class="model-name">Biology</td><td>Same biology safeguards as Fable 5.1. Vetted organisations can apply to the <strong>Life Sciences Verification Program</strong>.</td></tr>
+<tr><td class="model-name">Distillation</td><td>Launches with <strong>preserved thinking</strong>, the anti-distillation safeguard introduced with Fable 5.1. Applies to API accounts created on or after <strong>2026-08-31</strong>.</td></tr>
+<tr><td class="model-name">New containment test</td><td>Attempted to circumvent boundaries about <strong>85% less often</strong> than Opus 5 or Mythos 5.1; every attempt was low severity and self-reported.</td></tr>
+<tr><td class="model-name">Data handling</td><td>Available with <strong>zero data retention</strong>; ships with watermarking to comply with the EU AI Act.</td></tr>
+</tbody></table></div>
+<div class="context-note" style="border-left-color:var(--c-red);">
+  ⚠️ <strong>The announcement states a limit plainly.</strong> Verbatim: &ldquo;We see signs that Opus 5.5 often suspects it is being evaluated.&rdquo; That challenges the ability to predict behaviour in the wide variety of real deployment settings — a vendor acknowledgement that pre-release evaluation has limits. If you run agents unattended, keep your own guardrails.
+</div>
+<p class="source-note">Source: <a href="https://www.anthropic.com/claude-opus-5-5" target="_blank" rel="noopener">Anthropic, &ldquo;Introducing Claude Opus 5.5&rdquo;</a> (Safety section)</p>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="rel-h">
+<h2 class="section-title" id="rel-h" style="font-size:1.2rem;">How this relates to our other Claude pages</h2>
+<div class="table-wrap"><table><thead><tr><th>Model</th><th>On this site</th><th>Relationship</th></tr></thead><tbody>
+<tr><td class="model-name"><a href="/en/claude-fable-5-1/">Claude Fable 5.1</a></td><td>Dedicated page</td><td><strong>A different model (higher tier, higher price)</strong> at $10 input / $50 output. Opus 5.5&#39;s pitch is Fable-5.1-level work at a lower cost.</td></tr>
+<tr><td class="model-name"><a href="/en/claude-mythos-5-1/">Claude Mythos 5.1</a></td><td>Dedicated page</td><td><strong>A different model (trusted-access tier for vetted organisations)</strong>. Opus 5.5&#39;s cyber and biology safeguards are the same class, and lifting them needs a verification program.</td></tr>
+<tr><td class="model-name">Claude Opus 5.5</td><td><strong>This page (new)</strong></td><td>First model of the Claude 5.5 family; successor to Opus 5. <strong>Sonnet 5.5 and Haiku 5.5 are not yet available.</strong></td></tr>
+</tbody></table></div>
+<p style="font-size:.78rem;color:var(--c-muted);margin-top:.3rem;">We have no pages for <code>/en/claude-opus-5/</code> or Claude Sonnet 5.5 as of 2026-09-25, so we deliberately link to none.</p>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="choice-h">
+<h2 class="section-title" id="choice-h" style="font-size:1.2rem;">Where it fits — and where to be careful</h2>
+<div class="tip-box">
+  <ul>
+    <li><strong>Long-running agentic coding:</strong> cache reads at $0.20 and Anthropic&#39;s own note that cache reads dominate agentic costs make this a good fit for setups that resend repository context.</li>
+    <li><strong>Plan for thinking you cannot switch off:</strong> easy tasks still consume output tokens. Lower <code>effort</code> or use a lighter model for simple work.</li>
+    <li><strong>Cyber and biology work:</strong> requests transparently fall back to Opus 4.8 or Opus 5, so a task may be answered by a different model than the benchmark numbers describe.</li>
+    <li><strong>If raw peak accuracy is the goal:</strong> GPT-6 Astra leads Terminal-Bench-Science at 64.6% versus 58.7%. Check per domain rather than by overall reputation.</li>
+    <li><strong>The start of a price war:</strong> OpenAI announced GPT-6 Sol and Luna roughly a week later at about half the previous prices — see <a href="/en/gpt-6-sol-luna/">our GPT-6 Sol / Luna page</a>.</li>
+  </ul>
+</div>
+</section>
+
+<section class="section" style="padding-top:0;">
+<div style="background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid #d97757;border-radius:var(--r-lg);padding:1.5rem;text-align:center;">
+  <h3 style="font-size:1.1rem;margin-bottom:.75rem;">Estimate your real cost</h3>
+  <p style="color:var(--c-muted);font-size:.9rem;margin-bottom:1rem;">Compare token costs across models, including Claude Opus 5.5.</p>
+  <a href="/en/calculator/" style="display:inline-block;background:var(--c-accent);color:#fff;font-weight:600;padding:.65rem 1.5rem;border-radius:var(--r-md);">🧮 Open the token calculator &rarr;</a>
+  <p style="margin-top:.8rem;font-size:.82rem;color:var(--c-muted);"><a href="/en/pricing/">📊 Full pricing comparison</a> &middot; <a href="/en/gpt-6-sol-luna/">🆚 GPT-6 Sol / Luna</a> &middot; <a href="/en/claude-fable-5-1/">🤖 Fable 5.1</a> &middot; <a href="/en/timeline/">🗓️ Release timeline</a></p>
+</div>
+</section>
+
+<div class="tip-box" style="border-left-color:var(--c-red);margin-bottom:2rem;">
+  <h3>⚠️ Disclaimer</h3>
+  <ul>
+    <li>Pricing and specifications were verified on Anthropic&#39;s announcement and official documentation on 2026-09-25 and may change without notice. Always confirm on the official pages before you commit.</li>
+    <li>Benchmark figures include vendor-reported numbers. <strong>GPT-6 Astra and GPT-5.6 Sol figures come from OpenAI&#39;s own reporting</strong>, not from Anthropic re-runs, and conditions may not be identical.</li>
+    <li>This site is for information only and is not a recommendation or agent for any provider.</li>
+  </ul>
+</div>
+
+</div></main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>Operated by okamo channel</p><p><a href="/en/">Home</a> · <a href="/en/pricing/">Pricing</a> · <a href="/en/calculator/">Calculator</a> · <a href="/en/timeline/">Timeline</a> · <a href="/en/claude-fable-5-1/">Claude Fable 5.1</a> · <a href="/en/gpt-6-sol-luna/">GPT-6 Sol / Luna</a></p></div><p class="footer-disclaimer">⚠️ Pricing and specifications may change without notice. Always verify on official pages. Not affiliated with any provider.</p></div></footer>
+</body>
+</html>

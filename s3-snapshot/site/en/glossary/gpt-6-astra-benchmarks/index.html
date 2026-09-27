@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GPT-6 Astra: how to read "ARC-AGI-3 99.9%, ExploitBench 100%" | LLM Data Hub</title>
+  <meta name="description" content="Same benchmark, 62.7% under ARC Prize's neutral harness. 100% means the test stopped measuring. Past 272K input tokens a request bills at 2x input. How to read GPT-6 Astra's numbers.">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/en/glossary/gpt-6-astra-benchmarks/">
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/glossary/gpt-6-astra-benchmarks/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/glossary/gpt-6-astra-benchmarks/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/glossary/gpt-6-astra-benchmarks/">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/en/glossary/gpt-6-astra-benchmarks/">
+  <meta property="og:title" content="GPT-6 Astra: How to Read &quot;ARC-AGI-3 99.9%, ExploitBench 100%&quot;">
+  <meta property="og:description" content="62.7% under the neutral harness. 100% is a ceiling. Past 272K input tokens, the whole request doubles. Numbers, with their conditions.">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"GPT-6 Astra: How to Read \"ARC-AGI-3 99.9%, ExploitBench 100%\"","datePublished":"2026-09-15","dateModified":"2026-09-15","author":{"@type":"Organization","name":"LLM Data Hub"},"publisher":{"@type":"Organization","name":"okamoちゃんねる"},"url":"https://llm.okamomedia.tokyo/en/glossary/gpt-6-astra-benchmarks/","inLanguage":"en","about":"GPT-6 Astra benchmark numbers and what a 1.05M context window and 128K max output mean in practice"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://llm.okamomedia.tokyo/en/"},{"@type":"ListItem","position":2,"name":"Glossary","item":"https://llm.okamomedia.tokyo/en/glossary/"},{"@type":"ListItem","position":3,"name":"GPT-6 Astra benchmark numbers","item":"https://llm.okamomedia.tokyo/en/glossary/gpt-6-astra-benchmarks/"}]}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .phrase-box{background:linear-gradient(135deg,#12162a 0%,#1a1d35 55%,#0f1117 100%);border:1px solid var(--c-border);border-left:3px solid var(--c-accent2);border-radius:var(--r-lg);padding:1.2rem 1.3rem;margin:1.2rem 0 1.6rem}
+    .phrase-box .phrase{font-size:1.02rem;font-weight:700;line-height:1.75;margin-bottom:.6rem}
+    .phrase-box .phrase-meta{font-size:.8rem;color:var(--c-muted);line-height:1.7}
+    .num-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:.8rem;margin:1rem 0 1.6rem}
+    .num-card{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.9rem 1rem}
+    .num-card .k{font-family:var(--font-mono);font-size:.74rem;color:var(--c-muted);font-weight:600;letter-spacing:.02em}
+    .num-card .v{font-family:var(--font-mono);font-size:1.15rem;font-weight:700;margin:.15rem 0 .2rem}
+    .num-card .d{font-size:.8rem;color:var(--c-muted);line-height:1.6}
+    .read-box{background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-green);border-radius:var(--r-md);padding:1rem 1.2rem;margin:1rem 0 1.6rem;font-size:.88rem;color:var(--c-muted)}
+    .read-box strong{color:var(--c-text)}
+    .flow-fig{margin:1rem 0 1.4rem}
+    .flow-fig svg{width:100%;height:auto;border:1px solid var(--c-border);border-radius:var(--r-md);background:var(--c-surface)}
+    .cmp-table th,.cmp-table td{font-size:.85rem}
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/en/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="Main navigation"><a href="/en/" class="nav-link">Home</a><a href="/en/pricing/" class="nav-link">Pricing</a><a href="/en/calculator/" class="nav-link">Token Calculator</a><a href="/en/timeline/" class="nav-link">Release Timeline</a><a href="/en/china-ai/" class="nav-link">China AI</a><a href="/en/multimodal/" class="nav-link">Multimodal</a><a href="/en/mai/" class="nav-link">MS AI (MAI)</a><a href="/en/glossary/" class="nav-link">Glossary</a></nav></div></header>
+
+<main><div class="container">
+  <div class="section" style="padding-bottom:0;">
+    <h1 class="section-title" style="font-size:1.55rem;">GPT-6 Astra: How to Read "ARC-AGI-3 99.9%, ExploitBench 100%"</h1>
+    <p class="section-sub" style="max-width:760px;">
+      Installment 1 of <a href="/en/glossary/">Glossary</a>. We take one line from an announcement and walk it back to primary sources.
+      Today's line comes from <a href="/en/gpt-6/">GPT-6 Astra</a>: <strong>the numbers are accurate, the conditions are missing.</strong>
+      Without the conditions, this line cannot support a decision.
+    </p>
+    <div class="phrase-box">
+      <p class="phrase">"ARC-AGI-3 99.9% &middot; ExploitBench 100% &middot; Terminal-Bench Science 64.6%. A 1.05M context window and 128K max output."</p>
+      <p class="phrase-meta">Model: GPT-6 Astra (OpenAI, announced 2026-09-03, $10 / $50 per 1M tokens) — <a href="/en/gpt-6/">full page</a> · <a href="/en/timeline/">release timeline</a></p>
+    </div>
+    <div class="updated-bar">
+      <span class="dot">●</span>
+      Last updated: <time datetime="2026-09-15">September 15, 2026</time>
+      &ensp;|&ensp; Primary sources: <a href="https://openai.com/index/gpt-6-astra/" target="_blank" rel="noopener">OpenAI announcement</a> · <a href="https://arcprize.org/blog/astra" target="_blank" rel="noopener">ARC Prize blog</a> · <a href="https://developers.openai.com/api/docs/models/gpt-6-astra" target="_blank" rel="noopener">OpenAI model docs</a> · <a href="https://www.tbench.ai/news/terminal-bench-science-0-1" target="_blank" rel="noopener">Terminal-Bench-Science 0.1</a>
+      &ensp;|&ensp; Verified: 2026-09-15
+    </div>
+  </div>
+
+  <section class="section" style="padding-top:1.5rem;" aria-labelledby="decomp-h">
+    <h2 class="section-title" id="decomp-h" style="font-size:1.2rem;">First, split it into five numbers</h2>
+    <p class="section-sub" style="max-width:760px;">The line stacks up five figures of three completely different kinds. Even the percentages are not the same species of number.</p>
+    <div class="num-grid">
+      <div class="num-card"><div class="k">ARC-AGI-3</div><div class="v">99.9%</div><div class="d">Interactive reasoning: exploring an unknown environment and acquiring the goal itself. <strong>The benchmark is saturated</strong></div></div>
+      <div class="num-card"><div class="k">ExploitBench</div><div class="v">100.0%</div><div class="d">Turning real software vulnerabilities into working exploits. <strong>A perfect score is a ceiling</strong></div></div>
+      <div class="num-card"><div class="k">Terminal-Bench Science 0.1</div><div class="v">64.6%</div><div class="d">70 workflows that researchers actually ran. <strong>Still unsaturated</strong></div></div>
+      <div class="num-card"><div class="k">Context window</div><div class="v">1,050,000</div><div class="d">How much it can read at once. <strong>Past 272K tokens, the whole request costs 2x input</strong></div></div>
+      <div class="num-card"><div class="k">Max output</div><div class="v">128,000</div><div class="d">How much it can write at once. <strong>Use all of it and a single request costs $6.40</strong></div></div>
+    </div>
+    <p style="font-size:.86rem;color:var(--c-muted);">So "99.9%" is a <strong>saturated-benchmark number</strong>, "100%" is a <strong>hit-the-ceiling number</strong>, and "64.6%" is a number <strong>with room left in it</strong>. Same-looking list, very different information density.</p>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="h1-h">
+    <h2 class="section-title" id="h1-h" style="font-size:1.2rem;">1. Same benchmark, different playing field — 99.9% vs 62.7%</h2>
+    <div class="read-box">
+      <strong>Short version: an ARC-AGI-3 score cannot be compared until you know which harness produced it.</strong>
+      OpenAI's announcement says <strong>99.9%</strong>. ARC Prize, which runs the benchmark, published <strong>62.7% under its neutral harness</strong> for the same model on the same benchmark.
+    </div>
+    <div class="table-wrap"><table class="cmp-table"><thead><tr><th>Condition</th><th>Score</th><th>Cost</th><th>What it does</th></tr></thead><tbody>
+      <tr><td class="model-name">Standard harness (neutral)</td><td class="price">62.7%</td><td class="price">$26,098</td><td>The model chooses which notes to carry forward; the same minimal interface for every model</td></tr>
+      <tr><td class="model-name">Provider Adapter harness (OpenAI's)</td><td class="price">99.9%</td><td class="price">~$19K</td><td>Preserves opaque reasoning state between requests and compacts longer conversations</td></tr>
+    </tbody></table></div>
+    <p class="source-note">Sources: <a href="https://arcprize.org/blog/astra" target="_blank" rel="noopener">ARC Prize, "OpenAI's GPT-6 Astra on ARC-AGI-3"</a> and <a href="https://arcprize.org/results/openai-gpt-6-astra" target="_blank" rel="noopener">ARC-AGI results page</a> (verified 2026-09-15). OpenAI's own announcement notes that Astra was run on ARC-AGI-3 with its responses API harness, "which changes two settings to better match real-world performance."</p>
+    <h3 style="font-size:1rem;margin:1.4rem 0 .5rem;">What the gap actually means</h3>
+    <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.2em;line-height:1.85;">
+      <li><strong>The like-for-like comparison is 62.7% vs GPT-5.6 Sol's 7.8%.</strong> That is still a step change — ARC Prize calls it a genuine advance in interactive reasoning. Quoting 99.9% next to 7.8% compares two different harnesses.</li>
+      <li><strong>ARC Prize says it will publish both harness results on the leaderboard, labelled.</strong> The benchmark's own operator is telling you that a score without a named harness is not readable.</li>
+      <li><strong>The gap is software, not just the model.</strong> Under the Provider Adapter, aggregate elapsed time was about 3.66x faster and token use fell 49% across the 167 game-reasoning pairs both harnesses solved. If your runtime cannot carry reasoning state forward, the 99.9% is a demonstration of someone else's stack.</li>
+      <li><strong>ARC Prize explicitly declined the AGI conclusion:</strong> saturating this benchmark is not proof of general intelligence. When the people who built the test hedge, take the hedge seriously.</li>
+    </ul>
+    <p style="font-size:.86rem;color:var(--c-muted);">Background: ARC-AGI-3, launched 2026-03-25 by the ARC Prize Foundation, is the first interactive reasoning benchmark — no instructions, no stated goal, and agents must build a world model as they go. At launch every frontier model scored below 1% while humans solved every environment (<a href="https://arcprize.org/arc-agi/3" target="_blank" rel="noopener">ARC-AGI-3</a>).</p>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="h2-h">
+    <h2 class="section-title" id="h2-h" style="font-size:1.2rem;">2. A perfect score means "we can no longer measure it" — ExploitBench 100%</h2>
+    <div class="read-box">
+      <strong>Short version: 100% does not mean "far ahead". It means the measurement ran out of headroom.</strong>
+      ExploitBench asks whether a model can take real software vulnerabilities and produce exploits that actually run. Astra scored a perfect 100% (Sol 78.5%, Claude Fable 5.1 70%), so the benchmark no longer separates the leaders.
+    </div>
+    <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.2em;line-height:1.85;">
+      <li><strong>The model behind the leader cannot be distinguished on this test.</strong> The next comparison moves to ExploitGym (Astra 42.4% vs Sol 30.3%) and to fresh benchmarks. A number disappears when capability rises — and when a test fills up.</li>
+      <li><strong>The contamination caveat comes from the vendor itself.</strong> Because scores may be helped by exposure to historical vulnerabilities, OpenAI also evaluated Astra on two novel benchmarks. Read the perfect score with that reservation attached.</li>
+      <li><strong>OpenAI classified Astra as "Critical" under its Preparedness Framework — a first.</strong> The most advanced cyber capability ships gated, not open. "Most capable" and "available to everyone" are separate claims.</li>
+    </ul>
+    <p class="source-note">Source: <a href="https://openai.com/index/gpt-6-astra/" target="_blank" rel="noopener">OpenAI's GPT-6 Astra announcement</a> (verified 2026-09-15). Both models were evaluated without production safeguards, per the same announcement.</p>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="h3-h">
+    <h2 class="section-title" id="h3-h" style="font-size:1.2rem;">3. The unsaturated benchmark carries the most information — Terminal-Bench Science 64.6%</h2>
+    <div class="read-box">
+      <strong>Short version: 64.6% is a number from a test nobody has finished. That makes it useful for both capability and procurement.</strong>
+      Terminal-Bench-Science 0.1 is led by researchers at Stanford University with the Terminal-Bench / Harbor team and domain experts: <strong>70 expert-curated workflows across five domains</strong> (life, physical, Earth, mathematical, engineering sciences), three independent trials per task, graded on concrete artifacts — analyses, simulations, proofs, code, data products.
+    </div>
+    <div class="table-wrap"><table class="cmp-table"><thead><tr><th>Model</th><th>TB-Science 0.1 (OpenAI's figures)</th><th>Neutral leaderboard (snapshot)</th></tr></thead><tbody>
+      <tr><td class="model-name">GPT-6 Astra</td><td class="price">64.6%</td><td>—</td></tr>
+      <tr><td class="model-name"><a href="/en/claude-fable-5-1/">Claude Fable 5.1</a></td><td class="price">52.6%</td><td>—</td></tr>
+      <tr><td class="model-name">GPT-5.6 Sol</td><td class="price">22.4%</td><td class="price">22.4%</td></tr>
+      <tr><td class="model-name">Claude Opus 5 (top of the neutral board)</td><td>—</td><td class="price">30.0%</td></tr>
+    </tbody></table></div>
+    <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.2em;line-height:1.85;">
+      <li><strong>The 64.6% is OpenAI's own condition.</strong> On the public leaderboard snapshot, the top row is Claude Opus 5 at 30.0%. Same benchmark, very different numbers — the harness problem from section 1 shows up again.</li>
+      <li><strong>And yet this is the most usable figure of the five</strong>, because the test is genuinely hard: models that clear 80%+ on general terminal/coding benchmarks still fail the large majority of real research workflows.</li>
+      <li><strong>OpenAI also published low-effort numbers:</strong> Terminal-Bench Science 61.1% at roughly 27% lower cost, and GPQA Diamond 94.9% at about 37% lower cost. Their claim is that turning reasoning effort down does not immediately break quality — a self-reported figure, not an independently verified one.</li>
+    </ul>
+    <p class="source-note">Sources: <a href="https://openai.com/index/gpt-6-astra/" target="_blank" rel="noopener">OpenAI announcement</a> · <a href="https://www.tbench.ai/news/terminal-bench-science-0-1" target="_blank" rel="noopener">Terminal-Bench-Science 0.1 release</a> · <a href="https://github.com/harbor-framework/terminal-bench-science" target="_blank" rel="noopener">GitHub (structure and contributing institutions)</a> · neutral leaderboard mirror (<a href="https://benchlm.ai/benchmarks/terminal-bench-science" target="_blank" rel="noopener">BenchLM</a>, snapshot as of September 2026) (verified 2026-09-15).</p>
+  </section>
+
+  <figure class="flow-fig">
+    <svg viewBox="0 0 800 320" width="100%" role="img" aria-labelledby="harnessFigTitle" style="display:block;">
+      <title id="harnessFigTitle">ARC-AGI-3: same model, same benchmark &mdash; 62.7% under the neutral harness vs 99.9% under OpenAI's Provider Adapter</title>
+      <defs>
+        <linearGradient id="gPurple" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#6d28d9"/>
+          <stop offset="100%" stop-color="#a78bfa"/>
+        </linearGradient>
+      </defs>
+      <rect x="0" y="0" width="800" height="320" rx="14" fill="#14161f" stroke="#262a38"/>
+      <text x="36" y="46" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="19" font-weight="700" fill="#eef0f7">ARC-AGI-3: same model, same benchmark</text>
+      <text x="36" y="70" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="13" fill="#8b90a3">Different harness, different number.</text>
+      <text x="36" y="118" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="14" fill="#9aa0b4">Standard harness (neutral)</text>
+      <rect x="36" y="130" width="301" height="32" rx="4" fill="#2f3a55"/>
+      <text x="349" y="152" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="17" font-weight="700" fill="#e8eaf2">62.7%</text>
+      <text x="412" y="152" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="12" fill="#8b90a3">$26,098</text>
+      <text x="36" y="196" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="14" fill="#9aa0b4">Provider Adapter harness (OpenAI)</text>
+      <rect x="36" y="208" width="480" height="32" rx="4" fill="url(#gPurple)"/>
+      <text x="528" y="230" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="17" font-weight="700" fill="#e8eaf2">99.9%</text>
+      <text x="591" y="230" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="12" fill="#8b90a3">~$19K</text>
+      <line x1="36" y1="262" x2="516" y2="262" stroke="#2b2f3d" stroke-width="1"/>
+      <line x1="36" y1="262" x2="36" y2="268" stroke="#2b2f3d"/>
+      <line x1="276" y1="262" x2="276" y2="268" stroke="#2b2f3d"/>
+      <line x1="516" y1="262" x2="516" y2="268" stroke="#2b2f3d"/>
+      <text x="36" y="282" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11" fill="#6b7280">0%</text>
+      <text x="276" y="282" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11" fill="#6b7280">50%</text>
+      <text x="516" y="282" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="11" fill="#6b7280">100%</text>
+      <text x="36" y="306" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="11" fill="#6b7280">Source: ARC Prize (2026-09-03). Both rows are ARC Prize's own published results.</text>
+    </svg>
+    <figcaption style="font-size:.78rem;color:var(--c-muted);margin-top:.5rem;">Same benchmark, same model, two numbers. The harness moves the result this far (source: <a href="https://arcprize.org/blog/astra" target="_blank" rel="noopener">ARC Prize</a>).</figcaption>
+  </figure>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="h4-h">
+    <h2 class="section-title" id="h4-h" style="font-size:1.2rem;">4. What "1.05M context" means in practice</h2>
+    <div class="read-box">
+      <strong>Short version: 1.05M is about what fits. The 272K boundary is about what it costs.</strong>
+      At roughly 0.75 words per token, 1,050,000 tokens is on the order of 780,000 words. The specs — 1,050,000 context, 128,000 max output, knowledge cutoff 2026-04-30 — are on <a href="/en/gpt-6/">the model page</a> and in OpenAI's model docs.
+    </div>
+    <div class="table-wrap"><table class="cmp-table"><thead><tr><th>How you use it</th><th>Rate rule</th><th>Input cost for one request</th></tr></thead><tbody>
+      <tr><td class="model-name">272K tokens or less</td><td>Standard ($10 / 1M input)</td><td class="price">up to $2.72</td></tr>
+      <tr><td class="model-name">More than 272K tokens</td><td>The entire request is billed at 2x input and cache rates, 1.5x output</td><td class="price">1.05M &rarr; $21.00</td></tr>
+      <tr><td class="model-name">Same, with a cache hit ($1.00 / 1M doubled)</td><td>Cached input is 10% of input, but the 2x rule still applies</td><td class="price">1.05M &rarr; $2.10</td></tr>
+      <tr><td class="model-name">Maxing out the output (128K &times; $50 / 1M)</td><td>Output is 5x the input rate</td><td class="price">$6.40 (output side)</td></tr>
+    </tbody></table></div>
+    <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.2em;line-height:1.85;">
+      <li><strong>The boundary is 272K tokens, and it is not pro-rated.</strong> One token over and the whole request is billed at 2x input and 1.5x output. Dropping a giant document in once is where the bill jumps.</li>
+      <li><strong>Caching only pays when the same long prefix is reused.</strong> Cached input is 10% of input ($1.00 / 1M); cache writes cost 1.25x uncached input ($12.50 / 1M). A one-shot giant context, with no cache design, is the most expensive way to use this model.</li>
+      <li><strong>Long output hits the bill hardest.</strong> At $50 / 1M, maxing the 128K output costs $6.40 in a single request — more than a full 272K-token input. Splitting work and generating only what you need is cheaper than one giant generation.</li>
+      <li><strong>"It fits 1.05M" does not mean "send 1.05M."</strong> Design under 272K and you pay list price; design over it and everything doubles. That boundary is the real design budget. Run your own numbers in the <a href="/en/calculator/">token calculator</a>.</li>
+    </ul>
+    <p class="source-note">Source: <a href="https://developers.openai.com/api/docs/models/gpt-6-astra" target="_blank" rel="noopener">OpenAI GPT-6 Astra model docs</a> (context, max output, cutoff, rate rules; verified 2026-09-15). Dollar figures are simple arithmetic on published rates; an actual invoice sums input and output.</p>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="sum-h">
+    <h2 class="section-title" id="sum-h" style="font-size:1.2rem;">How to read the line (summary)</h2>
+    <div class="tip-box">
+      <h3>Three checks, every time</h3>
+      <ul>
+        <li><strong>Whose playing field is it?</strong> The vendor's harness or a neutral one. On ARC-AGI-3 that was 99.9% versus 62.7%.</li>
+        <li><strong>Has it hit the ceiling?</strong> A perfect or saturated score means the benchmark stopped separating models — a signal to move to the next axis (ExploitGym, fresh benchmarks).</li>
+        <li><strong>Is there a like-for-like comparison?</strong> Numbers measured under different conditions do not make a ranking. Until the conditions match, a benchmark score is not yet readable.</li>
+      </ul>
+    </div>
+    <p style="font-size:.9rem;color:var(--c-muted);max-width:760px;">The information in this line is not in the "99.9%" — it is in the <strong>gap between 99.9% and 62.7%</strong> and in the <strong>unsaturated 64.6%</strong>. The first is homework for your runtime design; the second is procurement input. Next time a model launches, apply the same three checks.</p>
+  </section>
+
+  <section class="section" style="padding-top:0;">
+    <div style="background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-accent);border-radius:var(--r-lg);padding:1.5rem;text-align:center;">
+      <h3 style="font-size:1.1rem;margin-bottom:.75rem;">Next</h3>
+      <p style="color:var(--c-muted);font-size:.9rem;margin-bottom:1rem;">With the conditions settled, the next question is cost: <a href="/en/gpt-6/">GPT-6 Astra pricing and availability</a>, the <a href="/en/claude-fable-5-1/">Claude Fable 5.1 comparison</a>, and your own numbers.</p>
+      <a href="/en/calculator/" style="display:inline-block;background:var(--c-accent);color:#fff;font-weight:600;padding:.65rem 1.5rem;border-radius:var(--r-md);">🧮 Run the token calculator →</a>
+      <p style="margin-top:.8rem;font-size:.82rem;color:var(--c-muted);"><a href="/en/gpt-6/">GPT-6 Astra</a> · <a href="/en/pricing/">Pricing</a> · <a href="/en/timeline/">Timeline</a> · <a href="/en/deepseek-v4-1-flash/">DeepSeek V4.1 Flash</a> · <a href="/en/glossary/prompt-cache/">Prompt caching</a> · <a href="/en/glossary/">Glossary</a></p>
+    </div>
+  </section>
+
+  <div class="tip-box" style="border-left-color:var(--c-red);margin-bottom:2rem;">
+    <h3>⚠️ Notes and disclaimers</h3>
+    <ul>
+      <li>Benchmark figures are as published by the benchmark operators or model vendors, and they differ in harness, trial count and reasoning effort. This page states those conditions rather than hiding them.</li>
+      <li>Prices and specifications were verified on vendor pages on 2026-09-15 and change without notice. Confirm on the official page before committing.</li>
+      <li>Cost conversions are simple arithmetic on published rates and do not guarantee an invoice amount.</li>
+    </ul>
+  </div>
+</div></main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>Operated by okamoちゃんねる</p><p><a href="/en/">Home</a> · <a href="/en/pricing/">Pricing</a> · <a href="/en/calculator/">Calculator</a> · <a href="/en/timeline/">Timeline</a> · <a href="/en/glossary/">Glossary</a> · <a href="/en/gpt-6/">GPT-6 Astra</a> · <a href="/en/gpt-5-6-sol/">GPT-5.6 Sol</a></p></div><p class="footer-disclaimer">⚠️ Prices and specifications change without notice. Always confirm on the vendor's official page before you commit. This site is not affiliated with any provider.</p></div></footer>
+</body>
+</html>

@@ -1,0 +1,105 @@
+{
+  "schema_note": "LLM Data Hub の料金データ単一の真実（SOT）。HTMLの料金表・ページ本文を更新したら必ずここも更新し、tools/verify_price_consistency.py でサイト全体を検証する。金額はすべて USD / 1Mトークン。",
+  "site": "https://llm.okamomedia.tokyo",
+  "last_verified": "2026-09-13",
+  "sources": {
+    "deepseek_pricing": "https://api-docs.deepseek.com/quick_start/pricing",
+    "deepseek_news": "https://api-docs.deepseek.com/news/news260910",
+    "deepseek_updates": "https://api-docs.deepseek.com/updates/"
+  },
+  "models": {
+    "deepseek-v4.1-flash": {
+      "name_ja": "DeepSeek V4.1 Flash",
+      "name_en": "DeepSeek V4.1 Flash",
+      "api_model_id": "deepseek-flash",
+      "provider": "DeepSeek",
+      "status": "current",
+      "released": "2026-09-10",
+      "price": {
+        "cache_hit_input_offpeak": 0.003,
+        "cache_hit_input_peak": 0.006,
+        "cache_miss_input_offpeak": 0.15,
+        "cache_miss_input_peak": 0.3,
+        "output_offpeak": 0.6,
+        "output_peak": 1.2
+      },
+      "pages": [
+        "/deepseek-v4-1-flash/",
+        "/en/deepseek-v4-1-flash/"
+      ]
+    },
+    "deepseek-v4-pro": {
+      "name_ja": "DeepSeek V4 Pro",
+      "name_en": "DeepSeek V4 Pro",
+      "api_model_id": "deepseek-v4-pro",
+      "provider": "DeepSeek",
+      "status": "current",
+      "price": {
+        "cache_hit_input_offpeak": 0.022,
+        "cache_hit_input_peak": 0.044,
+        "cache_miss_input_offpeak": 0.66,
+        "cache_miss_input_peak": 1.32,
+        "output_offpeak": 1.98,
+        "output_peak": 3.96
+      },
+      "pages": [
+        "/deepseek-v4-pro/",
+        "/en/deepseek-v4-pro/"
+      ],
+      "note": "2026-09-13 時点で提供中。公式料金ページの注記(2)と Change Log が「ユーザーの要望を受け、2026-09-14 以降も DeepSeek V4 Pro の API サービス提供を継続する。課金方法は変更しない」と告知し、2026-09-14 13:00 JST からの V4.1 Flash へのルーティング予告は撤回された。"
+    },
+    "deepseek-v4-flash": {
+      "name_ja": "DeepSeek V4 Flash",
+      "name_en": "DeepSeek V4 Flash",
+      "provider": "DeepSeek",
+      "status": "retired",
+      "retired_note": "V4.1 Flash へ統合（2026-09-10）。旧プロモ価格 $0.14/$0.28 も廃止済み。",
+      "price": {
+        "cache_miss_input_offpeak": 0.22,
+        "cache_miss_input_peak": 0.44,
+        "output_offpeak": 0.66,
+        "output_peak": 1.32
+      }
+    },
+    "deepseek-v4-flash-vision-exp": {
+      "name_ja": "DeepSeek V4 Flash Vision Exp",
+      "name_en": "DeepSeek V4 Flash Vision Exp",
+      "api_model_id": "deepseek-v4-flash-vision-exp",
+      "provider": "DeepSeek",
+      "status": "retired",
+      "retired_note": "画像入力は V4.1 Flash（deepseek-flash）がネイティブ対応。実験モデルは統合。"
+    }
+  },
+  "stale_price_patterns": [
+    "$0.14",
+    "$0.28",
+    "$0.22",
+    "$0.44",
+    "$0.87",
+    "$0.435"
+  ],
+  "stale_policy": {
+    "note": "上記パターンは DeepSeek の退役済み単価（V4 Flash 統合前のプロモ/旧価格）。以下のファイルでは《履歴・参考値》として意図的に残すため許容する。それ以外のファイルで見つかったら更新漏れ（要修正）。V4 Pro の現行単価 $0.66/$1.32/$0.022/$0.044/$1.98/$3.96 は 2026-09-13 の提供継続告知により現行値へ復帰したため、退役パターンから除外した。",
+    "allow": {
+      "/deepseek-v4-pro/": "V4 Pro 現行ページ（履歴・参考値の併記）",
+      "/en/deepseek-v4-pro/": "V4 Pro 現行ページ（履歴・参考値の併記）",
+      "/timeline/": "リリース年表（履歴）",
+      "/en/timeline/": "リリース年表（履歴）",
+      "/pricing/": "V4 Pro は現行行、V4 Flash の旧プロモ価格は廃止と明記",
+      "/en/pricing/": "V4 Pro は現行行、V4 Flash の旧プロモ価格は廃止と明記"
+    }
+  },
+  "current_price_signatures": [
+    "$0.15",
+    "$0.003",
+    "deepseek-flash"
+  ],
+  "current_price_signatures_note": "現行 DeepSeek の単価・API名シグネチャ。DeepSeek の金額に言及しているのにこれが1つも無いページは更新漏れの疑い。V4 Pro 現行単価も有効値。",
+  "family_needles": [
+    "V4.1 Flash",
+    "V4 Pro",
+    "V4 Flash",
+    "deepseek-flash",
+    "deepseek-v4"
+  ]
+}
