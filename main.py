@@ -941,9 +941,9 @@ def run_daily(dry_run: bool = False) -> None:
             post_line = "公開後の契約チェック: 実行失敗（ログ参照）"
 
         # ワークスペースのバックアップ整理（決定論的）。
-        # notes/backup-* は日付つきのスナップショット。増え続けると「どれが正か」が
-        # 分からなくなるため、古い世代だけを消す。削除できるのは notes/backup-* 配下のみ
-        # （IAMでもこのプレフィックスに限定）で、最新世代は必ず残す。
+        # notes/backup で始まる日付つきスナップショット（backup- と backup_）。
+        # 増え続けると「どれが正か」が分からなくなるため、古い世代だけを消す。
+        # 削除できるのは notes/backup* のみ（IAMでも同じ範囲）で、最新世代は必ず残す。
         # ※必ず save_workspace（finally）の後に実行する。先に消すと保存で復活する
         try:
             rot = akira_tools.rotate_workspace_backups()

@@ -915,7 +915,10 @@ def save_workspace() -> dict:
 # notes/backup-* は日付つきスナップショット。放っておくと増え続け「どれが正か」が
 # 分からなくなる（2026-09-27時点で notes/backup-* は89ファイル・1.79MB、バケット全体では
 # 旧バージョンが634件）。古い世代だけを消す道具を用意する。
-# 削除対象は notes/backup-* 配下のみで、IAM でもこのプレフィックスに限定してある
+# 削除対象は notes/backup で始まる日付つきキーのみ。IAM の DeleteObject も
+# arn:aws:s3:::akira-workspace/notes/backup* に限定してある
+# （backup- と backup_ の両方。notes/ 全体や他プレフィックスは対象外）。
+# backup-* だと backup_ 世代が AccessDenied になり、整理全体が例外で落ちる。
 # （ワークスペース全体は upsert-only のまま＝「消えない」安全設計は維持。
 #  2026-09-27の計算機事故はこの設計に救われた）。
 # 安全弁: 日付が読めないキーには触らない／最新世代は必ず残す／keep_days は最低3日。
@@ -997,7 +1000,8 @@ def rotate_workspace_backups(keep_days: int = 7, dry_run: bool = False) -> dict:
     """バックアップ（notes/backup-*）の古い世代を削除してワークスペースを整理する。
 
     最新世代より keep_days 日より古い世代だけを削除する。最新世代と日付が読めない
-    キーには触らない。削除できるのは notes/backup-* 配下のみ（IAMでも限定済み）。
+    キーには触らない。削除できるのは notes/backup で始まるキーのみ
+    （backup- と backup_。IAM も notes/backup* に限定済み）。
 
     Args:
         keep_days: 残す日数（最低3日。既定7日）
