@@ -16,6 +16,7 @@ import logging
 import os
 import signal
 import time
+import types
 from datetime import datetime, timezone
 
 from dotenv import load_dotenv
@@ -82,7 +83,34 @@ _MAX_EMPTY_ATTEMPTS = 3
 # ツール回数は費用と失敗率にほぼ二次関数的に効く。閾値超えは警告としてログに残す
 # （挙動は変えない。抑えるのはプロンプト側の指示＝CLAUDE_ENGINEER_SAVINGS_NOTEの役目）
 _DELEGATION_TOOL_WARN = 60
+
+# --- 委任先が「例外で落ちた」ときの1回だけの再依頼（2026-10-17 実発生）--------
+# 2026-10-17の2回目ランで、エンジニアの2回目呼び出しが
+#   anthropic SDKのストリーム蓄積（accumulate_event → from_json）
+#   ValueError: expected value at line 1 column 13
+# → strands が EventLoopException に包んでターン途中で死んだ（DeepSeek Anthropic互換の
+# tool_use引数JSONが壊れて流れてきた）。これは「ターンが死ぬ」型で、ターンが正常終了して
+# いる空応答（_is_empty_response）とは性質が違う:
+#   - 空応答: ターンは終わっている＝作業は完了している可能性がある → 再依頼は二重作業の恐れ
+#   - 例外  : ターンは途中で死んだ＝作業は未完のまま放置される → 未完分を続けさせる価値がある
+# よって例外のときだけ1回再依頼する。二重作業を避けるため再依頼文に「状態確認」と
+# 「完了済みはやり直さない」を必ず入れる（_resume_request）。
+_MAX_DELEGATION_RETRY = 1
 _run_deadline_monotonic: float | None = None
+
+
+def _resume_request(name: str, exc: Exception, request: str, tool_calls: int) -> str:
+    """例外で中断したあとの再依頼文（状態確認と二重作業の禁止を明示する）。"""
+    return (
+        f"【重要】直前のあなたの作業は例外で中断した"
+        f"（{type(exc).__name__}: {str(exc)[:200]}）。\n"
+        f"中断までにツールを{tool_calls}回実行している。**やり直す前に必ず現在の状態を確認**すること:\n"
+        "  list_local_files / list_site_files / list_workspace_files / get_site_file で\n"
+        "  「すでに保存・公開されているもの」を先に確かめ、**完了済みの作業は二度やらない**。\n"
+        "  （同じ内容の再公開は無駄。サイトを壊す恐れもある）\n"
+        "  未完の項目だけを実行し、最後に必ず要約を本文で返すこと（本文を空にしない）。\n"
+        "--- 依頼（内容は変わらない） ---\n" + request
+    )
 
 
 def _start_run_deadline() -> None:
@@ -185,6 +213,22 @@ def _tool_call_count(agent) -> int:
         return sum(int(getattr(m, "call_count", 0) or 0) for m in tool_metrics.values())
     except Exception:  # メトリクス構造が変わっても判定を止めない
         return 0
+
+
+def _record_delegation_usage(agent, model_id: str, name: str, result=None) -> float:
+    """委任1回分のトークン使用量を記録する（失敗した試行も漏らさず記録する）。
+
+    strands は agent 呼び出しごとに usage をリセットするので、agent 側の
+    `event_loop_metrics.accumulated_usage` がその呼び出しの消費量になる。
+    例外で落ちた場合は AgentResult が無いので、その時点までの消費をここから拾って
+    記録する（失敗した試行が無料だったことは無い＝予算の実費と乖離させない）。
+    """
+    if result is None:
+        usage = getattr(getattr(agent, "event_loop_metrics", None), "accumulated_usage", None)
+        if not usage:
+            return 0.0
+        result = types.SimpleNamespace(metrics=types.SimpleNamespace(accumulated_usage=usage))
+    return budget.collect_agent_usage(result, model_id, purpose=f"delegate:{name}", agent=agent)
 
 
 # =====================================================================
@@ -361,42 +405,72 @@ def create_delegation_tools(models, run_budget_jpy: float):
 
     import prompts
 
-    def _run(agent: "Agent", model_id: str, name: str, request: str) -> str:
-        if _deadline_exceeded():
-            return _STOP_WORK_MSG
-        spent = budget.get_run_spent_jpy()
-        if spent >= run_budget_jpy:
-            logger.warning("予算ガード発動: spent=%.1f remaining_limit=%.1f", spent, run_budget_jpy)
-            return _STOP_WORK_MSG
-        _debug_log_io("指示", name, request)
-        tools_before = _tool_call_count(agent)
-        result = agent(request)
-        _debug_log_io("応答", name, str(result))
-        cost = budget.collect_agent_usage(result, model_id, purpose=f"delegate:{name}", agent=agent)
-        tool_calls = max(0, _tool_call_count(agent) - tools_before)
-        logger.info("%s 完了 (約%.1f円 / 本日累計約%.1f円) ツール実行%d回",
-                    name, cost, budget.get_run_spent_jpy(), tool_calls)
-        if tool_calls >= _DELEGATION_TOOL_WARN:
-            logger.warning(
-                "%s のツール実行が%d回に達しました（履歴肥大の兆候。1回の依頼を分割するか、"
-                "編集を1本のスクリプトにまとめさせること）", name, tool_calls)
-        if _is_empty_response(result):
-            # 空応答（2026-09-15にAkira本体で発生したのと同症状。2026-10-17は委任先で、
-            # ツール実行11回の後に発生）。ここで空文字を素直に返すと
-            # Akira本体が「作業完了」と誤認するため、空振りだったことを明示して返す。
-            logger.error("%s の応答が空でした（この呼び出しでのツール実行 %d回）", name, tool_calls)
-            if tool_calls == 0:
+    def _run(make_agent, model_id: str, name: str, request: str) -> str:
+        """委任先を呼ぶ。例外で落ちたときだけ、状態確認つきで1回だけ再依頼する。
+
+        - 空応答（ターンは正常終了）は今までどおり再依頼しない（二重作業を避ける）
+        - 例外（ターンが途中で死ぬ）は未完の作業が放置される型なので1回だけ続きを頼む
+        エージェントは毎回 make_agent() で作り直す（例外で壊れた履歴を引きずらない・
+        前回呼び出しの履歴を持ち越さない）。
+        """
+        request_to_send = request
+        for attempt in range(_MAX_DELEGATION_RETRY + 1):
+            if _deadline_exceeded():
+                return _STOP_WORK_MSG
+            spent = budget.get_run_spent_jpy()
+            if spent >= run_budget_jpy:
+                logger.warning("予算ガード発動: spent=%.1f remaining_limit=%.1f", spent, run_budget_jpy)
+                return _STOP_WORK_MSG
+            agent = make_agent()
+            tools_before = _tool_call_count(agent)
+            _debug_log_io("指示", name, request_to_send)
+            try:
+                result = agent(request_to_send)
+            except _RunDeadlineExceeded:
+                raise  # 壁時計の打ち切りは run_daily のハンドリングへ（再依頼しない）
+            except Exception as e:  # noqa: BLE001
+                tool_calls = max(0, _tool_call_count(agent) - tools_before)
+                cost = _record_delegation_usage(agent, model_id, name)
+                logger.error(
+                    "%s の呼び出しが例外で中断しました（%s: %s / ツール実行%d回 / 約%.1f円）",
+                    name, type(e).__name__, str(e)[:200], tool_calls, cost)
+                if attempt < _MAX_DELEGATION_RETRY:
+                    logger.warning("%s を状態確認つきで1回だけ再依頼します", name)
+                    request_to_send = _resume_request(name, e, request, tool_calls)
+                    continue
                 return (
-                    f"【{name}: 応答が空】モデルは本文もツール呼び出しも返さず終了した。"
-                    f"この呼び出しでは何も実行されていない。同じ依頼を1回だけ送り直してよい。"
-                    f"2回目も空なら、その旨を日報に書いて終了せよ。"
+                    f"【{name}: 呼び出しが例外で中断】{type(e).__name__}: {str(e)[:200]}\n"
+                    f"ツール実行が{tool_calls}回あった後に落ちた。再依頼も同じ例外で落ちたため"
+                    f"これ以上呼び直さないこと。list_local_files / list_site_files / "
+                    f"list_workspace_files で作業の到達点を確認し、未完の項目は site_plan に"
+                    f"記録して日報で報告せよ。"
                 )
-            return (
-                f"【{name}: 応答が空】ツール実行が{tool_calls}回あった後に応答が空になった。"
-                f"作業が途中まで進んでいる可能性があるので、再依頼の前に"
-                f"list_local_files / list_site_files で状態を確認すること。"
-            )
-        return str(result)
+            _debug_log_io("応答", name, str(result))
+            cost = _record_delegation_usage(agent, model_id, name, result)
+            tool_calls = max(0, _tool_call_count(agent) - tools_before)
+            logger.info("%s 完了 (約%.1f円 / 本日累計約%.1f円) ツール実行%d回",
+                        name, cost, budget.get_run_spent_jpy(), tool_calls)
+            if tool_calls >= _DELEGATION_TOOL_WARN:
+                logger.warning(
+                    "%s のツール実行が%d回に達しました（履歴肥大の兆候。1回の依頼を分割するか、"
+                    "編集を1本のスクリプトにまとめさせること）", name, tool_calls)
+            if _is_empty_response(result):
+                # 空応答（2026-09-15にAkira本体で発生したのと同症状。2026-10-17は委任先で、
+                # ツール実行11回の後に発生）。ここで空文字を素直に返すと
+                # Akira本体が「作業完了」と誤認するため、空振りだったことを明示して返す。
+                logger.error("%s の応答が空でした（この呼び出しでのツール実行 %d回）", name, tool_calls)
+                if tool_calls == 0:
+                    return (
+                        f"【{name}: 応答が空】モデルは本文もツール呼び出しも返さず終了した。"
+                        f"この呼び出しでは何も実行されていない。同じ依頼を1回だけ送り直してよい。"
+                        f"2回目も空なら、その旨を日報に書いて終了せよ。"
+                    )
+                return (
+                    f"【{name}: 応答が空】ツール実行が{tool_calls}回あった後に応答が空になった。"
+                    f"作業が途中まで進んでいる可能性があるので、再依頼の前に"
+                    f"list_local_files / list_site_files で状態を確認すること。"
+                )
+            return str(result)
 
     # --- 共通WEBツール（全員に配布）---
     firecrawl = _create_firecrawl_mcp()
@@ -470,7 +544,7 @@ def create_delegation_tools(models, run_budget_jpy: float):
         Args:
             request: レビュー対象（サイト内パスや本文）と確認してほしい観点
         """
-        return _run(_new_gpt_agent(), OPENAI_MODEL_ID, "GPT税理士", request)
+        return _run(_new_gpt_agent, OPENAI_MODEL_ID, "GPT税理士", request)
 
     @tool
     def ask_gemini_mother(request: str) -> str:
@@ -482,7 +556,7 @@ def create_delegation_tools(models, run_budget_jpy: float):
                      （並列の大量file_readや複数画像は入力トークンが爆発する。
                      2026-09-05実績: 1回のUXレビューで約1,245円消費）
         """
-        return _run(_new_gemini_agent(), GEMINI_MODEL_ID, "Gemini子育てママ", request)
+        return _run(_new_gemini_agent, GEMINI_MODEL_ID, "Gemini子育てママ", request)
 
     # Claudeエンジニアの追加ツール（オプショナル）
     claude_tools = [
@@ -586,7 +660,7 @@ def create_delegation_tools(models, run_budget_jpy: float):
             request: 依頼内容。今日のテーマ候補・特筆事項を伝えれば十分（細かい手順の
                      指示は不要。リサーチ・執筆・レビュー依頼・公開判断はClaudeエンジニアに任せる）
         """
-        return _run(_new_engineer_agent(), engineer_model_id, "Claudeエンジニア", request)
+        return _run(_new_engineer_agent, engineer_model_id, "Claudeエンジニア", request)
 
     return [ask_claude_engineer, ask_gpt_tax_advisor, ask_gemini_mother]
 
