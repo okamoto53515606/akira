@@ -1,7 +1,7 @@
 # test_gemini_image.py — Gemini画像生成の単体テスト（ローカル実行用）
 #
 # 目的: 画像生成だけを、Fargateを介さずローカルで確認する。
-#   - バナー/図解で実際に使う BANNER_MODEL（既定 gemini-3.1-flash-image）で1枚作る
+#   - バナー/図解で実際に使う BANNER_MODEL（既定 gemini-nano-banana-2.1）で1枚作る
 #   - 生成した画像を GEMINI_MODEL_ID（視認チェック役）で読めるか確認する
 #   - 画像系モデルの一覧と、いくつかの候補モデルでの成否も並べて出す
 #

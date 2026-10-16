@@ -44,6 +44,11 @@ MODEL_PRICING_USD: dict[str, tuple[float, float]] = {
     # 2026-09-05確認の現行料金。新しいモデルIDを料金テーブルに追加。
     "gemini-3.5-flash-lite": (0.3, 2.5),
     "gemini-3.8-flash": (0.75, 3.75), # 導入価格。2027-01-01以降は2倍
+    # 画像生成（Nano Banana 2.1）。数値はテキスト/画像トークンの単価で、画像出力は別建て
+    # （$30/1M画像トークン = 1K画像 $0.0336・2K $0.0504・4K $0.113）。1枚あたりの計上は
+    # IMAGE_PRICE_USD 側で行う。
+    "gemini-nano-banana-2.1": (1.5, 7.5),
+    # 旧世代（Nano Banana 2）。BANNER_MODEL が旧名のままの環境向けに残す
     "gemini-3.1-flash-image": (0.5, 3.0),
     # 2026-09-10: DeepSeek V4.1 Flash に統一（モデル名は deepseek-flash）。
     # 旧名 deepseek-v4-pro / deepseek-v4-flash-vision-exp は退役済み（公式: 旧名は依然受理されるが
@@ -52,14 +57,21 @@ MODEL_PRICING_USD: dict[str, tuple[float, float]] = {
     "deepseek-flash": (0.15, 0.6),
 }
 DEFAULT_PRICING_USD = (10.0, 50.0)
-IMAGE_PRICE_USD = float(os.getenv("IMAGE_PRICE_USD", "0.05"))  # 生成画像1枚あたり
+# 生成画像1枚あたりの費用。画像モデルの料金はトークン建てなので、画像1枚に換算した値を置く。
+# Nano Banana 2.1: 1K=$0.0336 / 2K=$0.0504 / 4K=$0.113 → 既定解像度(1K)に対して
+# 上振れする側(0.05)を採る（見積もりは上振れさせない方針）
+IMAGE_PRICE_USD = float(os.getenv("IMAGE_PRICE_USD", "0.05"))
 
 # --- モデルID ---
 AKIRA_MODEL_ID = os.getenv("AKIRA_MODEL_ID", "claude-fable-5")
 CLAUDE_MODEL_ID = os.getenv("CLAUDE_MODEL_ID", "claude-sonnet-5")
 OPENAI_MODEL_ID = os.getenv("OPEN_AI_MODEL_ID", "gpt-5.6-terra")
 GEMINI_MODEL_ID = os.getenv("GEMINI_MODEL_ID", "gemini-3.8-flash")
-IMAGE_MODEL_ID = os.getenv("BANNER_MODEL", "gemini-3.1-flash-image")
+# 画像生成モデル。2026-10 に Nano Banana 2（gemini-3.1-flash-image）から
+# Nano Banana 2.1（gemini-nano-banana-2.1）へ移行。
+# ※Fargateではタスク定義の BANNER_MODEL が優先されるため、切り替えには
+#   タスク定義の更新（+ スケジューラの参照先確認）も必要
+IMAGE_MODEL_ID = os.getenv("BANNER_MODEL", "gemini-nano-banana-2.1")
 DEEPSEEK_MODEL_ID = os.getenv("DEEPSEEK_MODEL_ID", "deepseek-flash")
 
 # Akira本体をDeepSeek（Anthropic互換API）に切替えるか（テスト運用用）。trueで切替、false/falsyで従来のFable 5

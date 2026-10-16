@@ -1,7 +1,8 @@
 # tools.py — Akira / 3AI が使う @tool 群
 #
 # - サイト公開系: S3への書き込み + CloudFront invalidation
-# - 画像生成: Vertex AI (gemini-3.1-flash-image) を Workload Identity(キーレス)で呼ぶ
+# - 画像生成: Gemini Developer API（google-genai + GEMINI_API_KEY）で gemini-nano-banana-2.1 を呼ぶ
+#   ※Vertex AI / Workload Identity ではない（WIはGA4・BigQuery MCP専用。混同しないこと）
 # - 予算系: 予算状況の確認
 # - 自己改善系: システムプロンプト/skillsの書き換え（翌日起動時に反映）
 

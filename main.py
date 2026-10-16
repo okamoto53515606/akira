@@ -75,6 +75,13 @@ _STOP_WORK_MSG = (
 # 「（日報が生成されませんでした）」の1行だけになり、原因がログからも分からない）。
 # 空応答は課金も発生しないので、履歴を汚さない範囲で再試行するのが最も安い対策。
 _MAX_EMPTY_ATTEMPTS = 3
+
+# --- 委任先の「ツール叩きすぎ」監視（2026-10-17 実発生）----------------------
+# 1回の委任でツールを190回叩き（Claudeエンジニア、DeepSeek節約モード）、170円を使ったうえに
+# 最終応答が空で返って作業が宙に浮いた。モデル呼び出しのたびに履歴を全量再送するため、
+# ツール回数は費用と失敗率にほぼ二次関数的に効く。閾値超えは警告としてログに残す
+# （挙動は変えない。抑えるのはプロンプト側の指示＝CLAUDE_ENGINEER_SAVINGS_NOTEの役目）
+_DELEGATION_TOOL_WARN = 60
 _run_deadline_monotonic: float | None = None
 
 
@@ -366,11 +373,17 @@ def create_delegation_tools(models, run_budget_jpy: float):
         result = agent(request)
         _debug_log_io("応答", name, str(result))
         cost = budget.collect_agent_usage(result, model_id, purpose=f"delegate:{name}", agent=agent)
-        logger.info("%s 完了 (約%.1f円 / 本日累計約%.1f円)", name, cost, budget.get_run_spent_jpy())
+        tool_calls = max(0, _tool_call_count(agent) - tools_before)
+        logger.info("%s 完了 (約%.1f円 / 本日累計約%.1f円) ツール実行%d回",
+                    name, cost, budget.get_run_spent_jpy(), tool_calls)
+        if tool_calls >= _DELEGATION_TOOL_WARN:
+            logger.warning(
+                "%s のツール実行が%d回に達しました（履歴肥大の兆候。1回の依頼を分割するか、"
+                "編集を1本のスクリプトにまとめさせること）", name, tool_calls)
         if _is_empty_response(result):
-            # 空応答（2026-09-15にAkira本体で発生したのと同症状）。ここで空文字を素直に返すと
+            # 空応答（2026-09-15にAkira本体で発生したのと同症状。2026-10-17は委任先で、
+            # ツール実行11回の後に発生）。ここで空文字を素直に返すと
             # Akira本体が「作業完了」と誤認するため、空振りだったことを明示して返す。
-            tool_calls = max(0, _tool_call_count(agent) - tools_before)
             logger.error("%s の応答が空でした（この呼び出しでのツール実行 %d回）", name, tool_calls)
             if tool_calls == 0:
                 return (
@@ -536,31 +549,44 @@ def create_delegation_tools(models, run_budget_jpy: float):
         engineer_prompt = prompts.CLAUDE_ENGINEER_PROMPT
         engineer_model_id = CLAUDE_MODEL_ID
 
-    claude_agent = Agent(
-        name="claude_engineer",
-        model=engineer_model,
-        system_prompt=engineer_prompt,
-        tools=claude_tools,
-        # Firecrawlの巨大結果が履歴に残り続けるのを防ぐ（2026-09-09: 66.5万トークン）。
-        # per_turn=True でモデル呼び出し前に窓を切る。プロンプト側の cache+要約と併用。
-        conversation_manager=SlidingWindowConversationManager(
-            window_size=40,
-            per_turn=True,
-        ),
-    )
+    def _new_engineer_agent() -> "Agent":
+        """呼び出しごとに新規 Agent（前回呼び出しの会話履歴を持ち越さない）。
+
+        2026-10-17: 使い回しのエージェントで1回目にツールを190回叩き（所要170.2円）、
+        その履歴を抱えたまま2回目を実行したところ、ツール11回のあとに最終応答が空で
+        返り、作業が宙に浮いた。モデル呼び出しのたびに履歴を全量再送する作りなので、
+        使い回しには ①費用がほぼ二次関数的に増える ②コンテキストが膨らんで応答が
+        壊れる という二重の害がある（GPT税理士・Geminiママは2026-09-15に同じ理由で
+        「毎回新規」へ統一済み。エンジニアだけが残っていた）。
+        呼び出しをまたぐ状態は /tmp/site（サイトの実物）と /workspace（作業ファイル）に
+        残るので、履歴を持ち越さなくても作業は続けられる。
+        """
+        return Agent(
+            name="claude_engineer",
+            model=engineer_model,
+            system_prompt=engineer_prompt,
+            tools=claude_tools,
+            # Firecrawlの巨大結果が履歴に残り続けるのを防ぐ（2026-09-09: 66.5万トークン）。
+            # per_turn=True でモデル呼び出し前に窓を切る。プロンプト側の cache+要約と併用。
+            conversation_manager=SlidingWindowConversationManager(
+                window_size=40,
+                per_turn=True,
+            ),
+        )
 
 
     @tool
     def ask_claude_engineer(request: str) -> str:
         """Claudeエンジニアに今回分の作業をまとめて依頼する（現場責任者としてリサーチ→執筆→
         GPT税理士レビュー→必要ならGemini画像/UX→公開までを自律的に一気通貫で行い、最後に結果を
-        要約して返す）。同じエージェントの会話履歴が肥大化するため、原則1回のみ呼ぶこと。
+        要約して返す）。1回の依頼で完結させるのが原則（持ち越しは /workspace/drafts/ に書かせる）。
+        追加の依頼は最小スコープで1回までにする。
 
         Args:
             request: 依頼内容。今日のテーマ候補・特筆事項を伝えれば十分（細かい手順の
                      指示は不要。リサーチ・執筆・レビュー依頼・公開判断はClaudeエンジニアに任せる）
         """
-        return _run(claude_agent, engineer_model_id, "Claudeエンジニア", request)
+        return _run(_new_engineer_agent(), engineer_model_id, "Claudeエンジニア", request)
 
     return [ask_claude_engineer, ask_gpt_tax_advisor, ask_gemini_mother]
 
