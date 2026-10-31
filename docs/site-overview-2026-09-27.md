@@ -16,7 +16,7 @@
 | 公開ページ数 | **62URL（日本語31・英語31）**。`sitemap.xml` の登録数と一致 |
 | 中身の構成 | HTML 63ファイル（うち `404.html`）、画像5、CSS 1、`data/models.json` 1、`robots.txt`、`sitemap.xml` |
 | 技術 | S3 + CloudFront の静的配信。ビルドツールなしの素のHTML/CSS/JS |
-| 更新 | 2日ごと 05:00（JST）にAIが自動で更新（更新の仕組みは [自己改善ループの資料](self-improvement-loop.md) を参照） |
+| 更新 | 毎週 火・木・土の 05:00（JST）にAIが自動で更新（更新の仕組みは [自己改善ループの資料](self-improvement-loop.md) を参照） |
 | 実物のコピー | <https://github.com/okamoto53515606/akira/tree/main/s3-snapshot/site>（同日時点のスナップショット） |
 
 ---

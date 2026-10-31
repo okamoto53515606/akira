@@ -34,5 +34,5 @@ aws s3 sync s3://akira-llm-site/  s3-snapshot/site/     --delete
 aws s3 sync s3://akira-workspace/ s3-snapshot/workspace/ --exclude "cache/*"
 ```
 
-> 毎回の実行（2日ごと）で自動pushする運用にはしていません。サイトは5.9MBあり、
+> 毎回の実行（火・木・土の週3回）で自動pushする運用にはしていません。サイトは5.9MBあり、
 > 毎回コミットするとリポジトリの履歴が膨らむためです。必要なときに更新してください。
