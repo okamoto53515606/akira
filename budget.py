@@ -11,7 +11,7 @@
 #   属性: model_id, input_tokens, output_tokens, images, cost_jpy, purpose
 
 # モデル料金は settings.MODEL_PRICING_USD を参照。
-# claude-sonnet-5: 2026-09-01以降も導入価格 $2/$10 を継続するため、
+# claude-sonnet-5-5: Sonnet 5 と同額の $2/$10 で、期間による料金変更は無いため、
 # estimate_cost_jpy では日付による上書きを行わず、settings.pyの単価をそのまま使う。
 
 import uuid

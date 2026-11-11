@@ -1,6 +1,6 @@
 # Akira — AI/LLM実用データハブ運営エージェント
 
-Akira（`claude-fable-5`）が毎週 火・木・土の 05:00 JST（EventBridge Scheduler）に AWS Fargate 上で自律起動し、「AI/LLM実用データハブ」サイト
+Akira（`claude-fable-5-2`）が毎週 火・木・土の 05:00 JST（EventBridge Scheduler）に AWS Fargate 上で自律起動し、「AI/LLM実用データハブ」サイト
 [llm.okamomedia.tokyo](https://llm.okamomedia.tokyo/) を広告なしで運営し続けるためのバッチシステムです。
 リサーチ・作業指示・レビュー・GA4/Search Console分析・日報公開までを起動のたびに自動で行い、
 運営者の okamo には日報を通じて依頼事項を伝えます。
@@ -74,10 +74,15 @@ Secrets Manager共有のみの疎結合。
 
 | 役割 | モデル | 用途 |
 |---|---|---|
-| Akira本体 | `claude-fable-5`（Anthropic, $10/$50 per 1Mトークン） | リサーチ計画・3AIへの作業依頼・GA4/BigQuery分析・日報執筆 |
-| Claudeエンジニア | `claude-sonnet-5`（Anthropic, 導入価格 $2/$10、2026-08-31まで。以降$3/$15に自動切替） | 記事執筆・コーディング・S3への公開作業 |
-| GPT税理士 | `gpt-5.6-terra`（OpenAI, $2.5/$15） | 価値・PV貢献の助言とfactチェック（門番ではなくアドバイザー） |
-| Gemini子育てママ | `gemini-3.8-flash`（テキスト, $0.75/$3.75）/ `gemini-3.1-flash-image`（画像生成, $0.5/$3 + 画像$0.05/枚） | OGP・記事画像の生成、初心者目線のUXレビュー |
+| Akira本体 | `claude-fable-5-2`（Anthropic, $8/$40 per 1Mトークン） | リサーチ計画・3AIへの作業依頼・GA4/BigQuery分析・日報執筆 |
+| Claudeエンジニア | `claude-sonnet-5-5`（Anthropic, $2/$10） | 記事執筆・コーディング・S3への公開作業 |
+| GPT税理士 | `gpt-6.1-terra`（OpenAI, $1/$5） | 価値・PV貢献の助言とfactチェック（門番ではなくアドバイザー） |
+| Gemini子育てママ | `gemini-3.8-flash`（テキスト, $0.75/$3.75）/ `gemini-nano-banana-2.1`（画像生成, 入力$1.50・テキスト出力$7.50 + 画像$0.05/枚） | OGP・記事画像の生成、初心者目線のUXレビュー |
+
+上記は `settings.py` の既定値。Fargateではタスク定義の環境変数が優先されるため、実際に使うモデルは
+`aws ecs describe-task-definition --task-definition akira-daily` の `AKIRA_MODEL_ID` / `CLAUDE_MODEL_ID` /
+`OPEN_AI_MODEL_ID` / `GEMINI_MODEL_ID` / `BANNER_MODEL` で確認する（本番のGPT税理士は `gpt-6-luna`、
+Geminiは `gemini-3.5-flash-lite`）。
 
 料金・モデルIDは [settings.py](settings.py) の `MODEL_PRICING_USD` で一元管理し、[budget.py](budget.py) が
 DynamoDB (`akira-usage`) への記録と月次予算ゲートを行う。
@@ -98,7 +103,7 @@ DynamoDB (`akira-usage`) への記録と月次予算ゲートを行う。
 - そのため、**タスク定義の更新・再デプロイは不要**で、Secrets Managerの
   `DEEPSEEK_API_KEY` の値を書き換えるだけで翌回の起動から節約モードをON/OFF切替できる
   - 値を実際のAPIキー（`sk-...`）にする → 節約モードON（DeepSeek V4.1 Flashで安価に運用）
-  - 値を空文字列 `""` にする → 節約モードOFF（`claude-sonnet-5` で通常運用）
+  - 値を空文字列 `""` にする → 節約モードOFF（`claude-sonnet-5-5` で通常運用）
 
 ## ●AWSへのデプロイ手順
 

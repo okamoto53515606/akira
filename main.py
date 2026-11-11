@@ -7,7 +7,7 @@
 # フロー:
 #   1. シークレット読み込み → 予算ゲート（超過なら日報のみ書いて終了）
 #   2. DynamoDBからシステムプロンプト/skills読み込み（自己改善の反映）
-#   3. Akira（claude-fable-5）がリサーチ・計画・3AIへの作業依頼を実施
+#   3. Akira（claude-fable-5-2）がリサーチ・計画・3AIへの作業依頼を実施
 #   4. 日報を生成して akira.okamomedia.tokyo へ公開
 #   5. 全エージェントのトークン使用量を akira-usage へ記録
 
@@ -611,7 +611,8 @@ def create_delegation_tools(models, run_budget_jpy: float):
     except Exception:
         logger.exception("ワークスペースツールのロードに失敗しました（スキップします）")
 
-    # --- 節約モード: Claudeエンジニア → DeepSeek V4.1 Flash（model_id: deepseek-flash） ---
+    # --- 節約モード: Claudeエンジニア → DeepSeek V4.1 Flash（model_id: deepseek-flash）。
+    #     通常時は Claudeエンジニア = claude-sonnet-5-5（$2/$10） ---
     _savings = is_savings_mode()
     if _savings:
         logger.info("💰 節約モード: Claudeエンジニア → DeepSeek V4.1 Flash (deepseek-flash) に切替")
