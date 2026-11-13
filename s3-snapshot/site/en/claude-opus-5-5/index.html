@@ -4,18 +4,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Claude Opus 5.5 — First of the Claude 5.5 Family [Pricing &amp; Benchmarks] — LLM Data Hub</title>
-  <meta name="description" content="Claude Opus 5.5: $4 input / $20 output / $0.20 cache read, Fast mode $8/$40, 1M context, 128K max output. All nine official benchmarks plus who ran each harness. Released Sept 22, 2026. Updated Sept 25, 2026.">
+  <meta name="description" content="Claude Opus 5.5: $4 input / $20 output / $0.20 cache read, Fast mode $8/$40, 1M context, 128K max output. All nine official benchmarks plus who ran each harness. Released Sept 22, 2026. Updated Oct 1, 2026.">
   <link rel="canonical" href="https://llm.okamomedia.tokyo/en/claude-opus-5-5/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta property="og:image" content="https://llm.okamomedia.tokyo/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="LLM Data Hub — LLM API pricing, token costs and model data">
+  <meta name="twitter:image" content="https://llm.okamomedia.tokyo/assets/og-image.png">
+  <meta name="twitter:image:alt" content="LLM Data Hub — LLM API pricing, token costs and model data">
   <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/claude-opus-5-5/">
   <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/claude-opus-5-5/">
   <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/claude-opus-5-5/">
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://llm.okamomedia.tokyo/en/claude-opus-5-5/">
   <meta property="og:title" content="Claude Opus 5.5 — First of the Claude 5.5 Family">
-  <meta property="og:description" content="$4 input / $20 output / $0.20 cache read (updated Sept 25, 2026). 1M context, 128K max output, nine official benchmarks, harness notes.">
+  <meta property="og:description" content="$4 input / $20 output / $0.20 cache read (updated Oct 1, 2026). 1M context, 128K max output, nine official benchmarks, harness notes.">
   <meta property="og:site_name" content="LLM Data Hub">
-  <meta name="twitter:card" content="summary">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Claude Opus 5.5 — First of the Claude 5.5 Family [Pricing & Benchmarks]","datePublished":"2026-09-25","dateModified":"2026-09-25","author":{"@type":"Organization","name":"LLM Data Hub"},"publisher":{"@type":"Organization","name":"okamo channel"},"url":"https://llm.okamomedia.tokyo/en/claude-opus-5-5/","inLanguage":"en"}</script>
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Claude Opus 5.5 — First of the Claude 5.5 Family [Pricing & Benchmarks]","datePublished":"2026-09-25","dateModified":"2026-10-01","author":{"@type":"Organization","name":"LLM Data Hub"},"publisher":{"@type":"Organization","name":"okamo channel"},"url":"https://llm.okamomedia.tokyo/en/claude-opus-5-5/","inLanguage":"en"}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://llm.okamomedia.tokyo/en/"},{"@type":"ListItem","position":2,"name":"Claude Opus 5.5","item":"https://llm.okamomedia.tokyo/en/claude-opus-5-5/"}]}</script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
@@ -48,7 +56,7 @@
 </div></section>
 
 <main><div class="container">
-<div class="updated-bar" style="margin-top:2rem;"><span class="dot">●</span>Last updated: <time datetime="2026-09-25">September 25, 2026</time> | Sources: <a href="https://www.anthropic.com/claude-opus-5-5" target="_blank" rel="noopener">Anthropic announcement</a> &middot; <a href="https://platform.claude.com/docs/en/models/overview" target="_blank" rel="noopener">Models overview</a> &middot; <a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener">official pricing docs</a> | <a href="/en/pricing/">Pricing</a> &middot; <a href="/en/calculator/">Calculator</a> &middot; <a href="/en/claude-fable-5-1/">Fable 5.1</a></div>
+<div class="updated-bar" style="margin-top:2rem;"><span class="dot">●</span>Last updated: <time datetime="2026-10-01">October 1, 2026</time> | Sources: <a href="https://www.anthropic.com/claude-opus-5-5" target="_blank" rel="noopener">Anthropic announcement</a> &middot; <a href="https://platform.claude.com/docs/en/models/overview" target="_blank" rel="noopener">Models overview</a> &middot; <a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener">official pricing docs</a> | <a href="/en/pricing/">Pricing</a> &middot; <a href="/en/calculator/">Calculator</a> &middot; <a href="/en/claude-fable-5-1/">Fable 5.1</a></div>
 
 <section class="section" style="padding-top:2rem;" aria-labelledby="tl-h">
 <h2 class="section-title" id="tl-h" style="font-size:1.2rem;">The short version</h2>
@@ -57,7 +65,7 @@
     <li><strong>It replaces Opus 5; it is not a cut-down Fable 5.1.</strong> Anthropic says it matches Fable 5.1 on most work and is 40% cheaper than Opus 5 on typical workloads.</li>
     <li><strong>The price cut is the headline.</strong> Input $5&rarr;$4, output $25&rarr;$20, cache reads $0.50&rarr;$0.20 (a 60% cut). Anthropic says cache reads make up the majority of agentic and coding work costs.</li>
     <li><strong>Thinking can no longer be disabled.</strong> Depth is controlled with an <code>effort</code> parameter (low / medium / high&hellip;). The default is medium — the announcement&#39;s chart notes say &ldquo;at default effort (medium)&rdquo;.</li>
-    <li><strong>Sonnet 5.5 and Haiku 5.5 &ldquo;will follow in the coming weeks&rdquo;</strong> — not available at launch.</li>
+    <li><strong>Sonnet 5.5 was released on 2026-09-28</strong> &mdash; see <a href="/en/claude-sonnet-5-5/">our page for it</a>. Haiku 5.5 is still described only as following "in the coming weeks"; <strong>as of 2026-10-01 we have not verified its availability.</strong></li>
   </ul>
 </div>
 </section>
@@ -199,9 +207,9 @@
 <div class="table-wrap"><table><thead><tr><th>Model</th><th>On this site</th><th>Relationship</th></tr></thead><tbody>
 <tr><td class="model-name"><a href="/en/claude-fable-5-1/">Claude Fable 5.1</a></td><td>Dedicated page</td><td><strong>A different model (higher tier, higher price)</strong> at $10 input / $50 output. Opus 5.5&#39;s pitch is Fable-5.1-level work at a lower cost.</td></tr>
 <tr><td class="model-name"><a href="/en/claude-mythos-5-1/">Claude Mythos 5.1</a></td><td>Dedicated page</td><td><strong>A different model (trusted-access tier for vetted organisations)</strong>. Opus 5.5&#39;s cyber and biology safeguards are the same class, and lifting them needs a verification program.</td></tr>
-<tr><td class="model-name">Claude Opus 5.5</td><td><strong>This page (new)</strong></td><td>First model of the Claude 5.5 family; successor to Opus 5. <strong>Sonnet 5.5 and Haiku 5.5 are not yet available.</strong></td></tr>
+<tr><td class="model-name">Claude Opus 5.5</td><td><strong>This page (new)</strong></td><td>First model of the Claude 5.5 family; successor to Opus 5. <strong>Sonnet 5.5 was released 2026-09-28 (<a href="/en/claude-sonnet-5-5/">dedicated page</a>). Haiku 5.5 availability is not verified.</strong></td></tr>
 </tbody></table></div>
-<p style="font-size:.78rem;color:var(--c-muted);margin-top:.3rem;">We have no pages for <code>/en/claude-opus-5/</code> or Claude Sonnet 5.5 as of 2026-09-25, so we deliberately link to none.</p>
+<p style="font-size:.78rem;color:var(--c-muted);margin-top:.3rem;">We have no page for <code>/en/claude-opus-5/</code> as of 2026-10-01. Sonnet 5.5 is covered at <a href="/en/claude-sonnet-5-5/">/en/claude-sonnet-5-5/</a>; we do not link to pages that do not exist.</p>
 </section>
 
 <section class="section" style="padding-top:0;" aria-labelledby="choice-h">

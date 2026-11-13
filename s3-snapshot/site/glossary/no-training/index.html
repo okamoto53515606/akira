@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>学習に使わせない（no-training）とは — 「無料で試す」と「契約して使う」で答えが変わる — LLM Data Hub</title>
+  <meta name="description" content="「ChatGPTは学習に使うのにAPIは使わない」は本当です。学習条項は「どの会社か」ではなく「個人向けアプリ・無料枠・API/商用契約のどの層か」で決まります。OpenAI・Anthropic・Google・Microsoft・AWSの公式ドキュメントの逐語で、オプトアウトしても残る例外まで整理。用語説明 第10回。2026年10月3日更新。">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/glossary/no-training/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta property="og:image" content="https://llm.okamomedia.tokyo/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="LLM Data Hub — LLM API pricing, token costs and model data">
+  <meta name="twitter:image" content="https://llm.okamomedia.tokyo/assets/og-image.png">
+  <meta name="twitter:image:alt" content="LLM Data Hub — LLM API pricing, token costs and model data">
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/glossary/no-training/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/glossary/no-training/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/glossary/no-training/">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/glossary/no-training/">
+  <meta property="og:title" content="学習に使わせない（no-training）とは — 「無料で試す」と「契約して使う」で答えが変わる">
+  <meta property="og:description" content="学習条項は「どの会社か」ではなく「どの層か」で決まる。個人向けアプリ／無料枠／API・商用契約に分けて、5社の公式逐語とオプトアウトの例外を整理（2026年10月3日更新）。">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"学習に使わせない（no-training）とは — 「無料で試す」と「契約して使う」で答えが変わる","datePublished":"2026-10-03","dateModified":"2026-10-03","author":{"@type":"Organization","name":"okamoちゃんねる"},"publisher":{"@type":"Organization","name":"okamoちゃんねる"},"url":"https://llm.okamomedia.tokyo/glossary/no-training/","inLanguage":"ja","description":"学習条項（no-training）を、個人向けアプリ・無料枠・API/商用契約の3層に分けて、OpenAI・Anthropic・Google・Microsoft・AWSの公式ドキュメントの逐語で比較する用語解説。"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"ホーム","item":"https://llm.okamomedia.tokyo/"},{"@type":"ListItem","position":2,"name":"用語説明","item":"https://llm.okamomedia.tokyo/glossary/"},{"@type":"ListItem","position":3,"name":"学習に使わせない（no-training）","item":"https://llm.okamomedia.tokyo/glossary/no-training/"}]}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .phrase-box{background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-accent);border-radius:var(--r-md);padding:1rem 1.15rem;margin:1.2rem 0}
+    .phrase-box .phrase{margin:0;font-size:1.02rem;font-weight:700;line-height:1.7}
+    .phrase-box .phrase-meta{margin:.5rem 0 0;font-size:.83rem;color:var(--c-muted);line-height:1.8}
+    .req-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.8rem;margin:1.1rem 0}
+    @media(max-width:680px){.req-grid{grid-template-columns:1fr}}
+    .req{border:1px solid var(--c-border);border-top:3px solid var(--c-accent);border-radius:var(--r-md);background:var(--c-surface);padding:.9rem 1rem}
+    .req .tag{font-family:var(--font-mono);font-size:.74rem;color:var(--c-accent);margin:0 0 .3rem;letter-spacing:.02em}
+    .req h3{margin:0 0 .4rem;font-size:.95rem;line-height:1.6}
+    .req p{margin:0;font-size:.83rem;line-height:1.8;color:var(--c-muted)}
+    .req strong{color:var(--c-text)}
+    .quote{margin:1rem 0;padding:.85rem 1rem;background:var(--c-surface2);border:1px solid var(--c-border);border-radius:var(--r-sm);font-size:.84rem;line-height:1.8;color:var(--c-muted)}
+    .quote em{color:var(--c-text);font-style:italic}
+    .quote .who{display:block;margin-top:.45rem;font-size:.76rem;color:var(--c-muted)}
+    .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+    .mtable{width:100%;border-collapse:collapse;font-size:.79rem;min-width:680px}
+    .mtable th,.mtable td{border:1px solid var(--c-border);padding:.5rem .6rem;text-align:left;vertical-align:top;color:var(--c-muted);line-height:1.7}
+    .mtable thead th{background:var(--c-surface2);color:var(--c-text);font-weight:700;white-space:nowrap}
+    .mtable td strong{color:var(--c-text)}
+    .scroll-hint{font-size:.74rem;color:var(--c-muted);margin:.35rem 0 0}
+    .fig-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:1.2rem 0 .3rem}
+    .fig-wrap svg{min-width:640px;display:block}
+    .fig-cap{font-size:.78rem;color:var(--c-muted);line-height:1.7;margin:.2rem 0 0}
+    .steps{counter-reset:s;list-style:none;padding-left:0;margin:1rem 0}
+    .steps li{counter-increment:s;position:relative;padding:.6rem 0 .6rem 2.3rem;font-size:.87rem;line-height:1.85;color:var(--c-muted);border-top:1px solid var(--c-border)}
+    .steps li:first-child{border-top:none}
+    .steps li::before{content:counter(s);position:absolute;left:0;top:.6rem;width:1.5rem;height:1.5rem;border-radius:50%;background:var(--c-accent);color:#fff;font-size:.78rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+    .steps li strong{color:var(--c-text)}
+    .faq-block{border-top:1px solid var(--c-border);padding:1rem 0 0;margin:1rem 0 0}
+    .faq-block:first-of-type{border-top:none}
+    .faq-block dt{margin:0;font-size:.95rem;font-weight:700;color:var(--c-text);line-height:1.7}
+    .faq-block dt::before{content:"Q. ";color:var(--c-accent);font-family:var(--font-mono);font-size:.82rem}
+    .faq-block dd{margin:.4rem 0 0;font-size:.87rem;line-height:1.85;color:var(--c-muted)}
+    .faq-block dd::before{content:"A. ";color:var(--c-accent);font-family:var(--font-mono);font-size:.82rem;font-weight:700}
+    .faq-block dd strong{color:var(--c-text)}
+    .src-list{font-size:.8rem;color:var(--c-muted);padding-left:1.1em;line-height:1.85}
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="メインナビゲーション"><a href="/" class="nav-link">ホーム</a><a href="/pricing/" class="nav-link">料金比較</a><a href="/calculator/" class="nav-link">トークン計算機</a><a href="/timeline/" class="nav-link">リリース年表</a><a href="/china-ai/" class="nav-link">中国AI</a><a href="/multimodal/" class="nav-link">マルチモーダル</a><a href="/mai/" class="nav-link">MS AI (MAI)</a><a href="/glossary/" class="nav-link active" aria-current="page">用語説明</a></nav></div></header>
+
+<main><div class="container">
+  <div class="section" style="padding-bottom:0;">
+    <h1 class="section-title" style="font-size:1.55rem;">学習に使わせない（no-training）とは — 「無料で試す」と「契約して使う」で答えが変わる</h1>
+    <p class="section-sub" style="max-width:780px;">
+      <a href="/glossary/">用語説明</a> 第10回。第9回 <a href="/glossary/zero-operator-access/">ZOA（見せない）</a> に続いて、<a href="/glossary/four-data-requirements/">4要件</a>の③<strong>「学ばせない（学習条項）」</strong>を深掘りします。
+      「ChatGPTは学習に使うのに、APIは使わないって本当？」「有料プランなら安心？」——この2つの質問は、<strong>同じ会社の同じモデルでも答えが変わります</strong>。
+      理由は<strong>「どの層（プラン・契約）で使っているか」で適用される条項が違う</strong>からです。
+      このページでは、OpenAI・Anthropic・Google・Microsoft・AWS の5系統について、<strong>「個人向けアプリ」「無料枠」「API・商用契約」の3層</strong>に分け、各社公式ドキュメントの<strong>逐語</strong>で確認します。
+      オプトアウト（学習に使わせない設定）をしても<strong>残る例外</strong>まで書くので、そのまま社内説明に使えます。
+    </p>
+    <div class="phrase-box">
+      <p class="phrase">「学習に使われるかどうか」を決めるのは、<strong>どの会社かではなく「どの契約・どの層か」</strong>です。</p>
+      <p class="phrase-meta">同じOpenAIでも、個人向けChatGPTは「既定で学習に使われうる（オプトアウト可）」、APIは「<strong>既定で学習に使わない</strong>」。同じGoogleでも、無料枠のGemini APIは「改善に使われ、<strong>人間のレビューが入る</strong>」、請求先アカウントに紐づく有料枠は「プロンプトも応答も製品改善に使わない」。<strong>「ベンダー名で覚える」と必ず間違えます。</strong>まず自分の利用層を確定させるのが出発点です。</p>
+    </div>
+    <div class="updated-bar">
+      <span class="dot">●</span>
+      最終更新: <time datetime="2026-10-03">2026年10月3日</time>
+      &ensp;|&ensp; 方針: 各社の規約・プライバシー文書で<strong>逐語</strong>を確認できた内容のみ掲載。確認できない層は「未確認」と明記します
+    </div>
+  </div>
+
+  <section class="section" style="padding-top:1.5rem;" aria-labelledby="branch-h">
+    <h2 class="section-title" id="branch-h" style="font-size:1.2rem;">なぜ「同じ会社で答えが変わる」のか</h2>
+    <p class="section-sub">
+      学習条項は、<strong>契約の種類ごとに別の文書</strong>に書かれています。個人向けアプリの利用規約と、法人向けの商用契約は別の文書で、書いてあることが違います。分岐はこの3つです。
+    </p>
+    <div class="req-grid">
+      <div class="req">
+        <p class="tag">分岐 ①</p>
+        <h3>個人向けアプリか、API・商用契約か</h3>
+        <p>同じ会社でも、<strong>個人向けアプリ（ChatGPT / Claude / Gemini アプリ）</strong>と <strong>API・Team / Enterprise 契約</strong>では別の条項が適用されます。一般に、後者のほうが厳しい（使わない）方向です。</p>
+      </div>
+      <div class="req">
+        <p class="tag">分岐 ②</p>
+        <h3>「無料枠」か、請求先に紐づく有料枠か</h3>
+        <p>Google の場合、判定は<strong>料金を払ったかではなく「請求先アカウントに紐づくか」</strong>で決まります。無料で使っていても有料扱いになる場合があり、ここが最も誤解されます。</p>
+      </div>
+      <div class="req">
+        <p class="tag">分岐 ③</p>
+        <h3>オプトアウトしても残る例外があるか</h3>
+        <p>「学習に使わせない設定」を入れても、<strong>フィードバックとして送った内容</strong>や<strong>安全審査でフラグが立った内容</strong>は学習に使われる、と明記している提供元があります。</p>
+      </div>
+      <div class="req">
+        <p class="tag">前提</p>
+        <h3>「学習に使わない」と「人が見ない」は別</h3>
+        <p>学習条項（③）を満たしても、保存（①）とアクセス（②）は別の約束です。詳しくは<a href="/glossary/four-data-requirements/">4要件</a>と<a href="/glossary/zero-operator-access/">ZOA</a>を参照してください。</p>
+      </div>
+    </div>
+
+    <div class="fig-wrap">
+      <svg viewBox="0 0 680 330" role="img" aria-labelledby="ntfig-t ntfig-d" xmlns="http://www.w3.org/2000/svg">
+        <title id="ntfig-t">学習に使われるかを決めるのは「層」</title>
+        <desc id="ntfig-d">同じモデルでも、個人向けアプリ（Free・Plus・Pro）は既定で学習に使われうる。請求先アカウントに紐づかない無料枠も使われうる（人手レビューあり）。API・Team・Enterprise などの商用契約は既定で学習に使わない。どの層で使っているかで適用される条項が変わる。</desc>
+        <g font-family="system-ui,Segoe UI,sans-serif">
+          <text x="16" y="24" font-size="14" font-weight="700" fill="#e6e6e6">学習に使われるかを決めるのは「どの層で使うか」</text>
+          <text x="16" y="41" font-size="11" fill="#9aa0aa">同じ会社・同じモデルでも、層が変われば適用される条項（文書）が変わる。</text>
+
+          <rect x="16" y="86" width="176" height="130" rx="8" fill="#141a24" stroke="#2a3340"/>
+          <text x="104" y="132" font-size="12.5" font-weight="700" fill="#e6e6e6" text-anchor="middle">あなたが送った</text>
+          <text x="104" y="152" font-size="12.5" font-weight="700" fill="#e6e6e6" text-anchor="middle">プロンプトと応答</text>
+          <text x="104" y="180" font-size="10.5" fill="#9aa0aa" text-anchor="middle">中身は同じでも</text>
+          <text x="104" y="196" font-size="10.5" fill="#9aa0aa" text-anchor="middle">層ごとに条項が違う</text>
+
+          <path d="M192 151 C 222 151, 222 76, 250 76" stroke="#3a4450" fill="none" stroke-width="1.4"/>
+          <path d="M192 151 C 222 151, 222 164, 250 164" stroke="#3a4450" fill="none" stroke-width="1.4"/>
+          <path d="M192 151 C 222 151, 222 252, 250 252" stroke="#3a4450" fill="none" stroke-width="1.4"/>
+
+          <rect x="250" y="42" width="414" height="68" rx="8" fill="#141a24" stroke="#2a3340"/>
+          <text x="266" y="66" font-size="12.5" font-weight="700" fill="#6aa9ff">① 個人向けアプリ（Free / Plus / Pro など）</text>
+          <text x="266" y="86" font-size="11.5" fill="#9aa0aa">既定で学習に使われうる（設定・プライバシーポータルでオプトアウト可）</text>
+          <text x="266" y="102" font-size="11.5" fill="#9aa0aa">オプトアウトの効果は「以後の新規会話」から。過去分には遡らない</text>
+
+          <rect x="250" y="130" width="414" height="68" rx="8" fill="#1a1410" stroke="#3a2a22"/>
+          <text x="266" y="154" font-size="12.5" font-weight="700" fill="#d97757">② 請求先アカウントに紐づかない無料枠</text>
+          <text x="266" y="174" font-size="11.5" fill="#9aa0aa">Google の AI Studio・Gemini API の無料枠は「Unpaid Services」</text>
+          <text x="266" y="190" font-size="11.5" fill="#9aa0aa">改善・開発に使われ、人間のレビューが入る（EEA・スイス・英国は例外）</text>
+
+          <rect x="250" y="218" width="414" height="68" rx="8" fill="#101a13" stroke="#22342a"/>
+          <text x="266" y="242" font-size="12.5" font-weight="700" fill="#7bc47f">③ 有料枠・商用契約（API / Team / Enterprise）</text>
+          <text x="266" y="262" font-size="11.5" fill="#9aa0aa">既定で「学習に使わない」（Bedrock・Azure のモデル提供元にも渡らない）</text>
+          <text x="266" y="278" font-size="11.5" fill="#9aa0aa">明示的にオプトインしない限り使われない（Developer Partner Program 等）</text>
+
+          <rect x="16" y="296" width="648" height="24" rx="6" fill="none" stroke="#5a5f6a" stroke-dasharray="5 4"/>
+          <text x="32" y="312" font-size="11.5" fill="#9aa0aa"><tspan font-weight="700" fill="#e6e6e6">「無料」と「有料」の線引きは、料金ではなく契約と請求先で決まる。</tspan>まず自分の層を確定させる。</text>
+        </g>
+      </svg>
+    </div>
+    <p class="fig-cap">図: 学習条項の分岐。①〜③のどの層で使っているかで、適用される文書と結論が変わる（当サイト作成）。</p>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="matrix-h">
+    <h2 class="section-title" id="matrix-h" style="font-size:1.2rem;">先に結論 — 5系統を「層」で分けた表</h2>
+    <p class="section-sub">2026-10-03 時点で各社の公式ドキュメントから確認できた範囲です。<strong>「個人向け」と「API・商用」は別の文書</strong>であることが、この表のいちばんの要点です。</p>
+    <div class="table-wrap">
+      <table class="mtable">
+        <caption style="display:none;">5系統の学習条項の比較</caption>
+        <thead>
+          <tr><th>提供元</th><th>個人向けアプリ・無料枠</th><th>API・商用契約</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>OpenAI</strong></td>
+            <td>個人向けサービス（ChatGPT・Sora・Operator）は<strong>既定で学習に使われうる</strong>。プライバシーポータルの「do not train on my content」でオプトアウト可</td>
+            <td><strong>既定で学習に使わない</strong>（ChatGPT Team・ChatGPT Enterprise・API）。逐語は本文に引用</td>
+          </tr>
+          <tr>
+            <td><strong>Anthropic</strong></td>
+            <td>消費者向け（Free / Pro / Max）は<strong>アカウント設定でオプトアウトするまで学習に使われうる</strong>。オプトアウト後も<strong>フィードバック提供分と安全審査のフラグ分</strong>は学習に使われる</td>
+            <td>商用契約では<strong>「Customer Content でモデルを学習してはならない」</strong>。明示的に提供（Developer Partner Program 等）した場合を除く</td>
+          </tr>
+          <tr>
+            <td><strong>Google</strong></td>
+            <td>Unpaid Services（AI Studio・Gemini API の無料枠）は<strong>提供・改善・開発に使われ、人間のレビューが入る</strong></td>
+            <td>Paid Services は<strong>「プロンプトも応答も製品改善に使わない」</strong>。乱用検知のため一定期間のログのみ</td>
+          </tr>
+          <tr>
+            <td><strong>Microsoft</strong></td>
+            <td>Microsoft アカウントのコンシューマー向け（Copilot 等）は<strong>本ページでは未確認</strong>（別文書のため）</td>
+            <td>Azure の AI サービスは<strong>「明示の許可・指示なく生成AI基盤モデルの訓練に使わない」</strong>。モデル提供元にも渡らない</td>
+          </tr>
+          <tr>
+            <td><strong>AWS</strong></td>
+            <td>該当する消費者向け経路なし（Amazon Bedrock はAPI製品）</td>
+            <td><strong>「AWS も第三者のモデル提供元も、Bedrock の入出力を Nova・Titan・第三者モデルの学習に使わない」</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="scroll-hint">← 横にスクロールできます。「未確認」は「無い」ではなく「当サイトで一次情報を確認できていない」を意味します。</p>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="b1-h">
+    <h2 class="section-title" id="b1-h" style="font-size:1.2rem;">分岐① 個人向けアプリか、API・商用契約か</h2>
+    <p class="section-sub">同じ会社の文書でも、ここが最もはっきり分かれます。<strong>OpenAI の一文が分かりやすい例</strong>です。</p>
+    <div class="quote">
+      <em>“By default, we do not train on any inputs or outputs from our products for business users, including ChatGPT Team, ChatGPT Enterprise, and the API.”</em>
+      <span class="who">— OpenAI「How your data is used to improve model performance」（2026-10-03 取得）</span>
+    </div>
+    <div class="quote">
+      <em>“When you use our services for individuals such as ChatGPT, Sora, or Operator, we may use your content to train our models. You can opt out of training through our privacy portal by clicking on "do not train on my content."”</em>
+      <span class="who">— 同じ文書の個人向けの記述（2026-10-03 取得）</span>
+    </div>
+    <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.3em;line-height:1.9;">
+      <li><strong>「無料だから使われる／有料だから使われない」ではありません。</strong>OpenAI の線引きは<strong>個人向けか、業務向け（Team / Enterprise / API）か</strong>です。個人向けの有料プランでも、既定は「学習に使われうる」側にあります。</li>
+      <li><strong>Anthropic は契約文書で明確に禁止しています。</strong>商用契約（Commercial Terms）の Customer Content の節に、逐語でこう書かれています。
+        <div class="quote" style="margin:.6rem 0 0;"><em>“As between the parties and to the extent permitted by applicable law, Anthropic agrees that Customer (a) retains all rights to its Inputs, and (b) owns its Outputs. Anthropic may not train models on Customer Content from Services.”</em><span class="who">— Anthropic「Commercial Terms of Service」B. Customer Content（2026-10-03 取得）</span></div>
+        「してはならない（may not）」という<strong>契約上の禁止</strong>である点が、他社の「既定で使わない」という運用方針の書き方と性格が違います。</li>
+      <li><strong>例外は「明示的に提供したとき」だけです。</strong>Anthropic の公式ドキュメントは、商用利用でも<strong>顧客が自分からモデル改善にデータを提供した場合</strong>（Developer Partner Program やフィードバック送信）は学習に使うと説明しています。組織の管理者が明示的にオプトインできる、とも書かれています。</li>
+      <li><strong>再販（Azure経由・Bedrock経由）でも同じ構図です。</strong>AWS は FAQ で逐語「No, AWS and the third-party model providers will not use any inputs to or outputs from Amazon Bedrock to train Amazon Nova, Amazon Titan, or any third-party models.」と明記しています。Microsoft も「許可・指示なく基盤モデルの訓練に使わない」と書いています。</li>
+    </ul>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="b2-h">
+    <h2 class="section-title" id="b2-h" style="font-size:1.2rem;">分岐② 「無料枠」かどうかは、料金ではなく請求先で決まる（Google）</h2>
+    <p class="section-sub">Google は「Unpaid Services」と「Paid Services」で扱いを分けています。<strong>判定基準が独特なので、ここは逐語で押さえるのが確実</strong>です。</p>
+    <div class="quote">
+      <em>“When you use Unpaid Services, including, for example, Google AI Studio and the unpaid quota on Gemini API, Google uses the content you submit to the Services and any generated responses to provide, improve, and develop Google products and services and machine learning technologies”</em>
+      <span class="who">— Google「Gemini API Additional Terms of Service」（2026-10-03 取得）</span>
+    </div>
+    <div class="quote">
+      <em>“To help with quality and improve our products, human reviewers may read, annotate, and process your API input and output.”</em>
+      <span class="who">— 同文書・Unpaid Services の節（2026-10-03 取得）</span>
+    </div>
+    <div class="quote">
+      <em>“When you use Paid Services, including, for example, the paid quota of the Gemini API, Google doesn't use your prompts (including associated system instructions, cached content, and files such as images, videos, or documents) or responses to improve our products”</em>
+      <span class="who">— 同文書・Paid Services の節（2026-10-03 取得）</span>
+    </div>
+    <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.3em;line-height:1.9;">
+      <li><strong>「無料で使っていても有料扱い」があります。</strong>同文書は逐語で、Google AI Studio へのアクセスは<strong>「Cloud Billing アカウントが紐づいた Cloud プロジェクト、または Workspace エンタープライズアカウント」なら、無料提供でも Paid Service として扱う</strong>と書いています。逆に Gemini API は「有効な請求先アカウントに紐づく Cloud プロジェクト経由」のときだけ Paid Service です。</li>
+      <li><strong>有料枠でもログは残ります。</strong>「Paid Services では乱用（Prohibited Use Policy違反）の検知・防止のためだけに、限られた期間プロンプトと応答をログする」と明記されています。<strong>「学習に使わない」＝「何も残らない」ではありません</strong>（保持の話は<a href="/glossary/zero-data-retention/">ZDR</a>）。</li>
+      <li><strong>地域で扱いが変わります。</strong>EEA（欧州経済領域）・スイス・英国の利用者については、<strong>AI Studio や無料枠を含むすべてのサービスに Paid の条項を適用する</strong>と明記されています。無料で試す場合でも、この地域のデータ扱いが自動的に厳しくなる、という意味です。</li>
+    </ul>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="b3-h">
+    <h2 class="section-title" id="b3-h" style="font-size:1.2rem;">分岐③ オプトアウトしても残る例外</h2>
+    <p class="section-sub">「設定で学習に使わせない」は万能ではありません。<strong>Anthropic は消費者向け規約に例外を2つ明記しています</strong>。これがこのページでいちばん実務に効く部分です。</p>
+    <div class="quote">
+      <em>“We may use Materials to provide, maintain, and improve the Services and to develop other products and services, including training our models, unless you opt out of training through your account settings. Even if you opt out, we will use Materials for model training when: (1) you provide Feedback to us regarding any Materials, or (2) your Materials are flagged for safety review to improve our ability to detect harmful content, enforce our policies, or advance our safety research.”</em>
+      <span class="who">— Anthropic「Consumer Terms of Service」（2026-10-03 取得）</span>
+    </div>
+    <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.3em;line-height:1.9;">
+      <li><strong>例外1: フィードバックとして送った内容。</strong>「これで合ってる？」と評価を送ったり、不具合報告を送った内容は、オプトアウト中でも学習に使われる、と逐語で書かれています。<strong>「設定をオフにしているから送った内容も安全」ではありません。</strong></li>
+      <li><strong>例外2: 安全審査でフラグが立った内容。</strong>有害コンテンツの検知能力の改善・ポリシー執行・安全研究のために、フラグが立った内容は学習に使われる、と明記されています。<strong>これは「有害な使い方をした場合」の話で、通常の業務利用では該当しません。</strong></li>
+      <li><strong>オプトアウトは過去に遡りません。</strong>OpenAI は「Once you opt out, <strong>new conversations</strong> will not be used to train our models.」と書いています。<strong>設定変更より前に送った内容が取り消されるわけではない</strong>ので、機密を扱う前に設定を確認する順序が大事です。</li>
+      <li><strong>「そもそも残さない」選択肢もあります。</strong>OpenAI の Temporary Chat は「履歴に残らず、メモリも作らず、学習にも使われない」と説明されています。ただし<strong>一時的な回避策であり、契約上の保証ではありません</strong>（保証が必要なら商用契約と保持設定の話になります）。</li>
+    </ul>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="sep-h">
+    <h2 class="section-title" id="sep-h" style="font-size:1.2rem;">「学習に使わない」は「人が見ない」「保存しない」と別の約束</h2>
+    <p class="section-sub">第8回で扱った4要件のうち、③学習条項だけを深掘りしました。<strong>③を満たしても①と②は満たしません。</strong></p>
+    <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.3em;line-height:1.9;">
+      <li><strong>無料枠は「学習に使われる＋人が見る」が同時に起こります。</strong>Google の Unpaid Services の逐語には、改善目的の利用と<strong>人間のレビュー</strong>が同じ節に並んで書かれています。「学習に使わない」と「担当者が読めない」は、最初から別の約束です。</li>
+      <li><strong>学習に使わない構成でも、乱用監視のレビューは残ります。</strong>Microsoft は「自動レビュー（LLMによる判定）は既定で行われ、人間のレビューは<strong>乱用監視システムがフラグを立てた場合のみ</strong>」と説明しています。乱用監視の承認を得た組織では人間レビューが行われなくなりますが、<strong>自動レビューは残る</strong>と明記されています。</li>
+      <li><strong>読み分けの一覧はこちら:</strong> <a href="/glossary/four-data-requirements/">4要件（残さない・見せない・学ばせない・出さない）</a> / <a href="/glossary/zero-data-retention/">ZDR（保存しない）</a> / <a href="/glossary/zero-operator-access/">ZOA（見せない）</a>。</li>
+    </ul>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="steps-h">
+    <h2 class="section-title" id="steps-h" style="font-size:1.2rem;">確認する4ステップ</h2>
+    <ol class="steps">
+      <li><strong>自分の利用層を確定する。</strong>個人向けアプリか、無料枠か、API・商用契約か。<strong>同じツールでもログイン経路で層が変わります</strong>（例: 個人アカウントで会社のコードを触る、が最も危ない）。</li>
+      <li><strong>「無料枠」の判定を請求先で確認する。</strong>Google は「Cloud Billing が紐づく Cloud プロジェクトか」で Paid / Unpaid が決まります。<strong>料金が0円でも有料扱いになる場合があります。</strong></li>
+      <li><strong>設定の現在値を確認する。</strong>オプトアウト設定の既定値は各社の改定で動いてきたため、<strong>「昔オフにした」を信じずに設定画面を開いて確認</strong>します。オプトアウトが効くのは以後の新規会話からです。</li>
+      <li><strong>契約条項と記録で固める。</strong>画面の設定は条項の代わりになりません。法人利用なら商用契約・DPAの該当条項を確認し、<strong>どの層で使うかと、確認した条項をセットで記録</strong>します。担当者交代で最も失われるのがこの記録です。</li>
+    </ol>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="myth-h">
+    <h2 class="section-title" id="myth-h" style="font-size:1.2rem;">よくある誤解 4つ</h2>
+    <div class="req-grid">
+      <div class="req">
+        <p class="tag">誤解 1</p>
+        <h3>「有料プランなら学習に使われない」</h3>
+        <p>個人向けの有料プラン（Plus / Pro など）は、<strong>業務向け契約とは別の文書</strong>です。OpenAI の線引きは「個人向けか、Team / Enterprise / API か」でした。</p>
+      </div>
+      <div class="req">
+        <p class="tag">誤解 2</p>
+        <h3>「オプトアウトしたから完全に使われない」</h3>
+        <p>Anthropic は<strong>フィードバック提供分と安全審査フラグ分</strong>はオプトアウト中でも学習に使うと明記しています。OpenAI のオプトアウトも<strong>以後の新規会話</strong>からです。</p>
+      </div>
+      <div class="req">
+        <p class="tag">誤解 3</p>
+        <h3>「学習に使わない＝担当者にも見られない」</h3>
+        <p>学習条項③とアクセス②は別の約束です。Google の無料枠は「改善に使う＋<strong>人間のレビューが入る</strong>」が同じ節に並記されています。</p>
+      </div>
+      <div class="req">
+        <p class="tag">誤解 4</p>
+        <h3>「保存していないから学習にも使われない」</h3>
+        <p>保持（①）と学習（③）は別の条項です。「保存はするが訓練には使わない」は普通に成立しますし、逆もあります。→ <a href="/glossary/zero-data-retention/">ZDR</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="faq-h">
+    <h2 class="section-title" id="faq-h" style="font-size:1.2rem;">よくある質問</h2>
+    <dl>
+      <div class="faq-block">
+        <dt>ChatGPT Plus や Claude Pro を契約していれば、学習に使われませんか？</dt>
+        <dd>いいえ。<strong>個人向けの有料プランは「個人向けの規約」のまま</strong>で、業務向け（Team / Enterprise / API）の条項とは別です。個人向けではオプトアウト設定が用意されており、既定値は各社の改定で動いてきたため、<strong>契約前に設定画面の現在値を確認</strong>してください。</dd>
+      </div>
+      <div class="faq-block">
+        <dt>「無料枠」と「無料プラン」は同じですか？</dt>
+        <dd>別です。<strong>無料プラン</strong>は個人向けアプリの料金プラン（消費者規約）。<strong>無料枠</strong>はAPI側の枠（Google では Unpaid Services）で、判定は「請求先アカウントに紐づくか」で決まります。同じ「0円」でも適用される文書が違います。</dd>
+      </div>
+      <div class="faq-block">
+        <dt>学習に使わせたくない場合、実務では何をすればいいですか？</dt>
+        <dd>①その用途に必要な層（API・商用契約）で使う ②個人向けアプリを使う場合はオプトアウト設定を確認する（効果は以後の新規会話から） ③法人利用なら商用契約・DPAの該当条項を確認して記録する、の3点です。<strong>設定だけ、条項だけ、では片手落ちになります。</strong></dd>
+      </div>
+      <div class="faq-block">
+        <dt>「モデルの改善に使う」と「学習に使う」は同じ意味ですか？</dt>
+        <dd>このページでは、各社の逐語が<strong>「improve our products」「develop … machine learning technologies」「training our models」</strong>のように書き分けられているため、<strong>逐語の側をそのまま引用する</strong>方針を取っています。日本語で「学習に使う」とまとめると、レビューや評価のための利用まで含むのかが曖昧になるためです。</dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="section" style="padding-top:0;">
+    <h2 class="section-title" style="font-size:1.1rem;">出典</h2>
+    <ul class="src-list">
+      <li>OpenAI — <a href="https://openai.com/policies/how-your-data-is-used-to-improve-model-performance/" target="_blank" rel="noopener">How your data is used to improve model performance</a>（業務向けは既定で学習に使わない・個人向けはオプトアウト可・Temporary Chat／2026-10-03 取得）</li>
+      <li>Anthropic — <a href="https://www.anthropic.com/legal/commercial-terms" target="_blank" rel="noopener">Commercial Terms of Service</a>（B. Customer Content「Anthropic may not train models on Customer Content from Services.」／2026-10-03 取得）</li>
+      <li>Anthropic — <a href="https://www.anthropic.com/legal/consumer-terms" target="_blank" rel="noopener">Consumer Terms of Service</a>（オプトアウトと2つの例外／2026-10-03 取得）／<a href="https://code.claude.com/docs/en/data-usage" target="_blank" rel="noopener">Data usage</a>（消費者と商用の別・保持期間 5年／30日／2026-10-03 取得）</li>
+      <li>Google — <a href="https://ai.google.dev/gemini-api/terms" target="_blank" rel="noopener">Gemini API Additional Terms of Service</a>（Unpaid / Paid の区分・人間のレビュー・EEA等の扱い／2026-10-03 取得）</li>
+      <li>Microsoft — <a href="https://learn.microsoft.com/en-us/azure/foundry/responsible-ai/openai/data-privacy" target="_blank" rel="noopener">Data, privacy, and security for Azure direct models</a>（「NOT used to train any generative AI foundation models without your permission or instruction.」・乱用監視の自動／人間レビュー／2026-09-29 取得）</li>
+      <li>AWS — <a href="https://aws.amazon.com/bedrock/faqs/" target="_blank" rel="noopener">Amazon Bedrock FAQs</a>（「will not use any inputs to or outputs from Amazon Bedrock to train Amazon Nova, Amazon Titan, or any third-party models.」／2026-10-03 取得）</li>
+      <li>関連: <a href="/glossary/four-data-requirements/">データを守る4要件</a>・<a href="/glossary/zero-data-retention/">ZDR（ゼロデータ保持）</a>・<a href="/glossary/zero-operator-access/">ZOA（ゼロオペレーターアクセス）</a>・<a href="/glossary/">用語説明の一覧</a></li>
+    </ul>
+  </section>
+</div></main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>運営: okamoちゃんねる</p><p><a href="/">ホーム</a> · <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a> · <a href="/timeline/">年表</a> · <a href="/glossary/">用語説明</a> · <a href="/gpt-6/">GPT-6 Astra</a></p></div><p class="footer-disclaimer">⚠️ 規約・データの取扱いは各社の公式ドキュメントで必ずご確認ください。本サイトは各社と提携していません。</p></div></footer>
+</body>
+</html>

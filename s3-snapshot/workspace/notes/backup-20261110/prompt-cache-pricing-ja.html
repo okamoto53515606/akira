@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>プロンプトキャッシュ料金の横断比較【2026年11月版】OpenAI・Anthropic・Google・Moonshot・DeepSeek — LLM Data Hub</title>
+  <meta name="description" content="プロンプト（コンテキスト）キャッシュの単価を5社横断で比較。モデル別のキャッシュ読込/書込単価・割引率・保持時間・最小トークン数を、各社公式料金ページの逐語から整理（2026年11月10日確認）。">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/prompt-cache-pricing/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta property="og:image" content="https://llm.okamomedia.tokyo/assets/og-prompt-cache-pricing.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="LLM Data Hub — LLM API pricing, token costs and model data">
+  <meta name="twitter:image" content="https://llm.okamomedia.tokyo/assets/og-prompt-cache-pricing.png">
+  <meta name="twitter:image:alt" content="LLM Data Hub — LLM API pricing, token costs and model data">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/prompt-cache-pricing/">
+  <meta property="og:title" content="プロンプトキャッシュ料金の横断比較【2026年11月版】OpenAI・Anthropic・Google・Moonshot・DeepSeek — LLM Data Hub">
+  <meta property="og:description" content="プロンプト（コンテキスト）キャッシュの単価を5社横断で比較。モデル別のキャッシュ読込/書込単価・割引率・保持時間・最小トークン数を、各社公式料金ページの逐語から整理（2026年11月10日確認）。">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "プロンプトキャッシュ料金の横断比較【2026年11月版】", "datePublished": "2026-11-10", "dateModified": "2026-11-10", "author": {"@type": "Organization", "name": "LLM Data Hub"}, "publisher": {"@type": "Organization", "name": "okamoちゃんねる"}, "url": "https://llm.okamomedia.tokyo/prompt-cache-pricing/", "inLanguage": "ja", "isAccessibleForFree": true, "description": "プロンプト（コンテキスト）キャッシュの単価を5社横断で比較。モデル別のキャッシュ読込/書込単価・割引率・保持時間・最小トークン数を、各社公式料金ページの逐語から整理（2026年11月10日確認）。"}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "プロンプトキャッシュ料金の横断比較【2026年11月版】", "datePublished": "2026-11-10", "dateModified": "2026-11-10", "author": {"@type": "Organization", "name": "LLM Data Hub"}, "publisher": {"@type": "Organization", "name": "okamoちゃんねる"}, "url": "https://llm.okamomedia.tokyo/prompt-cache-pricing/", "inLanguage": "ja", "isAccessibleForFree": true, "description": "プロンプト（コンテキスト）キャッシュの単価を5社横断で比較。モデル別のキャッシュ読込/書込単価・割引率・保持時間・最小トークン数を、各社公式料金ページの逐語から整理（2026年11月10日確認）。"}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .phrase-box{background:linear-gradient(135deg,#12162a 0%,#1a1d35 55%,#0f1117 100%);border:1px solid var(--c-border);border-left:3px solid var(--c-accent2);border-radius:var(--r-lg);padding:1.2rem 1.3rem;margin:1.2rem 0 1.6rem}
+    .phrase-box .phrase{font-size:1.02rem;font-weight:700;line-height:1.75;margin-bottom:.6rem}
+    .phrase-box .phrase-meta{font-size:.8rem;color:var(--c-muted);line-height:1.7}
+    .num-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:.8rem;margin:1rem 0 1.6rem}
+    .num-card{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.9rem 1rem}
+    .num-card .k{font-family:var(--font-mono);font-size:.74rem;color:var(--c-muted);font-weight:600;letter-spacing:.02em}
+    .num-card .v{font-family:var(--font-mono);font-size:1.05rem;font-weight:700;margin:.15rem 0 .2rem}
+    .num-card .d{font-size:.8rem;color:var(--c-muted);line-height:1.6}
+    .read-box{background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-green);border-radius:var(--r-md);padding:1rem 1.2rem;margin:1rem 0 1.6rem;font-size:.88rem;color:var(--c-muted)}
+    .read-box strong{color:var(--c-text)}
+    .flow-fig{margin:1rem 0 1.4rem}
+    .flow-fig svg{width:100%;height:auto;border:1px solid var(--c-border);border-radius:var(--r-md);background:var(--c-surface)}
+    .cmp-table th,.cmp-table td{font-size:.85rem}
+  </style>
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/prompt-cache-pricing/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/prompt-cache-pricing/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/prompt-cache-pricing/"></head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="メインナビゲーション"><a href="/" class="nav-link">ホーム</a><a href="/pricing/" class="nav-link">料金比較</a><a href="/calculator/" class="nav-link">トークン計算機</a><a href="/timeline/" class="nav-link">リリース年表</a><a href="/china-ai/" class="nav-link">中国AI</a><a href="/multimodal/" class="nav-link">マルチモーダル</a><a href="/mai/" class="nav-link">MS AI (MAI)</a><a href="/glossary/" class="nav-link">用語説明</a></nav></div></header>
+
+<main>
+<div class="container" style="padding-top:2rem;">
+<h1 class="section-title" style="font-size:1.6rem;">プロンプトキャッシュ料金の横断比較 <span style="font-size:1rem;font-weight:500;color:var(--c-muted);">【2026年11月版】</span></h1>
+<p class="section-sub" style="max-width:760px;">同じ長い前置き（システムプロンプト・社内文書・コードベースなど）を何度も送るとき、<strong>各社の「キャッシュ」機能で入力トークン単価がどこまで下がるか</strong>を1つの表にまとめました。仕組みの解説は<a href="/glossary/prompt-cache/">用語集「プロンプトキャッシュ」</a>、通常時の単価は<a href="/pricing/">LLM API料金比較</a>を参照してください。本ページは<strong>単価と条件の比較表</strong>に絞っています。</p>
+<div class="updated-bar"><span class="dot">●</span>最終更新: <time datetime="2026-11-10">2026年11月10日</time> | 各社公式ページを2026-11-10に取得し、引用は逐語ベース。計算（割引率・倍率の換算）は当サイトによる。</div>
+<section class="section" style="padding-top:1rem;">
+<h2 class="section-title" style="font-size:1.15rem;">先に押さえる3点</h2>
+<ul style="max-width:760px;line-height:1.9;">
+<li><strong>「読込（ヒット）は安い／書込は割高」が基本形。</strong>読込は通常入力の0.025〜0.1倍、書込は1.25〜2倍という設計が主流です（OpenAI・Anthropic）。<strong>1回しか使わない前置きにキャッシュ書込を使うと、かえって高くつきます</strong>。</li>
+<li><strong>割引率の表示は「通常入力比」。</strong>同じ「90%減」でも、基準となる入力単価が違えば絶対額は大きく変わります。表では倍率と実額の両方を並べています。</li>
+<li><strong>書込・保持の条件は各社でバラバラ。</strong>自動でキャッシュされる（OpenAI・Moonshot・DeepSeek・Googleの暗黙キャッシュ）ものと、明示的に書込ポイントを指定する（Anthropic）ものがあります。</li>
+</ul>
+</section>
+<section class="section" style="padding-top:0;">
+<h2 class="section-title" style="font-size:1.15rem;">モデル別のキャッシュ単価（USD / 100万トークン）</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>提供元</th><th>モデル</th><th>通常入力</th><th>キャッシュ読込（ヒット）</th><th>読込の割引</th><th>書込（5分）</th><th>書込（1時間）</th><th>最小トークン</th><th>保持・課金単位</th></tr></thead>
+<tbody>
+<tr><td>OpenAI</td><td class="model-name">GPT-6.1 Terra</td><td class="price">$1.00</td><td class="price">$0.05</td><td>95%減（0.05×）</td><td class="price">$1.25</td><td class="price">$2.50</td><td>1,024</td><td>既定30分／Responses APIで12時間を選択可</td></tr>
+<tr><td>OpenAI</td><td class="model-name">GPT-6.1 Sol</td><td class="price">$2.00</td><td class="price">$0.10</td><td>95%減（0.05×）</td><td class="price">$2.50</td><td class="price">$5.00</td><td>1,024</td><td>同上</td></tr>
+<tr><td>OpenAI</td><td class="model-name">GPT-6 Sol</td><td class="price">$2.00</td><td class="price">$0.20</td><td>90%減（0.1×）</td><td class="price">$2.50</td><td class="price">$5.00</td><td>1,024</td><td>同上</td></tr>
+<tr><td>OpenAI</td><td class="model-name">GPT-6 Luna</td><td class="price">$0.10</td><td class="price">$0.01</td><td>90%減（0.1×）</td><td class="price">$0.125</td><td class="price">$0.25</td><td>1,024</td><td>同上</td></tr>
+<tr><td>Anthropic</td><td class="model-name">Claude Fable 5.1 / Mythos 5.1</td><td class="price">$10.00</td><td class="price">$0.25</td><td>97.5%減（0.025×）</td><td class="price">$12.50</td><td class="price">$20.00</td><td>未確認</td><td>書込時に5分/1時間を選択</td></tr>
+<tr><td>Anthropic</td><td class="model-name">Claude Opus 5.5</td><td class="price">$4.00</td><td class="price">$0.20</td><td>95%減（0.05×）</td><td class="price">$5.00</td><td class="price">$8.00</td><td>未確認</td><td>同上</td></tr>
+<tr><td>Anthropic</td><td class="model-name">Claude Sonnet 5.5</td><td class="price">$2.00</td><td class="price">$0.10</td><td>95%減（0.05×）</td><td class="price">$2.50</td><td class="price">$4.00</td><td>未確認</td><td>同上</td></tr>
+<tr><td>Anthropic</td><td class="model-name">Claude Haiku 5.5</td><td class="price">$0.10</td><td class="price">$0.01</td><td>90%減（0.1×）</td><td class="price">$0.125</td><td class="price">$0.20</td><td>未確認</td><td>同上</td></tr>
+<tr><td>Google</td><td class="model-name">Gemini 4 Argon</td><td class="price">$2.00<span style="font-size:.7rem;">（11/30まで）</span></td><td class="price">$0.10<span style="font-size:.7rem;">（12/1から$0.20）</span></td><td>95%減→90%減</td><td>記載なし（暗黙キャッシュのみ）</td><td>記載なし</td><td>未確認</td><td>保存料 $0.50/1M/時（12/31まで）→$1.00</td></tr>
+<tr><td>Moonshot</td><td class="model-name">kimi-k3.1-pro</td><td class="price">$2.00</td><td class="price">$0.20</td><td>90%減（0.1×）</td><td class="price">$2.00</td><td class="price">$4.00</td><td>未確認</td><td>既定5分・ヒット毎にTTL更新</td></tr>
+<tr><td>Moonshot</td><td class="model-name">kimi-k3.1-pro-highspeed</td><td class="price">$4.00</td><td class="price">$0.20</td><td>95%減（0.05×）</td><td class="price">$4.00</td><td class="price">$8.00</td><td>未確認</td><td>同上</td></tr>
+<tr><td>Moonshot</td><td class="model-name">kimi-k3</td><td class="price">$3.00</td><td class="price">$0.30</td><td>90%減（0.1×）</td><td class="price">$3.00</td><td class="price">$6.00</td><td>未確認</td><td>同上</td></tr>
+<tr><td>DeepSeek</td><td class="model-name">deepseek-flash</td><td class="price">$0.15／$0.30</td><td class="price">$0.003／$0.006</td><td>98%減</td><td>表に記載なし</td><td>表に記載なし</td><td>未確認</td><td>自動（オフピーク／ピーク）</td></tr>
+<tr><td>DeepSeek</td><td class="model-name">deepseek-v4-pro</td><td class="price">$0.66／$1.32</td><td class="price">$0.022／$0.044</td><td>96.7%減</td><td>表に記載なし</td><td>表に記載なし</td><td>未確認</td><td>自動（オフピーク／ピーク）</td></tr>
+</tbody></table></div>
+<p style="font-size:.78rem;color:var(--c-muted);max-width:820px;">※ OpenAIの書込単価は公式の倍率（30分=1.25×／12時間=2.5×）を通常入力に掛けた換算値です（公式は「加算ではなく置換」と明記）。Anthropicの書込は1.25×（5分）／2×（1時間）、読込は0.1×（Fable 5.1・Mythos 5.1は0.025×、Opus 5.5・Sonnet 5.5は0.05×）。DeepSeekの「／」はオフピーク／ピーク。</p>
+</section>
+<section class="section" style="padding-top:0;">
+<h2 class="section-title" style="font-size:1.15rem;">書込と読込のバランス（何回使えば得か）</h2>
+<p style="max-width:820px;line-height:1.9;">OpenAIの公式ドキュメントには、この判断の目安が逐語で書かれています。</p>
+<div class="note-bar" style="max-width:820px;">「At the 0.1× read rate with 30-minute writes, writing a prefix once and fully reusing it once costs <strong>1.35×</strong> its ordinary input cost, compared with <strong>2×</strong> for processing it twice without caching.」＝0.1×読込・30分書込（1.25×）の場合、<strong>1回書いて1回使い回すと通常入力の1.35倍</strong>。キャッシュ無しで2回処理すると2倍。つまり<strong>2回目以降の再利用で効いてくる</strong>という説明です。</div>
+<p style="max-width:820px;line-height:1.9;">この理屈は他社でも同じ構造です。たとえばMoonshotのkimi-k3.1-proは読込$0.20・書込$2.00（5分）・通常入力$2.00なので、書込は通常入力と同額。Anthropicは書込が1.25倍／2倍かかる代わりに読込が0.025〜0.1倍まで下がります。<strong>「前置きを何回使い回すか」が見積もりの起点</strong>になります。</p>
+</section>
+<section class="section" style="padding-top:0;">
+<h2 class="section-title" style="font-size:1.15rem;">当サイトで確認できていない項目（推測はしていません）</h2>
+<div class="table-wrap"><table><thead><tr><th>項目</th><th>状態</th><th>補足</th></tr></thead><tbody>
+<tr><td class="model-name">Anthropicの最小キャッシュ長</td><td><strong>未確認</strong></td><td>今回取得した料金ページの逐語には最小トークン数の記載がありませんでした。モデル別の値はモデルドキュメント側で確認でき次第追記します。</td></tr>
+<tr><td class="model-name">Googleのモデル別キャッシュ単価の帰属</td><td><strong>未確認</strong></td><td>ai.google.dev の料金ページはモデル名が表の外にあり、キャッシュ行だけを逐語で取ると帰属が確定しません。Gemini 4 Argon の行は、同じ表の入力/出力単価（$2.00/$10.00）が一致することをもって当サイトが対応づけています。</td></tr>
+<tr><td class="model-name">xAI（Grok）のキャッシュ単価</td><td><strong>未確認</strong></td><td>公式モデルページから逐語で取得できたのはコンテキスト長と入出力単価（$2.00/$6.00）までで、キャッシュ読込の行は確認できていません。</td></tr>
+<tr><td class="model-name">Qwen（Alibaba）のキャッシュ単価</td><td><strong>未確認</strong></td><td>本ページの作成時点で公式料金ページの逐語を取得できていません。次回の更新で追加します。</td></tr>
+<tr><td class="model-name">DeepSeekの書込課金・最小トークン</td><td><strong>未確認</strong></td><td>今回確認した公式料金表には「キャッシュヒット」「キャッシュミス」の行のみで、独立した書込単価・最小キャッシュ長の行は見当たりませんでした（書込課金が無いとは断定していません）。</td></tr>
+</tbody></table></div>
+</section>
+<section class="section" style="padding-top:0;">
+<h2 class="section-title" style="font-size:1.15rem;">出典（すべて2026-11-10取得）</h2>
+<ul style="line-height:1.9;max-width:820px;">
+<li>OpenAI 料金: <a href="https://developers.openai.com/api/docs/pricing" target="_blank" rel="noopener">developers.openai.com/api/docs/pricing</a>（GPT-6.1 Terra = 入力$1.00／キャッシュ読込$0.05／出力$5.00 を逐語確認）</li>
+<li>OpenAI Prompt caching: <a href="https://developers.openai.com/api/docs/guides/prompt-caching" target="_blank" rel="noopener">developers.openai.com/api/docs/guides/prompt-caching</a>（最小1,024トークン、書込1.25×／12時間2.5×、読込0.1×（GPT-6.1 Sol・Terraは0.05×）、1.35× vs 2×の例）</li>
+<li>Anthropic Pricing: <a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener">platform.claude.com/docs/en/about-claude/pricing</a>（5分書込1.25×／1時間書込2×／読込0.1×、Fable 5.1・Mythos 5.1は0.025×、Opus 5.5・Sonnet 5.5は0.05×）</li>
+<li>Google Gemini API pricing: <a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">ai.google.dev/gemini-api/docs/pricing</a>（Context caching price 行、保存料 $0.50/1M/時→$1.00 等）</li>
+<li>Moonshot（Kimi API Platform）: <a href="https://platform.kimi.ai/docs/pricing/chat" target="_blank" rel="noopener">platform.kimi.ai/docs/pricing/chat</a>（kimi-k3.1-pro = $2.00／$10.00／読込$0.20／書込5分$2.00・1時間$4.00、全K3系1,048,576トークン）</li>
+<li>DeepSeek: <a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">api-docs.deepseek.com/quick_start/pricing</a>（キャッシュヒット／ミスのオフピーク・ピーク単価）</li>
+</ul>
+</section>
+<section class="section" style="padding-top:0;">
+<h2 class="section-title" style="font-size:1.15rem;">関連ページ</h2>
+<ul style="line-height:2;">
+<li><a href="/pricing/">LLM API料金比較（入力・キャッシュ入力・出力）</a> — キャッシュを使わない通常単価の一覧</li>
+<li><a href="/glossary/prompt-cache/">用語集: プロンプトキャッシュとは</a> — 仕組み・導入時の注意点</li>
+<li><a href="/calculator/">トークンコスト計算機</a> — 入力/出力トークン数から概算</li>
+<li><a href="/kimi-k3-1-pro/">Kimi K3.1 Pro 詳細</a>／<a href="/gpt-6-1-terra/">GPT-6.1 Terra 詳細</a></li>
+</ul>
+</section>
+</div>
+</main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>運営: okamoちゃんねる</p><p><a href="/">ホーム</a> · <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a> · <a href="/timeline/">年表</a> · <a href="/glossary/">用語説明</a> · <a href="/gpt-6/">GPT-6 Astra</a></p></div><p class="footer-disclaimer">⚠️ 料金・仕様は予告なく変動します。契約前に必ず各社公式ページでご確認ください。本サイトは各社と提携していません。</p></div></footer>
+</body>
+</html>

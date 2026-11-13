@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LLMデータの4要件とは — 「残さない・見せない・学ばせない・出さない」を分けて確認する — LLM Data Hub</title>
+  <meta name="description" content="ZDR（残さない）・ZOA（見せない）・学習に使わせない条項（学ばせない）・データレジデンシー（出さない）は、それぞれ別の約束です。ひとつ満たしても他は満たしません。AWS Bedrock・Microsoft Foundry・OpenAI・Anthropic・Google Cloud の5社について、4要件のどこが既定でどこが申請制・審査制かを公式ドキュメントの逐語で並べ、契約前に確認する5ステップとよくある誤解までを1枚にまとめます。用語説明 第8回。2026年10月1日更新。">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/glossary/four-data-requirements/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta property="og:image" content="https://llm.okamomedia.tokyo/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="LLM Data Hub — LLM API pricing, token costs and model data">
+  <meta name="twitter:image" content="https://llm.okamomedia.tokyo/assets/og-image.png">
+  <meta name="twitter:image:alt" content="LLM Data Hub — LLM API pricing, token costs and model data">
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/glossary/four-data-requirements/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/glossary/four-data-requirements/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/glossary/four-data-requirements/">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/glossary/four-data-requirements/">
+  <meta property="og:title" content="LLMデータの4要件とは — 「残さない・見せない・学ばせない・出さない」">
+  <meta property="og:description" content="ZDR・ZOA・学習条項・レジデンシーは別々の約束。5社の公式ドキュメント逐語で「既定か申請制か」を1枚に整理（2026年10月1日更新）。">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"LLMデータの4要件とは — 「残さない・見せない・学ばせない・出さない」を分けて確認する","datePublished":"2026-09-29","dateModified":"2026-10-01","author":{"@type":"Organization","name":"okamoちゃんねる"},"publisher":{"@type":"Organization","name":"okamoちゃんねる"},"url":"https://llm.okamomedia.tokyo/glossary/four-data-requirements/","inLanguage":"ja","description":"ZDR・ZOA・学習に使わせない条項・データレジデンシーを別々の約束として分け、AWS Bedrock・Microsoft Foundry・OpenAI・Anthropic・Google Cloud の5社で「既定か申請制か」を公式ドキュメントの逐語で比較する用語解説。"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"ホーム","item":"https://llm.okamomedia.tokyo/"},{"@type":"ListItem","position":2,"name":"用語説明","item":"https://llm.okamomedia.tokyo/glossary/"},{"@type":"ListItem","position":3,"name":"LLMデータの4要件","item":"https://llm.okamomedia.tokyo/glossary/four-data-requirements/"}]}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .phrase-box{background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-accent);border-radius:var(--r-md);padding:1rem 1.15rem;margin:1.2rem 0}
+    .phrase-box .phrase{margin:0;font-size:1.02rem;font-weight:700;line-height:1.7}
+    .phrase-box .phrase-meta{margin:.5rem 0 0;font-size:.83rem;color:var(--c-muted);line-height:1.8}
+    .req-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.8rem;margin:1.1rem 0}
+    @media(max-width:680px){.req-grid{grid-template-columns:1fr}}
+    .req{border:1px solid var(--c-border);border-top:3px solid var(--c-accent);border-radius:var(--r-md);background:var(--c-surface);padding:.9rem 1rem}
+    .req .tag{font-family:var(--font-mono);font-size:.74rem;color:var(--c-accent);margin:0 0 .3rem;letter-spacing:.02em}
+    .req h3{margin:0 0 .4rem;font-size:.95rem;line-height:1.6}
+    .req p{margin:0;font-size:.83rem;line-height:1.8;color:var(--c-muted)}
+    .req strong{color:var(--c-text)}
+    .quote{margin:1rem 0;padding:.85rem 1rem;background:var(--c-surface2);border:1px solid var(--c-border);border-radius:var(--r-sm);font-size:.84rem;line-height:1.8;color:var(--c-muted)}
+    .quote em{color:var(--c-text);font-style:italic}
+    .quote .who{display:block;margin-top:.45rem;font-size:.76rem;color:var(--c-muted)}
+    .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+    .mtable{width:100%;border-collapse:collapse;font-size:.79rem;min-width:680px}
+    .mtable th,.mtable td{border:1px solid var(--c-border);padding:.5rem .6rem;text-align:left;vertical-align:top;color:var(--c-muted);line-height:1.7}
+    .mtable thead th{background:var(--c-surface2);color:var(--c-text);font-weight:700;white-space:nowrap}
+    .mtable td strong{color:var(--c-text)}
+    .scroll-hint{font-size:.74rem;color:var(--c-muted);margin:.35rem 0 0}
+    .steps{counter-reset:s;list-style:none;padding-left:0;margin:1rem 0}
+    .steps li{counter-increment:s;position:relative;padding:.6rem 0 .6rem 2.3rem;font-size:.87rem;line-height:1.85;color:var(--c-muted);border-top:1px solid var(--c-border)}
+    .steps li:first-child{border-top:none}
+    .steps li::before{content:counter(s);position:absolute;left:0;top:.6rem;width:1.5rem;height:1.5rem;border-radius:50%;background:var(--c-accent);color:#fff;font-size:.78rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+    .steps li strong{color:var(--c-text)}
+    .faq-block{border-top:1px solid var(--c-border);padding:1rem 0 0;margin:1rem 0 0}
+    .faq-block:first-of-type{border-top:none}
+    .faq-block dt{margin:0;font-size:.95rem;font-weight:700;color:var(--c-text);line-height:1.7}
+    .faq-block dt::before{content:"Q. ";color:var(--c-accent);font-family:var(--font-mono);font-size:.82rem}
+    .faq-block dd{margin:.4rem 0 0;font-size:.87rem;line-height:1.85;color:var(--c-muted)}
+    .faq-block dd::before{content:"A. ";color:var(--c-accent);font-family:var(--font-mono);font-size:.82rem;font-weight:700}
+    .faq-block dd strong{color:var(--c-text)}
+    .src-list{font-size:.8rem;color:var(--c-muted);padding-left:1.1em;line-height:1.85}
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="メインナビゲーション"><a href="/" class="nav-link">ホーム</a><a href="/pricing/" class="nav-link">料金比較</a><a href="/calculator/" class="nav-link">トークン計算機</a><a href="/timeline/" class="nav-link">リリース年表</a><a href="/china-ai/" class="nav-link">中国AI</a><a href="/multimodal/" class="nav-link">マルチモーダル</a><a href="/mai/" class="nav-link">MS AI (MAI)</a><a href="/glossary/" class="nav-link active" aria-current="page">用語説明</a></nav></div></header>
+
+<main><div class="container">
+  <div class="section" style="padding-bottom:0;">
+    <h1 class="section-title" style="font-size:1.55rem;">LLMデータの4要件とは — 「残さない・見せない・学ばせない・出さない」を分けて確認する</h1>
+    <p class="section-sub" style="max-width:780px;">
+      <a href="/glossary/">用語説明</a> 第8回。第7回で扱った <a href="/glossary/zero-data-retention/">ZDR（ゼロデータ保持）</a> の読者から、こんな質問が続きました。
+      <strong>「ZDRに対応しているベンダーなら、担当者にも見られないし、学習にも使われないし、データは日本から出ない——で合っていますか？」</strong>
+      答えは<strong>「いいえ」</strong>です。この4つは<strong>別々の約束</strong>で、片方を満たしてももう片方は満たしません。
+      このページでは、混同されがちな4つを<strong>① 残さない（ZDR）② 見せない（ZOA）③ 学ばせない（学習条項）④ 出さない（データレジデンシー）</strong>として分け、
+      5社の公式ドキュメントの<strong>逐語</strong>で「どこが既定で、どこが申請制・審査制か」を並べます。契約前のチェックリストとして使える形にしました。
+    </p>
+    <div class="phrase-box">
+      <p class="phrase">「保存しない」「担当者が見られない」「学習に使わない」「データが域外に出ない」は、<strong>4つの別々の約束</strong>です。</p>
+      <p class="phrase-meta">1社が4つ全部を既定で満たすことは、まずありません。実際、AWS は①と②を「データセキュリティモデル」として説明し、①には<strong>保持必須モデルの例外リスト</strong>を置いています。Microsoft は③を明文化しつつ、①は<strong>乱用監視ログを既定で最大30日</strong>保持します。Anthropic は④を <code>inference_geo</code> という<strong>リクエスト単位の指定</strong>で提供し、既定は <code>global</code> です。<strong>「4要件のどれが既定で、どれが申請制か」を1つずつ確認する</strong>——それがこのページの目的です。</p>
+    </div>
+    <div class="updated-bar">
+      <span class="dot">●</span>
+      最終更新: <time datetime="2026-10-01">2026年10月1日</time>
+      &ensp;|&ensp; 方針: 各社の公式ドキュメントで逐語を確認できた内容のみ掲載。確認できていない項目は「未確認」と明記します
+    </div>
+  </div>
+
+  <section class="section" style="padding-top:1.5rem;" aria-labelledby="why-h">
+    <h2 class="section-title" id="why-h" style="font-size:1.2rem;">なぜ「4要件」に分けるのか</h2>
+    <p class="section-sub">
+      理由は単純で、<strong>提供元が違えば当たり前のように満たしている要件が違う</strong>からです。技術的に見ると、4つは処理の流れの別々の段階に対応しています。
+    </p>
+    <div class="req-grid">
+      <div class="req">
+        <p class="tag">① 残さない / ZDR</p>
+        <h3>Zero Data Retention — 入出力を保存しない</h3>
+        <p>推論が終わったあと、プロンプトと応答を<strong>保持しない</strong>という約束。保持期間（0日か30日か）の話です。</p>
+      </div>
+      <div class="req">
+        <p class="tag">② 見せない / ZOA</p>
+        <h3>Zero Operator Access — 運用担当者が見られない</h3>
+        <p>保存されていてもいなくても、<strong>サービス運営者側の人間が中身にアクセスできない</strong>という別の約束。保持の話とは独立です。</p>
+      </div>
+      <div class="req">
+        <p class="tag">③ 学ばせない / 学習条項</p>
+        <h3>Training restriction — モデル改善・訓練に使わない</h3>
+        <p>そのデータを<strong>自社モデルの訓練に使わない</strong>という契約条項。保存してよいかとは別の条項で、契約書側に書かれます。</p>
+      </div>
+      <div class="req">
+        <p class="tag">④ 出さない / レジデンシー</p>
+        <h3>Data residency — 保存・処理される場所を固定する</h3>
+        <p><strong>どこに保存し、どこで処理するか</strong>の話。<strong>保存場所と処理場所は別</strong>で、エンドポイントやデプロイ種別で決まります。</p>
+      </div>
+    </div>
+    <p class="section-sub" style="margin-top:1rem;">
+      「ZDR対応」という一文を読んだときに確認すべきは、<strong>それが4つのうちのどれを指しているか</strong>です。ここを取り違えると、監査や社内規程で「担保できているつもり」の状態が生まれます。
+    </p>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="req1-h">
+    <h2 class="section-title" id="req1-h" style="font-size:1.2rem;">① 残さない — ZDR（ゼロデータ保持）</h2>
+    <p class="section-sub">まず「既定かどうか」を確認します。<strong>ZDRは「既定で保存しない」であって「常時有効」ではありません</strong>（詳しくは <a href="/glossary/zero-data-retention/">第7回 ZDR</a>）。</p>
+    <div class="quote">
+      <em>“uses a zero data retention (ZDR) data security model. This means that <strong>by default</strong>, Amazon Bedrock does not store model inputs or outputs.”</em>
+      <span class="who">— AWS 公式ドキュメント（Amazon Bedrock のデータセキュリティモデル）</span>
+    </div>
+    <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.3em;line-height:1.9;">
+      <li><strong>既定の保持期間は提供元ごとに違います。</strong>AWS は保持モードで選び（<code>none</code> / <code>default</code> / <code>inherit</code> / <code>aws_review</code>）、アカウント単位・プロジェクト単位で設定します（新規プロジェクトは継承が既定）。Microsoft は乱用監視ログを<strong>既定で最大30日</strong>保持し、申請が承認されると保管なし（modified abuse monitoring）に切り替わります。OpenAI は ZDR が<strong>承認制</strong>で、既定は最大30日のログです。</li>
+      <li><strong>例外モデルがあります。</strong>AWS は保持が必要なモデルを明示しています。たとえば OpenAI 系モデルは<strong>分類器がフラグを立てたトラフィックに限り最大30日</strong>、Claude Fable 5 / 5.1 は<strong>全トラフィックを30日</strong>保持。<strong>対象モデルは変わります（2026-09-26 改定）。</strong>「ZDRにしたから全部ゼロ」ではありません。</li>
+      <li><strong>「保存しない」と「ログが出ない」も別です。</strong>保持しない構成でも、リクエストのメタデータ（誰がいつ呼んだか）は運用ログとして残ります。中身が残らないことと、呼び出しの記録が残らないことは別問題です。</li>
+    </ul>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="req2-h">
+    <h2 class="section-title" id="req2-h" style="font-size:1.2rem;">② 見せない — ZOA（ゼロオペレーターアクセス）</h2>
+    <p class="section-sub">ZDR は「残さない」、ZOA は「人間が見られない」。<strong>保存されているかいないかとは独立した約束</strong>です。</p>
+    <div class="quote">
+      <em>“zero operator access (ZOA) ... <strong>no operators of the service can access model input or output</strong>”</em>
+      <span class="who">— AWS 公式ドキュメント（Amazon Bedrock）</span>
+    </div>
+    <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.3em;line-height:1.9;">
+      <li><strong>「人間が見るかどうか」は乱用監視の設計で決まります。</strong>Microsoft の場合、自動レビュー（LLMによる判定）は<strong>既定で行われ</strong>、データは「システムに保存されず、AIモデルの訓練にも使われない」と説明されています。人間によるレビューは<strong>乱用監視システムがフラグを立てた場合のみ</strong>で、レビューはEEA（欧州経済領域）在住の担当者が行う——という形でアクセス主体を限定しています。</li>
+      <li><strong>組織向けのオプトアウトがあります。</strong>Microsoft の modified abuse monitoring が承認されると<strong>保管も人間によるレビューも行われなくなります</strong>（自動レビューは残ります）。</li>
+      <li><strong>ZOA の逐語は公開されていない提供元もあります。</strong>その場合、「ZDRだから見られない」と推測せず、<strong>確認できない項目として扱う</strong>のが当サイトの立場です。</li>
+    </ul>
+  
+    <p class="section-sub" style="font-size:.85rem;">→ <strong>この「見せない」を深掘りした記事を公開しました:</strong> <a href="/glossary/zero-operator-access/">第9回 ZOA（ゼロオペレーターアクセス）</a>。アクセスを止める3層、CMK／BYOK／HYOKの違い、各社の承認フロー（Customer Lockbox・Access Approval・Key Access Justifications・EKM）と緊急時の例外までを逐語で整理しています。</p>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="req3-h">
+    <h2 class="section-title" id="req3-h" style="font-size:1.2rem;">③ 学ばせない — 学習に使わせない条項</h2>
+    <p class="section-sub">保存するかどうかとは別の条項です。<strong>「保存はするが訓練には使わない」は成立します。</strong></p>
+    <div class="quote">
+      <em>“Customer Data and Customer Content is ... <strong>NOT used to train any generative AI foundation models</strong> without your permission or instruction.”</em>
+      <span class="who">— Microsoft（Azure / Microsoft Foundry のデータ・プライバシー文書）</span>
+    </div>
+    <div class="quote">
+      <em>“<strong>By default, Anthropic does not use customer data from commercial deployments to train models.</strong>”</em>
+      <span class="who">— Anthropic（地域コンプライアンスの文書）</span>
+    </div>
+    <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.3em;line-height:1.9;">
+      <li><strong>「提供元に渡らない」も別立てです。</strong>Microsoft は「Models sold by Azure のデータは OpenAI や他のモデル提供元から利用可能にならず、提供元が運営するサービスとやり取りしない」と明記しています。再販（Azure経由のDeepSeekなど）を検討するときは、この一文が効きます。</li>
+      <li><strong>既定で「訓練に使う」サービスもあります。</strong>失敗例として分かりやすいのが DeepSeek で、プライバシーポリシーには<strong>サービス改善と「機械学習モデル・アルゴリズムの訓練」のため</strong>にデータを使う旨と、オプトアウトの権利が記載されています。ただし <strong>API にも同じ条項が適用されるか、オプトアウトの手続きだけで③を満たせるかは、一次情報では確認できていません</strong>（個人データを中国国内で処理・保存する旨の記載もあります）。導入時は契約条項の確認が必要です。</li>
+      <li><strong>「無料プラン」と「API・商用」は別条項です。</strong>同じ会社でも、消費者向けUIと API／商用契約では学習条項が違うことがあります。このページの整理は<strong>API・商用の公式ドキュメント</strong>に基づきます。</li>
+    </ul>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="req4-h">
+    <h2 class="section-title" id="req4-h" style="font-size:1.2rem;">④ 出さない — データレジデンシー</h2>
+    <p class="section-sub">ここが最も誤解されています。<strong>保存場所と処理場所は別</strong>で、片方を選んでももう片方は担保されません。</p>
+    <div class="quote">
+      <em>“Data-at-rest (storage) ... <strong>remains physically stored in the specific Google Cloud location you chose</strong>. This residency is maintained <strong>regardless of which endpoint you use</strong>.”</em>
+      <span class="who">— Google Cloud（生成AIのデータレジデンシー文書）</span>
+    </div>
+    <p class="section-sub">つまり Google Cloud では、<strong>保存先は選んだロケーション、処理場所は選んだエンドポイント</strong>で決まります。そしてエンドポイントには<strong>3段階</strong>あります。</p>
+    <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.3em;line-height:1.9;">
+      <li><strong>jurisdictional multi-region エンドポイント（US / EU）</strong> — <strong>処理もその管轄内に限定</strong>されます。域外に出したくない場合はこれ。</li>
+      <li><strong>global エンドポイント</strong> — 「任意のGoogleのロケーションで処理される可能性があり、<strong>regional isolation や data residency の保証は提供しない</strong>」と明記されています。</li>
+      <li><strong>AWS の cross-Region inference</strong> — 保存は「Bedrock を使っている AWS リージョンに保存」ですが、推論は <strong>geographic プロファイル（US / EU / APAC）</strong>か <strong>global プロファイル</strong>に広がります。global の Data residency は「Any supported AWS commercial Region worldwide」で、<strong>AWS 自身が Geographic の利用を推奨</strong>しています。</li>
+      <li><strong>Azure はデプロイ種別で決まります。</strong>Standard / Regional は<b>顧客が指定した Azure geography 内</b>（運用上、同地理内の別リージョンで処理される場合あり）、<strong>DataZone は US / EU / APAC</strong>（EU Data Zone は EFTA 諸国を含む）、<strong>Global は任意の Azure リージョン</strong>。<strong>Global Standard を選んだ時点で、処理場所は選べません。</strong></li>
+      <li><strong>Anthropic（Claude API）はリクエスト単位です。</strong><code>inference_geo</code> は <code>us</code> か <code>global</code> の2択で、<strong>既定は <code>global</code></strong>。Workspace の geo は <code>us</code> のみで<strong>作成後に変更できません</strong>。US固定は<strong>全トークンが1.1倍</strong>。さらに Opus 4.5 / Sonnet 4.5 / Haiku 4.5 以前のモデルに <code>inference_geo</code> を付けると<strong>400エラー</strong>になります。<strong>ここでの <code>inference_geo</code> は Anthropic の API を直接使う場合の話</strong>で、Bedrock・Vertex AI・Foundry などパートナー基盤上の地域対応は<strong>基盤側の設定として別に確認</strong>が必要です。</li>
+    </ul>
+    <p class="section-sub" style="margin-top:.8rem;">
+      「リージョンを選べる」＝「データが域外に出ない」ではありません。<strong>地理固定のオプションを明示的に選び、契約で裏を取る</strong>必要があります。
+    </p>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="matrix-h">
+    <h2 class="section-title" id="matrix-h" style="font-size:1.2rem;">5社マトリクス — どこが「既定」でどこが「申請制」か</h2>
+    <p class="section-sub">2026-09-29 時点で各社の公式ドキュメントから確認できた範囲です。<strong>「申請制」は、契約前に動かない可能性があるという意味</strong>です。</p>
+    <div class="table-wrap">
+      <table class="mtable">
+        <caption style="display:none;">5社のデータ保護4要件の比較</caption>
+        <thead>
+          <tr><th>提供元</th><th>① 残さない</th><th>② 見せない</th><th>③ 学ばせない</th><th>④ 出さない</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>AWS Bedrock</strong></td>
+            <td>既定は保存なし（保持モードで明示）。<strong>保持必須モデルの例外あり</strong></td>
+            <td>ZOA をデータセキュリティモデルとして明記（例外モデルでは人手レビューあり）</td>
+            <td>既定で訓練に使わない旨を明記</td>
+            <td>保存は使用リージョン。<strong>cross-Region は Geographic を選ぶ</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Microsoft Foundry</strong></td>
+            <td>乱用監視ログを<strong>既定で最大30日</strong>。modified abuse monitoring の承認で保管なし</td>
+            <td>自動レビューは既定、人間レビューはフラグ時のみ・EEA在住者</td>
+            <td>「許可・指示なく基盤モデルの訓練に使わない」＋<strong>提供元に渡らない</strong></td>
+            <td>Standard / <strong>DataZone</strong> / Global の3種。<strong>Global は任意リージョンで処理</strong>、Standard は指定した geography 内（同地理内の別リージョンあり）</td>
+          </tr>
+          <tr>
+            <td><strong>OpenAI API</strong></td>
+            <td><strong>ZDR は申請制</strong>（承認＋修正保持契約）。既定は最大30日</td>
+            <td>公式明記は未確認（各社で仕様変更が多いため、最新の公式ドキュメントで未確認）</td>
+            <td>API / ビジネス利用のデータを訓練に使わない旨を明記</td>
+            <td><strong>プロジェクト単位</strong>で地域を選択。US以外は承認＋修正保持契約、UAEは追加承認</td>
+          </tr>
+          <tr>
+            <td><strong>Anthropic</strong></td>
+            <td><strong>ZDR は申請制</strong>（on request）</td>
+            <td>公式明記は未確認（各社で仕様変更が多いため、最新の公式ドキュメントで未確認）</td>
+            <td><strong>既定</strong>で商用データを訓練に使わない</td>
+            <td><code>inference_geo</code>（＝<strong>処理する国を指定する設定</strong>。<code>us</code>/<code>global</code>、<strong>既定 global</strong>）。US固定は1.1倍</td>
+          </tr>
+          <tr>
+            <td><strong>Google Cloud</strong></td>
+            <td>契約・個別設定で対応（一律の既定値は未確認）</td>
+            <td>—</td>
+            <td>AI/ML Privacy Commitment で訓練に使わない旨を説明（要旨・逐語は未取得）</td>
+            <td>ロケーション＋エンドポイント。<strong>jurisdictional（US/EU）なら処理も域内</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="scroll-hint">← 横にスクロールできます。空欄は「無い」ではなく「当サイトで一次情報を確認できていない」を意味します。</p>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="steps-h">
+    <h2 class="section-title" id="steps-h" style="font-size:1.2rem;">契約前に確認する5ステップ</h2>
+    <ol class="steps">
+      <li><strong>自社で必須の要件を決める。</strong>規制業種・顧客契約・社内規程で「絶対に外せない」のは4つのうちどれか。<strong>全部必須だと思うと、選定が止まります。</strong></li>
+      <li><strong>提供元の「既定」を調べる。</strong>この記事の表がその下地です。既定の保持期間（0日 / 30日）と、例外モデルの有無を確認します。</li>
+      <li><strong>既定で足りない分を設定・申請する。</strong>Bedrock の保持モード、Azure のデプロイ種別、Anthropic の <code>inference_geo</code>、ZDR／modified abuse monitoring の申請。<strong>ここで初めて「申請制」の壁に当たります。</strong></li>
+      <li><strong>契約書・DPAで固める。</strong>申請制の項目は、画面の設定だけでは保証になりません。<strong>文書（修正契約・DPA）で受け取る</strong>のが原則です。</li>
+      <li><strong>記録して、モデル追加時に再確認する。</strong>どの要件をどう担保したかを残します。例外モデルのリストは改定される（AWSは2026-09-26に更新）ため、<strong>新モデルを足すたびに見直し</strong>ます。担当者交代で最も失われるのがこの記録です。</li>
+    </ol>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="myth-h">
+    <h2 class="section-title" id="myth-h" style="font-size:1.2rem;">よくある誤解 3つ</h2>
+    <div class="req-grid">
+      <div class="req">
+        <p class="tag">誤解 1</p>
+        <h3>「ZDRなら担当者にも見られない」</h3>
+        <p>ZDRは①、ZOAは②で<strong>別の約束</strong>です。ZDRを選んでも、サービス運営者側のアクセス可否は別に決まります。</p>
+      </div>
+      <div class="req">
+        <p class="tag">誤解 2</p>
+        <h3>「保存しないから学習にも使われない」</h3>
+        <p>訓練への利用は<strong>契約条項</strong>（③）で決まります。①が満たされていても③の記載が無ければ、担保したことになりません。</p>
+      </div>
+      <div class="req">
+        <p class="tag">誤解 3</p>
+        <h3>「リージョンを選んだから域外に出ない」</h3>
+        <p>Global系の選択肢（Azure Global、Bedrock global、<code>inference_geo=global</code>）は<strong>任意リージョンで処理</strong>されます。地理固定のオプションを選ぶ必要があります。</p>
+      </div>
+      <div class="req">
+        <p class="tag">誤解 4</p>
+        <h3>「相乗りしているだけだから安全」</h3>
+        <p>再販経路では、<strong>再販元の条項</strong>（学習に使わない・提供元に渡さない）が効きます。ただし<strong>デプロイ種別とエンドポイント次第で処理場所が変わります</strong>（例: <a href="/deepseek-v4-1-flash/">Azure経由のDeepSeek</a>）。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="faq-h">
+    <h2 class="section-title" id="faq-h" style="font-size:1.2rem;">よくある質問</h2>
+    <dl>
+      <div class="faq-block">
+        <dt>「ZDR対応」と書いてあるベンダーなら安心ですか？</dt>
+        <dd>まず<strong>4要件のどれを指しているか</strong>を確認してください。①のみの約束であることが多く、②〜④は別途の確認が必要です。加えて①自体にも<strong>例外モデル</strong>があり、対象モデルは改定されます。</dd>
+      </div>
+      <div class="faq-block">
+        <dt>リージョン固定はどう選べばいいですか？</dt>
+        <dd>処理場所まで固定したいなら、<strong>地理を明示するオプション</strong>を選びます。Bedrock は Geographic の cross-Region inference、Azure は DataZone / Regional、Anthropic は <code>inference_geo: us</code>、Google Cloud は jurisdictional multi-region（US / EU）エンドポイントです。<strong>global 系は「任意のリージョンで処理」と明記されているので、固定には使えません。</strong></dd>
+      </div>
+      <div class="faq-block">
+        <dt>無料プランや個人向けアプリでも同じ整理でよいですか？</dt>
+        <dd>いいえ。<strong>消費者向けUIとAPI・商用契約では条項が違う</strong>ことが多く、学習条項で特に差が出ます。このページの整理は<strong>API・商用の公式ドキュメント</strong>に基づきます。個人向けプランを使う場合は、そのプランの規約を別途確認してください。</dd>
+      </div>
+      <div class="faq-block">
+        <dt>なぜ4つに分ける必要があるのですか？「保存しない」で十分では？</dt>
+        <dd>たとえば「保存はするが訓練に使わず、担当者も見られず、処理は国内」という構成は成立しますし、逆に「保存はしないが、提供元に渡って訓練に使われる」構成もあります。<strong>監査で問われるのは要件ごと</strong>なので、まとめて「ZDR」と呼ぶと説明できなくなります。</dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="section" style="padding-top:0;">
+    <h2 class="section-title" style="font-size:1.1rem;">出典</h2>
+    <ul class="src-list">
+      <li>AWS — <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/data-protection.html" target="_blank" rel="noopener">Data protection in Amazon Bedrock</a>（ZDR・ZOA・保持モード・リージョン保存／2026-09-27 取得）</li>
+      <li>AWS — <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/model-data-retention.html" target="_blank" rel="noopener">Model data retention</a>（例外モデルリスト／2026-09-27 取得）</li>
+      <li>Microsoft — <a href="https://learn.microsoft.com/en-us/azure/foundry/responsible-ai/openai/data-privacy" target="_blank" rel="noopener">Data, privacy, and security for Azure direct models</a>・<a href="https://learn.microsoft.com/en-us/azure/foundry/responsible-ai/openai/abuse-monitoring" target="_blank" rel="noopener">Abuse monitoring</a>（学習条項・提供元に渡らない・保持30日／2026-09-27 取得）</li>
+      <li>Microsoft — <a href="https://learn.microsoft.com/en-us/azure/azure-government/azure-secure-workload-architecture" target="_blank" rel="noopener">Data residency for Azure</a>・Azure deployment types（DataZone / Global・EU Data Zone のEFTA記載／2026-09-27 取得）</li>
+      <li>Anthropic — <a href="https://claude.com/regional-compliance" target="_blank" rel="noopener">Regional compliance</a>（<code>inference_geo</code>・既定 global・1.1倍・400エラー／2026-09-27 取得）</li>
+      <li>OpenAI — ZDR／abuse monitoring controls／データレジデンシー（申請制・US以外の条件・UAE追加承認／2026-09-27 取得）</li>
+      <li>Google Cloud — <a href="https://docs.cloud.google.com/vertex-ai/generative-ai/docs/data-governance" target="_blank" rel="noopener">Data governance and generative AI</a>・<a href="https://docs.cloud.google.com/generative-ai-app-builder/docs/data-governance" target="_blank" rel="noopener">AI/ML Privacy Commitment</a>（保存と処理の別・エンドポイント3段階・jurisdictional の保証／2026-09-29 取得）</li>
+      <li>関連: <a href="/glossary/zero-data-retention/">ZDR（ゼロデータ保持）</a>・<a href="/china-ai/">中国AI</a>・<a href="/deepseek-v4-1-flash/">DeepSeek V4.1 Flash（Azure経由の実測）</a>・<a href="/glossary/">用語説明の一覧</a></li>
+    </ul>
+  </section>
+</div></main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>運営: okamoちゃんねる</p><p><a href="/">ホーム</a> · <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a> · <a href="/timeline/">年表</a> · <a href="/glossary/">用語説明</a> · <a href="/gpt-6/">GPT-6 Astra</a></p></div><p class="footer-disclaimer">⚠️ 規約・データの取扱いは各社の公式ドキュメントで必ずご確認ください。本サイトは各社と提携していません。</p></div></footer>
+</body>
+</html>

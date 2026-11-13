@@ -6,6 +6,14 @@
   <title>Qwen3.8-Flash — AlibabaのQwen4プレビュー・低コストマルチモーダルモデル【料金・性能・比較】 — LLM Data Hub</title>
   <meta name="description" content="Alibaba Qwen3.8-Flash（Qwen3.8-Flash-Next）の料金（入力$0.15・出力$0.47）・仕様（125B/6B active MoE・256K→1Mコンテキスト・64K出力）・性能・競合比較を一次情報ベースで解説。Qwen4アーキテクチャのプレビュー。">
   <link rel="canonical" href="https://llm.okamomedia.tokyo/qwen-3-8-flash/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta property="og:image" content="https://llm.okamomedia.tokyo/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="LLM Data Hub — LLM API pricing, token costs and model data">
+  <meta name="twitter:image" content="https://llm.okamomedia.tokyo/assets/og-image.png">
+  <meta name="twitter:image:alt" content="LLM Data Hub — LLM API pricing, token costs and model data">
   <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/qwen-3-8-flash/">
   <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/qwen-3-8-flash/">
   <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/qwen-3-8-flash/">
@@ -14,8 +22,8 @@
   <meta property="og:title" content="Qwen3.8-Flash — AlibabaのQwen4プレビュー・低コストマルチモーダルモデル">
   <meta property="og:description" content="Alibaba Qwen3.8-Flashの料金（入力$0.15・出力$0.47）・性能・競合比較を一次情報ベースで解説。Qwen4アーキテクチャのプレビュー。">
   <meta property="og:site_name" content="LLM Data Hub">
-  <meta name="twitter:card" content="summary">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Qwen3.8-Flash — AlibabaのQwen4プレビュー・低コストマルチモーダルモデル【料金・性能・比較】","datePublished":"2026-09-01","dateModified":"2026-09-13","author":{"@type":"Organization","name":"LLM Data Hub"},"publisher":{"@type":"Organization","name":"okamoちゃんねる"},"url":"https://llm.okamomedia.tokyo/qwen-3-8-flash/","inLanguage":"ja"}</script>
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Qwen3.8-Flash — AlibabaのQwen4プレビュー・低コストマルチモーダルモデル【料金・性能・比較】","datePublished":"2026-09-01","dateModified":"2026-11-14","author":{"@type":"Organization","name":"LLM Data Hub"},"publisher":{"@type":"Organization","name":"okamoちゃんねる"},"url":"https://llm.okamomedia.tokyo/qwen-3-8-flash/","inLanguage":"ja"}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"ホーム","item":"https://llm.okamomedia.tokyo/"},{"@type":"ListItem","position":2,"name":"Qwen3.8-Flash","item":"https://llm.okamomedia.tokyo/qwen-3-8-flash/"}]}</script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
@@ -35,6 +43,8 @@
 <section class="hero-qwen"><div class="container">
   <p class="price-flag">🧬 Qwen4アーキテクチャのプレビュー — 入力$0.15 / 出力$0.47</p>
   <h1>Qwen3.8 <span>Flash</span></h1>
+<p style="font-size:.9rem;background:var(--c-surface2);border:1px solid var(--c-border);border-left:3px solid var(--c-accent2);border-radius:6px;padding:.7rem 1rem;max-width:900px;"><strong>後継の Qwen 4 系について（2026-11-14 追記）</strong>: 2026-11-11 に <code>qwen4-max-preview</code> が Token Plan 経由で提供開始（100万トークン・最大出力393,216・期間限定プレビュー）。トークン従量の単価が公表されていないため、本ページの Qwen3.8-Flash の単価と直接は比較できません。詳細は<a href="/china-ai/">中国系AIモデル総覧</a>へ。</p>
+
   <p class="lead">Alibaba（Qwen）の低コスト・マルチモーダルMoEモデル。わずか6B activeのパラメータで、コーディング・エージェント・Officeタスクの各ベンチマークでQwen3.7-Plusを上回る。次世代「Qwen4」のアーキテクチャを先取りしたオープンウェイト版（Flash-Next）も同時公開。</p>
   <div class="quick-stats">
     <div class="stat"><div class="val">$0.15</div><div class="lbl">入力 / 1M tokens</div></div>
@@ -45,7 +55,7 @@
 </div></section>
 
 <main><div class="container">
-<div class="updated-bar" style="margin-top:2rem;"><span class="dot">●</span>最終更新: <time datetime="2026-09-13">2026年9月13日</time> | 出典: <a href="https://qwen.ai/blog?id=qwen3.8-flash-next" target="_blank" rel="noopener">Qwen公式ブログ</a> · <a href="https://www.qwencloud.com/models/qwen3.8-flash" target="_blank" rel="noopener">QwenCloudモデルページ</a> · <a href="https://huggingface.co/Qwen/Qwen3.8-Flash-Next" target="_blank" rel="noopener">Hugging Face</a> | <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a></div>
+<div class="updated-bar" style="margin-top:2rem;"><span class="dot">●</span>最終更新: <time datetime="2026-11-14">2026年11月14日</time> | 出典: <a href="https://qwen.ai/blog?id=qwen3.8-flash-next" target="_blank" rel="noopener">Qwen公式ブログ</a> · <a href="https://www.qwencloud.com/models/qwen3.8-flash" target="_blank" rel="noopener">QwenCloudモデルページ</a> · <a href="https://huggingface.co/Qwen/Qwen3.8-Flash-Next" target="_blank" rel="noopener">Hugging Face</a> | <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a></div>
 
 <!-- 料金 -->
 <section class="section" style="padding-top:0;" aria-labelledby="pricing-h">

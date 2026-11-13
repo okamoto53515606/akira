@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gemini 4 Argon Pricing: $2/$10 Intro Rate, $4/$20 From Dec 1, 2026 | LLM Data Hub</title>
+  <meta name="description" content="Google Gemini 4 Argon (gemini-4-argon) pricing and specs from the official docs: $2.00 input, $10.00 output (thinking tokens included) and $0.10 cache reads through November 30, 2026, rising to $4.00/$20.00/$0.20 on December 1. No free tier, 1,048,576-token context, 65,536 max synchronous output. Updated Nov 3, 2026.">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/en/gemini-4-argon/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta property="og:image" content="https://llm.okamomedia.tokyo/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="LLM Data Hub — LLM API pricing, token costs and model data">
+  <meta name="twitter:image" content="https://llm.okamomedia.tokyo/assets/og-image.png">
+  <meta name="twitter:image:alt" content="LLM Data Hub — LLM API pricing, token costs and model data">
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/gemini-4-argon/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/gemini-4-argon/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/gemini-4-argon/">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/en/gemini-4-argon/">
+  <meta property="og:title" content="Gemini 4 Argon Pricing: $2/$10 Intro Rate, $4/$20 From Dec 1, 2026">
+  <meta property="og:description" content="Google Gemini 4 Argon (gemini-4-argon) pricing and specs from the official docs: $2.00 input, $10.00 output (thinking tokens included) and $0.10 cache reads through November 30, 2026, rising to $4.00/$20.00/$0.20 on December 1. No free tier, 1,048,576-token context, 65,536 max synchronous output. Updated Nov 3, 2026.">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Gemini 4 Argon Pricing: $2/$10 Intro Rate, $4/$20 From Dec 1, 2026","datePublished":"2026-10-21","dateModified":"2026-11-03","author":{"@type":"Organization","name":"okamoちゃんねる"},"publisher":{"@type":"Organization","name":"okamoちゃんねる"},"url":"https://llm.okamomedia.tokyo/en/gemini-4-argon/","inLanguage":"en","description":"Gemini 4 Argon (gemini-4-argon) pricing, context window, max output and caching rules, quoted verbatim from Google's official docs, with the introductory rate separated from the December 1, 2026 forecast."}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://llm.okamomedia.tokyo/en/"},{"@type":"ListItem","position":2,"name":"Pricing","item":"https://llm.okamomedia.tokyo/en/pricing/"},{"@type":"ListItem","position":3,"name":"Gemini 4 Argon","item":"https://llm.okamomedia.tokyo/en/gemini-4-argon/"}]}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .hero-g4{background:linear-gradient(135deg,#0a1420 0%,#10303f 50%,#0f1117 100%);border-bottom:1px solid var(--c-border);padding:3rem 1rem 2.5rem;text-align:center}
+    .hero-g4 .price-flag{display:inline-block;background:rgba(124,196,255,.16);border:1px solid rgba(124,196,255,.4);color:#a8d7ff;font-size:.82rem;font-weight:700;padding:.3rem .8rem;border-radius:100px;margin-bottom:1rem}
+    .hero-g4 h1{font-size:clamp(1.6rem,4.5vw,2.4rem);font-weight:800;line-height:1.2;margin-bottom:.75rem}
+    .hero-g4 h1 span{color:#7cc4ff}
+    .hero-g4 .lead{font-size:1.05rem;color:var(--c-muted);max-width:700px;margin:0 auto 1.5rem}
+    .hero-g4 .quick-stats{display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;margin-top:1rem}
+    .hero-g4 .stat{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.75rem 1.25rem;text-align:center}
+    .hero-g4 .stat .val{font-family:var(--font-mono);font-size:1.25rem;font-weight:700;color:#7cc4ff}
+    .hero-g4 .stat .lbl{font-size:.75rem;color:var(--c-muted);margin-top:.15rem}
+    .spec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.8rem;margin-bottom:1.5rem}
+    .spec-item{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.9rem 1rem}
+    .spec-item .spec-label{font-size:.75rem;color:var(--c-muted);font-weight:600;margin-bottom:.25rem}
+    .spec-item .spec-value{font-family:var(--font-mono);font-size:1rem;font-weight:700}
+    .context-note{background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid #7cc4ff;border-radius:var(--r-md);padding:.8rem 1rem;margin:1rem 0;font-size:.84rem;color:var(--c-muted)}
+    .quote{margin:1rem 0;padding:.85rem 1rem;background:var(--c-surface2);border:1px solid var(--c-border);border-radius:var(--r-sm);font-size:.84rem;line-height:1.85;color:var(--c-muted)}
+    .quote em{color:var(--c-text);font-style:italic}.quote .who{display:block;margin-top:.45rem;font-size:.76rem;color:var(--c-muted)}
+    @media(max-width:640px){.hero-g4 .quick-stats{flex-direction:column;gap:.5rem}}
+  </style>
+</head>
+<body>
+
+<header class="site-header"><div class="header-inner"><a href="/en/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="Main navigation"><a href="/en/" class="nav-link">Home</a><a href="/en/pricing/" class="nav-link">Pricing</a><a href="/en/calculator/" class="nav-link">Token Calculator</a><a href="/en/timeline/" class="nav-link">Release Timeline</a><a href="/en/china-ai/" class="nav-link">China AI</a><a href="/en/multimodal/" class="nav-link">Multimodal</a><a href="/en/mai/" class="nav-link">MS AI (MAI)</a><a href="/en/glossary/" class="nav-link">Glossary</a></nav></div></header>
+
+<section class="hero-g4"><div class="container">
+  <p class="price-flag">🚀 GA in October 2026 — $2 input / $10 output is an <strong>introductory rate through November 30, 2026</strong>. From December 1: $4 / $20</p>
+  <h1>Gemini <span>4 Argon</span></h1>
+  <p class="lead">Google's flagship reasoning model. The official listing says it is built for complex software engineering, deep mathematical and scientific problem solving, autonomous multi-step agents, and long decode up to 1M tokens. Pricing is a <strong>time-limited introductory rate</strong>, and there is no free tier.</p>
+  <p class="lead">The successor, <strong>Gemini 4 Carbon</strong>, was announced on Oct 28, 2026, but access is currently <strong>limited</strong> to a subset of cyber defenders and trusted partners through the Fairwind Program; no developer API is available yet (<a href="/en/timeline/#gemini-4-carbon">timeline entry</a>).</p>
+  <div class="quick-stats">
+    <div class="stat"><div class="val">$2.00</div><div class="lbl">input / 1M tokens (to Nov 30)</div></div>
+    <div class="stat"><div class="val">$10.00</div><div class="lbl">output / 1M tokens (to Nov 30)</div></div>
+    <div class="stat"><div class="val">1,048,576</div><div class="lbl">context (input + output)</div></div>
+    <div class="stat"><div class="val">65,536</div><div class="lbl">max output (synchronous)</div></div>
+  </div>
+</div></section>
+
+<main><div class="container">
+<div class="updated-bar" style="margin-top:2rem;"><span class="dot">●</span>Last updated: <time datetime="2026-11-03">November 3, 2026</time><br>Sources: <a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">Gemini Developer API — Pricing</a> · <a href="https://ai.google.dev/gemini-api/docs/models/gemini-4-argon" target="_blank" rel="noopener">model page (gemini-4-argon)</a> · <a href="https://ai.google.dev/gemini-api/docs/changelog" target="_blank" rel="noopener">Changelog</a> (re-fetched 2026-10-21) | <a href="/en/pricing/">Pricing</a> · <a href="/en/calculator/">Calculator</a> · <a href="/en/timeline/">Timeline</a></div>
+
+<section class="section" style="padding-top:2rem;" aria-labelledby="tl-h">
+<h2 class="section-title" id="tl-h" style="font-size:1.2rem;">The short version — six things that matter</h2>
+<div class="context-note" style="border-left-color:var(--c-green);">
+  <ul style="margin:0;padding-left:1.1rem;line-height:1.9;">
+    <li><strong>$2.00 input, $10.00 output and $0.10 caching are introductory prices.</strong> The pricing cells read “$2.00 through November 30, 2026. $4.00 starting December 1, 2026.” On December 1, 2026 all three double.</li>
+    <li><strong>No free tier.</strong> Verbatim: “Free Tier: Not available”.</li>
+    <li><strong>Implicit caching only.</strong> Verbatim: “Implicit caching only (explicit caching is not supported)”. You cannot create or manage caches explicitly.</li>
+    <li><strong>The context window is a unified input+output limit of 1,048,576 tokens.</strong> Verbatim: “Context window (unified input and output token limit) 1,048,576”.</li>
+    <li><strong>Output pricing includes thinking tokens.</strong> Verbatim: “Output price (including thinking tokens)”. Heavy thinking raises the billed output side.</li>
+    <li><strong>No day-level release date is published.</strong> The only date signal is “Latest update: October 2026” on the model page, so we write “October 2026” instead of inventing a day.</li>
+  </ul>
+</div>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="price-h">
+<h2 class="section-title" id="price-h" style="font-size:1.2rem;">Pricing (USD per 1M tokens, official pricing page)</h2>
+<p class="section-sub">Gemini API, Standard mode. Same values as the Google section of our <a href="/en/pricing/">pricing comparison</a>. The right column is the <strong>forecast</strong> the official page labels “starting December 1, 2026” — it is not in effect yet.</p>
+<div class="table-wrap"><table><thead><tr><th>Item</th><th>Through Nov 30, 2026</th><th>From Dec 1, 2026 (forecast)</th></tr></thead><tbody>
+<tr><td class="model-name">Input price</td><td class="price">$2.00</td><td>$4.00</td></tr>
+<tr><td class="model-name">Output price (thinking tokens included)</td><td class="price">$10.00</td><td>$20.00</td></tr>
+<tr><td class="model-name">Context caching price</td><td class="price">$0.10</td><td>$0.20</td></tr>
+<tr><td class="model-name">Free tier</td><td>Not available</td><td>Not available</td></tr>
+</tbody></table></div>
+<div class="quote">
+  <em>“Input price | Not available | $2.00 through November 30, 2026. $4.00 starting December 1, 2026.”</em><br>
+  <em>“Output price (including thinking tokens) | Not available | $10.00 through November 30, 2026. $20.00 starting December 1, 2026.”</em><br>
+  <em>“Context caching price | Not available | $0.10 through November 30, 2026. $0.20 starting December 1, 2026. Implicit caching only (explicit caching is not supported).”</em>
+  <span class="who">— Gemini Developer API “Pricing”, Gemini 4 Argon / Standard (checked 2026-10-21)</span>
+</div>
+<p style="font-size:.78rem;color:var(--c-muted);margin-top:.3rem;">Note: we only carry time-limited wording that appears verbatim in the price cells. Batch / Priority rates and any long-context surcharge for gemini-4-argon were <strong>not confirmed</strong> on the official pricing page during this check, so they are marked unconfirmed rather than estimated.</p>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="spec-h">
+<h2 class="section-title" id="spec-h" style="font-size:1.2rem;">Specs (official model page)</h2>
+<div class="spec-grid">
+  <div class="spec-item"><div class="spec-label">Model code</div><div class="spec-value">gemini-4-argon</div></div>
+  <div class="spec-item"><div class="spec-label">Versions</div><div class="spec-value">Stable</div></div>
+  <div class="spec-item"><div class="spec-label">Context window (input+output)</div><div class="spec-value">1,048,576</div></div>
+  <div class="spec-item"><div class="spec-label">Max output (default synchronous)</div><div class="spec-value">65,536</div></div>
+  <div class="spec-item"><div class="spec-label">Max output with long decode</div><div class="spec-value">1,048,576</div></div>
+  <div class="spec-item"><div class="spec-label">Latest update (official wording)</div><div class="spec-value">October 2026</div></div>
+</div>
+<div class="quote">
+  <em>“Token limits | Context window (unified input and output token limit) 1,048,576 / Max output 65,536 (default synchronous) / up to 1,048,576 (with long decode)”</em>
+  <span class="who">— Gemini API “Gemini 4 Argon” model page (checked 2026-10-21)</span>
+</div>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="use-h">
+<h2 class="section-title" id="use-h" style="font-size:1.2rem;">What it is positioned for (official wording)</h2>
+<div class="quote">
+  <em>“Gemini 4 Argon (gemini-4-argon) is our flagship reasoning model, built for complex software engineering, deep mathematical and scientific problem solving, autonomous multi-step agents, and long decode up to 1M tokens.”</em>
+  <span class="who">— Gemini API “Gemini 4 Argon” (checked 2026-10-21)</span>
+</div>
+<p style="font-size:.88rem;line-height:1.9;">Our reading: it targets (1) writing and fixing code, (2) hard maths and science, (3) agents that call tools repeatedly, and (4) very long generations. <strong>We found no benchmark table on the official model or pricing page</strong>, so we publish no numbers — see <a href="/en/glossary/benchmarks/">how to read benchmarks</a> for why third-party harness numbers need a label.</p>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="calc-h">
+<h2 class="section-title" id="calc-h" style="font-size:1.2rem;">Cost examples (our arithmetic)</h2>
+<p class="section-sub">Unit price × token count, calculated by us — not an official quote. Output pricing includes thinking tokens, so heavy thinking increases the output side.</p>
+<div class="table-wrap"><table><thead><tr><th>Usage</th><th>Through Nov 30, 2026</th><th>From Dec 1, 2026 (forecast)</th></tr></thead><tbody>
+<tr><td class="model-name">1M input + 0.1M output</td><td class="price">$3.00</td><td>$6.00</td></tr>
+<tr><td class="model-name">100K input + 20K output</td><td class="price">$0.40</td><td>$0.80</td></tr>
+<tr><td class="model-name">1M input + 1M output (long decode)</td><td class="price">$12.00</td><td>$24.00</td></tr>
+<tr><td class="model-name">1M cache reads (implicit)</td><td class="price">$0.10</td><td>$0.20</td></tr>
+</tbody></table></div>
+<p style="font-size:.78rem;color:var(--c-muted);margin-top:.3rem;">Use the <a href="/en/calculator/">token calculator</a> for your own token counts, and <a href="/en/glossary/prompt-cache/">prompt caching</a> for how cache billing works.</p>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="unk-h">
+<h2 class="section-title" id="unk-h" style="font-size:1.2rem;">Caveats and what we could not confirm</h2>
+<ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.3em;line-height:1.9;">
+  <li><strong>December 1 pricing is a forecast.</strong> It comes from “starting December 1, 2026” in the official price cells and does not apply before that date. We keep intro and forecast prices in separate columns.</li>
+  <li><strong>Explicit caching is not supported</strong>, so you cannot control cache creation or eviction.</li>
+  <li><strong>No free tier</strong> — a paid API key is required to try it.</li>
+  <li><strong>Unconfirmed:</strong> Batch / Priority rates, any long-context surcharge, official benchmark numbers, and a day-level release date. We do not invent values or dates.</li>
+</ul>
+</section>
+
+<section class="section" style="padding-top:0;">
+<h2 class="section-title" style="font-size:1.1rem;">Related pages</h2>
+<ul style="font-size:.9rem;line-height:2;padding-left:1.3em;">
+  <li><a href="/en/pricing/">LLM API pricing comparison (all vendors, USD/1M tokens)</a></li>
+  <li><a href="/en/calculator/">Token calculator</a></li>
+  <li><a href="/en/timeline/">LLM release timeline (includes the October 2026 GA)</a></li>
+  <li><a href="/en/gemini-3-8-flash/">Gemini 3.8 Flash pricing</a></li>
+  <li><a href="/en/multimodal/">Multimodal support matrix</a></li>
+  <li><a href="/en/glossary/one-million-context/">What a 1M-token context window is</a></li>
+</ul>
+</section>
+</div></main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>Operated by okamo channel</p><p><a href="/en/">Home</a> · <a href="/en/pricing/">Pricing</a> · <a href="/en/calculator/">Calculator</a> · <a href="/en/timeline/">Timeline</a> · <a href="/en/claude-opus-5-5/">Claude Opus 5.5</a> · <a href="/en/claude-fable-5-1/">Claude Fable 5.1</a> · <a href="/en/glossary/zero-operator-access/">ZOA</a></p></div><p class="footer-disclaimer">⚠️ Pricing and specifications may change without notice. Always verify on official pages. Not affiliated with any provider.</p></div></footer>
+</body>
+</html>

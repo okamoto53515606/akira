@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GPT-6.1 Sol — GPT-6世代のバランス型【$2/$10・キャッシュ入力$0.10・272K超は2倍】 — LLM Data Hub</title>
+  <meta name="description" content="OpenAI GPT-6.1 Sol（gpt-6.1-sol）の料金を公式モデルページで確認。入力$2・キャッシュ入力$0.10（入力の5%）・キャッシュ書込$2.50・出力$10（USD/1Mトークン）。Fastは2倍・Ultrafastは6倍・Batch/Flexは50%引き、272,000トークン超の入力はリクエスト全体が入力・キャッシュ2倍・出力1.5倍になります。1.05Mコンテキスト・128K出力・最大入力922K、reasoning effortはlow〜max。2026年10月9日更新。">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/gpt-6-1-sol/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta property="og:image" content="https://llm.okamomedia.tokyo/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="LLM Data Hub — LLM API pricing, token costs and model data">
+  <meta name="twitter:image" content="https://llm.okamomedia.tokyo/assets/og-image.png">
+  <meta name="twitter:image:alt" content="LLM Data Hub — LLM API pricing, token costs and model data">
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/gpt-6-1-sol/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/gpt-6-1-sol/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/gpt-6-1-sol/">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/gpt-6-1-sol/">
+  <meta property="og:title" content="GPT-6.1 Sol — GPT-6世代のバランス型【$2/$10・272K超は2倍】">
+  <meta property="og:description" content="入力$2・キャッシュ入力$0.10・出力$10。Fast 2倍／Ultrafast 6倍／Batch 50%引き、272K超はリクエスト全体が入力2倍。1.05Mコンテキスト・128K出力・reasoning effortはlow〜max（noneは非対応）を一次情報で整理。">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"GPT-6.1 Sol — GPT-6世代のバランス型【$2/$10・キャッシュ入力$0.10・272K超は2倍】","datePublished":"2026-10-09","dateModified":"2026-10-09","author":{"@type":"Organization","name":"okamoちゃんねる"},"publisher":{"@type":"Organization","name":"okamoちゃんねる"},"url":"https://llm.okamomedia.tokyo/gpt-6-1-sol/","inLanguage":"ja","description":"GPT-6.1 Solの料金・コンテキスト・reasoning effort・対応エンドポイントをOpenAI公式ドキュメントの逐語で整理する解説。"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"ホーム","item":"https://llm.okamomedia.tokyo/"},{"@type":"ListItem","position":2,"name":"GPT-6.1 Sol","item":"https://llm.okamomedia.tokyo/gpt-6-1-sol/"}]}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+<style>
+    .hero-sonnet{background:linear-gradient(135deg,#0a1420 0%,#122232 50%,#0f1117 100%);border-bottom:1px solid var(--c-border);padding:3rem 1rem 2.5rem;text-align:center}.hero-sonnet .price-flag{display:inline-block;background:rgba(106,169,255,.16);border:1px solid rgba(106,169,255,.4);color:#9cc4ff;font-size:.82rem;font-weight:700;padding:.3rem .8rem;border-radius:100px;margin-bottom:1rem}.hero-sonnet h1{font-size:clamp(1.6rem,4.5vw,2.4rem);font-weight:800;line-height:1.2;margin-bottom:.75rem}.hero-sonnet h1 span{color:#6aa9ff}.hero-sonnet .lead{font-size:1.05rem;color:var(--c-muted);max-width:680px;margin:0 auto 1.5rem}.hero-sonnet .quick-stats{display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;margin-top:1rem}.hero-sonnet .stat{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.75rem 1.25rem;text-align:center}.hero-sonnet .stat .val{font-family:var(--font-mono);font-size:1.25rem;font-weight:700;color:#6aa9ff}.hero-sonnet .stat .lbl{font-size:.75rem;color:var(--c-muted);margin-top:.15rem}
+    .spec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.8rem;margin-bottom:1.5rem}.spec-item{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.9rem 1rem}.spec-item .spec-label{font-size:.75rem;color:var(--c-muted);font-weight:600;margin-bottom:.25rem}.spec-item .spec-value{font-family:var(--font-mono);font-size:1rem;font-weight:700}
+    .context-note{background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid #6aa9ff;border-radius:var(--r-md);padding:.8rem 1rem;margin:1rem 0;font-size:.84rem;color:var(--c-muted)}
+    .quote{margin:1rem 0;padding:.85rem 1rem;background:var(--c-surface2);border:1px solid var(--c-border);border-radius:var(--r-sm);font-size:.84rem;line-height:1.85;color:var(--c-muted)}
+    .quote em{color:var(--c-text);font-style:italic}.quote .who{display:block;margin-top:.45rem;font-size:.76rem;color:var(--c-muted)}
+    .fig-wrap{position:relative}.fig-fig{margin:1rem 0 1.4rem}.fig-fig svg{width:100%;height:auto;border:1px solid var(--c-border);border-radius:var(--r-md);background:var(--c-surface);display:block}
+    .fig-hint{display:none;font-size:.75rem;color:var(--c-muted);text-align:center;margin:.3rem 0 0}
+    @media (max-width:680px){.fig-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}.fig-scroll svg{min-width:600px}.fig-hint{display:block}}
+    @media(max-width:640px){.hero-sonnet .quick-stats{flex-direction:column;gap:.5rem}}
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="メインナビゲーション"><a href="/" class="nav-link">ホーム</a><a href="/pricing/" class="nav-link">料金比較</a><a href="/calculator/" class="nav-link">トークン計算機</a><a href="/timeline/" class="nav-link">リリース年表</a><a href="/china-ai/" class="nav-link">中国AI</a><a href="/multimodal/" class="nav-link">マルチモーダル</a><a href="/mai/" class="nav-link">MS AI (MAI)</a><a href="/glossary/" class="nav-link">用語説明</a></nav></div></header>
+
+<section class="hero-sonnet">
+  <div class="container">
+    <p class="price-flag">⚡ GPT-6世代のバランス型 — 公式の位置づけは「Near-Astra performance for complex work at a lower cost」</p>
+    <h1>GPT-6.1 <span>Sol</span></h1>
+    <p class="lead">OpenAI の GPT-6 世代で「知能とコストのバランス」を担うモデル。モデルIDは <code>gpt-6.1-sol</code> で、公式モデルページの説明は <strong>「Near-Astra performance for complex work at a lower cost（Astraに近い性能を、より低いコストで）」</strong>。料金は <strong>入力$2 / 出力$10</strong>、<strong>キャッシュ入力は入力の5%＝$0.10</strong> です。</p>
+    <div class="quick-stats">
+      <div class="stat"><div class="val">$2.00</div><div class="lbl">入力 / 1M</div></div>
+      <div class="stat"><div class="val">$0.10</div><div class="lbl">キャッシュ入力 / 1M</div></div>
+      <div class="stat"><div class="val">$10.00</div><div class="lbl">出力 / 1M</div></div>
+      <div class="stat"><div class="val">1.05M</div><div class="lbl">コンテキスト</div></div>
+    </div>
+  </div>
+</section>
+
+<main><div class="container">
+<div class="updated-bar" style="margin-top:2rem;"><span class="dot">●</span>最終更新: <time datetime="2026-10-09">2026年10月9日</time> | 一次情報: <a href="https://developers.openai.com/api/docs/models/gpt-6.1-sol" target="_blank" rel="noopener">OpenAI — GPT-6.1 Sol モデルページ</a> · <a href="https://developers.openai.com/api/docs/pricing" target="_blank" rel="noopener">公式料金ページ</a> | <a href="/pricing/">料金比較</a> · <a href="/calculator/">トークン計算機</a> · <a href="/gpt-6-sol-luna/">GPT-6 Sol / Luna</a></div>
+
+<section class="section" style="padding-top:2rem;" aria-labelledby="tl-h">
+<h2 class="section-title" id="tl-h" style="font-size:1.2rem;">短くまとめると</h2>
+<div class="context-note" style="border-left-color:var(--c-blue);">
+  <ul style="margin:0;padding-left:1.1rem;line-height:1.9;">
+    <li><strong>入力$2・出力$10はGPT-6 Solと同額。</strong>一方で<strong>キャッシュ入力は$0.10（入力の5%）</strong>と、GPT-6 Solの$0.20（90%引き）からさらに半額になりました（公式モデルページの記載）。</li>
+    <li><strong>reasoning effortはlow / medium（既定）/ high / xhigh / max。</strong><code>none</code>と<code>minimal</code>は非対応です（GPT-6 Sol・Lunaは<code>none</code>に対応）。</li>
+    <li><strong>ツール呼び出しはResponses APIで。</strong>Chat Completionsはツールなしのリクエストのみ対応です。</li>
+    <li><strong>速度ティアは価格が変わる:</strong> Fastは2倍、Ultrafastは6倍、BatchとFlexは50%引き。地域処理は+10%。</li>
+    <li><strong>272,000トークン超の入力は「リクエスト全体」が入力2倍・出力1.5倍。</strong>長文を1回で流す設計は割高になります（公式逐語）。</li>
+    <li><strong>リリース日は公式モデルページに記載がありません。</strong>第三者報道は2026年9月29日で一致していますが、当サイトはこの点を明記して掲載します（後述）。</li>
+  </ul>
+</div>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="price-h">
+<h2 class="section-title" id="price-h" style="font-size:1.2rem;">料金（USD / 1Mトークン、公式モデルページより）</h2>
+<p class="section-sub">Standardは公式ページの記載値そのまま。Fast・Batch/Flex・Ultrafastは公式の倍率（2倍・50%引き・6倍）から当サイトが算出した参考値です。</p>
+<div class="table-wrap"><table><thead><tr><th>項目</th><th>Standard</th><th>Fast（2倍）</th><th>Batch / Flex（50%引き）</th><th>Ultrafast（6倍）</th></tr></thead><tbody>
+<tr><td class="model-name">入力</td><td class="price">$2.00</td><td>$4.00</td><td>$1.00</td><td>$12.00</td></tr>
+<tr><td class="model-name">キャッシュ入力</td><td class="price">$0.10</td><td>$0.20</td><td>$0.05</td><td>$0.60</td></tr>
+<tr><td class="model-name">キャッシュ書込（1.25倍）</td><td class="price">$2.50</td><td>$5.00</td><td>$1.25</td><td>$15.00</td></tr>
+<tr><td class="model-name">出力</td><td class="price">$10.00</td><td>$20.00</td><td>$5.00</td><td>$60.00</td></tr>
+</tbody></table></div>
+<p style="font-size:.78rem;color:var(--c-muted);margin-top:.3rem;">※ 公式ページの注記: キャッシュ入力は「入力の5%」、キャッシュ書込は「入力の1.25倍」。Fast 2倍・Batch/Flex 50%引き・Ultrafast 6倍・地域処理+10%。</p>
+<p class="source-note">出典: <a href="https://developers.openai.com/api/docs/models/gpt-6.1-sol" target="_blank" rel="noopener">OpenAI — GPT-6.1 Sol（Pricing）</a>（2026-10-09時点）</p>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="long-h">
+<h2 class="section-title" id="long-h" style="font-size:1.2rem;">272Kトークンの壁：長文を1回で流すと割高になる</h2>
+<p class="section-sub">公式の注記は「272,000入力トークンを超えるプロンプトは、<strong>リクエスト全体</strong>が入力・キャッシュの2倍、出力の1.5倍で課金される」というものです。超過分だけではありません。</p>
+<div class="table-wrap"><table><thead><tr><th>ケース</th><th>計算</th><th>金額</th></tr></thead><tbody>
+<tr><td class="model-name">300,000トークン入力＋5,000トークン出力<br>（1回で送る）</td><td>入力 $4/M × 0.3 ＋ 出力 $15/M × 0.005<br><small>※272K超のため入力2倍・出力1.5倍</small></td><td class="price">$1.275</td></tr>
+<tr><td class="model-name">同内容を100,000トークンずつ3回に分ける<br>（文脈が分断されない場合）</td><td>入力 $2/M × 0.3 ＋ 出力は各回の分だけ</td><td class="price">$0.60＋出力分</td></tr>
+</tbody></table></div>
+<ul style="font-size:.86rem;color:var(--c-muted);padding-left:1.3em;line-height:1.9;">
+  <li><strong>「1.05Mコンテキスト」と「1.05Mを1回で送る」は別の話です。</strong>272Kを超えるとそのリクエスト全体が割増になるため、長文一括処理はコスト設計の問題になります。</li>
+  <li><strong>会話を長く続ける用途ではキャッシュ入力$0.10が効きます。</strong>ただし272Kを超えた時点でキャッシュも2倍（$0.20/M）になります。</li>
+  <li>数字はすべて公式の倍率からの計算値です。実際の課金はAPIのレスポンスで確認してください。</li>
+</ul>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="cmp-h">
+<h2 class="section-title" id="cmp-h" style="font-size:1.2rem;">GPT-6 Solとの違い</h2>
+<div class="table-wrap"><table><thead><tr><th>項目</th><th>GPT-6.1 Sol</th><th>GPT-6 Sol（前世代）</th></tr></thead><tbody>
+<tr><td class="model-name">入力</td><td class="price">$2.00</td><td>$2.00</td></tr>
+<tr><td class="model-name">キャッシュ入力</td><td class="price">$0.10（入力の5%）</td><td>$0.20（90%引き）</td></tr>
+<tr><td class="model-name">キャッシュ書込</td><td class="price">$2.50（入力の1.25倍）</td><td>公式モデルページに記載なし</td></tr>
+<tr><td class="model-name">出力</td><td class="price">$10.00</td><td>$10.00</td></tr>
+<tr><td class="model-name">reasoning effort</td><td>low / medium（既定）/ high / xhigh / max（<strong>none・minimal非対応</strong>）</td><td>none を含む（<code>reasoning_effort: "none"</code>でのfunction callingに対応）</td></tr>
+<tr><td class="model-name">コンテキスト / 最大出力</td><td>1,050,000 / 128,000（最大入力922,000）</td><td>1,050,000 / 128,000</td></tr>
+<tr><td class="model-name">知識カットオフ</td><td>2026年4月30日</td><td>2026年4月</td></tr>
+</tbody></table></div>
+<p style="font-size:.78rem;color:var(--c-muted);margin-top:.3rem;">※ GPT-6 Solの単価・カットオフは当サイトの <a href="/pricing/">料金比較</a> 掲載値（2026-09-25時点の公式ページで確認）。GPT-6.1 Solは公式モデルページの記載値（2026-10-09確認）です。</p>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="mig-h">
+<h2 class="section-title" id="mig-h" style="font-size:1.2rem;">移行時に効く公式の注意点</h2>
+<div class="spec-grid">
+  <div class="spec-item"><div class="spec-label">ツール呼び出しはResponses API</div><div class="spec-value">Chat Completionsはツールなしのリクエストのみ対応。ツール付きの推論はResponses APIを使ってください（公式モデルページの逐語）。</div></div>
+  <div class="spec-item"><div class="spec-label">effort≠none なら温度系は削除</div><div class="spec-value">reasoning effortが<code>none</code>以外のとき、<code>temperature</code>・<code>top_p</code>・<code>top_logprobs</code>（Chat Completionsでは<code>logprobs</code>）は送れません。移行ガイドの記載どおり削除が必要です。</div></div>
+  <div class="spec-item"><div class="spec-label">キャッシュTTLの指定方法が変更</div><div class="spec-value">GPT-5.5以前の<code>prompt_cache_retention</code>から、<code>prompt_cache_options.ttl</code>＝<code>"30m"</code>に置き換わっています。</div></div>
+  <div class="spec-item"><div class="spec-label">データレジデンシー</div><div class="spec-value">米国・EUに対応（Fast・Ultrafastモードを含む）。地域処理は+10%です。</div></div>
+</div>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="spec-h">
+<h2 class="section-title" id="spec-h" style="font-size:1.2rem;">仕様</h2>
+<div class="table-wrap"><table><thead><tr><th>項目</th><th>値（公式モデルページ）</th></tr></thead><tbody>
+<tr><td class="model-name">モデルID / スナップショット</td><td><code>gpt-6.1-sol</code></td></tr>
+<tr><td class="model-name">コンテキスト</td><td>1,050,000トークン</td></tr>
+<tr><td class="model-name">最大入力トークン</td><td>922,000</td></tr>
+<tr><td class="model-name">最大出力</td><td>128,000トークン</td></tr>
+<tr><td class="model-name">入出力</td><td>テキスト・画像 → テキスト（音声・動画は非対応）</td></tr>
+<tr><td class="model-name">知識カットオフ</td><td>2026年4月30日（reasoningトークン対応）</td></tr>
+<tr><td class="model-name">対応エンドポイント</td><td>Responses、Chat Completions（ツールなし）、Batch。Live / Realtime / Assistants / Embeddings / 画像生成 / 音声 / ファインチューニングは非対応</td></tr>
+<tr><td class="model-name">主なツール</td><td>web search、file search、image generation、code interpreter、computer use、MCP、apply_patch ほか</td></tr>
+<tr><td class="model-name">レート制限（Standard）</td><td>Build 5,000 RPM / 1,000,000 TPM、Launch 10,000 / 4,000,000、Grow 15,000 / 40,000,000</td></tr>
+</tbody></table></div>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="bench-h">
+<h2 class="section-title" id="bench-h" style="font-size:1.2rem;">ベンチマークについて（当サイトの方針）</h2>
+<p class="section-sub">OpenAIのモデルページには<strong>数値のベンチマーク表が掲載されていません</strong>（2026-10-09時点で確認）。ページにあるのは「Near-Astra performance for complex work at a lower cost」という位置づけの説明です。</p>
+<ul style="font-size:.86rem;color:var(--c-muted);padding-left:1.3em;line-height:1.9;">
+  <li>第三者の集計サイトがスコアを公開していますが、<strong>当サイトは運営元（OpenAI）が公表していない数値を掲載しません</strong>。推測で埋めると「一次情報で裏取りできる情報のみ」という方針に反するためです。</li>
+  <li>判断材料としては、公式が推奨する「自社タスクでAstraと比較する（Compare it with Astra on your tasks）」という手順が最も確実です。</li>
+</ul>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="rel-h">
+<h2 class="section-title" id="rel-h" style="font-size:1.2rem;">関連ページ</h2>
+<ul style="font-size:.88rem;line-height:2;">
+  <li><a href="/gpt-6-sol-luna/">GPT-6 Sol / GPT-6 Luna</a> — 同世代の前世代モデル（Solは$2/$10、Lunaは$0.10/$0.50）</li>
+  <li><a href="/pricing/">主要LLM API 料金比較</a> — 各社の公式料金を1ページで比較</li>
+  <li><a href="/calculator/">トークン料金計算機</a> — 入力・出力トークン数から実額を計算</li>
+  <li><a href="/claude-sonnet-5-5/">Claude Sonnet 5.5</a> — 同価格帯の競合（$2/$10・キャッシュ読込$0.10）</li>
+  <li><a href="/glossary/prompt-cache/">プロンプトキャッシュとは</a> — キャッシュ入力$0.10が効く条件</li>
+  <li><a href="/timeline/">リリース年表</a> — GPT-6世代の時系列</li>
+</ul>
+</section>
+
+<div class="tip-box" style="border-left-color:var(--c-yellow);">
+  <h3 style="font-size:1rem;margin:0 0 .5rem;">⚠️ 免責事項</h3>
+  <ul style="font-size:.84rem;color:var(--c-muted);line-height:1.9;">
+    <li>料金・仕様は2026-10-09時点でOpenAI公式ドキュメント（GPT-6.1 Sol モデルページ・料金ページ）を確認したものです。</li>
+    <li>Fast・Batch/Flex・Ultrafast・272K超の金額は公式の倍率から当サイトが算出した参考値です。請求額は公式の請求明細で確認してください。</li>
+    <li>リリース日は公式モデルページに記載がないため、当サイトは第三者報道の日付を「第三者情報」と明記して掲載しています。</li>
+    <li>本サイトは情報提供目的であり、特定プロバイダーの推奨・代理ではありません。</li>
+  <li><a href="/timeline/#gpt-6-cyber">GPT-6 Cyber</a> — 2026-11-05公開のサイバー特化モデル（承認制Daybreak Red限定・価格未公表）</li>
+</ul>
+</div>
+</div></main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>運営: okamoちゃんねる</p><p><a href="/">ホーム</a> · <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a> · <a href="/timeline/">年表</a> · <a href="/claude-opus-5-5/">Claude Opus 5.5</a> · <a href="/claude-fable-5-1/">Claude Fable 5.1</a> · <a href="/glossary/zero-operator-access/">ZOA</a></p></div><p class="footer-disclaimer">⚠️ 料金・仕様は予告なく変動します。契約前に必ず各社公式ページでご確認ください。本サイトは各社と提携していません。</p></div></footer>
+</body>
+</html>

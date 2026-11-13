@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Four data-protection requirements for LLMs: keep, access, train, location — LLM Data Hub</title>
+  <meta name="description" content="ZDR (not stored), ZOA (not seen), training restrictions and data residency are four separate promises. Compared across AWS Bedrock, Microsoft Foundry, OpenAI, Anthropic and Google Cloud using their own wording, with a five-step pre-contract check. Glossary entry 8, updated 2026-10-01.">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/en/glossary/four-data-requirements/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta property="og:image" content="https://llm.okamomedia.tokyo/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="LLM Data Hub — LLM API pricing, token costs and model data">
+  <meta name="twitter:image" content="https://llm.okamomedia.tokyo/assets/og-image.png">
+  <meta name="twitter:image:alt" content="LLM Data Hub — LLM API pricing, token costs and model data">
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/glossary/four-data-requirements/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/glossary/four-data-requirements/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/glossary/four-data-requirements/">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/en/glossary/four-data-requirements/">
+  <meta property="og:title" content="The four data-protection requirements for LLMs — keep, access, training, location">
+  <meta property="og:description" content="ZDR, ZOA, training restrictions and residency are four separate promises. Compared across five providers using their own wording (updated October 1, 2026).">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"The four data-protection requirements for LLMs — keep, access, training and location","datePublished":"2026-09-29","dateModified":"2026-10-01","author":{"@type":"Organization","name":"okamoちゃんねる"},"publisher":{"@type":"Organization","name":"okamoちゃんねる"},"url":"https://llm.okamomedia.tokyo/en/glossary/four-data-requirements/","inLanguage":"en","description":"Zero data retention, zero operator access, training restrictions and data residency treated as four separate promises, compared across AWS Bedrock, Microsoft Foundry, OpenAI, Anthropic and Google Cloud using the wording of their official documents."}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://llm.okamomedia.tokyo/en/"},{"@type":"ListItem","position":2,"name":"Glossary","item":"https://llm.okamomedia.tokyo/en/glossary/"},{"@type":"ListItem","position":3,"name":"The four data-protection requirements","item":"https://llm.okamomedia.tokyo/en/glossary/four-data-requirements/"}]}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .phrase-box{background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-accent);border-radius:var(--r-md);padding:1rem 1.15rem;margin:1.2rem 0}
+    .phrase-box .phrase{margin:0;font-size:1.02rem;font-weight:700;line-height:1.7}
+    .phrase-box .phrase-meta{margin:.5rem 0 0;font-size:.83rem;color:var(--c-muted);line-height:1.8}
+    .req-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.8rem;margin:1.1rem 0}
+    @media(max-width:680px){.req-grid{grid-template-columns:1fr}}
+    .req{border:1px solid var(--c-border);border-top:3px solid var(--c-accent);border-radius:var(--r-md);background:var(--c-surface);padding:.9rem 1rem}
+    .req .tag{font-family:var(--font-mono);font-size:.74rem;color:var(--c-accent);margin:0 0 .3rem;letter-spacing:.02em}
+    .req h3{margin:0 0 .4rem;font-size:.95rem;line-height:1.6}
+    .req p{margin:0;font-size:.83rem;line-height:1.8;color:var(--c-muted)}
+    .req strong{color:var(--c-text)}
+    .quote{margin:1rem 0;padding:.85rem 1rem;background:var(--c-surface2);border:1px solid var(--c-border);border-radius:var(--r-sm);font-size:.84rem;line-height:1.8;color:var(--c-muted)}
+    .quote em{color:var(--c-text);font-style:italic}
+    .quote .who{display:block;margin-top:.45rem;font-size:.76rem;color:var(--c-muted)}
+    .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+    .mtable{width:100%;border-collapse:collapse;font-size:.79rem;min-width:680px}
+    .mtable th,.mtable td{border:1px solid var(--c-border);padding:.5rem .6rem;text-align:left;vertical-align:top;color:var(--c-muted);line-height:1.7}
+    .mtable thead th{background:var(--c-surface2);color:var(--c-text);font-weight:700;white-space:nowrap}
+    .mtable td strong{color:var(--c-text)}
+    .scroll-hint{font-size:.74rem;color:var(--c-muted);margin:.35rem 0 0}
+    .steps{counter-reset:s;list-style:none;padding-left:0;margin:1rem 0}
+    .steps li{counter-increment:s;position:relative;padding:.6rem 0 .6rem 2.3rem;font-size:.87rem;line-height:1.85;color:var(--c-muted);border-top:1px solid var(--c-border)}
+    .steps li:first-child{border-top:none}
+    .steps li::before{content:counter(s);position:absolute;left:0;top:.6rem;width:1.5rem;height:1.5rem;border-radius:50%;background:var(--c-accent);color:#fff;font-size:.78rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+    .steps li strong{color:var(--c-text)}
+    .faq-block{border-top:1px solid var(--c-border);padding:1rem 0 0;margin:1rem 0 0}
+    .faq-block:first-of-type{border-top:none}
+    .faq-block dt{margin:0;font-size:.95rem;font-weight:700;color:var(--c-text);line-height:1.7}
+    .faq-block dt::before{content:"Q. ";color:var(--c-accent);font-family:var(--font-mono);font-size:.82rem}
+    .faq-block dd{margin:.4rem 0 0;font-size:.87rem;line-height:1.85;color:var(--c-muted)}
+    .faq-block dd::before{content:"A. ";color:var(--c-accent);font-family:var(--font-mono);font-size:.82rem;font-weight:700}
+    .faq-block dd strong{color:var(--c-text)}
+    .src-list{font-size:.8rem;color:var(--c-muted);padding-left:1.1em;line-height:1.85}
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/en/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="Main navigation"><a href="/en/" class="nav-link">Home</a><a href="/en/pricing/" class="nav-link">Pricing</a><a href="/en/calculator/" class="nav-link">Token Calculator</a><a href="/en/timeline/" class="nav-link">Release Timeline</a><a href="/en/china-ai/" class="nav-link">China AI</a><a href="/en/multimodal/" class="nav-link">Multimodal</a><a href="/en/mai/" class="nav-link">MS AI (MAI)</a><a href="/en/glossary/" class="nav-link active" aria-current="page">Glossary</a></nav></div></header>
+
+<main><div class="container">
+  <div class="section" style="padding-bottom:0;">
+    <h1 class="section-title" style="font-size:1.55rem;">The four data-protection requirements for LLMs — checking "not stored", "not seen", "not learned from" and "not sent abroad" separately</h1>
+    <p class="section-sub" style="max-width:780px;">
+      <a href="/en/glossary/">Glossary</a> entry 8. After our <a href="/en/glossary/zero-data-retention/">zero data retention (ZDR) explainer</a>, readers kept asking the same thing:
+      <strong>"If a vendor supports ZDR, that means their staff can't see my data, it isn't used for training, and it never leaves the country — right?"</strong>
+      The answer is <strong>no</strong>. Those are <strong>four separate promises</strong>, and satisfying one does not satisfy the others.
+      This page splits them into <strong>① not stored (ZDR) ② not seen (ZOA) ③ not learned from (training terms) ④ not sent abroad (data residency)</strong>, then lines up five providers' <strong>own wording</strong> to show which requirement is the default and which has to be requested or approved. It is written to be usable as a pre-contract checklist.
+    </p>
+    <div class="phrase-box">
+      <p class="phrase">"Not stored", "not seen by operators", "not used for training" and "never leaves the region" are <strong>four separate promises</strong>.</p>
+      <p class="phrase-meta">It is rare for one provider to satisfy all four by default. AWS describes ① and ② as a "data security model" while keeping a <strong>list of models that require retention</strong>. Microsoft documents ③ explicitly, yet retains <strong>abuse-monitoring logs for up to 30 days by default</strong>. Anthropic delivers ④ through a <strong>per-request</strong> setting called <code>inference_geo</code>, and its default is <code>global</code>. The work is checking <strong>which of the four is the default and which must be requested</strong> — one at a time.</p>
+    </div>
+    <div class="updated-bar">
+      <span class="dot">●</span>
+      Last updated: <time datetime="2026-10-01">October 1, 2026</time>
+      &ensp;|&ensp; Policy: only content we could confirm in the vendors' own documents; anything unconfirmed is labelled as such
+    </div>
+  </div>
+
+  <section class="section" style="padding-top:1.5rem;" aria-labelledby="why-h">
+    <h2 class="section-title" id="why-h" style="font-size:1.2rem;">Why split them into four</h2>
+    <p class="section-sub">
+      Because <strong>different providers satisfy different requirements by default</strong>. Technically the four map to different stages of the same request.
+    </p>
+    <div class="req-grid">
+      <div class="req">
+        <p class="tag">① Not stored / ZDR</p>
+        <h3>Zero Data Retention — inputs and outputs are not kept</h3>
+        <p>After inference finishes, the prompt and the response are <strong>not retained</strong>. This is about the retention window: zero days or thirty.</p>
+      </div>
+      <div class="req">
+        <p class="tag">② Not seen / ZOA</p>
+        <h3>Zero Operator Access — service operators cannot read it</h3>
+        <p>Whether or not anything is stored, <strong>no human on the provider's side can access the content</strong>. This is independent of retention.</p>
+      </div>
+      <div class="req">
+        <p class="tag">③ Not learned from</p>
+        <h3>Training restriction — not used to train or improve models</h3>
+        <p>A contractual term that the data is <strong>not used to train the provider's models</strong>. It lives in the contract, not in the retention setting.</p>
+      </div>
+      <div class="req">
+        <p class="tag">④ Not sent abroad</p>
+        <h3>Data residency — where data is stored and processed</h3>
+        <p><strong>Storage location and processing location are different things</strong>, decided by the endpoint or deployment type you choose.</p>
+      </div>
+    </div>
+    <p class="section-sub" style="margin-top:1rem;">
+      When you read "ZDR supported", the question to ask is <strong>which of the four it refers to</strong>. Mixing them up produces the worst outcome: believing you have covered an audit requirement when you have not.
+    </p>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="req1-h">
+    <h2 class="section-title" id="req1-h" style="font-size:1.2rem;">① Not stored — zero data retention (ZDR)</h2>
+    <p class="section-sub">Start with whether it is the default. <strong>ZDR means "not stored by default", not "always on"</strong> (see <a href="/en/glossary/zero-data-retention/">entry 7 on ZDR</a>).</p>
+    <div class="quote">
+      <em>"uses a zero data retention (ZDR) data security model. This means that <strong>by default</strong>, Amazon Bedrock does not store model inputs or outputs."</em>
+      <span class="who">— AWS documentation (Amazon Bedrock data security model)</span>
+    </div>
+    <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.3em;line-height:1.9;">
+      <li><strong>Default retention differs by provider.</strong> AWS offers retention modes (<code>none</code> / <code>default</code> / <code>inherit</code> / <code>aws_review</code>) set per account and per project (new projects inherit). Microsoft retains abuse-monitoring logs for <strong>up to 30 days by default</strong> and drops them entirely once modified abuse monitoring is approved. OpenAI's ZDR is <strong>application-only</strong>; the default is up to 30 days of logs.</li>
+      <li><strong>Some models are exceptions.</strong> AWS publishes a list of models that require retention: OpenAI-based models retain <strong>only traffic flagged by a classifier, for up to 30 days</strong>, while Claude Fable 5 / 5.1 retain <strong>all traffic for 30 days</strong>. <strong>The list changes (updated 2026-09-26)</strong> — ZDR does not mean zero everywhere.</li>
+      <li><strong>"Not stored" and "no logs" are different.</strong> Even with no content retention, request metadata (who called what, when) remains in operational logs. Content not being stored is not the same as calls not being recorded.</li>
+    </ul>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="req2-h">
+    <h2 class="section-title" id="req2-h" style="font-size:1.2rem;">② Not seen — zero operator access (ZOA)</h2>
+    <p class="section-sub">ZDR is "not retained"; ZOA is "no human can read it". <strong>Independent of whether anything is stored.</strong></p>
+    <div class="quote">
+      <em>"zero operator access (ZOA) ... <strong>no operators of the service can access model input or output</strong>"</em>
+      <span class="who">— AWS documentation (Amazon Bedrock)</span>
+    </div>
+    <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.3em;line-height:1.9;">
+      <li><strong>Human access is decided by the abuse-monitoring design.</strong> At Microsoft, automated review (an LLM classifier) is <strong>on by default</strong>, and that data is described as not stored by the system and not used to train AI models. Human review happens <strong>only when the abuse-monitoring system flags content</strong>, and reviewers are based in the EEA — that is how the access surface is limited.</li>
+      <li><strong>There is an enterprise opt-out.</strong> Once Microsoft's modified abuse monitoring is approved, <strong>neither storage nor human review takes place</strong> (automated review remains).</li>
+      <li><strong>Some providers do not publish ZOA wording at all.</strong> When that is the case we treat it as unverified rather than assuming "ZDR implies no access".</li>
+    </ul>
+  
+    <p class="section-sub" style="font-size:.85rem;">→ <strong>Deep dive now available:</strong> <a href="/en/glossary/zero-operator-access/">#9: Zero operator access</a> covers the three layers that block access, CMK vs BYOK vs HYOK, the approval workflows (Customer Lockbox, Access Approval, Key Access Justifications, EKM) and the emergency exceptions, all quoted from primary sources.</p>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="req3-h">
+    <h2 class="section-title" id="req3-h" style="font-size:1.2rem;">③ Not learned from — training restrictions</h2>
+    <p class="section-sub">A separate clause from retention. <strong>"Stored but never used for training" is a real configuration.</strong></p>
+    <div class="quote">
+      <em>"Customer Data and Customer Content is ... <strong>NOT used to train any generative AI foundation models</strong> without your permission or instruction."</em>
+      <span class="who">— Microsoft (Azure / Microsoft Foundry data and privacy documentation)</span>
+    </div>
+    <div class="quote">
+      <em>"<strong>By default, Anthropic does not use customer data from commercial deployments to train models.</strong>"</em>
+      <span class="who">— Anthropic (regional compliance documentation)</span>
+    </div>
+    <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.3em;line-height:1.9;">
+      <li><strong>"Not passed to the model provider" is yet another clause.</strong> Microsoft states that data for models sold by Azure is not made available to OpenAI or other providers, and that those models do not interact with services operated by the providers. That sentence matters when you buy a resold model through Azure.</li>
+      <li><strong>Some services do train on your data by default.</strong> DeepSeek is the clearest example: its privacy policy covers using data to improve services and to <strong>train machine learning models and algorithms</strong>, with a right to opt out. However, <strong>whether the same terms apply to the API, and whether an opt-out alone satisfies ③, is not confirmed in the primary sources</strong> (the policy also states personal data is processed and stored in China). Review the contract terms before relying on it.</li>
+      <li><strong>Free tiers and business/API terms differ.</strong> The same company often has different training terms for consumer UIs and for API or commercial contracts. Everything on this page is based on <strong>API and commercial documentation</strong>.</li>
+    </ul>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="req4-h">
+    <h2 class="section-title" id="req4-h" style="font-size:1.2rem;">④ Not sent abroad — data residency</h2>
+    <p class="section-sub">This is where most confusion lives. <strong>Storage location and processing location are separate</strong>, and choosing one does not guarantee the other.</p>
+    <div class="quote">
+      <em>"Data-at-rest (storage) ... <strong>remains physically stored in the specific Google Cloud location you chose</strong>. This residency is maintained <strong>regardless of which endpoint you use</strong>."</em>
+      <span class="who">— Google Cloud (generative AI data residency documentation)</span>
+    </div>
+    <p class="section-sub">In other words, on Google Cloud <strong>storage follows the location you pick and processing follows the endpoint you pick</strong> — and endpoints come in three tiers.</p>
+    <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.3em;line-height:1.9;">
+      <li><strong>jurisdictional multi-region endpoints (US / EU)</strong> — <strong>processing stays inside the jurisdiction.</strong> Use this when data must not leave the region.</li>
+      <li><strong>global endpoints</strong> — explicitly documented as possibly processing in any Google location, and as <strong>not providing regional isolation or data residency guarantees</strong>.</li>
+      <li><strong>AWS cross-Region inference</strong> — storage stays "in the AWS Region where you are using Amazon Bedrock", but inference can spread across a <strong>geographic profile (US / EU / APAC)</strong> or the <strong>global profile</strong>. The global profile's data residency is "any supported AWS commercial Region worldwide", and <strong>AWS itself recommends the geographic option</strong>.</li>
+      <li><strong>Azure decides by deployment type.</strong> Standard / Regional stays within the <b>customer-selected Azure geography</b> (operationally it may be processed in another region inside that geography), <strong>DataZone is US / EU / APAC</strong> (the EU Data Zone includes EFTA countries), and <strong>Global can process in any Azure region</strong>. Choosing Global Standard means you are not choosing a processing location.</li>
+      <li><strong>Anthropic (Claude API) is per request.</strong> <code>inference_geo</code> takes <code>us</code> or <code>global</code>, and the <strong>default is <code>global</code></strong>. Workspace geo is US-only and <strong>cannot be changed after creation</strong>. US-only inference costs <strong>1.1× on every token</strong>, and passing <code>inference_geo</code> to Opus 4.5, Sonnet 4.5, Haiku 4.5 or earlier returns a <strong>400 error</strong>. <strong><code>inference_geo</code> here refers to using Anthropic's API directly</strong>; regional handling on partner platforms (Bedrock, Vertex AI, Foundry) is a <strong>separate setting</strong> to verify.</li>
+    </ul>
+    <p class="section-sub" style="margin-top:.8rem;">
+      "You can pick a region" does not mean "your data never leaves the country". Pick an option that <strong>pins the geography</strong> and back it with the contract.
+    </p>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="matrix-h">
+    <h2 class="section-title" id="matrix-h" style="font-size:1.2rem;">Five-provider matrix — what is default and what must be requested</h2>
+    <p class="section-sub">Where the vendors' own documentation had it, as of 2026-09-29. <strong>"Requested" means it may not be available before you sign.</strong></p>
+    <div class="table-wrap">
+      <table class="mtable">
+        <caption style="display:none;">Data-protection requirements across five providers</caption>
+        <thead>
+          <tr><th>Provider</th><th>① Not stored</th><th>② Not seen</th><th>③ Not learned from</th><th>④ Not sent abroad</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>AWS Bedrock</strong></td>
+            <td>No storage by default (set via retention mode); <strong>models that require retention are exceptions</strong></td>
+            <td>ZOA documented as part of the data security model (exception models may involve human review)</td>
+            <td>Documented as not used to train models by default</td>
+            <td>Stored in the region you use; <strong>choose Geographic for cross-Region inference</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Microsoft Foundry</strong></td>
+            <td>Abuse-monitoring logs <strong>kept up to 30 days by default</strong>; modified abuse monitoring removes storage</td>
+            <td>Automated review by default; human review only when flagged, by EEA-based reviewers</td>
+            <td>"NOT used to train any generative AI foundation models without your permission or instruction" + <strong>not available to the provider</strong></td>
+            <td>Standard / <strong>DataZone</strong> / Global; <strong>Global processes in any region</strong>, Standard stays inside the selected geography (may cross regions within it)</td>
+          </tr>
+          <tr>
+            <td><strong>OpenAI API</strong></td>
+            <td><strong>ZDR is application-based</strong> (approval plus a modified retention amendment); default is up to 30 days</td>
+            <td>Not confirmed in the vendor's docs (worth re-checking on the current official page, as terms change often)</td>
+            <td>Documented as not training on API / business data</td>
+            <td><strong>Selected per project</strong>; outside the US requires approval and a modified retention amendment, UAE adds a further approval</td>
+          </tr>
+          <tr>
+            <td><strong>Anthropic</strong></td>
+            <td><strong>ZDR on request</strong></td>
+            <td>Not confirmed in the vendor's docs (worth re-checking on the current official page, as terms change often)</td>
+            <td><strong>By default</strong>, commercial data is not used to train models</td>
+            <td><code>inference_geo</code> (<strong>the setting that picks which country processes the request</strong>: <code>us</code>/<code>global</code>, <strong>default global</strong>); US-only costs 1.1×</td>
+          </tr>
+          <tr>
+            <td><strong>Google Cloud</strong></td>
+            <td>Handled by contract and configuration (no single default confirmed)</td>
+            <td>—</td>
+            <td>AI/ML Privacy Commitment says customer data is not used to train foundation models (summary; we have not captured the full wording)</td>
+            <td>Location plus endpoint; <strong>jurisdictional (US/EU) keeps processing in-region</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="scroll-hint">← Scrolls horizontally. A blank cell means "we could not verify it from primary sources", not "it does not exist".</p>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="steps-h">
+    <h2 class="section-title" id="steps-h" style="font-size:1.2rem;">A five-step check before you sign</h2>
+    <ol class="steps">
+      <li><strong>Decide which requirements are non-negotiable for you.</strong> Regulation, customer contracts and internal policy will rank the four. <strong>Treating all four as mandatory stalls the selection.</strong></li>
+      <li><strong>Look up the provider's defaults.</strong> The matrix above is the starting point: the default retention window (0 or 30 days) and whether exception models exist.</li>
+      <li><strong>Configure or request whatever the default does not cover.</strong> Bedrock retention modes, the Azure deployment type, Anthropic's <code>inference_geo</code>, ZDR or modified abuse monitoring applications. <strong>This is where "requested" becomes a blocker.</strong></li>
+      <li><strong>Pin it down in the contract and DPA.</strong> Items that require approval are not guaranteed by a console toggle. Get them <strong>in writing</strong>.</li>
+      <li><strong>Record it and re-check when you add a model.</strong> Keep a note of which requirement is covered how. Exception lists get revised (AWS updated theirs on 2026-09-26), so <strong>review on every new model</strong>. This record is the first thing lost when staff change.</li>
+    </ol>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="myth-h">
+    <h2 class="section-title" id="myth-h" style="font-size:1.2rem;">Four myths</h2>
+    <div class="req-grid">
+      <div class="req">
+        <p class="tag">Myth 1</p>
+        <h3>"With ZDR, operators cannot see it either"</h3>
+        <p>ZDR is ① and ZOA is ② — <strong>different promises</strong>. Enabling ZDR says nothing about whether provider staff can access content.</p>
+      </div>
+      <div class="req">
+        <p class="tag">Myth 2</p>
+        <h3>"If it is not stored, it is not used for training"</h3>
+        <p>Training use is governed by <strong>contract terms</strong> (③). A retention setting can be perfect while ③ is undocumented.</p>
+      </div>
+      <div class="req">
+        <p class="tag">Myth 3</p>
+        <h3>"I picked a region, so nothing leaves the country"</h3>
+        <p>Global options (Azure Global, Bedrock global profile, <code>inference_geo=global</code>) explicitly <strong>process in any region</strong>. Choose the geography-pinned option instead.</p>
+      </div>
+      <div class="req">
+        <p class="tag">Myth 4</p>
+        <h3>"It is just a resold model, so it is safer"</h3>
+        <p>On a resale route the <strong>reseller's terms</strong> apply (no training, not passed to the provider). But <strong>deployment type and endpoint still decide where processing happens</strong> — see <a href="/en/deepseek-v4-1-flash/">DeepSeek via Azure</a>.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="faq-h">
+    <h2 class="section-title" id="faq-h" style="font-size:1.2rem;">FAQ</h2>
+    <dl>
+      <div class="faq-block">
+        <dt>If a vendor says "ZDR supported", am I safe?</dt>
+        <dd>First check <strong>which of the four it refers to</strong>. It is usually ① only, leaving ②–④ to verify separately. Even ① has <strong>exception models</strong>, and that list is revised over time.</dd>
+      </div>
+      <div class="faq-block">
+        <dt>How do I pin the region?</dt>
+        <dd>Pick the option that <strong>names the geography</strong>: Geographic cross-Region inference on Bedrock, DataZone / Regional on Azure, <code>inference_geo: us</code> on Anthropic, or jurisdictional multi-region (US / EU) endpoints on Google Cloud. <strong>Global options are documented as processing in any region, so they cannot be used to pin.</strong></dd>
+      </div>
+      <div class="faq-block">
+        <dt>Does the same table apply to free tiers and consumer apps?</dt>
+        <dd>No. <strong>Consumer UIs and API / commercial contracts often carry different terms</strong>, and training clauses differ most. This page is based on <strong>API and commercial documentation</strong>; check the specific plan's terms separately.</dd>
+      </div>
+      <div class="faq-block">
+        <dt>Why not just say "zero retention" and be done?</dt>
+        <dd>Because configurations such as "stored, but never used for training, unreadable by staff, processed in-country" are real — and so is "not retained, but passed to the provider and used for training". <strong>Audits ask requirement by requirement</strong>, so collapsing them into "ZDR" leaves you unable to answer.</dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="section" style="padding-top:0;">
+    <h2 class="section-title" style="font-size:1.1rem;">Sources</h2>
+    <ul class="src-list">
+      <li>AWS — <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/data-protection.html" target="_blank" rel="noopener">Data protection in Amazon Bedrock</a> (ZDR, ZOA, retention modes, regional storage; retrieved 2026-09-27)</li>
+      <li>AWS — <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/model-data-retention.html" target="_blank" rel="noopener">Model data retention</a> (exception model list; retrieved 2026-09-27)</li>
+      <li>Microsoft — <a href="https://learn.microsoft.com/en-us/azure/foundry/responsible-ai/openai/data-privacy" target="_blank" rel="noopener">Data, privacy, and security for Azure direct models</a> and <a href="https://learn.microsoft.com/en-us/azure/foundry/responsible-ai/openai/abuse-monitoring" target="_blank" rel="noopener">Abuse monitoring</a> (training terms, not available to the provider, 30-day retention; retrieved 2026-09-27)</li>
+      <li>Microsoft — Azure deployment types and data residency documentation (DataZone / Global, EFTA in the EU Data Zone; retrieved 2026-09-27)</li>
+      <li>Anthropic — <a href="https://claude.com/regional-compliance" target="_blank" rel="noopener">Regional compliance</a> (<code>inference_geo</code>, default global, 1.1× pricing, 400 error on older models; retrieved 2026-09-27)</li>
+      <li>OpenAI — ZDR, abuse monitoring controls and data residency (application process, conditions outside the US, additional UAE approval; retrieved 2026-09-27)</li>
+      <li>Google Cloud — <a href="https://docs.cloud.google.com/vertex-ai/generative-ai/docs/data-governance" target="_blank" rel="noopener">Data governance and generative AI</a> and <a href="https://docs.cloud.google.com/generative-ai-app-builder/docs/data-governance" target="_blank" rel="noopener">AI/ML Privacy Commitment</a> (storage vs processing, the three endpoint tiers, jurisdictional guarantees; retrieved 2026-09-29)</li>
+      <li>Related: <a href="/en/glossary/zero-data-retention/">zero data retention (ZDR)</a> · <a href="/en/china-ai/">China AI</a> · <a href="/en/deepseek-v4-1-flash/">DeepSeek V4.1 Flash (Azure walkthrough)</a> · <a href="/en/glossary/">all glossary entries</a></li>
+    </ul>
+  </section>
+</div></main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>Operated by okamo channel</p><p><a href="/en/">Home</a> · <a href="/en/pricing/">Pricing</a> · <a href="/en/calculator/">Calculator</a> · <a href="/en/timeline/">Timeline</a> · <a href="/en/glossary/">Glossary</a> · <a href="/en/gpt-6/">GPT-6 Astra</a></p></div><p class="footer-disclaimer">⚠️ Always confirm terms and data handling in each provider's official documentation. Not affiliated with any provider.</p></div></footer>
+</body>
+</html>

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>出さない（データレジデンシー）とは — データが国外に出ない＝「保存」と「処理」は別の約束 — LLM Data Hub</title>
+  <meta name="description" content="データレジデンシー（データが国外に出ない）は、「保存する場所」と「処理する場所」の2つの問いに分かれます。OpenAIはstorageとprocessingを別項目に分け、日本は「保存＝可・処理＝不可」。AWS・Googleは推論プロファイル／エンドポイント、Microsoftはdeployment type、Anthropicはinference geoとworkspace geoの2設定で決まります。5社の公式ドキュメント逐語で「選べる」と「固定される」の違いまで整理。用語説明 第11回。2026年10月5日更新。">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/glossary/data-residency/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta property="og:image" content="https://llm.okamomedia.tokyo/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="LLM Data Hub — LLM API pricing, token costs and model data">
+  <meta name="twitter:image" content="https://llm.okamomedia.tokyo/assets/og-image.png">
+  <meta name="twitter:image:alt" content="LLM Data Hub — LLM API pricing, token costs and model data">
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/glossary/data-residency/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/glossary/data-residency/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/glossary/data-residency/">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/glossary/data-residency/">
+  <meta property="og:title" content="出さない（データレジデンシー）とは — データが国外に出ない＝「保存」と「処理」は別の約束">
+  <meta property="og:description" content="「国外に出さない」は「保存する場所」と「処理する場所」の2つに分かれる。5社の公式逐語で、選べる設定と実際に固定される範囲を整理（2026年10月5日更新）。">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"出さない（データレジデンシー）とは — データが国外に出ない＝「保存」と「処理」は別の約束","datePublished":"2026-10-05","dateModified":"2026-10-05","author":{"@type":"Organization","name":"okamoちゃんねる"},"publisher":{"@type":"Organization","name":"okamoちゃんねる"},"url":"https://llm.okamomedia.tokyo/glossary/data-residency/","inLanguage":"ja","description":"データレジデンシー（データが国外に出ない）を、「保存する場所（at rest）」と「処理する場所（推論）」の2つの問いに分け、AWS Bedrock・Microsoft Foundry・Google Cloud・OpenAI・Anthropicの公式ドキュメント逐語で比較する用語解説。"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"ホーム","item":"https://llm.okamomedia.tokyo/"},{"@type":"ListItem","position":2,"name":"用語説明","item":"https://llm.okamomedia.tokyo/glossary/"},{"@type":"ListItem","position":3,"name":"出さない（データレジデンシー）","item":"https://llm.okamomedia.tokyo/glossary/data-residency/"}]}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .phrase-box{background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-accent);border-radius:var(--r-md);padding:1rem 1.15rem;margin:1.2rem 0}
+    .phrase-box .phrase{margin:0;font-size:1.02rem;font-weight:700;line-height:1.7}
+    .phrase-box .phrase-meta{margin:.5rem 0 0;font-size:.83rem;color:var(--c-muted);line-height:1.8}
+    .req-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.8rem;margin:1.1rem 0}
+    @media(max-width:680px){.req-grid{grid-template-columns:1fr}}
+    .req{border:1px solid var(--c-border);border-top:3px solid var(--c-accent);border-radius:var(--r-md);background:var(--c-surface);padding:.9rem 1rem}
+    .req .tag{font-family:var(--font-mono);font-size:.74rem;color:var(--c-accent);margin:0 0 .3rem;letter-spacing:.02em}
+    .req h3{margin:0 0 .4rem;font-size:.95rem;line-height:1.6}
+    .req p{margin:0;font-size:.83rem;line-height:1.8;color:var(--c-muted)}
+    .req strong{color:var(--c-text)}
+    .quote{margin:1rem 0;padding:.85rem 1rem;background:var(--c-surface2);border:1px solid var(--c-border);border-radius:var(--r-sm);font-size:.84rem;line-height:1.8;color:var(--c-muted)}
+    .quote em{color:var(--c-text);font-style:italic}
+    .quote .who{display:block;margin-top:.45rem;font-size:.76rem;color:var(--c-muted)}
+    .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+    .mtable{width:100%;border-collapse:collapse;font-size:.79rem;min-width:680px}
+    .mtable th,.mtable td{border:1px solid var(--c-border);padding:.5rem .6rem;text-align:left;vertical-align:top;color:var(--c-muted);line-height:1.7}
+    .mtable thead th{background:var(--c-surface2);color:var(--c-text);font-weight:700;white-space:nowrap}
+    .mtable td strong{color:var(--c-text)}
+    .scroll-hint{font-size:.74rem;color:var(--c-muted);margin:.35rem 0 0}
+    .fig-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:1.2rem 0 .3rem}
+    .fig-wrap svg{min-width:640px;display:block}
+    .fig-cap{font-size:.78rem;color:var(--c-muted);line-height:1.7;margin:.2rem 0 0}
+    .steps{counter-reset:s;list-style:none;padding-left:0;margin:1rem 0}
+    .steps li{counter-increment:s;position:relative;padding:.6rem 0 .6rem 2.3rem;font-size:.87rem;line-height:1.85;color:var(--c-muted);border-top:1px solid var(--c-border)}
+    .steps li:first-child{border-top:none}
+    .steps li::before{content:counter(s);position:absolute;left:0;top:.6rem;width:1.5rem;height:1.5rem;border-radius:50%;background:var(--c-accent);color:#fff;font-size:.78rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+    .steps li strong{color:var(--c-text)}
+    .faq-block{border-top:1px solid var(--c-border);padding:1rem 0 0;margin:1rem 0 0}
+    .faq-block:first-of-type{border-top:none}
+    .faq-block dt{margin:0;font-size:.95rem;font-weight:700;color:var(--c-text);line-height:1.7}
+    .faq-block dt::before{content:"Q. ";color:var(--c-accent);font-family:var(--font-mono);font-size:.82rem}
+    .faq-block dd{margin:.4rem 0 0;font-size:.87rem;line-height:1.85;color:var(--c-muted)}
+    .faq-block dd::before{content:"A. ";color:var(--c-accent);font-family:var(--font-mono);font-size:.82rem;font-weight:700}
+    .faq-block dd strong{color:var(--c-text)}
+    .src-list{font-size:.8rem;color:var(--c-muted);padding-left:1.1em;line-height:1.85}
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="メインナビゲーション"><a href="/" class="nav-link">ホーム</a><a href="/pricing/" class="nav-link">料金比較</a><a href="/calculator/" class="nav-link">トークン計算機</a><a href="/timeline/" class="nav-link">リリース年表</a><a href="/china-ai/" class="nav-link">中国AI</a><a href="/multimodal/" class="nav-link">マルチモーダル</a><a href="/mai/" class="nav-link">MS AI (MAI)</a><a href="/glossary/" class="nav-link active" aria-current="page">用語説明</a></nav></div></header>
+
+<main><div class="container">
+  <div class="section" style="padding-bottom:0;">
+    <h1 class="section-title" style="font-size:1.55rem;">出さない（データレジデンシー）とは — データが国外に出ない＝「保存」と「処理」は別の約束</h1>
+    <p class="section-sub" style="max-width:780px;">
+      <a href="/glossary/">用語説明</a> 第11回。第10回 <a href="/glossary/no-training/">no-training（学ばせない）</a> に続いて、<a href="/glossary/four-data-requirements/">4要件</a>の④<strong>「出さない（データレジデンシー）」</strong>を深掘りします。
+      「海外リージョンを使わなければデータは国外に出ない」「リージョンを選べるから安心」——どちらも<strong>半分だけ正しい</strong>答えです。
+      理由は、データレジデンシーが<strong>「保存する場所（at rest）」と「処理する場所（推論）」という2つの別々の問い</strong>に分かれているからです。
+      このページでは、AWS Bedrock・Microsoft Foundry・Google Cloud・OpenAI・Anthropic の5系統について、<strong>保存と処理を分けた表</strong>を作り、各社公式ドキュメントの<strong>逐語</strong>で確認します。
+      「どの設定を、誰が、いつ固定するのか」まで書くので、そのまま社内説明に使えます。
+    </p>
+    <div class="phrase-box">
+      <p class="phrase">「国外に出さない」は、<strong>「保存する場所」と「処理する場所」という2つの約束</strong>に分かれます。</p>
+      <p class="phrase-meta">OpenAI はデータレジデンシーを<strong>Storage（保存）と Processing（処理）に分けた別項目</strong>で公表しており、<strong>日本は「Storage = 可／Processing = 不可」</strong>です。つまり「保存は国内、推論は地域外でもよい」という設定です。AWS は<strong>推論プロファイル</strong>、Google は<strong>エンドポイント</strong>、Microsoft は<strong>デプロイ種別</strong>、Anthropic は<strong>inference geo と workspace geo の2設定</strong>——5社すべてで、保存と処理は<strong>別の確認項目</strong>です（設定の仕組みは各社で異なります）。<strong>片方だけ確認して「国外に出ない」と結論づけるのが、いちばん多い誤りです。</strong></p>
+    </div>
+    <div class="updated-bar">
+      <span class="dot">●</span>
+      最終更新: <time datetime="2026-10-05">2026年10月5日</time>
+      &ensp;|&ensp; 方針: 各社の公式ドキュメントで<strong>逐語</strong>を確認できた内容のみ掲載。確認できない設定は「未確認」と明記します
+    </div>
+  </div>
+
+  <section class="section" style="padding-top:1.5rem;" aria-labelledby="why-h">
+    <h2 class="section-title" id="why-h" style="font-size:1.2rem;">なぜ「出さない」は2つの問いに分かれるのか</h2>
+    <p class="section-sub">
+      同じプロンプトでも、<strong>「置いておく場所」と「計算する場所」は別</strong>です。分岐はこの4つです。
+    </p>
+    <div class="req-grid">
+      <div class="req">
+        <p class="tag">分岐 ①</p>
+        <h3>保存（at rest）の場所</h3>
+        <p>ディスクに書き込まれたデータを、<strong>どの地域の設備に置いておくか</strong>。ここは多くの提供元が「指定した地域に固定」と書いています。<strong>比較的守りやすい側</strong>です。</p>
+      </div>
+      <div class="req">
+        <p class="tag">分岐 ②</p>
+        <h3>処理（推論）の場所</h3>
+        <p>リクエストを<strong>どの地域の計算資源で動かすか</strong>。ここは「どこでも（global）」側が既定になっている設定もあり、<strong>設定を間違えると国外で処理されます</strong>。</p>
+      </div>
+      <div class="req">
+        <p class="tag">分岐 ③</p>
+        <h3>「選べる」か「固定される」か</h3>
+        <p>地域を選ぶオプションがあることと、実際にそこで動くことは別です。固定方法は <strong>デプロイ種別 / プロファイル / エンドポイント / プロジェクト設定 / ワークスペース設定</strong> と提供元ごとに違います。</p>
+      </div>
+      <div class="req">
+        <p class="tag">前提</p>
+        <h3>④を満たしても①〜③は満たさない</h3>
+        <p>レジデンシー（出さない）は、保持（残さない）・アクセス（見せない）・学習（学ばせない）とは<strong>別の約束</strong>です。→ <a href="/glossary/four-data-requirements/">4要件</a></p>
+      </div>
+    </div>
+
+    <div class="fig-wrap">
+      <svg viewBox="0 0 680 344" role="img" aria-labelledby="drfig-t drfig-d" xmlns="http://www.w3.org/2000/svg">
+        <title id="drfig-t">「国外に出さない」は保存と処理の2つの約束に分かれる</title>
+        <desc id="drfig-d">同じプロンプトと応答でも、①保存（at rest）はデータを置いておく場所、②処理（推論）は計算する場所で、別々の設定と文書で決まる。保存を地域内に固定しても、処理が地域外で行われる設定は成立する。5社すべてで、保存と処理は別の項目として公表されている。</desc>
+        <g font-family="system-ui,Segoe UI,sans-serif">
+          <text x="16" y="24" font-size="14" font-weight="700" fill="#e6e6e6">「国外に出さない」は2つの約束に分かれる</text>
+          <text x="16" y="41" font-size="11" fill="#9aa0aa">同じデータでも、置いておく場所と計算する場所は別の設定で決まる。</text>
+
+          <rect x="16" y="92" width="176" height="126" rx="8" fill="#141a24" stroke="#2a3340"/>
+          <text x="104" y="136" font-size="12.5" font-weight="700" fill="#e6e6e6" text-anchor="middle">あなたのプロンプト</text>
+          <text x="104" y="156" font-size="12.5" font-weight="700" fill="#e6e6e6" text-anchor="middle">と応答</text>
+          <text x="104" y="182" font-size="10.5" fill="#9aa0aa" text-anchor="middle">中身は同じでも</text>
+          <text x="104" y="198" font-size="10.5" fill="#9aa0aa" text-anchor="middle">約束は2つある</text>
+
+          <path d="M192 136 C 222 136, 222 112, 250 112" stroke="#3a4450" fill="none" stroke-width="1.4"/>
+          <path d="M192 172 C 222 172, 222 198, 250 198" stroke="#3a4450" fill="none" stroke-width="1.4"/>
+
+          <rect x="250" y="82" width="414" height="66" rx="8" fill="#141a24" stroke="#2a3340"/>
+          <text x="266" y="104" font-size="12.5" font-weight="700" fill="#6aa9ff">① 保存（at rest）— データを置いておく場所</text>
+          <text x="266" y="122" font-size="11.5" fill="#9aa0aa">切り替えるのは「リージョン・データゾーン」。多くは指定地域に固定</text>
+          <text x="266" y="139" font-size="11.5" fill="#9aa0aa">国・地域の要件でまず問われるのは、こちら</text>
+
+          <rect x="250" y="164" width="414" height="66" rx="8" fill="#1a1410" stroke="#3a2a22"/>
+          <text x="266" y="186" font-size="12.5" font-weight="700" fill="#d97757">② 処理（推論）— 計算する場所</text>
+          <text x="266" y="204" font-size="11.5" fill="#9aa0aa">切り替えるのは「エンドポイント・プロファイル・設定」</text>
+          <text x="266" y="221" font-size="11.5" fill="#9aa0aa">既定が「どこでも（global）」のことが多く、ここが漏れる</text>
+
+          <rect x="16" y="252" width="648" height="76" rx="8" fill="none" stroke="#5a5f6a" stroke-dasharray="5 4"/>
+          <text x="32" y="276" font-size="11.5" fill="#9aa0aa"><tspan font-weight="700" fill="#e6e6e6">「保存を地域内にした」＝「処理も地域内」ではない。</tspan>反例: OpenAI の日本は Storage 可・Processing 不可。</text>
+          <text x="32" y="298" font-size="11.5" fill="#9aa0aa"><tspan font-weight="700" fill="#e6e6e6">5社すべてで、この2つは別の項目として公表されている。</tspan></text>
+          <text x="32" y="318" font-size="11.5" fill="#9aa0aa">だから「どの層で、どの設定を固定したか」まで記録しないと、説明できない。</text>
+        </g>
+      </svg>
+    </div>
+    <p class="fig-cap">図: 保存と処理は別の約束。片方だけ固定しても、もう片方は既定のまま動きます（当サイト作成）。</p>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="matrix-h">
+    <h2 class="section-title" id="matrix-h" style="font-size:1.2rem;">先に結論 — 5系統を「保存」と「処理」で分けた表</h2>
+    <p class="section-sub">2026-10-05 時点で各社の公式ドキュメントから確認できた範囲です。<strong>「保存」と「処理」を別の列にしている</strong>ことが、この表のいちばんの要点です。</p>
+    <div class="table-wrap">
+      <table class="mtable">
+        <caption style="display:none;">5系統のデータレジデンシーの比較（保存と処理）</caption>
+        <thead>
+          <tr><th>提供元</th><th>① 保存（at rest）の場所</th><th>② 処理（推論）の場所</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Microsoft</strong><br>Azure / Foundry</td>
+            <td>デプロイ種別に関わらず<strong>「指定した Azure geography」に at rest</strong>（公式の逐語）</td>
+            <td><strong>3段階</strong>。Global＝どの Azure リージョンでも / Data Zone＝指定データゾーン内（US・EU・APAC）/ Standard・Regional＝指定 geography 内（<strong>同一 geography 内のリージョン間処理はあり</strong>）。Developer 枠は<strong>レジデンシー保証なし</strong></td>
+          </tr>
+          <tr>
+            <td><strong>AWS</strong><br>Amazon Bedrock</td>
+            <td>Bedrock を使っている <strong>AWS リージョンに at rest</strong>（cross-Region 有効時は処理先リージョンに保存）</td>
+            <td><strong>推論プロファイルで選ぶ</strong>。Geographic＝US・EU・APAC の境界内 / Global＝<strong>どの商用リージョンでも</strong>。AWS 自身が「コンプライアンス要件なら Geographic を選べ」と推奨</td>
+          </tr>
+          <tr>
+            <td><strong>Google Cloud</strong></td>
+            <td><strong>選んだロケーションに固定</strong>（「エンドポイントに関係なく at rest はそこに残る」と逐語）</td>
+            <td><strong>エンドポイントで決まる</strong>。jurisdictional multi-region＝その地域内（US・EU）/ global＝<strong>「regional isolation も data residency の保証も提供しない」</strong></td>
+          </tr>
+          <tr>
+            <td><strong>OpenAI</strong><br>第一者 API</td>
+            <td><strong>プロジェクト単位の設定</strong>。対応エンドポイントなら選択地域に at rest</td>
+            <td><strong>地域ごとに Storage と Processing を別判定</strong>。日本・英国・カナダ等は <strong>Storage 可 / Processing 不可</strong>。US 以外は abuse monitoring controls の承認と Modified Retention 追補が必要（UAE は追加承認）</td>
+          </tr>
+          <tr>
+            <td><strong>Anthropic</strong><br>第一者 API</td>
+            <td><strong>workspace geo</strong>（ワークスペース作成時に固定・<strong>後から変更不可</strong>。現在は "us" のみ）</td>
+            <td><strong>inference geo</strong>（既定 "global"、リクエスト単位またはワークスペース既定で "us" を選択可）。<strong>米国限定の推論は 1.1 倍の価格</strong>（Claude 4.6 以降のモデルが対象）</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="scroll-hint">← 横にスクロールできます。「未確認」は「無い」ではなく「当サイトで一次情報を確認できていない」を意味します。</p>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="b1-h">
+    <h2 class="section-title" id="b1-h" style="font-size:1.2rem;">分岐① 「保存」と「処理」を分けて公表している例（OpenAI）</h2>
+    <p class="section-sub">ここが最も分かりやすい例です。OpenAI は<strong>地域ごとに Storage と Processing を別々に</strong>示しています。つまり<strong>「保存は国内・処理は地域外」という組み合わせが、公式に存在します</strong>。</p>
+    <div class="quote">
+      <em>“If you select a region that supports regional processing, as specifically identified below, the services will perform inference for your Customer Content in the selected region as well.”</em>
+      <span class="who">— OpenAI「Data controls in the OpenAI platform」（2026-10-05 取得）</span>
+    </div>
+    <div class="quote">
+      <em>“Support for regional storage does not imply support for regional processing.”</em>
+      <span class="who">— 同じ文書（2026-10-05 取得）</span>
+    </div>
+    <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.3em;line-height:1.9;">
+      <li><strong>料金を払う地域は「保存」だけの地域があります。</strong>公式の地域表では、United States と Europe（EEA＋スイス）と UAE は Storage も Processing も可、<strong>日本（jp.api.openai.com）・英国・カナダ・オーストラリア・インド・シンガポール・韓国は Storage 可 / Processing 不可</strong>です。「日本リージョンがある」＝「日本国内で推論される」ではありません。</li>
+      <li><strong>US 以外は申請が必要です。</strong>逐語で「To use data residency with any region other than the United States, you must be approved for abuse monitoring controls, and execute a Modified Retention amendment.」と書かれています。データレジデンシーは<strong>セルフサービスで完結する設定ではなく、審査と契約追補を伴う</strong>ものです。</li>
+      <li><strong>UAE はさらに追加承認</strong>が必要とも明記されています。<strong>地域ごとに条件が違う</strong>ので、「対応地域一覧」だけを見て判断すると足りません。</li>
+      <li><strong>設定の単位は「プロジェクト」</strong>です。逐語で「select the appropriate region from the dropdown when creating a new project」とあり、<strong>既存プロジェクトの後付けではなく作成時に選ぶ</strong>形です。誰がどのプロジェクトをどの地域で作ったかを記録しておく必要があります。</li>
+    </ul>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="b2-h">
+    <h2 class="section-title" id="b2-h" style="font-size:1.2rem;">分岐② 同じクラウドでも「どの設定か」で3段階に変わる（Microsoft / AWS / Google）</h2>
+    <p class="section-sub">クラウド事業者側は、<strong>保存は固定・処理は選択</strong>という形が共通しています。ただし<strong>選択の単位と段階が各社で違います</strong>。</p>
+    <div class="quote">
+      <em>“Data residency for all deployment types: Data stored at rest remains in the designated Azure geography. However, inferencing data is processed as follows: Global types: May be processed in any Azure region / Standard and Regional Provisioned types: Prompts and responses are processed within the customer-specified Azure geography and might be processed between regions within that geography for operational purposes.”</em>
+      <span class="who">— Microsoft Learn「Understanding deployment types in Microsoft Foundry Models」（2026-10-05 取得）</span>
+    </div>
+    <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.3em;line-height:1.9;">
+      <li><strong>Microsoft は「デプロイ種別」が3段階です。</strong>処理の範囲は <strong>Global（どの Azure リージョンでも）/ Data Zone（US・EU・APAC のデータゾーン内）/ Standard・Regional（指定 geography 内）</strong>。しかも Select する場所は課金の単位でもあるため、<strong>同じモデルで価格が3通り</strong>になります（選択は利用企業側）。</li>
+      <li><strong>Microsoft の「同一 geography 内のリージョン間処理」は残ります。</strong>逐語に「might be processed between regions within that geography for operational purposes」とあり、<strong>国単位で固定したい場合、これだけでは足りない</strong>ことがあります。EU は Azure EU Data Boundary（EFTA のノルウェー・スイスを含む）に従う、と補足されています。</li>
+      <li><strong>AWS は「推論プロファイル」で選びます。</strong>公式表の Data residency は、Geographic＝「Within geographic boundaries (such as US, EU, and APAC)」、Global＝「Any supported AWS commercial Region worldwide」。<strong>推奨も逐語で書かれており</strong>「Choose Geographic for compliance requirements（コンプライアンス要件があるなら Geographic を選べ）」です。cross-Region 中も「データは AWS ネットワーク上に留まり、公開インターネットを経由しない」と明記されています。</li>
+      <li><strong>Google Cloud は「エンドポイント」で選びます。</strong>at rest は「選んだロケーションに残る（エンドポイントに関係なく）」、処理は jurisdictional multi-region ならその地域内、global なら<strong>「regional isolation も data residency の保証も提供しない」</strong>と逐語で書かれています。<strong>「global endpoint を使っていないか」が確認点</strong>です。</li>
+      <li><strong>除外もあります。</strong>Google のデータレジデンシー条項では、Grounding with Google Search・Web Grounding for Enterprise・Grounding with Google Maps・RAG Engine が対象外として列挙されています。<strong>「同じプロジェクトだから対象内」とは限りません。</strong></li>
+    </ul>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="b3-h">
+    <h2 class="section-title" id="b3-h" style="font-size:1.2rem;">分岐③ 第一者 API は「選択肢が少ない」ことがある（Anthropic）</h2>
+    <p class="section-sub">Anthropic は<strong>2つの独立した設定</strong>で管理しています。ここは<strong>「地域を自由に選べる」わけではない</strong>という例として重要です。</p>
+    <div class="quote">
+      <em>“Two independent settings govern this: Inference geo: Controls where model inference runs, on a per-request basis. Set through the inference_geo API parameter or as a workspace default. Workspace geo: Controls where data is stored at rest and where endpoint processing (such as image transcoding and code execution) happens. Configured at the workspace level in the Claude Console”</em>
+      <span class="who">— Claude Platform Docs「Data residency」（2026-10-05 取得）</span>
+    </div>
+    <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.3em;line-height:1.9;">
+      <li><strong>選べる値は "us" と "global" の2つだけです。</strong>inference geo は既定が "global"（「Inference may run in any available geography」）、"us" を選ぶと米国内の設備に限定されます。<strong>EU は第一者 API では選べません</strong>（＝EU 要件はパートナー基盤側で満たす形になります）。</li>
+      <li><strong>workspace geo は作成時に固定され、変更できません。</strong>逐語で「Workspace geo is set when you create a workspace and can't be changed afterward. Currently, "us" is the only available workspace geo.」とあります。<strong>「後から切り替える」ができない設定がある</strong>という点は、契約前に必ず押さえてください。</li>
+      <li><strong>米国限定の推論は 1.1 倍の価格です（対象は Claude 4.6 以降のモデル）。</strong>逐語で「Claude 4.6 and later models: US-only inference (inference_geo: "us") is priced at 1.1x the standard rate across all token pricing categories」と明記されています。<strong>データの置き場所は料金に跳ね返ります</strong>（グローバル経路は標準価格）。</li>
+      <li><strong>パートナー基盤は別扱いです。</strong>「On Claude in Microsoft Foundry, the same 1.1x multiplier applies to deployments hosted on Azure that use the US Data Zone Standard deployment type. Partner-operated platforms (Bedrock and Google Cloud) have their own regional pricing.」とあり、<strong>同じモデルでも経路ごとに地域の選択肢と価格が違います</strong>。Anthropic の地域別レジデンシーは Europe・United States・Canada・Asia-Pacific（日本・韓国・シンガポール・インド・オーストラリアを含む）で提供、と案内されています（パートナー基盤側の提供）。</li>
+    </ul>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="sep-h">
+    <h2 class="section-title" id="sep-h" style="font-size:1.2rem;">「出さない」は「残さない」「見せない」「学ばせない」と別の約束</h2>
+    <p class="section-sub">第8回で扱った4要件のうち、④レジデンシーだけを深掘りしました。<strong>④を満たしても①〜③は満たしません。</strong></p>
+    <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.3em;line-height:1.9;">
+      <li><strong>「保存先を国内にした」は「学習に使わない」ではありません。</strong>OpenAI のデータレジデンシーページは、<strong>保存・処理の場所を定める文書</strong>であり、学習条項は別の文書です（しかも US 以外では Modified Retention 追補が必要と書かれています）。<a href="/glossary/no-training/">no-training（学ばせない）</a>とセットで確認してください。</li>
+      <li><strong>「保存先を国内にした」は「担当者が見られない」でもありません。</strong>専用の承認フローや鍵管理（CMK / BYOK / HYOK）は、レジデンシーとは別の仕組みです。→ <a href="/glossary/zero-operator-access/">ZOA（見せない）</a></li>
+      <li><strong>「処理を地域内にした」は「残さない」でもありません。</strong>処理場所の保証と保持期間の保証は別です。→ <a href="/glossary/zero-data-retention/">ZDR（保存しない）</a></li>
+      <li><strong>読み分けの一覧:</strong> <a href="/glossary/four-data-requirements/">4要件（残さない・見せない・学ばせない・出さない）</a> / <a href="/glossary/zero-data-retention/">ZDR</a> / <a href="/glossary/zero-operator-access/">ZOA</a> / <a href="/glossary/no-training/">no-training</a>。</li>
+    </ul>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="steps-h">
+    <h2 class="section-title" id="steps-h" style="font-size:1.2rem;">確認する4ステップ</h2>
+    <ol class="steps">
+      <li><strong>「保存」と「処理」を分けて質問する。</strong>「データはどこに保存されますか」だけでは足りません。<strong>「推論はどの地域で実行されますか」を別の質問として</strong>投げます。この2問を分けるだけで、答えが変わる提供元が複数あります。</li>
+      <li><strong>どの設定で固定するのかを特定する。</strong>デプロイ種別・推論プロファイル・エンドポイント・プロジェクト設定・ワークスペース設定——<strong>固定する単位は提供元ごとに違います</strong>。単位が分かると「誰が設定したか」も分かります。</li>
+      <li><strong>「どこでも」が残っていないか確認する。</strong>global エンドポイント、global プロファイル、Global デプロイ、既定の "global"——<strong>既定が「どこでも」側になっている設定がある</strong>ので、明示的に地域を指定したかを確認します。</li>
+      <li><strong>契約と記録で固める。</strong>画面の設定は条項の代わりになりません。<strong>「どの層・どの設定・どの地域」を、確認した条文とセットで記録</strong>します。担当者交代で最も失われるのがこの記録です。</li>
+    </ol>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="myth-h">
+    <h2 class="section-title" id="myth-h" style="font-size:1.2rem;">よくある誤解 4つ</h2>
+    <div class="req-grid">
+      <div class="req">
+        <p class="tag">誤解 1</p>
+        <h3>「リージョンを選べる＝データは国外に出ない」</h3>
+        <p>「選べる」は「固定される」ではありません。<strong>既定値がどこでも（global）</strong>の提供元が多く、明示的に指定して初めて固定されます。</p>
+      </div>
+      <div class="req">
+        <p class="tag">誤解 2</p>
+        <h3>「保存先を国内にした＝処理も国内」</h3>
+        <p>OpenAI の日本は <strong>Storage 可 / Processing 不可</strong>。Microsoft は Global 種別で「どの Azure リージョンでも」処理され得ます。<strong>処理は別の設定</strong>です。</p>
+      </div>
+      <div class="req">
+        <p class="tag">誤解 3</p>
+        <h3>「レジデンシー対応＝学習にも使われない」</h3>
+        <p>保存・処理の場所と、学習条項は別の文書です。レジデンシーを満たしても学習条項は満たしません。→ <a href="/glossary/no-training/">no-training</a></p>
+      </div>
+      <div class="req">
+        <p class="tag">誤解 4</p>
+        <h3>「日本リージョンがある＝日本国内で処理される」</h3>
+        <p>第一者 API の地域は<strong>「保存」だけのことがあります</strong>。処理まで国内にするかは別項目です。Anthropic の第一者 API では EU すら選べません。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="faq-h">
+    <h2 class="section-title" id="faq-h" style="font-size:1.2rem;">よくある質問</h2>
+    <dl>
+      <div class="faq-block">
+        <dt>データレジデンシーとデータ主権（データソブリン）は同じですか？</dt>
+        <dd>このページでは区別して使っています。レジデンシーは<strong>「データが置かれ、処理される場所」の約束</strong>、データ主権は<strong>「そのデータにどの国の法が及ぶか」というより広い論点</strong>です。置き場所を国内にしても、その提供元の本国法が及ぶ範囲は別途確認が必要です。</dd>
+      </div>
+      <div class="faq-block">
+        <dt>「リージョンを選びました」と社内で説明すれば十分ですか？</dt>
+        <dd>不十分です。<strong>①保存と②処理のどちらを固定したのか</strong>を分けて言う必要があります。特にクラウド事業者の場合、処理範囲は「同一 geography 内のリージョン間」まで広がることがあり、<strong>国単位で固定したいなら構成を変える必要があります</strong>。</dd>
+      </div>
+      <div class="faq-block">
+        <dt>データレジデンシーを有効にすると料金は変わりますか？</dt>
+        <dd>変わることがあります。Anthropic は<strong>米国限定の推論を 1.1 倍</strong>と明記しています（対象は Claude 4.6 以降のモデル）。Microsoft もデプロイ種別ごとに価格が異なります（Global / Data Zone / Standard）。<strong>レジデンシーは構成の選択であり、価格の選択でもあります</strong>。</dd>
+      </div>
+      <div class="faq-block">
+        <dt>「未確認」と書いてある項目は、保証がないという意味ですか？</dt>
+        <dd>違います。当サイトで<strong>一次情報を確認できていない</strong>という意味です。たとえば Microsoft の消費者向けサービスや、各社の除外サービスの最新一覧は、確認できた範囲でのみ記載しています。<strong>契約前には必ず提供元の最新ドキュメントを確認してください。</strong></dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="section" style="padding-top:0;">
+    <h2 class="section-title" style="font-size:1.1rem;">出典</h2>
+    <ul class="src-list">
+      <li>Microsoft — <a href="https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/deployment-types" target="_blank" rel="noopener">Understanding deployment types in Microsoft Foundry Models</a>（at rest は designated Azure geography・Global / Data Zone / Standard の処理範囲・Developer 枠の保証なし／2026-10-05 取得）</li>
+      <li>AWS — <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference.html" target="_blank" rel="noopener">Route model inference requests across AWS Regions with cross-Region inference</a>（Geographic / Global の Data residency と推奨・AWS ネットワーク内に留まる／2026-10-05 取得）</li>
+      <li>AWS — <a href="https://aws.amazon.com/bedrock/faqs/" target="_blank" rel="noopener">Amazon Bedrock FAQs</a>（「stored at rest in the AWS Region where you are using Amazon Bedrock.」／2026-09-29 取得）</li>
+      <li>Google Cloud — <a href="https://docs.cloud.google.com/gemini-enterprise-agent-platform/resources/data-residency" target="_blank" rel="noopener">Data residency</a>（at rest は選んだロケーション・jurisdictional / global エンドポイントの違い／2026-10-05 取得）／<a href="https://cloud.google.com/terms/data-residency" target="_blank" rel="noopener">Cloud Data Residency Terms</a>（対象外サービスの一覧）</li>
+      <li>OpenAI — <a href="https://developers.openai.com/api/docs/guides/your-data" target="_blank" rel="noopener">Data controls in the OpenAI platform</a>（プロジェクト単位の設定・地域ごとの Storage / Processing の別判定・US 以外の承認要件・「Support for regional storage does not imply support for regional processing.」／2026-10-05 取得）</li>
+      <li>Anthropic — <a href="https://platform.claude.com/docs/en/manage-claude/data-residency" target="_blank" rel="noopener">Data residency</a>（inference geo と workspace geo・米国限定 1.1 倍・workspace geo は変更不可／2026-10-05 取得）／<a href="https://claude.com/regional-compliance" target="_blank" rel="noopener">Regional compliance</a>（地域別レジデンシーの提供範囲／2026-09-29 取得）</li>
+      <li>関連: <a href="/glossary/four-data-requirements/">データを守る4要件</a>・<a href="/glossary/zero-data-retention/">ZDR（ゼロデータ保持）</a>・<a href="/glossary/zero-operator-access/">ZOA（ゼロオペレーターアクセス）</a>・<a href="/glossary/no-training/">no-training（学ばせない）</a>・<a href="/glossary/">用語説明の一覧</a></li>
+    </ul>
+  </section>
+</div></main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>運営: okamoちゃんねる</p><p><a href="/">ホーム</a> · <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a> · <a href="/timeline/">年表</a> · <a href="/glossary/">用語説明</a> · <a href="/gpt-6/">GPT-6 Astra</a></p></div><p class="footer-disclaimer">⚠️ 規約・データの取扱いは各社の公式ドキュメントで必ずご確認ください。本サイトは各社と提携していません。</p></div></footer>
+</body>
+</html>

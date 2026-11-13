@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="LLM Data Hub">
+  <rect x="0" y="0" width="64" height="64" rx="14" fill="#131722"/>
+  <rect x="1.5" y="1.5" width="61" height="61" rx="12.5" fill="none" stroke="#2e3250" stroke-width="3"/>
+  <rect x="11" y="34" width="11" height="18" rx="3" fill="#6c8eff"/>
+  <rect x="26.5" y="24" width="11" height="28" rx="3" fill="#a78bfa"/>
+  <rect x="42" y="14" width="11" height="38" rx="3" fill="#34d399"/>
+</svg>

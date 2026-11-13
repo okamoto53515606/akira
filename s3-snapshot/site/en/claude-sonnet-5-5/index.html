@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Claude Sonnet 5.5 — The Balanced Model of the Claude 5.5 Family [Pricing &amp; 1M Context] — LLM Data Hub</title>
+  <meta name="description" content="Anthropic Claude Sonnet 5.5: $2 input / $10 output, $0.10 cache reads, 1M context, 128K max output, adaptive thinking with a default effort of high. Input and output match the previous-generation Sonnet 5 while cache reads halve to $0.10; includes the model ID on each of the five platforms. Updated October 9, 2026.">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/en/claude-sonnet-5-5/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta property="og:image" content="https://llm.okamomedia.tokyo/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="LLM Data Hub — LLM API pricing, token costs and model data">
+  <meta name="twitter:image" content="https://llm.okamomedia.tokyo/assets/og-image.png">
+  <meta name="twitter:image:alt" content="LLM Data Hub — LLM API pricing, token costs and model data">
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/claude-sonnet-5-5/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/claude-sonnet-5-5/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/claude-sonnet-5-5/">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/en/claude-sonnet-5-5/">
+  <meta property="og:title" content="Claude Sonnet 5.5 — The Balanced Model of the Claude 5.5 Family">
+  <meta property="og:description" content="$2 input / $10 output, 1M context, 128K max output (updated October 9, 2026). Input and output match Sonnet 5; cache reads halve to $0.10 (5% of input). Differences from Opus 5.5 and all five platform model IDs, from primary sources.">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Claude Sonnet 5.5 — The Balanced Model of the Claude 5.5 Family [Pricing & 1M Context]","datePublished":"2026-10-01","dateModified":"2026-10-09","author":{"@type":"Organization","name":"okamo channel"},"publisher":{"@type":"Organization","name":"okamo channel"},"url":"https://llm.okamomedia.tokyo/en/claude-sonnet-5-5/","inLanguage":"en","description":"Claude Sonnet 5.5 pricing, context window, output limit, thinking behaviour and platform model IDs, quoted from Anthropic's official documentation."}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://llm.okamomedia.tokyo/en/"},{"@type":"ListItem","position":2,"name":"Claude Sonnet 5.5","item":"https://llm.okamomedia.tokyo/en/claude-sonnet-5-5/"}]}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .hero-sonnet{background:linear-gradient(135deg,#0a1420 0%,#122232 50%,#0f1117 100%);border-bottom:1px solid var(--c-border);padding:3rem 1rem 2.5rem;text-align:center}.hero-sonnet .price-flag{display:inline-block;background:rgba(106,169,255,.16);border:1px solid rgba(106,169,255,.4);color:#9cc4ff;font-size:.82rem;font-weight:700;padding:.3rem .8rem;border-radius:100px;margin-bottom:1rem}.hero-sonnet h1{font-size:clamp(1.6rem,4.5vw,2.4rem);font-weight:800;line-height:1.2;margin-bottom:.75rem}.hero-sonnet h1 span{color:#6aa9ff}.hero-sonnet .lead{font-size:1.05rem;color:var(--c-muted);max-width:680px;margin:0 auto 1.5rem}.hero-sonnet .quick-stats{display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;margin-top:1rem}.hero-sonnet .stat{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.75rem 1.25rem;text-align:center}.hero-sonnet .stat .val{font-family:var(--font-mono);font-size:1.25rem;font-weight:700;color:#6aa9ff}.hero-sonnet .stat .lbl{font-size:.75rem;color:var(--c-muted);margin-top:.15rem}
+    .spec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.8rem;margin-bottom:1.5rem}.spec-item{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.9rem 1rem}.spec-item .spec-label{font-size:.75rem;color:var(--c-muted);font-weight:600;margin-bottom:.25rem}.spec-item .spec-value{font-family:var(--font-mono);font-size:1rem;font-weight:700}
+    .context-note{background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid #6aa9ff;border-radius:var(--r-md);padding:.8rem 1rem;margin:1rem 0;font-size:.84rem;color:var(--c-muted)}
+    .quote{margin:1rem 0;padding:.85rem 1rem;background:var(--c-surface2);border:1px solid var(--c-border);border-radius:var(--r-sm);font-size:.84rem;line-height:1.85;color:var(--c-muted)}
+    .quote em{color:var(--c-text);font-style:italic}.quote .who{display:block;margin-top:.45rem;font-size:.76rem;color:var(--c-muted)}
+    .fig-wrap{position:relative}.fig-fig{margin:1rem 0 1.4rem}.fig-fig svg{width:100%;height:auto;border:1px solid var(--c-border);border-radius:var(--r-md);background:var(--c-surface);display:block}
+    .fig-hint{display:none;font-size:.75rem;color:var(--c-muted);text-align:center;margin:.3rem 0 0}
+    @media (max-width:680px){.fig-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}.fig-scroll svg{min-width:600px}.fig-hint{display:block}}
+    @media(max-width:640px){.hero-sonnet .quick-stats{flex-direction:column;gap:.5rem}}
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/en/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="Main navigation"><a href="/en/" class="nav-link">Home</a><a href="/en/pricing/" class="nav-link">Pricing</a><a href="/en/calculator/" class="nav-link">Token Calculator</a><a href="/en/timeline/" class="nav-link">Release Timeline</a><a href="/en/china-ai/" class="nav-link">China AI</a><a href="/en/multimodal/" class="nav-link">Multimodal</a><a href="/en/mai/" class="nav-link">MS AI (MAI)</a><a href="/en/glossary/" class="nav-link">Glossary</a></nav></div></header>
+
+<section class="hero-sonnet"><div class="container">
+  <p class="price-flag">🚀 Released September 28, 2026 — the balanced model of the Claude 5.5 family. Same input/output price as Sonnet 5; cache reads are half ($0.10).</p>
+  <h1>Claude <span>Sonnet 5.5</span></h1>
+  <p class="lead">The second model in Anthropic's Claude 5.5 family. The official docs describe it as <strong>"The best combination of speed and intelligence."</strong> Input and output pricing is <strong>the same as the previous-generation Sonnet 5</strong> at $2 / $10, while <strong>cache reads halve from $0.20 to $0.10</strong>.</p>
+  <div class="quick-stats">
+    <div class="stat"><div class="val">$2.00</div><div class="lbl">Input / 1M tokens</div></div>
+    <div class="stat"><div class="val">$10.00</div><div class="lbl">Output / 1M tokens</div></div>
+    <div class="stat"><div class="val">1M</div><div class="lbl">Context</div></div>
+    <div class="stat"><div class="val">128K</div><div class="lbl">Max output</div></div>
+  </div>
+</div></section>
+
+<main><div class="container">
+<div class="updated-bar" style="margin-top:2rem;"><span class="dot">●</span>Last updated: <time datetime="2026-10-09">October 9, 2026</time><br><span style="color:var(--c-yellow);">⚠️ 2026-10-09: corrected the cache-read price from $0.20 to $0.10 after re-checking the official pricing docs.</span> | Sources: <a href="https://platform.claude.com/docs/en/models/sonnet-5-5/overview" target="_blank" rel="noopener">Claude Platform Docs — Sonnet 5.5 overview</a> · <a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener">Official pricing docs</a> | <a href="/en/pricing/">Pricing</a> · <a href="/en/calculator/">Calculator</a> · <a href="/en/claude-opus-5-5/">Opus 5.5</a></div>
+
+<section class="section" style="padding-top:2rem;" aria-labelledby="tl-h">
+<h2 class="section-title" id="tl-h" style="font-size:1.2rem;">The short version</h2>
+<div class="context-note" style="border-left-color:var(--c-green);">
+  <ul style="margin:0;padding-left:1.1rem;line-height:1.9;">
+    <li><strong>This is a generation update, not an across-the-board price cut.</strong> $2 input / $10 output is <strong>the same</strong> as the previous-generation Claude Sonnet 5 — but cache reads halved (see the next point), which lowers real costs for reused long prompts.</li><li><strong>Cached input, however, is halved: $0.20 &rarr; $0.10.</strong> Input and output match the previous generation, but long reused contexts (RAG, agents) get cheaper in practice (re-verified on the official pricing page on 2026-10-09).</li>
+    <li><strong>On paper, the specs match Opus 5.5 (our comparison).</strong> 1M context, 128K max output, knowledge cutoff June 2026 — the specs match the tier above it.</li>
+    <li><strong>Thinking is "Adaptive," on by default, with a default effort of <code>high</code>.</strong> Unlike Opus 5.5's "Adaptive (always on)," Sonnet 5.5 documents a lowest setting, <code>between_tools</code>, that turns off up-front thinking.</li>
+    <li><strong>No benchmarks published.</strong> The official Sonnet 5.5 overview page carries no benchmark table, unlike the Opus 5.5 announcement. We do not invent numbers — we say "not published."</li>
+  </ul>
+</div>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="price-h">
+<h2 class="section-title" id="price-h" style="font-size:1.2rem;">Pricing (USD per 1M tokens, from official docs)</h2>
+<p class="section-sub">Verified on the Sonnet 5.5 overview page and the official pricing documentation. Standard rates, matching our <a href="/en/pricing/">pricing comparison</a>.</p>
+<div class="table-wrap"><table><thead><tr><th>Item</th><th>Claude Sonnet 5.5</th><th>Claude Sonnet 5 (previous gen)</th><th>Claude Opus 5.5 (tier above)</th></tr></thead><tbody>
+<tr><td class="model-name">Input</td><td class="price">$2.00</td><td>$2.00</td><td>$4.00</td></tr>
+<tr><td class="model-name">Output</td><td class="price">$10.00</td><td>$10.00</td><td>$20.00</td></tr>
+<tr><td class="model-name">Cache read (cache hit)</td><td class="price">$0.10</td><td>$0.20</td><td>$0.20</td></tr>
+<tr><td class="model-name">Cache write (5-minute TTL)</td><td class="price">$2.50</td><td>$2.50</td><td>$5.00</td></tr>
+<tr><td class="model-name">Cache write (1-hour TTL)</td><td class="price">$4.00</td><td>—</td><td>—</td></tr>
+</tbody></table></div>
+<p style="font-size:.78rem;color:var(--c-muted);margin-top:.3rem;">※ Cache prices for Sonnet 5 and Opus 5.5 match the official figures listed in our <a href="/en/pricing/">pricing comparison</a>. The $4 one-hour cache write for Sonnet 5.5 is stated on its overview page; Sonnet 5's equivalent is not published on our site, so it is shown as "—".</p>
+
+<h3 style="font-size:1rem;margin:1.6rem 0 .5rem;">The general cache rules Anthropic publishes</h3>
+<div class="quote">
+  <em>“5-minute cache write | 1.25x base input price … 1-hour cache write | 2x base input price … Cache read (hit) | 0.1x base input price (0.025x on Claude Fable 5.1 and Claude Mythos 5.1; 0.05x on Claude Opus 5.5 and Claude Sonnet 5.5)”</em>
+  <span class="who">— Claude Platform Docs, "Pricing" (verified 2026-10-09)</span>
+</div>
+<ul style="font-size:.86rem;color:var(--c-muted);padding-left:1.3em;line-height:1.9;">
+  <li><strong>Sonnet 5.5's cache read is 5% of input ($0.10) — deeper than the standard 10% discount.</strong> The docs say &ldquo;0.05x on Claude Opus 5.5 and Claude Sonnet 5.5&rdquo;. In cash terms it undercuts both Fable 5.1's $0.25 and Opus 5.5's $0.20. Discount depth and absolute cost are different things, so look at both.</li>
+  <li><strong>Batch API is a 50% discount</strong> on input and output, per the official pages.</li>
+  <li><strong>US-only inference costs 1.1x.</strong> Verbatim: “For Claude 4.6 and later models, specifying US-only inference through the <code>inference_geo</code> parameter incurs a 1.1x multiplier on all token pricing categories, including input tokens, output tokens, cache writes, and cache reads.”</li>
+  <li><strong>Partner platforms set their own regional prices.</strong> Verbatim: “Partner-operated platforms (Bedrock and Google Cloud) have independent regional pricing.”</li>
+</ul>
+<p class="source-note">Primary sources: <a href="https://platform.claude.com/docs/en/models/sonnet-5-5/overview" target="_blank" rel="noopener">Sonnet 5.5 overview</a> (pricing block, verified 2026-10-09) · <a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener">Official pricing docs</a> (cache multipliers, inference_geo, partner pricing)</p>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="fig-h">
+<h2 class="section-title" id="fig-h" style="font-size:1.2rem;">Chart: Where Sonnet 5.5 sits on unit price</h2>
+<div class="fig-wrap">
+  <div class="fig-scroll">
+  <figure class="fig-fig" style="margin:0;">
+    <svg viewBox="0 0 640 250" role="img" aria-labelledby="sfig-t sfig-d" xmlns="http://www.w3.org/2000/svg">
+      <title id="sfig-t">Unit price comparison: Claude Sonnet 5.5, Sonnet 5, Opus 5.5 and Fable 5.1</title>
+      <desc id="sfig-d">Horizontal bar chart of input and output prices in USD per 1M tokens. Sonnet 5.5 and Sonnet 5 are both $2 input and $10 output. Opus 5.5 is $4 input and $20 output. Fable 5.1 is $10 input and $50 output.</desc>
+      <g font-family="system-ui,Segoe UI,sans-serif" font-size="12.5" fill="#e6e6e6">
+        <text x="12" y="26" font-size="13" font-weight="700" fill="#6aa9ff">Input $ / 1M tokens</text>
+        <rect x="150" y="12" width="60" height="18" rx="3" fill="#6aa9ff"/><text x="220" y="26" fill="#e6e6e6">Sonnet 5.5 &#8212; $2.00</text>
+        <rect x="150" y="36" width="60" height="18" rx="3" fill="#3d5f80"/><text x="220" y="50" fill="#9aa0aa">Sonnet 5 &#8212; $2.00 (same)</text>
+        <rect x="150" y="60" width="120" height="18" rx="3" fill="#d97757"/><text x="280" y="74" fill="#e6e6e6">Opus 5.5 &#8212; $4.00</text>
+        <rect x="150" y="84" width="300" height="18" rx="3" fill="#5f4a3e"/><text x="460" y="98" fill="#9aa0aa">Fable 5.1 &#8212; $10.00</text>
+        <text x="12" y="140" font-size="13" font-weight="700" fill="#6aa9ff">Output $ / 1M tokens</text>
+        <rect x="150" y="126" width="39" height="18" rx="3" fill="#6aa9ff"/><text x="199" y="140" fill="#e6e6e6">Sonnet 5.5 &#8212; $10</text>
+        <rect x="150" y="150" width="39" height="18" rx="3" fill="#3d5f80"/><text x="199" y="164" fill="#9aa0aa">Sonnet 5 &#8212; $10 (same)</text>
+        <rect x="150" y="174" width="78" height="18" rx="3" fill="#d97757"/><text x="238" y="188" fill="#e6e6e6">Opus 5.5 &#8212; $20</text>
+        <rect x="150" y="198" width="196" height="18" rx="3" fill="#5f4a3e"/><text x="356" y="212" fill="#9aa0aa">Fable 5.1 &#8212; $50</text>
+      </g>
+    </svg>
+    <figcaption style="font-size:.78rem;color:var(--c-muted);margin-top:.5rem;">Source: Claude Platform Docs, "Sonnet 5.5 overview" and "Pricing" (verified 2026-10-09). Bars are scaled against $10 input / $50 output. Values are USD per 1M tokens. <strong>Sonnet 5.5 matches Sonnet 5 on both input and output</strong> — a generation change, not a price cut.</figcaption>
+  </figure>
+  </div>
+  <p class="fig-hint">← scroll horizontally →</p>
+</div>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="spec-h">
+<h2 class="section-title" id="spec-h" style="font-size:1.2rem;">Specifications (from the official docs)</h2>
+<div class="spec-grid">
+  <div class="spec-item"><div class="spec-label">Released</div><div class="spec-value">2026-09-28</div></div>
+  <div class="spec-item"><div class="spec-label">Context</div><div class="spec-value">1M tokens</div></div>
+  <div class="spec-item"><div class="spec-label">Max output</div><div class="spec-value">128K tokens</div></div>
+  <div class="spec-item"><div class="spec-label">Knowledge cutoff</div><div class="spec-value">Jun 2026</div></div>
+  <div class="spec-item"><div class="spec-label">Thinking</div><div class="spec-value">Adaptive (on by default)</div></div>
+  <div class="spec-item"><div class="spec-label">Default effort</div><div class="spec-value">high</div></div>
+  <div class="spec-item"><div class="spec-label">Status</div><div class="spec-value">Active (latest)</div></div>
+  <div class="spec-item"><div class="spec-label">Model ID (Claude API)</div><div class="spec-value" style="font-size:.85rem;">claude-sonnet-5-5</div></div>
+</div>
+<p class="section-sub">The official overview table is a single row (verbatim).</p>
+<div class="quote">
+  <em>“| Claude Sonnet 5.5 | 1M | 128K | $2 / $10 | Fast | Adaptive | high | Jun 2026 |”</em>
+  <span class="who">— columns are Context / Max output / Price per MTok / Latency / Thinking / Default effort / Knowledge cutoff (verified 2026-10-09)</span>
+</div>
+<p class="source-note">Source: <a href="https://platform.claude.com/docs/en/models/sonnet-5-5/overview" target="_blank" rel="noopener">Claude Platform Docs, "Claude Sonnet 5.5"</a> (Released September 28, 2026 / Context 1M / Max output 128K / Reliable knowledge cutoff Jun 2026 / Training data cutoff Jun 2026 / Availability: Active (latest))</p>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="prov-h">
+<h2 class="section-title" id="prov-h" style="font-size:1.2rem;">Where it runs, and the model ID on each platform</h2>
+<p class="section-sub">Same model, different call strings. These are quoted straight from the official page.</p>
+<div class="table-wrap"><table><thead><tr><th>Platform</th><th>Model ID</th></tr></thead><tbody>
+<tr><td class="model-name">Claude API</td><td><code>claude-sonnet-5-5</code></td></tr>
+<tr><td class="model-name">Amazon Bedrock</td><td><code>anthropic.claude-sonnet-5-5</code></td></tr>
+<tr><td class="model-name">Google Cloud (Vertex AI)</td><td><code>claude-sonnet-5-5</code></td></tr>
+<tr><td class="model-name">Microsoft Foundry</td><td><code>claude-sonnet-5-5</code></td></tr>
+<tr><td class="model-name">Claude Platform on AWS</td><td><code>claude-sonnet-5-5</code></td></tr>
+</tbody></table></div>
+<div class="context-note" style="border-left-color:var(--c-yellow);">
+  ⚠️ <strong>Watch the prefix:</strong> only Amazon Bedrock adds <code>anthropic.</code>. More importantly, <strong>data handling differs by platform</strong> — retention, training and location are governed by the platform you call, not by the model. We break this down in <a href="/en/glossary/four-data-requirements/">Glossary #8: The four data requirements</a> and <a href="/en/glossary/zero-operator-access/">#9: Zero operator access</a>.
+</div>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="think-h">
+<h2 class="section-title" id="think-h" style="font-size:1.2rem;">Thinking — documented differently from Opus 5.5</h2>
+<p class="section-sub">The Sonnet 5.5 overview page says this, verbatim.</p>
+<div class="quote">
+  <em>“Adaptive thinking is on by default. The lowest thinking setting is <code>between_tools</code>, which turns off up-front thinking. It works at <code>high</code> effort or below.”</em>
+  <span class="who">— Claude Platform Docs, "Claude Sonnet 5.5" (verified 2026-10-09)</span>
+</div>
+<div class="table-wrap"><table><thead><tr><th>Item</th><th>Claude Sonnet 5.5</th><th>Claude Opus 5.5</th></tr></thead><tbody>
+<tr><td class="model-name">Thinking entry</td><td>Adaptive</td><td>Adaptive (always on)</td></tr>
+<tr><td class="model-name">Default effort</td><td>high</td><td>medium</td></tr>
+<tr><td class="model-name">Can up-front thinking be turned off?</td><td><strong>Yes</strong> — the lowest setting <code>between_tools</code> turns off up-front thinking, at <code>high</code> effort or below</td><td><strong>No</strong> — see "thinking can't be disabled" in our <a href="/en/claude-opus-5-5/">Opus 5.5 deep dive</a></td></tr>
+</tbody></table></div>
+<div class="context-note">
+  🔍 <strong>Why it matters:</strong> both models say "Adaptive," but only Sonnet 5.5 documents an escape hatch to spend fewer thinking tokens. For high-volume, low-complexity work, that difference lands directly on your output-token bill — so "Sonnet is cheaper" is not only about the unit price.
+</div>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="unk-h">
+<h2 class="section-title" id="unk-h" style="font-size:1.2rem;">What we could not verify (no estimated numbers)</h2>
+<p class="section-sub">Our rule: <strong>anything not confirmable in a primary source is marked "not verified."</strong> We do not publish guessed figures.</p>
+<div class="table-wrap"><table><thead><tr><th>Item</th><th>Status</th><th>Notes</th></tr></thead><tbody>
+<tr><td class="model-name">Benchmark scores</td><td><strong>Not published</strong></td><td>The Sonnet 5.5 overview page has no benchmark table (the Opus 5.5 announcement had nine rows).</td></tr>
+<tr><td class="model-name">List of available regions</td><td><strong>Not verified</strong></td><td>The overview page only states "Availability: Status = Active (latest)". What is documented: the 1.1x US-only inference multiplier via <code>inference_geo</code>, and that Bedrock / Google Cloud have independent regional pricing.</td></tr>
+<tr><td class="model-name">Rate limits and tiers</td><td><strong>Not published</strong></td><td>Not mentioned on the overview page.</td></tr>
+<tr><td class="model-name">Introductory or limited-time pricing</td><td><strong>Not published</strong></td><td>No such note exists, so $2 / $10 is treated as the standard price (same as Sonnet 5).</td></tr>
+<tr><td class="model-name">ZDR / ZOA availability for this model</td><td><strong>Not verified</strong></td><td>Per-model retention conditions (e.g. Covered Models) are not stated on the model overview page. See <a href="/en/glossary/zero-operator-access/">our ZOA explainer</a> for where each vendor documents this.</td></tr>
+</tbody></table></div>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="rel-h">
+<h2 class="section-title" id="rel-h" style="font-size:1.2rem;">How it relates to other pages on this site</h2>
+<div class="table-wrap"><table><thead><tr><th>Model</th><th>On this site</th><th>Relationship</th></tr></thead><tbody>
+<tr><td class="model-name"><a href="/en/claude-opus-5-5/">Claude Opus 5.5</a></td><td>Dedicated page</td><td><strong>Tier above, twice the price</strong> ($4 / $20, default effort medium, thinking always on). Sonnet 5.5 sits below it.</td></tr>
+<tr><td class="model-name">Claude Sonnet 5</td><td>Listed in <a href="/en/pricing/">Pricing</a></td><td><strong>Previous generation, identical $2 / $10.</strong> The story is "same price, newer generation," not "cheaper."</td></tr>
+<tr><td class="model-name"><a href="/en/claude-fable-5-1/">Claude Fable 5.1</a> / <a href="/en/claude-mythos-5-1/">Mythos 5.1</a></td><td>Dedicated pages</td><td>Flagship tier ($10 / $50). Sonnet 5.5 is the general-purpose tier below them.</td></tr>
+<tr><td class="model-name"><a href="/en/claude-haiku-5-5/">Claude Haiku 5.5</a></td><td>Dedicated page</td><td>The fastest and cheapest model of the Claude 5.5 family. <strong>Released October 7, 2026</strong>; we published a dedicated page ($0.10/$0.50, and $0.50/$2.50 above 100k tokens).</td></tr>
+</tbody></table></div>
+<p class="source-note">Sources: <a href="https://www.anthropic.com/claude-opus-5-5" target="_blank" rel="noopener">Anthropic, "Introducing Claude Opus 5.5"</a> (Sonnet 5.5 / Haiku 5.5 "will follow in the coming weeks") · <a href="https://platform.claude.com/docs/en/models/sonnet-5-5/overview" target="_blank" rel="noopener">Sonnet 5.5 overview</a></p>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="use-h">
+<h2 class="section-title" id="use-h" style="font-size:1.2rem;">Good fit / watch out</h2>
+<div class="tip-box">
+  <ul>
+    <li><strong>High-volume work on a budget:</strong> $2 input and $0.10 cache reads are on the low side for a 1M-context model (compared with the models listed in our price comparison), and long reused contexts are exactly where that matters.</li>
+    <li><strong>Workloads that need to cap thinking:</strong> dropping to <code>between_tools</code> saves output tokens on classification and extraction — something Opus 5.5 cannot do.</li>
+    <li><strong>Migrating from Sonnet 5:</strong> the unit price is unchanged, so the decision rests on quality and total tokens. Since Sonnet 5.5's <strong>benchmarks are not published</strong>, run your own evaluation set instead of comparing numbers.</li>
+    <li><strong>Anything with audit or contract implications:</strong> retention, operator access, training terms and data location are not on the model page. Start from <a href="/en/glossary/zero-operator-access/">ZOA</a> and <a href="/en/glossary/four-data-requirements/">the four requirements</a>.</li>
+    <li><strong>Latency-sensitive work:</strong> the official table lists Latency as <strong>Fast</strong> (Opus 5.5 is Moderate). Concrete latency or throughput figures are not published.</li>
+  </ul>
+</div>
+</section>
+
+<section class="section" style="padding-top:0;">
+<div style="background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid #6aa9ff;border-radius:var(--r-lg);padding:1.5rem;text-align:center;">
+  <h3 style="font-size:1.1rem;margin-bottom:.75rem;">Estimate your real cost</h3>
+  <p style="color:var(--c-muted);font-size:.9rem;margin-bottom:1rem;">Compare token costs across major models, including Claude Sonnet 5.5.</p>
+  <a href="/en/calculator/" style="display:inline-block;background:var(--c-accent);color:#fff;font-weight:600;padding:.65rem 1.5rem;border-radius:var(--r-md);">🧮 Open the token calculator →</a>
+  <p style="margin-top:.8rem;font-size:.82rem;color:var(--c-muted);"><a href="/en/pricing/">📊 Full pricing comparison</a> · <a href="/en/claude-opus-5-5/">🤖 Opus 5.5 deep dive</a> · <a href="/en/claude-fable-5-1/">🚀 Fable 5.1</a> · <a href="/en/glossary/zero-operator-access/">🔐 Zero operator access</a> · <a href="/en/timeline/">🗓️ Release timeline</a></p>
+</div>
+</section>
+
+<div class="tip-box" style="border-left-color:var(--c-red);margin-bottom:2rem;">
+  <h3>⚠️ Disclaimer</h3>
+  <ul>
+    <li>Pricing and specifications were verified against Anthropic's official documentation (Claude Platform Docs "Sonnet 5.5 overview" and "Pricing") on <strong>2026-10-09</strong>. They can change without notice — always confirm on the official pages.</li>
+    <li>This page publishes no benchmark scores, because <strong>none are published officially</strong>. We do not estimate or copy numbers from elsewhere.</li>
+    <li>Items marked <strong>"not verified"</strong> (regions, rate limits, limited-time pricing, per-model data retention) will be updated once primary sources are available.</li>
+    <li>This site is informational only and is not affiliated with any provider.</li>
+  </ul>
+</div>
+
+</div></main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>Operated by okamo channel</p><p><a href="/en/">Home</a> · <a href="/en/pricing/">Pricing</a> · <a href="/en/calculator/">Calculator</a> · <a href="/en/timeline/">Timeline</a> · <a href="/en/claude-opus-5-5/">Claude Opus 5.5</a> · <a href="/en/claude-fable-5-1/">Claude Fable 5.1</a> · <a href="/en/glossary/zero-operator-access/">ZOA</a></p></div><p class="footer-disclaimer">⚠️ Pricing and specifications may change without notice. Always verify on official pages. Not affiliated with any provider.</p></div></footer>
+</body>
+</html>

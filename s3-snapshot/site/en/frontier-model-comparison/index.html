@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Frontier Models Compared (Nov 2026): Cache, Batch, ZDR, ZOA — LLM Data Hub</title>
+  <meta name="description" content="Claude Fable 5.2, GPT-6 Astra, Gemini 4 Carbon, Kimi K3.1 Pro and Meta Muse Wonder compared on cache rates, Batch discounts, ZDR, ZOA, training use, data residency and context length. Verbatim official sources with access dates; gaps marked unconfirmed (verified Nov 14, 2026).">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/en/frontier-model-comparison/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta property="og:image" content="https://llm.okamomedia.tokyo/assets/og/en-frontier-model-comparison.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Five frontier models compared: cache, Batch, ZDR, ZOA and data residency (LLM Data Hub)">
+  <meta name="twitter:image" content="https://llm.okamomedia.tokyo/assets/og/en-frontier-model-comparison.png">
+  <meta name="twitter:image:alt" content="Five frontier models compared: cache, Batch, ZDR, ZOA and data residency (LLM Data Hub)">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/en/frontier-model-comparison/">
+  <meta property="og:title" content="Frontier Models Compared (Nov 2026): Cache, Batch, ZDR, ZOA — LLM Data Hub">
+  <meta property="og:description" content="Claude Fable 5.2, GPT-6 Astra, Gemini 4 Carbon, Kimi K3.1 Pro and Meta Muse Wonder compared on cache rates, Batch discounts, ZDR, ZOA, training use, data residency and context length. Verbatim official sources with access dates; gaps marked unconfirmed (verified Nov 14, 2026).">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Frontier Models Compared (Nov 2026): Cache, Batch, ZDR, ZOA", "datePublished": "2026-11-14", "dateModified": "2026-11-14", "author": {"@type": "Organization", "name": "LLM Data Hub"}, "publisher": {"@type": "Organization", "name": "okamo channel"}, "url": "https://llm.okamomedia.tokyo/en/frontier-model-comparison/", "inLanguage": "en", "isAccessibleForFree": true, "description": "Claude Fable 5.2, GPT-6 Astra, Gemini 4 Carbon, Kimi K3.1 Pro and Meta Muse Wonder compared on cache rates, Batch discounts, ZDR, ZOA, training use, data residency and context length. Verbatim official sources with access dates; gaps marked unconfirmed (verified Nov 14, 2026)."}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .phrase-box{background:linear-gradient(135deg,#12162a 0%,#1a1d35 55%,#0f1117 100%);border:1px solid var(--c-border);border-left:3px solid var(--c-accent2);border-radius:var(--r-lg);padding:1.2rem 1.3rem;margin:1.2rem 0 1.6rem}
+    .phrase-box .phrase{font-size:1.02rem;font-weight:700;line-height:1.75;margin-bottom:.6rem}
+    .phrase-box .phrase-meta{font-size:.8rem;color:var(--c-muted);line-height:1.7}
+    .num-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:.8rem;margin:1rem 0 1.6rem}
+    .num-card{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.9rem 1rem}
+    .num-card .k{font-family:var(--font-mono);font-size:.74rem;color:var(--c-muted);font-weight:600;letter-spacing:.02em}
+    .num-card .v{font-family:var(--font-mono);font-size:1.05rem;font-weight:700;margin:.15rem 0 .2rem}
+    .num-card .d{font-size:.8rem;color:var(--c-muted);line-height:1.6}
+    .read-box{background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-green);border-radius:var(--r-md);padding:1rem 1.2rem;margin:1rem 0 1.6rem;font-size:.88rem;color:var(--c-muted)}
+    .read-box strong{color:var(--c-text)}
+    .cmp-table th,.cmp-table td{font-size:.84rem;vertical-align:top}
+    .cmp-table td.na{color:var(--c-muted)}
+    .table-wrap{overflow-x:auto}
+  </style>
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/frontier-model-comparison/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/frontier-model-comparison/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/frontier-model-comparison/"></head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/en/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="Main navigation"><a href="/en/" class="nav-link">Home</a><a href="/en/pricing/" class="nav-link">Pricing</a><a href="/en/calculator/" class="nav-link">Token calculator</a><a href="/en/timeline/" class="nav-link">Timeline</a><a href="/en/china-ai/" class="nav-link">China AI</a><a href="/en/multimodal/" class="nav-link">Multimodal</a><a href="/en/mai/" class="nav-link">MS AI (MAI)</a><a href="/en/glossary/" class="nav-link">Glossary</a></nav></div></header>
+
+<main>
+<div class="container" style="padding-top:2rem;">
+<h1 class="section-title" style="font-size:1.6rem;">Frontier models compared <span style="font-size:1rem;font-weight:500;color:var(--c-muted);">(November 2026)</span></h1>
+<p style="font-size:.9rem;background:var(--c-surface2);border:1px solid var(--c-border);border-radius:6px;padding:.6rem .9rem;max-width:880px;"><strong>Scope</strong>: five current flagship models, compared on the axes that only matter before you sign: prompt caching, Batch discounts, ZDR, ZOA, training use and data residency. Per-token rates match our <a href="/en/pricing/">pricing table</a>; anything we could not verify is marked <strong>not confirmed</strong> rather than filled in.</p>
+<div class="updated-bar"><span class="dot">●</span>Last updated: <time datetime="2026-11-14">November 14, 2026</time> | Official vendor pages fetched 2026-11-14. Figures are quoted verbatim; cells we could not source are marked not confirmed.</div>
+
+<section class="section" style="padding-top:1rem;">
+<h2 class="section-title" style="font-size:1.15rem;">The five models</h2>
+<div class="table-wrap"><table class="cmp-table">
+<thead><tr><th>Model (official name)</th><th>Vendor</th><th>Position</th><th>Details</th></tr></thead>
+<tbody>
+<tr><td class="model-name">Claude Fable 5.2</td><td>Anthropic</td><td>Released 2026-11-09; successor to Fable 5.1 at 20% lower rates</td><td><a href="/en/claude-fable-5-1/">Fable 5.1 deep dive</a></td></tr>
+<tr><td class="model-name">GPT-6 Astra</td><td>OpenAI</td><td>Flagship announced 2026-09-03</td><td><a href="/en/gpt-6/">GPT-6 Astra deep dive</a></td></tr>
+<tr><td class="model-name">Gemini 4 Carbon</td><td>Google</td><td>Announced 2026-10-28. The pricing page lists input $2.00 / output $10.00 (no free tier)</td><td><a href="/en/pricing/">Pricing</a> / <a href="/en/timeline/">Timeline</a></td></tr>
+<tr><td class="model-name">Kimi K3.1 Pro</td><td>Moonshot AI</td><td>Live 2026-10-23; weights published 2026-11-04</td><td><a href="/en/kimi-k3-1-pro/">Kimi K3.1 Pro deep dive</a></td></tr>
+<tr><td class="model-name">Meta Muse Wonder</td><td>Meta</td><td>Launched 2026-10-12; API exposes <code>muse-wonder-1.0</code> only</td><td><a href="/en/timeline/">Timeline</a></td></tr>
+</tbody></table></div>
+<p style="font-size:.82rem;color:var(--c-muted);max-width:860px;">The larger <strong>Muse Wonder Full</strong> is available only through Muse Code subscriptions, not the public API, so it is outside this comparison.</p>
+</section>
+
+<section class="section" style="padding-top:1rem;">
+<h2 class="section-title" style="font-size:1.15rem;">Three things to take away</h2>
+<ul style="max-width:840px;line-height:1.9;">
+<li><strong>Cache read discounts span 4x across the five models.</strong> The deepest is Claude Fable 5.2 at 0.025x (97.5% off); Muse Wonder sits in the middle at 0.05x (95% off); the shallowest is 0.1x (90% off) on GPT-6 Astra and Kimi K3.1 Pro. For a workload that resends the same prefix, the multiplier can matter more than the headline input rate.</li>
+<li><strong>Discount rate and absolute price are different questions.</strong> The most expensive cached read here is GPT-6 Astra at $1.00; Fable 5.2, Kimi K3.1 Pro and Muse Wonder all sit at $0.20.</li>
+<li><strong>Choosing ZDR costs you features.</strong> Meta states that with ZDR enabled, server-side conversation state, background requests, file uploads, web search and Contributor mode are unavailable. Retention settings and feature settings are the same switch.</li>
+</ul>
+</section>
+
+<section class="section" style="padding-top:1rem;">
+<h2 class="section-title" style="font-size:1.15rem;">1. Rates (USD per 1M tokens, standard tier)</h2>
+<div class="table-wrap"><table class="cmp-table">
+<thead><tr><th>Model</th><th>Input</th><th>Output</th><th>Cache read</th><th>Write 5 min</th><th>Write 1 hour</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td class="model-name">Claude Fable 5.2</td><td class="price">$8.00</td><td class="price">$40.00</td><td class="price">$0.20<br><small>0.025x</small></td><td class="price">$10.00<br><small>1.25x</small></td><td class="price">$16.00<br><small>2x</small></td><td>Fast mode $16 / $80</td></tr>
+<tr><td class="model-name">GPT-6 Astra</td><td class="price">$10.00</td><td class="price">$50.00</td><td class="price">$1.00<br><small>0.1x</small></td><td class="na">Not confirmed</td><td class="na">Not confirmed</td><td>Long tier $20 / $2 / $75. Fast mode 2x</td></tr>
+<tr><td class="model-name">Gemini 4 Carbon</td><td class="price">$2.00<br><small>$4.00 from 1 Dec</small></td><td class="price">$10.00<br><small>$20.00 from 1 Dec</small></td><td class="price">$0.10<br><small>$0.20 from 1 Dec</small></td><td class="na">Not listed</td><td class="na">Not listed</td><td>Implicit caching only (no explicit caching)</td></tr>
+<tr><td class="model-name">Kimi K3.1 Pro</td><td class="price">$2.00</td><td class="price">$10.00</td><td class="price">$0.20<br><small>0.1x</small></td><td class="price">$2.00</td><td class="price">$4.00</td><td>Highspeed tier is 2x</td></tr>
+<tr><td class="model-name">Meta Muse Wonder</td><td class="price">$4.00</td><td class="price">$20.00</td><td class="price">$0.20<br><small>95% off</small></td><td class="na">Not confirmed</td><td class="na">Not confirmed</td><td>No long-context premium</td></tr>
+</tbody></table></div>
+<p style="font-size:.82rem;color:var(--c-muted);max-width:860px;">Fable 5.2 cache rates were read off the <a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener">Claude pricing page</a> with the column headers intact (fetched 2026-11-14): <strong>5m writes $10, 1h writes $16, hits and refreshes $0.20</strong>. Our earlier &quot;not confirmed&quot; came from a summary table showing &quot;Prompt caching $40&quot;, which looked like a 5x marker; the breakdown is now resolved.</p>
+</section>
+
+<section class="section" style="padding-top:1rem;">
+<h2 class="section-title" style="font-size:1.15rem;">2. Cache mechanics (minimum length, retention, mode)</h2>
+<div class="table-wrap"><table class="cmp-table">
+<thead><tr><th>Model</th><th>Mode</th><th>Minimum cacheable</th><th>Retention (TTL)</th><th>What it means</th></tr></thead>
+<tbody>
+<tr><td class="model-name">Claude Fable 5.2</td><td>Explicit (<code>cache_control</code>)</td><td class="na">Not confirmed</td><td>Choose 5 minutes or 1 hour at write time</td><td>The only one of the five where you pick the TTL</td></tr>
+<tr><td class="model-name">GPT-6 Astra</td><td>Automatic + explicit</td><td>1,024<br><small>(stated for the GPT-6.1 line; Astra-specific value not confirmed)</small></td><td>30 min default; 12 h option in the Responses API<br><small>(GPT-6.1 line)</small></td><td>Works on short prefixes, but the read rate is the highest here</td></tr>
+<tr><td class="model-name">Gemini 4 Carbon</td><td>Implicit only</td><td class="na">Not listed</td><td class="na">Not listed</td><td>No explicit caching means you cannot set the boundary yourself</td></tr>
+<tr><td class="model-name">Kimi K3.1 Pro</td><td>Automatic by default</td><td class="na">Not confirmed</td><td>5 min default; each hit refreshes the TTL</td><td>No configuration needed; weak for long-lived reuse</td></tr>
+<tr><td class="model-name">Meta Muse Wonder</td><td>Automatic</td><td class="na">Not confirmed</td><td class="na">Not confirmed</td><td>Under ZDR, server-side state is unavailable entirely</td></tr>
+</tbody></table></div>
+<p style="font-size:.82rem;color:var(--c-muted);max-width:860px;">For explicit vs implicit caching, see <a href="/en/glossary/prompt-cache/">the glossary entry</a>; per-model rates are in <a href="/en/prompt-cache-pricing/">Prompt caching rates compared</a>.</p>
+</section>
+
+<section class="section" style="padding-top:1rem;">
+<h2 class="section-title" style="font-size:1.15rem;">3. Batch discounts and combining with cache</h2>
+<div class="table-wrap"><table class="cmp-table">
+<thead><tr><th>Model</th><th>Batch discount</th><th>Batch rate (calculated)</th><th>Combine with cache?</th></tr></thead>
+<tbody>
+<tr><td class="model-name">Claude Fable 5.2</td><td><strong>50% off</strong></td><td>$4.00 / $20.00</td><td>Yes — &quot;Batch API and prompt caching discounts can be combined.&quot;</td></tr>
+<tr><td class="model-name">GPT-6 Astra</td><td><strong>50% off</strong></td><td>$5.00 / $25.00</td><td class="na">Not confirmed</td></tr>
+<tr><td class="model-name">Gemini 4 Carbon</td><td><strong>Not supported</strong></td><td>—</td><td>— (&quot;Batch API isn't supported&quot;)</td></tr>
+<tr><td class="model-name">Kimi K3.1 Pro</td><td><strong>60% of standard</strong></td><td>$1.20 / $6.00</td><td class="na">Not confirmed</td></tr>
+<tr><td class="model-name">Meta Muse Wonder</td><td class="na">Not confirmed</td><td>—</td><td>—</td></tr>
+</tbody></table></div>
+<p style="font-size:.82rem;color:var(--c-muted);max-width:860px;">Turnaround, retention windows and limits are in <a href="/en/batch-api-pricing/">Batch API discounts compared</a>. Batch rates here are <strong>calculated</strong> (standard rate x discount), not figures each vendor published separately.</p>
+</section>
+
+<section class="section" style="padding-top:1rem;">
+<h2 class="section-title" style="font-size:1.15rem;">4. Data controls (ZDR, ZOA, training, residency)</h2>
+<div class="table-wrap"><table class="cmp-table">
+<thead><tr><th>Model</th><th>ZDR</th><th>ZOA (operator access)</th><th>Training (API default)</th><th>Data location</th></tr></thead>
+<tbody>
+<tr><td class="model-name">Claude Fable 5.2</td><td>On request<br><small>Fable 5.1 and earlier are Covered Models requiring 30-day retention and are excluded from ZDR; whether 5.2 is on that list is not confirmed</small></td><td>Controlled access path<br><small>Customer-managed keys not confirmed</small></td><td>Commercial terms: no training on Customer Content</td><td>No region choice on the first-party API (not even EU)</td></tr>
+<tr><td class="model-name">GPT-6 Astra</td><td>Approval required<br><small>Zero Data Retention or Modified Abuse Monitoring customers only</small></td><td>Safety review runtime designed to disable human access; EKM</td><td>Not used for training by default on the API</td><td>Storage selectable; <strong>processing is not</strong> (Japan: storage yes, processing no)</td></tr>
+<tr><td class="model-name">Gemini 4 Carbon</td><td>Available on Google Cloud<br><small>customer-side configuration required</small></td><td>Access Approval / Access Transparency / KAJ</td><td>Paid tier: not used. Free tier (Unpaid Services) is used for improvement with human review</td><td>Google Cloud supports region selection; AI Studio location not confirmed</td></tr>
+<tr><td class="model-name">Kimi K3.1 Pro</td><td class="na">Not confirmed</td><td class="na">Not confirmed</td><td class="na">Not confirmed</td><td class="na">Not confirmed</td></tr>
+<tr><td class="model-name">Meta Muse Wonder</td><td>Approval required<br><small>qualified Meta Model API accounts; ZDR disables stateful requests, background requests, file uploads and web search</small></td><td class="na">Not confirmed</td><td class="na">Not confirmed<br><small>Contributor mode is unavailable under ZDR per the official help centre</small></td><td class="na">Not confirmed</td></tr>
+</tbody></table></div>
+<p style="font-size:.82rem;color:var(--c-muted);max-width:860px;">ZDR, ZOA, training and residency are <strong>separate documents</strong>. Background: <a href="/en/glossary/zero-data-retention/">ZDR</a> / <a href="/en/glossary/zero-operator-access/">ZOA</a> / <a href="/en/glossary/no-training/">training use</a> / <a href="/en/glossary/data-residency/">data residency</a>. Satisfying one does not satisfy another.</p>
+</section>
+
+<section class="section" style="padding-top:1rem;">
+<h2 class="section-title" style="font-size:1.15rem;">5. Context window and output ceiling</h2>
+<div class="table-wrap"><table class="cmp-table">
+<thead><tr><th>Model</th><th>Context window</th><th>Max output</th><th>Long-context billing</th></tr></thead>
+<tbody>
+<tr><td class="model-name">Claude Fable 5.2</td><td class="na">Not confirmed<br><small>Fable 5.1 is 1M</small></td><td class="na">Not confirmed<br><small>5.1 is 128K</small></td><td>No tiered pricing (per 5.1)</td></tr>
+<tr><td class="model-name">GPT-6 Astra</td><td>1.05M</td><td>128K</td><td>Long tier $20 / $2 / $75</td></tr>
+<tr><td class="model-name">Gemini 4 Carbon</td><td class="na">Not confirmed</td><td class="na">Not confirmed</td><td class="na">Not confirmed</td></tr>
+<tr><td class="model-name">Kimi K3.1 Pro</td><td>1,048,576</td><td class="na">Not confirmed</td><td>None listed</td></tr>
+<tr><td class="model-name">Meta Muse Wonder</td><td>1M</td><td class="na">Not confirmed</td><td>No long-context premium</td></tr>
+</tbody></table></div>
+</section>
+
+<section class="section" style="padding-top:1rem;">
+<h2 class="section-title" style="font-size:1.15rem;">Cells we could not confirm</h2>
+<div class="table-wrap"><table class="cmp-table">
+<thead><tr><th>Item</th><th>Model</th><th>Why it is missing</th></tr></thead>
+<tbody>
+<tr><td>Minimum cacheable length</td><td>Fable 5.2 / Kimi K3.1 Pro / Muse Wonder</td><td>No minimum token count in the pricing pages we fetched, and none in Anthropic's caching docs either</td></tr>
+<tr><td>Cache write rate</td><td>GPT-6 Astra / Muse Wonder</td><td>The official cache rate table has no row for these models</td></tr>
+<tr><td>ZDR, ZOA, training, residency</td><td>Kimi K3.1 Pro</td><td>No verbatim quote obtainable from the official data-handling pages; third-party summaries exist but are not primary sources</td></tr>
+<tr><td>ZOA and residency</td><td>Meta Muse Wonder</td><td>The official help centre covers ZDR only</td></tr>
+<tr><td>Context window and max output</td><td>Fable 5.2 / Gemini 4 Carbon</td><td>Not on the pricing pages; model docs not yet retrieved verbatim</td></tr>
+<tr><td>Batch discount</td><td>Meta Muse Wonder</td><td>No Batch-equivalent statement found on Meta's pricing page</td></tr>
+<tr><td>Availability stage (GA / preview)</td><td>Gemini 4 Carbon</td><td>The pricing page carries no stage label. Our timeline records it as generally available on 11-10; this page states only what the pricing page shows (a paid-tier rate)</td></tr>
+</tbody></table></div>
+<p style="font-size:.85rem;color:var(--c-muted);max-width:860px;"><strong>&quot;Not confirmed&quot; does not mean &quot;not available&quot;.</strong> We fill cells only from primary sources, and update them as we verify each one.</p>
+</section>
+
+<section class="section" style="padding-top:1rem;">
+<h2 class="section-title" style="font-size:1.15rem;">Sources (all fetched 2026-11-14)</h2>
+<ul style="font-size:.86rem;line-height:1.9;color:var(--c-muted);">
+<li>Anthropic — <a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener">Pricing</a> (Fable 5.2 $8 in / $40 out, 5m writes $10, 1h writes $16, hits $0.20, Batch 50% off)</li>
+<li>OpenAI — pricing page (GPT-6 Astra $10 / $50, cached input $1.00) and model page (1.05M context, 128K output)</li>
+<li>Google — <a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">Gemini Developer API pricing</a> (Carbon $2.00/$10.00 rising to $4.00/$20.00 on 1 Dec; cache $0.10 to $0.20; implicit only) and the <a href="https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-hydrogen/" target="_blank" rel="noopener">Gemini 4 Hydrogen announcement</a> (Carbon: &quot;Batch API isn't supported&quot;)</li>
+<li>Moonshot AI — platform.kimi.ai pricing page (K3.1 Pro $2.00 / $10.00, cache read $0.20, writes $2.00 for 5m and $4.00 for 1h, Batch at 60% of standard)</li>
+<li>Meta — <a href="https://dev.meta.ai/help/policies-and-privacy/zero-data-retention" target="_blank" rel="noopener">Model API: Zero Data Retention</a> (&quot;ZDR is available for qualified Meta Model API accounts&quot; plus the list of unavailable features) and the pricing page ($4.00 / $20.00, cached input $0.20, 1M context)</li>
+</ul>
+</section>
+
+<section class="section" style="padding-top:0;">
+<h2 class="section-title" style="font-size:1.15rem;">Related pages</h2>
+<ul style="line-height:2;">
+<li><a href="/en/prompt-cache-pricing/">Prompt caching rates compared</a> — write and read rates across five vendors</li>
+<li><a href="/en/batch-api-pricing/">Batch API discounts compared</a> — discounts, turnaround and retention</li>
+<li><a href="/en/pricing/">LLM API pricing</a> — standard rates with per-model verification dates</li>
+<li><a href="/en/glossary/zero-data-retention/">ZDR</a> / <a href="/en/glossary/zero-operator-access/">ZOA</a> / <a href="/en/glossary/data-residency/">Data residency</a> — the definitions behind the table above</li>
+<li><a href="/en/calculator/">Token cost calculator</a> — estimate from input/output token counts</li>
+</ul>
+</section>
+</div>
+</main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>Operated by okamo channel</p><p><a href="/en/">Home</a> · <a href="/en/pricing/">Pricing</a> · <a href="/en/calculator/">Calculator</a> · <a href="/en/timeline/">Timeline</a> · <a href="/en/glossary/">Glossary</a> · <a href="/en/gpt-6/">GPT-6 Astra</a></p></div><p class="footer-disclaimer">⚠️ Prices and specifications change without notice. Always confirm on the vendor's official page before you commit. We are not affiliated with any vendor.</p></div></footer>
+</body>
+</html>

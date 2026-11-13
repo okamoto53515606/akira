@@ -4,13 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>LLM Token Cost Calculator — Compare API Costs Instantly | LLM Data Hub</title>
-  <meta name="description" content="Enter input and output token counts to instantly compare costs across Claude, GPT, Gemini, DeepSeek, GLM, Grok, Qwen and other LLM APIs. All calculations run locally in your browser. Updated September 27, 2026.">
+  <meta name="description" content="Enter input and output token counts to instantly compare costs across Claude, GPT, Gemini, DeepSeek, GLM, Grok, Qwen and other LLM APIs. All calculations run locally in your browser. Updated October 13, 2026.">
   <link rel="canonical" href="https://llm.okamomedia.tokyo/en/calculator/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta property="og:image" content="https://llm.okamomedia.tokyo/assets/og/en-calculator.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Token cost calculator: input and output tokens x per-1M API prices, with cache rates">
+  <meta name="twitter:image" content="https://llm.okamomedia.tokyo/assets/og/en-calculator.png">
+  <meta name="twitter:image:alt" content="Token cost calculator: input and output tokens x per-1M API prices, with cache rates">
   <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/calculator/">
   <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/calculator/">
   <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/calculator/">
-  <meta property="og:type" content="website"><meta property="og:url" content="https://llm.okamomedia.tokyo/en/calculator/"><meta property="og:title" content="LLM Token Cost Calculator"><meta property="og:description" content="Compare LLM API costs across Claude, GPT, Gemini, DeepSeek. All local."><meta property="og:site_name" content="LLM Data Hub"><meta name="twitter:card" content="summary">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"LLM Token Cost Calculator","url":"https://llm.okamomedia.tokyo/en/calculator/","applicationCategory":"UtilitiesApplication","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@type":"Organization","name":"okamo channel"},"dateModified":"2026-09-27","inLanguage":"en"}</script>
+  <meta property="og:type" content="website"><meta property="og:url" content="https://llm.okamomedia.tokyo/en/calculator/"><meta property="og:title" content="LLM Token Cost Calculator"><meta property="og:description" content="Compare LLM API costs across Claude, GPT, Gemini, DeepSeek. All local."><meta property="og:site_name" content="LLM Data Hub"><meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"LLM Token Cost Calculator","url":"https://llm.okamomedia.tokyo/en/calculator/","applicationCategory":"UtilitiesApplication","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@type":"Organization","name":"okamo channel"},"dateModified":"2026-10-13","inLanguage":"en"}</script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
   <link rel="stylesheet" href="/assets/style.css">
@@ -23,7 +31,7 @@
 <h1 class="section-title" style="font-size:1.6rem;">LLM Token Cost Calculator</h1>
 <p class="section-sub" style="max-width:680px;">Enter input and output token counts to instantly compare costs across major LLM APIs. All calculations run locally. See <a href="/en/pricing/">Pricing Comparison</a> for primary sources.</p>
 <p class="token-hint">💡 Rough guide: English ≈ 1.3 tokens/word. Japanese ≈ 1–1.3 tokens/char. Varies by content.</p>
-<div class="updated-bar"><span class="dot">●</span>Last updated: <time datetime="2026-09-27">September 27, 2026</time> | Sources on <a href="/en/pricing/">Pricing Comparison</a></div>
+<div class="updated-bar"><span class="dot">●</span>Last updated: <time datetime="2026-10-13">October 13, 2026</time> | Sources on <a href="/en/pricing/">Pricing Comparison</a></div>
 </div>
 <div class="calc-card"><div class="calc-grid">
 <div class="calc-field"><label for="input-tokens">Input Tokens</label><input type="number" id="input-tokens" inputmode="numeric" min="0" step="1" value="1000000"><div class="calc-preview" id="input-tokens-preview"></div><div class="preset-row"><button type="button" class="preset-btn" data-target="input-tokens" data-value="1000">1K</button><button type="button" class="preset-btn" data-target="input-tokens" data-value="10000">10K</button><button type="button" class="preset-btn" data-target="input-tokens" data-value="100000">100K</button><button type="button" class="preset-btn" data-target="input-tokens" data-value="1000000">1M</button></div></div>
@@ -32,8 +40,9 @@
 </div></div>
 <section aria-labelledby="rh"><h2 class="section-title" id="rh" style="font-size:1.1rem;">Comparison Results (sorted by total cost)</h2>
 <div class="table-wrap"><table><thead><tr><th>Model</th><th>Provider</th><th>Input Price</th><th>Output Price</th><th>Total (USD)</th><th>Approx. JPY</th></tr></thead><tbody id="result-body"></tbody></table></div>
-<p class="calc-disclaimer">※ Standard (non-cached) rates only. Batch API & prompt cache discounts not included. Claude Fable 5.1: $10/$50 (cache read $0.25, released 2026-09-01). Claude Sonnet 5: $2/$10 (now permanent). GPT-5.6 Sol: promo rate (thru 11/21). GLM-5.3-Flash: list price ($0.15/$0.50; promo ended 9/9). DeepSeek: <strong>V4.1 Flash</strong> is now the workhorse ($0.15/$0.60 off-peak, $0.30/$1.20 peak) — both peak/off-peak listed (peak = weekdays only, 01-04 &amp; 06-10 UTC, weekends all off-peak). Requests to V4 Flash are served by V4.1 Flash at the Flash price. V4 Pro keeps running after 2026-09-14 (the 9/14 routing notice was withdrawn) and its rates remain current. GPT-5.6 Terra/Luna: post-July-30 cuts. Always check official pages. See <a href="/en/pricing/">Pricing Comparison</a>.</p>
-</section></div></main>
+<p class="calc-disclaimer">※ Standard (non-cached) rates only. Batch API & prompt cache discounts not included. Claude Fable 5.1: $10/$50 (cache read $0.25, released 2026-09-01). Claude Sonnet 5: $2/$10 (now permanent). GPT-5.6 Sol: promo rate (thru 11/21). Gemini 3.8/3.7/3.6 Flash are at intro pricing (through 12/31). Gemini Omni 1.1 Flash is $1.50 in, with output at $9.00 (text) or $17.50 (video); the table uses the text rate. GLM-5.3-Flash: list price ($0.15/$0.50; promo ended 9/9). DeepSeek: <strong>V4.1 Flash</strong> is now the workhorse ($0.15/$0.60 off-peak, $0.30/$1.20 peak) — both peak/off-peak listed (peak = weekdays only, 01-04 &amp; 06-10 UTC, weekends all off-peak). Requests to V4 Flash are served by V4.1 Flash at the Flash price. V4 Pro keeps running after 2026-09-14 (the 9/14 routing notice was withdrawn) and its rates remain current. GPT-5.6 Terra/Luna: post-July-30 cuts. Always check official pages. See <a href="/en/pricing/">Pricing Comparison</a>.</p>
+</section></div><p style="font-size:.9rem;margin:1.5rem 0 0;"><strong>Related:</strong> <a href="/en/gemini-4-argon/">Gemini 4 Argon pricing and specs (1M context, Dec 1 forecast)</a></p>
+</main>
 <footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>Operated by okamo channel</p><p><a href="/en/">Home</a> · <a href="/en/pricing/">Pricing</a> · <a href="/en/calculator/">Calculator</a> · <a href="/en/timeline/">Timeline</a></p></div><p class="footer-disclaimer">⚠️ Pricing may change without notice. Always verify on official pages. Not affiliated with any provider.</p></div></footer>
 <script>
 var MODELS=[];

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>フロンティア5モデル横断比較【2026年11月版】キャッシュ・Batch・ZDR・ZOA — LLM Data Hub</title>
+  <meta name="description" content="Claude Fable 5.2・GPT-6 Astra・Gemini 4 Carbon・Kimi K3.1 Pro・Meta Muse Wonderを、キャッシュ単価・Batch割引・ZDR・ZOA・学習利用・データ所在地・コンテキスト長で横断比較。公式の逐語と取得日を明記し、取れないセルは「未確認」（2026-11-14確認）。">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/frontier-model-comparison/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta property="og:image" content="https://llm.okamomedia.tokyo/assets/og/ja-frontier-model-comparison.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="フロンティア5モデルの横断比較：キャッシュ・Batch・ZDR・ZOA・データ所在地（LLM Data Hub）">
+  <meta name="twitter:image" content="https://llm.okamomedia.tokyo/assets/og/ja-frontier-model-comparison.png">
+  <meta name="twitter:image:alt" content="フロンティア5モデルの横断比較：キャッシュ・Batch・ZDR・ZOA・データ所在地（LLM Data Hub）">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/frontier-model-comparison/">
+  <meta property="og:title" content="フロンティア5モデル横断比較【2026年11月版】キャッシュ・Batch・ZDR・ZOA — LLM Data Hub">
+  <meta property="og:description" content="Claude Fable 5.2・GPT-6 Astra・Gemini 4 Carbon・Kimi K3.1 Pro・Meta Muse Wonderを、キャッシュ単価・Batch割引・ZDR・ZOA・学習利用・データ所在地・コンテキスト長で横断比較。公式の逐語と取得日を明記し、取れないセルは「未確認」（2026-11-14確認）。">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "フロンティア5モデル横断比較【2026年11月版】キャッシュ・Batch・ZDR・ZOA", "datePublished": "2026-11-14", "dateModified": "2026-11-14", "author": {"@type": "Organization", "name": "LLM Data Hub"}, "publisher": {"@type": "Organization", "name": "okamoちゃんねる"}, "url": "https://llm.okamomedia.tokyo/frontier-model-comparison/", "inLanguage": "ja", "isAccessibleForFree": true, "description": "Claude Fable 5.2・GPT-6 Astra・Gemini 4 Carbon・Kimi K3.1 Pro・Meta Muse Wonderを、キャッシュ単価・Batch割引・ZDR・ZOA・学習利用・データ所在地・コンテキスト長で横断比較。公式の逐語と取得日を明記し、取れないセルは「未確認」（2026-11-14確認）。"}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .phrase-box{background:linear-gradient(135deg,#12162a 0%,#1a1d35 55%,#0f1117 100%);border:1px solid var(--c-border);border-left:3px solid var(--c-accent2);border-radius:var(--r-lg);padding:1.2rem 1.3rem;margin:1.2rem 0 1.6rem}
+    .phrase-box .phrase{font-size:1.02rem;font-weight:700;line-height:1.75;margin-bottom:.6rem}
+    .phrase-box .phrase-meta{font-size:.8rem;color:var(--c-muted);line-height:1.7}
+    .num-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:.8rem;margin:1rem 0 1.6rem}
+    .num-card{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.9rem 1rem}
+    .num-card .k{font-family:var(--font-mono);font-size:.74rem;color:var(--c-muted);font-weight:600;letter-spacing:.02em}
+    .num-card .v{font-family:var(--font-mono);font-size:1.05rem;font-weight:700;margin:.15rem 0 .2rem}
+    .num-card .d{font-size:.8rem;color:var(--c-muted);line-height:1.6}
+    .read-box{background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-green);border-radius:var(--r-md);padding:1rem 1.2rem;margin:1rem 0 1.6rem;font-size:.88rem;color:var(--c-muted)}
+    .read-box strong{color:var(--c-text)}
+    .cmp-table th,.cmp-table td{font-size:.84rem;vertical-align:top}
+    .cmp-table td.na{color:var(--c-muted)}
+    .table-wrap{overflow-x:auto}
+  </style>
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/frontier-model-comparison/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/frontier-model-comparison/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/frontier-model-comparison/"></head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="メインナビゲーション"><a href="/" class="nav-link">ホーム</a><a href="/pricing/" class="nav-link">料金比較</a><a href="/calculator/" class="nav-link">トークン計算機</a><a href="/timeline/" class="nav-link">リリース年表</a><a href="/china-ai/" class="nav-link">中国AI</a><a href="/multimodal/" class="nav-link">マルチモーダル</a><a href="/mai/" class="nav-link">MS AI (MAI)</a><a href="/glossary/" class="nav-link">用語説明</a></nav></div></header>
+
+<main>
+<div class="container" style="padding-top:2rem;">
+<h1 class="section-title" style="font-size:1.6rem;">フロンティアモデル横断比較 <span style="font-size:1rem;font-weight:500;color:var(--c-muted);">【2026年11月版】</span></h1>
+<p style="font-size:.9rem;background:var(--c-surface2);border:1px solid var(--c-border);border-radius:6px;padding:.6rem .9rem;max-width:880px;"><strong>このページの範囲</strong>: 2026年11月時点で各社の最新フラッグシップにあたる5モデルを、<strong>料金の「横」ではなく運用条件の「縦」</strong>で並べたものです。入力・出力の単価は<a href="/pricing/">料金比較</a>と同値で、ここではプロンプトキャッシュ・Batch・ZDR・ZOA・学習利用・データ所在地という<strong>契約前にしか効かない軸</strong>を突き合わせます。</p>
+<div class="updated-bar"><span class="dot">●</span>最終更新: <time datetime="2026-11-14">2026年11月14日</time> | 各社公式ページを2026-11-14に取得。引用は逐語ベースで、取れなかったセルは「未確認」と明記しています。</div>
+
+<section class="section" style="padding-top:1rem;">
+<h2 class="section-title" style="font-size:1.15rem;">対象5モデル（正式名と提供元）</h2>
+<div class="table-wrap"><table class="cmp-table">
+<thead><tr><th>モデル（正式名）</th><th>提供元</th><th>位置づけ</th><th>詳細</th></tr></thead>
+<tbody>
+<tr><td class="model-name">Claude Fable 5.2</td><td>Anthropic</td><td>2026-11-09公開。Fable 5.1の後継で入出力とも20%安</td><td><a href="/claude-fable-5-1/">Fable 5.1 詳細</a></td></tr>
+<tr><td class="model-name">GPT-6 Astra</td><td>OpenAI</td><td>2026-09-03発表のフラッグシップ</td><td><a href="/gpt-6/">GPT-6 Astra 詳細</a></td></tr>
+<tr><td class="model-name">Gemini 4 Carbon</td><td>Google</td><td>2026-10-28発表。料金ページに入力$2.00／出力$10.00の行あり（無料枠は提供なし）</td><td><a href="/pricing/">料金比較</a>／<a href="/timeline/">年表</a></td></tr>
+<tr><td class="model-name">Kimi K3.1 Pro</td><td>Moonshot AI</td><td>2026-10-23提供開始、11-04に重み公開</td><td><a href="/kimi-k3-1-pro/">Kimi K3.1 Pro 詳細</a></td></tr>
+<tr><td class="model-name">Meta Muse Wonder</td><td>Meta</td><td>2026-10-12公開。APIは <code>muse-wonder-1.0</code> のみ</td><td><a href="/timeline/">年表</a></td></tr>
+</tbody></table></div>
+<p style="font-size:.82rem;color:var(--c-muted);max-width:860px;">※ 上位版の <strong>Muse Wonder Full</strong> は Muse Code のサブスク経由のみで、公開APIでは提供されていません（当サイトはAPI比較の対象外と判断）。</p>
+</section>
+
+<section class="section" style="padding-top:1rem;">
+<h2 class="section-title" style="font-size:1.15rem;">先に押さえる3点</h2>
+<ul style="max-width:840px;line-height:1.9;">
+<li><strong>キャッシュ読込の「割引率」は5モデルで4倍の開きがある。</strong>最も深いのは Claude Fable 5.2 の0.025×（97.5%減）、中間が Muse Wonder の0.05×（95%減）、最も浅いのが GPT-6 Astra と Kimi K3.1 Pro の0.1×（90%減）。同じ前置きを毎回送る workload では、<strong>入力単価の安さより読込倍率のほうが効く</strong>ことがあります。</li>
+<li><strong>割引率と実額は別物。</strong>読込単価の絶対額は GPT-6 Astra の $1.00 が最も高く、Fable 5.2 と Kimi K3.1 Pro と Muse Wonder が $0.20 で並びます。率で選ぶと判断を誤ります。</li>
+<li><strong>ZDR（保存しない）を選ぶと機能が落ちる。</strong>Meta は公式ヘルプで「ZDR有効時はサーバー側の会話状態・非同期リクエスト・ファイルアップロード・Web検索・Contributor modeが使えない」と明記しています。<strong>保持を削る設定は、機能を削る設定と同じ</strong>です。</li>
+</ul>
+</section>
+
+<section class="section" style="padding-top:1rem;">
+<h2 class="section-title" style="font-size:1.15rem;">① 料金（USD / 100万トークン・標準料金）</h2>
+<div class="table-wrap"><table class="cmp-table">
+<thead><tr><th>モデル</th><th>入力</th><th>出力</th><th>キャッシュ読込</th><th>書込 5分</th><th>書込 1時間</th><th>注記</th></tr></thead>
+<tbody>
+<tr><td class="model-name">Claude Fable 5.2</td><td class="price">$8.00</td><td class="price">$40.00</td><td class="price">$0.20<br><small>0.025×</small></td><td class="price">$10.00<br><small>1.25×</small></td><td class="price">$16.00<br><small>2×</small></td><td>fast mode は $16 / $80</td></tr>
+<tr><td class="model-name">GPT-6 Astra</td><td class="price">$10.00</td><td class="price">$50.00</td><td class="price">$1.00<br><small>0.1×</small></td><td class="na">未確認</td><td class="na">未確認</td><td>Long は $20 / $2 / $75。Fast mode 2倍</td></tr>
+<tr><td class="model-name">Gemini 4 Carbon</td><td class="price">$2.00<br><small>12/1から$4.00</small></td><td class="price">$10.00<br><small>12/1から$20.00</small></td><td class="price">$0.10<br><small>12/1から$0.20</small></td><td class="na">記載なし</td><td class="na">記載なし</td><td>暗黙キャッシュのみ（明示キャッシュ非対応）</td></tr>
+<tr><td class="model-name">Kimi K3.1 Pro</td><td class="price">$2.00</td><td class="price">$10.00</td><td class="price">$0.20<br><small>0.1×</small></td><td class="price">$2.00</td><td class="price">$4.00</td><td>Highspeed は単価2倍</td></tr>
+<tr><td class="model-name">Meta Muse Wonder</td><td class="price">$4.00</td><td class="price">$20.00</td><td class="price">$0.20<br><small>95%減</small></td><td class="na">未確認</td><td class="na">未確認</td><td>長文プレミアムなし</td></tr>
+</tbody></table></div>
+<p style="font-size:.82rem;color:var(--c-muted);max-width:860px;">Fable 5.2 のキャッシュ単価は <a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener">platform.claude.com の料金ページ</a>で列ヘッダーごと確認（2026-11-14取得）。<strong>「5m writes $10 / 1h writes $16 / hits and refreshes $0.20」</strong>。以前この欄を「未確認」としていたのは、要約表の "Prompt caching $40" が5倍表記に見えたためで、内訳が取れたことで解消しました。</p>
+</section>
+
+<section class="section" style="padding-top:1rem;">
+<h2 class="section-title" style="font-size:1.15rem;">② キャッシュの実務条件（最小長・保持・方式）</h2>
+<div class="table-wrap"><table class="cmp-table">
+<thead><tr><th>モデル</th><th>方式</th><th>最小キャッシュ長</th><th>保持（TTL）</th><th>この軸の読み方</th></tr></thead>
+<tbody>
+<tr><td class="model-name">Claude Fable 5.2</td><td>明示（<code>cache_control</code>）</td><td class="na">未確認</td><td>書込時に5分／1時間を選択</td><td>保持時間を自分で選べるのは5モデル中ここだけ</td></tr>
+<tr><td class="model-name">GPT-6 Astra</td><td>自動＋明示</td><td>1,024<br><small>（GPT-6.1系の公式記載。Astra単体は未確認）</small></td><td>既定30分／Responses APIで12時間<br><small>（GPT-6.1系の記載）</small></td><td>短い前置きでも効くが、読込単価は最も高い</td></tr>
+<tr><td class="model-name">Gemini 4 Carbon</td><td>暗黙のみ</td><td class="na">記載なし</td><td class="na">記載なし</td><td>明示キャッシュ非対応＝自分で境界を切れない</td></tr>
+<tr><td class="model-name">Kimi K3.1 Pro</td><td>既定で自動有効</td><td class="na">未確認</td><td>既定5分・ヒット毎にTTL更新</td><td>設定不要で効く。長期の使い回しには不足</td></tr>
+<tr><td class="model-name">Meta Muse Wonder</td><td>自動</td><td class="na">未確認</td><td class="na">未確認</td><td>ZDR有効時はサーバー側状態そのものが使えない</td></tr>
+</tbody></table></div>
+<p style="font-size:.82rem;color:var(--c-muted);max-width:860px;">明示キャッシュ（境界をコードで指定）と暗黙キャッシュ（同じ前置きなら自動）の違いは<a href="/glossary/prompt-cache/">用語集: プロンプトキャッシュ</a>、モデル別の単価一覧は<a href="/prompt-cache-pricing/">プロンプトキャッシュ料金の横断比較</a>にまとめています。</p>
+</section>
+
+<section class="section" style="padding-top:1rem;">
+<h2 class="section-title" style="font-size:1.15rem;">③ Batch API 割引と併用可否</h2>
+<div class="table-wrap"><table class="cmp-table">
+<thead><tr><th>モデル</th><th>Batch割引</th><th>Batch単価（計算値）</th><th>キャッシュとの併用</th></tr></thead>
+<tbody>
+<tr><td class="model-name">Claude Fable 5.2</td><td><strong>50%減</strong></td><td>$4.00 / $20.00</td><td>可（公式に「Batch API and prompt caching discounts can be combined.」）</td></tr>
+<tr><td class="model-name">GPT-6 Astra</td><td><strong>50%減</strong></td><td>$5.00 / $25.00</td><td class="na">未確認</td></tr>
+<tr><td class="model-name">Gemini 4 Carbon</td><td><strong>非対応</strong></td><td>—</td><td>—（公式ブログに「Batch API isn't supported」）</td></tr>
+<tr><td class="model-name">Kimi K3.1 Pro</td><td>標準の<strong>60%</strong></td><td>$1.20 / $6.00</td><td class="na">未確認</td></tr>
+<tr><td class="model-name">Meta Muse Wonder</td><td class="na">未確認</td><td>—</td><td>—</td></tr>
+</tbody></table></div>
+<p style="font-size:.82rem;color:var(--c-muted);max-width:860px;">割引率・締切・結果の保持期間は<a href="/batch-api-pricing/">Batch API割引の横断比較</a>にまとめています。Batch単価は「通常単価×割引率」の<strong>計算値</strong>で、各社が個別に公表した額ではありません。</p>
+</section>
+
+<section class="section" style="padding-top:1rem;">
+<h2 class="section-title" style="font-size:1.15rem;">④ データ統制（ZDR・ZOA・学習利用・所在地）</h2>
+<div class="table-wrap"><table class="cmp-table">
+<thead><tr><th>モデル</th><th>ZDR（保存しない）</th><th>ZOA（事業者アクセス）</th><th>学習利用（API既定）</th><th>データ所在地</th></tr></thead>
+<tbody>
+<tr><td class="model-name">Claude Fable 5.2</td><td>申請制で提供<br><small>ただし Fable 5.1 までは Covered Models として30日保持が必要でZDR対象外。5.2が同リストかは未確認</small></td><td>controlled access path（アクセス経路の制限）<br><small>顧客管理鍵は未確認</small></td><td>商用契約は学習に使わない（Commercial ToS）</td><td>第一者APIでは地域を選べない（EUも不可）</td></tr>
+<tr><td class="model-name">GPT-6 Astra</td><td>承認制<br><small>ZDR または Modified Abuse Monitoring の承認顧客のみ</small></td><td>安全レビューのランタイムに人間のアクセスを許さない設計／EKM</td><td>APIは既定で学習に使わない</td><td>保存は地域指定可・<strong>処理は不可</strong>（日本は Storage 可／Processing 不可）</td></tr>
+<tr><td class="model-name">Gemini 4 Carbon</td><td>Google Cloud 側で提供<br><small>利用者側の設定作業が必要</small></td><td>Access Approval／Access Transparency／KAJ</td><td>有料枠は使わない。無料枠（Unpaid Services）は改善利用＋人間レビュー</td><td>Google Cloud はリージョン指定可。AI Studio 側の所在地は未確認</td></tr>
+<tr><td class="model-name">Kimi K3.1 Pro</td><td class="na">未確認</td><td class="na">未確認</td><td class="na">未確認</td><td class="na">未確認</td></tr>
+<tr><td class="model-name">Meta Muse Wonder</td><td>承認制<br><small>qualified Meta Model API accounts。ZDR有効時は会話状態・非同期・ファイル・Web検索が使えない</small></td><td class="na">未確認</td><td class="na">未確認<br><small>ZDR有効時は Contributor mode 自体が使えない旨は公式ヘルプに記載</small></td><td class="na">未確認</td></tr>
+</tbody></table></div>
+<p style="font-size:.82rem;color:var(--c-muted);max-width:860px;">ZDR・ZOA・学習利用・所在地は<strong>それぞれ別の文書</strong>です。用語と提供元ごとの差分は<a href="/glossary/zero-data-retention/">ZDR</a>／<a href="/glossary/zero-operator-access/">ZOA</a>／<a href="/glossary/no-training/">学習利用</a>／<a href="/glossary/data-residency/">データレジデンシー</a>を参照してください。<strong>ZDRを契約しても学習条項は満たしません</strong>（逆も同じ）。</p>
+</section>
+
+<section class="section" style="padding-top:1rem;">
+<h2 class="section-title" style="font-size:1.15rem;">⑤ コンテキスト長と出力上限</h2>
+<div class="table-wrap"><table class="cmp-table">
+<thead><tr><th>モデル</th><th>コンテキスト長</th><th>最大出力</th><th>長文の課金</th></tr></thead>
+<tbody>
+<tr><td class="model-name">Claude Fable 5.2</td><td class="na">未確認<br><small>前世代 Fable 5.1 は 1M</small></td><td class="na">未確認<br><small>5.1 は 128K</small></td><td>段階課金なし（5.1の記載）</td></tr>
+<tr><td class="model-name">GPT-6 Astra</td><td>1.05M</td><td>128K</td><td>Long 単価 $20 / $2 / $75（段階課金）</td></tr>
+<tr><td class="model-name">Gemini 4 Carbon</td><td class="na">未確認</td><td class="na">未確認</td><td class="na">未確認</td></tr>
+<tr><td class="model-name">Kimi K3.1 Pro</td><td>1,048,576</td><td class="na">未確認</td><td>記載なし</td></tr>
+<tr><td class="model-name">Meta Muse Wonder</td><td>1M</td><td class="na">未確認</td><td>長文プレミアムなし</td></tr>
+</tbody></table></div>
+</section>
+
+<section class="section" style="padding-top:1rem;">
+<h2 class="section-title" style="font-size:1.15rem;">未確認セルの一覧（推測で埋めていません）</h2>
+<div class="table-wrap"><table class="cmp-table">
+<thead><tr><th>項目</th><th>対象</th><th>確認できなかった理由</th></tr></thead>
+<tbody>
+<tr><td>最小キャッシュ長</td><td>Fable 5.2／Kimi K3.1 Pro／Muse Wonder</td><td>今回取得した料金ページの逐語に最小トークン数の記載がない（Anthropicは用語ページ側にも記載を確認できず）</td></tr>
+<tr><td>キャッシュ書込単価</td><td>GPT-6 Astra／Muse Wonder</td><td>公式のキャッシュ単価表に該当モデルの行がない</td></tr>
+<tr><td>ZDR・ZOA・学習利用・所在地</td><td>Kimi K3.1 Pro</td><td>公式のデータ取扱いページから逐語を取得できなかった（第三者解説はあるが、一次情報ではないため採用しない）</td></tr>
+<tr><td>ZOA・所在地</td><td>Meta Muse Wonder</td><td>公式ヘルプはZDRの可否と制約のみ。所在地の記載は確認できず</td></tr>
+<tr><td>コンテキスト長・最大出力</td><td>Fable 5.2／Gemini 4 Carbon</td><td>料金ページに記載がなく、モデルドキュメント側の逐語を取得できていない</td></tr>
+<tr><td>Batch割引</td><td>Meta Muse Wonder</td><td>Meta の料金ページにBatch相当の記載を確認できず</td></tr>
+<tr><td>提供段階（GA／プレビュー）</td><td>Gemini 4 Carbon</td><td>料金ページに段階の表記がない。当サイトの年表は11-10の一般提供として記録しているが、本ページでは料金ページに載っている事実（有料枠の単価）だけを記載した</td></tr>
+</tbody></table></div>
+<p style="font-size:.85rem;color:var(--c-muted);max-width:860px;">当サイトの方針として、<strong>「未確認」は「機能がない」ではありません</strong>。次回以降の取得で埋まったセルから更新します。</p>
+</section>
+
+<section class="section" style="padding-top:1rem;">
+<h2 class="section-title" style="font-size:1.15rem;">出典（すべて2026-11-14取得）</h2>
+<ul style="font-size:.86rem;line-height:1.9;color:var(--c-muted);">
+<li>Anthropic — <a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener">Pricing</a>（Fable 5.2 の入力$8／出力$40／5m writes $10／1h writes $16／hits $0.20、Batch 50%減）</li>
+<li>OpenAI — 料金ページ（GPT-6 Astra $10／$50、cached input $1.00）／モデルページ（1.05M コンテキスト・128K 出力）</li>
+<li>Google — <a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">Gemini Developer API pricing</a>（Carbon $2.00/$10.00 → 12/1 $4.00/$20.00、キャッシュ $0.10 → $0.20、暗黙のみ）／<a href="https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-hydrogen/" target="_blank" rel="noopener">Gemini 4 Hydrogen 発表ブログ</a>（Carbon の Batch 非対応）</li>
+<li>Moonshot AI — platform.kimi.ai の料金ページ（K3.1 Pro $2.00／$10.00、キャッシュ読込 $0.20、書込5分 $2.00／1時間 $4.00、Batch は標準の60%）</li>
+<li>Meta — <a href="https://dev.meta.ai/help/policies-and-privacy/zero-data-retention" target="_blank" rel="noopener">Model API: Zero Data Retention</a>（「ZDR is available for qualified Meta Model API accounts」と、ZDR有効時に使えない機能の列挙）／料金ページ（$4.00／$20.00、cached input $0.20、1Mコンテキスト）</li>
+</ul>
+</section>
+
+<section class="section" style="padding-top:0;">
+<h2 class="section-title" style="font-size:1.15rem;">関連ページ</h2>
+<ul style="line-height:2;">
+<li><a href="/prompt-cache-pricing/">プロンプトキャッシュ料金の横断比較</a> — 5社・モデル別の書込／読込単価</li>
+<li><a href="/batch-api-pricing/">Batch API割引の横断比較</a> — 割引率・締切・保持期間</li>
+<li><a href="/pricing/">LLM API料金比較</a> — 通常単価の一覧（モデル別・確認日つき）</li>
+<li><a href="/glossary/zero-data-retention/">用語集: ゼロデータ保持（ZDR）</a>／<a href="/glossary/zero-operator-access/">ゼロオペレーターアクセス（ZOA）</a>／<a href="/glossary/data-residency/">データレジデンシー</a></li>
+<li><a href="/calculator/">トークンコスト計算機</a> — 入力／出力トークン数から概算</li>
+</ul>
+</section>
+</div>
+</main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>運営: okamoちゃんねる</p><p><a href="/">ホーム</a> · <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a> · <a href="/timeline/">年表</a> · <a href="/glossary/">用語説明</a> · <a href="/gpt-6/">GPT-6 Astra</a></p></div><p class="footer-disclaimer">⚠️ 料金・仕様は予告なく変動します。契約前に必ず各社公式ページでご確認ください。本サイトは各社と提携していません。</p></div></footer>
+</body>
+</html>

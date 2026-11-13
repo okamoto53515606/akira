@@ -1,7 +1,7 @@
 {
   "schema_note": "LLM Data Hub の料金データ単一の真実（SOT）。HTMLの料金表・ページ本文を更新したら必ずここも更新し、tools/verify_price_consistency.py でサイト全体を検証する。金額はすべて USD / 1Mトークン。",
   "site": "https://llm.okamomedia.tokyo",
-  "last_verified": "2026-09-27",
+  "last_verified": "2026-10-29",
   "sources": {
     "deepseek_pricing": "https://api-docs.deepseek.com/quick_start/pricing",
     "deepseek_news": "https://api-docs.deepseek.com/news/news260910",
@@ -11,7 +11,11 @@
     "openai_gpt6": "https://openai.com/index/introducing-gpt-6-sol-and-luna/",
     "moonshot_kimi_k3": "https://platform.kimi.ai/docs/pricing/chat-k3",
     "xiaomi_mimo_v26": "https://mimo.xiaomi.com/mimo-v2-6",
-    "xiaomi_mimo_model_page": "https://mimo.mi.com/models/en-US/mimo-v2.6-flash"
+    "xiaomi_mimo_model_page": "https://mimo.mi.com/models/en-US/mimo-v2.6-flash",
+    "gemini_api_pricing": "https://ai.google.dev/gemini-api/docs/pricing",
+    "gemini_nano_banana_2_1_model": "https://ai.google.dev/gemini-api/docs/models/gemini-nano-banana-2.1",
+    "openai_gpt61_terra": "https://openai.com/index/introducing-gpt-6-1-terra/",
+    "openai_model_gpt61_terra": "https://developers.openai.com/api/docs/models/gpt-6.1-terra"
   },
   "models": {
     "deepseek-v4.1-flash": {
@@ -286,6 +290,546 @@
         "output": 8.7
       },
       "note": "Proと同じ重みを高速提供するAPI提供バリアント（最大20倍の出力速度）。単価はPro比10倍。重みの公開は未確認。"
+    },
+    "claude-sonnet-5-5": {
+      "name_ja": "Claude Sonnet 5.5",
+      "name_en": "Claude Sonnet 5.5",
+      "api_model_id": "claude-sonnet-5-5",
+      "provider": "Anthropic",
+      "status": "current",
+      "released": "2026-09-28",
+      "price": {
+        "cache_hit_input": 0.1,
+        "cache_miss_input": 2.0,
+        "output": 10.0,
+        "cache_write_input_5m": 2.5,
+        "cache_write_input_1h": 4.0
+      },
+      "batch_discount": "50% (input/output)",
+      "context": "1,000,000",
+      "max_output": "128,000",
+      "pages": [
+        "/claude-sonnet-5-5/",
+        "/en/claude-sonnet-5-5/"
+      ],
+      "sources": [
+        "https://platform.claude.com/docs/en/models/sonnet-5-5/overview",
+        "https://platform.claude.com/docs/en/about-claude/pricing"
+      ],
+      "note": "Sonnet 5($2/$10, cache read $0.20)から価格据え置き。5分TTLキャッシュ書込$2.50(1.25x)・1h TTL $4.00(2x)。batch 50% off。thinking=Adaptive(既定effort high, 最小設定はbetween_tools=up-front thinking off)。knowledge cutoff Jun 2026。プラットフォーム5種のIDあり。2026-10-01確認",
+      "verified": "2026-10-01",
+      "note_correction": "2026-10-09: cache_hit_input を $0.20 → $0.10 に修正（公式 pricing ページで確認）。"
+    },
+    "claude-haiku-5-5": {
+      "name_ja": "Claude Haiku 5.5",
+      "name_en": "Claude Haiku 5.5",
+      "api_model_id": "claude-haiku-5-5",
+      "provider": "Anthropic",
+      "status": "current",
+      "released": "2026-10-07",
+      "price": {
+        "cache_hit_input": 0.01,
+        "cache_miss_input": 0.1,
+        "output": 0.5,
+        "cache_write_input_5m": 0.125,
+        "cache_write_input_1h": 0.2,
+        "above_100k_cache_hit_input": 0.05,
+        "above_100k_cache_miss_input": 0.5,
+        "above_100k_output": 2.5
+      },
+      "batch_discount": "50% (input/output)",
+      "context": "1,000,000",
+      "max_output": "128,000 (300,000 with the Batch API beta header)",
+      "pages": [
+        "/claude-haiku-5-5/",
+        "/en/claude-haiku-5-5/"
+      ],
+      "sources": [
+        "https://platform.claude.com/docs/en/models/haiku-5-5/overview",
+        "https://platform.claude.com/docs/en/about-claude/pricing"
+      ],
+      "verified": "2026-10-09",
+      "note": "100,000トークン超は入力$0.50・出力$2.50・キャッシュ読込$0.05。新トークナイザーで同一文面がHaiku 4.5より約30%多くカウントされる。"
+    },
+    "gpt-6-1-sol": {
+      "name_ja": "GPT-6.1 Sol",
+      "name_en": "GPT-6.1 Sol",
+      "api_model_id": "gpt-6.1-sol",
+      "provider": "OpenAI",
+      "status": "current",
+      "released": null,
+      "released_note": "公式モデルページにリリース日の記載なし。第三者報道は2026-09-29（当サイトは第三者情報として明記）。",
+      "price": {
+        "cache_hit_input": 0.1,
+        "cache_miss_input": 2.0,
+        "output": 10.0,
+        "cache_write_input": 2.5,
+        "above_272k_cache_miss_input": 4.0,
+        "above_272k_output": 15.0
+      },
+      "speed_multipliers": {
+        "fast": 2,
+        "ultrafast": 6,
+        "batch_flex": 0.5,
+        "regional_processing": 1.1
+      },
+      "context": "1,050,000",
+      "max_input": "922,000",
+      "max_output": "128,000",
+      "pages": [
+        "/gpt-6-1-sol/",
+        "/en/gpt-6-1-sol/"
+      ],
+      "sources": [
+        "https://developers.openai.com/api/docs/models/gpt-6.1-sol",
+        "https://developers.openai.com/api/docs/pricing"
+      ],
+      "verified": "2026-10-09",
+      "note": "272,000トークン超の入力はリクエスト全体が入力2倍・キャッシュ2倍・出力1.5倍。reasoning effort は low/medium(既定)/high/xhigh/max で none・minimal 非対応。"
+    },
+    "gemini-nano-banana-2.1": {
+      "name_ja": "Gemini Nano Banana 2.1",
+      "name_en": "Gemini Nano Banana 2.1",
+      "api_model_id": "gemini-nano-banana-2.1",
+      "provider": "Google",
+      "status": "current",
+      "released": null,
+      "released_note": "公式ブログにリリース日の明記なし（モデルページの『最新の更新 2026年10月』のみ）。",
+      "price": {
+        "cache_miss_input": 1.5,
+        "output_text_thinking": 7.5,
+        "output_image_per_1m_tokens": 30.0,
+        "output_image_1k_usd": 0.0336,
+        "output_image_2k_usd": 0.0504,
+        "output_image_4k_usd": 0.113,
+        "batch_cache_miss_input": 0.75,
+        "batch_output_text_thinking": 3.75,
+        "batch_output_image_per_1m_tokens": 15.0,
+        "batch_output_image_1k_usd": 0.0168,
+        "batch_output_image_2k_usd": 0.0252,
+        "batch_output_image_4k_usd": 0.0567,
+        "grounding_per_1k_requests_after_free": 14.0
+      },
+      "context": "131,072",
+      "max_output": "32,768",
+      "pages": [
+        "/multimodal/",
+        "/en/multimodal/"
+      ],
+      "sources": [
+        "https://ai.google.dev/gemini-api/docs/pricing",
+        "https://ai.google.dev/gemini-api/docs/models/gemini-nano-banana-2.1"
+      ],
+      "verified": "2026-10-09",
+      "note": "Nano Banana 2（Gemini 3.1 Flash Image）のアップデート版で、Gemini 3 Pro Image（Nano Banana Pro）の高効率版。1K/2K/4K 出力（既定1K）、最大14枚の参照画像、Google検索/画像検索グラウンディング、思考レベル minimal/medium(既定)/high。キャッシュ保存・コード実行・Live API 等は非対応。画像1枚=1K 1,120 / 2K 1,680 / 4K 3,780 トークン。Google検索グラウンディングは Gemini 3.x 共有で月5,000リクエスト無料、以降 $14/1,000。"
+    },
+    "gemini-3.1-flash-image": {
+      "name_ja": "Gemini 3.1 Flash Image（Nano Banana 2）",
+      "name_en": "Gemini 3.1 Flash Image (Nano Banana 2)",
+      "api_model_id": "gemini-3.1-flash-image",
+      "provider": "Google",
+      "status": "current",
+      "price": {
+        "cache_miss_input": 0.5,
+        "output_text_thinking": 3.0,
+        "output_image_per_1m_tokens": 60.0,
+        "output_image_05k_usd": 0.045,
+        "output_image_1k_usd": 0.067,
+        "output_image_2k_usd": 0.101,
+        "output_image_4k_usd": 0.151,
+        "batch_cache_miss_input": 0.25,
+        "batch_output_text_thinking": 1.5,
+        "batch_output_image_per_1m_tokens": 30.0,
+        "batch_output_image_05k_usd": 0.022,
+        "batch_output_image_1k_usd": 0.034,
+        "batch_output_image_2k_usd": 0.05,
+        "batch_output_image_4k_usd": 0.076
+      },
+      "pages": [
+        "/multimodal/",
+        "/en/multimodal/"
+      ],
+      "sources": [
+        "https://ai.google.dev/gemini-api/docs/pricing",
+        "https://ai.google.dev/gemini-api/docs/models/gemini-nano-banana-2.1"
+      ],
+      "verified": "2026-10-09",
+      "note": "NB2.1 の前世代。画像出力は $60/1M（0.5K 747 / 1K 1,120 / 2K 1,680 / 4K 2,520 トークン）。"
+    },
+    "gemini-3.1-flash-lite-image": {
+      "name_ja": "Gemini 3.1 Flash Lite Image（Nano Banana 2 Lite）",
+      "name_en": "Gemini 3.1 Flash Lite Image (Nano Banana 2 Lite)",
+      "api_model_id": "gemini-3.1-flash-lite-image",
+      "provider": "Google",
+      "status": "current",
+      "price": {
+        "cache_miss_input": 0.25,
+        "output_text_thinking": 1.5,
+        "output_image_per_1m_tokens": 30.0,
+        "output_image_1k_usd": 0.0336,
+        "batch_output_text_thinking": 0.75,
+        "batch_output_image_per_1m_tokens": 15.0,
+        "batch_output_image_1k_usd": 0.0168
+      },
+      "pages": [
+        "/multimodal/",
+        "/en/multimodal/"
+      ],
+      "sources": [
+        "https://ai.google.dev/gemini-api/docs/pricing",
+        "https://ai.google.dev/gemini-api/docs/models/gemini-nano-banana-2.1"
+      ],
+      "verified": "2026-10-09",
+      "note": "入力 $0.25（text/image/video）。Batch の入力単価は公式ページに行の記載なし。"
+    },
+    "gemini-3-pro-image": {
+      "name_ja": "Gemini 3 Pro Image（Nano Banana Pro）",
+      "name_en": "Gemini 3 Pro Image (Nano Banana Pro)",
+      "api_model_id": "gemini-3-pro-image",
+      "provider": "Google",
+      "status": "current",
+      "price": {
+        "cache_miss_input": 2.0,
+        "output_text_thinking": 12.0,
+        "output_image_per_1m_tokens": 120.0,
+        "output_image_1k_usd": 0.134,
+        "output_image_2k_usd": 0.134,
+        "output_image_4k_usd": 0.24
+      },
+      "pages": [
+        "/multimodal/",
+        "/en/multimodal/"
+      ],
+      "sources": [
+        "https://ai.google.dev/gemini-api/docs/pricing",
+        "https://ai.google.dev/gemini-api/docs/models/gemini-nano-banana-2.1"
+      ],
+      "verified": "2026-10-09",
+      "note": "gemini-3-pro-preview の画像生成版。画像1K/2K $0.134・4K $0.24。"
+    },
+    "gemini-2.5-flash-image": {
+      "name_ja": "Gemini 2.5 Flash Image（Nano Banana）",
+      "name_en": "Gemini 2.5 Flash Image (Nano Banana)",
+      "api_model_id": "gemini-2.5-flash-image",
+      "provider": "Google",
+      "status": "current",
+      "price": {
+        "cache_miss_input": 0.3,
+        "output_image_per_image_usd": 0.039
+      },
+      "pages": [
+        "/multimodal/",
+        "/en/multimodal/"
+      ],
+      "sources": [
+        "https://ai.google.dev/gemini-api/docs/pricing",
+        "https://ai.google.dev/gemini-api/docs/models/gemini-nano-banana-2.1"
+      ],
+      "verified": "2026-10-09",
+      "note": "最初の Nano Banana。画像1枚 $0.039。"
+    },
+    "gemini-3.8-flash": {
+      "name_ja": "Gemini 3.8 Flash",
+      "name_en": "Gemini 3.8 Flash",
+      "api_model_id": "gemini-3.8-flash",
+      "provider": "Google",
+      "status": "current",
+      "price": {
+        "cache_miss_input": 0.75,
+        "output": 3.75,
+        "cache_storage_per_1m_per_hour": 0.5,
+        "batch_cache_miss_input": 0.375,
+        "batch_output": 1.875,
+        "priority_cache_miss_input": 1.35,
+        "priority_output": 6.75,
+        "cache_miss_input_from_2027_01_01": 1.5,
+        "output_from_2027_01_01": 7.5,
+        "priority_cache_miss_input_from_2027_01_01": 2.7,
+        "priority_output_from_2027_01_01": 13.5
+      },
+      "pages": [
+        "/multimodal/",
+        "/en/multimodal/"
+      ],
+      "sources": [
+        "https://ai.google.dev/gemini-api/docs/pricing",
+        "https://ai.google.dev/gemini-api/docs/models/gemini-nano-banana-2.1"
+      ],
+      "verified": "2026-10-09",
+      "note": "2026-12-31 までの初回価格。2027-01-01 から入力 $1.50 / 出力 $7.50（予告・公式ページ記載）。Flex は標準と同額。"
+    },
+    "gemini-3.7-flash": {
+      "name_ja": "Gemini 3.7 Flash",
+      "name_en": "Gemini 3.7 Flash",
+      "api_model_id": "gemini-3.7-flash",
+      "provider": "Google",
+      "status": "current",
+      "price": {
+        "cache_miss_input": 0.75,
+        "output": 3.75,
+        "priority_cache_miss_input": 1.35,
+        "priority_output": 6.75,
+        "cache_miss_input_from_2027_01_01": 1.5,
+        "output_from_2027_01_01": 7.5
+      },
+      "pages": [
+        "/multimodal/",
+        "/en/multimodal/"
+      ],
+      "sources": [
+        "https://ai.google.dev/gemini-api/docs/pricing",
+        "https://ai.google.dev/gemini-api/docs/models/gemini-nano-banana-2.1"
+      ],
+      "verified": "2026-10-09",
+      "note": "3.8 Flash と同単価・同条件（2027-01-01 からの値上げ予告あり）。"
+    },
+    "gemini-3.6-flash": {
+      "name_ja": "Gemini 3.6 Flash",
+      "name_en": "Gemini 3.6 Flash",
+      "api_model_id": "gemini-3.6-flash",
+      "provider": "Google",
+      "status": "current",
+      "price": {
+        "cache_miss_input": 0.75,
+        "output": 3.75,
+        "cache_miss_input_from_2027_01_01": 1.5,
+        "output_from_2027_01_01": 7.5
+      },
+      "pages": [
+        "/multimodal/",
+        "/en/multimodal/"
+      ],
+      "sources": [
+        "https://ai.google.dev/gemini-api/docs/pricing",
+        "https://ai.google.dev/gemini-api/docs/models/gemini-nano-banana-2.1"
+      ],
+      "verified": "2026-10-09",
+      "note": "3.8/3.7 Flash と同じ初回価格（2027-01-01 からの値上げ予告あり）。"
+    },
+    "gemini-3.5-flash": {
+      "name_ja": "Gemini 3.5 Flash",
+      "name_en": "Gemini 3.5 Flash",
+      "api_model_id": "gemini-3.5-flash",
+      "provider": "Google",
+      "status": "current",
+      "price": {
+        "cache_miss_input": 1.5,
+        "output": 9.0,
+        "cache_storage_per_1m_per_hour": 0.5
+      },
+      "pages": [
+        "/multimodal/",
+        "/en/multimodal/"
+      ],
+      "sources": [
+        "https://ai.google.dev/gemini-api/docs/pricing",
+        "https://ai.google.dev/gemini-api/docs/models/gemini-nano-banana-2.1"
+      ],
+      "verified": "2026-10-09",
+      "note": "値上げ予告の記載なし（一律）。"
+    },
+    "gemini-3.5-flash-lite": {
+      "name_ja": "Gemini 3.5 Flash-Lite",
+      "name_en": "Gemini 3.5 Flash-Lite",
+      "api_model_id": "gemini-3.5-flash-lite",
+      "provider": "Google",
+      "status": "current",
+      "price": {
+        "cache_miss_input": 0.3,
+        "output": 2.5,
+        "cache_read": 0.03
+      },
+      "pages": [
+        "/multimodal/",
+        "/en/multimodal/"
+      ],
+      "sources": [
+        "https://ai.google.dev/gemini-api/docs/pricing",
+        "https://ai.google.dev/gemini-api/docs/models/gemini-nano-banana-2.1"
+      ],
+      "verified": "2026-10-09",
+      "note": "入力 $0.30（text/image/video/audio）。"
+    },
+    "gemini-3.1-flash-lite": {
+      "name_ja": "Gemini 3.1 Flash-Lite",
+      "name_en": "Gemini 3.1 Flash-Lite",
+      "api_model_id": "gemini-3.1-flash-lite",
+      "provider": "Google",
+      "status": "current",
+      "price": {
+        "cache_miss_input_text_image_video": 0.25,
+        "cache_miss_input_audio": 0.5,
+        "output": 1.5,
+        "cache_read_text_image_video": 0.025,
+        "cache_read_audio": 0.05
+      },
+      "pages": [
+        "/multimodal/",
+        "/en/multimodal/"
+      ],
+      "sources": [
+        "https://ai.google.dev/gemini-api/docs/pricing",
+        "https://ai.google.dev/gemini-api/docs/models/gemini-nano-banana-2.1"
+      ],
+      "verified": "2026-10-09",
+      "note": "音声入力は $0.50 と別建て。"
+    },
+    "gemini-3.1-pro-preview": {
+      "name_ja": "Gemini 3.1 Pro Preview",
+      "name_en": "Gemini 3.1 Pro Preview",
+      "api_model_id": "gemini-3.1-pro-preview",
+      "provider": "Google",
+      "status": "current",
+      "price": {
+        "cache_miss_input_le_200k": 2.0,
+        "cache_miss_input_gt_200k": 4.0,
+        "output_le_200k": 12.0,
+        "output_gt_200k": 18.0,
+        "cache_read_le_200k": 0.2,
+        "cache_read_gt_200k": 0.4,
+        "cache_storage_per_1m_per_hour": 4.5
+      },
+      "pages": [
+        "/multimodal/",
+        "/en/multimodal/"
+      ],
+      "sources": [
+        "https://ai.google.dev/gemini-api/docs/pricing",
+        "https://ai.google.dev/gemini-api/docs/models/gemini-nano-banana-2.1"
+      ],
+      "verified": "2026-10-09",
+      "note": "200k トークン超は入力・キャッシュ2倍、出力1.5倍。`-customtools` も同単価。"
+    },
+    "gemini-omni-1.1-flash": {
+      "name_ja": "Gemini Omni 1.1 Flash",
+      "name_en": "Gemini Omni 1.1 Flash",
+      "api_model_id": "gemini-omni-1.1-flash",
+      "provider": "Google",
+      "status": "current",
+      "price": {
+        "cache_miss_input": 1.5,
+        "output_text": 9.0,
+        "output_video_per_1m": 17.5,
+        "output_video_720p_per_second_usd": 0.1
+      },
+      "pages": [
+        "/multimodal/",
+        "/en/multimodal/"
+      ],
+      "sources": [
+        "https://ai.google.dev/gemini-api/docs/pricing",
+        "https://ai.google.dev/gemini-api/docs/models/gemini-nano-banana-2.1"
+      ],
+      "verified": "2026-10-09",
+      "note": "動画生成・編集の一般提供。720p で約 $0.10/秒。"
+    },
+    "gemini-4-argon": {
+      "name_ja": "Gemini 4 Argon",
+      "name_en": "Gemini 4 Argon",
+      "api_model_id": "gemini-4-argon",
+      "provider": "Google",
+      "status": "current",
+      "price": {
+        "cache_miss_input": 2.0,
+        "cache_hit_input": 0.1,
+        "output": 10.0,
+        "cache_miss_input_from_2026_12_01": 4.0,
+        "cache_hit_input_from_2026_12_01": 0.2,
+        "output_from_2026_12_01": 20.0,
+        "cache_write": null,
+        "batch_cache_miss_input": null,
+        "batch_output": null,
+        "priority_cache_miss_input": null,
+        "priority_output": null
+      },
+      "sources": [
+        "https://ai.google.dev/gemini-api/docs/pricing",
+        "https://ai.google.dev/gemini-api/docs/models/gemini-4-argon"
+      ],
+      "verified": "2026-10-17",
+      "note": "導入価格(〜2026-11-30)：入力$2.00・出力$10.00（思考含む）・キャッシュ$0.10。12/1から$4.00/$20.00/$0.20。暗黙キャッシュのみ・無料枠なし。長文プレミアムの記載なし。",
+      "released": "2026-10",
+      "released_note": "GA（公式モデルページの記載は Latest update: October 2026）",
+      "context": "1M",
+      "max_output": "65,536（long decodeで最大1,048,576）",
+      "cache_note": "暗黙キャッシュのみ（明示キャッシュ非対応）",
+      "pages_planned": [
+        "/gemini-4-argon/",
+        "/en/gemini-4-argon/"
+      ]
+    },
+    "stepfun-step-5-preview": {
+      "name_ja": "StepFun step-5-preview",
+      "name_en": "StepFun step-5-preview",
+      "api_model_id": "step-5-preview",
+      "provider": "StepFun",
+      "status": "current",
+      "price": {
+        "cache_miss_input": 1.0,
+        "cache_hit_input": 0.1,
+        "output": 2.7
+      },
+      "sources": [
+        "https://platform.stepfun.ai/docs/en/guides/pricing/details"
+      ],
+      "verified": "2026-10-24",
+      "note": "マルチモーダル推論モデル区分。cache-miss入力はキャッシュ書き込み込み。出力は推論過程を含む。"
+    },
+    "stepfun-step-3-7-flash": {
+      "name_ja": "StepFun step-3.7-flash",
+      "name_en": "StepFun step-3.7-flash",
+      "api_model_id": "step-3.7-flash",
+      "provider": "StepFun",
+      "status": "current",
+      "price": {
+        "cache_miss_input": 0.2,
+        "cache_hit_input": 0.04,
+        "output": 1.15
+      },
+      "sources": [
+        "https://platform.stepfun.ai/docs/en/guides/pricing/details"
+      ],
+      "verified": "2026-10-24",
+      "note": "マルチモーダル推論モデル区分の低価格版。"
+    },
+    "gpt-6-1-terra": {
+      "name_ja": "GPT-6.1 Terra",
+      "name_en": "GPT-6.1 Terra",
+      "api_model_id": "gpt-6.1-terra",
+      "provider": "OpenAI",
+      "status": "current",
+      "released": "2026-10-26",
+      "released_note": "公式ブログは「Starting today」とのみ記載（日付の明示なし）。第三者報道（9to5Mac / BleepingComputer / GitHub Changelog）はいずれも2026-10-26で一致。当サイトはこの点を明記して掲載。",
+      "price": {
+        "cache_hit_input": 0.05,
+        "cache_miss_input": 1.0,
+        "output": 5.0,
+        "cache_write_input": 1.25,
+        "cache_write_12h_input": 2.5,
+        "above_272k_cache_miss_input": 2.0,
+        "above_272k_cache_hit_input": 0.1,
+        "above_272k_output": 7.5
+      },
+      "speed_multipliers": {
+        "fast": 2,
+        "batch_flex": 0.5,
+        "regional_processing": 1.1
+      },
+      "context": "1,050,000",
+      "max_output": "128,000",
+      "knowledge_cutoff": "2026-06-01",
+      "pages": [
+        "/gpt-6-1-terra/",
+        "/en/gpt-6-1-terra/"
+      ],
+      "sources": [
+        "https://openai.com/index/introducing-gpt-6-1-terra/",
+        "https://developers.openai.com/api/docs/models/gpt-6.1-terra",
+        "https://developers.openai.com/api/docs/pricing"
+      ],
+      "verified": "2026-10-29",
+      "relation_note": "公式ブログの逐語では「A significant step up from GPT-5.6 Terra」。GPT-5.6 Terraの後継にあたる上位グレードであり、GPT-6.1 Solとは同世代の別グレード（Solの後継ではない）。",
+      "note": "272,000トークン超の入力はリクエスト全体が入力・キャッシュ2倍／出力1.5倍。Batch/Flexは50%引き、Fastは2倍、地域処理は+10%。reasoning effortは none/low/medium(既定)/high/xhigh/max。"
     }
   },
   "stale_price_patterns": [
@@ -497,6 +1041,66 @@
       "deepseek-v4.1-flash": {
         "no_cache": 0.012,
         "with_cache": 0.0014
+      }
+    }
+  },
+  "gemini_image_pricing": {
+    "last_verified": "2026-10-09",
+    "source": "https://ai.google.dev/gemini-api/docs/pricing",
+    "note": "Google（Gemini API）の画像生成系の単価。課題42 対応で 2026-10-09 に SOT へ初回登録。**計算機（/data/models.json）への反映は未実施＝次回課題**（画像生成はトークン入力/出力の2欄で表現できないため、MAI 画像系と同じ扱いにするかを先に決める）。",
+    "models": {
+      "gemini-nano-banana-2.1": {
+        "text_image_video_input_per_1m": 1.5,
+        "text_thinking_output_per_1m": 7.5,
+        "image_output_per_1m": 30.0,
+        "per_image_1k": 0.0336,
+        "per_image_2k": 0.0504,
+        "per_image_4k": 0.113,
+        "availability": "GA（モデルページ 最終更新 2026-10-06）"
+      },
+      "gemini-3.1-flash-image": {
+        "input_per_1m": 0.5,
+        "text_thinking_output_per_1m": 3.0,
+        "image_output_per_1m": 60.0,
+        "per_image_1k": 0.067
+      },
+      "gemini-3.1-flash-lite-image": {
+        "input_per_1m": 0.25,
+        "text_thinking_output_per_1m": 1.5,
+        "image_output_per_1m": 30.0,
+        "per_image_1k": 0.0336
+      },
+      "gemini-3-pro-image": {
+        "input_per_1m": 2.0,
+        "text_thinking_output_per_1m": 12.0,
+        "image_output_per_1m": 120.0,
+        "per_image_1k": 0.134,
+        "per_image_4k": 0.24
+      },
+      "gemini-2.5-flash-image": {
+        "input_per_1m": 0.3,
+        "per_image": 0.039
+      }
+    },
+    "not_in_calculator": "Gemini の画像生成系も計算機には未反映（2026-10-09時点。上記 note 参照）。"
+  },
+  "gemini_tts_rows_observed": {
+    "observed": "2026-10-09",
+    "source": "https://ai.google.dev/gemini-api/docs/pricing",
+    "note": "2026-10-09 の再フェッチで公式料金ページに TTS 行を新規検出（同日朝の取得スナップショットには未記録）。初回価格はすべて『through December 31, 2026』。サイトへの反映は未実施＝次回以降の判断事項。",
+    "rows": {
+      "gemini-3.8-flash-tts": {
+        "input_text_per_1m_until_2026_12_31": 0.5,
+        "input_text_from_2027_01_01": 1.0,
+        "output_audio_per_1m_until_2026_12_31": 9.0,
+        "output_audio_per_1m_from_2027_01_01": 18.0
+      },
+      "gemini-3.8-flash-lite-tts": {
+        "input_text_per_1m_until_2026_12_31": 0.5,
+        "output_audio_per_1m_until_2026_12_31": 6.0
+      },
+      "gemini-3.1-flash-tts-preview": {
+        "output_audio_per_1m": 20.0
       }
     }
   }

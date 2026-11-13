@@ -1,0 +1,72 @@
+===== index.html
+  dateModified: []
+  times: [('2026-10-09', '2026年10月9日')]
+  bar: '<span class="dot">●</span>最終更新: <time datetime="2026-10-09">2026年10月9日</time> — Claude Haiku 5.5・GPT-6.1 Sol を追加 — <a href="/glossary/data-residency/">用語説明: 出さない（データレジデンシー）</a> · <a href="/glossary/">'
+  ja_dates: ['2026年10月9日']
+  en_dates: []
+===== en/index.html
+  dateModified: []
+  times: [('2026-10-09', 'October 9, 2026')]
+  bar: '<span class="dot">●</span>Last updated: <time datetime="2026-10-09">October 9, 2026</time> — <a href="/en/glossary/data-residency/">Glossary: data residency</a> · <a href="/en/glossary/">All 11 glossa'
+  ja_dates: []
+  en_dates: ['October 5, 2026', 'October 9, 2026']
+===== pricing/index.html
+  dateModified: ['2026-10-09']
+  times: [('2026-10-09', '2026年10月9日')]
+  bar: '<span class="dot">●</span>ページ更新: <time datetime="2026-10-09">2026年10月9日</time>（料金最終確認: OpenAI 2026-09-25（GPT-6.1 Sol 2026-10-09）, Anthropic 2026-10-09, DeepSeek 2026-09-25, Gemini 2026-09-04（画像モデル 202'
+  ja_dates: ['2026年10月9日']
+  en_dates: []
+===== en/pricing/index.html
+  dateModified: ['2026-10-09']
+  times: [('2026-10-09', 'October 9, 2026')]
+  bar: '<span class="dot">●</span>Page updated: <time datetime="2026-10-09">October 9, 2026</time> (pricing verified 2026-09-25 for OpenAI (GPT-6.1 Sol 2026-10-09), 2026-10-09 for Anthropic, 2026-09-25 for De'
+  ja_dates: []
+  en_dates: ['October 9, 2026']
+===== timeline/index.html
+  dateModified: ['2026-10-09']
+  times: [('2026-10-09', '2026年10月9日')]
+  bar: '<span class="dot">●</span>最終更新: <time datetime="2026-10-09">2026年10月9日</time> | 各項目に一次情報リンク掲載</div></div>\n<div class="legend-row"><span class="legend-item"><span class="legend-dot openai"></span>OpenA'
+  ja_dates: ['2026年10月9日']
+  en_dates: []
+===== en/timeline/index.html
+  dateModified: ['2026-10-09']
+  times: [('2026-10-09', 'October 9, 2026')]
+  bar: '<span class="dot">●</span>Last updated: <time datetime="2026-10-09">October 9, 2026</time> | Primary-source links per entry</div></div>\n<div class="legend-row"><span class="legend-item"><span class="l'
+  ja_dates: []
+  en_dates: ['October 9, 2026']
+===== multimodal/index.html
+  dateModified: ['2026-09-27']
+  times: [('2026-10-09', '2026年10月9日')]
+  bar: '<span class="dot">●</span>最終更新: <time datetime="2026-10-09">2026年10月9日</time> | 出典: <a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">Google AI 料金ページ</a> · <a href'
+  ja_dates: ['2026年10月9日']
+  en_dates: []
+===== en/multimodal/index.html
+  dateModified: ['2026-09-27']
+  times: [('2026-10-09', 'October 9, 2026')]
+  bar: '<span class="dot">●</span>Last updated: <time datetime="2026-10-09">October 9, 2026</time> | Sources: <a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">Google AI p'
+  ja_dates: []
+  en_dates: ['October 9, 2026']
+===== glossary/zero-operator-access/index.html
+  dateModified: ['2026-10-09']
+  times: [('2026-10-03', '2026年10月3日')]
+  bar: '\n      <span class="dot">●</span>\n      最終更新: <time datetime="2026-10-03">2026年10月3日</time>\n      &ensp;|&ensp; 方針: 各社の公式ドキュメントで逐語を確認できた内容のみ掲載。確認できていない項目は「未確認」と明記します\n    </div>\n  </div>\n\n  <section cl'
+  ja_dates: ['2026年10月3日', '2026年10月9日']
+  en_dates: []
+===== glossary/zero-data-retention/index.html
+  dateModified: ['2026-10-09']
+  times: [('2026-10-05', '2026年10月5日')]
+  bar: '\n      <span class="dot">●</span>\n      最終更新: <time datetime="2026-10-05">2026年10月5日</time>\n      &ensp;|&ensp; 方針: 各社の公式ドキュメントで逐語を確認できた内容のみ掲載。「一般にこう言われている」は書きません\n    </div>\n  </div>\n\n  <section class'
+  ja_dates: ['2026年10月5日', '2026年10月9日']
+  en_dates: []
+===== en/glossary/zero-operator-access/index.html
+  dateModified: ['2026-10-09']
+  times: [('2026-10-03', 'October 3, 2026')]
+  bar: '\n      <span class="dot">●</span>\n      Last updated: <time datetime="2026-10-03">October 3, 2026</time>\n      &ensp;|&ensp; Policy: only content verified verbatim in official documentation. Anything '
+  ja_dates: []
+  en_dates: ['October 3, 2026', 'October 9, 2026']
+===== en/glossary/zero-data-retention/index.html
+  dateModified: ['2026-10-09']
+  times: [('2026-10-05', 'October 5, 2026')]
+  bar: '\n      <span class="dot">●</span>\n      Last updated: <time datetime="2026-10-05">October 5, 2026</time>\n      &ensp;|&ensp; Policy: we publish only what we verified verbatim in vendor documentation. '
+  ja_dates: []
+  en_dates: ['October 5, 2026', 'October 9, 2026']

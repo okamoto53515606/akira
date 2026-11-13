@@ -1,7 +1,34 @@
 {
-  "updated": "2026-09-27",
+  "updated": "2026-11-07",
   "source": "各プロバイダ公式料金ページでfact確認済み（詳細は /pricing/ の出典欄）",
   "models": [
+    {
+      "name": "GPT-6.1 Sol",
+      "provider": "openai",
+      "label": "OpenAI",
+      "input": 2.0,
+      "output": 10.0,
+      "note": "cache入力$0.10・272,000トークン超はリクエスト全体が入力2倍/出力1.5倍",
+      "note_en": "cached input $0.10 · above 272,000 input tokens the whole request is repriced at 2x input / 1.5x output"
+    },
+    {
+      "name": "GPT-6.1 Terra",
+      "provider": "openai",
+      "label": "OpenAI",
+      "input": 1.0,
+      "output": 5.0,
+      "note": "キャッシュ入力$0.05（入力の5%）・272,000トークン超はリクエスト全体が入力2倍/出力1.5倍。1.05Mコンテキスト・128K出力",
+      "note_en": "cached input $0.05 (5% of input) · above 272,000 input tokens the whole request is repriced at 2x input / 1.5x output · 1.05M context, 128K output"
+    },
+    {
+      "name": "Claude Haiku 5.5",
+      "provider": "anthropic",
+      "label": "Anthropic",
+      "input": 0.1,
+      "output": 0.5,
+      "note": "2026-10-07公開・100,000トークンまで（超は$0.50/$2.50）・cache読込$0.01",
+      "note_en": "Released 2026-10-07 · up to 100,000 tokens ($0.50/$2.50 above) · cache read $0.01"
+    },
     {
       "name": "Claude Fable 5.1",
       "provider": "anthropic",
@@ -46,6 +73,15 @@
       "output": 25.0,
       "note": "",
       "note_en": ""
+    },
+    {
+      "name": "Claude Sonnet 5.5",
+      "provider": "anthropic",
+      "label": "Anthropic",
+      "input": 2.0,
+      "output": 10.0,
+      "note": "2026-09-28公開・Sonnet 5と同額",
+      "note_en": "Released 2026-09-28 · same price as Sonnet 5"
     },
     {
       "name": "Claude Sonnet 5",
@@ -165,6 +201,15 @@
       "note_en": ""
     },
     {
+      "name": "Gemini 4 Argon",
+      "provider": "google",
+      "label": "Google",
+      "input": 2.0,
+      "output": 10.0,
+      "note": "導入価格(〜2026-11-30)・通常$4/$20。キャッシュ$0.10→$0.20。無料枠なし",
+      "note_en": "Intro pricing (through 2026-11-30) · list $4/$20. Cache $0.10→$0.20. No free tier"
+    },
+    {
       "name": "Gemini 3.8 Flash",
       "provider": "google",
       "label": "Google",
@@ -179,8 +224,8 @@
       "label": "Google",
       "input": 0.75,
       "output": 3.75,
-      "note": "初回価格(〜12/31)",
-      "note_en": "Intro (until 12/31)"
+      "note": "導入価格(〜2026-12-31)・通常$1.50/$7.50。提供終了予定（2027-01-28・移行先 Gemini 3.8 Flash）",
+      "note_en": "Intro pricing (through 2026-12-31) · list $1.50/$7.50. Scheduled for retirement 2027-01-28 (replacement: Gemini 3.8 Flash)"
     },
     {
       "name": "Gemini 3.6 Flash",
@@ -188,8 +233,8 @@
       "label": "Google",
       "input": 0.75,
       "output": 3.75,
-      "note": "初回価格(〜12/31)",
-      "note_en": "Intro (until 12/31)"
+      "note": "導入価格(〜2026-12-31)・通常$1.50/$7.50",
+      "note_en": "Intro pricing (through 2026-12-31) · list $1.50/$7.50"
     },
     {
       "name": "Gemini 3.5 Flash",
@@ -215,8 +260,8 @@
       "label": "Google",
       "input": 2.0,
       "output": 12.0,
-      "note": "≤200K",
-      "note_en": "≤200K"
+      "note": "≤200K・200K超は$4/$18",
+      "note_en": "≤200K · above 200K is $4/$18"
     },
     {
       "name": "Gemini 3.1 Flash-Lite",
@@ -224,8 +269,17 @@
       "label": "Google",
       "input": 0.25,
       "output": 1.5,
-      "note": "",
-      "note_en": ""
+      "note": "音声入力は$0.50",
+      "note_en": "audio input $0.50"
+    },
+    {
+      "name": "Gemini Omni 1.1 Flash",
+      "provider": "google",
+      "label": "Google",
+      "input": 1.5,
+      "output": 9.0,
+      "note": "動画生成・編集向け。出力はテキスト$9.00・動画$17.50",
+      "note_en": "Video generation/editing. Output: $9.00 text, $17.50 video"
     },
     {
       "name": "Gemini 2.5 Pro",
@@ -336,6 +390,15 @@
       "note_en": "Flagship"
     },
     {
+      "name": "Kimi K3.1 Pro",
+      "provider": "other",
+      "label": "Moonshot (Kimi)",
+      "input": 2.0,
+      "output": 10.0,
+      "note": "cache入力$0.20・書込は5分$2.00/1時間$4.00・1,048,576コンテキスト・Batchは標準の60%",
+      "note_en": "cached input $0.20 · cache writes $2.00 (5m) / $4.00 (1h) · 1,048,576 context · Batch at 60%"
+    },
+    {
       "name": "Kimi K3",
       "provider": "other",
       "label": "Moonshot AI",
@@ -370,6 +433,15 @@
       "output": 8.7,
       "note": "Proの高速API版（単価10倍・最大20倍速）",
       "note_en": "High-speed API variant of Pro (10x price, up to 20x faster)"
+    },
+    {
+      "name": "Meta Muse Wonder",
+      "provider": "other",
+      "label": "Muse Wonder",
+      "input": 4.0,
+      "output": 20.0,
+      "note": "2026-10-12公開（muse-wonder-1.0）。キャッシュ入力 $0.20、1Mコンテキスト、長文プレミアムなし。Contributor モードの提供なし",
+      "note_en": "Released 2026-10-12 (muse-wonder-1.0). $0.20 cache input, 1M context, no long-context surcharge, no Contributor mode"
     }
   ]
 }

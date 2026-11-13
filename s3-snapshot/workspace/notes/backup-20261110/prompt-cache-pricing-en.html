@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Prompt Caching Pricing Compared (Nov 2026): OpenAI, Anthropic, Google, Moonshot, DeepSeek — LLM Data Hub</title>
+  <meta name="description" content="Prompt (context) cache pricing side by side for 5 providers: cached-input and cache-write rates per 1M tokens, discount ratios, retention and minimum cacheable length, quoted from each vendor official page (checked 10 Nov 2026).">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/en/prompt-cache-pricing/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta property="og:image" content="https://llm.okamomedia.tokyo/assets/og-prompt-cache-pricing-en.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="LLM Data Hub — LLM API pricing, token costs and model data">
+  <meta name="twitter:image" content="https://llm.okamomedia.tokyo/assets/og-prompt-cache-pricing-en.png">
+  <meta name="twitter:image:alt" content="LLM Data Hub — LLM API pricing, token costs and model data">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/en/prompt-cache-pricing/">
+  <meta property="og:title" content="Prompt Caching Pricing Compared (Nov 2026): OpenAI, Anthropic, Google, Moonshot, DeepSeek — LLM Data Hub">
+  <meta property="og:description" content="Prompt (context) cache pricing side by side for 5 providers: cached-input and cache-write rates per 1M tokens, discount ratios, retention and minimum cacheable length, quoted from each vendor official page (checked 10 Nov 2026).">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Prompt Caching Pricing Compared (November 2026)", "datePublished": "2026-11-10", "dateModified": "2026-11-10", "author": {"@type": "Organization", "name": "LLM Data Hub"}, "publisher": {"@type": "Organization", "name": "okamo channel"}, "url": "https://llm.okamomedia.tokyo/en/prompt-cache-pricing/", "inLanguage": "en", "isAccessibleForFree": true, "description": "Prompt (context) cache pricing side by side for 5 providers: cached-input and cache-write rates per 1M tokens, discount ratios, retention and minimum cacheable length, quoted from each vendor official page (checked 10 Nov 2026)."}</script>
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .phrase-box{background:linear-gradient(135deg,#12162a 0%,#1a1d35 55%,#0f1117 100%);border:1px solid var(--c-border);border-left:3px solid var(--c-accent2);border-radius:var(--r-lg);padding:1.2rem 1.3rem;margin:1.2rem 0 1.6rem}
+    .phrase-box .phrase{font-size:1.02rem;font-weight:700;line-height:1.75;margin-bottom:.6rem}
+    .phrase-box .phrase-meta{font-size:.8rem;color:var(--c-muted);line-height:1.7}
+    .num-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:.8rem;margin:1rem 0 1.6rem}
+    .num-card{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.9rem 1rem}
+    .num-card .k{font-family:var(--font-mono);font-size:.74rem;color:var(--c-muted);font-weight:600;letter-spacing:.02em}
+    .num-card .v{font-family:var(--font-mono);font-size:1.05rem;font-weight:700;margin:.15rem 0 .2rem}
+    .num-card .d{font-size:.8rem;color:var(--c-muted);line-height:1.6}
+    .read-box{background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-green);border-radius:var(--r-md);padding:1rem 1.2rem;margin:1rem 0 1.6rem;font-size:.88rem;color:var(--c-muted)}
+    .read-box strong{color:var(--c-text)}
+    .flow-fig{margin:1rem 0 1.4rem}
+    .flow-fig svg{width:100%;height:auto;border:1px solid var(--c-border);border-radius:var(--r-md);background:var(--c-surface)}
+    .cmp-table th,.cmp-table td{font-size:.85rem}
+  </style>
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/prompt-cache-pricing/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/prompt-cache-pricing/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/prompt-cache-pricing/">
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/en/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="Main navigation"><a href="/en/" class="nav-link">Home</a><a href="/en/pricing/" class="nav-link">Pricing</a><a href="/en/calculator/" class="nav-link">Token Calculator</a><a href="/en/timeline/" class="nav-link">Release Timeline</a><a href="/en/china-ai/" class="nav-link">China AI</a><a href="/en/multimodal/" class="nav-link">Multimodal</a><a href="/en/mai/" class="nav-link">MS AI (MAI)</a><a href="/en/glossary/" class="nav-link">Glossary</a></nav></div></header>
+
+<main>
+<div class="container" style="padding-top:2rem;">
+<h1 class="section-title" style="font-size:1.6rem;">Prompt Caching Pricing Compared <span style="font-size:1rem;font-weight:500;color:var(--c-muted);">[November 2026]</span></h1>
+<p class="section-sub" style="max-width:760px;">How far does the input rate drop when you reuse the same long prefix (system prompt, document set, codebase) with each vendor's cache? This page is the <strong>rate-and-terms comparison</strong>; the concept is explained in the <a href="/en/glossary/prompt-cache/">glossary entry on prompt caching</a>, and standard (non-cached) rates are in the <a href="/en/pricing/">LLM API pricing comparison</a>.</p>
+<div class="updated-bar"><span class="dot">●</span>Last updated: <time datetime="2026-11-10">10 Nov 2026</time> | Every vendor page was fetched on 10 Nov 2026; quotations are verbatim and the ratio/absolute conversions are ours.</div>
+<section class="section" style="padding-top:1rem;">
+<h2 class="section-title" style="font-size:1.15rem;">Three things to know first</h2>
+<ul style="max-width:760px;line-height:1.9;">
+<li><strong>Reads are cheap, writes are expensive.</strong> Cache reads land at 0.025x to 0.1x of the normal input rate, while writes cost 1.25x to 2x (OpenAI and Anthropic both work this way). <strong>Caching a prefix you will only send once costs you more than not caching it.</strong></li>
+<li><strong>Discounts are quoted against the normal input rate.</strong> "90% off" means different money on a $0.10 model than on a $10 model, so the table shows both the multiplier and the absolute rate.</li>
+<li><strong>Terms differ more than prices do.</strong> Some caches are automatic (OpenAI, Moonshot, DeepSeek, Google's implicit caching), while Anthropic makes you place explicit cache breakpoints.</li>
+</ul>
+</section>
+<section class="section" style="padding-top:0;">
+<h2 class="section-title" style="font-size:1.15rem;">Cache rates by model (USD per 1M tokens)</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Vendor</th><th>Model</th><th>Normal input</th><th>Cached input (hit)</th><th>Read discount</th><th>Write (5 min)</th><th>Write (1 hour)</th><th>Minimum tokens</th><th>Retention / billing unit</th></tr></thead>
+<tbody>
+<tr><td>OpenAI</td><td class="model-name">GPT-6.1 Terra</td><td class="price">$1.00</td><td class="price">$0.05</td><td>95% off (0.05x)</td><td class="price">$1.25</td><td class="price">$2.50</td><td>1,024</td><td>30 min default; 12 h option in the Responses API</td></tr>
+<tr><td>OpenAI</td><td class="model-name">GPT-6.1 Sol</td><td class="price">$2.00</td><td class="price">$0.10</td><td>95% off (0.05x)</td><td class="price">$2.50</td><td class="price">$5.00</td><td>1,024</td><td>As above</td></tr>
+<tr><td>OpenAI</td><td class="model-name">GPT-6 Sol</td><td class="price">$2.00</td><td class="price">$0.20</td><td>90% off (0.1x)</td><td class="price">$2.50</td><td class="price">$5.00</td><td>1,024</td><td>As above</td></tr>
+<tr><td>OpenAI</td><td class="model-name">GPT-6 Luna</td><td class="price">$0.10</td><td class="price">$0.01</td><td>90% off (0.1x)</td><td class="price">$0.125</td><td class="price">$0.25</td><td>1,024</td><td>As above</td></tr>
+<tr><td>Anthropic</td><td class="model-name">Claude Fable 5.1 / Mythos 5.1</td><td class="price">$10.00</td><td class="price">$0.25</td><td>97.5% off (0.025x)</td><td class="price">$12.50</td><td class="price">$20.00</td><td>Not confirmed</td><td>Choose 5 min or 1 hour at write time</td></tr>
+<tr><td>Anthropic</td><td class="model-name">Claude Opus 5.5</td><td class="price">$4.00</td><td class="price">$0.20</td><td>95% off (0.05x)</td><td class="price">$5.00</td><td class="price">$8.00</td><td>Not confirmed</td><td>As above</td></tr>
+<tr><td>Anthropic</td><td class="model-name">Claude Sonnet 5.5</td><td class="price">$2.00</td><td class="price">$0.10</td><td>95% off (0.05x)</td><td class="price">$2.50</td><td class="price">$4.00</td><td>Not confirmed</td><td>As above</td></tr>
+<tr><td>Anthropic</td><td class="model-name">Claude Haiku 5.5</td><td class="price">$0.10</td><td class="price">$0.01</td><td>90% off (0.1x)</td><td class="price">$0.125</td><td class="price">$0.20</td><td>Not confirmed</td><td>As above</td></tr>
+<tr><td>Google</td><td class="model-name">Gemini 4 Argon</td><td class="price">$2.00<span style="font-size:.7rem;"> (to 30 Nov)</span></td><td class="price">$0.10<span style="font-size:.7rem;"> ($0.20 from 1 Dec)</span></td><td>95% off, then 90%</td><td>Not listed (implicit caching only)</td><td>Not listed</td><td>Not confirmed</td><td>Storage $0.50/1M/hour (to 31 Dec) then $1.00</td></tr>
+<tr><td>Moonshot</td><td class="model-name">kimi-k3.1-pro</td><td class="price">$2.00</td><td class="price">$0.20</td><td>90% off (0.1x)</td><td class="price">$2.00</td><td class="price">$4.00</td><td>Not confirmed</td><td>5 min default; each hit refreshes the TTL</td></tr>
+<tr><td>Moonshot</td><td class="model-name">kimi-k3.1-pro-highspeed</td><td class="price">$4.00</td><td class="price">$0.20</td><td>95% off (0.05x)</td><td class="price">$4.00</td><td class="price">$8.00</td><td>Not confirmed</td><td>As above</td></tr>
+<tr><td>Moonshot</td><td class="model-name">kimi-k3</td><td class="price">$3.00</td><td class="price">$0.30</td><td>90% off (0.1x)</td><td class="price">$3.00</td><td class="price">$6.00</td><td>Not confirmed</td><td>As above</td></tr>
+<tr><td>DeepSeek</td><td class="model-name">deepseek-flash</td><td class="price">$0.15 / $0.30</td><td class="price">$0.003 / $0.006</td><td>98% off</td><td>Not listed</td><td>Not listed</td><td>Not confirmed</td><td>Automatic (off-peak / peak)</td></tr>
+<tr><td>DeepSeek</td><td class="model-name">deepseek-v4-pro</td><td class="price">$0.66 / $1.32</td><td class="price">$0.022 / $0.044</td><td>96.7% off</td><td>Not listed</td><td>Not listed</td><td>Not confirmed</td><td>Automatic (off-peak / peak)</td></tr>
+</tbody></table></div>
+<p style="font-size:.78rem;color:var(--c-muted);max-width:820px;">OpenAI write rates are the official multipliers (1.25x for the 30-minute lifetime, 2.5x for 12 hours) applied to normal input; the docs stress that a cache write is not an additive fee but a replacement rate. Anthropic writes are 1.25x (5 min) and 2x (1 hour), reads are 0.1x (0.025x on Fable 5.1 and Mythos 5.1, 0.05x on Opus 5.5 and Sonnet 5.5). DeepSeek shows off-peak / peak.</p>
+</section>
+<section class="section" style="padding-top:0;">
+<h2 class="section-title" style="font-size:1.15rem;">Write versus read: when caching pays off</h2>
+<p style="max-width:820px;line-height:1.9;">OpenAI states the break-even arithmetic verbatim:</p>
+<div class="note-bar" style="max-width:820px;">"At the 0.1× read rate with 30-minute writes, writing a prefix once and fully reusing it once costs <strong>1.35×</strong> its ordinary input cost, compared with <strong>2×</strong> for processing it twice without caching."</div>
+<p style="max-width:820px;line-height:1.9;">The same structure holds elsewhere. For Moonshot's kimi-k3.1-pro a 5-minute write ($2.00) equals the normal input rate ($2.00) while reads fall to $0.20. Anthropic charges 1.25x or 2x on writes in exchange for reads down to 0.025x-0.1x. <strong>How many times you reuse the prefix is what decides the bill.</strong></p>
+</section>
+<section class="section" style="padding-top:0;">
+<h2 class="section-title" style="font-size:1.15rem;">What we could not confirm (we do not guess)</h2>
+<div class="table-wrap"><table><thead><tr><th>Item</th><th>Status</th><th>Note</th></tr></thead><tbody>
+<tr><td class="model-name">Anthropic minimum cacheable length</td><td><strong>Not confirmed</strong></td><td>The pricing page we fetched does not state a minimum token count. We will add per-model values from the model docs once verified.</td></tr>
+<tr><td class="model-name">Per-model attribution of Google cache rates</td><td><strong>Not confirmed</strong></td><td>Model names sit outside the pricing tables on ai.google.dev, so quoting a cache row alone does not establish which model it belongs to. We associate the Gemini 4 Argon row because its input/output rates ($2.00/$10.00) match that model's table.</td></tr>
+<tr><td class="model-name">xAI (Grok) cache rate</td><td><strong>Not confirmed</strong></td><td>The official models page yielded only context length and input/output rates ($2.00/$6.00) verbatim; no cached-input row was retrievable.</td></tr>
+<tr><td class="model-name">Qwen (Alibaba) cache rate</td><td><strong>Not confirmed</strong></td><td>We could not obtain a verbatim quote from the official pricing page for this release; it will be added in a later update.</td></tr>
+<tr><td class="model-name">DeepSeek write charge and minimum length</td><td><strong>Not confirmed</strong></td><td>The official table we checked lists only cache-hit and cache-miss rows; no separate write or minimum-cache-length row was found (we do not claim there is no write charge).</td></tr>
+</tbody></table></div>
+</section>
+<section class="section" style="padding-top:0;">
+<h2 class="section-title" style="font-size:1.15rem;">Sources (all fetched 10 Nov 2026)</h2>
+<ul style="line-height:1.9;max-width:820px;">
+<li>OpenAI pricing: <a href="https://developers.openai.com/api/docs/pricing" target="_blank" rel="noopener">developers.openai.com/api/docs/pricing</a> (GPT-6.1 Terra quoted at $1.00 input / $0.05 cached input / $5.00 output)</li>
+<li>OpenAI prompt caching: <a href="https://developers.openai.com/api/docs/guides/prompt-caching" target="_blank" rel="noopener">developers.openai.com/api/docs/guides/prompt-caching</a> (1,024-token minimum, 1.25x write for 30 min / 2.5x for 12 h, 0.1x reads, 0.05x on GPT-6.1 Sol and Terra, the 1.35x vs 2x example)</li>
+<li>Anthropic pricing: <a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener">platform.claude.com/docs/en/about-claude/pricing</a> (1.25x 5-minute write, 2x 1-hour write, 0.1x read; 0.025x on Fable 5.1 and Mythos 5.1; 0.05x on Opus 5.5 and Sonnet 5.5)</li>
+<li>Google Gemini API pricing: <a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">ai.google.dev/gemini-api/docs/pricing</a> (context caching price rows, storage $0.50 to $1.00 per 1M tokens per hour)</li>
+<li>Moonshot (Kimi API Platform): <a href="https://platform.kimi.ai/docs/pricing/chat" target="_blank" rel="noopener">platform.kimi.ai/docs/pricing/chat</a> (kimi-k3.1-pro $2.00 / $10.00 / $0.20 cached input / $2.00 5-min write / $4.00 1-hour write; 1,048,576-token context for all K3 models)</li>
+<li>DeepSeek: <a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">api-docs.deepseek.com/quick_start/pricing</a> (cache-hit and cache-miss rates, off-peak and peak)</li>
+</ul>
+</section>
+<section class="section" style="padding-top:0;">
+<h2 class="section-title" style="font-size:1.15rem;">Related pages</h2>
+<ul style="line-height:2;">
+<li><a href="/en/pricing/">LLM API pricing comparison</a> - standard input, cached input and output rates</li>
+<li><a href="/en/glossary/prompt-cache/">Glossary: what prompt caching is</a> - how it works and what to watch for</li>
+<li><a href="/en/calculator/">Token cost calculator</a> - estimate from input/output token counts</li>
+<li><a href="/en/kimi-k3-1-pro/">Kimi K3.1 Pro</a> / <a href="/en/gpt-6-1-terra/">GPT-6.1 Terra</a></li>
+</ul>
+</section>
+</div>
+</main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>Operated by okamoちゃんねる</p><p><a href="/en/">Home</a> · <a href="/en/pricing/">Pricing</a> · <a href="/en/calculator/">Calculator</a> · <a href="/en/timeline/">Timeline</a> · <a href="/en/glossary/">Glossary</a> · <a href="/en/gpt-6/">GPT-6 Astra</a></p></div><p class="footer-disclaimer">⚠️ Prices and specifications change without notice. Always confirm on the vendor's official page before you commit. This site is not affiliated with any provider.</p></div></footer>
+</body>
+</html>

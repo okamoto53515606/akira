@@ -1,0 +1,40 @@
+=== claude-opus-5-5/index.html | キャッシュ読込$0.20
+'ent="width=device-width, initial-scale=1">\n  <title>Claude Opus 5.5 — Claude 5.5世代の第一弾【料金・ベンチマーク・比較】 — LLM Data Hub</title>\n  <meta name="description" content="Anthropic Claude Opus 5.5の料金（入力$4・出力$20・キャッシュ読込$0.20・Fast $8/$40）・1Mコンテキスト・公式ベンチマーク9項目を一次情報で解説。Fable 5.1と同等性能でOpus 5より40%安いという主張の中身と、誰のハーネスでの測定かを明記。2026年9月22日公開。2026年10月1日更新。">\n  <link rel="'
+=== claude-opus-5-5/index.html | キャッシュ読込$0.20
+'ty="og:url" content="https://llm.okamomedia.tokyo/claude-opus-5-5/">\n  <meta property="og:title" content="Claude Opus 5.5 — Claude 5.5世代の第一弾">\n  <meta property="og:description" content="料金は入力$4・出力$20・キャッシュ読込$0.20（2026年10月1日更新）。1Mコンテキスト・公式ベンチ9項目・ハーネス注記まで一次情報で整理。">\n  <meta property="og:site_name" content="LLM Data Hub">\n  <meta name="twitter:card" co'
+=== en/claude-opus-5-5/index.html | $0.20 cache read
+'tial-scale=1">\n  <title>Claude Opus 5.5 — First of the Claude 5.5 Family [Pricing &amp; Benchmarks] — LLM Data Hub</title>\n  <meta name="description" content="Claude Opus 5.5: $4 input / $20 output / $0.20 cache read, Fast mode $8/$40, 1M context, 128K max output. All nine official benchmarks plus who ran each harness. Released Sept 22, 2026. Updat'
+=== en/claude-opus-5-5/index.html | $0.20 cache read
+'//llm.okamomedia.tokyo/en/claude-opus-5-5/">\n  <meta property="og:title" content="Claude Opus 5.5 — First of the Claude 5.5 Family">\n  <meta property="og:description" content="$4 input / $20 output / $0.20 cache read (updated Oct 1, 2026). 1M context, 128K max output, nine official benchmarks, harness notes.">\n  <meta property="og:site_name" conten'
+=== en/claude-opus-5-5/index.html | cache reads at $0.20
+'e-h">\n<h2 class="section-title" id="choice-h" style="font-size:1.2rem;">Where it fits — and where to be careful</h2>\n<div class="tip-box">\n  <ul>\n    <li><strong>Long-running agentic coding:</strong> cache reads at $0.20 and Anthropic&#39;s own note that cache reads dominate agentic costs make this a good fit for setups that resend repository conte'
+=== en/index.html | $0.20 cache read
+'"card"><div class="card-icon">🧠</div><h3 class="card-title">Claude Opus 5.5 — first of the Claude 5.5 family, cheaper than Opus 5</h3><p class="card-desc">Released 2026-09-22. $4 input / $20 output / $0.20 cache read (down from Opus 5&#39;s $5/$25). 1M context, 128K output. All nine official benchmarks with the harness owner noted, the basis for th'
+=== en/index.html | $0.20 cache read
+'ass="card"><div class="card-icon">🚀</div><h3 class="card-title">Claude Sonnet 5.5 — the balanced model of the Claude 5.5 family</h3><p class="card-desc">Released 2026-09-28 at $2 input / $10 output / $0.20 cache reads — <strong>identical pricing to the previous-generation Sonnet 5</strong>, so this is a generation update, not a price cut. 1M contex'
+=== en/index.html | $0.20 cache reads
+'ass="card"><div class="card-icon">🚀</div><h3 class="card-title">Claude Sonnet 5.5 — the balanced model of the Claude 5.5 family</h3><p class="card-desc">Released 2026-09-28 at $2 input / $10 output / $0.20 cache reads — <strong>identical pricing to the previous-generation Sonnet 5</strong>, so this is a generation update, not a price cut. 1M contex'
+=== en/pricing/index.html | $0.20 cache read
+"Mythos 5.1 (released 2026-09-01) reflected. Fable 5.1 is $10/$50 with $0.25 cache reads (75% below Fable 5's $1.00).</strong> Added <strong>Claude Sonnet 5.5 (released 2026-09-28)</strong>: $2 / $10, $0.20 cache reads, $2.50 5-minute cache writes, $4 one-hour cache writes &mdash; <strong>identical to the previous-generation Sonnet 5</strong> (a gen"
+=== en/pricing/index.html | $0.20 cache reads
+"Mythos 5.1 (released 2026-09-01) reflected. Fable 5.1 is $10/$50 with $0.25 cache reads (75% below Fable 5's $1.00).</strong> Added <strong>Claude Sonnet 5.5 (released 2026-09-28)</strong>: $2 / $10, $0.20 cache reads, $2.50 5-minute cache writes, $4 one-hour cache writes &mdash; <strong>identical to the previous-generation Sonnet 5</strong> (a gen"
+=== en/timeline/index.html | $0.20 cache read
+'tyle="font-size:.7rem;">New</span></h2><p class="tl-desc">The second model in Anthropic\'s Claude 5.5 family; the docs call it "the best combination of speed and intelligence". $2 input / $10 output / $0.20 cache reads / $2.50 5-minute cache writes / $4 one-hour cache writes — <strong>identical to the previous-generation Sonnet 5</strong>, not a pri'
+=== en/timeline/index.html | $0.20 cache reads
+'tyle="font-size:.7rem;">New</span></h2><p class="tl-desc">The second model in Anthropic\'s Claude 5.5 family; the docs call it "the best combination of speed and intelligence". $2 input / $10 output / $0.20 cache reads / $2.50 5-minute cache writes / $4 one-hour cache writes — <strong>identical to the previous-generation Sonnet 5</strong>, not a pri'
+=== en/timeline/index.html | cache read $0.20
+'r be disabled</strong> — depth is set with <code>effort</code> (default medium). Sonnet 5.5 shipped on 9/28 (see the entry below); Haiku 5.5 is still unconfirmed. <span class="tl-price-badge">$4/$20 (cache read $0.20, write $5)</span></p><div class="tl-links"><a href="https://www.anthropic.com/claude-opus-5-5" target="_blank" rel="noopener">Anthrop'
+=== en/timeline/index.html | cache read $0.20
+' thinking. <strong>No benchmark table is published.</strong> Available on the Claude API, Amazon Bedrock, Vertex AI, Microsoft Foundry and Claude Platform on AWS. <span class="tl-price-badge">$2/$10 (cache read $0.20, write $2.50)</span></p><div class="tl-links"><a href="https://platform.claude.com/docs/en/models/sonnet-5-5/overview" target="_blank'
+=== index.html | キャッシュ読込$0.20
+'l / Luna詳細を見る →</a></article>\n<article class="card"><div class="card-icon">🧠</div><h3 class="card-title">Claude Opus 5.5 — Claude 5.5世代の第一弾・Opus 5より安い</h3><p class="card-desc">2026-09-22公開。入力$4・出力$20・キャッシュ読込$0.20（Opus 5の$5/$25から値下げ）。1Mコンテキスト・128K出力。公式ベンチ9項目と「誰のハーネスでの測定か」、40%安の根拠、thinking無効化不可の仕様変更まで一次情報で解説。</p><a href="/claude-opus-5-5/" class="car'
+=== index.html | キャッシュ読込$0.20
+'-link">Opus 5.5詳細を見る →</a></article>\n<article class="card"><div class="card-icon">🚀</div><h3 class="card-title">Claude Sonnet 5.5 — Claude 5.5世代のバランス型</h3><p class="card-desc">2026-09-28公開。入力$2・出力$10・キャッシュ読込$0.20で<strong>前世代Sonnet 5と同額</strong>（値下げではなく世代更新）。1Mコンテキスト・128K出力、thinkingはAdaptiveで既定ON・既定エフォート<code>high</code>、<code>between_tools</code>で事'
+=== pricing/index.html | キャッシュ読込$0.20
+'com をFirecrawlで直接確認（2026-09-01 JST）。<strong>Claude Fable 5.1/Mythos 5.1（2026-09-01公開）を反映。Fable 5.1は$10/$50・キャッシュ読込$0.25（Fable 5の$1.00から75%減）。</strong>Claude Sonnet 5.5（2026-09-28公開）を追加。<strong>$2/$10・キャッシュ読込$0.20・5分キャッシュ書込$2.50・1時間$4で、前世代Sonnet 5と同額</strong>です（値下げではなく世代更新）。Claude Sonnet 5の$2/$10は導入価格から恒久化（2026-08-10発表）。<a href="https://www.anthropi'
+=== timeline/index.html | キャッシュ読込$0.20
+'。1Mコンテキスト・128K出力・知識カットオフ2026年6月。<strong>thinkingは無効化できず</strong>、<code>effort</code>で深さを調整（既定medium）。Sonnet 5.5 は 9/28 に公開済み（下の項目）。Haiku 5.5 は「coming weeks」のままで未確認。<span class="tl-price-badge">$4/$20（キャッシュ読込$0.20・書込$5）</span></p><div class="tl-links"><a href="https://www.anthropic.com/claude-opus-5-5" target="_blank" rel="noopener">Anthropic公式発表 →<'
+=== timeline/index.html | キャッシュ読込$0.20
+'trong>で世代更新 <span class="badge badge-new" style="font-size:.7rem;">New</span></h2><p class="tl-desc">AnthropicのClaude 5.5ファミリー2番目のモデル。公式の説明は「The best combination of speed and intelligence」。入力$2・出力$10・キャッシュ読込$0.20・5分キャッシュ書込$2.50・1時間$4で、<strong>前世代Sonnet 5と同額</strong>（値下げではありません）。1Mコンテキスト・128K出力・知識カットオフ2026年6月。thinkingはAdaptiveで既定ON、既定エフォート<code>high'
+=== timeline/index.html | キャッシュ読込$0.20
+'code>、<code>between_tools</code>で事前思考をオフにできます。<strong>公式ページにベンチマーク表は未掲載</strong>。提供はClaude API・Amazon Bedrock・Vertex AI・Microsoft Foundry・Claude Platform on AWSの5つ。<span class="tl-price-badge">$2/$10（キャッシュ読込$0.20・書込$2.50）</span></p><div class="tl-links"><a href="https://platform.claude.com/docs/en/models/sonnet-5-5/overview" target="_blank" rel="no'

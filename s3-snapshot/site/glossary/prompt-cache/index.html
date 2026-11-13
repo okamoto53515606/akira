@@ -6,6 +6,14 @@
   <title>プロンプトキャッシュとは — cache hit・cache miss・書込の違いを料金で理解 | LLM Data Hub</title>
   <meta name="description" content="プロンプトキャッシュを初心者向けに整理。cache hit（読込）とcache miss、キャッシュ書込の単価、TTL、キャッシュされる最小トークン数をOpenAI・Anthropic・Google・DeepSeekの一次情報で比較し、10回送ったときの削減額まで試算します。">
   <link rel="canonical" href="https://llm.okamomedia.tokyo/glossary/prompt-cache/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta property="og:image" content="https://llm.okamomedia.tokyo/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="LLM Data Hub — LLM API pricing, token costs and model data">
+  <meta name="twitter:image" content="https://llm.okamomedia.tokyo/assets/og-image.png">
+  <meta name="twitter:image:alt" content="LLM Data Hub — LLM API pricing, token costs and model data">
   <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/glossary/prompt-cache/">
   <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/glossary/prompt-cache/">
   <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/glossary/prompt-cache/">
@@ -14,8 +22,8 @@
   <meta property="og:title" content="プロンプトキャッシュとは — cache hit・cache miss・書込の違いを料金で理解">
   <meta property="og:description" content="DeepSeekでは同じ入力でも単価が50倍違う「cache hit」。仕組み・TTL・最小トークン数・書込の1.25倍ルールを4社の一次情報で比較。">
   <meta property="og:site_name" content="LLM Data Hub">
-  <meta name="twitter:card" content="summary">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"プロンプトキャッシュとは — cache hit・cache miss・書込の違いを料金で理解","datePublished":"2026-09-17","dateModified":"2026-09-17","author":{"@type":"Organization","name":"LLM Data Hub"},"publisher":{"@type":"Organization","name":"okamoちゃんねる"},"url":"https://llm.okamomedia.tokyo/glossary/prompt-cache/","inLanguage":"ja","about":"プロンプトキャッシュ（cache hit / cache miss / cache write）の仕組みと料金ルール"}</script>
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"プロンプトキャッシュとは — cache hit・cache miss・書込の違いを料金で理解","datePublished":"2026-09-17","dateModified": "2026-11-12","author":{"@type":"Organization","name":"LLM Data Hub"},"publisher":{"@type":"Organization","name":"okamoちゃんねる"},"url":"https://llm.okamomedia.tokyo/glossary/prompt-cache/","inLanguage":"ja","about":"プロンプトキャッシュ（cache hit / cache miss / cache write）の仕組みと料金ルール"}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"ホーム","item":"https://llm.okamomedia.tokyo/"},{"@type":"ListItem","position":2,"name":"用語説明","item":"https://llm.okamomedia.tokyo/glossary/"},{"@type":"ListItem","position":3,"name":"プロンプトキャッシュとは","item":"https://llm.okamomedia.tokyo/glossary/prompt-cache/"}]}</script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
@@ -42,6 +50,8 @@
 <main><div class="container">
   <div class="section" style="padding-bottom:0;">
     <h1 class="section-title" style="font-size:1.55rem;">プロンプトキャッシュとは — 「cache hit」の一行を料金で読み解く</h1>
+<p style="font-size:.9rem;background:var(--c-surface2);border:1px solid var(--c-border);border-radius:6px;padding:.6rem .9rem;max-width:820px;">各社の<strong>キャッシュ単価と条件を横断比較</strong>した表は <a href="/prompt-cache-pricing/"><strong>プロンプトキャッシュ料金の横断比較</strong></a> にまとめています。</p>
+<p style="font-size:.9rem;background:var(--c-surface2);border:1px solid var(--c-border);border-radius:6px;padding:.6rem .9rem;max-width:820px;">非同期バッチ（Batch API）の割引率・締切・保持期間は <a href="/batch-api-pricing/"><strong>Batch API割引の横断比較</strong></a> にまとめています。</p>
     <p class="section-sub" style="max-width:760px;">
       <a href="/glossary/">用語説明</a> 第2回。料金表やニュースに出てくる用語を、一次情報まで戻して分解します。
       今回のテーマは <strong>プロンプトキャッシュ</strong>。DeepSeekの公式料金ページにあるこの一行から始めます。
@@ -53,7 +63,7 @@
     </div>
     <div class="updated-bar">
       <span class="dot">●</span>
-      最終更新: <time datetime="2026-09-17">2026年9月17日</time>
+      最終更新: <time datetime="2026-11-12">2026年11月12日</time>
       &ensp;|&ensp; 一次情報: <a href="https://platform.openai.com/docs/guides/prompt-caching" target="_blank" rel="noopener">OpenAI Prompt caching</a>・<a href="https://platform.claude.com/docs/en/build-with-claude/prompt-caching" target="_blank" rel="noopener">Anthropic Prompt caching</a>・<a href="https://ai.google.dev/gemini-api/docs/caching" target="_blank" rel="noopener">Gemini Context caching</a>・<a href="https://api-docs.deepseek.com/guides/kv_cache" target="_blank" rel="noopener">DeepSeek Context Caching</a>
       &ensp;|&ensp; 確認日: 2026-09-17
     </div>
@@ -216,7 +226,8 @@
       <li>キャッシュの実装・既定値・乗数は各社が変更する可能性があります。実装前に各社の最新ドキュメントをご確認ください。</li>
     </ul>
   </div>
-</div></main>
+</div><p class="source-note">関連: <a href="/kimi-k3-1-pro/">Kimi K3.1 Pro（キャッシュ課金が自動有効な実例）</a></p>
+</main>
 <footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>運営: okamoちゃんねる</p><p><a href="/">ホーム</a> · <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a> · <a href="/timeline/">年表</a> · <a href="/glossary/">用語説明</a> · <a href="/gpt-6/">GPT-6 Astra</a></p></div><p class="footer-disclaimer">⚠️ 料金・仕様は予告なく変動します。契約前に必ず各社公式ページでご確認ください。本サイトは各社と提携していません。</p></div></footer>
 </body>
 </html>

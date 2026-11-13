@@ -4,17 +4,25 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>用語説明 — AI用語・フレーズを一次情報でかみくだく | LLM Data Hub</title>
-  <meta name="description" content="AIの料金表やニュースに出てくる用語を初心者向けにかみくだく解説です。ベンチマークの仕分け方（誰が・何を・どう測るか）、ハーネス、プロンプトキャッシュ、1Mコンテキストなど、各社の公式ドキュメントとベンチ運営者の公表資料で確認した内容だけを掲載します。">
+  <meta name="description" content="AIの料金表やニュースに出てくる用語を初心者向けにかみくだく解説です。ベンチマークの仕分け方（誰が・何を・どう測るか）、ハーネス、プロンプトキャッシュ、1Mコンテキスト、ZDR（ゼロデータ保持）、データを守る4要件（残さない・見せない・学ばせない・出さない）、学習に使わせない（no-training）、データレジデンシー（出さない＝保存と処理の別々の約束）など、各社の公式ドキュメントとベンチ運営者の公表資料で確認した内容だけを掲載します。">
   <link rel="canonical" href="https://llm.okamomedia.tokyo/glossary/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta property="og:image" content="https://llm.okamomedia.tokyo/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="LLM Data Hub — LLM API pricing, token costs and model data">
+  <meta name="twitter:image" content="https://llm.okamomedia.tokyo/assets/og-image.png">
+  <meta name="twitter:image:alt" content="LLM Data Hub — LLM API pricing, token costs and model data">
   <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/glossary/">
   <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/glossary/">
   <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/glossary/">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://llm.okamomedia.tokyo/glossary/">
   <meta property="og:title" content="用語説明 — AI用語・フレーズを一次情報でかみくだく">
-  <meta property="og:description" content="「ベンチマークが多すぎて分からない」を、①誰が ②何を ③どう測るか の3つで解消。ベンチマーク／ハーネス／プロンプトキャッシュ／1Mコンテキストを1ページ1テーマで、出典つきに解説します。">
+  <meta property="og:description" content="「ベンチマークが多すぎて分からない」を、①誰が ②何を ③どう測るか の3つで解消。ベンチマーク／ハーネス／プロンプトキャッシュ／1Mコンテキストを1ページ1テーマで、出典つきに解説します。学習に使わせない（no-training）、データレジデンシー（出さない）も同じ形式です。">
   <meta property="og:site_name" content="LLM Data Hub">
-  <meta name="twitter:card" content="summary">
+  <meta name="twitter:card" content="summary_large_image">
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
   <link rel="stylesheet" href="/assets/style.css">
@@ -33,7 +41,7 @@
     </p>
     <div class="updated-bar">
       <span class="dot">●</span>
-      最終更新: <time datetime="2026-09-27">2026年9月27日</time>
+      最終更新: <time datetime="2026-10-05">2026年10月5日</time>
       &ensp;|&ensp; 方針: 一次情報（各社公式発表・ベンチ運営者の公表資料）で裏取りできる範囲のみ掲載
     </div>
   </div>
@@ -80,13 +88,37 @@
         <p class="card-desc">DeepSWEはDatacurve、OSWorldはXLANG Lab、GDPvalはOpenAI、GDPval-AAはArtificial Analysis、AutomationBenchはZapier——<strong>ベンチ名から運営組織にたどり着く手順を4ステップに固定</strong>しました。①原論文・公式リポジトリ ②組織の分類（ベンダー／独立評価／研究機関／業務ソフト企業） ③スコアの報告者は誰か ④ハーネス提供元。代表12ベンチの運営元一覧と、「第三者が運営＝公平ではない」3つの実例（GDPval-AA・AutomationBench・WANDR）付き。</p>
         <a href="/glossary/benchmark-orgs/" class="card-link">解説を読む →</a>
       </article>
-    </div>
 <article class="card">
         <div class="card-icon">🔒</div>
         <h3 class="card-title">ZDR（ゼロデータ保持）とは — 「保存しない」の3つの落とし穴</h3>
         <p class="card-desc">ZDR は<strong>「既定で保存しない」であって「常時有効」ではありません</strong>。①<strong>保持が必要なモデルの例外リスト</strong>があり、②保証には<strong>明示指定</strong>が要り、③「保存しない」と「担当者が見られない（ZOA）」「学習に使わない」は<strong>別の約束</strong>です。AWS Bedrock の保持モード（none / default / inherit / aws_review）と設定単位、公開されている例外リスト（OpenAI系モデル・Claude Fable 5 / 5.1）、OpenAI・Anthropic・Google・Microsoft の入手方法（<strong>既定か審査制か</strong>）を、各社公式ドキュメントの逐語で比較します。用語説明 第7回。</p>
         <a href="/glossary/zero-data-retention/" class="card-link">解説を読む →</a>
       </article>
+<article class="card">
+        <div class="card-icon">🛡️</div>
+        <h3 class="card-title"><span class="badge badge-new">New</span> データを守る4要件とは — 「残さない・見せない・学ばせない・出さない」</h3>
+        <p class="card-desc">「ZDR対応なら安心」は早計です。<strong>①残さない（ZDR）②見せない（ZOA）③学ばせない（学習条項）④出さない（データレジデンシー）は別々の約束</strong>で、1社が4つ全部を既定で満たすことはまずありません。AWS Bedrock・Microsoft Foundry・OpenAI・Anthropic・Google Cloud の5社について、<strong>どこが既定でどこが申請制・審査制か</strong>を公式ドキュメントの逐語で並べ、契約前の5ステップとよくある誤解4つまでまとめました。用語説明 第8回。</p>
+        <a href="/glossary/four-data-requirements/" class="card-link">解説を読む →</a>
+      </article>
+<article class="card">
+        <div class="card-icon">🔐</div>
+        <h3 class="card-title"><span class="badge badge-new">New</span> ZOA（ゼロオペレーターアクセス）とは — 「保存しない」と「見られない」は別の約束</h3>
+        <p class="card-desc">ZDRが「保存の話」なら、ZOAは「人のアクセスの話」。<strong>アクセスを止める3つの層（手続き・鍵・実行環境）</strong>、鍵管理の3段階（<strong>CMK／BYOK／HYOK</strong>）、承認フロー（Microsoft Customer Lockbox・Google Access Approval と Key Access Justifications・OpenAI EKM・Anthropicのcontrolled access path）を、AWS Bedrock・Microsoft・Google Cloud・OpenAI・Anthropicの公式ドキュメント逐語で整理しました。緊急時の例外（break glass等）まで明記。用語説明 第9回。</p>
+        <a href="/glossary/zero-operator-access/" class="card-link">解説を読む →</a>
+      </article>
+      <article class="card">
+        <div class="card-icon">🚫</div>
+        <h3 class="card-title"><span class="badge badge-new">New</span> 学習に使わせない（no-training）とは — 「無料で試す」と「契約して使う」で答えが変わる</h3>
+        <p class="card-desc">「ChatGPTは学習に使うのに、APIは使わない」は本当です。<strong>学習条項を決めるのは「どの会社か」ではなく「個人向けアプリ・無料枠・API/商用契約のどの層か」</strong>。同じGoogleでも、無料枠は「改善に使われ、<strong>人間のレビューも入る</strong>」、有料枠は「プロンプトも応答も製品改善に使わない」。OpenAI・Anthropic・Google・Microsoft・AWSの公式ドキュメントの逐語で、<strong>オプトアウトしても残る2つの例外</strong>（フィードバック提供分・安全審査フラグ分）と、無料枠の判定が「料金ではなく請求先アカウント」で決まる仕組みまで整理しました。用語説明 第10回。</p>
+        <a href="/glossary/no-training/" class="card-link">解説を読む →</a>
+      </article>
+      <article class="card">
+        <div class="card-icon">🌍</div>
+        <h3 class="card-title"><span class="badge badge-new">New</span> 出さない（データレジデンシー）とは — データが国外に出ない＝「保存」と「処理」は別の約束</h3>
+        <p class="card-desc">「国外に出さない」は、<strong>「保存する場所（at rest）」と「処理する場所（推論）」という2つの別の約束</strong>に分かれます。OpenAI は地域ごとに <strong>Storage と Processing を別項目</strong>で公表し、<strong>日本は「保存＝可・処理＝不可」</strong>。AWS は推論プロファイル、Google はエンドポイント、Microsoft は deployment type で3段階、Anthropic は inference geo と workspace geo の2設定——5社すべてで保存と処理は別の確認項目です（設定の仕組みは各社で異なります）。<strong>「選べる」と「固定される」の違い</strong>、米国限定推論が1.1倍になる価格差、除外サービスまで公式逐語で整理しました。用語説明 第11回。</p>
+        <a href="/glossary/data-residency/" class="card-link">解説を読む →</a>
+      </article>
+    </div>
     <div class="tip-box" style="margin-top:1.5rem;">
       <h3>📌 このページの方針</h3>
       <ul>
@@ -97,9 +129,10 @@
         <li>1ページ1テーマ。読んで3分、そのまま実務で使える形にします。</li>
       </ul>
     </div>
-    <p style="font-size:.86rem;color:var(--c-muted);">関連: <a href="/glossary/benchmarks/">ベンチマークの仕分け方</a> · <a href="/glossary/harness/">ハーネス（harness）</a> · <a href="/glossary/prompt-cache/">プロンプトキャッシュ（cache hit）</a> · <a href="/glossary/one-million-context/">1Mコンテキスト</a> · <a href="/glossary/zero-data-retention/">ZDR（ゼロデータ保持）</a> · <a href="/gpt-6/">GPT-6 Astra 詳細</a> · <a href="/claude-fable-5-1/">Claude Fable 5.1 詳細</a> · <a href="/deepseek-v4-1-flash/">DeepSeek V4.1 Flash 実践ガイド</a> · <a href="/multimodal/">マルチモーダル対応一覧</a></p>
+    <p style="font-size:.86rem;color:var(--c-muted);">関連: <a href="/glossary/benchmarks/">ベンチマークの仕分け方</a> · <a href="/glossary/harness/">ハーネス（harness）</a> · <a href="/glossary/prompt-cache/">プロンプトキャッシュ（cache hit）</a> · <a href="/glossary/one-million-context/">1Mコンテキスト</a> · <a href="/glossary/zero-data-retention/">ZDR（ゼロデータ保持）</a> · <a href="/glossary/zero-operator-access/">ZOA（ゼロオペレーターアクセス）</a> · <a href="/glossary/four-data-requirements/">データを守る4要件</a> · <a href="/glossary/no-training/">用語説明: 学習に使わせない</a> · <a href="/glossary/data-residency/">用語説明: 出さない（データレジデンシー）</a> · <a href="/gpt-6/">GPT-6 Astra 詳細</a> · <a href="/claude-fable-5-1/">Claude Fable 5.1 詳細</a> · <a href="/deepseek-v4-1-flash/">DeepSeek V4.1 Flash 実践ガイド</a> · <a href="/multimodal/">マルチモーダル対応一覧</a></p>
   </section>
-</div></main>
+</div><p style="font-size:.9rem;margin:1.5rem 0 0;"><strong>関連:</strong> <a href="/gemini-4-argon/">Gemini 4 Argon の料金と仕様（1Mコンテキスト・12/1からの予告価格）</a></p>
+</main>
 <footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>運営: okamoちゃんねる</p><p><a href="/">ホーム</a> · <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a> · <a href="/timeline/">年表</a> · <a href="/glossary/">用語説明</a> · <a href="/gpt-6/">GPT-6 Astra</a></p></div><p class="footer-disclaimer">⚠️ 料金・仕様は予告なく変動します。契約前に必ず各社公式ページでご確認ください。本サイトは各社と提携していません。</p></div></footer>
 </body>
 </html>

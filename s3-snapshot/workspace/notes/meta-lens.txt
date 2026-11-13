@@ -1,0 +1,24 @@
+======== index.html (44 / 403)
+T: LLM Data Hub — AI/LLM実用データハブ | 料金・モデル情報を随時更新
+D: OpenAI・Anthropic・Google Gemini・DeepSeek・xAI Grok・Z.ai GLMなどのLLM API料金をプロバイダー公式ページに基づいて随時更新。Claude Opus 5.5（9/22公開・$4/$20）・GPT-6 Sol/Luna（9/22公開・$2/$10・$0.10/$0.50）・GPT-6 Astra($10/$50)・Gemini 3.8 Flash($0.75/$3.75)・Claude Fable 5.1・Grok 4.7（9/21公開・$2/$6）・DeepSeek V4.1 Flash（$0.15/$0.60〜）対応。中国系AI総覧・トークンコスト計算機・料金比較・モデルリリース年表を一次情報ベースで提供。 Claude Haiku 5.5（$0.10/$0.50）・GPT-6.1 Sol（$2/$10・キャッシュ入力$0.10）を反映。
+======== pricing/index.html (40 / 312)
+T: 主要LLM API 料金比較【2026年10月版】 — LLM Data Hub
+D: OpenAI・Anthropic Claude・Google Gemini・DeepSeek・xAI Grok・Z.ai GLM・Alibaba QwenのLLM API料金を公式一次情報から直接確認。Qwen3.8-Flash・GLM 5.3 Flash・Gemini 3.7 Flash・Grok 4.6・DeepSeek V4.1 Flash（ピーク/オフピーク制・9/10登場）対応。USD per 1M tokens（2026年10月9日更新）。 Claude Haiku 5.5（10/7公開・$0.10/$0.50・100k超は2段階）・GPT-6.1 Sol（$2/$10・キャッシュ入力$0.10）も追加。
+======== en/glossary/zero-operator-access/index.html (109 / 496)
+T: What Is Zero Operator Access (ZOA)? Not Retained vs Not Viewable, Compared Across Five Vendors | LLM Data Hub
+D: ZOA (zero operator access) means the operator&#39;s staff cannot decrypt or read your data — a different promise from ZDR. This page breaks down the three layers that stop access (process, keys, runtime), the three levels of key management (CMK vs BYOK vs HYOK), approval workflows (Microsoft Customer Lockbox, Google Access Approval, Key Access Justifications, OpenAI EKM), and what AWS Bedrock, Microsoft, Google Cloud, OpenAI and Anthropic each state, quoted verbatim. Updated October 9, 2026.
+======== en/glossary/zero-data-retention/index.html (107 / 417)
+T: Zero Data Retention (ZDR) Explained: 3 Catch Points and How 5 Vendors Grant It [Glossary #7] | LLM Data Hub
+D: Zero data retention (ZDR) is a default, not a guarantee — and not always on. Some models require retention, and coverage has to be requested explicitly. This page covers how ZDR differs from ZOA (zero operator access) and from &quot;not used for training&quot;, and how AWS Bedrock, OpenAI, Anthropic, Google and Microsoft each grant it, quoted from their official documentation. Glossary #7. Updated October 9, 2026.
+======== claude-haiku-5-5/index.html (86 / 245)
+T: Claude Haiku 5.5 — Claude 5.5世代の最速・最安【$0.10/$0.50・100k超の2段階料金・1Mコンテキスト】 — LLM Data Hub
+D: Anthropic Claude Haiku 5.5の料金（入力$0.10・出力$0.50、100,000トークン超は入力$0.50・出力$2.50の2段階）・キャッシュ読込$0.01・1Mコンテキスト・128K出力・thinking（Adaptive／既定medium）を公式ドキュメントの逐語で解説。Haiku 4.5との比較、トークナイザー変更で同じ文面が約30%多くカウントされる注意点、提供5プラットフォームのモデルIDを掲載。2026年10月7日公開。2026年10月9日更新。
+======== en/claude-haiku-5-5/index.html (122 / 430)
+T: Claude Haiku 5.5 — Fastest and Cheapest of the Claude 5.5 Family [$0.10/$0.50, Two-Tier Pricing Above 100k] — LLM Data Hub
+D: Anthropic Claude Haiku 5.5 pricing ($0.10 input / $0.50 output up to 100,000 tokens; $0.50 / $2.50 above it), $0.01 cache reads, 1M context, 128K output and adaptive thinking at a default effort of medium — quoted from Anthropic's docs. Includes the Haiku 4.5 comparison, the new tokenizer warning (about 30% more tokens for the same text) and the model ID on all five platforms. Released October 7, 2026. Updated October 9, 2026.
+======== gpt-6-1-sol/index.html (72 / 323)
+T: GPT-6.1 Sol — GPT-6世代のバランス型【$2/$10・キャッシュ入力$0.10・272K超は2倍】 — LLM Data Hub
+D: OpenAI GPT-6.1 Sol（gpt-6.1-sol）の料金を公式モデルページで確認。入力$2・キャッシュ入力$0.10（入力の5%）・キャッシュ書込$2.50・出力$10（USD/1Mトークン）。Fastは2倍・Ultrafastは6倍・Batch/Flexは50%引き、272,000トークン超の入力はリクエスト全体が入力2倍・出力1.5倍になります。1.05Mコンテキスト・128K出力・最大入力922K、reasoning effortはlow〜max（none/minimal非対応）、ツール呼び出しはResponses API。GPT-6 Solとの違いと移行時の注意を公式ドキュメントの逐語で整理。2026年10月9日更新。
+======== en/gpt-6-1-sol/index.html (111 / 546)
+T: GPT-6.1 Sol — The Balanced Model of the GPT-6 Family [$2/$10, $0.10 Cached Input, 2x Above 272K] — LLM Data Hub
+D: OpenAI GPT-6.1 Sol (gpt-6.1-sol) pricing from the official model page: $2 input, $0.10 cached input (5% of input), $2.50 cache writes and $10 output per 1M tokens. Fast mode is 2x, Ultrafast 6x, Batch/Flex 50% off, and prompts above 272,000 input tokens are repriced at 2x input and 1.5x output for the whole request. 1.05M context, 128K max output, 922K max input, reasoning effort low through max (no none/minimal), tool calling via the Responses API. Includes the GPT-6 Sol comparison and the official migration notes. Updated October 9, 2026.

@@ -4,17 +4,25 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Glossary — AI terms, explained from primary sources | LLM Data Hub</title>
-  <meta name="description" content="AI pricing and benchmark terms explained one per page: benchmark scores, agent harnesses, prompt caching and 1M-token context, each traced to primary sources.">
+  <meta name="description" content="Plain-language explanations of terms in AI pricing tables and announcements: sorting benchmarks, agent harnesses, prompt caching, the 1M-token context, zero data retention, the four data-protection requirements, training restrictions (no-training) and data residency — storage and processing are two promises.">
   <link rel="canonical" href="https://llm.okamomedia.tokyo/en/glossary/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta property="og:image" content="https://llm.okamomedia.tokyo/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="LLM Data Hub — LLM API pricing, token costs and model data">
+  <meta name="twitter:image" content="https://llm.okamomedia.tokyo/assets/og-image.png">
+  <meta name="twitter:image:alt" content="LLM Data Hub — LLM API pricing, token costs and model data">
   <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/glossary/">
   <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/glossary/">
   <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/glossary/">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://llm.okamomedia.tokyo/en/glossary/">
   <meta property="og:title" content="Glossary — AI terms, explained from primary sources">
-  <meta property="og:description" content="&ldquo;Too many benchmarks to make sense of&rdquo; solved with three questions: who runs it, what it measures, how. Benchmarks, harnesses, prompt caching and 1M-token context, one term per page, with sources.">
+  <meta property="og:description" content="&ldquo;Too many benchmarks to make sense of&rdquo; solved with three questions: who runs it, what it measures, how. Benchmarks, harnesses, prompt caching, 1M-token context, ZDR, ZOA, the four data requirements and training terms — one term per page, with sources.">
   <meta property="og:site_name" content="LLM Data Hub">
-  <meta name="twitter:card" content="summary">
+  <meta name="twitter:card" content="summary_large_image">
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
   <link rel="stylesheet" href="/assets/style.css">
@@ -35,7 +43,7 @@
     </p>
     <div class="updated-bar">
       <span class="dot">●</span>
-      Last updated: <time datetime="2026-09-27">September 27, 2026</time>
+      Last updated: <time datetime="2026-10-05">October 5, 2026</time>
       &ensp;|&ensp; Policy: only figures we can trace to primary sources (vendor announcements, benchmark operators' own publications)
     </div>
   </div>
@@ -82,13 +90,37 @@
         <p class="card-desc">DeepSWE is Datacurve, OSWorld is XLANG Lab, GDPval is OpenAI, GDPval-AA is Artificial Analysis, AutomationBench is Zapier — this entry fixes a <strong>four-step procedure for getting from a benchmark name to the organisation behind it</strong>: (1) the paper or official repository, (2) how to classify the operator (vendor, independent evaluator, research lab, business-software company), (3) who reported the score, (4) whose harness ran it. Includes a table of twelve benchmarks and three worked examples of why &ldquo;a third party operates it&rdquo; does not mean &ldquo;fair&rdquo;.</p>
         <a href="/en/glossary/benchmark-orgs/" class="card-link">Read the entry →</a>
       </article>
-    </div>
 <article class="card">
         <div class="card-icon">🔒</div>
         <h3 class="card-title">Zero data retention (ZDR) — three catch points</h3>
         <p class="card-desc">ZDR means <strong>&ldquo;not stored by default&rdquo;, not &ldquo;always on&rdquo;</strong>. Three things trip people up: ① there is an <strong>exception list of models that require retention</strong>, ② a guarantee needs an <strong>explicit setting</strong>, and ③ &ldquo;not stored&rdquo;, ZOA (operators cannot see it) and &ldquo;not used for training&rdquo; are <strong>three separate promises</strong>. Includes Bedrock's retention modes (none / default / inherit / aws_review) and their scope, the published exception lists (OpenAI models and Claude Fable 5 / 5.1), and whether OpenAI, Anthropic, Google and Microsoft give you ZDR <strong>by default or only by approval</strong> — quoted from their own docs. Glossary #7.</p>
         <a href="/en/glossary/zero-data-retention/" class="card-link">Read the entry →</a>
       </article>
+<article class="card">
+        <div class="card-icon">🛡️</div>
+        <h3 class="card-title"><span class="badge badge-new">New</span> The four data-protection requirements — "not stored", "not seen", "not learned from", "not sent abroad"</h3>
+        <p class="card-desc">"ZDR supported" is not the end of the story. <strong>Telling conditions of an audit: ① not stored (ZDR) ② not seen (ZOA) ③ not learned from (training terms) ④ not sent abroad (data residency) are four separate promises</strong>, and almost no provider satisfies all four by default. Across AWS Bedrock, Microsoft Foundry, OpenAI, Anthropic and Google Cloud, this entry lines up <strong>which requirement is the default and which needs an application or approval</strong>, quoted from their own documentation, then adds a five-step pre-contract check and four myths. Glossary entry 8.</p>
+        <a href="/en/glossary/four-data-requirements/" class="card-link">Read the entry →</a>
+      </article>
+<article class="card">
+        <div class="card-icon">🔐</div>
+        <h3 class="card-title"><span class="badge badge-new">New</span> What is zero operator access (ZOA)? — "not retained" and "not viewable" are different promises</h3>
+        <p class="card-desc">If ZDR is about storage, ZOA is about people: <strong>the three layers that block access (process, keys, runtime)</strong>, the three stages of key management (<strong>CMK / BYOK / HYOK</strong>), and the approval workflows (Microsoft Customer Lockbox, Google Access Approval with Key Access Justifications, OpenAI EKM, Anthropic's controlled access path) — all quoted from official AWS, Microsoft, Google Cloud, OpenAI and Anthropic documentation, including the emergency exceptions. Glossary #9.</p>
+        <a href="/en/glossary/zero-operator-access/" class="card-link">Read the entry →</a>
+      </article>
+      <article class="card">
+        <div class="card-icon">🚫</div>
+        <h3 class="card-title"><span class="badge badge-new">New</span> No-training explained — why one vendor gives two answers</h3>
+        <p class="card-desc">"ChatGPT trains on your chats but the API does not" is true, and the reason is <strong>the layer, not the vendor: consumer app, free tier, or API/commercial contract</strong>. The same Google treats free-tier Gemini API traffic as "used to improve products, with human review" while paid quota is not used to improve products at all. Quoted from OpenAI, Anthropic, Google, Microsoft and AWS, including <strong>the two exceptions that survive an opt-out</strong> (content you send as feedback, and content flagged for safety review) and why a free tier is decided by the billing account. Glossary entry 10.</p>
+        <a href="/en/glossary/no-training/" class="card-link">Read the entry →</a>
+      </article>
+      <article class="card">
+        <div class="card-icon">🌍</div>
+        <h3 class="card-title"><span class="badge badge-new">New</span> Data residency explained — “not sent abroad” is two promises</h3>
+        <p class="card-desc">Keeping data in country takes <strong>two separate settings: where it is stored at rest, and where inference runs</strong>. OpenAI publishes Storage and Processing separately per region — <strong>Japan is storage yes / processing no</strong>. AWS decides with inference profiles, Google Cloud with endpoints, Microsoft with three deployment types and Anthropic with two settings. Quoted from each vendor's own documents, including why <strong>“available” is not “pinned”</strong>, the excluded services, and the 1.1x US-only inference surcharge. Glossary entry 11.</p>
+        <a href="/en/glossary/data-residency/" class="card-link">Read the entry →</a>
+      </article>
+    </div>
     <div class="tip-box" style="margin-top:1.5rem;">
       <h3>📌 How this works</h3>
       <ul>
@@ -99,9 +131,10 @@
         <li>One term per page. A three-minute read you can use the same day.</li>
       </ul>
     </div>
-    <p style="font-size:.86rem;color:var(--c-muted);">See also: <a href="/en/glossary/benchmarks/">Sorting benchmarks</a> · <a href="/en/glossary/harness/">Agent harnesses</a> · <a href="/en/glossary/prompt-cache/">Prompt caching (cache hits)</a> · <a href="/en/glossary/one-million-context/">1M-token context</a> · <a href="/en/glossary/zero-data-retention/">Zero data retention (ZDR)</a> · <a href="/en/gpt-6/">GPT-6 Astra</a> · <a href="/en/claude-fable-5-1/">Claude Fable 5.1</a> · <a href="/en/deepseek-v4-1-flash/">DeepSeek V4.1 Flash guide</a> · <a href="/en/multimodal/">Multimodal support list</a></p>
+    <p style="font-size:.86rem;color:var(--c-muted);">See also: <a href="/en/glossary/benchmarks/">Sorting benchmarks</a> · <a href="/en/glossary/harness/">Agent harnesses</a> · <a href="/en/glossary/prompt-cache/">Prompt caching (cache hits)</a> · <a href="/en/glossary/one-million-context/">1M-token context</a> · <a href="/en/glossary/zero-data-retention/">Zero data retention (ZDR)</a> · <a href="/en/glossary/zero-operator-access/">Zero operator access (ZOA)</a> · <a href="/en/glossary/four-data-requirements/">Four data-protection requirements</a> · <a href="/en/glossary/no-training/">Glossary: training restrictions (no-training)</a> · <a href="/en/glossary/data-residency/">Glossary: data residency</a> · <a href="/en/gpt-6/">GPT-6 Astra</a> · <a href="/en/claude-fable-5-1/">Claude Fable 5.1</a> · <a href="/en/deepseek-v4-1-flash/">DeepSeek V4.1 Flash guide</a> · <a href="/en/multimodal/">Multimodal support list</a></p>
   </section>
-</div></main>
+</div><p style="font-size:.9rem;margin:1.5rem 0 0;"><strong>Related:</strong> <a href="/en/gemini-4-argon/">Gemini 4 Argon pricing and specs (1M context, Dec 1 forecast)</a></p>
+</main>
 <footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>Operated by okamoちゃんねる</p><p><a href="/en/">Home</a> · <a href="/en/pricing/">Pricing</a> · <a href="/en/calculator/">Calculator</a> · <a href="/en/timeline/">Timeline</a> · <a href="/en/glossary/">Glossary</a> · <a href="/en/gpt-6/">GPT-6 Astra</a></p></div><p class="footer-disclaimer">⚠️ Prices and specifications change without notice. Always confirm on the vendor's official page before you commit. This site is not affiliated with any provider.</p></div></footer>
 </body>
 </html>

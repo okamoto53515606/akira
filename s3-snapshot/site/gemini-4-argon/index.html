@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gemini 4 Argon — 料金（入力$2・出力$10／12月1日から$4・$20）と1Mコンテキスト — LLM Data Hub</title>
+  <meta name="description" content="Google Gemini 4 Argon（gemini-4-argon）の料金・仕様を公式ドキュメントの逐語で整理。入力$2.00・出力$10.00（思考トークン含む）・暗黙キャッシュ$0.10はいずれも2026年11月30日までの導入価格で、12月1日から$4.00／$20.00／$0.20。無料枠なし、コンテキスト1,048,576、同期の最大出力65,536。2026年11月3日更新。">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/gemini-4-argon/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta property="og:image" content="https://llm.okamomedia.tokyo/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="LLM Data Hub — LLM API pricing, token costs and model data">
+  <meta name="twitter:image" content="https://llm.okamomedia.tokyo/assets/og-image.png">
+  <meta name="twitter:image:alt" content="LLM Data Hub — LLM API pricing, token costs and model data">
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/gemini-4-argon/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/gemini-4-argon/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/gemini-4-argon/">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/gemini-4-argon/">
+  <meta property="og:title" content="Gemini 4 Argon — 料金（入力$2・出力$10／12月1日から$4・$20）と1Mコンテキスト">
+  <meta property="og:description" content="入力$2.00・出力$10.00（思考トークン含む）・暗黙キャッシュ$0.10は2026年11月30日までの導入価格。12月1日から$4.00／$20.00／$0.20に改定予告。無料枠なし・コンテキスト1,048,576・同期の最大出力65,536（2026年11月3日更新）。">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Gemini 4 Argon — 料金（入力$2・出力$10／12月1日から$4・$20）と1Mコンテキスト","datePublished":"2026-10-21","dateModified":"2026-11-03","author":{"@type":"Organization","name":"okamoちゃんねる"},"publisher":{"@type":"Organization","name":"okamoちゃんねる"},"url":"https://llm.okamomedia.tokyo/gemini-4-argon/","inLanguage":"ja","description":"Gemini 4 Argon（gemini-4-argon）の料金・コンテキスト・最大出力・キャッシュ仕様をGoogle公式ドキュメントの逐語で整理。導入価格と2026年12月1日からの予告価格を書き分ける。"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"ホーム","item":"https://llm.okamomedia.tokyo/"},{"@type":"ListItem","position":2,"name":"料金比較","item":"https://llm.okamomedia.tokyo/pricing/"},{"@type":"ListItem","position":3,"name":"Gemini 4 Argon","item":"https://llm.okamomedia.tokyo/gemini-4-argon/"}]}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .hero-g4{background:linear-gradient(135deg,#0a1420 0%,#10303f 50%,#0f1117 100%);border-bottom:1px solid var(--c-border);padding:3rem 1rem 2.5rem;text-align:center}
+    .hero-g4 .price-flag{display:inline-block;background:rgba(124,196,255,.16);border:1px solid rgba(124,196,255,.4);color:#a8d7ff;font-size:.82rem;font-weight:700;padding:.3rem .8rem;border-radius:100px;margin-bottom:1rem}
+    .hero-g4 h1{font-size:clamp(1.6rem,4.5vw,2.4rem);font-weight:800;line-height:1.2;margin-bottom:.75rem}
+    .hero-g4 h1 span{color:#7cc4ff}
+    .hero-g4 .lead{font-size:1.05rem;color:var(--c-muted);max-width:700px;margin:0 auto 1.5rem}
+    .hero-g4 .quick-stats{display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;margin-top:1rem}
+    .hero-g4 .stat{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.75rem 1.25rem;text-align:center}
+    .hero-g4 .stat .val{font-family:var(--font-mono);font-size:1.25rem;font-weight:700;color:#7cc4ff}
+    .hero-g4 .stat .lbl{font-size:.75rem;color:var(--c-muted);margin-top:.15rem}
+    .spec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.8rem;margin-bottom:1.5rem}
+    .spec-item{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.9rem 1rem}
+    .spec-item .spec-label{font-size:.75rem;color:var(--c-muted);font-weight:600;margin-bottom:.25rem}
+    .spec-item .spec-value{font-family:var(--font-mono);font-size:1rem;font-weight:700}
+    .context-note{background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid #7cc4ff;border-radius:var(--r-md);padding:.8rem 1rem;margin:1rem 0;font-size:.84rem;color:var(--c-muted)}
+    .quote{margin:1rem 0;padding:.85rem 1rem;background:var(--c-surface2);border:1px solid var(--c-border);border-radius:var(--r-sm);font-size:.84rem;line-height:1.85;color:var(--c-muted)}
+    .quote em{color:var(--c-text);font-style:italic}.quote .who{display:block;margin-top:.45rem;font-size:.76rem;color:var(--c-muted)}
+    @media(max-width:640px){.hero-g4 .quick-stats{flex-direction:column;gap:.5rem}}
+  </style>
+</head>
+<body>
+
+<header class="site-header"><div class="header-inner"><a href="/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="メインナビゲーション"><a href="/" class="nav-link">ホーム</a><a href="/pricing/" class="nav-link">料金比較</a><a href="/calculator/" class="nav-link">トークン計算機</a><a href="/timeline/" class="nav-link">リリース年表</a><a href="/china-ai/" class="nav-link">中国AI</a><a href="/multimodal/" class="nav-link">マルチモーダル</a><a href="/mai/" class="nav-link">MS AI (MAI)</a><a href="/glossary/" class="nav-link">用語説明</a></nav></div></header>
+
+<section class="hero-g4"><div class="container">
+  <p class="price-flag">🚀 2026年10月 GA — 入力$2／出力$10は<strong>2026年11月30日までの導入価格</strong>。12月1日から$4／$20</p>
+  <h1>Gemini <span>4 Argon</span></h1>
+  <p class="lead">Googleのフラッグシップ推論モデル。公式は「複雑なソフトウェアエンジニアリング、深い数学・科学の問題解決、自律的なマルチステップエージェント、最大1Mトークンのlong decode」向けと説明しています。料金は<strong>期間限定の導入価格</strong>で、無料枠はありません。</p>
+  <p class="lead">後継の <strong>Gemini 4 Carbon</strong> は 2026-10-28 に発表されましたが、現時点はサイバー防御担当者の一部と Fairwind Program 経由の<strong>限定提供</strong>で、開発者向けAPIは未提供です（<a href="/timeline/#gemini-4-carbon">年表の該当項目</a>）。</p>
+  <div class="quick-stats">
+    <div class="stat"><div class="val">$2.00</div><div class="lbl">入力 / 1M tokens（〜11/30）</div></div>
+    <div class="stat"><div class="val">$10.00</div><div class="lbl">出力 / 1M tokens（〜11/30）</div></div>
+    <div class="stat"><div class="val">1,048,576</div><div class="lbl">コンテキスト（入出力統合）</div></div>
+    <div class="stat"><div class="val">65,536</div><div class="lbl">最大出力（同期・既定）</div></div>
+  </div>
+</div></section>
+
+<main><div class="container">
+<div class="updated-bar" style="margin-top:2rem;"><span class="dot">●</span>最終更新: <time datetime="2026-11-03">2026年11月3日</time><br>出典: <a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">Gemini Developer API — Pricing</a> · <a href="https://ai.google.dev/gemini-api/docs/models/gemini-4-argon" target="_blank" rel="noopener">モデルページ（gemini-4-argon）</a> · <a href="https://ai.google.dev/gemini-api/docs/changelog" target="_blank" rel="noopener">Changelog</a>（2026-10-21 に再取得） | <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a> · <a href="/timeline/">年表</a></div>
+
+<section class="section" style="padding-top:2rem;" aria-labelledby="tl-h">
+<h2 class="section-title" id="tl-h" style="font-size:1.2rem;">まず結論 — 押さえるべき6点</h2>
+<div class="context-note" style="border-left-color:var(--c-green);">
+  <ul style="margin:0;padding-left:1.1rem;line-height:1.9;">
+    <li><strong>入力$2.00・出力$10.00・キャッシュ$0.10は「導入価格」です。</strong>公式の価格欄は「$2.00 through November 30, 2026. $4.00 starting December 1, 2026.」と期間を明記しています。2026年12月1日からは入力・出力・キャッシュがそろって2倍になります。</li>
+    <li><strong>無料枠はありません。</strong>逐語は「Free Tier: Not available」。</li>
+    <li><strong>キャッシュは暗黙キャッシュ（Implicit caching）のみ。</strong>逐語は「Implicit caching only (explicit caching is not supported)」。自分で明示的にキャッシュを作る制御はできません。</li>
+    <li><strong>コンテキストは「入出力を合わせて」1,048,576トークン。</strong>逐語は「Context window (unified input and output token limit) 1,048,576」。入力と出力の合計でこの上限に当たります。</li>
+    <li><strong>出力単価には思考トークンが含まれます。</strong>逐語は「Output price (including thinking tokens)」。thinking を多く使うと出力側の課金が増えます。</li>
+    <li><strong>リリース日（日単位）は公式に明記がありません。</strong>モデルページの「Latest update: October 2026」だけが日付情報なので、当サイトでは日付を作らず「2026年10月」と表記します。</li>
+  </ul>
+</div>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="price-h">
+<h2 class="section-title" id="price-h" style="font-size:1.2rem;">料金（USD / 1Mトークン・公式価格ページ）</h2>
+<p class="section-sub">Gemini API の Standard モード。<a href="/pricing/">料金比較</a>の Google セクションと同じ値です。右列は公式が「starting December 1, 2026」と書いている<strong>予告価格</strong>で、まだ適用されていません。</p>
+<div class="table-wrap"><table><thead><tr><th>項目</th><th>〜2026年11月30日</th><th>2026年12月1日〜（予告）</th></tr></thead><tbody>
+<tr><td class="model-name">入力（Input price）</td><td class="price">$2.00</td><td>$4.00</td></tr>
+<tr><td class="model-name">出力（Output price・思考トークン含む）</td><td class="price">$10.00</td><td>$20.00</td></tr>
+<tr><td class="model-name">コンテキストキャッシュ（Context caching）</td><td class="price">$0.10</td><td>$0.20</td></tr>
+<tr><td class="model-name">無料枠（Free Tier）</td><td>なし（Not available）</td><td>なし（Not available）</td></tr>
+</tbody></table></div>
+<div class="quote">
+  <em>“Input price | Not available | $2.00 through November 30, 2026. $4.00 starting December 1, 2026.”</em><br>
+  <em>“Output price (including thinking tokens) | Not available | $10.00 through November 30, 2026. $20.00 starting December 1, 2026.”</em><br>
+  <em>“Context caching price | Not available | $0.10 through November 30, 2026. $0.20 starting December 1, 2026. Implicit caching only (explicit caching is not supported).”</em>
+  <span class="who">— Gemini Developer API「Pricing」Gemini 4 Argon / Standard（2026-10-21 確認）</span>
+</div>
+<p style="font-size:.78rem;color:var(--c-muted);margin-top:.3rem;">※ 期間限定表現は公式の価格欄に逐語で付いているものだけを載せています。Batch・Priority などの別モード単価、および長文入力の追加料金の有無は、今回 gemini-4-argon について公式価格ページ上で確認できていないため<strong>「未確認」</strong>とします（推測値は載せません）。</p>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="spec-h">
+<h2 class="section-title" id="spec-h" style="font-size:1.2rem;">仕様（公式モデルページ）</h2>
+<div class="spec-grid">
+  <div class="spec-item"><div class="spec-label">モデルコード</div><div class="spec-value">gemini-4-argon</div></div>
+  <div class="spec-item"><div class="spec-label">提供段階（Versions）</div><div class="spec-value">Stable</div></div>
+  <div class="spec-item"><div class="spec-label">コンテキスト（入出力統合）</div><div class="spec-value">1,048,576</div></div>
+  <div class="spec-item"><div class="spec-label">最大出力（同期・既定）</div><div class="spec-value">65,536</div></div>
+  <div class="spec-item"><div class="spec-label">long decode 時の最大出力</div><div class="spec-value">1,048,576</div></div>
+  <div class="spec-item"><div class="spec-label">Latest update（公式表記）</div><div class="spec-value">October 2026</div></div>
+</div>
+<div class="quote">
+  <em>“Token limits | Context window (unified input and output token limit) 1,048,576 / Max output 65,536 (default synchronous) / up to 1,048,576 (with long decode)”</em>
+  <span class="who">— Gemini API「Gemini 4 Argon」モデルページ（2026-10-21 確認）</span>
+</div>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="use-h">
+<h2 class="section-title" id="use-h" style="font-size:1.2rem;">何に強いモデルなのか（公式の位置づけ）</h2>
+<div class="quote">
+  <em>“Gemini 4 Argon (gemini-4-argon) is our flagship reasoning model, built for complex software engineering, deep mathematical and scientific problem solving, autonomous multi-step agents, and long decode up to 1M tokens.”</em>
+  <span class="who">— Gemini API「Gemini 4 Argon」（2026-10-21 確認）</span>
+</div>
+<p style="font-size:.88rem;line-height:1.9;">当サイトの解釈では、①コードを書く・直す仕事、②数学／科学の難問、③ツールを何度も呼ぶエージェント、④長い出力を一気に生成する用途、の4つが想定されています。<strong>ベンチマークの数値は公式のモデルページ・価格ページに掲載が見当たらない</strong>ため、当サイトでは数値を作らず「未掲載」としています（第三者ハーネスの数字は<a href="/glossary/benchmarks/">ベンチマークの読み方</a>を参照）。</p>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="calc-h">
+<h2 class="section-title" id="calc-h" style="font-size:1.2rem;">コストの目安（当サイトの試算）</h2>
+<p class="section-sub">単価×トークン数で計算した当サイトの試算です（公式の見積もりではありません）。出力単価には思考トークンが含まれるため、thinking を多用すると出力側が増えます。</p>
+<div class="table-wrap"><table><thead><tr><th>使い方</th><th>〜2026年11月30日</th><th>2026年12月1日〜（予告）</th></tr></thead><tbody>
+<tr><td class="model-name">入力1M + 出力0.1M</td><td class="price">$3.00</td><td>$6.00</td></tr>
+<tr><td class="model-name">入力100K + 出力20K</td><td class="price">$0.40</td><td>$0.80</td></tr>
+<tr><td class="model-name">入力1M + 出力1M（long decode 級）</td><td class="price">$12.00</td><td>$24.00</td></tr>
+<tr><td class="model-name">キャッシュ読込1M（暗黙キャッシュ）</td><td class="price">$0.10</td><td>$0.20</td></tr>
+</tbody></table></div>
+<p style="font-size:.78rem;color:var(--c-muted);margin-top:.3rem;">※ 具体的なトークン数での試算は<a href="/calculator/">トークン計算機</a>で行えます。長い文脈を毎回使い回す場合は<a href="/glossary/prompt-cache/">プロンプトキャッシュ</a>の考え方も参照してください。</p>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="unk-h">
+<h2 class="section-title" id="unk-h" style="font-size:1.2rem;">注意点と未確認事項</h2>
+<ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.3em;line-height:1.9;">
+  <li><strong>12月1日以降の単価は「予告」です。</strong>公式価格欄の「starting December 1, 2026」によるもので、それまでは適用されません。当サイトでは導入価格と予告価格を表で分けて書いています。</li>
+  <li><strong>明示キャッシュは使えません。</strong>暗黙キャッシュのみなので、キャッシュの作成・破棄を自分で制御する設計はできません。</li>
+  <li><strong>無料枠はありません。</strong>試す場合は有料の API キーが必要です。</li>
+  <li><strong>未確認:</strong> Batch / Priority 等の別モード単価、長文入力の追加料金の有無、公式ベンチマーク数値、日単位のリリース日。いずれも公式ページで確認できていないため、当サイトでは数値・日付を作りません。</li>
+</ul>
+</section>
+
+<section class="section" style="padding-top:0;">
+<h2 class="section-title" style="font-size:1.1rem;">関連ページ</h2>
+<ul style="font-size:.9rem;line-height:2;padding-left:1.3em;">
+  <li><a href="/pricing/">LLM料金比較（全社・USD/1Mトークン）</a></li>
+  <li><a href="/calculator/">トークン計算機（入力トークン数からコスト試算）</a></li>
+  <li><a href="/timeline/">LLMリリース年表（2026年10月のGAを収録）</a></li>
+  <li><a href="/gemini-3-8-flash/">Gemini 3.8 Flash（料金・キャッシュ単価）</a></li>
+  <li><a href="/multimodal/">マルチモーダル対応表</a></li>
+  <li><a href="/glossary/one-million-context/">1Mコンテキストとは（何が入るか・課金の違い）</a></li>
+</ul>
+</section>
+</div></main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>運営: okamoちゃんねる</p><p><a href="/">ホーム</a> · <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a> · <a href="/timeline/">年表</a> · <a href="/claude-opus-5-5/">Claude Opus 5.5</a> · <a href="/claude-fable-5-1/">Claude Fable 5.1</a> · <a href="/glossary/zero-operator-access/">ZOA</a></p></div><p class="footer-disclaimer">⚠️ 料金・仕様は予告なく変動します。契約前に必ず各社公式ページでご確認ください。本サイトは各社と提携していません。</p></div></footer>
+</body>
+</html>

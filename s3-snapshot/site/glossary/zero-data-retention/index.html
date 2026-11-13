@@ -3,19 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ZDR（ゼロデータ保持）とは — 「保存しない」の3つの落とし穴 — LLM Data Hub</title>
-  <meta name="description" content="ZDR（ゼロデータ保持）は「既定」であって常時有効ではありません。保持が必要なモデルの例外リストがあり、保証には明示指定が要ります。ZOA（ゼロオペレーターアクセス）との違い、「学習に使わない」との違い、AWS Bedrock・OpenAI・Anthropic・Google・Microsoftの5社の入手方法を公式ドキュメントで比較。用語説明 第7回。2026年9月27日更新。">
+  <title>ZDR（ゼロデータ保持）とは？「既定」なのに常時有効でない3つの落とし穴【5社比較】 | LLM Data Hub</title>
+  <meta name="description" content="ZDR（ゼロデータ保持）は「既定」であって常時有効ではありません。保持が必要なモデルの例外リストがあり、保証には明示指定が要ります。ZDRとZOA（ゼロオペレーターアクセス）の違い、「学習に使わない」との違い、AWS Bedrock・OpenAI・Anthropic・Google・Microsoftの5社でどう入手するかを公式ドキュメントの逐語で比較。用語説明 第7回。2026年10月9日更新。">
   <link rel="canonical" href="https://llm.okamomedia.tokyo/glossary/zero-data-retention/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta property="og:image" content="https://llm.okamomedia.tokyo/assets/og/ja-zdr.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="ZDR（ゼロデータ保持）の3つの落とし穴を図解（保存しない・見せない・明示指定）">
+  <meta name="twitter:image" content="https://llm.okamomedia.tokyo/assets/og/ja-zdr.png">
+  <meta name="twitter:image:alt" content="ZDR（ゼロデータ保持）の3つの落とし穴を図解（保存しない・見せない・明示指定）">
   <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/glossary/zero-data-retention/">
   <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/glossary/zero-data-retention/">
   <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/glossary/zero-data-retention/">
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://llm.okamomedia.tokyo/glossary/zero-data-retention/">
-  <meta property="og:title" content="ZDR（ゼロデータ保持）とは — 「保存しない」の3つの落とし穴">
-  <meta property="og:description" content="ZDRは「既定」で「常時有効」ではない。例外モデル・明示指定・ZOAとの違い・5社の入手方法を1枚で整理（2026年9月27日更新）。">
+  <meta property="og:title" content="ZDR（ゼロデータ保持）とは？常時有効でない3つの落とし穴【5社比較】">
+  <meta property="og:description" content="ZDR（ゼロデータ保持）は「既定」であって常時有効ではありません。保持が必要なモデルの例外リストがあり、保証には明示指定が要ります。ZDRとZOA（ゼロオペレーターアクセス）の違い、「学習に使わない」との違い、AWS Bedrock・OpenAI・Anthropic・Google・Microsoftの5社でどう入手するかを公式ドキュメントの逐語で比較。用語説明 第7回。2026年10月9日更新。">
   <meta property="og:site_name" content="LLM Data Hub">
-  <meta name="twitter:card" content="summary">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"ZDR（ゼロデータ保持）とは — 「保存しない」の3つの落とし穴","datePublished":"2026-09-27","dateModified":"2026-09-27","author":{"@type":"Organization","name":"LLM Data Hub"},"publisher":{"@type":"Organization","name":"okamoちゃんねる"},"url":"https://llm.okamomedia.tokyo/glossary/zero-data-retention/","inLanguage":"ja"}</script>
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"ZDR（ゼロデータ保持）とは — 「保存しない」の3つの落とし穴","datePublished":"2026-09-27","dateModified":"2026-10-09","author":{"@type":"Organization","name":"LLM Data Hub"},"publisher":{"@type":"Organization","name":"okamoちゃんねる"},"url":"https://llm.okamomedia.tokyo/glossary/zero-data-retention/","inLanguage":"ja"}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"ホーム","item":"https://llm.okamomedia.tokyo/"},{"@type":"ListItem","position":2,"name":"用語説明","item":"https://llm.okamomedia.tokyo/glossary/"},{"@type":"ListItem","position":3,"name":"ZDR（ゼロデータ保持）","item":"https://llm.okamomedia.tokyo/glossary/zero-data-retention/"}]}</script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
@@ -51,6 +59,7 @@
 <header class="site-header"><div class="header-inner"><a href="/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="メインナビゲーション"><a href="/" class="nav-link">ホーム</a><a href="/pricing/" class="nav-link">料金比較</a><a href="/calculator/" class="nav-link">トークン計算機</a><a href="/timeline/" class="nav-link">リリース年表</a><a href="/china-ai/" class="nav-link">中国AI</a><a href="/multimodal/" class="nav-link">マルチモーダル</a><a href="/mai/" class="nav-link">MS AI (MAI)</a><a href="/glossary/" class="nav-link active" aria-current="page">用語説明</a></nav></div></header>
 
 <main><div class="container">
+<figure class="key-visual" style="margin:1.5rem 0 .5rem;"><img src="/assets/og/ja-zdr.png" alt="ZDR（ゼロデータ保持）の3つの落とし穴を図解（保存しない・見せない・明示指定）" width="1200" height="630" loading="eager" decoding="async" style="width:100%;max-width:900px;height:auto;display:block;margin:0 auto;border:1px solid var(--c-border);border-radius:var(--r-md);"></figure>
   <div class="section" style="padding-bottom:0;">
     <h1 class="section-title" style="font-size:1.55rem;">ZDR（ゼロデータ保持）とは — 「保存しない」の3つの落とし穴</h1>
     <p class="section-sub" style="max-width:780px;">
@@ -64,7 +73,7 @@
     </div>
     <div class="updated-bar">
       <span class="dot">●</span>
-      最終更新: <time datetime="2026-09-27">2026年9月27日</time>
+      最終更新: <time datetime="2026-10-09">2026年10月9日</time>
       &ensp;|&ensp; 方針: 各社の公式ドキュメントで逐語を確認できた内容のみ掲載。「一般にこう言われている」は書きません
     </div>
   </div>
@@ -277,7 +286,7 @@
       <li>Google AI for Developers「Zero data retention in the Gemini Developer API」（Vertex AI への案内・メモリ内キャッシュ） — <a href="https://ai.google.dev/gemini-api/docs/zdr" target="_blank" rel="noopener">ai.google.dev/gemini-api/docs/zdr</a></li>
       <li>Microsoft Learn「Data, privacy, and security for Foundry Models sold by Azure in Microsoft Foundry」（modified abuse monitoring） — <a href="https://learn.microsoft.com/en-us/azure/foundry/responsible-ai/openai/data-privacy" target="_blank" rel="noopener">learn.microsoft.com/.../openai/data-privacy</a></li>
     </ul>
-    <p style="font-size:.8rem;color:var(--c-muted);margin-top:.6rem;">関連: <a href="/glossary/">用語説明 一覧</a> · <a href="/china-ai/">中国AI（Bedrock 経由のデータ取扱いを追記）</a> · <a href="/glossary/harness/">ハーネス（第3回）</a> · <a href="/glossary/benchmarks/">ベンチマークとは（第5回）</a> · <a href="/glossary/benchmark-orgs/">ベンチマークを運営している組織（第6回）</a> · <a href="/glossary/prompt-cache/">プロンプトキャッシュ（第2回）</a></p>
+    <p style="font-size:.8rem;color:var(--c-muted);margin-top:.6rem;">関連: <a href="/glossary/">用語説明 一覧</a> · <a href="/china-ai/">中国AI（Bedrock 経由のデータ取扱いを追記）</a> · <a href="/glossary/harness/">ハーネス（第3回）</a> · <a href="/glossary/benchmarks/">ベンチマークとは（第5回）</a> · <a href="/glossary/benchmark-orgs/">ベンチマークを運営している組織（第6回）</a> · <a href="/glossary/four-data-requirements/">データの4要件（第8回・続編）</a> · <a href="/glossary/zero-operator-access/">ZOA（第9回）</a> · <a href="/glossary/no-training/">no-training（第10回）</a> · <a href="/glossary/data-residency/">データレジデンシー（第11回）</a> · <a href="/glossary/prompt-cache/">プロンプトキャッシュ（第2回）</a></p>
   </section>
 
   <div class="tip-box" style="border-left-color:var(--c-red);margin-bottom:2rem;">

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Data residency explained — "not sent abroad" is two promises, not one — LLM Data Hub</title>
+  <meta name="description" content="Data residency is two promises, not one: where data is stored at rest, and where inference runs. OpenAI splits Storage and Processing by region (Japan: storage yes, processing no); AWS uses profiles, Google endpoints, Microsoft three deployment types, Anthropic two settings. Glossary entry 11, updated October 5, 2026.">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/en/glossary/data-residency/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta property="og:image" content="https://llm.okamomedia.tokyo/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="LLM Data Hub — LLM API pricing, token costs and model data">
+  <meta name="twitter:image" content="https://llm.okamomedia.tokyo/assets/og-image.png">
+  <meta name="twitter:image:alt" content="LLM Data Hub — LLM API pricing, token costs and model data">
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/glossary/data-residency/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/glossary/data-residency/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/glossary/data-residency/">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/en/glossary/data-residency/">
+  <meta property="og:title" content="Data residency explained — “not sent abroad” is two promises">
+  <meta property="og:description" content="Keeping data in country takes two separate settings: where it is stored at rest, and where inference runs. Five providers compared from their own wording (updated October 5, 2026).">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Data residency explained — why \"not sent abroad\" is two promises","datePublished":"2026-10-05","dateModified":"2026-10-05","author":{"@type":"Organization","name":"okamoちゃんねる"},"publisher":{"@type":"Organization","name":"okamoちゃんねる"},"url":"https://llm.okamomedia.tokyo/en/glossary/data-residency/","inLanguage":"en","description":"Data residency split into its two real questions — where data is stored at rest and where inference is processed — compared across AWS Bedrock, Microsoft Foundry, Google Cloud, OpenAI and Anthropic using the wording of their own documents."}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://llm.okamomedia.tokyo/en/"},{"@type":"ListItem","position":2,"name":"Glossary","item":"https://llm.okamomedia.tokyo/en/glossary/"},{"@type":"ListItem","position":3,"name":"Data residency","item":"https://llm.okamomedia.tokyo/en/glossary/data-residency/"}]}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .phrase-box{background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-accent);border-radius:var(--r-md);padding:1rem 1.15rem;margin:1.2rem 0}
+    .phrase-box .phrase{margin:0;font-size:1.02rem;font-weight:700;line-height:1.7}
+    .phrase-box .phrase-meta{margin:.5rem 0 0;font-size:.83rem;color:var(--c-muted);line-height:1.8}
+    .req-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.8rem;margin:1.1rem 0}
+    @media(max-width:680px){.req-grid{grid-template-columns:1fr}}
+    .req{border:1px solid var(--c-border);border-top:3px solid var(--c-accent);border-radius:var(--r-md);background:var(--c-surface);padding:.9rem 1rem}
+    .req .tag{font-family:var(--font-mono);font-size:.74rem;color:var(--c-accent);margin:0 0 .3rem;letter-spacing:.02em}
+    .req h3{margin:0 0 .4rem;font-size:.95rem;line-height:1.6}
+    .req p{margin:0;font-size:.83rem;line-height:1.8;color:var(--c-muted)}
+    .req strong{color:var(--c-text)}
+    .quote{margin:1rem 0;padding:.85rem 1rem;background:var(--c-surface2);border:1px solid var(--c-border);border-radius:var(--r-sm);font-size:.84rem;line-height:1.8;color:var(--c-muted)}
+    .quote em{color:var(--c-text);font-style:italic}
+    .quote .who{display:block;margin-top:.45rem;font-size:.76rem;color:var(--c-muted)}
+    .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+    .mtable{width:100%;border-collapse:collapse;font-size:.79rem;min-width:680px}
+    .mtable th,.mtable td{border:1px solid var(--c-border);padding:.5rem .6rem;text-align:left;vertical-align:top;color:var(--c-muted);line-height:1.7}
+    .mtable thead th{background:var(--c-surface2);color:var(--c-text);font-weight:700;white-space:nowrap}
+    .mtable td strong{color:var(--c-text)}
+    .scroll-hint{font-size:.74rem;color:var(--c-muted);margin:.35rem 0 0}
+    .fig-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:1.2rem 0 .3rem}
+    .fig-wrap svg{min-width:640px;display:block}
+    .fig-cap{font-size:.78rem;color:var(--c-muted);line-height:1.7;margin:.2rem 0 0}
+    .steps{counter-reset:s;list-style:none;padding-left:0;margin:1rem 0}
+    .steps li{counter-increment:s;position:relative;padding:.6rem 0 .6rem 2.3rem;font-size:.87rem;line-height:1.85;color:var(--c-muted);border-top:1px solid var(--c-border)}
+    .steps li:first-child{border-top:none}
+    .steps li::before{content:counter(s);position:absolute;left:0;top:.6rem;width:1.5rem;height:1.5rem;border-radius:50%;background:var(--c-accent);color:#fff;font-size:.78rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+    .steps li strong{color:var(--c-text)}
+    .faq-block{border-top:1px solid var(--c-border);padding:1rem 0 0;margin:1rem 0 0}
+    .faq-block:first-of-type{border-top:none}
+    .faq-block dt{margin:0;font-size:.95rem;font-weight:700;color:var(--c-text);line-height:1.7}
+    .faq-block dt::before{content:"Q. ";color:var(--c-accent);font-family:var(--font-mono);font-size:.82rem}
+    .faq-block dd{margin:.4rem 0 0;font-size:.87rem;line-height:1.85;color:var(--c-muted)}
+    .faq-block dd::before{content:"A. ";color:var(--c-accent);font-family:var(--font-mono);font-size:.82rem;font-weight:700}
+    .faq-block dd strong{color:var(--c-text)}
+    .src-list{font-size:.8rem;color:var(--c-muted);padding-left:1.1em;line-height:1.85}
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/en/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="Main navigation"><a href="/en/" class="nav-link">Home</a><a href="/en/pricing/" class="nav-link">Pricing</a><a href="/en/calculator/" class="nav-link">Token Calculator</a><a href="/en/timeline/" class="nav-link">Release Timeline</a><a href="/en/china-ai/" class="nav-link">China AI</a><a href="/en/multimodal/" class="nav-link">Multimodal</a><a href="/en/mai/" class="nav-link">MS AI (MAI)</a><a href="/en/glossary/" class="nav-link active" aria-current="page">Glossary</a></nav></div></header>
+
+<main><div class="container">
+  <div class="section" style="padding-bottom:0;">
+    <h1 class="section-title" style="font-size:1.55rem;">Data residency explained — why “not sent abroad” is two promises</h1>
+    <p class="section-sub" style="max-width:780px;">
+      <a href="/en/glossary/">Glossary</a> entry 11. After entry 10 on <a href="/en/glossary/no-training/">training restrictions</a>, this entry drills into requirement ④ of the <a href="/en/glossary/four-data-requirements/">four data-protection requirements</a>: <strong>data residency — not sent abroad</strong>.
+      “We don't use overseas regions, so the data never leaves the country” and “we can pick a region, so we're covered” are both <strong>only half true</strong>.
+      The reason is that residency is <strong>two separate questions: where data is stored at rest, and where inference is processed</strong>.
+      This page builds a table that keeps those two columns apart across AWS Bedrock, Microsoft Foundry, Google Cloud, OpenAI and Anthropic, and quotes <strong>their own wording</strong> — including who fixes which setting, and when.
+    </p>
+    <div class="phrase-box">
+      <p class="phrase">“Not sent abroad” is really <strong>two promises: where data is stored, and where it is processed</strong>.</p>
+      <p class="phrase-meta">OpenAI publishes data residency as <strong>separate Storage and Processing columns per region</strong>, and <strong>Japan is storage-capable but processing-incapable</strong> — i.e. stored in country, inferenced elsewhere. AWS decides with <strong>inference profiles</strong>, Google with <strong>endpoints</strong>, Microsoft with <strong>deployment types</strong>, Anthropic with <strong>inference geo plus workspace geo</strong>. In all five, storage and processing are separate items to check (the mechanism differs by provider). <strong>Checking one and concluding “it never leaves” is the most common mistake.</strong></p>
+    </div>
+    <div class="updated-bar">
+      <span class="dot">●</span>
+      Last updated: <time datetime="2026-10-05">October 5, 2026</time>
+      &ensp;|&ensp; Policy: only content we could confirm <strong>verbatim</strong> in each vendor's official documents. Settings we could not confirm are marked <strong>unverified</strong>
+    </div>
+  </div>
+
+  <section class="section" style="padding-top:1.5rem;" aria-labelledby="why-h">
+    <h2 class="section-title" id="why-h" style="font-size:1.2rem;">Why “not sent abroad” splits into two questions</h2>
+    <p class="section-sub">
+      Even for the same prompt, <strong>the place it is kept and the place it is computed are different</strong>. There are four branches.
+    </p>
+    <div class="req-grid">
+      <div class="req">
+        <p class="tag">Branch ①</p>
+        <h3>Where data is stored at rest</h3>
+        <p>Which region's facilities hold the data written to disk. Most providers state this is pinned to the <strong>region you designate</strong>. This is usually <strong>the easier half to secure</strong>.</p>
+      </div>
+      <div class="req">
+        <p class="tag">Branch ②</p>
+        <h3>Where inference is processed</h3>
+        <p>Which region's compute actually runs the request. “Anywhere (global)” is the default in several configurations, so <strong>a misconfigured setting means processing abroad</strong>.</p>
+      </div>
+      <div class="req">
+        <p class="tag">Branch ③</p>
+        <h3>“Available” versus “pinned”</h3>
+        <p>Having a region option is not the same as running there. The pinning unit differs: <strong>deployment type / profile / endpoint / project setting / workspace setting</strong>.</p>
+      </div>
+      <div class="req">
+        <p class="tag">Prerequisite</p>
+        <h3>④ satisfied does not satisfy ①–③</h3>
+        <p>Residency (not sent abroad) is a <strong>different promise</strong> from retention (not stored), access (not seen) and training (not learned from). → <a href="/en/glossary/four-data-requirements/">four requirements</a></p>
+      </div>
+    </div>
+
+    <div class="fig-wrap">
+      <svg viewBox="0 0 680 344" role="img" aria-labelledby="drfig-t drfig-d" xmlns="http://www.w3.org/2000/svg">
+        <title id="drfig-t">“Not sent abroad” splits into storage and processing</title>
+        <desc id="drfig-d">The same prompt and response have two separate promises: storage at rest is where the data is kept, processing is where inference runs. Pinning storage to a region does not pin processing. All five providers publish storage and processing separately.</desc>
+        <g font-family="system-ui,Segoe UI,sans-serif">
+          <text x="16" y="24" font-size="14" font-weight="700" fill="#e6e6e6">“Not sent abroad” is two promises</text>
+          <text x="16" y="41" font-size="11" fill="#9aa0aa">Same data — but where it is kept and where it is computed are set separately.</text>
+
+          <rect x="16" y="92" width="176" height="126" rx="8" fill="#141a24" stroke="#2a3340"/>
+          <text x="104" y="136" font-size="12.5" font-weight="700" fill="#e6e6e6" text-anchor="middle">Your prompts</text>
+          <text x="104" y="156" font-size="12.5" font-weight="700" fill="#e6e6e6" text-anchor="middle">and responses</text>
+          <text x="104" y="182" font-size="10.5" fill="#9aa0aa" text-anchor="middle">Identical content,</text>
+          <text x="104" y="198" font-size="10.5" fill="#9aa0aa" text-anchor="middle">two different promises</text>
+
+          <path d="M192 136 C 222 136, 222 112, 250 112" stroke="#3a4450" fill="none" stroke-width="1.4"/>
+          <path d="M192 172 C 222 172, 222 198, 250 198" stroke="#3a4450" fill="none" stroke-width="1.4"/>
+
+          <rect x="250" y="82" width="414" height="66" rx="8" fill="#141a24" stroke="#2a3340"/>
+          <text x="266" y="104" font-size="12.5" font-weight="700" fill="#6aa9ff">① Storage (at rest) — where data is kept</text>
+          <text x="266" y="122" font-size="11.5" fill="#9aa0aa">Switched by region or data zone. Usually pinned to the location you choose</text>
+          <text x="266" y="139" font-size="11.5" fill="#9aa0aa">This is the half that country requirements ask about first</text>
+
+          <rect x="250" y="164" width="414" height="66" rx="8" fill="#1a1410" stroke="#3a2a22"/>
+          <text x="266" y="186" font-size="12.5" font-weight="700" fill="#d97757">② Processing (inference) — where it runs</text>
+          <text x="266" y="204" font-size="11.5" fill="#9aa0aa">Switched by endpoint, inference profile or a setting</text>
+          <text x="266" y="221" font-size="11.5" fill="#9aa0aa">Often defaults to “anywhere / global” — this is what gets missed</text>
+
+          <rect x="16" y="252" width="648" height="76" rx="8" fill="none" stroke="#5a5f6a" stroke-dasharray="5 4"/>
+          <text x="32" y="276" font-size="11.5" fill="#9aa0aa"><tspan font-weight="700" fill="#e6e6e6">Pinning storage in country does not pin processing.</tspan> OpenAI Japan: storage yes, processing no.</text>
+          <text x="32" y="298" font-size="11.5" fill="#9aa0aa"><tspan font-weight="700" fill="#e6e6e6">All five providers publish the two as separate items.</tspan></text>
+          <text x="32" y="318" font-size="11.5" fill="#9aa0aa">So record which layer and which setting you pinned, or you cannot answer an audit.</text>
+        </g>
+      </svg>
+    </div>
+    <p class="fig-cap">Figure: storage and processing are separate promises. Pinning one leaves the other on its default (created by LLM Data Hub).</p>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="matrix-h">
+    <h2 class="section-title" id="matrix-h" style="font-size:1.2rem;">The answer up front: five providers split by storage and processing</h2>
+    <p class="section-sub">Confirmed from official documentation as of 2026-10-05. The key point is that <strong>storage and processing sit in separate columns</strong>.</p>
+    <div class="table-wrap">
+      <table class="mtable">
+        <caption style="display:none;">Data residency compared across five providers, split into storage and processing</caption>
+        <thead>
+          <tr><th>Provider</th><th>① Storage (at rest)</th><th>② Processing (inference)</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Microsoft</strong><br>Azure / Foundry</td>
+            <td>For all deployment types, <strong>“Data stored at rest remains in the designated Azure geography.”</strong></td>
+            <td><strong>Three layers.</strong> Global = may be processed in any Azure region / Data Zone = within the data zone (US, EU, APAC) / Standard &amp; Regional = within the customer-specified geography, <strong>and may move between regions inside it</strong>. The Developer tier carries <strong>no data-residency guarantee</strong></td>
+          </tr>
+          <tr>
+            <td><strong>AWS</strong><br>Amazon Bedrock</td>
+            <td>Stored at rest <strong>in the AWS Region where you use Bedrock</strong> (with cross-Region inference, in the destination Region)</td>
+            <td><strong>Chosen by inference profile.</strong> Geographic = within US / EU / APAC boundaries; Global = <strong>any supported AWS commercial Region worldwide</strong>. AWS itself recommends Geographic for compliance</td>
+          </tr>
+          <tr>
+            <td><strong>Google Cloud</strong></td>
+            <td><strong>Pinned to the location you chose</strong> — “independent of the Agent Platform endpoint called”</td>
+            <td><strong>Chosen by endpoint.</strong> Jurisdictional multi-region = inside that region (US, EU); global = <strong>“they don't provide regional isolation or data residency guarantees”</strong></td>
+          </tr>
+          <tr>
+            <td><strong>OpenAI</strong><br>first-party API</td>
+            <td><strong>A per-project setting.</strong> With supported endpoints, customer content is stored at rest in the selected region</td>
+            <td><strong>Storage and Processing are decided separately per region.</strong> Japan, UK, Canada and others are <strong>storage yes / processing no</strong>. Non-US regions need approval for abuse monitoring controls plus a Modified Retention amendment (UAE needs extra approval)</td>
+          </tr>
+          <tr>
+            <td><strong>Anthropic</strong><br>first-party API</td>
+            <td><strong>Workspace geo</strong> — set when the workspace is created, <strong>cannot be changed afterwards</strong>; currently "us" only</td>
+            <td><strong>Inference geo</strong> — defaults to "global", can be set to "us" per request or as a workspace default. <strong>US-only inference is priced at 1.1x</strong> (Claude 4.6 and later models)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="scroll-hint">← Scroll horizontally. “Unverified” means we could not confirm it in primary sources — not that the guarantee is absent.</p>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="b1-h">
+    <h2 class="section-title" id="b1-h" style="font-size:1.2rem;">Branch ① Where a provider publishes the two separately (OpenAI)</h2>
+    <p class="section-sub">This is the clearest example. OpenAI lists <strong>Storage and Processing as separate columns per region</strong>, which means <strong>“stored in country, processed abroad” is an officially documented combination</strong>.</p>
+    <div class="quote">
+      <em>“If you select a region that supports regional processing, as specifically identified below, the services will perform inference for your Customer Content in the selected region as well.”</em>
+      <span class="who">— OpenAI, “Data controls in the OpenAI platform” (retrieved 2026-10-05)</span>
+    </div>
+    <div class="quote">
+      <em>“Support for regional storage does not imply support for regional processing.”</em>
+      <span class="who">— Same document (retrieved 2026-10-05)</span>
+    </div>
+    <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.3em;line-height:1.9;">
+      <li><strong>Some regions you can pay for are storage-only.</strong> In the official table, the United States, Europe (EEA + Switzerland) and the UAE are storage <em>and</em> processing, while <strong>Japan (jp.api.openai.com), the UK, Canada, Australia, India, Singapore and South Korea are storage yes / processing no</strong>. “There is a Japan region” does not mean “inference happens in Japan”.</li>
+      <li><strong>Non-US regions require approval.</strong> Verbatim: “To use data residency with any region other than the United States, you must be approved for abuse monitoring controls, and execute a Modified Retention amendment.” Residency here is <strong>not a self-service toggle</strong>.</li>
+      <li><strong>Selecting the UAE requires additional approval</strong> — conditions differ by region, so a list of supported regions is not enough on its own.</li>
+      <li><strong>The unit of configuration is the project.</strong> “To configure data residency for regional storage, select the appropriate region from the dropdown when creating a new project.” It is chosen <strong>at creation, not retrofitted</strong>, so you have to record who created which project where.</li>
+    </ul>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="b2-h">
+    <h2 class="section-title" id="b2-h" style="font-size:1.2rem;">Branch ② In the clouds, the setting decides between three layers (Microsoft / AWS / Google)</h2>
+    <p class="section-sub">Cloud providers share a shape — <strong>storage pinned, processing selectable</strong> — but the unit and the number of layers differ.</p>
+    <div class="quote">
+      <em>“Data residency for all deployment types: Data stored at rest remains in the designated Azure geography. However, inferencing data is processed as follows: Global types: May be processed in any Azure region / Standard and Regional Provisioned types: Prompts and responses are processed within the customer-specified Azure geography and might be processed between regions within that geography for operational purposes.”</em>
+      <span class="who">— Microsoft Learn, “Understanding deployment types in Microsoft Foundry Models” (retrieved 2026-10-05)</span>
+    </div>
+    <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.3em;line-height:1.9;">
+      <li><strong>Microsoft splits processing three ways by deployment type</strong>: Global (any Azure region), Data Zone (inside the US / EU / APAC data zone) and Standard or Regional (inside the customer-specified geography). The choice is made by the <strong>customer</strong> and it also changes the price, so the same model has three price points.</li>
+      <li><strong>“Between regions within that geography” survives.</strong> The wording says processing “might be processed between regions within that geography for operational purposes”, so a geography-level pin <strong>may not satisfy a country-level requirement</strong>. The EU follows the Azure EU Data Boundary, which can include EFTA countries such as Norway and Switzerland.</li>
+      <li><strong>AWS decides with the inference profile.</strong> Its table gives Data residency as Geographic = “Within geographic boundaries (such as US, EU, and APAC)” and Global = “Any supported AWS commercial Region worldwide”, with the recommendation “Choose Geographic for compliance requirements”. It also states that data in cross-Region operations <strong>stays on the AWS network and does not traverse the public internet</strong>.</li>
+      <li><strong>Google Cloud decides with the endpoint.</strong> At rest, “Data stored at rest in the customer selected location remains at rest in that location, independent of the … endpoint called.” For processing, jurisdictional multi-region endpoints keep ML processing inside that region, while global endpoints “route and process data anywhere globally” and <strong>“don't provide regional isolation or data residency guarantees”</strong>. Checking that you are not on a global endpoint is the practical test.</li>
+      <li><strong>There are exclusions.</strong> Google's data residency terms list services outside the commitment, including Grounding with Google Search, Web Grounding for Enterprise, Grounding with Google Maps and RAG Engine. <strong>Being in the same project does not put every feature inside the commitment.</strong></li>
+    </ul>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="b3-h">
+    <h2 class="section-title" id="b3-h" style="font-size:1.2rem;">Branch ③ On a first-party API the menu can be shorter (Anthropic)</h2>
+    <p class="section-sub">Anthropic manages this with <strong>two independent settings</strong>, and it is the clearest example that <strong>“pick your region” is not unlimited</strong>.</p>
+    <div class="quote">
+      <em>“Two independent settings govern this: Inference geo: Controls where model inference runs, on a per-request basis. Set through the inference_geo API parameter or as a workspace default. Workspace geo: Controls where data is stored at rest and where endpoint processing (such as image transcoding and code execution) happens. Configured at the workspace level in the Claude Console”</em>
+      <span class="who">— Claude Platform Docs, “Data residency” (retrieved 2026-10-05)</span>
+    </div>
+    <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.3em;line-height:1.9;">
+      <li><strong>The only values are "us" and "global".</strong> Inference geo defaults to "global" (“Inference may run in any available geography”) and "us" restricts inference to US-based infrastructure. <strong>There is no EU option on the first-party API</strong>, so EU requirements are met through partner platforms instead.</li>
+      <li><strong>Workspace geo is fixed at creation and cannot be changed.</strong> “Workspace geo is set when you create a workspace and can't be changed afterward. Currently, "us" is the only available workspace geo.” <strong>Some settings cannot be switched later</strong>, which is exactly why they belong in contract review.</li>
+      <li><strong>US-only inference costs 1.1x (Claude 4.6 and later models).</strong> “Claude 4.6 and later models: US-only inference (inference_geo: "us") is priced at 1.1x the standard rate across all token pricing categories”, while global routing uses standard pricing. <strong>Where data lives shows up on the bill.</strong></li>
+      <li><strong>Partner platforms are handled separately.</strong> “On Claude in Microsoft Foundry, the same 1.1x multiplier applies to deployments hosted on Azure that use the US Data Zone Standard deployment type. Partner-operated platforms (Bedrock and Google Cloud) have their own regional pricing.” The same model therefore has different regional options and prices <strong>depending on the path you use</strong>. Regional data residency is offered across Europe, the United States, Canada and Asia-Pacific (including Japan, South Korea, Singapore, India and Australia) — on the partner platforms.</li>
+    </ul>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="sep-h">
+    <h2 class="section-title" id="sep-h" style="font-size:1.2rem;">“Not sent abroad” is a different promise from not stored, not seen and not trained on</h2>
+    <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.3em;line-height:1.9;">
+      <li><strong>Pinning storage in country is not “not used for training”.</strong> OpenAI's residency page governs <strong>where data is stored and processed</strong>; training terms live in a different document — and non-US regions additionally require a Modified Retention amendment. Check it together with <a href="/en/glossary/no-training/">no-training</a>.</li>
+      <li><strong>Pinning storage is not “staff cannot see it”.</strong> Approval workflows and key management (CMK / BYOK / HYOK) are separate mechanisms. → <a href="/en/glossary/zero-operator-access/">ZOA (not seen)</a></li>
+      <li><strong>Pinning processing is not “nothing is retained”.</strong> A guarantee about where processing happens says nothing about how long data is kept. → <a href="/en/glossary/zero-data-retention/">ZDR (not stored)</a></li>
+      <li><strong>Read them side by side:</strong> <a href="/en/glossary/four-data-requirements/">the four requirements</a>, <a href="/en/glossary/zero-data-retention/">ZDR</a>, <a href="/en/glossary/zero-operator-access/">ZOA</a>, <a href="/en/glossary/no-training/">no-training</a>.</li>
+    </ul>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="steps-h">
+    <h2 class="section-title" id="steps-h" style="font-size:1.2rem;">A four-step check</h2>
+    <ol class="steps">
+      <li><strong>Ask storage and processing as two questions.</strong> “Where is data stored?” is not enough. Ask <strong>“in which region is inference executed?” separately</strong>. Splitting the question changes the answer at several providers.</li>
+      <li><strong>Identify the setting that pins it.</strong> Deployment type, inference profile, endpoint, project setting, workspace setting — <strong>the unit differs by provider</strong>, and naming the unit also names who configured it.</li>
+      <li><strong>Check whether “anywhere” is still in play.</strong> Global endpoints, global profiles, Global deployments, a default of "global" — <strong>the default can be the anywhere option</strong>, so confirm that a region was explicitly selected.</li>
+      <li><strong>Confirm it in the contract and write it down.</strong> A settings page is not a clause. Record <strong>which layer, which setting and which region</strong>, together with the clause you verified. That record is what disappears when people change teams.</li>
+    </ol>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="myth-h">
+    <h2 class="section-title" id="myth-h" style="font-size:1.2rem;">Four common misconceptions</h2>
+    <div class="req-grid">
+      <div class="req">
+        <p class="tag">Misconception 1</p>
+        <h3>“You can pick a region, so nothing leaves the country”</h3>
+        <p>Available is not the same as pinned. Defaults are frequently “anywhere / global”, and only an explicit selection pins them.</p>
+      </div>
+      <div class="req">
+        <p class="tag">Misconception 2</p>
+        <h3>“Storage in country means processing in country”</h3>
+        <p>OpenAI's Japan region is <strong>storage yes / processing no</strong>, and Microsoft's Global deployment type “may be processed in any Azure region”. Processing has <strong>its own setting</strong>.</p>
+      </div>
+      <div class="req">
+        <p class="tag">Misconception 3</p>
+        <h3>“Residency support means no training”</h3>
+        <p>Location and training are governed by different documents. Meeting residency does not meet the training requirement. → <a href="/en/glossary/no-training/">no-training</a></p>
+      </div>
+      <div class="req">
+        <p class="tag">Misconception 4</p>
+        <h3>“A Japan region means processing happens in Japan”</h3>
+        <p>First-party API regions are sometimes <strong>storage-only</strong>. On Anthropic's first-party API you cannot even select the EU.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="faq-h">
+    <h2 class="section-title" id="faq-h" style="font-size:1.2rem;">Questions</h2>
+    <dl>
+      <div class="faq-block">
+        <dt>Is data residency the same as data sovereignty?</dt>
+        <dd>This page keeps them apart. Residency is the <strong>promise about where data is stored and processed</strong>; sovereignty is the wider question of <strong>which country's law applies to it</strong>. Keeping data in country does not, by itself, tell you the reach of the provider's home jurisdiction.</dd>
+      </div>
+      <div class="faq-block">
+        <dt>Is “we selected a region” enough to tell an auditor?</dt>
+        <dd>No. Say <strong>which of the two you pinned</strong> — storage, processing, or both. On cloud platforms processing can extend “between regions within the geography”, so a country-level requirement may need a different configuration entirely.</dd>
+      </div>
+      <div class="faq-block">
+        <dt>Does residency change the price?</dt>
+        <dd>It can. Anthropic prices US-only inference at <strong>1.1x</strong> (Claude 4.6 and later models), and Microsoft prices deployment types differently (Global, Data Zone, Standard). <strong>Residency is a configuration choice and a pricing choice.</strong></dd>
+      </div>
+      <div class="faq-block">
+        <dt>When a row says “unverified”, does that mean there is no guarantee?</dt>
+        <dd>No — it means we could not confirm it in primary sources. Where we could confirm only part of a picture (for example Google's list of excluded services), we publish only what we verified. <strong>Always check the provider's current documentation before you commit.</strong></dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="section" style="padding-top:0;">
+    <h2 class="section-title" style="font-size:1.1rem;">Sources</h2>
+    <ul class="src-list">
+      <li>Microsoft — <a href="https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/deployment-types" target="_blank" rel="noopener">Understanding deployment types in Microsoft Foundry Models</a> (at rest in the designated Azure geography; Global / Data Zone / Standard processing; Developer tier has no residency guarantee / retrieved 2026-10-05)</li>
+      <li>AWS — <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference.html" target="_blank" rel="noopener">Cross-Region inference</a> (Geographic vs Global data residency and the recommendation; stays on the AWS network / retrieved 2026-10-05)</li>
+      <li>AWS — <a href="https://aws.amazon.com/bedrock/faqs/" target="_blank" rel="noopener">Amazon Bedrock FAQs</a> (“stored at rest in the AWS Region where you are using Amazon Bedrock” / retrieved 2026-09-29)</li>
+      <li>Google Cloud — <a href="https://docs.cloud.google.com/gemini-enterprise-agent-platform/resources/data-residency" target="_blank" rel="noopener">Data residency</a> (at-rest location independent of endpoint; jurisdictional vs global endpoints / retrieved 2026-10-05) · <a href="https://cloud.google.com/terms/data-residency" target="_blank" rel="noopener">Cloud Data Residency Terms</a> (excluded services)</li>
+      <li>OpenAI — <a href="https://developers.openai.com/api/docs/guides/your-data" target="_blank" rel="noopener">Data controls in the OpenAI platform</a> (per-project configuration; separate Storage and Processing per region; non-US approval requirements; “Support for regional storage does not imply support for regional processing.” / retrieved 2026-10-05)</li>
+      <li>Anthropic — <a href="https://platform.claude.com/docs/en/manage-claude/data-residency" target="_blank" rel="noopener">Data residency</a> (inference geo and workspace geo; 1.1x for US-only; workspace geo immutable / retrieved 2026-10-05) · <a href="https://claude.com/regional-compliance" target="_blank" rel="noopener">Regional compliance</a> (regions offered / retrieved 2026-09-29)</li>
+      <li>Related: <a href="/en/glossary/four-data-requirements/">the four data-protection requirements</a> · <a href="/en/glossary/zero-data-retention/">ZDR</a> · <a href="/en/glossary/zero-operator-access/">ZOA</a> · <a href="/en/glossary/no-training/">no-training</a> · <a href="/en/glossary/">all glossary entries</a></li>
+    </ul>
+  </section>
+</div></main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>Operated by okamo channel</p><p><a href="/en/">Home</a> · <a href="/en/pricing/">Pricing</a> · <a href="/en/calculator/">Calculator</a> · <a href="/en/timeline/">Timeline</a> · <a href="/en/glossary/">Glossary</a> · <a href="/en/gpt-6/">GPT-6 Astra</a></p></div><p class="footer-disclaimer">⚠️ Always confirm terms and data handling in each provider's official documentation. Not affiliated with any provider.</p></div></footer>
+</body>
+</html>

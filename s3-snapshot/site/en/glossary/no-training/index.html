@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>No-training explained — one vendor, two answers | LLM Data Hub</title>
+  <meta name="description" content="Training terms are decided by the layer you use, not the vendor: consumer app vs free tier vs API/commercial contract. Five providers compared from their own wording, plus the two exceptions that survive an opt-out. Glossary entry 10, updated 2026-10-03.">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/en/glossary/no-training/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta property="og:image" content="https://llm.okamomedia.tokyo/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="LLM Data Hub — LLM API pricing, token costs and model data">
+  <meta name="twitter:image" content="https://llm.okamomedia.tokyo/assets/og-image.png">
+  <meta name="twitter:image:alt" content="LLM Data Hub — LLM API pricing, token costs and model data">
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/glossary/no-training/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/glossary/no-training/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/glossary/no-training/">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/en/glossary/no-training/">
+  <meta property="og:title" content="No-training explained — one vendor, two answers: the layer decides">
+  <meta property="og:description" content="Training terms depend on the layer you use, not the vendor: consumer app, free tier, or API/commercial contract — with the two exceptions that survive an opt-out (updated 2026-10-03).">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"No-training (training restrictions) explained — why one vendor gives two answers","datePublished":"2026-10-03","dateModified":"2026-10-03","author":{"@type":"Organization","name":"okamoちゃんねる"},"publisher":{"@type":"Organization","name":"okamoちゃんねる"},"url":"https://llm.okamomedia.tokyo/en/glossary/no-training/","inLanguage":"en","description":"Training restrictions (no-training) split by layer: consumer app, free tier, and API or commercial contract, compared across OpenAI, Anthropic, Google, Microsoft and AWS using the wording of their own documents."}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://llm.okamomedia.tokyo/en/"},{"@type":"ListItem","position":2,"name":"Glossary","item":"https://llm.okamomedia.tokyo/en/glossary/"},{"@type":"ListItem","position":3,"name":"No-training (training restrictions)","item":"https://llm.okamomedia.tokyo/en/glossary/no-training/"}]}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .phrase-box{background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-accent);border-radius:var(--r-md);padding:1rem 1.15rem;margin:1.2rem 0}
+    .phrase-box .phrase{margin:0;font-size:1.02rem;font-weight:700;line-height:1.7}
+    .phrase-box .phrase-meta{margin:.5rem 0 0;font-size:.83rem;color:var(--c-muted);line-height:1.8}
+    .req-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.8rem;margin:1.1rem 0}
+    @media(max-width:680px){.req-grid{grid-template-columns:1fr}}
+    .req{border:1px solid var(--c-border);border-top:3px solid var(--c-accent);border-radius:var(--r-md);background:var(--c-surface);padding:.9rem 1rem}
+    .req .tag{font-family:var(--font-mono);font-size:.74rem;color:var(--c-accent);margin:0 0 .3rem;letter-spacing:.02em}
+    .req h3{margin:0 0 .4rem;font-size:.95rem;line-height:1.6}
+    .req p{margin:0;font-size:.83rem;line-height:1.8;color:var(--c-muted)}
+    .req strong{color:var(--c-text)}
+    .quote{margin:1rem 0;padding:.85rem 1rem;background:var(--c-surface2);border:1px solid var(--c-border);border-radius:var(--r-sm);font-size:.84rem;line-height:1.8;color:var(--c-muted)}
+    .quote em{color:var(--c-text);font-style:italic}
+    .quote .who{display:block;margin-top:.45rem;font-size:.76rem;color:var(--c-muted)}
+    .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+    .mtable{width:100%;border-collapse:collapse;font-size:.79rem;min-width:680px}
+    .mtable th,.mtable td{border:1px solid var(--c-border);padding:.5rem .6rem;text-align:left;vertical-align:top;color:var(--c-muted);line-height:1.7}
+    .mtable thead th{background:var(--c-surface2);color:var(--c-text);font-weight:700;white-space:nowrap}
+    .mtable td strong{color:var(--c-text)}
+    .scroll-hint{font-size:.74rem;color:var(--c-muted);margin:.35rem 0 0}
+    .fig-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:1.2rem 0 .3rem}
+    .fig-wrap svg{min-width:640px;display:block}
+    .fig-cap{font-size:.78rem;color:var(--c-muted);line-height:1.7;margin:.2rem 0 0}
+    .steps{counter-reset:s;list-style:none;padding-left:0;margin:1rem 0}
+    .steps li{counter-increment:s;position:relative;padding:.6rem 0 .6rem 2.3rem;font-size:.87rem;line-height:1.85;color:var(--c-muted);border-top:1px solid var(--c-border)}
+    .steps li:first-child{border-top:none}
+    .steps li::before{content:counter(s);position:absolute;left:0;top:.6rem;width:1.5rem;height:1.5rem;border-radius:50%;background:var(--c-accent);color:#fff;font-size:.78rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+    .steps li strong{color:var(--c-text)}
+    .faq-block{border-top:1px solid var(--c-border);padding:1rem 0 0;margin:1rem 0 0}
+    .faq-block:first-of-type{border-top:none}
+    .faq-block dt{margin:0;font-size:.95rem;font-weight:700;color:var(--c-text);line-height:1.7}
+    .faq-block dt::before{content:"Q. ";color:var(--c-accent);font-family:var(--font-mono);font-size:.82rem}
+    .faq-block dd{margin:.4rem 0 0;font-size:.87rem;line-height:1.85;color:var(--c-muted)}
+    .faq-block dd::before{content:"A. ";color:var(--c-accent);font-family:var(--font-mono);font-size:.82rem;font-weight:700}
+    .faq-block dd strong{color:var(--c-text)}
+    .src-list{font-size:.8rem;color:var(--c-muted);padding-left:1.1em;line-height:1.85}
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/en/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="Main navigation"><a href="/en/" class="nav-link">Home</a><a href="/en/pricing/" class="nav-link">Pricing</a><a href="/en/calculator/" class="nav-link">Token Calculator</a><a href="/en/timeline/" class="nav-link">Release Timeline</a><a href="/en/china-ai/" class="nav-link">China AI</a><a href="/en/multimodal/" class="nav-link">Multimodal</a><a href="/en/mai/" class="nav-link">MS AI (MAI)</a><a href="/en/glossary/" class="nav-link active" aria-current="page">Glossary</a></nav></div></header>
+
+<main><div class="container">
+  <div class="section" style="padding-bottom:0;">
+    <h1 class="section-title" style="font-size:1.55rem;">No-training (training restrictions) explained — why one vendor gives two answers</h1>
+    <p class="section-sub" style="max-width:780px;">
+      <a href="/en/glossary/">Glossary</a> entry 10. After entry 9 on <a href="/en/glossary/zero-operator-access/">zero operator access (not seen)</a>, this entry drills into requirement ③ of the <a href="/en/glossary/four-data-requirements/">four data-protection requirements</a>: <strong>training restrictions</strong>.
+      “ChatGPT trains on your chats but the API does not — is that true?” and “Am I safe on a paid plan?” have <strong>different answers for the same model from the same vendor</strong>, because the terms that apply depend on <strong>which layer you are using: consumer app, free tier, or API/commercial contract</strong>.
+      This page splits OpenAI, Anthropic, Google, Microsoft and AWS into those three layers and quotes their own documents, including the <strong>exceptions that survive an opt-out</strong> so you can reuse the wording in internal reviews.
+    </p>
+    <div class="phrase-box">
+      <p class="phrase">What decides whether your data trains a model is not <strong>which vendor</strong> you use but <strong>which contract and which layer</strong>.</p>
+      <p class="phrase-meta">The same OpenAI: the consumer ChatGPT app may use content to train models by default (opt-out available), while the API does not train on business data by default. The same Google: the free Gemini API quota is used to improve products <strong>and human reviewers may read it</strong>, while paid quota is not used to improve products. <strong>Memorising vendor names guarantees the wrong answer.</strong> Pin down your layer first.</p>
+    </div>
+    <div class="updated-bar">
+      <span class="dot">●</span>
+      Last updated: <time datetime="2026-10-03">3 October 2026</time>
+      &ensp;|&ensp; Policy: only content we could confirm <strong>verbatim</strong> in each vendor's terms or privacy documents. Layers we could not confirm are marked <strong>unverified</strong>
+    </div>
+  </div>
+
+  <section class="section" style="padding-top:1.5rem;" aria-labelledby="branch-h">
+    <h2 class="section-title" id="branch-h" style="font-size:1.2rem;">Why the same vendor gives two answers</h2>
+    <p class="section-sub">
+      Training terms live in <strong>different documents per contract type</strong>. A consumer app's terms of service and a business commercial contract are separate documents with different content. There are three branches.
+    </p>
+    <div class="req-grid">
+      <div class="req">
+        <p class="tag">Branch ①</p>
+        <h3>Consumer app, or API / commercial contract</h3>
+        <p>The same vendor applies <strong>different documents</strong> to a consumer app (ChatGPT, Claude, Gemini) and to an API, Team or Enterprise contract. Generally the latter is the stricter, no-training side.</p>
+      </div>
+      <div class="req">
+        <p class="tag">Branch ②</p>
+        <h3>Free tier, or quota tied to a billing account</h3>
+        <p>For Google the test is <strong>not whether money changed hands but whether a billing account is attached</strong>. Free usage can still be treated as a paid service, and this is the most misread part.</p>
+      </div>
+      <div class="req">
+        <p class="tag">Branch ③</p>
+        <h3>Exceptions that survive an opt-out</h3>
+        <p>Even with training turned off, some vendors state that <strong>content you send as feedback</strong> or <strong>content flagged in a safety review</strong> is still used to train models.</p>
+      </div>
+      <div class="req">
+        <p class="tag">Prerequisite</p>
+        <h3>“Not trained on” is not “not seen”</h3>
+        <p>Meeting requirement ③ says nothing about retention (①) or operator access (②). See the <a href="/en/glossary/four-data-requirements/">four requirements</a> and <a href="/en/glossary/zero-operator-access/">ZOA</a>.</p>
+      </div>
+    </div>
+
+    <div class="fig-wrap">
+      <svg viewBox="0 0 680 330" role="img" aria-labelledby="ntfig-t ntfig-d" xmlns="http://www.w3.org/2000/svg">
+        <title id="ntfig-t">The layer decides whether your data trains a model</title>
+        <desc id="ntfig-d">The same model can be trained on in one layer and not in another. Consumer apps (Free, Plus, Pro) may train by default. A free tier not tied to a billing account may train on your data, with human review. API, Team and Enterprise contracts do not train by default. Which layer you use selects which document applies.</desc>
+        <g font-family="system-ui,Segoe UI,sans-serif">
+          <text x="16" y="24" font-size="14" font-weight="700" fill="#e6e6e6">The layer decides whether your data trains a model</text>
+          <text x="16" y="41" font-size="11" fill="#9aa0aa">Same vendor, same model — but a different layer selects a different document.</text>
+
+          <rect x="16" y="86" width="176" height="130" rx="8" fill="#141a24" stroke="#2a3340"/>
+          <text x="104" y="132" font-size="12.5" font-weight="700" fill="#e6e6e6" text-anchor="middle">Your prompts</text>
+          <text x="104" y="152" font-size="12.5" font-weight="700" fill="#e6e6e6" text-anchor="middle">and responses</text>
+          <text x="104" y="180" font-size="10.5" fill="#9aa0aa" text-anchor="middle">Identical content,</text>
+          <text x="104" y="196" font-size="10.5" fill="#9aa0aa" text-anchor="middle">different terms per layer</text>
+
+          <path d="M192 151 C 222 151, 222 76, 250 76" stroke="#3a4450" fill="none" stroke-width="1.4"/>
+          <path d="M192 151 C 222 151, 222 164, 250 164" stroke="#3a4450" fill="none" stroke-width="1.4"/>
+          <path d="M192 151 C 222 151, 222 252, 250 252" stroke="#3a4450" fill="none" stroke-width="1.4"/>
+
+          <rect x="250" y="42" width="414" height="68" rx="8" fill="#141a24" stroke="#2a3340"/>
+          <text x="266" y="66" font-size="12.5" font-weight="700" fill="#6aa9ff">① Consumer app (Free / Plus / Pro)</text>
+          <text x="266" y="86" font-size="11.5" fill="#9aa0aa">May train by default — opt out in settings or the privacy portal</text>
+          <text x="266" y="102" font-size="11.5" fill="#9aa0aa">Opting out applies to new conversations; it is not retroactive</text>
+
+          <rect x="250" y="130" width="414" height="68" rx="8" fill="#1a1410" stroke="#3a2a22"/>
+          <text x="266" y="154" font-size="12.5" font-weight="700" fill="#d97757">② Free tier with no billing account attached</text>
+          <text x="266" y="174" font-size="11.5" fill="#9aa0aa">Google AI Studio and free Gemini API quota are “Unpaid Services”</text>
+          <text x="266" y="190" font-size="11.5" fill="#9aa0aa">Used to improve products, and human reviewers may read it</text>
+
+          <rect x="250" y="218" width="414" height="68" rx="8" fill="#101a13" stroke="#22342a"/>
+          <text x="266" y="242" font-size="12.5" font-weight="700" fill="#7bc47f">③ Paid quota / commercial contract (API, Team, Enterprise)</text>
+          <text x="266" y="262" font-size="11.5" fill="#9aa0aa">Not used for training by default (Bedrock and Azure do not pass it to providers)</text>
+          <text x="266" y="278" font-size="11.5" fill="#9aa0aa">Only with an explicit opt-in (e.g. the Developer Partner Program)</text>
+
+          <rect x="16" y="296" width="648" height="24" rx="6" fill="none" stroke="#5a5f6a" stroke-dasharray="5 4"/>
+          <text x="32" y="312" font-size="11.5" fill="#9aa0aa"><tspan font-weight="700" fill="#e6e6e6">“Free” versus “paid” is decided by the contract and billing account, not the price.</tspan></text>
+        </g>
+      </svg>
+    </div>
+    <p class="fig-cap">Figure: the three branches. Which layer you use selects the document and therefore the answer (created by LLM Data Hub).</p>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="matrix-h">
+    <h2 class="section-title" id="matrix-h" style="font-size:1.2rem;">The answer up front: five providers split by layer</h2>
+    <p class="section-sub">Confirmed from official documentation as of 2026-10-03. The key point of the table is that <strong>consumer terms and API/commercial terms are different documents</strong>.</p>
+    <div class="table-wrap">
+      <table class="mtable">
+        <caption style="display:none;">Training terms compared across five providers</caption>
+        <thead>
+          <tr><th>Provider</th><th>Consumer app / free tier</th><th>API / commercial contract</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>OpenAI</strong></td>
+            <td>Services for individuals (ChatGPT, Sora, Operator) <strong>may be used to train models</strong>. Opt out via the privacy portal (“do not train on my content”)</td>
+            <td><strong>Does not train by default</strong> (ChatGPT Team, ChatGPT Enterprise, API). Wording quoted in the body</td>
+          </tr>
+          <tr>
+            <td><strong>Anthropic</strong></td>
+            <td>Consumer (Free / Pro / Max) data <strong>may be used for training until you opt out</strong>. Even after opting out, <strong>feedback you send and content flagged for safety review</strong> are still used</td>
+            <td>Commercial terms <strong>prohibit training on Customer Content</strong>, except where the customer explicitly provides data (e.g. Development Partner Program)</td>
+          </tr>
+          <tr>
+            <td><strong>Google</strong></td>
+            <td>Unpaid Services (AI Studio, free Gemini API quota) are <strong>used to provide, improve and develop products, with human review</strong></td>
+            <td>Paid Services: <strong>prompts and responses are not used to improve products</strong>. Logged for a limited period only for abuse detection</td>
+          </tr>
+          <tr>
+            <td><strong>Microsoft</strong></td>
+            <td>Consumer services under a Microsoft account (e.g. Copilot) are <strong>unverified on this page</strong> (separate document)</td>
+            <td>Azure AI services: <strong>“NOT used to train any generative AI foundation models without your permission or instruction.”</strong> Not shared with model providers</td>
+          </tr>
+          <tr>
+            <td><strong>AWS</strong></td>
+            <td>No consumer path (Amazon Bedrock is an API product)</td>
+            <td><strong>“No, AWS and the third-party model providers will not use any inputs to or outputs from Amazon Bedrock to train Amazon Nova, Amazon Titan, or any third-party models.”</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="scroll-hint">← Scroll horizontally. “Unverified” means we could not confirm it in primary sources — not that the guarantee is absent.</p>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="b1-h">
+    <h2 class="section-title" id="b1-h" style="font-size:1.2rem;">Branch ① Consumer app, or API / commercial contract</h2>
+    <p class="section-sub">This is where the split is sharpest, and <strong>one OpenAI sentence shows it best</strong>.</p>
+    <div class="quote">
+      <em>“By default, we do not train on any inputs or outputs from our products for business users, including ChatGPT Team, ChatGPT Enterprise, and the API.”</em>
+      <span class="who">— OpenAI, “How your data is used to improve model performance” (retrieved 2026-10-03)</span>
+    </div>
+    <div class="quote">
+      <em>“When you use our services for individuals such as ChatGPT, Sora, or Operator, we may use your content to train our models. You can opt out of training through our privacy portal by clicking on "do not train on my content."”</em>
+      <span class="who">— Same document, consumer section (retrieved 2026-10-03)</span>
+    </div>
+    <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.3em;line-height:1.9;">
+      <li><strong>It is not “free means trained on, paid means not trained”.</strong> OpenAI's line is <strong>consumer versus business</strong> (Team / Enterprise / API). A paid consumer plan still sits on the consumer side of that line by default.</li>
+      <li><strong>Anthropic puts the prohibition in the contract itself.</strong> Section B (Customer Content) of the Commercial Terms reads:
+        <div class="quote" style="margin:.6rem 0 0;"><em>“As between the parties and to the extent permitted by applicable law, Anthropic agrees that Customer (a) retains all rights to its Inputs, and (b) owns its Outputs. Anthropic may not train models on Customer Content from Services.”</em><span class="who">— Anthropic, Commercial Terms of Service, B. Customer Content (retrieved 2026-10-03)</span></div>
+        Note the verb: <strong>“may not” — a contractual prohibition</strong>, which is a different kind of statement from a policy of “we do not train by default”.</li>
+      <li><strong>The exception is an explicit opt-in.</strong> Anthropic's own documentation explains that under commercial terms it does not train generative models on code or prompts <strong>unless the customer has chosen to provide their data for model improvement</strong> (for example the Development Partner Program, or feedback you send). An organisation admin can opt the organisation in.</li>
+      <li><strong>The resale paths work the same way.</strong> AWS states in its FAQ: “No, AWS and the third-party model providers will not use any inputs to or outputs from Amazon Bedrock to train Amazon Nova, Amazon Titan, or any third-party models.” Microsoft states that Azure customer data is “NOT used to train any generative AI foundation models without your permission or instruction.”</li>
+    </ul>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="b2-h">
+    <h2 class="section-title" id="b2-h" style="font-size:1.2rem;">Branch ② “Free tier” is decided by the billing account, not the price (Google)</h2>
+    <p class="section-sub">Google splits <strong>Unpaid Services</strong> from <strong>Paid Services</strong>, and the test is unusual enough that the wording is worth keeping.</p>
+    <div class="quote">
+      <em>“When you use Unpaid Services, including, for example, Google AI Studio and the unpaid quota on Gemini API, Google uses the content you submit to the Services and any generated responses to provide, improve, and develop Google products and services and machine learning technologies”</em>
+      <span class="who">— Google, Gemini API Additional Terms of Service (retrieved 2026-10-03)</span>
+    </div>
+    <div class="quote">
+      <em>“To help with quality and improve our products, human reviewers may read, annotate, and process your API input and output.”</em>
+      <span class="who">— Same document, Unpaid Services section (retrieved 2026-10-03)</span>
+    </div>
+    <div class="quote">
+      <em>“When you use Paid Services, including, for example, the paid quota of the Gemini API, Google doesn't use your prompts (including associated system instructions, cached content, and files such as images, videos, or documents) or responses to improve our products”</em>
+      <span class="who">— Same document, Paid Services section (retrieved 2026-10-03)</span>
+    </div>
+    <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.3em;line-height:1.9;">
+      <li><strong>Free usage can be a paid service.</strong> The same document says access to Google AI Studio is a <strong>Paid Service even when offered free of charge, if the account has access to a Cloud project with an associated and active Cloud Billing account, or is a Workspace enterprise account</strong>. Gemini API access is a Paid Service only through a Cloud project tied to an active billing account.</li>
+      <li><strong>Paid services still log.</strong> For Paid Services Google “logs prompts and responses for a limited period of time, solely for detecting and preventing violations of the Prohibited Use Policy”. <strong>“Not used for training” is not “nothing is kept”</strong> — that is the retention question (see <a href="/en/glossary/zero-data-retention/">ZDR</a>).</li>
+      <li><strong>Region changes the answer.</strong> For the EEA, Switzerland and the UK, the terms under “How Google uses Your Data” in Paid Services <strong>apply to all Services, including Google AI Studio and the unpaid quota</strong>, even though they are free of charge.</li>
+    </ul>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="b3-h">
+    <h2 class="section-title" id="b3-h" style="font-size:1.2rem;">Branch ③ The two exceptions that survive an opt-out</h2>
+    <p class="section-sub">Turning training off is not a blanket guarantee. <strong>Anthropic spells out two exceptions in its consumer terms</strong>, and this is the most practically useful part of the page.</p>
+    <div class="quote">
+      <em>“We may use Materials to provide, maintain, and improve the Services and to develop other products and services, including training our models, unless you opt out of training through your account settings. Even if you opt out, we will use Materials for model training when: (1) you provide Feedback to us regarding any Materials, or (2) your Materials are flagged for safety review to improve our ability to detect harmful content, enforce our policies, or advance our safety research.”</em>
+      <span class="who">— Anthropic, Consumer Terms of Service (retrieved 2026-10-03)</span>
+    </div>
+    <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.3em;line-height:1.9;">
+      <li><strong>Exception 1: content you send as feedback.</strong> Ratings, corrections or bug reports you submit can be used for training even while you are opted out. <strong>Opting out does not protect what you volunteer.</strong></li>
+      <li><strong>Exception 2: content flagged for safety review.</strong> Flagged content is used to improve harmful-content detection, enforce policies and advance safety research. This targets harmful use rather than ordinary business content, but it is written into the terms rather than left implied.</li>
+      <li><strong>Opt-outs are not retroactive.</strong> OpenAI: “Once you opt out, <strong>new conversations</strong> will not be used to train our models.” Content sent before the change is not withdrawn, so the setting belongs before the sensitive work, not after.</li>
+      <li><strong>There is also a “do not keep it” option.</strong> OpenAI describes Temporary Chat as not appearing in history, not using or creating memories and not being used to train models. That is a session-level workaround rather than a contractual guarantee.</li>
+    </ul>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="sep-h">
+    <h2 class="section-title" id="sep-h" style="font-size:1.2rem;">“Not trained on” is a different promise from “not seen” and “not stored”</h2>
+    <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.3em;line-height:1.9;">
+      <li><strong>On a free tier, training and human review happen together.</strong> The Unpaid Services section of Google's terms puts improvement use and human review in the same paragraph. From the start, those were two different promises.</li>
+      <li><strong>Even a no-training setup keeps abuse monitoring.</strong> Microsoft describes automated review (including by LLMs) as <strong>on by default</strong>, with human review <strong>only when the abuse monitoring system flags the data</strong>; approved organisations lose the storage and human review but automated review remains.</li>
+      <li><strong>Read them side by side:</strong> <a href="/en/glossary/four-data-requirements/">the four requirements</a>, <a href="/en/glossary/zero-data-retention/">ZDR (not stored)</a>, <a href="/en/glossary/zero-operator-access/">ZOA (not seen)</a>.</li>
+    </ul>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="steps-h">
+    <h2 class="section-title" id="steps-h" style="font-size:1.2rem;">A four-step check</h2>
+    <ol class="steps">
+      <li><strong>Pin down your layer.</strong> Consumer app, free tier, or API/commercial contract. <strong>The same tool changes layer with the login you use</strong> — signing in with a personal account to touch company code is the classic mistake.</li>
+      <li><strong>Decide “free tier” by billing, not price.</strong> For Google it turns on whether a Cloud Billing account is attached to the Cloud project.</li>
+      <li><strong>Check the current setting.</strong> Opt-out defaults have moved with vendor updates, so <strong>open the setting instead of trusting a change you made years ago</strong>. And remember the effect starts with new conversations.</li>
+      <li><strong>Confirm it in the contract and write it down.</strong> A settings toggle is not a term. For business use, read the relevant clause in the commercial terms or DPA and record <strong>which layer you use together with the clause you verified</strong> — that record is what disappears when people change teams.</li>
+    </ol>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="myth-h">
+    <h2 class="section-title" id="myth-h" style="font-size:1.2rem;">Four common misconceptions</h2>
+    <div class="req-grid">
+      <div class="req">
+        <p class="tag">Misconception 1</p>
+        <h3>“A paid plan means no training”</h3>
+        <p>Paid consumer plans are governed by a <strong>different document</strong> from business contracts. OpenAI's line was consumer versus Team / Enterprise / API.</p>
+      </div>
+      <div class="req">
+        <p class="tag">Misconception 2</p>
+        <h3>“Opting out stops everything”</h3>
+        <p>Anthropic states that <strong>feedback you send and content flagged for safety review</strong> are still used for training after an opt-out, and OpenAI's opt-out only covers <strong>new conversations</strong>.</p>
+      </div>
+      <div class="req">
+        <p class="tag">Misconception 3</p>
+        <h3>“Not trained on means nobody can read it”</h3>
+        <p>Training terms (③) and operator access (②) are separate. Google's free tier combines improvement use with <strong>human review</strong> in one section.</p>
+      </div>
+      <div class="req">
+        <p class="tag">Misconception 4</p>
+        <h3>“Nothing is stored, so nothing trains”</h3>
+        <p>Retention (①) and training (③) are separate clauses. “Stored but not used for training” is perfectly normal — and so is the reverse. → <a href="/en/glossary/zero-data-retention/">ZDR</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="faq-h">
+    <h2 class="section-title" id="faq-h" style="font-size:1.2rem;">Questions</h2>
+    <dl>
+      <div class="faq-block">
+        <dt>If I pay for ChatGPT Plus or Claude Pro, am I outside training?</dt>
+        <dd>No. <strong>A paid consumer plan keeps consumer terms</strong>; business terms (Team / Enterprise / API) are a separate document. Consumer plans offer an opt-out, and defaults have moved with vendor updates, so <strong>check the current state of the setting before you rely on it</strong>.</dd>
+      </div>
+      <div class="faq-block">
+        <dt>Is a “free tier” the same as a “free plan”?</dt>
+        <dd>No. A <strong>free plan</strong> is a pricing tier of a consumer app (consumer terms). A <strong>free tier</strong> is quota on the API side (Unpaid Services for Google), decided by whether a billing account is attached. Both cost nothing and get different documents.</dd>
+      </div>
+      <div class="faq-block">
+        <dt>What should I actually do if I do not want my data used?</dt>
+        <dd>① Use the layer the use case requires (API / commercial contract) ② check the opt-out setting if you use a consumer app, knowing it starts with new conversations ③ for business use, verify and record the relevant clause in the commercial terms or DPA. <strong>Settings alone, or clauses alone, leave a gap.</strong></dd>
+      </div>
+      <div class="faq-block">
+        <dt>Are “improving the product” and “training” the same thing?</dt>
+        <dd>The English terms write these differently — <strong>“improve our products”, “develop … machine learning technologies”, “training our models”</strong> — so this page quotes the wording as written. Collapsing them in translation blurs whether review and evaluation use is included.</dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="section" style="padding-top:0;">
+    <h2 class="section-title" style="font-size:1.1rem;">Sources</h2>
+    <ul class="src-list">
+      <li>OpenAI — <a href="https://openai.com/policies/how-your-data-is-used-to-improve-model-performance/" target="_blank" rel="noopener">How your data is used to improve model performance</a> (business default, consumer opt-out, Temporary Chat / retrieved 2026-10-03)</li>
+      <li>Anthropic — <a href="https://www.anthropic.com/legal/commercial-terms" target="_blank" rel="noopener">Commercial Terms of Service</a> (B. Customer Content, “Anthropic may not train models on Customer Content from Services.” / retrieved 2026-10-03)</li>
+      <li>Anthropic — <a href="https://www.anthropic.com/legal/consumer-terms" target="_blank" rel="noopener">Consumer Terms of Service</a> (opt-out and its two exceptions / retrieved 2026-10-03) · <a href="https://code.claude.com/docs/en/data-usage" target="_blank" rel="noopener">Data usage</a> (consumer vs commercial, 5-year vs 30-day retention / retrieved 2026-10-03)</li>
+      <li>Google — <a href="https://ai.google.dev/gemini-api/terms" target="_blank" rel="noopener">Gemini API Additional Terms of Service</a> (Unpaid vs Paid, human review, EEA/Switzerland/UK / retrieved 2026-10-03)</li>
+      <li>Microsoft — <a href="https://learn.microsoft.com/en-us/azure/foundry/responsible-ai/openai/data-privacy" target="_blank" rel="noopener">Data, privacy, and security for Azure direct models</a> (“NOT used to train any generative AI foundation models without your permission or instruction.”, abuse monitoring / retrieved 2026-09-29)</li>
+      <li>AWS — <a href="https://aws.amazon.com/bedrock/faqs/" target="_blank" rel="noopener">Amazon Bedrock FAQs</a> (“will not use any inputs to or outputs from Amazon Bedrock to train Amazon Nova, Amazon Titan, or any third-party models.” / retrieved 2026-10-03)</li>
+      <li>Related: <a href="/en/glossary/four-data-requirements/">the four data-protection requirements</a> · <a href="/en/glossary/zero-data-retention/">ZDR</a> · <a href="/en/glossary/zero-operator-access/">ZOA</a> · <a href="/en/glossary/">all glossary entries</a></li>
+    </ul>
+  </section>
+</div></main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>Operated by okamo channel</p><p><a href="/en/">Home</a> · <a href="/en/pricing/">Pricing</a> · <a href="/en/calculator/">Calculator</a> · <a href="/en/timeline/">Timeline</a> · <a href="/en/glossary/">Glossary</a> · <a href="/en/gpt-6/">GPT-6 Astra</a></p></div><p class="footer-disclaimer">⚠️ Always confirm terms and data handling in each provider's official documentation. Not affiliated with any provider.</p></div></footer>
+</body>
+</html>

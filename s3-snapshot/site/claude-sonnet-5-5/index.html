@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Claude Sonnet 5.5 — Claude 5.5世代のバランス型【料金・1Mコンテキスト・Opus 5.5との違い】 — LLM Data Hub</title>
+  <meta name="description" content="Anthropic Claude Sonnet 5.5の料金（入力$2・出力$10・キャッシュ読込$0.10・5分キャッシュ書込$2.50）・1Mコンテキスト・128K出力・thinking（Adaptive／既定high）を公式ドキュメントの逐語で解説。入力・出力はSonnet 5と同額でキャッシュ読込は半減した点、Opus 5.5との違い、提供5プラットフォームのモデルID一覧を掲載。2026年9月28日公開。2026年10月9日更新。">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/claude-sonnet-5-5/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta property="og:image" content="https://llm.okamomedia.tokyo/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="LLM Data Hub — LLM API pricing, token costs and model data">
+  <meta name="twitter:image" content="https://llm.okamomedia.tokyo/assets/og-image.png">
+  <meta name="twitter:image:alt" content="LLM Data Hub — LLM API pricing, token costs and model data">
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/claude-sonnet-5-5/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/claude-sonnet-5-5/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/claude-sonnet-5-5/">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/claude-sonnet-5-5/">
+  <meta property="og:title" content="Claude Sonnet 5.5 — Claude 5.5世代のバランス型">
+  <meta property="og:description" content="入力$2・出力$10・キャッシュ読込$0.10・1Mコンテキスト（2026年10月9日更新）。入力と出力はSonnet 5と同額、キャッシュ読込は$0.20から半減。Opus 5.5との違いと提供先5つのモデルIDを一次情報で整理。">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Claude Sonnet 5.5 — Claude 5.5世代のバランス型【料金・1Mコンテキスト・Opus 5.5との違い】","datePublished":"2026-10-01","dateModified":"2026-10-09","author":{"@type":"Organization","name":"okamoちゃんねる"},"publisher":{"@type":"Organization","name":"okamoちゃんねる"},"url":"https://llm.okamomedia.tokyo/claude-sonnet-5-5/","inLanguage":"ja","description":"Claude Sonnet 5.5の料金・コンテキスト・出力上限・thinking仕様・提供プラットフォームをAnthropic公式ドキュメントの逐語で整理する解説。"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"ホーム","item":"https://llm.okamomedia.tokyo/"},{"@type":"ListItem","position":2,"name":"Claude Sonnet 5.5","item":"https://llm.okamomedia.tokyo/claude-sonnet-5-5/"}]}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .hero-sonnet{background:linear-gradient(135deg,#0a1420 0%,#122232 50%,#0f1117 100%);border-bottom:1px solid var(--c-border);padding:3rem 1rem 2.5rem;text-align:center}.hero-sonnet .price-flag{display:inline-block;background:rgba(106,169,255,.16);border:1px solid rgba(106,169,255,.4);color:#9cc4ff;font-size:.82rem;font-weight:700;padding:.3rem .8rem;border-radius:100px;margin-bottom:1rem}.hero-sonnet h1{font-size:clamp(1.6rem,4.5vw,2.4rem);font-weight:800;line-height:1.2;margin-bottom:.75rem}.hero-sonnet h1 span{color:#6aa9ff}.hero-sonnet .lead{font-size:1.05rem;color:var(--c-muted);max-width:680px;margin:0 auto 1.5rem}.hero-sonnet .quick-stats{display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;margin-top:1rem}.hero-sonnet .stat{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.75rem 1.25rem;text-align:center}.hero-sonnet .stat .val{font-family:var(--font-mono);font-size:1.25rem;font-weight:700;color:#6aa9ff}.hero-sonnet .stat .lbl{font-size:.75rem;color:var(--c-muted);margin-top:.15rem}
+    .spec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.8rem;margin-bottom:1.5rem}.spec-item{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.9rem 1rem}.spec-item .spec-label{font-size:.75rem;color:var(--c-muted);font-weight:600;margin-bottom:.25rem}.spec-item .spec-value{font-family:var(--font-mono);font-size:1rem;font-weight:700}
+    .context-note{background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid #6aa9ff;border-radius:var(--r-md);padding:.8rem 1rem;margin:1rem 0;font-size:.84rem;color:var(--c-muted)}
+    .quote{margin:1rem 0;padding:.85rem 1rem;background:var(--c-surface2);border:1px solid var(--c-border);border-radius:var(--r-sm);font-size:.84rem;line-height:1.85;color:var(--c-muted)}
+    .quote em{color:var(--c-text);font-style:italic}.quote .who{display:block;margin-top:.45rem;font-size:.76rem;color:var(--c-muted)}
+    .fig-wrap{position:relative}.fig-fig{margin:1rem 0 1.4rem}.fig-fig svg{width:100%;height:auto;border:1px solid var(--c-border);border-radius:var(--r-md);background:var(--c-surface);display:block}
+    .fig-hint{display:none;font-size:.75rem;color:var(--c-muted);text-align:center;margin:.3rem 0 0}
+    @media (max-width:680px){.fig-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}.fig-scroll svg{min-width:600px}.fig-hint{display:block}}
+    @media(max-width:640px){.hero-sonnet .quick-stats{flex-direction:column;gap:.5rem}}
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="メインナビゲーション"><a href="/" class="nav-link">ホーム</a><a href="/pricing/" class="nav-link">料金比較</a><a href="/calculator/" class="nav-link">トークン計算機</a><a href="/timeline/" class="nav-link">リリース年表</a><a href="/china-ai/" class="nav-link">中国AI</a><a href="/multimodal/" class="nav-link">マルチモーダル</a><a href="/mai/" class="nav-link">MS AI (MAI)</a><a href="/glossary/" class="nav-link">用語説明</a></nav></div></header>
+
+<section class="hero-sonnet"><div class="container">
+  <p class="price-flag">🚀 2026年9月28日公開 — Claude 5.5世代のバランス型。入力・出力はSonnet 5と同額、キャッシュ読込は$0.20→$0.10に半減</p>
+  <h1>Claude <span>Sonnet 5.5</span></h1>
+  <p class="lead">Anthropicの「Claude 5.5ファミリー」2番目のモデル。公式ドキュメントは位置づけを<strong>「The best combination of speed and intelligence」</strong>と説明しています。料金は前世代 <a href="/pricing/">Sonnet 5</a> と<strong>同じ$2/$10</strong>で、世代だけが新しくなりました。</p>
+  <div class="quick-stats">
+    <div class="stat"><div class="val">$2.00</div><div class="lbl">入力 / 1M tokens</div></div>
+    <div class="stat"><div class="val">$10.00</div><div class="lbl">出力 / 1M tokens</div></div>
+    <div class="stat"><div class="val">1M</div><div class="lbl">コンテキスト</div></div>
+    <div class="stat"><div class="val">128K</div><div class="lbl">最大出力</div></div>
+  </div>
+</div></section>
+
+<main><div class="container">
+<div class="updated-bar" style="margin-top:2rem;"><span class="dot">●</span>最終更新: <time datetime="2026-10-09">2026年10月9日</time><br><span style="color:var(--c-yellow);">⚠️ 2026-10-09: キャッシュ読込の単価を $0.20 → $0.10 に訂正しました（公式料金ドキュメントで再確認）。</span> | 出典: <a href="https://platform.claude.com/docs/en/models/sonnet-5-5/overview" target="_blank" rel="noopener">Claude Platform Docs — Sonnet 5.5 overview</a> · <a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener">公式料金ドキュメント</a> | <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a> · <a href="/claude-opus-5-5/">Opus 5.5</a></div>
+
+<section class="section" style="padding-top:2rem;" aria-labelledby="tl-h">
+<h2 class="section-title" id="tl-h" style="font-size:1.2rem;">まず結論 — 何が新しいのか</h2>
+<div class="context-note" style="border-left-color:var(--c-green);">
+  <ul style="margin:0;padding-left:1.1rem;line-height:1.9;">
+    <li><strong>値下げではなく世代更新です。</strong>入力$2・出力$10は、前世代のClaude Sonnet 5（$2/$10）と<strong>同じ</strong>。Opus 5.5のように前世代より安くなったモデルとは性格が違います。</li><li><strong>ただしキャッシュ読込は$0.20→$0.10に半減しています。</strong>入力・出力の単価は前世代と同じですが、長い文脈を使い回すRAG・エージェント用途では実効コストが下がります（公式料金ページで2026-10-09に再確認）。</li>
+    <li><strong>仕様はOpus 5.5とほぼ同じ水準（当サイトの比較）。</strong>コンテキスト1M・最大出力128K・知識カットオフ2026年6月。上位モデルと同じ土俵です。</li>
+    <li><strong>thinkingは「Adaptive」で既定ON、既定エフォートは<code>high</code>。</strong>ただしOpus 5.5の「Adaptive (always on)」とは書き分けられており、Sonnet 5.5には<strong>事前思考を切る最低設定<code>between_tools</code></strong>が用意されています。</li>
+    <li><strong>公式ページにベンチマークの記載はありません。</strong>Opus 5.5の発表記事に載っていたベンチ表のような数値は、Sonnet 5.5の概要ページには<strong>見当たりません</strong>。当サイトでは数値を作らずに「未掲載」と書きます。</li>
+  </ul>
+</div>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="price-h">
+<h2 class="section-title" id="price-h" style="font-size:1.2rem;">料金（USD/1Mトークン・公式ドキュメント）</h2>
+<p class="section-sub">Sonnet 5.5の概要ページと公式料金ドキュメントで確認。当サイトの<a href="/pricing/">料金比較</a>と同じく「標準料金」ベースです。</p>
+<div class="table-wrap"><table><thead><tr><th>項目</th><th>Claude Sonnet 5.5</th><th>Claude Sonnet 5（前世代）</th><th>Claude Opus 5.5（上位）</th></tr></thead><tbody>
+<tr><td class="model-name">入力</td><td class="price">$2.00</td><td>$2.00</td><td>$4.00</td></tr>
+<tr><td class="model-name">出力</td><td class="price">$10.00</td><td>$10.00</td><td>$20.00</td></tr>
+<tr><td class="model-name">キャッシュ読込（cache hit）</td><td class="price">$0.10</td><td>$0.20</td><td>$0.20</td></tr>
+<tr><td class="model-name">キャッシュ書込（5分TTL）</td><td class="price">$2.50</td><td>$2.50</td><td>$5.00</td></tr>
+<tr><td class="model-name">キャッシュ書込（1時間TTL）</td><td class="price">$4.00</td><td>—</td><td>—</td></tr>
+</tbody></table></div>
+<p style="font-size:.78rem;color:var(--c-muted);margin-top:.3rem;">※ Sonnet 5 / Opus 5.5のキャッシュ単価は、当サイトの<a href="/pricing/">料金比較</a>に掲載している公式値に合わせています。Sonnet 5.5の1時間キャッシュ書込$4は概要ページに明記があり、Sonnet 5の同項目は当サイトでは未掲載のため「—」としています。</p>
+
+<h3 style="font-size:1rem;margin:1.6rem 0 .5rem;">公式が示しているキャッシュの一般ルール</h3>
+<div class="quote">
+  <em>“5-minute cache write | 1.25x base input price … 1-hour cache write | 2x base input price … Cache read (hit) | 0.1x base input price (0.025x on Claude Fable 5.1 and Claude Mythos 5.1; 0.05x on Claude Opus 5.5 and Claude Sonnet 5.5)”</em>
+  <span class="who">— Claude Platform Docs「Pricing」（2026-10-09 確認）</span>
+</div>
+<ul style="font-size:.86rem;color:var(--c-muted);padding-left:1.3em;line-height:1.9;">
+  <li><strong>Sonnet 5.5のキャッシュ読込は入力の5%（$0.10）で、標準の10%より深い割引です。</strong>公式の逐語は「0.05x on Claude Opus 5.5 and Claude Sonnet 5.5」。実額でも<strong>Fable 5.1の$0.25・Opus 5.5の$0.20より安い$0.10</strong>です。割引率の深さと実額の安さは別物なので、両方を見てください。</li>
+  <li><strong>Batch APIは入力・出力とも50%割引</strong>と公式ページに記載があります。</li>
+  <li><strong>米国限定推論は1.1倍。</strong>逐語:「For Claude 4.6 and later models, specifying US-only inference through the <code>inference_geo</code> parameter incurs a 1.1x multiplier on all token pricing categories, including input tokens, output tokens, cache writes, and cache reads.」</li>
+  <li><strong>提携プラットフォームは独自の地域価格。</strong>逐語:「Partner-operated platforms (Bedrock and Google Cloud) have independent regional pricing.」</li>
+</ul>
+<p class="source-note">一次情報: <a href="https://platform.claude.com/docs/en/models/sonnet-5-5/overview" target="_blank" rel="noopener">Sonnet 5.5 overview</a>（料金欄・2026-10-09確認）· <a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener">公式料金ドキュメント</a>（キャッシュ倍率・inference_geo・提携先価格）</p>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="fig-h">
+<h2 class="section-title" id="fig-h" style="font-size:1.2rem;">図: Claude 5.5世代の単価の位置関係</h2>
+<div class="fig-wrap">
+  <div class="fig-scroll">
+  <figure class="fig-fig" style="margin:0;">
+    <svg viewBox="0 0 640 250" role="img" aria-labelledby="sfig-t sfig-d" xmlns="http://www.w3.org/2000/svg">
+      <title id="sfig-t">Claude Sonnet 5.5・Sonnet 5・Opus 5.5・Fable 5.1の単価比較</title>
+      <desc id="sfig-d">入力と出力の単価を1MトークンあたりUSDで並べた横棒グラフ。Sonnet 5.5とSonnet 5は入力2ドル・出力10ドルで同額、Opus 5.5は入力4ドル・出力20ドル、Fable 5.1は入力10ドル・出力50ドル。</desc>
+      <g font-family="system-ui,Segoe UI,sans-serif" font-size="12.5" fill="#e6e6e6">
+        <text x="12" y="26" font-size="13" font-weight="700" fill="#6aa9ff">入力 $ / 1M tokens</text>
+        <rect x="150" y="12" width="60" height="18" rx="3" fill="#6aa9ff"/><text x="220" y="26" fill="#e6e6e6">Sonnet 5.5 &#8212; $2.00</text>
+        <rect x="150" y="36" width="60" height="18" rx="3" fill="#3d5f80"/><text x="220" y="50" fill="#9aa0aa">Sonnet 5 &#8212; $2.00（同額）</text>
+        <rect x="150" y="60" width="120" height="18" rx="3" fill="#d97757"/><text x="280" y="74" fill="#e6e6e6">Opus 5.5 &#8212; $4.00</text>
+        <rect x="150" y="84" width="300" height="18" rx="3" fill="#5f4a3e"/><text x="460" y="98" fill="#9aa0aa">Fable 5.1 &#8212; $10.00</text>
+        <text x="12" y="140" font-size="13" font-weight="700" fill="#6aa9ff">出力 $ / 1M tokens</text>
+        <rect x="150" y="126" width="39" height="18" rx="3" fill="#6aa9ff"/><text x="199" y="140" fill="#e6e6e6">Sonnet 5.5 &#8212; $10</text>
+        <rect x="150" y="150" width="39" height="18" rx="3" fill="#3d5f80"/><text x="199" y="164" fill="#9aa0aa">Sonnet 5 &#8212; $10（同額）</text>
+        <rect x="150" y="174" width="78" height="18" rx="3" fill="#d97757"/><text x="238" y="188" fill="#e6e6e6">Opus 5.5 &#8212; $20</text>
+        <rect x="150" y="198" width="196" height="18" rx="3" fill="#5f4a3e"/><text x="356" y="212" fill="#9aa0aa">Fable 5.1 &#8212; $50</text>
+      </g>
+    </svg>
+    <figcaption style="font-size:.78rem;color:var(--c-muted);margin-top:.5rem;">出典: Claude Platform Docs「Sonnet 5.5 overview」「Pricing」（2026-10-09確認）。棒の長さは入力$10・出力$50を基準に比例。数値は1MトークンあたりUSD。Sonnet 5.5は<strong>入力・出力とも前世代Sonnet 5と同額</strong>です（キャッシュ読込はSonnet 5の$0.20から$0.10へ半減。棒グラフは入力・出力の単価のみを比較しています）。</figcaption>
+  </figure>
+  </div>
+  <p class="fig-hint">← 横にスクロールできます →</p>
+</div>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="spec-h">
+<h2 class="section-title" id="spec-h" style="font-size:1.2rem;">モデル仕様（公式ドキュメントの逐語から）</h2>
+<div class="spec-grid">
+  <div class="spec-item"><div class="spec-label">公開日</div><div class="spec-value">2026-09-28</div></div>
+  <div class="spec-item"><div class="spec-label">コンテキスト</div><div class="spec-value">1M tokens</div></div>
+  <div class="spec-item"><div class="spec-label">最大出力</div><div class="spec-value">128K tokens</div></div>
+  <div class="spec-item"><div class="spec-label">知識カットオフ</div><div class="spec-value">2026年6月</div></div>
+  <div class="spec-item"><div class="spec-label">思考モード</div><div class="spec-value">Adaptive（既定ON）</div></div>
+  <div class="spec-item"><div class="spec-label">既定エフォート</div><div class="spec-value">high</div></div>
+  <div class="spec-item"><div class="spec-label">ステータス</div><div class="spec-value">Active (latest)</div></div>
+  <div class="spec-item"><div class="spec-label">モデルID（Claude API）</div><div class="spec-value" style="font-size:.85rem;">claude-sonnet-5-5</div></div>
+</div>
+<p class="section-sub">公式ページの一覧表は次の1行です（逐語）。</p>
+<div class="quote">
+  <em>“| Claude Sonnet 5.5 | 1M | 128K | $2 / $10 | Fast | Adaptive | high | Jun 2026 |”</em>
+  <span class="who">— 列は Context / Max output / Price / MTok / Latency / Thinking / Default effort / Knowledge cutoff（2026-10-09確認）</span>
+</div>
+<p class="source-note">出典: <a href="https://platform.claude.com/docs/en/models/sonnet-5-5/overview" target="_blank" rel="noopener">Claude Platform Docs「Claude Sonnet 5.5」</a>（Released September 28, 2026 / Context 1M / Max output 128K / Reliable knowledge cutoff Jun 2026 / Training data cutoff Jun 2026 / Availability: Active (latest)）</p>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="prov-h">
+<h2 class="section-title" id="prov-h" style="font-size:1.2rem;">提供プラットフォームとモデルID</h2>
+<p class="section-sub">同じモデルでも、呼び出し名（モデルID）はプラットフォームごとに違います。公式ページの記載をそのまま並べます。</p>
+<div class="table-wrap"><table><thead><tr><th>プラットフォーム</th><th>モデルID</th></tr></thead><tbody>
+<tr><td class="model-name">Claude API</td><td><code>claude-sonnet-5-5</code></td></tr>
+<tr><td class="model-name">Amazon Bedrock</td><td><code>anthropic.claude-sonnet-5-5</code></td></tr>
+<tr><td class="model-name">Google Cloud (Vertex AI)</td><td><code>claude-sonnet-5-5</code></td></tr>
+<tr><td class="model-name">Microsoft Foundry</td><td><code>claude-sonnet-5-5</code></td></tr>
+<tr><td class="model-name">Claude Platform on AWS</td><td><code>claude-sonnet-5-5</code></td></tr>
+</tbody></table></div>
+<div class="context-note" style="border-left-color:var(--c-yellow);">
+  ⚠️ <strong>気をつける点:</strong> Amazon Bedrockだけ<code>anthropic.</code>接頭辞が付きます。<strong>提供プラットフォームごとにデータの扱い（保持・学習・所在）が変わります。</strong>同じモデルIDでも「Anthropic直販」と「Bedrock経由」では契約条件が別物です。この整理は<a href="/glossary/four-data-requirements/">用語説明 第8回「データの4要件」</a>と<a href="/glossary/zero-operator-access/">第9回「ZOA」</a>にまとめています。
+</div>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="think-h">
+<h2 class="section-title" id="think-h" style="font-size:1.2rem;">thinking の扱い — Opus 5.5と書き分けられている</h2>
+<p class="section-sub">Sonnet 5.5の概要ページには、thinkingについて次の逐語があります。</p>
+<div class="quote">
+  <em>“Adaptive thinking is on by default. The lowest thinking setting is <code>between_tools</code>, which turns off up-front thinking. It works at <code>high</code> effort or below.”</em>
+  <span class="who">— Claude Platform Docs「Claude Sonnet 5.5」（2026-10-09確認）</span>
+</div>
+<div class="table-wrap"><table><thead><tr><th>項目</th><th>Claude Sonnet 5.5</th><th>Claude Opus 5.5</th></tr></thead><tbody>
+<tr><td class="model-name">thinkingの記載</td><td>Adaptive</td><td>Adaptive (always on)</td></tr>
+<tr><td class="model-name">既定エフォート</td><td>high</td><td>medium</td></tr>
+<tr><td class="model-name">事前思考を切れるか</td><td><strong>切れる</strong>（最低設定<code>between_tools</code>でup-front thinkingがオフ。high以下のエフォートで動作）</td><td><strong>切れない</strong>（当サイトの<a href="/claude-opus-5-5/">Opus 5.5解説</a>で扱った「thinking can't be disabled」）</td></tr>
+</tbody></table></div>
+<div class="context-note">
+  🔍 <strong>読み方:</strong> 同じ「Adaptive」でも、Sonnet 5.5には<strong>思考を減らす逃げ道</strong>があり、Opus 5.5にはありません。単純なタスクを大量に流す用途では、この差が出力トークン量＝コストに効きます。「Sonnetの方が安い」理由は単価だけではない、という点に注意してください。
+</div>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="unk-h">
+<h2 class="section-title" id="unk-h" style="font-size:1.2rem;">公式で確認できなかった項目（推測値は載せていません）</h2>
+<p class="section-sub">当サイトの方針どおり、<strong>一次情報で確認できなかった項目は「未確認」と明記</strong>します。数値を推定して書くことはしません。</p>
+<div class="table-wrap"><table><thead><tr><th>項目</th><th>状態</th><th>補足</th></tr></thead><tbody>
+<tr><td class="model-name">ベンチマーク数値</td><td><strong>未確認</strong></td><td>Sonnet 5.5の概要ページにベンチ表・数値は見当たりません（Opus 5.5は発表記事に9項目の表がありました）。</td></tr>
+<tr><td class="model-name">提供リージョンの一覧</td><td><strong>未確認</strong></td><td>概要ページの記載は「Availability: Status = Active (latest)」のみ。米国限定推論（<code>inference_geo</code>）の1.1倍と「Bedrock / Google Cloudは独自の地域価格」までが確認範囲です。</td></tr>
+<tr><td class="model-name">レート制限・利用ティア</td><td><strong>未確認</strong></td><td>概要ページに記載が見当たりません。</td></tr>
+<tr><td class="model-name">期間限定価格・導入価格</td><td><strong>未確認</strong></td><td>記載が無いため、$2/$10は標準価格として扱っています（前世代Sonnet 5と同額）。</td></tr>
+<tr><td class="model-name">Sonnet 5.5でのZDR / ZOAの提供条件</td><td><strong>未確認</strong></td><td>モデル別の保持条件（Covered Models等）はモデル概要ページには書かれていません。<a href="/glossary/zero-operator-access/">ZOAの解説</a>でベンダー別の確認先を示しています。</td></tr>
+</tbody></table></div>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="rel-h">
+<h2 class="section-title" id="rel-h" style="font-size:1.2rem;">既存ページとの関係（当サイト内）</h2>
+<div class="table-wrap"><table><thead><tr><th>モデル</th><th>当サイトの扱い</th><th>関係</th></tr></thead><tbody>
+<tr><td class="model-name"><a href="/claude-opus-5-5/">Claude Opus 5.5</a></td><td>個別ページあり</td><td><strong>上位・高価</strong>（$4/$20、既定エフォートmedium、thinkingは常時オン）。Sonnet 5.5はその下の位置づけで、単価は半分です。</td></tr>
+<tr><td class="model-name">Claude Sonnet 5</td><td><a href="/pricing/">料金比較</a>に掲載</td><td><strong>前世代。単価はSonnet 5.5と同じ$2/$10。</strong>「安くなった」のではなく「同額で世代が上がった」のがポイントです。</td></tr>
+<tr><td class="model-name"><a href="/claude-fable-5-1/">Claude Fable 5.1</a> / <a href="/claude-mythos-5-1/">Mythos 5.1</a></td><td>個別ページあり</td><td>上位フラッグシップ（$10/$50）。Sonnet 5.5はこの下の汎用枠です。</td></tr>
+<tr><td class="model-name"><a href="/claude-haiku-5-5/">Claude Haiku 5.5</a></td><td>個別ページあり</td><td>Claude 5.5世代の最速・最安モデル。<strong>2026年10月7日に公開</strong>され、当サイトも個別ページを用意しました（$0.10/$0.50、100kトークン超は$0.50/$2.50）。</td></tr>
+</tbody></table></div>
+<p class="source-note">出典: <a href="https://www.anthropic.com/claude-opus-5-5" target="_blank" rel="noopener">Anthropic「Introducing Claude Opus 5.5」</a>（Sonnet 5.5 / Haiku 5.5 は "will follow in the coming weeks"）· <a href="https://platform.claude.com/docs/en/models/sonnet-5-5/overview" target="_blank" rel="noopener">Sonnet 5.5 overview</a></p>
+</section>
+
+<section class="section" style="padding-top:0;" aria-labelledby="use-h">
+<h2 class="section-title" id="use-h" style="font-size:1.2rem;">向いている場面 / 注意すべき場面</h2>
+<div class="tip-box">
+  <ul>
+    <li><strong>コストを抑えた大量処理:</strong> 入力$2・キャッシュ読込$0.10は、1Mコンテキスト級のモデルとしては低い側です（当サイトの比較結果）（当サイトの料金比較に掲載しているモデルとの比較）。長い文脈を繰り返し送るRAGやエージェントでも単価が効きます。</li>
+    <li><strong>thinkingを絞りたい処理:</strong> <code>between_tools</code>まで下げられるので、分類・抽出のような単純作業で出力トークンを抑えられます。Opus 5.5ではできない芸当です。</li>
+    <li><strong>「Sonnet 5から乗り換える」場合:</strong> 単価は同じなので、乗り換えの判断材料は<strong>性能と出力トークン量</strong>になります。ただしSonnet 5.5の<strong>ベンチマークは公式に未掲載</strong>なので、数値比較はできません。自前の評価セットでの確認を推奨します。</li>
+    <li><strong>監査・契約が絡む用途:</strong> ZDR / ZOA / 学習条項 / データ所在はモデル概要ページには書かれていません。<a href="/glossary/zero-operator-access/">ZOA</a>・<a href="/glossary/four-data-requirements/">4要件</a>の各ページで、ベンダー別の確認先を先に押さえてください。</li>
+    <li><strong>速度優先の用途:</strong> 公式表のLatencyは<strong>Fast</strong>（Opus 5.5はModerate）と記載されています。ただし具体的なレイテンシ値・スループットの数値は未確認です。</li>
+  </ul>
+</div>
+</section>
+
+<section class="section" style="padding-top:0;">
+<div style="background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid #6aa9ff;border-radius:var(--r-lg);padding:1.5rem;text-align:center;">
+  <h3 style="font-size:1.1rem;margin-bottom:.75rem;">実際のコストを試算する</h3>
+  <p style="color:var(--c-muted);font-size:.9rem;margin-bottom:1rem;">Claude Sonnet 5.5を含む主要モデルのトークンコストを一括計算できます。</p>
+  <a href="/calculator/" style="display:inline-block;background:var(--c-accent);color:#fff;font-weight:600;padding:.65rem 1.5rem;border-radius:var(--r-md);">🧮 トークン計算機で試算する →</a>
+  <p style="margin-top:.8rem;font-size:.82rem;color:var(--c-muted);"><a href="/pricing/">📊 全モデル料金比較</a> · <a href="/claude-opus-5-5/">🤖 Opus 5.5 詳細</a> · <a href="/claude-fable-5-1/">🚀 Fable 5.1</a> · <a href="/glossary/zero-operator-access/">🔐 ZOA（見られない）</a> · <a href="/timeline/">🗓️ リリース年表</a></p>
+</div>
+</section>
+
+<div class="tip-box" style="border-left-color:var(--c-red);margin-bottom:2rem;">
+  <h3>⚠️ 免責事項</h3>
+  <ul>
+    <li>料金・仕様はAnthropicの公式ドキュメント（Claude Platform Docs「Sonnet 5.5 overview」「Pricing」）を<strong>2026-10-09</strong>に確認したものです。予告なく変動します。契約前に必ず公式ページをご確認ください。</li>
+    <li>本ページにはベンチマーク数値を掲載していません。<strong>公式ページに掲載が無いため</strong>で、当サイトが数値を推定・転載することはしません。</li>
+    <li><strong>「未確認」とした項目</strong>（提供リージョン・レート制限・期間限定価格・モデル別のデータ保持条件）は、確認でき次第このページを更新します。</li>
+    <li>本サイトは情報提供目的であり、特定プロバイダーの推薦・代理ではありません。</li>
+  </ul>
+</div>
+
+</div></main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>運営: okamoちゃんねる</p><p><a href="/">ホーム</a> · <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a> · <a href="/timeline/">年表</a> · <a href="/claude-opus-5-5/">Claude Opus 5.5</a> · <a href="/claude-fable-5-1/">Claude Fable 5.1</a> · <a href="/glossary/zero-operator-access/">ZOA</a></p></div><p class="footer-disclaimer">⚠️ 料金・仕様は予告なく変動します。契約前に必ず各社公式ページでご確認ください。本サイトは各社と提携していません。</p></div></footer>
+</body>
+</html>

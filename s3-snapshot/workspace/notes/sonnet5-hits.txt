@@ -1,0 +1,34 @@
+=== claude-sonnet-5-5/index.html | Sonnet 5と同額
+'itle>\n  <meta name="description" content="Anthropic Claude Sonnet 5.5の料金（入力$2・出力$10・キャッシュ読込$0.10・5分キャッシュ書込$2.50）・1Mコンテキスト・128K出力・thinking（Adaptive／既定high）を公式ドキュメントの逐語で解説。Sonnet 5と同額で世代更新された点、Opus 5.5との違い、提供5プラットフォームのモデルID一覧を掲載。2026年9月28日公開。2026年10月9日更新。">\n  <link rel="canonical" href="https://llm.okamomedia.to'
+=== claude-sonnet-5-5/index.html | Sonnet 5と同額
+'eta property="og:title" content="Claude Sonnet 5.5 — Claude 5.5世代のバランス型">\n  <meta property="og:description" content="入力$2・出力$10・キャッシュ読込$0.10・1Mコンテキスト（2026年10月9日更新）。入力と出力はSonnet 5と同額、キャッシュ読込は$0.20から半減。Opus 5.5との違いと提供先5つのモデルIDを一次情報で整理。">\n  <meta property="og:site_name" content="LLM Data Hub">\n  <meta name="twitt'
+=== claude-sonnet-5-5/index.html | Sonnet 5と同額
+'ossary/" class="nav-link">用語説明</a></nav></div></header>\n\n<section class="hero-sonnet"><div class="container">\n  <p class="price-flag">🚀 2026年9月28日公開 — Claude 5.5世代のバランス型。Sonnet 5と同額で世代更新</p>\n  <h1>Claude <span>Sonnet 5.5</span></h1>\n  <p class="lead">Anthropicの「Claude 5.5ファミリー」2番目のモデル。公式ドキュメントは位置づけを<strong>「Th'
+=== claude-sonnet-5-5/index.html | Sonnet 5と同額
+'ar(--c-muted);margin-top:.5rem;">出典: Claude Platform Docs「Sonnet 5.5 overview」「Pricing」（2026-10-09確認）。棒の長さは入力$10・出力$50を基準に比例。数値は1MトークンあたりUSD。Sonnet 5.5は<strong>入力・出力とも前世代Sonnet 5と同額</strong>で、値下げではなく世代交代であることが読み取れます。</figcaption>\n  </figure>\n  </div>\n  <p class="fig-hint">← 横にスクロールできます →</p>\n</div>\n</section>\n'
+=== claude-sonnet-5-5/index.html | Sonnet 5と同額
+'><td><strong>未確認</strong></td><td>概要ページに記載が見当たりません。</td></tr>\n<tr><td class="model-name">期間限定価格・導入価格</td><td><strong>未確認</strong></td><td>記載が無いため、$2/$10は標準価格として扱っています（前世代Sonnet 5と同額）。</td></tr>\n<tr><td class="model-name">Sonnet 5.5でのZDR / ZOAの提供条件</td><td><strong>未確認</strong></td><td>モデル別の保持条件（Covered Models等）'
+=== claude-sonnet-5-5/index.html | 同額で世代更新
+'meta name="description" content="Anthropic Claude Sonnet 5.5の料金（入力$2・出力$10・キャッシュ読込$0.10・5分キャッシュ書込$2.50）・1Mコンテキスト・128K出力・thinking（Adaptive／既定high）を公式ドキュメントの逐語で解説。Sonnet 5と同額で世代更新された点、Opus 5.5との違い、提供5プラットフォームのモデルID一覧を掲載。2026年9月28日公開。2026年10月9日更新。">\n  <link rel="canonical" href="https://llm.okamomedia.tokyo/c'
+=== claude-sonnet-5-5/index.html | 同額で世代更新
+'class="nav-link">用語説明</a></nav></div></header>\n\n<section class="hero-sonnet"><div class="container">\n  <p class="price-flag">🚀 2026年9月28日公開 — Claude 5.5世代のバランス型。Sonnet 5と同額で世代更新</p>\n  <h1>Claude <span>Sonnet 5.5</span></h1>\n  <p class="lead">Anthropicの「Claude 5.5ファミリー」2番目のモデル。公式ドキュメントは位置づけを<strong>「The bes'
+=== en/claude-sonnet-5-5/index.html | Same price as Sonnet 5
+' — The Balanced Model of the Claude 5.5 Family">\n  <meta property="og:description" content="$2 input / $10 output, 1M context, 128K max output (updated October 9, 2026). Same price as Sonnet 5 — a generation update, not a price cut. Differences from Opus 5.5 and all five platform model IDs, from primary sources.">\n  <met'
+=== en/claude-sonnet-5-5/index.html | Same price as Sonnet 5
+'/div></header>\n\n<section class="hero-sonnet"><div class="container">\n  <p class="price-flag">🚀 Released September 28, 2026 — the balanced model of the Claude 5.5 family. Same price as Sonnet 5.</p>\n  <h1>Claude <span>Sonnet 5.5</span></h1>\n  <p class="lead">The second model in Anthropic\'s Claude 5.5 family. The official '
+=== en/claude-sonnet-5-5/index.html | identical to the previous-generation Sonnet 5
+'ude Sonnet 5.5: $2 input / $10 output, $0.10 cache reads, 1M context, 128K max output, adaptive thinking with a default effort of high. Includes the fact that pricing is identical to the previous-generation Sonnet 5 and the model ID on each of the five platforms. Updated October 1, 2026.">\n  <link rel="canonical" href="https://llm.okamomedia.t'
+=== en/claude-sonnet-5-5/index.html | identical to the previous-generation Sonnet 5
+'The second model in Anthropic\'s Claude 5.5 family. The official docs describe it as <strong>"The best combination of speed and intelligence."</strong> Pricing is <strong>identical to the previous-generation Sonnet 5</strong> at $2 / $10 — the generation changed, the price did not.</p>\n  <div class="quick-stats">\n    <div class="stat"><div clas'
+=== en/claude-sonnet-5-5/index.html | a generation update, not a price cut
+'the Claude 5.5 Family">\n  <meta property="og:description" content="$2 input / $10 output, 1M context, 128K max output (updated October 9, 2026). Same price as Sonnet 5 — a generation update, not a price cut. Differences from Opus 5.5 and all five platform model IDs, from primary sources.">\n  <meta property="og:site_name" content="LLM '
+=== en/claude-sonnet-5-5/index.html | a generation update, not a price cut
+'rt version</h2>\n<div class="context-note" style="border-left-color:var(--c-green);">\n  <ul style="margin:0;padding-left:1.1rem;line-height:1.9;">\n    <li><strong>This is a generation update, not a price cut.</strong> $2 input / $10 output is <strong>the same</strong> as the previous-generation Claude Sonnet 5. Unlike Opus 5.5, this mo'
+=== en/pricing/index.html | Same price as Sonnet 5
+':.7rem;">New</span></td><td class="price">$2.00</td><td class="price">$2.50</td><td class="price">$0.10</td><td class="price">$10.00</td><td>Released 2026-09-28. <strong>Same price as Sonnet 5</strong> (cache reads corrected from $0.20 to $0.10 on 2026-10-09 after checking the official page) (generation update). <a href='
+=== index.html | Sonnet 5と同額
+'icle class="card"><div class="card-icon">🚀</div><h3 class="card-title">Claude Sonnet 5.5 — Claude 5.5世代のバランス型</h3><p class="card-desc">2026-09-28公開。入力$2・出力$10は<strong>前世代Sonnet 5と同額</strong>、キャッシュ読込は入力の5%（<strong>$0.10</strong>）でSonnet 5の$0.20から半減（公式の逐語は「0.05x on Claude Opus 5.5 and Claude Sonnet 5.5」）。1Mコンテキス'
+=== pricing/index.html | Sonnet 5と同額
+'09-01 JST）。<strong>Claude Fable 5.1/Mythos 5.1（2026-09-01公開）を反映。Fable 5.1は$10/$50・キャッシュ読込$0.25（Fable 5の$1.00から75%減）。</strong>Claude Sonnet 5.5（2026-09-28公開）を追加。$2/$10は前世代Sonnet 5と同額ですが、<strong>キャッシュ読込は$0.20→$0.10（入力の5%）に半減</strong>。5分キャッシュ書込$2.50・1時間$4です。Claude Sonnet 5の$2/$10は導入価格から恒久化（2026-08-10発表）。<a href="'
+=== timeline/index.html | Sonnet 5と同額
+'dge-new" style="font-size:.7rem;">New</span></h2><p class="tl-desc">AnthropicのClaude 5.5ファミリー2番目のモデル。公式の説明は「The best combination of speed and intelligence」。入力$2・出力$10は前世代Sonnet 5と同額、キャッシュ読込は入力の5%（<strong>$0.10</strong>）でSonnet 5の$0.20から半減。5分キャッシュ書込$2.50・1時間$4。1Mコンテキスト・128K出力・知識カットオフ2026年6月。thinkingはAdaptiveで既定'

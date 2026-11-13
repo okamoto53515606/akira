@@ -3,19 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Zero Data Retention (ZDR) Explained — Three Catch Points [Glossary #7] — LLM Data Hub</title>
-  <meta name="description" content="Zero data retention (ZDR) explained: why &quot;not stored&quot; is not &quot;always on&quot;, AWS Bedrock&#39;s four retention modes and their published exception lists, and how OpenAI, Anthropic, Google and Microsoft grant ZDR — quoted from their own documentation.">
+  <title>Zero Data Retention (ZDR): What It Covers, What It Doesn't (2026) | LLM Data Hub</title>
+  <meta name="description" content="ZDR means a provider does not store your prompts or outputs after the response — but retention is still required for some models. How ZDR differs from ZOA and from &quot;not used for training&quot;, which providers grant it by default vs. by gate, and the exception lists, quoted from official docs.">
   <link rel="canonical" href="https://llm.okamomedia.tokyo/en/glossary/zero-data-retention/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta property="og:image" content="https://llm.okamomedia.tokyo/assets/og/en-zdr.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Zero data retention explained in three layers: not retained, not viewable, explicit flag">
+  <meta name="twitter:image" content="https://llm.okamomedia.tokyo/assets/og/en-zdr.png">
+  <meta name="twitter:image:alt" content="Zero data retention explained in three layers: not retained, not viewable, explicit flag">
   <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/glossary/zero-data-retention/">
   <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/glossary/zero-data-retention/">
   <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/glossary/zero-data-retention/">
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://llm.okamomedia.tokyo/en/glossary/zero-data-retention/">
-  <meta property="og:title" content="Zero Data Retention (ZDR) Explained — Three Catch Points">
-  <meta property="og:description" content="ZDR is a default, not always-on: exception models, explicit settings, and how it differs from ZOA and from training exclusion, across five providers (updated Sept 27, 2026).">
+  <meta property="og:title" content="Zero Data Retention (ZDR): What It Covers, What It Doesn't (2026)">
+  <meta property="og:description" content="ZDR means a provider does not store your prompts or outputs after the response — but retention is still required for some models. How ZDR differs from ZOA and from &quot;not used for training&quot;, which providers grant it by default vs. by gate, and the exception lists, quoted from official docs.">
   <meta property="og:site_name" content="LLM Data Hub">
-  <meta name="twitter:card" content="summary">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Zero Data Retention (ZDR) Explained — Three Catch Points [Glossary #7]","datePublished":"2026-09-27","dateModified":"2026-09-27","author":{"@type":"Organization","name":"LLM Data Hub"},"publisher":{"@type":"Organization","name":"okamo channel"},"url":"https://llm.okamomedia.tokyo/en/glossary/zero-data-retention/","inLanguage":"en"}</script>
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Zero Data Retention (ZDR) Explained — Three Catch Points [Glossary #7]","datePublished":"2026-09-27","dateModified":"2026-10-09","author":{"@type":"Organization","name":"LLM Data Hub"},"publisher":{"@type":"Organization","name":"okamo channel"},"url":"https://llm.okamomedia.tokyo/en/glossary/zero-data-retention/","inLanguage":"en"}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://llm.okamomedia.tokyo/en/"},{"@type":"ListItem","position":2,"name":"Glossary","item":"https://llm.okamomedia.tokyo/en/glossary/"},{"@type":"ListItem","position":3,"name":"Zero data retention (ZDR)","item":"https://llm.okamomedia.tokyo/en/glossary/zero-data-retention/"}]}</script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
@@ -51,6 +59,7 @@
 <header class="site-header"><div class="header-inner"><a href="/en/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="Main navigation"><a href="/en/" class="nav-link">Home</a><a href="/en/pricing/" class="nav-link">Pricing</a><a href="/en/calculator/" class="nav-link">Token Calculator</a><a href="/en/timeline/" class="nav-link">Release Timeline</a><a href="/en/china-ai/" class="nav-link">China AI</a><a href="/en/multimodal/" class="nav-link">Multimodal</a><a href="/en/mai/" class="nav-link">MS AI (MAI)</a><a href="/en/glossary/" class="nav-link active" aria-current="page">Glossary</a></nav></div></header>
 
 <main><div class="container">
+<figure class="key-visual" style="margin:1.5rem 0 .5rem;"><img src="/assets/og/en-zdr.png" alt="Zero data retention explained in three layers: not retained, not viewable, explicit flag" width="1200" height="630" loading="eager" decoding="async" style="width:100%;max-width:900px;height:auto;display:block;margin:0 auto;border:1px solid var(--c-border);border-radius:var(--r-md);"></figure>
   <div class="section" style="padding-bottom:0;">
     <h1 class="section-title" style="font-size:1.55rem;">Zero Data Retention (ZDR) Explained — Three Catch Points</h1>
     <p class="section-sub" style="max-width:780px;">
@@ -64,7 +73,7 @@
     </div>
     <div class="updated-bar">
       <span class="dot">●</span>
-      Last updated: <time datetime="2026-09-27">September 27, 2026</time>
+      Last updated: <time datetime="2026-10-09">October 9, 2026</time>
       &ensp;|&ensp; Policy: we publish only what we verified verbatim in vendor documentation. No “it is generally understood that” here
     </div>
   </div>
@@ -277,7 +286,7 @@
       <li>Google AI for Developers, “Zero data retention in the Gemini Developer API” (points to Vertex AI; in-memory caching) — <a href="https://ai.google.dev/gemini-api/docs/zdr" target="_blank" rel="noopener">ai.google.dev/gemini-api/docs/zdr</a></li>
       <li>Microsoft Learn, “Data, privacy, and security for Foundry Models sold by Azure in Microsoft Foundry” (modified abuse monitoring) — <a href="https://learn.microsoft.com/en-us/azure/foundry/responsible-ai/openai/data-privacy" target="_blank" rel="noopener">learn.microsoft.com/.../openai/data-privacy</a></li>
     </ul>
-    <p style="font-size:.8rem;color:var(--c-muted);margin-top:.6rem;">Related: <a href="/en/glossary/">Glossary index</a> · <a href="/en/china-ai/">China AI (Bedrock data handling note)</a> · <a href="/en/glossary/harness/">Harness (#3)</a> · <a href="/en/glossary/benchmarks/">What benchmarks are (#5)</a> · <a href="/en/glossary/benchmark-orgs/">Who operates the benchmarks (#6)</a> · <a href="/en/glossary/prompt-cache/">Prompt cache (#2)</a></p>
+    <p style="font-size:.8rem;color:var(--c-muted);margin-top:.6rem;">Related: <a href="/en/glossary/">Glossary index</a> · <a href="/en/china-ai/">China AI (Bedrock data handling note)</a> · <a href="/en/glossary/harness/">Harness (#3)</a> · <a href="/en/glossary/benchmarks/">What benchmarks are (#5)</a> · <a href="/en/glossary/benchmark-orgs/">Who operates the benchmarks (#6)</a> · <a href="/en/glossary/four-data-requirements/">The four data requirements (#8)</a> · <a href="/en/glossary/zero-operator-access/">ZOA (#9)</a> · <a href="/en/glossary/no-training/">No-training (#10)</a> · <a href="/en/glossary/data-residency/">Data residency (#11)</a> · <a href="/en/glossary/prompt-cache/">Prompt cache (#2)</a></p>
   </section>
 
   <div class="tip-box" style="border-left-color:var(--c-red);margin-bottom:2rem;">

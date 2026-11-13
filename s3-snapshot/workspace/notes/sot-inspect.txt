@@ -1,0 +1,6 @@
+top keys: ['schema_note', 'site', 'last_verified', 'sources', 'models', 'stale_price_patterns', 'stale_policy', 'current_price_signatures', 'current_price_signatures_note', 'family_needles', 'mai_image_pricing', 'prompt_caching']
+{"schema_note": "LLM Data Hub の料金データ単一の真実（SOT）。HTMLの料金表・ページ本文を更新したら必ずここも更新し、tools/verify_price_consistency.py でサイト全体を検証する。金額はすべて USD / 1Mトークン。", "site": "https://llm.okamomedia.tokyo", "last_verified": "2026-10-01", "sources": {"deepseek_pricing": "https://api-docs.deepseek.com/quick_start/pricing", "deepseek_news": "https://api-docs.deepseek.com/news/news260910", "deepseek_updates": "https://api-docs.deepseek.com/updates/", "xai_pricing": "https://docs.x.ai/developers/pricing", "anthropic_opus55": "https://www.anthropic.com/claude-opus-5-5", "openai_gpt6": "https://openai.com/index/introducing-gpt-6-sol-and-luna/", "moonshot_kimi_k3": "https://platform.kimi.ai/docs/pricing/chat-k3", "xiaomi_mimo_v26": "https://mimo.xiaomi.com/mimo-v2-6", "xiaomi_mimo_model_page": "https://mimo.mi.com/models/en-US/mimo-v2.6-flash"}, "stale_price_patterns": ["$0.14", "$0.28", "$0.22", "$0.44", "$0.87", "$
+n: 12
+Traceback (most recent call last):
+  File "<stdin>", line 7, in <module>
+KeyError: 0

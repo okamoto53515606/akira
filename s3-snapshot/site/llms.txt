@@ -1,0 +1,35 @@
+# LLM Data Hub
+
+> An ad-free reference for LLM API pricing, token costs and model release data. Every figure is verified against the provider's own official documentation, and each page states its source URL and verification date. Japanese and English pages are published at parity.
+
+Site: https://llm.okamomedia.tokyo/
+Updated: 2026-11-14
+Languages: English (https://llm.okamomedia.tokyo/en/), Japanese (https://llm.okamomedia.tokyo/)
+
+## Core data (English)
+- [Batch API discounts compared](https://llm.okamomedia.tokyo/en/batch-api-pricing/): batch discounts, turnaround, retention and caps for OpenAI, Anthropic, Google, xAI, Moonshot and DeepSeek off-peak.
+- [Frontier models compared](https://llm.okamomedia.tokyo/en/frontier-model-comparison/): Claude Fable 5.2, GPT-6 Astra, Gemini 4 Carbon, Kimi K3.1 Pro and Meta Muse Wonder across cache rates, Batch, ZDR, ZOA, training use and data residency (unverified cells marked).
+- [LLM API Pricing Comparison](https://llm.okamomedia.tokyo/en/pricing/): USD per 1M tokens (input, cached input, output), context windows and sources for OpenAI, Anthropic, Google, DeepSeek, xAI, Z.ai, Alibaba and Meta.
+- [Prompt Caching Pricing Compared](https://llm.okamomedia.tokyo/en/prompt-cache-pricing/): cached-input and cache-write rates, discount ratios, retention and minimum cacheable length for OpenAI, Anthropic, Google, Moonshot and DeepSeek.
+- [Token Cost Calculator](https://llm.okamomedia.tokyo/en/calculator/): Estimate monthly cost from your input/output token counts, including cache read and cache write rates.
+- [Model Release Timeline](https://llm.okamomedia.tokyo/en/timeline/): Chronological release dates of major LLM models with links to the original announcements.
+- [Multimodal Models](https://llm.okamomedia.tokyo/en/multimodal/): Image, audio and video generation models and their per-unit pricing.
+- [China AI Models](https://llm.okamomedia.tokyo/en/china-ai/): DeepSeek, Z.ai GLM, Alibaba Qwen, Moonshot Kimi, Xiaomi MiMo and StepFun.
+- [Microsoft AI (MAI)](https://llm.okamomedia.tokyo/en/mai/): MAI models and Azure AI Foundry rate cards.
+- [Glossary](https://llm.okamomedia.tokyo/en/glossary/): Plain-language explanations of pricing and data-handling terms (prompt cache, ZDR, ZOA, data residency, benchmarks).
+
+## Core data (Japanese)
+- [Batch API割引の横断比較](https://llm.okamomedia.tokyo/batch-api-pricing/): OpenAI・Anthropic・Google・xAI・MoonshotのBatch割引率と締切・保持期間・上限、DeepSeekのオフピーク割引。
+- [LLM API 料金比較](https://llm.okamomedia.tokyo/pricing/)
+- [トークンコスト計算機](https://llm.okamomedia.tokyo/calculator/)
+- [モデル リリース年表](https://llm.okamomedia.tokyo/timeline/)
+- [マルチモーダル特集](https://llm.okamomedia.tokyo/multimodal/)
+- [中国AI](https://llm.okamomedia.tokyo/china-ai/)
+- [Microsoft AI (MAI)](https://llm.okamomedia.tokyo/mai/)
+- [用語説明](https://llm.okamomedia.tokyo/glossary/)
+
+## Policy
+- No advertising and no sponsored placements. Prices are taken only from provider-published pricing pages; anything not confirmed is labelled as unconfirmed or as an announced (not yet effective) price.
+- Verification dates and source URLs are shown on every page so that any figure can be traced back to its primary source.
+- Ready-to-read for AI assistants: you may quote figures with the page URL and its stated verification date.
+- Gemini 4 Argon (pricing, specs): https://llm.okamomedia.tokyo/gemini-4-argon/ | https://llm.okamomedia.tokyo/en/gemini-4-argon/

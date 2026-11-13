@@ -3,9 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>DeepSeek V4.1 Flash 実践ガイド【料金・ベンチマーク・Azure AI Foundry／GitHub Copilot 導入手順・FAQ】 — LLM Data Hub</title>
-  <meta name="description" content="2026-09-10登場のDeepSeek V4.1 Flash（deepseek-flash）を一次情報で解説。公式料金（オフピーク$0.15/$0.60・ピーク$0.30/$1.20・cache hit $0.003）、1Mコンテキスト・384K出力・ネイティブ画像入力、公式ベンチマーク、VS Code GitHub Copilot Chatの導入手順、Azure AI Foundry（Microsoft Foundry）でDeepSeek-V4-Flash-0731をデプロイするAzure CLI手順、FAQを収録。">
+  <title>DeepSeek V4.1 Flash のAzureデプロイ手順と料金【az CLI実測・$0.15/$0.60】 — LLM Data Hub</title>
+  <meta name="description" content="DeepSeek V4.1 Flash のAzureデプロイ手順と料金を一次情報で解説。Microsoft Foundry でDeepSeek-V4.1-Flashをaz CLIでデプロイした実測（capacity 20＝20RPM/20,000TPM、eastusのサブスク上限、つまずき付き）と、オフピーク$0.15/$0.60・ピーク$0.30/$1.20・cache hit $0.003（2026-11-12再確認で変動なし）。1Mコンテキスト・384K出力・ネイティブ画像入力、公式ベンチマーク、VS Code GitHub Copilot Chatの導入手順、FAQを収録。2026年11月12日更新。">
   <link rel="canonical" href="https://llm.okamomedia.tokyo/deepseek-v4-1-flash/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta property="og:image" content="https://llm.okamomedia.tokyo/assets/og/ja-deepseek-v4-1-flash.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="DeepSeek V4.1 Flash: オフピーク入力$0.15・出力$0.60、1Mコンテキスト">
+  <meta name="twitter:image" content="https://llm.okamomedia.tokyo/assets/og/ja-deepseek-v4-1-flash.png">
+  <meta name="twitter:image:alt" content="DeepSeek V4.1 Flash: オフピーク入力$0.15・出力$0.60、1Mコンテキスト">
   <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/deepseek-v4-1-flash/">
   <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/deepseek-v4-1-flash/">
   <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/deepseek-v4-1-flash/">
@@ -13,10 +21,10 @@
   <!-- OGP -->
   <meta property="og:type"        content="article">
   <meta property="og:url"         content="https://llm.okamomedia.tokyo/deepseek-v4-1-flash/">
-  <meta property="og:title"       content="DeepSeek V4.1 Flash 実践ガイド — 料金・ベンチマーク・Azure AI Foundry／GitHub Copilot 導入">
-  <meta property="og:description" content="2026-09-10リリースのDeepSeek V4.1 Flash。料金はオフピーク$0.15/$0.60でV4 Proより大幅に安く、ネイティブの画像入力に対応。V4 Proは9/14以降も提供継続が公式に告知されています（ルーティング予告は撤回）。">
+  <meta property="og:title"       content="DeepSeek V4.1 Flash を Azure で使う — 料金・az CLIデプロイ実測・ベンチマーク・Copilot 導入">
+  <meta property="og:description" content="2026-09-10リリースのDeepSeek V4.1 Flash。Microsoft Foundry ではDeepSeek-V4.1-Flashをaz CLIでデプロイできることを2026-09-28に実測（capacityの実数・つまずき付き）。料金はオフピーク$0.15/$0.60（2026-11-12再確認で変動なし）でV4 Proより大幅に安く、ネイティブの画像入力に対応。">
   <meta property="og:site_name"   content="LLM Data Hub">
-  <meta name="twitter:card"       content="summary">
+  <meta name="twitter:card"       content="summary_large_image">
 
   <!-- 構造化データ -->
   <script type="application/ld+json">
@@ -25,11 +33,11 @@
     "@type": "TechArticle",
     "headline": "DeepSeek V4.1 Flash 実践ガイド — 料金・ベンチマーク・Azure AI Foundry／GitHub Copilot 導入手順",
     "datePublished": "2026-09-11",
-    "dateModified": "2026-09-15",
+    "dateModified": "2026-11-12",
     "author": { "@type": "Organization", "name": "okamoちゃんねる" },
     "publisher": { "@type": "Organization", "name": "okamoちゃんねる" },
     "url": "https://llm.okamomedia.tokyo/deepseek-v4-1-flash/",
-    "description": "DeepSeek V4.1 Flashの公式料金（ピーク/オフピーク）・スペック・ベンチマーク・導入手順、Azure AI FoundryでのDeepSeek-V4-Flash-0731デプロイ手順、V4 Proの提供継続（ルーティング予告の撤回）をまとめた実践ガイド。"
+    "description": "DeepSeek V4.1 Flashの公式料金（ピーク/オフピーク）・スペック・ベンチマーク・導入手順、Azure AI FoundryでのDeepSeek-V4.1-Flashデプロイ実測（2026-09-28）とcapacity/クォータの注意点、自社APIとAzure経由の違い、V4 Proの提供継続をまとめた実践ガイド。"
   }
   </script>
 
@@ -95,6 +103,7 @@
 
   <main>
     <div class="container">
+<p style="font-size:.9rem;background:var(--c-surface2);border:1px solid var(--c-border);border-radius:6px;padding:.6rem .9rem;max-width:820px;">2026-11-12 追記: Azure のモデルカタログでは本モデルが <code>DeepSeek-V4.1-Flash-1017</code>（Version: <code>2026-10-17</code>／コンテキスト1000k／DeepSeek直販）として掲載されています。DeepSeek公式の MODEL VERSION 表記も <code>DeepSeek-V4.1-Flash-1017</code> です。デプロイ時のバージョン文字列は環境で異なるため、下記の <code>list-models</code> で必ず確認してください。</p>
 
       <div class="section" style="padding-bottom:0;">
         <h1 class="section-title" style="font-size:1.55rem;">
@@ -110,14 +119,37 @@
 
         <div class="updated-bar">
           <span class="dot">●</span>
-          最終更新: <time datetime="2026-09-15">2026年9月15日</time>
-          &ensp;|&ensp; 一次情報: <a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">公式料金ページ</a>・<a href="https://api-docs.deepseek.com/updates/" target="_blank" rel="noopener">Change Log（2026-09-10）</a>
-          &ensp;|&ensp; 取得日: 2026-09-15
+          最終更新: <time datetime="2026-11-12">2026年11月12日</time>
+          &ensp;|&ensp; 一次情報: <a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">公式料金ページ</a>（2026-11-03 再確認・変動なし）・<a href="https://ai.azure.com/catalog/models/DeepSeek-V4.1-Flash" target="_blank" rel="noopener">Microsoft Foundry モデルカタログ</a>
+          &ensp;|&ensp; 取得日: 2026-10-05
         </div>
       </div>
 
       <!-- ===== 要点 ===== -->
-      <section class="section" style="padding-top:1.5rem;" aria-labelledby="key-heading">
+      <section class="section" style="padding-top:1.5rem;" aria-labelledby="u1017-heading">
+<h2 class="section-title" id="u1017-heading" style="font-size:1.2rem;">2026-10-17 の更新 — V4.1-Flash-1017 と Web検索 / Fetch API</h2>
+<div class="context-note" style="border-left-color:var(--c-green);">
+  <ul style="margin:0;padding-left:1.1rem;line-height:1.9;">
+    <li><strong>モデルが更新されました（料金とAPIの呼び方は不変）。</strong>逐語: 「DeepSeek V4.1 Flash has been upgraded to DeepSeek-V4.1-Flash-1017. The official web and APP models have also been updated to the new version. The API calling method and pricing remain unchanged — simply use deepseek-flash to access the latest model.」</li>
+    <li><strong>ベンチマークは公式の記載をそのまま転記します</strong>（当サイトの測定値ではありません）。HLE (w/o tools) 42.6（44.0*）／Terminal-Bench 4.0 42.3／DeepSWE v1.1 77.0／ProgramBench 29.1／NL2Repo-Bench 68.2／Automation-Bench v1.0.6 60.5／Agents' Last Exam 35.4／Apex Bench v1.1 72.1／Chartography (w/tools) 83.0／BabyVision (w/tools) 92.5／ZeroBench-main (w/tools) 51.0。*はHLEの純テキスト部分集合のみ、Terminal-Bench 4.0 は Claude Code ハーネス、DeepSWE は Mini-SWE-V2、ZeroBench-main は Pass@5 での評価。</li>
+    <li><strong>「タスク実行時間と出力長を削減した」と公式が明記。</strong>逐語は「While improving performance, we also reduced the model's task runtime and output length, enabling users to complete tasks at lower cost and higher speed」。DeepSeek Harness 0.2.1-rc.1 以降への更新が推奨されています。</li>
+    <li><strong>「project development capabilities が大幅に強化」という要約は公式ページに逐語で見当たりません。</strong>そのため当サイトでは採用せず、上記のベンチマーク表と「runtime／出力長の削減」という逐語の範囲で書いています。</li>
+  </ul>
+</div>
+<h3 style="font-size:1rem;margin:1.6rem 0 .5rem;">Web検索 / Fetch API（同日公開）</h3>
+<div class="table-wrap"><table><thead><tr><th>項目</th><th>公式ドキュメントの記載</th></tr></thead><tbody>
+<tr><td class="model-name">Search エンドポイント</td><td><code>POST https://api.deepseek.com/v1/tools/search</code></td></tr>
+<tr><td class="model-name">Fetch エンドポイント</td><td><code>POST https://api.deepseek.com/v1/tools/fetch</code></td></tr>
+<tr><td class="model-name">認証</td><td>DeepSeek API と同じ Bearer 認証・JSON（<code>Authorization: Bearer &lt;API Key&gt;</code>）</td></tr>
+<tr><td class="model-name">課金（Search）</td><td>$0.75 / 1,000 successful requests</td></tr>
+<tr><td class="model-name">課金（Fetch）</td><td>$0.75 / 1,000 successful requests</td></tr>
+<tr><td class="model-name">Search の制約</td><td>query は1〜128文字（空白のみ不可）、count は1〜50（既定10）、need_content の既定は false</td></tr>
+<tr><td class="model-name">Fetch の制約</td><td>url は8192文字以内の HTTP/HTTPS。取得は対象サイトの可用性・アクセス方針に依存（逐語: “Fetching is subject to the target site's availability and access policies.”）</td></tr>
+</tbody></table></div>
+<p style="font-size:.78rem;color:var(--c-muted);margin-top:.3rem;">※ 課金は「成功したリクエスト」単位で、トークン課金とは別建てです。DeepSeek Harness / Claude Code / Codex 経由のサーバーサイドツール呼び出しは「currently free of charge」で、<strong>2026年11月1日 00:00（北京時間）からリクエスト課金が始まる</strong>と明記されています。料金表のトークン単価（Flash: キャッシュヒット $0.003／ミス $0.15／出力 $0.60、いずれもオフピーク）は 2026-11-03 の再取得でも変化なしでした。</p>
+</section>
+
+<section class="section" style="padding-top:1.5rem;" aria-labelledby="key-heading">
         <div class="key-box">
           <h2 id="key-heading">3行でわかる要点</h2>
           <ul>
@@ -130,10 +162,10 @@
 
       <!-- ===== 料金 ===== -->
       <section class="section" style="padding-top:0;" aria-labelledby="price-heading">
-        <h2 class="section-title" id="price-heading" style="font-size:1.2rem;">公式料金（2026-09-11時点）</h2>
+        <h2 class="section-title" id="price-heading" style="font-size:1.2rem;">公式料金（2026-11-03 再確認・前回から変動なし）</h2>
         <p class="section-sub">単位は USD / 1Mトークン。オフピークはピークの半額です。</p>
 
-        <div class="screenshot-note">✅ api-docs.deepseek.com の Models &amp; Pricing を Firecrawl で直接確認（2026-09-11）。</div>
+        <div class="screenshot-note">✅ api-docs.deepseek.com の Models &amp; Pricing を Firecrawl で直接確認（初回 2026-09-11 / <strong>2026-10-05 に再取得して単価・ピーク時間帯・レガシー名の注記が変わっていないことを確認</strong>）。</div>
 
         <div class="table-wrap">
           <table class="peak-table">
@@ -166,7 +198,7 @@
           </table>
         </div>
 
-        <p style="font-size:.78rem;color:var(--c-muted);">⏰ <strong>ピーク時間帯</strong>: 01:00-04:00 UTC と 06:00-10:00 UTC の <strong>月〜金のみ</strong>（<strong>日本時間 10:00-13:00 / 15:00-19:00</strong>／北京時間 09:00-12:00 / 14:00-18:00）。<strong>土日は終日オフピーク</strong>。ピーク/オフピーク制は 2026-08-16 16:00 UTC 発効です。一次情報: <a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">api-docs.deepseek.com</a>（2026-09-11 取得）。</p>
+        <p style="font-size:.78rem;color:var(--c-muted);">⏰ <strong>ピーク時間帯</strong>: 01:00-04:00 UTC と 06:00-10:00 UTC の <strong>月〜金のみ（中国の祝日を除く）</strong>（<strong>日本時間 10:00-13:00 / 15:00-19:00</strong>／北京時間 09:00-12:00 / 14:00-18:00）。<strong>土日と中国の祝日は終日オフピーク</strong>です。ピーク/オフピーク制は 2026-08-16 16:00 UTC 発効で、公式料金ページの注記（2）に「月〜金（中国の祝日を除く）」と記載されています。一次情報: <a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">api-docs.deepseek.com</a>（初回 2026-09-11／注記は 2026-09-23 に確認・2026-11-03 再確認）。</p>
 
         <p style="font-size:.86rem;color:var(--c-muted);margin-top:.8rem;">コスト試算は <a href="/calculator/">トークン計算機</a>で、V4.1 Flash のオフピーク／ピーク両方が選べます。他社モデルとの比較は <a href="/pricing/#dh">料金比較（DeepSeek）</a>を参照してください。</p>
       </section>
@@ -211,7 +243,7 @@
             <caption style="display:none;">DeepSeek V4.1 Flash の仕様</caption>
             <thead><tr><th>項目</th><th>V4.1 Flash（<code>deepseek-flash</code>）</th></tr></thead>
             <tbody>
-              <tr><td class="model-name">モデルバージョン</td><td>DeepSeek-V4.1-Flash</td></tr>
+              <tr><td class="model-name">モデルバージョン</td><td>DeepSeek-V4.1-Flash（Azureカタログ: <code>DeepSeek-V4.1-Flash-1017</code>／2026-10-17）</td></tr>
               <tr><td class="model-name">コンテキスト長</td><td>1M トークン</td></tr>
               <tr><td class="model-name">最大出力</td><td>384K トークン（公式表記 MAXIMUM: 384K）</td></tr>
               <tr><td class="model-name">thinking mode</td><td>non-thinking / thinking の両対応（<strong>thinking が既定</strong>）</td></tr>
@@ -291,17 +323,23 @@
 
       <!-- ===== Azure AI Foundry で動かす ===== -->
       <section class="section" style="padding-top:0;" aria-labelledby="azure-heading">
-        <h2 class="section-title" id="azure-heading" style="font-size:1.2rem;">Azure AI Foundry で動かす（DeepSeek-V4-Flash-0731）</h2>
+        <h2 class="section-title" id="azure-heading" style="font-size:1.2rem;">Azure AI Foundry（Microsoft Foundry）で動かす — DeepSeek-V4.1-Flash を CLI でデプロイ（2026-09-28 実測）</h2>
+          <p class="section-sub" style="font-size:.92rem;">2026-11-05 追記: Azure の DeepSeek 料金タブに掲載されているのは V3 / V3.2 / R1 / V4 Pro / V4 Flash（0731 含む）の行のみで、<strong>DeepSeek-V4.1-Flash の行は現在もありません</strong>。V4.1-Flash は Microsoft Foundry のモデルカタログ（Direct from Azure）からデプロイします（下記の手順は 2026-09-28 実測）。</p>
         <p class="section-sub">
-          DeepSeek 自社 API だけでなく、Microsoft Azure の <strong>Azure AI Foundry（Microsoft Foundry）</strong> 経由でも DeepSeek 系モデルをデプロイできます。
-          ここでは Azure が「Direct from Azure」として販売している <code>DeepSeek-V4-Flash-0731</code> を、<strong>Azure CLI でデプロイして curl で疎通確認するまで</strong>の手順を示します。
+          DeepSeek 自社 API だけでなく、Microsoft Azure の <strong>Azure AI Foundry（Microsoft Foundry）</strong> 経由でも DeepSeek 系モデルを使えます。
+          2026年9月28日の実測では、<strong>最新の <code>DeepSeek-V4.1-Flash</code>（version <code>2026-09-10</code>）を <code>az</code> CLI でデプロイし、OpenAI 互換エンドポイントから応答を取得するところまで通りました</strong>。
+          ここでは ①提供状況 ②デプロイ ③クォータ（capacity）の決め方 ④疎通確認 ⑤つまずきどころ の順に、実際に実行したコマンドで示します。
         </p>
 
         <div class="screenshot-note">
-          ℹ️ <strong><code>DeepSeek-V4-Flash-0731</code> と V4.1 Flash の関係</strong>:
-          <code>-0731</code> は V4.1 Flash の<strong>ひとつ前の世代</strong>（2026-07-31 リリース・V4-Flash-Preview と同じアーキテクチャ／サイズで再事後学習したもの）です。
-          DeepSeek 自社 API では V4 Flash 系は退役して V4.1 Flash に統合されましたが、<strong>Azure AI Foundry では <code>DeepSeek-V4-Flash-0731</code> が現在も Preview モデルとして提供されています</strong>（2026-09-13 時点）。
-          Azure 側の仕様は Microsoft Learn の記載に基づきます。コマンド列の流れは<strong>運営者（okamoちゃんねる）が 2026年9月時点で動作確認済み</strong>のものです。
+          ℹ️ <strong>一次情報の更新状況（Azure の料金ページは 2026-10-05 再確認／Learn の一覧は 2026-09-29 時点）</strong>
+          <ul style="margin:.5rem 0 0;padding-left:1.2em;">
+            <li><strong>モデルカタログ</strong>: <code>DeepSeek-V4.1-Flash</code> が「Direct from Azure」で掲載。<strong>Version 2026-09-10 / Type: Chat completion / Lifecycle: Preview / Context window 1000k</strong>。</li>
+            <li><strong>Foundry ブログ（2026-09-25 更新）</strong>: 「Direct from Azure（public preview）」と「Fireworks on Foundry（generally available）」の<strong>2経路</strong>があると告知されています。</li>
+            <li><strong>Microsoft Learn のモデル一覧</strong>（ms.date 2026-09-21）は <code>DeepSeek-V4-Pro</code> / <code>DeepSeek-V4-Flash-0731</code>（Preview）/ <code>DeepSeek-V4-Flash</code> の3行のままで、<strong>V4.1-Flash は未掲載</strong>です。</li>
+            <li><strong>Azure の料金ページ（DeepSeek タブ）</strong>にも V4.1-Flash の行が<strong>まだありません</strong>（<strong>2026-10-05 再確認</strong>。掲載は V4 Pro / V4 Flash / V4 Flash 0731 / V3.1 の4行のみ、ページ改訂トークン <code>awa-stv=20260930-0214-20260930-2100-183594243</code>）。</li>
+          </ul>
+          → <strong>カタログとブログが先行し、Learn の一覧と料金ページが遅れている</strong>状態です。ドキュメントに無いから使えない、と判断せず、<strong>自分のアカウントで <code>list-models</code> を叩いて実物を確認する</strong>のが確実です（STEP 3）。
         </div>
 
         <h3 style="font-size:1rem;margin:1.5rem 0 .6rem;">前提</h3>
@@ -320,9 +358,9 @@
               <tr><td class="model-name"><code>&lt;SUBSCRIPTION_ID_OR_NAME&gt;</code></td><td>使う Azure サブスクリプションの ID または名前</td></tr>
               <tr><td class="model-name"><code>&lt;RESOURCE_GROUP&gt;</code></td><td>リソースグループ名（例: <code>rg-deepseek</code>）</td></tr>
               <tr><td class="model-name"><code>&lt;LOCATION&gt;</code></td><td>リージョン（例: <code>eastus</code>）。モデルによって提供リージョンが異なるため、Azure ポータルのモデルカタログで確認してください</td></tr>
-              <tr><td class="model-name"><code>&lt;ACCOUNT_NAME&gt;</code></td><td>Azure AI Services アカウント名。<strong>全世界で一意</strong>にする必要があります（例: <code>dsflash0731</code>）。<code>--custom-domain</code> にも同じ値を使います</td></tr>
-              <tr><td class="model-name"><code>&lt;DEPLOYMENT_NAME&gt;</code></td><td>デプロイ名（任意）。<strong>API 呼び出しの <code>model</code> に指定するのはモデル名ではなく、このデプロイ名です</strong>（例: <code>deepseek-0731</code>）</td></tr>
-              <tr><td class="model-name"><code>&lt;MODEL_VERSION&gt;</code></td><td>モデルのバージョン文字列。<strong>実値は次の <code>az cognitiveservices account list-models</code> で確認してください</strong>（本ページでは断定しません）</td></tr>
+              <tr><td class="model-name"><code>&lt;ACCOUNT_NAME&gt;</code></td><td>Azure AI Services アカウント名。<strong>全世界で一意</strong>にする必要があります（例: <code>dsflash0928</code>）。<code>--custom-domain</code> にも同じ値を使います</td></tr>
+              <tr><td class="model-name"><code>&lt;DEPLOYMENT_NAME&gt;</code></td><td>デプロイ名（任意）。<strong>API 呼び出しの <code>model</code> に指定するのはモデル名ではなく、このデプロイ名です</strong>（例: <code>ds-flash-01</code>）</td></tr>
+              <tr><td class="model-name"><code>&lt;MODEL_VERSION&gt;</code></td><td>モデルのバージョン文字列。<strong>2026-09-28 の実測では <code>2026-09-10</code> でしたが、モデル名・バージョンは環境（サブスクリプション／リージョン）で異なるため、必ず次の <code>list-models</code> で確認してください</strong></td></tr>
               <tr><td class="model-name"><code>&lt;API_KEY&gt;</code></td><td>Azure AI Services アカウントのキー（手順内で CLI から取得します）</td></tr>
             </tbody>
           </table>
@@ -363,37 +401,54 @@ az provider show --namespace Microsoft.CognitiveServices --query registrationSta
   --allow-project-management true \
   --yes</code></pre>
 
-        <h3 style="font-size:1rem;margin:1.5rem 0 .6rem;">STEP 3 — DeepSeek-V4-Flash-0731 をデプロイ</h3>
-        <p style="font-size:.86rem;color:var(--c-muted);">まず利用可能なモデルとバージョンを確認し、その値でデプロイします。</p>
+        <h3 style="font-size:1rem;margin:1.5rem 0 .6rem;">STEP 3 — DeepSeek-V4.1-Flash をデプロイ</h3>
+        <p style="font-size:.86rem;color:var(--c-muted);">まず利用可能なモデルとバージョンを確認し、その値でデプロイします。<strong>この「実物を確認してからデプロイ」が、ドキュメントが遅れている時期でも安全に進めるコツです。</strong></p>
         <pre class="cmd"><code># デプロイ可能な DeepSeek 系モデルとバージョンを確認
 az cognitiveservices account list-models \
   -n "&lt;ACCOUNT_NAME&gt;" -g "&lt;RESOURCE_GROUP&gt;" \
-  --query "[?contains(name,'DeepSeek')].{name:name,format:format,version:version}" -o table
+  --query "[?contains(name,'DeepSeek')].{name:name,format:format,version:version}" -o json
 
 # モデルをデプロイ（SKU は GlobalStandard。--sku-capacity の値は下の注意書きを参照）
 az cognitiveservices account deployment create \
   --name "&lt;ACCOUNT_NAME&gt;" \
   --resource-group "&lt;RESOURCE_GROUP&gt;" \
   --deployment-name "&lt;DEPLOYMENT_NAME&gt;" \
-  --model-name "DeepSeek-V4-Flash-0731" \
+  --model-name "DeepSeek-V4.1-Flash" \
   --model-version "&lt;MODEL_VERSION&gt;" \
   --model-format "DeepSeek" \
   --sku-name "GlobalStandard" \
-  --sku-capacity 20</code></pre>
+  --sku-capacity 20
+
+# デプロイ結果の確認（モデル名・SKU・capacity が入っているか）
+az cognitiveservices account list-deployments \
+  -n "&lt;ACCOUNT_NAME&gt;" -g "&lt;RESOURCE_GROUP&gt;" \
+  --query "[].{name:name,model:properties.model.name,version:properties.model.version,sku:sku}" -o json</code></pre>
         <p style="font-size:.8rem;color:var(--c-muted);">
-          💡 <code>--sku-capacity</code> はクォータ（Tokens Per Minute、千トークン単位）として消費されます。容量が足りないと
-          <code>InsufficientQuota</code> でデプロイに失敗することがあるため、その場合は値を調整するか、Azure ポータルでクォータの増加を申請してください。
+          💡 2026-09-28 の実測では <code>list-models</code> に <code>DeepSeek-V4.1-Flash</code>（version <code>2026-09-10</code>、format <code>DeepSeek</code>）が返り、そのままデプロイできました。
+          バージョン文字列は環境で違うことがあるため、<strong>記事の値をそのまま貼らず、<code>list-models</code> の戻り値を使ってください</strong>。
         </p>
 
         <div class="warn-box">
-          <h2>⚠️ <code>--sku-capacity</code> の実運用（運営者実測・2026-09-15）</h2>
+          <h2>⚠️ <code>--sku-capacity</code> の実運用（運営者実測・2026-09-28）</h2>
           <ul>
-            <li><code>--sku-capacity 1</code> でも<strong>デプロイ自体は成功します</strong>が、<strong>少なすぎて API を少し使っただけでクォータ不足のエラー</strong>になりました。運営者は <code>20</code> に引き上げてから安定して運用しています。</li>
-            <li>確保する容量は <code>az cognitiveservices usage list</code> で確認できる <strong>limit（上限）の範囲内</strong>で指定してください。</li>
-            <li><strong>上限まで使い切らないでください。</strong>上限を使い切ると、同じサブスクリプションで他のデプロイにクォータを割り当てられなくなります。</li>
+            <li><code>--sku-capacity 1</code> でも<strong>デプロイ自体は成功します</strong>が、<strong>少なすぎて API を少し使っただけでクォータ不足のエラー</strong>になりました。実測では <code>20</code> に引き上げてから安定しています（短時間の試行での観測で、負荷条件により必要な容量は変わります。<strong>一般に推奨される値ではありません</strong>）。</li>
+            <li>capacity は <strong>TPM（tokens per minute）</strong>に対応します。Microsoft Learn には「<strong>TPM は 1,000 単位で割り当て、RPM は TPM から導出されモデルによって変わる</strong>」と記載されています（<a href="https://learn.microsoft.com/en-us/azure/foundry/foundry-models/quotas-limits" target="_blank" rel="noopener">Foundry Models quotas and limits</a>）。</li>
+            <li>実測（capacity 20 のデプロイで応答ヘッダを確認）: <code>x-ratelimit-limit-requests: 20</code>（RPM）／<code>x-ratelimit-limit-tokens: 20000</code>（TPM）。<strong>自分の環境の上限は、デプロイ後にこのヘッダか <code>usage list</code> で確認するのが確実です。</strong></li>
+            <li>クォータは<strong>サブスクリプション単位</strong>で消費されます。<strong>Global Standard は同じモデル・同じバージョンのデプロイが全リージョンで1つのプールを共有</strong>するため、同じモデルを別リージョンにもう1本立てると同じ枠を取り合います（同 Learn）。</li>
+            <li><strong>上限まで使い切らないでください。</strong>使い切ると、同じサブスクリプションで他のデプロイにクォータを割り当てられなくなります。</li>
+            <li>上限を超えた呼び出しは <strong>HTTP 429</strong> で返ります。指数バックオフ＋リトライで対処し、恒常的に足りない場合はクォータ増加を申請してください（同 Learn）。</li>
           </ul>
           <pre class="cmd"><code># 現在のクォータ使用量と上限を確認（LOCATION はデプロイ先リージョン）
 az cognitiveservices usage list --location "&lt;LOCATION&gt;" -o table</code></pre>
+        </div>
+
+        <div class="warn-box">
+          <h2>⚠️ core CLI に <code>deployment update</code> はありません（capacity を変えるときの落とし穴）</h2>
+          <ul>
+            <li>Microsoft Learn の <a href="https://learn.microsoft.com/en-us/cli/azure/cognitiveservices/account/deployment?view=azure-cli-latest" target="_blank" rel="noopener"><code>az cognitiveservices account deployment</code></a> にあるサブコマンドは <code>create</code> / <code>list</code> / <code>show</code> で、<strong><code>update</code> は core にはありません</strong>（Preview の拡張機能 <code>foundry-cost-control</code> 版としてのみ提供）。</li>
+            <li>したがって <strong>capacity の変更も、同じ <code>deployment create</code> を新しい値で再実行</strong>するのが実務的な手順です（2026-09-28 実測）。</li>
+            <li>迷ったら Azure ポータルの「デプロイ」画面から編集するのが確実です。CLI のサブコマンド構成は変わることがあるため、実行前に必ず Learn の最新ページを確認してください。</li>
+          </ul>
         </div>
 
         <h3 style="font-size:1rem;margin:1.5rem 0 .6rem;">STEP 4 — 接続情報を環境変数に入れる</h3>
@@ -407,8 +462,8 @@ export AZURE_AI_API_KEY="$(az cognitiveservices account keys list \
 # API 呼び出しの model に入れるのはデプロイ名
 export DEPLOYMENT_NAME="&lt;DEPLOYMENT_NAME&gt;"</code></pre>
 
-        <h3 style="font-size:1rem;margin:1.5rem 0 .6rem;">STEP 5 — curl で疎通確認</h3>
-        <pre class="cmd"><code>curl -sS "$AZURE_AI_ENDPOINT/chat/completions" \
+        <h3 style="font-size:1rem;margin:1.5rem 0 .6rem;">STEP 5 — curl で疎通確認（レート制限ヘッダも見る）</h3>
+        <pre class="cmd"><code>curl -sS -D - "$AZURE_AI_ENDPOINT/chat/completions" \
   -H "Content-Type: application/json" \
   -H "api-key: $AZURE_AI_API_KEY" \
   -X POST \
@@ -419,10 +474,22 @@ export DEPLOYMENT_NAME="&lt;DEPLOYMENT_NAME&gt;"</code></pre>
     ]
   }'</code></pre>
         <p style="font-size:.84rem;color:var(--c-muted);">
-          ✅ 応答 JSON が返れば疎通完了です。<code>model</code> にデプロイ名を渡している点に注意してください（モデル名 <code>DeepSeek-V4-Flash-0731</code> を渡すと 404 などになることがあります）。
+          ✅ 応答 JSON が返れば疎通完了です。<code>model</code> にデプロイ名を渡している点に注意してください（モデル名 <code>DeepSeek-V4.1-Flash</code> を渡すと 404 などになることがあります）。
+          <code>-D -</code> を付けると<strong>レート制限ヘッダ（<code>x-ratelimit-limit-requests</code> / <code>x-ratelimit-limit-tokens</code>）がそのまま見える</strong>ので、capacity が意図どおり効いているか確認できます。
           環境変数にキーを置きたくない場合は <code>-H "api-key: &lt;API_KEY&gt;"</code> を直接指定します。
           Entra ID（旧 Azure AD）で認証する場合は、公式チュートリアルにあるとおり <code>DefaultAzureCredential</code> 等でスコープ <code>https://ai.azure.com/.default</code> のトークンを取得する方式も使えます。
         </p>
+
+        <div class="warn-box">
+          <h2>⚠️ Azure 経由で固有のつまずきどころ</h2>
+          <ul>
+            <li><strong>DeepSeek 固有の <code>thinking</code> パラメータは Azure 側では通りません。</strong>実測では <code>{"thinking": {"type": "enabled"}}</code> を含めると <strong>HTTP 400</strong> が返り、<code>reasoning_effort</code> だけが受け付けられました。自社 API のコードをそのまま流用するときは、この2行を必ず見直してください。</li>
+            <li>Foundry ブログの説明では、このモデルの推論努力は<strong>「1〜100 の連続値」</strong>で制御するとされています（自社 API は <code>low</code> / <code>high</code> / <code>max</code> の3段階）。<strong>パラメータの体系が違う</strong>ので、移行時はいったん小さく試してください。</li>
+            <li>モデルカタログのカード表記は <strong>Context window 1000k / Token limits 128k output</strong> です。DeepSeek 側が公表している最大出力 384K と食い違うため、<strong>実際の上限は自分のアカウントで確認</strong>してください。</li>
+            <li>モデル名・バージョンは環境依存です。記事の値で固定せず <code>list-models</code> を使ってください。</li>
+            <li><strong>Preview（public preview）である</strong>点も重要です。SKU・料金・クォータ・パラメータが予告なく変わることがあります。</li>
+          </ul>
+        </div>
 
         <div class="warn-box">
           <h2>⚠️ <code>MissingSubscriptionRegistration</code> が出たら</h2>
@@ -437,17 +504,43 @@ The subscription is not registered to use namespace 'Microsoft.CognitiveServices
           </ul>
         </div>
 
+        <h3 style="font-size:1rem;margin:1.5rem 0 .6rem;">DeepSeek 自社 API と Azure 経由の違い（2026-10-05 時点）</h3>
+        <p style="font-size:.86rem;color:var(--c-muted);">「同じモデルだから同じ」ではありません。運用で効いてくる差だけを並べます。</p>
+        <div class="table-wrap">
+          <table class="spec-table">
+            <caption style="display:none;">DeepSeek 自社 API と Azure AI Foundry 経由の比較</caption>
+            <thead><tr><th>項目</th><th>DeepSeek 自社 API</th><th>Azure AI Foundry 経由</th></tr></thead>
+            <tbody>
+              <tr><td class="model-name">単価（1Mトークン）</td><td><strong>ピーク／オフピーク制</strong>。入力（cache miss）$0.15〜$0.30 / 出力 $0.60〜$1.20 / cache hit $0.003〜$0.006</td><td><strong>時間帯で変わらない</strong>。入力 $0.30 / 出力 $1.20 / cache hit $0.006（Direct from Azure の告知値）</td></tr>
+              <tr><td class="model-name">課金の前提</td><td>使ったトークンだけの従量課金</td><td>トークン従量＋<strong>デプロイに capacity（TPM）を予約</strong>する。容量が足りないと 429</td></tr>
+              <tr><td class="model-name">思考の制御</td><td>OpenAI 形式の <code>thinking</code>（既定で有効）＋ <code>reasoning_effort</code>（<code>low</code>/<code>high</code>/<code>max</code>・既定 <code>high</code>）</td><td><code>reasoning_effort</code> のみ（<code>thinking</code> は 400・実測）。ブログは「1〜100 の連続値」と説明</td></tr>
+              <tr><td class="model-name">API 形式</td><td>OpenAI 互換・Anthropic 互換・Responses API の3形式</td><td>OpenAI 互換（<code>/openai/v1</code>）のみ。Anthropic 互換エンドポイントは無い</td></tr>
+              <tr><td class="model-name">データの所在</td><td>プライバシーポリシーに「People's Republic of China で直接収集・処理・保存する」と明記</td><td>デプロイ種別に従う。<strong>Global Standard は任意の Azure リージョンで推論</strong>、リージョン固定したい場合は DataZone / Regional を選ぶ</td></tr>
+              <tr><td class="model-name">学習への利用</td><td>「サービス改善・機械学習モデルとアルゴリズムの訓練のため」に使う旨と、<strong>オプトアウトの権利</strong>を記載（API への適用範囲は一次情報で未確認）</td><td>Microsoft は「<strong>あなたの許可・指示なく生成AI基盤モデルの訓練には使わない</strong>」「提供元には渡らない」と明記</td></tr>
+              <tr><td class="model-name">レート制限の考え方</td><td>公式告知では「並行数・レートの制限なし」を掲げる</td><td><strong>capacity で決まる</strong>。実測 capacity 20 → RPM 20 / TPM 20,000</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:.78rem;color:var(--c-muted);">
+          データの取扱いの詳細は <a href="/glossary/zero-data-retention/">ZDR（ゼロデータ保持）の解説</a> と <a href="/china-ai/">中国AI</a> の該当節を参照してください。
+        </p>
+
         <div class="screenshot-note" style="margin-top:1.2rem;">
-          ⚠️ <strong>Azure 側の料金は本ページに掲載していません。</strong>
-          Azure AI Foundry の DeepSeek 系モデルの単価は、DeepSeek 自社 API の peak/off-peak 単価とは別体系です。当サイトで一次情報（<code>DeepSeek-V4-Flash-0731</code> に特定した確定値）を確認できていないため、
-          ご契約前に <a href="https://azure.microsoft.com/en-us/pricing/details/ai-foundry-models/deepseek/" target="_blank" rel="noopener">Azure の Foundry Models 料金ページ</a>または Azure ポータルで必ずご確認ください。
+          💰 <strong>Azure 経由の料金（Microsoft の告知値）</strong>:
+          Foundry ブログ（2026-09-25 更新）の表では、<strong>Direct from Azure（Global Standard）が入力 $0.30 / 出力 $1.20 / cached input $0.006</strong>、
+          <strong>Fireworks on Foundry（Standard Global）が入力 $0.37 / 出力 $1.50 / cached input $0.007</strong>（いずれも USD / 1Mトークン）。
+          Direct from Azure の値は DeepSeek 自社 API の<strong>ピーク単価と同じ水準</strong>です。
+          ただし <strong>Azure の料金ページには 2026-10-05 時点で V4.1-Flash の行がまだ無い（DeepSeek タブの掲載は V4 Pro / V4 Flash など4行のみ）</strong>ため、契約前に
+          <a href="https://azure.microsoft.com/en-us/pricing/details/ai-foundry-models/deepseek/" target="_blank" rel="noopener">Azure の Foundry Models 料金ページ</a>または Azure ポータルで必ずご確認ください。
         </div>
 
         <p style="font-size:.78rem;color:var(--c-muted);">
-          出典: <a href="https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure?pivots=azure-direct-others" target="_blank" rel="noopener">Microsoft Learn — Foundry Models sold by Azure</a>（DeepSeek-V4-Flash-0731 は Preview / 入力 1M・出力 384K・ツール呼び出し対応）、
-          <a href="https://learn.microsoft.com/en-us/azure/foundry/foundry-models/how-to/quickstart-create-resources" target="_blank" rel="noopener">Create and configure resources for Microsoft Foundry Models</a>、
-          <a href="https://learn.microsoft.com/en-us/azure/foundry/foundry-models/tutorials/get-started-deepseek-r1" target="_blank" rel="noopener">Get started with a DeepSeek model in Foundry Models</a>（2026-09-13 取得）。
-          コマンド列の流れは運営者（okamoちゃんねる）が 2026年9月時点に動作確認済みです。
+          出典: <a href="https://ai.azure.com/catalog/models/DeepSeek-V4.1-Flash" target="_blank" rel="noopener">Microsoft Foundry モデルカタログ — DeepSeek-V4.1-Flash</a>（Version 2026-09-10 / Preview / Context window 1000k）、
+          <a href="https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/deepseek-v4-1-flash-is-coming-to-microsoft-foundry/4556431" target="_blank" rel="noopener">Foundry ブログ — DeepSeek-V4.1-Flash is coming to Microsoft Foundry</a>（2026-09-25 更新／2経路と料金表）、
+          <a href="https://learn.microsoft.com/en-us/cli/azure/cognitiveservices/account/deployment?view=azure-cli-latest" target="_blank" rel="noopener">az cognitiveservices account deployment</a>（ms.date 2026-09-01）、
+          <a href="https://learn.microsoft.com/en-us/azure/foundry/foundry-models/quotas-limits" target="_blank" rel="noopener">Foundry Models quotas and limits</a>（TPM/RPM の考え方・429）、
+          <a href="https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/deployment-types" target="_blank" rel="noopener">Deployment types</a>・<a href="https://learn.microsoft.com/en-us/azure/foundry/responsible-ai/openai/data-privacy" target="_blank" rel="noopener">Data, privacy, and security</a>（データ所在・学習利用）。
+          コマンド列と capacity の実数値は<strong>運営者（okamoちゃんねる）が 2026-09-28 に実測</strong>したものです（2026-09-29 取得の一次情報で再確認）。
         </p>
       </section>
 
@@ -472,6 +565,15 @@ The subscription is not registered to use namespace 'Microsoft.CognitiveServices
 
         <h3 style="font-size:.98rem;margin:1.2rem 0 .4rem;">Q. コンテキスト長と最大出力は？</h3>
         <p style="font-size:.88rem;color:var(--c-muted);">A. コンテキスト長 1M トークン、最大出力 384K トークンです。thinking mode は non-thinking と thinking の両方に対応し、thinking が既定です。</p>
+
+        <h3 style="font-size:.98rem;margin:1.2rem 0 .4rem;">Q. Azure（Microsoft Foundry）でも DeepSeek V4.1 Flash を使えますか？</h3>
+        <p style="font-size:.88rem;color:var(--c-muted);">A. <strong>使えます。</strong>2026-09-28 の実測で、<code>DeepSeek-V4.1-Flash</code>（version <code>2026-09-10</code>）を <code>az cognitiveservices account deployment create</code> でデプロイし、OpenAI 互換エンドポイントから応答を取得できました。ただし <strong>Preview（public preview）</strong>で、Microsoft Learn のモデル一覧（2026-09-29 時点）と Azure の料金ページ（2026-10-05 時点）はまだ未更新です。手順と capacity の実数値は<a href="#azure-heading">Azure AI Foundry の節</a>にまとめています。</p>
+
+        <h3 style="font-size:.98rem;margin:1.2rem 0 .4rem;">Q. Azure 経由の料金はいくらですか？</h3>
+        <p style="font-size:.88rem;color:var(--c-muted);">A. Microsoft の Foundry ブログ（2026-09-25 更新）の表では、<strong>Direct from Azure が入力 $0.30 / 出力 $1.20 / cached input $0.006</strong>、<strong>Fireworks on Foundry が入力 $0.37 / 出力 $1.50 / cached input $0.007</strong>（USD / 1Mトークン）。Direct from Azure は DeepSeek 自社 API の<strong>ピーク単価と同水準</strong>で、自社 API のような時間帯割引はありません。Azure の料金ページに V4.1-Flash の行がまだ無いため、契約前にポータルで確認してください。</p>
+
+        <h3 style="font-size:.98rem;margin:1.2rem 0 .4rem;">Q. Azure に移すとコードはそのまま動きますか？</h3>
+        <p style="font-size:.88rem;color:var(--c-muted);">A. <strong>概ね動きますが、2点だけ直しが必要です。</strong>① DeepSeek 固有の <code>thinking</code> パラメータは Azure 側では 400 になり、<code>reasoning_effort</code> のみ受け付けます（2026-09-28 実測）。② 思考の強さの体系が違い、Foundry ブログは「1〜100 の連続値」と説明しています（自社 API は <code>low</code>/<code>high</code>/<code>max</code>）。エンドポイントは OpenAI 互換（<code>/openai/v1</code>）なので、この2点以外はほぼ置き換えで済みます。</p>
       </section>
 
       <!-- ===== 出典・免責 ===== -->
@@ -481,7 +583,7 @@ The subscription is not registered to use namespace 'Microsoft.CognitiveServices
           <li><a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">DeepSeek API Docs — Models &amp; Pricing</a>（料金・スペック・注記／2026-09-13 取得）</li>
           <li><a href="https://api-docs.deepseek.com/updates/" target="_blank" rel="noopener">DeepSeek API Docs — Change Log（2026-09-10 DeepSeek-V4.1-Flash Release）</a>（リリース内容・ベンチマーク）</li>
           <li><a href="https://api-docs.deepseek.com/news/news260910" target="_blank" rel="noopener">DeepSeek 公式ニュース（news260910）</a></li>
-          <li>Microsoft Learn — <a href="https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure?pivots=azure-direct-others" target="_blank" rel="noopener">Foundry Models sold by Azure</a>・<a href="https://learn.microsoft.com/en-us/azure/foundry/foundry-models/how-to/quickstart-create-resources" target="_blank" rel="noopener">Create and configure resources for Microsoft Foundry Models</a>（Azure 節／2026-09-13 取得）</li>
+          <li>Microsoft Foundry — <a href="https://ai.azure.com/catalog/models/DeepSeek-V4.1-Flash" target="_blank" rel="noopener">モデルカタログ（DeepSeek-V4.1-Flash）</a>・<a href="https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/deepseek-v4-1-flash-is-coming-to-microsoft-foundry/4556431" target="_blank" rel="noopener">Foundry ブログ（2026-09-25 更新）</a>・<a href="https://learn.microsoft.com/en-us/azure/foundry/foundry-models/quotas-limits" target="_blank" rel="noopener">Foundry Models quotas and limits</a>・<a href="https://learn.microsoft.com/en-us/cli/azure/cognitiveservices/account/deployment?view=azure-cli-latest" target="_blank" rel="noopener">az cognitiveservices account deployment</a>・<a href="https://learn.microsoft.com/en-us/azure/foundry/responsible-ai/openai/data-privacy" target="_blank" rel="noopener">Data, privacy, and security</a>（Azure 節／2026-09-29 取得）</li>
           <li>関連ページ: <a href="/pricing/#dh">料金比較（DeepSeek）</a>・<a href="/calculator/">トークン計算機</a>・<a href="/deepseek-v4-pro/">V4 Pro 提供継続のまとめ</a>・<a href="/multimodal/">マルチモーダル対応一覧</a>・<a href="/timeline/">リリース年表</a></li>
         </ul>
       </section>
@@ -489,10 +591,10 @@ The subscription is not registered to use namespace 'Microsoft.CognitiveServices
       <div class="tip-box" style="border-left-color: var(--c-red); margin-bottom:2rem;">
         <h3>⚠️ 免責事項</h3>
         <ul>
-          <li>本ページの料金・スペック・ベンチマークは DeepSeek 公式ページ（api-docs.deepseek.com）の 2026-09-13 取得内容に基づきます。料金・モデルの提供状況は予告なく変動することがあります。契約・本番利用前に必ず公式ページをご確認ください。</li>
+          <li>本ページの料金・スペック・ベンチマークは DeepSeek 公式ページ（api-docs.deepseek.com）の 2026-11-03 再取得内容に基づきます（単価は前回から変動なし）。料金・モデルの提供状況は予告なく変動することがあります。契約・本番利用前に必ず公式ページをご確認ください。</li>
           <li>ベンチマーク値は提供元の公表値であり、当サイトが再計測・検証したものではありません。</li>
           <li>導入手順は運営者の環境（2026年7月時点の V4 Pro での記録）に基づきます。拡張機能の仕様変更により表示が異なる場合があります。</li>
-          <li>Azure AI Foundry の節は、Microsoft Learn の記載と運営者が 2026年9月時点で動作確認したコマンド列に基づきます。Azure 側のモデル提供状況・SKU・クォータ・料金は変動するため、実行前に Azure ポータルと公式ドキュメントでご確認ください。なお Azure 側の料金は一次情報で確定できていないため本ページには掲載していません。</li>
+          <li>Azure AI Foundry の節は、Microsoft の公式ページ（モデルカタログ・Foundry ブログ・Microsoft Learn）と、運営者が 2026-09-28 に実測した <code>az</code> コマンド列・応答に基づきます。Azure 側は Preview のため、SKU・クォータ・料金・パラメータが予告なく変わることがあります。とくに <strong>Azure の料金ページには V4.1-Flash の行がまだ無い</strong>ため、契約前に Azure ポータルで必ずご確認ください。</li>
           <li>本サイトは特定プロバイダーの推薦・代理ではありません。DeepSeek は DeepSeek の商標です。GitHub、GitHub Copilot は GitHub, Inc. の商標または登録商標です。</li>
         </ul>
       </div>

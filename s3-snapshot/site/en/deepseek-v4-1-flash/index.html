@@ -3,9 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>DeepSeek V4.1 Flash Guide [Pricing, Benchmarks, Azure AI Foundry &amp; GitHub Copilot Setup] — LLM Data Hub</title>
-  <meta name="description" content="DeepSeek V4.1 Flash (deepseek-flash), released 2026-09-10, from primary sources: official peak/off-peak pricing ($0.15/$0.60 off-peak, $0.30/$1.20 peak, $0.003 cache hit), 1M context, 384K output, native image input, official benchmarks, VS Code GitHub Copilot Chat setup, and an Azure CLI walkthrough for deploying DeepSeek-V4-Flash-0731 on Azure AI Foundry. V4 Pro keeps running after 9/14.">
+  <title>DeepSeek V4.1 Flash on Azure — Deploy Steps, Pricing &amp; Benchmarks — LLM Data Hub</title>
+  <meta name="description" content="DeepSeek V4.1 Flash on Azure: a measured Microsoft Foundry deploy with the az CLI (2026-09-28, capacity 20 = 20 RPM / 20,000 TPM, pitfalls included) plus full pricing ($0.15/$0.60 off-peak, cache hits $0.003, unchanged on 2026-11-12), 1M context, 384K output, image input and benchmarks. Updated November 12, 2026.">
   <link rel="canonical" href="https://llm.okamomedia.tokyo/en/deepseek-v4-1-flash/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta property="og:image" content="https://llm.okamomedia.tokyo/assets/og/en-deepseek-v4-1-flash.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="DeepSeek V4.1 Flash price cards: $0.15 off-peak input and $0.60 off-peak output per 1M tokens, peak $0.30 and $1.20">
+  <meta name="twitter:image" content="https://llm.okamomedia.tokyo/assets/og/en-deepseek-v4-1-flash.png">
+  <meta name="twitter:image:alt" content="DeepSeek V4.1 Flash price cards: $0.15 off-peak input and $0.60 off-peak output per 1M tokens, peak $0.30 and $1.20">
   <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/deepseek-v4-1-flash/">
   <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/deepseek-v4-1-flash/">
   <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/deepseek-v4-1-flash/">
@@ -13,10 +21,10 @@
   <!-- OGP -->
   <meta property="og:type"        content="article">
   <meta property="og:url"         content="https://llm.okamomedia.tokyo/en/deepseek-v4-1-flash/">
-  <meta property="og:title"       content="DeepSeek V4.1 Flash Guide — Pricing, Benchmarks, Azure AI Foundry &amp; Copilot Setup">
-  <meta property="og:description" content="Released 2026-09-10, DeepSeek V4.1 Flash costs far less than V4 Pro and supports native image input. V4 Pro keeps running after 9/14 — DeepSeek withdrew its routing notice.">
+  <meta property="og:title"       content="DeepSeek V4.1 Flash on Azure — Pricing, Deploy Walkthrough, Benchmarks &amp; Copilot Setup">
+  <meta property="og:description" content="Released 2026-09-10, DeepSeek V4.1 Flash costs $0.15/$0.60 off-peak (re-checked 2026-11-12, unchanged) and supports native image input. On Microsoft Foundry you can deploy DeepSeek-V4.1-Flash with the az CLI — measured 2026-09-28, including capacity and quota numbers.">
   <meta property="og:site_name"   content="LLM Data Hub">
-  <meta name="twitter:card"       content="summary">
+  <meta name="twitter:card"       content="summary_large_image">
 
   <!-- Structured data -->
   <script type="application/ld+json">
@@ -25,11 +33,11 @@
     "@type": "TechArticle",
     "headline": "DeepSeek V4.1 Flash Guide — Pricing, Benchmarks, Azure AI Foundry and GitHub Copilot Setup",
     "datePublished": "2026-09-11",
-    "dateModified": "2026-09-15",
+    "dateModified": "2026-11-12",
     "author": { "@type": "Organization", "name": "okamoちゃんねる" },
     "publisher": { "@type": "Organization", "name": "okamoちゃんねる" },
     "url": "https://llm.okamomedia.tokyo/en/deepseek-v4-1-flash/",
-    "description": "DeepSeek V4.1 Flash official peak/off-peak pricing, specifications, benchmarks, setup steps, an Azure AI Foundry deployment walkthrough for DeepSeek-V4-Flash-0731, and the V4 Pro continuation (routing notice withdrawn)."
+    "description": "DeepSeek V4.1 Flash official peak/off-peak pricing, specifications, benchmarks, setup steps, a measured Microsoft Foundry (Azure) deployment walkthrough for DeepSeek-V4.1-Flash with capacity/quota notes, first-party vs Azure differences, and the V4 Pro continuation."
   }
   </script>
 
@@ -95,6 +103,8 @@
 
   <main>
     <div class="container">
+<p style="font-size:.9rem;background:var(--c-surface2);border:1px solid var(--c-border);border-radius:6px;padding:.6rem .9rem;max-width:820px;">Added 2026-11-12: the Azure model catalog lists this model as <code>DeepSeek-V4.1-Flash-1017</code> (Version <code>2026-10-17</code>, 1000k context, sold directly by Azure). DeepSeek’s own docs give the same MODEL VERSION, <code>DeepSeek-V4.1-Flash-1017</code>. Version strings differ by environment, so always confirm with <code>list-models</code> below.</p>
+<figure class="key-visual" style="margin:1.5rem 0 .5rem;"><img src="/assets/og/en-deepseek-v4-1-flash.png" alt="DeepSeek V4.1 Flash price cards: $0.15 off-peak input and $0.60 off-peak output per 1M tokens, peak $0.30 and $1.20" width="1200" height="630" loading="eager" decoding="async" style="width:100%;max-width:900px;height:auto;display:block;margin:0 auto;border:1px solid var(--c-border);border-radius:var(--r-md);"></figure>
 
       <div class="section" style="padding-bottom:0;">
         <h1 class="section-title" style="font-size:1.55rem;">
@@ -110,14 +120,37 @@
 
         <div class="updated-bar">
           <span class="dot">●</span>
-          Last updated: <time datetime="2026-09-15">September 15, 2026</time>
-          &ensp;|&ensp; Primary source: <a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">official pricing page</a> · <a href="https://api-docs.deepseek.com/updates/" target="_blank" rel="noopener">Change Log (2026-09-10)</a>
-          &ensp;|&ensp; Retrieved: 2026-09-15
+          Last updated: <time datetime="2026-11-12">November 12, 2026</time>
+          &ensp;|&ensp; Primary source: <a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">official pricing page</a> (re-checked 2026-11-03, no change) · <a href="https://ai.azure.com/catalog/models/DeepSeek-V4.1-Flash" target="_blank" rel="noopener">Microsoft Foundry model catalog</a>
+          &ensp;|&ensp; Retrieved: 2026-10-05
         </div>
       </div>
 
       <!-- ===== Key points ===== -->
-      <section class="section" style="padding-top:1.5rem;" aria-labelledby="key-heading">
+      <section class="section" style="padding-top:1.5rem;" aria-labelledby="u1017-heading">
+<h2 class="section-title" id="u1017-heading" style="font-size:1.2rem;">October 17, 2026 update — V4.1-Flash-1017, plus Search and Fetch APIs</h2>
+<div class="context-note" style="border-left-color:var(--c-green);">
+  <ul style="margin:0;padding-left:1.1rem;line-height:1.9;">
+    <li><strong>The model was updated; pricing and API calls stayed the same.</strong> Verbatim: “DeepSeek V4.1 Flash has been upgraded to DeepSeek-V4.1-Flash-1017. The official web and APP models have also been updated to the new version. The API calling method and pricing remain unchanged — simply use deepseek-flash to access the latest model.”</li>
+    <li><strong>Benchmarks below are copied from the official changelog</strong> (not our measurements): HLE (w/o tools) 42.6 (44.0*) / Terminal-Bench 4.0 42.3 / DeepSWE v1.1 77.0 / ProgramBench 29.1 / NL2Repo-Bench 68.2 / Automation-Bench v1.0.6 60.5 / Agents' Last Exam 35.4 / Apex Bench v1.1 72.1 / Chartography (w/tools) 83.0 / BabyVision (w/tools) 92.5 / ZeroBench-main (w/tools) 51.0. *pure-text subset of HLE only; Terminal-Bench 4.0 was run with the Claude Code framework, DeepSWE with Mini-SWE-V2, ZeroBench-main with Pass@5.</li>
+    <li><strong>DeepSeek says it also cut task runtime and output length.</strong> Verbatim: “While improving performance, we also reduced the model's task runtime and output length, enabling users to complete tasks at lower cost and higher speed”. DeepSeek Harness 0.2.1-rc.1 or later is recommended.</li>
+    <li><strong>The phrasing “significantly enhanced project development capabilities” does not appear verbatim on the official page</strong>, so we do not use it; we stick to the benchmark table and the runtime/output-length wording above.</li>
+  </ul>
+</div>
+<h3 style="font-size:1rem;margin:1.6rem 0 .5rem;">Web Search / Fetch APIs (released the same day)</h3>
+<div class="table-wrap"><table><thead><tr><th>Item</th><th>Official documentation</th></tr></thead><tbody>
+<tr><td class="model-name">Search endpoint</td><td><code>POST https://api.deepseek.com/v1/tools/search</code></td></tr>
+<tr><td class="model-name">Fetch endpoint</td><td><code>POST https://api.deepseek.com/v1/tools/fetch</code></td></tr>
+<tr><td class="model-name">Auth</td><td>Same bearer auth as the DeepSeek API, JSON body (<code>Authorization: Bearer &lt;API Key&gt;</code>)</td></tr>
+<tr><td class="model-name">Billing (Search)</td><td>$0.75 per 1,000 successful requests</td></tr>
+<tr><td class="model-name">Billing (Fetch)</td><td>$0.75 per 1,000 successful requests</td></tr>
+<tr><td class="model-name">Search limits</td><td>query: 1–128 Unicode characters (not all whitespace); count: 1–50 (default 10); need_content defaults to false</td></tr>
+<tr><td class="model-name">Fetch limits</td><td>url up to 8192 characters, HTTP or HTTPS. Availability depends on the target site (verbatim: “Fetching is subject to the target site's availability and access policies.”)</td></tr>
+</tbody></table></div>
+<p style="font-size:.78rem;color:var(--c-muted);margin-top:.3rem;">Billing is per successful request and is separate from token billing. Server-side tool calls made through DeepSeek Harness, Claude Code or Codex are “currently free of charge”; per-request billing starts at 00:00 Beijing time on November 1, 2026. Token prices (Flash: $0.003 cache hit / $0.15 cache miss / $0.60 output, all off-peak) were unchanged when we re-checked on 2026-11-03.</p>
+</section>
+
+<section class="section" style="padding-top:1.5rem;" aria-labelledby="key-heading">
         <div class="key-box">
           <h2 id="key-heading">The short version</h2>
           <ul>
@@ -130,10 +163,10 @@
 
       <!-- ===== Pricing ===== -->
       <section class="section" style="padding-top:0;" aria-labelledby="price-heading">
-        <h2 class="section-title" id="price-heading" style="font-size:1.2rem;">Official pricing (as of 2026-09-11)</h2>
+        <h2 class="section-title" id="price-heading" style="font-size:1.2rem;">Official pricing (re-checked 2026-11-03 — unchanged)</h2>
         <p class="section-sub">USD per 1M tokens. Off-peak rates are half the peak rates.</p>
 
-        <div class="screenshot-note">✅ Verified via Firecrawl on api-docs.deepseek.com — Models &amp; Pricing (2026-09-11).</div>
+        <div class="screenshot-note">✅ Verified via Firecrawl on api-docs.deepseek.com — Models &amp; Pricing (first read 2026-09-11; <strong>re-fetched 2026-10-05 to confirm rates, peak hours and the legacy-name note are unchanged</strong>).</div>
 
         <div class="table-wrap">
           <table class="peak-table">
@@ -166,7 +199,7 @@
           </table>
         </div>
 
-        <p style="font-size:.78rem;color:var(--c-muted);">⏰ <strong>Peak hours</strong>: 01:00-04:00 and 06:00-10:00 UTC, <strong>Monday-Friday only</strong> (JST 10:00-13:00 / 15:00-19:00; Beijing 09:00-12:00 / 14:00-18:00). <strong>Weekends are off-peak all day.</strong> The peak/off-peak scheme took effect 2026-08-16 16:00 UTC. Source: <a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">api-docs.deepseek.com</a> (retrieved 2026-09-11).</p>
+        <p style="font-size:.78rem;color:var(--c-muted);">⏰ <strong>Peak hours</strong>: 01:00-04:00 and 06:00-10:00 UTC, <strong>Monday-Friday only (excluding Chinese public holidays)</strong> (JST 10:00-13:00 / 15:00-19:00; Beijing 09:00-12:00 / 14:00-18:00). <strong>Weekends and Chinese public holidays are off-peak all day.</strong> The peak/off-peak scheme took effect 2026-08-16 16:00 UTC, and footnote (2) on the official pricing page reads "Monday through Friday (excluding Chinese holidays)". Source: <a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">api-docs.deepseek.com</a> (first read 2026-09-11; footnote captured 2026-09-23, re-checked 2026-11-03).</p>
 
         <p style="font-size:.86rem;color:var(--c-muted);margin-top:.8rem;">Estimate your own cost with the <a href="/en/calculator/">token calculator</a>, which lists both off-peak and peak rows for V4.1 Flash. For cross-provider comparison see <a href="/en/pricing/#dh">pricing (DeepSeek)</a>.</p>
       </section>
@@ -291,58 +324,64 @@
 
       <!-- ===== Azure AI Foundry ===== -->
       <section class="section" style="padding-top:0;" aria-labelledby="azure-heading">
-        <h2 class="section-title" id="azure-heading" style="font-size:1.2rem;">Run it on Azure AI Foundry (DeepSeek-V4-Flash-0731)</h2>
+        <h2 class="section-title" id="azure-heading" style="font-size:1.2rem;">Running it on Microsoft Foundry (Azure) — deploying DeepSeek-V4.1-Flash with the CLI (measured 2026-09-28)</h2>
+          <p class="section-sub" style="font-size:.92rem;">Added 2026-11-05: Azure’s DeepSeek pricing tab lists only V3 / V3.2 / R1 / V4 Pro / V4 Flash (including 0731) — <strong>there is still no DeepSeek-V4.1-Flash row</strong>. V4.1-Flash is deployed from the Microsoft Foundry model catalog (Direct from Azure); the steps below are from our 2026-09-28 run.</p>
         <p class="section-sub">
-          Beyond DeepSeek's own API, you can deploy DeepSeek models through Microsoft Azure's <strong>Azure AI Foundry (Microsoft Foundry)</strong>.
-          This walkthrough deploys <code>DeepSeek-V4-Flash-0731</code>, which Azure sells as a "Direct from Azure" model, using the <strong>Azure CLI, then verifies the endpoint with curl</strong>.
+          DeepSeek's first-party API is not the only route: you can run DeepSeek models through <strong>Microsoft Foundry on Azure</strong>.
+          In a measurement on 2026-09-28, we <strong>deployed the current model <code>DeepSeek-V4.1-Flash</code> (version <code>2026-09-10</code>) with the <code>az</code> CLI and got a response back from the OpenAI-compatible endpoint</strong>.
+          Below: ① availability ② deploy ③ choosing capacity ④ verifying the call ⑤ the pitfalls, using the exact commands we ran.
         </p>
 
         <div class="screenshot-note">
-          ℹ️ <strong>How <code>DeepSeek-V4-Flash-0731</code> relates to V4.1 Flash</strong>:
-          <code>-0731</code> is the <strong>previous generation</strong> (released 2026-07-31; same architecture and size as V4-Flash-Preview, re-post-trained).
-          On DeepSeek's own API the V4 Flash generation was retired into V4.1 Flash, but <strong>Azure AI Foundry still offers <code>DeepSeek-V4-Flash-0731</code> as a Preview model</strong> (as of 2026-09-13).
-          The Azure-side details come from Microsoft Learn. The command sequence was <strong>verified in practice by the operator (okamo channel) in September 2026</strong>.
+          ℹ️ <strong>Where the primary sources stand (Azure pricing page re-checked 2026-10-05 / Learn list as of 2026-09-29)</strong>
+          <ul style="margin:.5rem 0 0;padding-left:1.2em;">
+            <li><strong>Model catalog</strong>: <code>DeepSeek-V4.1-Flash</code> is listed as "Direct from Azure" — <strong>version 2026-09-10, type Chat completion, lifecycle Preview, context window 1000k</strong>.</li>
+            <li><strong>Foundry blog (updated 2026-09-25)</strong>: two consumption paths are announced — "Direct from Azure" (public preview) and "Fireworks on Foundry" (generally available).</li>
+            <li><strong>Microsoft Learn's model list</strong> (ms.date 2026-09-21) still shows only <code>DeepSeek-V4-Pro</code>, <code>DeepSeek-V4-Flash-0731</code> (Preview) and <code>DeepSeek-V4-Flash</code> — <strong>V4.1-Flash is not listed yet</strong>.</li>
+            <li><strong>Azure's pricing page</strong> has <strong>no V4.1-Flash row yet</strong> either (re-checked <strong>2026-10-05</strong>; the DeepSeek tab still lists only V4 Pro, V4 Flash, V4 Flash 0731 and V3.1).</li>
+          </ul>
+          → The catalog and the blog are ahead; Learn's list and the pricing page lag behind. Don't conclude "it isn't available because the docs don't list it" — <strong>run <code>list-models</code> against your own account and check the real thing</strong> (Step 3).
         </div>
 
         <h3 style="font-size:1rem;margin:1.5rem 0 .6rem;">Prerequisites</h3>
         <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.3em;">
-          <li style="margin-bottom:.35rem;">An Azure subscription with permission to create resources. Registering a resource provider requires <strong>Owner</strong> at the subscription level.</li>
-          <li style="margin-bottom:.35rem;">The Azure CLI (<code>az</code>). The <code>az cognitiveservices</code> commands ship in the CLI core, so no extra extension is needed on Azure CLI 2.60 or later.</li>
-          <li>You are signed in to the target subscription via <code>az login</code>.</li>
+          <li style="margin-bottom:.35rem;">An Azure subscription where you can create resources (registering a resource provider requires <strong>Owner</strong>)</li>
+          <li style="margin-bottom:.35rem;">The Azure CLI (<code>az</code>). The <code>az cognitiveservices</code> commands ship with core, so Azure CLI 2.60+ needs no extra extension</li>
+          <li>You are signed in to the target subscription with <code>az login</code></li>
         </ul>
 
         <h3 style="font-size:1rem;margin:1.5rem 0 .6rem;">Placeholders used below</h3>
         <div class="table-wrap">
           <table class="spec-table">
             <caption style="display:none;">Placeholders used in the commands</caption>
-            <thead><tr><th>Placeholder</th><th>What to supply</th></tr></thead>
+            <thead><tr><th>Placeholder</th><th>Meaning / value to supply</th></tr></thead>
             <tbody>
-              <tr><td class="model-name"><code>&lt;SUBSCRIPTION_ID_OR_NAME&gt;</code></td><td>The ID or name of the Azure subscription to use</td></tr>
-              <tr><td class="model-name"><code>&lt;RESOURCE_GROUP&gt;</code></td><td>Resource group name (for example <code>rg-deepseek</code>)</td></tr>
-              <tr><td class="model-name"><code>&lt;LOCATION&gt;</code></td><td>Region (for example <code>eastus</code>). Availability differs per model — check the model catalog in the Azure portal</td></tr>
-              <tr><td class="model-name"><code>&lt;ACCOUNT_NAME&gt;</code></td><td>Azure AI Services account name. Must be <strong>globally unique</strong> (for example <code>dsflash0731</code>). The same value is reused for <code>--custom-domain</code></td></tr>
-              <tr><td class="model-name"><code>&lt;DEPLOYMENT_NAME&gt;</code></td><td>Deployment name (your choice). <strong>The <code>model</code> field in API calls takes the deployment name, not the model name</strong> (for example <code>deepseek-0731</code>)</td></tr>
-              <tr><td class="model-name"><code>&lt;MODEL_VERSION&gt;</code></td><td>The model version string. <strong>Read the actual value from the <code>az cognitiveservices account list-models</code> call below</strong> — this page does not assert it</td></tr>
-              <tr><td class="model-name"><code>&lt;API_KEY&gt;</code></td><td>The Azure AI Services account key (fetched from the CLI in the steps below)</td></tr>
+              <tr><td class="model-name"><code>&lt;SUBSCRIPTION_ID_OR_NAME&gt;</code></td><td>ID or name of the Azure subscription to use</td></tr>
+              <tr><td class="model-name"><code>&lt;RESOURCE_GROUP&gt;</code></td><td>Resource group name (e.g. <code>rg-deepseek</code>)</td></tr>
+              <tr><td class="model-name"><code>&lt;LOCATION&gt;</code></td><td>Region (e.g. <code>eastus</code>). Availability differs per model — check the Azure portal model catalog</td></tr>
+              <tr><td class="model-name"><code>&lt;ACCOUNT_NAME&gt;</code></td><td>Azure AI Services account name, which must be <strong>globally unique</strong> (e.g. <code>dsflash0928</code>). The same value is used for <code>--custom-domain</code></td></tr>
+              <tr><td class="model-name"><code>&lt;DEPLOYMENT_NAME&gt;</code></td><td>Your deployment name (free choice). <strong>The <code>model</code> field in API calls takes this deployment name, not the model name</strong> (e.g. <code>ds-flash-01</code>)</td></tr>
+              <tr><td class="model-name"><code>&lt;MODEL_VERSION&gt;</code></td><td>Model version string. <strong>Measured as <code>2026-09-10</code> on 2026-09-28, but names and versions differ by environment (subscription/region) — always confirm with <code>list-models</code> below</strong></td></tr>
+              <tr><td class="model-name"><code>&lt;API_KEY&gt;</code></td><td>Key of the Azure AI Services account (fetched from the CLI in the steps below)</td></tr>
             </tbody>
           </table>
         </div>
 
         <h3 style="font-size:1rem;margin:1.5rem 0 .6rem;">Step 0 — Prepare the Azure CLI and register the resource provider</h3>
-        <p style="font-size:.86rem;color:var(--c-muted);">Doing this first avoids the <code>MissingSubscriptionRegistration</code> error later on.</p>
-        <pre class="cmd"><code># Check the Azure CLI version (2.60 or later recommended)
+        <p style="font-size:.86rem;color:var(--c-muted);">Doing this first avoids the <code>MissingSubscriptionRegistration</code> error later.</p>
+        <pre class="cmd"><code># Check the Azure CLI version (2.60+ recommended)
 az version
 
 # Sign in if needed
 az login
 
-# Select the target subscription
+# Select the subscription to use
 az account set --subscription "&lt;SUBSCRIPTION_ID_OR_NAME&gt;"
 
-# Register the resource provider (prevents MissingSubscriptionRegistration)
+# Register the resource provider (avoids MissingSubscriptionRegistration)
 az provider register --namespace Microsoft.CognitiveServices
 
-# Check registration state (may take a few minutes to reach Succeeded)
+# Check registration state (can take a few minutes to become Succeeded)
 az provider show --namespace Microsoft.CognitiveServices --query registrationState -o tsv</code></pre>
 
         <h3 style="font-size:1rem;margin:1.5rem 0 .6rem;">Step 1 — Create a resource group</h3>
@@ -351,7 +390,7 @@ az provider show --namespace Microsoft.CognitiveServices --query registrationSta
   --location "&lt;LOCATION&gt;"</code></pre>
 
         <h3 style="font-size:1rem;margin:1.5rem 0 .6rem;">Step 2 — Create the Azure AI Services account</h3>
-        <p style="font-size:.86rem;color:var(--c-muted);">Passing <code>--custom-domain</code> makes later endpoints take the form <code>https://&lt;ACCOUNT_NAME&gt;.openai.azure.com/</code>.</p>
+        <p style="font-size:.86rem;color:var(--c-muted);">With <code>--custom-domain</code>, the endpoint becomes <code>https://&lt;ACCOUNT_NAME&gt;.openai.azure.com/</code>.</p>
         <pre class="cmd"><code>az cognitiveservices account create \
   --name "&lt;ACCOUNT_NAME&gt;" \
   --resource-group "&lt;RESOURCE_GROUP&gt;" \
@@ -363,37 +402,54 @@ az provider show --namespace Microsoft.CognitiveServices --query registrationSta
   --allow-project-management true \
   --yes</code></pre>
 
-        <h3 style="font-size:1rem;margin:1.5rem 0 .6rem;">Step 3 — Deploy DeepSeek-V4-Flash-0731</h3>
-        <p style="font-size:.86rem;color:var(--c-muted);">First list the available models and versions, then deploy with those values.</p>
+        <h3 style="font-size:1rem;margin:1.5rem 0 .6rem;">Step 3 — Deploy DeepSeek-V4.1-Flash</h3>
+        <p style="font-size:.86rem;color:var(--c-muted);">List the models actually available to your account, then deploy with those values. <strong>Checking the real thing first is how you stay safe while the docs lag behind.</strong></p>
         <pre class="cmd"><code># List deployable DeepSeek models and their versions
 az cognitiveservices account list-models \
   -n "&lt;ACCOUNT_NAME&gt;" -g "&lt;RESOURCE_GROUP&gt;" \
-  --query "[?contains(name,'DeepSeek')].{name:name,format:format,version:version}" -o table
+  --query "[?contains(name,'DeepSeek')].{name:name,format:format,version:version}" -o json
 
-# Deploy the model (GlobalStandard SKU; see the capacity note below)
+# Deploy (SKU is GlobalStandard; see the notes below for --sku-capacity)
 az cognitiveservices account deployment create \
   --name "&lt;ACCOUNT_NAME&gt;" \
   --resource-group "&lt;RESOURCE_GROUP&gt;" \
   --deployment-name "&lt;DEPLOYMENT_NAME&gt;" \
-  --model-name "DeepSeek-V4-Flash-0731" \
+  --model-name "DeepSeek-V4.1-Flash" \
   --model-version "&lt;MODEL_VERSION&gt;" \
   --model-format "DeepSeek" \
   --sku-name "GlobalStandard" \
-  --sku-capacity 20</code></pre>
+  --sku-capacity 20
+
+# Confirm the deployment (model name, SKU, capacity)
+az cognitiveservices account list-deployments \
+  -n "&lt;ACCOUNT_NAME&gt;" -g "&lt;RESOURCE_GROUP&gt;" \
+  --query "[].{name:name,model:properties.model.name,version:properties.model.version,sku:sku}" -o json</code></pre>
         <p style="font-size:.8rem;color:var(--c-muted);">
-          💡 <code>--sku-capacity</code> consumes quota measured in Tokens Per Minute (thousands). If capacity is insufficient the deployment can fail with
-          <code>InsufficientQuota</code> — adjust the value, or request a quota increase in the Azure portal.
+          💡 On 2026-09-28, <code>list-models</code> returned <code>DeepSeek-V4.1-Flash</code> (version <code>2026-09-10</code>, format <code>DeepSeek</code>) and the deployment went through with those values.
+          Version strings can differ by environment, so <strong>don't paste the value from this article — use what <code>list-models</code> returns</strong>.
         </p>
 
         <div class="warn-box">
-          <h2>⚠️ <code>--sku-capacity</code> in practice (measured by the operator, 2026-09-15)</h2>
+          <h2>⚠️ <code>--sku-capacity</code> in practice (measured by the operator, 2026-09-28)</h2>
           <ul>
-            <li><code>--sku-capacity 1</code> <strong>does deploy successfully</strong>, but it is <strong>too small: the API returned quota errors after only light use</strong>. The operator has run it at <code>20</code> since, without further trouble.</li>
-            <li>Set a value <strong>within the limit</strong> reported by <code>az cognitiveservices usage list</code>.</li>
-            <li><strong>Do not consume the whole limit.</strong> Once it is used up, no quota is left to assign to other deployments in the same subscription.</li>
+            <li><code>--sku-capacity 1</code> <strong>does deploy successfully</strong>, but it was <strong>so small that a few API calls hit quota errors</strong>. In our measurement, <code>20</code> was stable (a short trial in one environment; the capacity you need varies with load, so <strong>this is not a general recommendation</strong>).</li>
+            <li>Capacity maps to <strong>TPM (tokens per minute)</strong>. Microsoft Learn states that <strong>TPM is assigned in increments of 1,000 and RPM is derived from TPM, varying by model</strong> (<a href="https://learn.microsoft.com/en-us/azure/foundry/foundry-models/quotas-limits" target="_blank" rel="noopener">Foundry Models quotas and limits</a>).</li>
+            <li>Measured on a capacity-20 deployment via response headers: <code>x-ratelimit-limit-requests: 20</code> (RPM) and <code>x-ratelimit-limit-tokens: 20000</code> (TPM). <strong>Always confirm your own limits from these headers or <code>usage list</code> after deploying.</strong></li>
+            <li>Quota is consumed <strong>per subscription</strong>. For <strong>Global Standard, deployments of the same model and version share a single quota pool across all regions</strong>, so adding the same model in another region competes for the same pool (same Learn page).</li>
+            <li><strong>Don't consume the whole limit.</strong> If you do, you cannot allocate quota to other deployments in the same subscription.</li>
+            <li>Calls above the limit return <strong>HTTP 429</strong>. Use exponential backoff with retries, and request a quota increase if it is a recurring problem (same Learn page).</li>
           </ul>
-          <pre class="cmd"><code># Check current quota usage and limit (LOCATION = deployment region)
+          <pre class="cmd"><code># Check current quota usage and limits (LOCATION = your deployment region)
 az cognitiveservices usage list --location "&lt;LOCATION&gt;" -o table</code></pre>
+        </div>
+
+        <div class="warn-box">
+          <h2>⚠️ There is no <code>deployment update</code> in the core CLI (changing capacity)</h2>
+          <ul>
+            <li>Microsoft Learn's <a href="https://learn.microsoft.com/en-us/cli/azure/cognitiveservices/account/deployment?view=azure-cli-latest" target="_blank" rel="noopener"><code>az cognitiveservices account deployment</code></a> lists <code>create</code> / <code>list</code> / <code>show</code> — <strong>core has no <code>update</code></strong> (it exists only in the Preview <code>foundry-cost-control</code> extension).</li>
+            <li>So <strong>changing capacity practically means re-running <code>deployment create</code> with the new value</strong> (measured 2026-09-28).</li>
+            <li>Editing the deployment in the Azure portal is the safest fallback. Subcommand layouts change, so check the current Learn page before you run anything.</li>
+          </ul>
         </div>
 
         <h3 style="font-size:1rem;margin:1.5rem 0 .6rem;">Step 4 — Export the connection settings</h3>
@@ -404,11 +460,11 @@ export AZURE_AI_API_KEY="$(az cognitiveservices account keys list \
   --resource-group "&lt;RESOURCE_GROUP&gt;" \
   --query key1 -o tsv)"
 
-# The API "model" field takes the deployment name
+# The API's model field takes the deployment name
 export DEPLOYMENT_NAME="&lt;DEPLOYMENT_NAME&gt;"</code></pre>
 
-        <h3 style="font-size:1rem;margin:1.5rem 0 .6rem;">Step 5 — Verify connectivity with curl</h3>
-        <pre class="cmd"><code>curl -sS "$AZURE_AI_ENDPOINT/chat/completions" \
+        <h3 style="font-size:1rem;margin:1.5rem 0 .6rem;">Step 5 — Verify with curl (and read the rate-limit headers)</h3>
+        <pre class="cmd"><code>curl -sS -D - "$AZURE_AI_ENDPOINT/chat/completions" \
   -H "Content-Type: application/json" \
   -H "api-key: $AZURE_AI_API_KEY" \
   -X POST \
@@ -419,35 +475,73 @@ export DEPLOYMENT_NAME="&lt;DEPLOYMENT_NAME&gt;"</code></pre>
     ]
   }'</code></pre>
         <p style="font-size:.84rem;color:var(--c-muted);">
-          ✅ A JSON response means the endpoint is live. Note that <code>model</code> must be the deployment name — passing the model name <code>DeepSeek-V4-Flash-0731</code> can return a 404.
-          If you would rather not export the key, use <code>-H "api-key: &lt;API_KEY&gt;"</code> inline.
-          For Entra ID (formerly Azure AD) authentication, Microsoft's tutorial shows obtaining a token with scope <code>https://ai.azure.com/.default</code> via <code>DefaultAzureCredential</code>.
+          ✅ A JSON response means you are connected. Note that <code>model</code> takes the <em>deployment</em> name (passing the model name <code>DeepSeek-V4.1-Flash</code> can return a 404).
+          <code>-D -</code> prints the <strong>rate-limit headers (<code>x-ratelimit-limit-requests</code> / <code>x-ratelimit-limit-tokens</code>)</strong>, so you can confirm your capacity is in effect.
+          If you prefer not to keep keys in environment variables, pass <code>-H "api-key: &lt;API_KEY&gt;"</code> directly.
+          For Entra ID (formerly Azure AD) auth, the official tutorial's approach with <code>DefaultAzureCredential</code> and scope <code>https://ai.azure.com/.default</code> also works.
         </p>
 
         <div class="warn-box">
+          <h2>⚠️ Pitfalls specific to the Azure route</h2>
+          <ul>
+            <li><strong>DeepSeek's own <code>thinking</code> parameter does not work on Azure.</strong> In our measurement, including <code>{"thinking": {"type": "enabled"}}</code> returned <strong>HTTP 400</strong>; only <code>reasoning_effort</code> was accepted. If you port code from the first-party API, revisit those lines first.</li>
+            <li>The Foundry blog describes this model's reasoning effort as a <strong>continuous setting from 1 to 100</strong>, while the first-party API uses three levels (<code>low</code> / <code>high</code> / <code>max</code>). <strong>The parameter systems differ</strong> — start small when migrating.</li>
+            <li>The catalog card states <strong>Context window 1000k / Token limits 128k output</strong>, which conflicts with the 384K max output DeepSeek publishes. <strong>Verify real limits in your own account.</strong></li>
+            <li>Model names and versions vary by environment — use <code>list-models</code> rather than hard-coding values from this article.</li>
+            <li>It is <strong>Preview (public preview)</strong>: SKUs, pricing, quotas and parameters can change without notice.</li>
+          </ul>
+        </div>
+
+        <div class="warn-box">
           <h2>⚠️ If you hit <code>MissingSubscriptionRegistration</code></h2>
-          <p style="margin-bottom:.5rem;">It looks like this (HTTP 409 / Conflict). It simply means the <code>Microsoft.CognitiveServices</code> resource provider is not registered on the subscription — nothing is wrong with your resource request.</p>
+          <p style="margin-bottom:.5rem;">The error looks like this (HTTP 409 / Conflict). <strong>The subscription simply has not registered the <code>Microsoft.CognitiveServices</code> resource provider</strong> — nothing is wrong with your resource definition.</p>
           <pre class="cmd"><code>MissingSubscriptionRegistration
 The subscription is not registered to use namespace 'Microsoft.CognitiveServices'.</code></pre>
           <ul style="margin-top:.5rem;">
-            <li><strong>Fix 1 (CLI)</strong>: run <code>az provider register --namespace Microsoft.CognitiveServices</code> and wait until <code>az provider show --namespace Microsoft.CognitiveServices --query registrationState -o tsv</code> reports <code>Registered</code> (this can take a few minutes).</li>
+            <li><strong>Fix 1 (CLI)</strong>: run <code>az provider register --namespace Microsoft.CognitiveServices</code>, then wait until <code>az provider show --namespace Microsoft.CognitiveServices --query registrationState -o tsv</code> returns <code>Registered</code> (can take a few minutes).</li>
             <li><strong>Fix 2 (portal)</strong>: Azure portal → Subscriptions → Resource providers → select <code>Microsoft.CognitiveServices</code> → Register.</li>
-            <li><strong>Permissions</strong>: registration requires <strong>Owner on the subscription</strong>. Ask an administrator if you lack it.</li>
+            <li><strong>Permissions</strong>: registration requires <strong>Owner</strong> on the subscription. Ask an administrator otherwise.</li>
             <li>Official troubleshooting: <a href="https://learn.microsoft.com/en-us/azure/azure-resource-manager/troubleshooting/error-register-resource-provider" target="_blank" rel="noopener">Register a resource provider</a></li>
           </ul>
         </div>
 
+        <h3 style="font-size:1rem;margin:1.5rem 0 .6rem;">First-party API vs the Azure route (as of 2026-10-05)</h3>
+        <p style="font-size:.86rem;color:var(--c-muted);">Same model, not the same service. Only the differences that matter in operations:</p>
+        <div class="table-wrap">
+          <table class="spec-table">
+            <caption style="display:none;">DeepSeek first-party API vs Microsoft Foundry on Azure</caption>
+            <thead><tr><th>Item</th><th>DeepSeek first-party API</th><th>Via Microsoft Foundry (Azure)</th></tr></thead>
+            <tbody>
+              <tr><td class="model-name">Unit price (per 1M tokens)</td><td><strong>Peak / off-peak</strong>: input (cache miss) $0.15–$0.30, output $0.60–$1.20, cache hit $0.003–$0.006</td><td><strong>No time-of-day variation</strong>: input $0.30, output $1.20, cached input $0.006 (Direct from Azure, per Microsoft's announcement)</td></tr>
+              <tr><td class="model-name">Billing model</td><td>Pure consumption by token</td><td>Token consumption plus a <strong>reserved capacity (TPM) per deployment</strong>; over-limit calls return 429</td></tr>
+              <tr><td class="model-name">Reasoning control</td><td>OpenAI-style <code>thinking</code> (enabled by default) plus <code>reasoning_effort</code> (<code>low</code>/<code>high</code>/<code>max</code>, default <code>high</code>)</td><td><code>reasoning_effort</code> only (<code>thinking</code> returns 400 in our test); the blog describes a continuous 1–100 setting</td></tr>
+              <tr><td class="model-name">API surface</td><td>OpenAI-compatible, Anthropic-compatible and Responses API</td><td>OpenAI-compatible (<code>/openai/v1</code>) only; no Anthropic-compatible endpoint</td></tr>
+              <tr><td class="model-name">Where data lives</td><td>The privacy policy states personal data is "directly collect[ed], process[ed] and store[d] ... in People's Republic of China"</td><td>Follows the deployment type: <strong>Global Standard processes in any Azure region</strong>; choose DataZone or Regional to pin the geography</td></tr>
+              <tr><td class="model-name">Training on your data</td><td>The policy covers improving services and "train[ing] and improv[ing] our technology, such as our machine learning models and algorithms", and grants an <strong>opt-out right</strong> (API applicability not confirmed in primary sources)</td><td>Microsoft states data is <strong>"NOT used to train any generative AI foundation models without your permission or instruction"</strong> and is not available to the model provider</td></tr>
+              <tr><td class="model-name">Rate limits</td><td>Official announcement advertises "no limits on concurrency or rate"</td><td><strong>Determined by capacity</strong>: measured capacity 20 → 20 RPM / 20,000 TPM</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:.78rem;color:var(--c-muted);">
+          For the data-handling side in detail, see the <a href="/en/glossary/zero-data-retention/">zero data retention explainer</a> and the China AI section of <a href="/en/china-ai/">the China AI page</a>.
+        </p>
+
         <div class="screenshot-note" style="margin-top:1.2rem;">
-          ⚠️ <strong>We deliberately do not publish Azure-side pricing.</strong>
-          Azure AI Foundry prices DeepSeek models on its own schedule, separate from DeepSeek's peak/off-peak API rates. We have not confirmed a primary-source rate specific to <code>DeepSeek-V4-Flash-0731</code>, so please check the
-          <a href="https://azure.microsoft.com/en-us/pricing/details/ai-foundry-models/deepseek/" target="_blank" rel="noopener">Azure Foundry Models pricing page</a> or the Azure portal before you commit.
+          💰 <strong>Azure-side pricing (Microsoft's announced figures)</strong>:
+          In the Foundry blog's table (updated 2026-09-25), <strong>Direct from Azure (Global Standard) is input $0.30 / output $1.20 / cached input $0.006</strong>, and
+          <strong>Fireworks on Foundry (Standard Global) is input $0.37 / output $1.50 / cached input $0.007</strong> (USD per 1M tokens).
+          The Direct from Azure figures match DeepSeek's <strong>peak rates</strong> — there is no off-peak discount.
+          Because <strong>Azure's pricing page still has no V4.1-Flash row as of 2026-10-05</strong>, please confirm in
+          <a href="https://azure.microsoft.com/en-us/pricing/details/ai-foundry-models/deepseek/" target="_blank" rel="noopener">Azure's Foundry Models pricing page</a> or the Azure portal before you commit.
         </div>
 
         <p style="font-size:.78rem;color:var(--c-muted);">
-          Sources: <a href="https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure?pivots=azure-direct-others" target="_blank" rel="noopener">Microsoft Learn — Foundry Models sold by Azure</a> (DeepSeek-V4-Flash-0731 is Preview; input 1M, output 384K, tool calling supported),
-          <a href="https://learn.microsoft.com/en-us/azure/foundry/foundry-models/how-to/quickstart-create-resources" target="_blank" rel="noopener">Create and configure resources for Microsoft Foundry Models</a>, and
-          <a href="https://learn.microsoft.com/en-us/azure/foundry/foundry-models/tutorials/get-started-deepseek-r1" target="_blank" rel="noopener">Get started with a DeepSeek model in Foundry Models</a> (retrieved 2026-09-13).
-          The command sequence was verified in practice by the operator (okamo channel) as of September 2026.
+          Sources: <a href="https://ai.azure.com/catalog/models/DeepSeek-V4.1-Flash" target="_blank" rel="noopener">Microsoft Foundry model catalog — DeepSeek-V4.1-Flash</a> (version 2026-09-10, Preview, context window 1000k),
+          <a href="https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/deepseek-v4-1-flash-is-coming-to-microsoft-foundry/4556431" target="_blank" rel="noopener">Foundry blog — DeepSeek-V4.1-Flash is coming to Microsoft Foundry</a> (updated 2026-09-25; two paths and the price table),
+          <a href="https://learn.microsoft.com/en-us/cli/azure/cognitiveservices/account/deployment?view=azure-cli-latest" target="_blank" rel="noopener">az cognitiveservices account deployment</a> (ms.date 2026-09-01),
+          <a href="https://learn.microsoft.com/en-us/azure/foundry/foundry-models/quotas-limits" target="_blank" rel="noopener">Foundry Models quotas and limits</a> (TPM/RPM and 429 behaviour),
+          <a href="https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/deployment-types" target="_blank" rel="noopener">Deployment types</a> and <a href="https://learn.microsoft.com/en-us/azure/foundry/responsible-ai/openai/data-privacy" target="_blank" rel="noopener">Data, privacy, and security</a> (data location and training).
+          The command sequence and capacity figures were <strong>measured by the operator (okamoちゃんねる) on 2026-09-28</strong> and re-checked against primary sources retrieved 2026-09-29.
         </p>
       </section>
 
@@ -472,6 +566,15 @@ The subscription is not registered to use namespace 'Microsoft.CognitiveServices
 
         <h3 style="font-size:.98rem;margin:1.2rem 0 .4rem;">Q. Context length and max output?</h3>
         <p style="font-size:.88rem;color:var(--c-muted);">A. 1M-token context and 384K-token maximum output. Thinking mode supports both non-thinking and thinking, with thinking as the default.</p>
+
+        <h3 style="font-size:.98rem;margin:1.2rem 0 .4rem;">Q. Can I run DeepSeek V4.1 Flash on Azure (Microsoft Foundry)?</h3>
+        <p style="font-size:.88rem;color:var(--c-muted);">A. <strong>Yes.</strong> In a measurement on 2026-09-28 we deployed <code>DeepSeek-V4.1-Flash</code> (version <code>2026-09-10</code>) with <code>az cognitiveservices account deployment create</code> and got responses from the OpenAI-compatible endpoint. It is <strong>Preview (public preview)</strong>, and as of 2026-10-05 Azure's pricing page had not been updated yet (Microsoft Learn's list as of 2026-09-29). The full walkthrough, including real capacity figures, is in the <a href="#azure-heading">Microsoft Foundry section</a>.</p>
+
+        <h3 style="font-size:.98rem;margin:1.2rem 0 .4rem;">Q. What does the Azure route cost?</h3>
+        <p style="font-size:.88rem;color:var(--c-muted);">A. Per Microsoft's Foundry blog (updated 2026-09-25): <strong>Direct from Azure is input $0.30 / output $1.20 / cached input $0.006</strong>, and <strong>Fireworks on Foundry is input $0.37 / output $1.50 / cached input $0.007</strong> (USD per 1M tokens). Direct from Azure matches DeepSeek's <strong>peak rates</strong>, with no off-peak discount. Because Azure's pricing page has no V4.1-Flash row yet, confirm in the portal before committing.</p>
+
+        <h3 style="font-size:.98rem;margin:1.2rem 0 .4rem;">Q. Does my code work as-is if I move to Azure?</h3>
+        <p style="font-size:.88rem;color:var(--c-muted);">A. <strong>Mostly, with two fixes.</strong> ① DeepSeek's own <code>thinking</code> parameter returns 400 on Azure; only <code>reasoning_effort</code> is accepted (measured 2026-09-28). ② The effort scale differs — the Foundry blog describes a continuous 1–100 setting, while the first-party API uses <code>low</code>/<code>high</code>/<code>max</code>. The endpoint is OpenAI-compatible (<code>/openai/v1</code>), so apart from those two points it is largely a drop-in swap.</p>
       </section>
 
       <!-- ===== Sources ===== -->
@@ -481,7 +584,7 @@ The subscription is not registered to use namespace 'Microsoft.CognitiveServices
           <li><a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">DeepSeek API Docs — Models &amp; Pricing</a> (pricing, specs, notes; retrieved 2026-09-11)</li>
           <li><a href="https://api-docs.deepseek.com/updates/" target="_blank" rel="noopener">DeepSeek API Docs — Change Log (2026-09-10, DeepSeek-V4.1-Flash Release)</a> (release details, benchmarks)</li>
           <li><a href="https://api-docs.deepseek.com/news/news260910" target="_blank" rel="noopener">DeepSeek official news (news260910)</a></li>
-          <li>Microsoft Learn — <a href="https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure?pivots=azure-direct-others" target="_blank" rel="noopener">Foundry Models sold by Azure</a> · <a href="https://learn.microsoft.com/en-us/azure/foundry/foundry-models/how-to/quickstart-create-resources" target="_blank" rel="noopener">Create and configure resources for Microsoft Foundry Models</a> (Azure section; retrieved 2026-09-13)</li>
+          <li>Microsoft Foundry — <a href="https://ai.azure.com/catalog/models/DeepSeek-V4.1-Flash" target="_blank" rel="noopener">model catalog (DeepSeek-V4.1-Flash)</a> · <a href="https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/deepseek-v4-1-flash-is-coming-to-microsoft-foundry/4556431" target="_blank" rel="noopener">Foundry blog (updated 2026-09-25)</a> · <a href="https://learn.microsoft.com/en-us/azure/foundry/foundry-models/quotas-limits" target="_blank" rel="noopener">Foundry Models quotas and limits</a> · <a href="https://learn.microsoft.com/en-us/cli/azure/cognitiveservices/account/deployment?view=azure-cli-latest" target="_blank" rel="noopener">az cognitiveservices account deployment</a> · <a href="https://learn.microsoft.com/en-us/azure/foundry/responsible-ai/openai/data-privacy" target="_blank" rel="noopener">Data, privacy, and security</a> (Azure section; retrieved 2026-09-29)</li>
           <li>Related: <a href="/en/pricing/#dh">pricing (DeepSeek)</a> · <a href="/en/calculator/">token calculator</a> · <a href="/en/deepseek-v4-pro/">V4 Pro continuation</a> · <a href="/en/multimodal/">multimodal guide</a> · <a href="/en/timeline/">release timeline</a></li>
         </ul>
       </section>
@@ -489,10 +592,10 @@ The subscription is not registered to use namespace 'Microsoft.CognitiveServices
       <div class="tip-box" style="border-left-color: var(--c-red); margin-bottom:2rem;">
         <h3>⚠️ Disclaimer</h3>
         <ul>
-          <li>Pricing, specs and benchmarks on this page are based on DeepSeek's official pages (api-docs.deepseek.com) as retrieved on 2026-09-11. Prices and model availability may change without notice. Always verify on the official page before contracting or production use.</li>
+          <li>Pricing, specs and benchmarks on this page are based on DeepSeek's official pages (api-docs.deepseek.com) as re-retrieved on 2026-11-03 (rates unchanged from the previous read). Prices and model availability may change without notice. Always verify on the official page before contracting or production use.</li>
           <li>Benchmark figures are vendor-reported and have not been independently re-measured by this site.</li>
           <li>The setup steps reflect the operator's environment (recorded in July 2026 on V4 Pro) and may display differently after extension updates.</li>
-          <li>The Azure AI Foundry section is based on Microsoft Learn documentation and a command sequence the operator verified in practice as of September 2026. Azure model availability, SKUs, quotas and pricing change over time — confirm in the Azure portal and official docs before running it. We deliberately omit Azure-side pricing because we could not confirm a primary-source rate.</li>
+          <li>The Microsoft Foundry (Azure) section is based on Microsoft's own pages (model catalog, Foundry blog, Microsoft Learn) and on the <code>az</code> commands and responses the operator measured on 2026-09-28. Because the model is in Preview, SKUs, quotas, pricing and parameters can change without notice. In particular, <strong>Azure's pricing page has no V4.1-Flash row yet</strong> — always confirm in the Azure portal before committing.</li>
           <li>This site is not a recommendation or an agent for any provider. DeepSeek is a trademark of DeepSeek. GitHub and GitHub Copilot are trademarks or registered trademarks of GitHub, Inc.</li>
         </ul>
       </div>

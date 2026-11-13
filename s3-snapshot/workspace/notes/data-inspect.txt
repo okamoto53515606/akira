@@ -1,0 +1,32 @@
+keys: ['updated', 'source', 'models']
+updated: 2026-10-01 | source: 各プロバイダ公式料金ページでfact確認済み（詳細は /pricing/ の出典欄）
+n models: 42 | type: list
+first: {"name": "Claude Fable 5.1", "provider": "anthropic", "label": "Anthropic", "input": 10.0, "output": 50.0, "note": "2026-09-01公開・cache読込$0.25", "note_en": "Released 2026-09-01 · cache read $0.25"}
+providers: ['anthropic', 'deepseek', 'google', 'openai', 'other']
+sitemap head: <?xml version="1.0" encoding="UTF-8"?>|<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"|        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"|        xsi:schemaLocation="http://www.sitemaps.org/schemas
+n urls: 72 | n lastmod: 72
+sonnet entries:
+<url>
+    <loc>https://llm.okamomedia.tokyo/claude-sonnet-5-5/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+<url>
+    <loc>https://llm.okamomedia.tokyo/en/claude-sonnet-5-5/</loc>
+    <lastmod>2026-10-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+tail: tmod>2026-10-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://llm.okamomedia.tokyo/en/glossary/data-residency/</loc>
+    <lastmod>2026-10-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+</urlset>
+

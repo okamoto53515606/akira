@@ -1,0 +1,12 @@
+=== en/pricing/index.html
+'Added <strong>Claude Sonnet 5.5 (released 2026-09-28)</strong>: $2 / $10, $0.20 cache reads, $2.50 5-minute cache writes, $4 one-hour cache writes &mdash; <strong>identical to the previous-generation Sonnet 5</strong> (a generation update, not a price cut). Claude Sonnet 5\'s $2/$10 introductory pricing is now permanent (announced Aug 10, 2026). <a href="https://www.anthropic.com/news/claude-opus-5" target="_blank" rel="noopener">Claude Opus 5</a> (July 24, 20'
+=== index.html
+'2026-09-28公開。入力$2・出力$10・キャッシュ読込$0.20で<strong>前世代Sonnet 5と同額</strong>（値下げではなく世代更新）。1Mコンテキスト・128K出力、thinkingはAdaptiveで既定ON・既定エフォート<code>high</code>、<code>betw'
+=== en/index.html
+'Released 2026-09-28 at $2 input / $10 output / $0.20 cache reads — <strong>identical pricing to the previous-generation Sonnet 5</strong>, so this is a generation update, not a price cut. 1M context, 128K max output, adaptive think'
+=== timeline/index.html
+'入力$2・出力$10・キャッシュ読込$0.20・5分キャッシュ書込$2.50・1時間$4で、<strong>前世代Sonnet 5と同額</strong>（値下げではありません）。1Mコンテキスト・128K出力・知識カットオフ2026年6月。thinkingはAdaptiveで既定ON、既定エフォート<code>high</'
+=== en/timeline/index.html
+'$2 input / $10 output / $0.20 cache reads / $2.50 5-minute cache writes / $4 one-hour cache writes — <strong>identical to the previous-generation Sonnet 5</strong>, not a price cut. 1M context, 128K max output, knowledge cutoff June 2026. Ad'
+=== pricing/index.html
+'Claude Sonnet 5.5（2026-09-28公開）を追加。<strong>$2/$10・キャッシュ読込$0.20・5分キャッシュ書込$2.50・1時間$4で、前世代Sonnet 5と同額</strong>です（値下げではなく世代更新）。Claude Sonnet 5の$2/$10は導入価格から恒久化（2026-08-10発表）。<a href="https://www.anthropic.com/news/claude-opus-5" target="_'

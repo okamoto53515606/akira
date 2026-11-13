@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ZOA（ゼロオペレーターアクセス）とは？「保存しない」と「見られない」の違いを5社の公式ドキュメントで比較 | LLM Data Hub</title>
+  <meta name="description" content="ZOA（ゼロオペレーターアクセス）は、サービス運営者の担当者があなたのデータを復号・閲覧できないという約束で、ZDR（保存しない）とは別物です。アクセスを止める3つの層（手続き・鍵・実行環境）、鍵管理の3段階（CMK／BYOK／HYOK）、承認フロー（Microsoft Customer Lockbox・Google Access Approval・Key Access Justifications・OpenAI EKM）、AWS Bedrock・Microsoft・Google Cloud・OpenAI・Anthropicの記載を逐語で比較します。2026年10月9日更新。">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/glossary/zero-operator-access/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta property="og:image" content="https://llm.okamomedia.tokyo/assets/og/ja-zoa.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Zero Operator Access: 運営者が入出力を見られない保証とZDRとの違い">
+  <meta name="twitter:image" content="https://llm.okamomedia.tokyo/assets/og/ja-zoa.png">
+  <meta name="twitter:image:alt" content="Zero Operator Access: 運営者が入出力を見られない保証とZDRとの違い">
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/glossary/zero-operator-access/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/glossary/zero-operator-access/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/glossary/zero-operator-access/">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/glossary/zero-operator-access/">
+  <meta property="og:title" content="ZOA（ゼロオペレーターアクセス）とは？「保存しない」と「見られない」の違いを5社比較">
+  <meta property="og:description" content="ZOA（ゼロオペレーターアクセス）は、サービス運営者の担当者があなたのデータを復号・閲覧できないという約束で、ZDR（保存しない）とは別物です。アクセスを止める3つの層（手続き・鍵・実行環境）、鍵管理の3段階（CMK／BYOK／HYOK）、承認フロー（Microsoft Customer Lockbox・Google Access Approval・Key Access Justifications・OpenAI EKM）、AWS Bedrock・Microsoft・Google Cloud・OpenAI・Anthropicの記載を逐語で比較します。2026年10月9日更新。">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"ZOA（ゼロオペレーターアクセス）とは — 「保存しない」と「見られない」は別の約束","datePublished":"2026-10-01","dateModified":"2026-10-09","author":{"@type":"Organization","name":"okamoちゃんねる"},"publisher":{"@type":"Organization","name":"okamoちゃんねる"},"url":"https://llm.okamomedia.tokyo/glossary/zero-operator-access/","inLanguage":"ja","description":"ZOA（ゼロオペレーターアクセス）を、アクセスを止める3つの層・鍵管理の3段階（CMK/BYOK/HYOK）・承認フロー・ベンダー別提供状況に分け、各社公式ドキュメントの逐語で整理する用語解説。"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"ホーム","item":"https://llm.okamomedia.tokyo/"},{"@type":"ListItem","position":2,"name":"用語説明","item":"https://llm.okamomedia.tokyo/glossary/"},{"@type":"ListItem","position":3,"name":"ZOA（ゼロオペレーターアクセス）","item":"https://llm.okamomedia.tokyo/glossary/zero-operator-access/"}]}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .phrase-box{background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-accent);border-radius:var(--r-md);padding:1rem 1.15rem;margin:1.2rem 0}
+    .phrase-box .phrase{margin:0;font-size:1.02rem;font-weight:700;line-height:1.7}
+    .phrase-box .phrase-meta{margin:.5rem 0 0;font-size:.83rem;color:var(--c-muted);line-height:1.8}
+    .quote{margin:1rem 0;padding:.85rem 1rem;background:var(--c-surface2);border:1px solid var(--c-border);border-radius:var(--r-sm);font-size:.84rem;line-height:1.8;color:var(--c-muted)}
+    .quote em{color:var(--c-text);font-style:italic}
+    .quote .who{display:block;margin-top:.45rem;font-size:.76rem;color:var(--c-muted)}
+    .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+    .mtable{width:100%;border-collapse:collapse;font-size:.79rem;min-width:700px}
+    .mtable th,.mtable td{border:1px solid var(--c-border);padding:.5rem .6rem;text-align:left;vertical-align:top;color:var(--c-muted);line-height:1.7}
+    .mtable thead th{background:var(--c-surface2);color:var(--c-text);font-weight:700;white-space:nowrap}
+    .mtable td strong{color:var(--c-text)}
+    .scroll-hint{font-size:.74rem;color:var(--c-muted);margin:.35rem 0 0}
+    .steps{counter-reset:s;list-style:none;padding-left:0;margin:1rem 0}
+    .steps li{counter-increment:s;position:relative;padding:.6rem 0 .6rem 2.3rem;font-size:.87rem;line-height:1.85;color:var(--c-muted);border-top:1px solid var(--c-border)}
+    .steps li:first-child{border-top:none}
+    .steps li::before{content:counter(s);position:absolute;left:0;top:.6rem;width:1.5rem;height:1.5rem;border-radius:50%;background:var(--c-accent);color:#fff;font-size:.78rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+    .steps li strong{color:var(--c-text)}
+    .faq-block{border-top:1px solid var(--c-border);padding:1rem 0 0;margin:1rem 0 0}
+    .faq-block:first-of-type{border-top:none}
+    .faq-block dt{margin:0;font-size:.95rem;font-weight:700;color:var(--c-text);line-height:1.7}
+    .faq-block dt::before{content:"Q. ";color:var(--c-accent);font-family:var(--font-mono);font-size:.82rem}
+    .faq-block dd{margin:.4rem 0 0;font-size:.87rem;line-height:1.85;color:var(--c-muted)}
+    .faq-block dd::before{content:"A. ";color:var(--c-accent);font-family:var(--font-mono);font-size:.82rem;font-weight:700}
+    .faq-block dd strong{color:var(--c-text)}
+    .src-list{font-size:.8rem;color:var(--c-muted);padding-left:1.1em;line-height:1.85}
+    .fig-wrap{position:relative}.fig-fig{margin:1rem 0 1.2rem}.fig-fig svg{width:100%;height:auto;border:1px solid var(--c-border);border-radius:var(--r-md);background:var(--c-surface);display:block}
+    .fig-hint{display:none;font-size:.75rem;color:var(--c-muted);text-align:center;margin:.3rem 0 0}
+    @media (max-width:680px){.fig-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}.fig-scroll svg{min-width:620px}.fig-hint{display:block}}
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="メインナビゲーション"><a href="/" class="nav-link">ホーム</a><a href="/pricing/" class="nav-link">料金比較</a><a href="/calculator/" class="nav-link">トークン計算機</a><a href="/timeline/" class="nav-link">リリース年表</a><a href="/china-ai/" class="nav-link">中国AI</a><a href="/multimodal/" class="nav-link">マルチモーダル</a><a href="/mai/" class="nav-link">MS AI (MAI)</a><a href="/glossary/" class="nav-link active" aria-current="page">用語説明</a></nav></div></header>
+
+<main><div class="container">
+  <div class="section" style="padding-bottom:0;">
+    <h1 class="section-title" style="font-size:1.55rem;">ZOA（ゼロオペレーターアクセス）とは — 「保存しない」と「見られない」は別の約束</h1>
+    <p class="section-sub" style="max-width:790px;">
+      <a href="/glossary/">用語説明</a> 第9回。第7回の <a href="/glossary/zero-data-retention/">ZDR（ゼロデータ保持）</a> と第8回の <a href="/glossary/four-data-requirements/">データの4要件</a> で、ZOAは<strong>「見せない」＝サービス運営者側の人間が中身にアクセスできないこと</strong>として一度だけ登場しました。
+      このページはそこを深掘りします。<strong>ZDRが「保存の話」なら、ZOAは「人のアクセスの話」</strong>です。保存していなくても処理の途中で見ることは理論上でき、逆に30日保存していても運営者が復号できなければ中身は読めません。<strong>2つは独立した約束</strong>で、片方を満たしてももう片方は満たしません。
+      ここでは、アクセスを止める仕組みを<strong>① 手続き ② 鍵 ③ 実行環境</strong>の3層に分け、各社が公開している<strong>逐語</strong>で「何が既定で、何が申請制か」を並べます。
+    </p>
+    <div class="phrase-box">
+      <p class="phrase">ZOA（ゼロオペレーターアクセス）＝ <strong>サービスを運営している側の人間が、あなたのデータを復号・閲覧できない</strong>という約束。</p>
+      <p class="phrase-meta">AWSは Amazon Bedrock のデータセキュリティモデルとして、この語を公式ドキュメントで定義しています。逐語は「Amazon Bedrock uses a <strong>zero operator access (ZOA)</strong> data security model. This means <strong>no operators of the service can access model input or output</strong>.」——<strong>同じ段落の次の文でZDR（保存しない）を別のモデルとして説明している</strong>点が、このページの出発点です。1つの文で2つを並べている＝別の約束だ、という一次情報上の根拠になります。</p>
+    </div>
+    <div class="updated-bar">
+      <span class="dot">●</span>
+      最終更新: <time datetime="2026-10-09">2026年10月9日</time>
+      &ensp;|&ensp; 方針: 各社の公式ドキュメントで逐語を確認できた内容のみ掲載。確認できていない項目は「未確認」と明記します
+    </div>
+  </div>
+
+  <section class="section" style="padding-top:1.5rem;" aria-labelledby="def-h">
+    <h2 class="section-title" id="def-h" style="font-size:1.2rem;">1. ZOAが防ぐもの・防がないもの</h2>
+    <p class="section-sub">このページで「オペレーター（運営者）」というときは、<strong>クラウド事業者＝サービスを提供する側の運用担当者・サポートエンジニア・基盤管理者</strong>を指します（例: AWS の運用担当者）。攻撃者や他テナントの話ではありません。一方、<strong>そのクラウドを使う企業側の担当者（自社の情報システム部門・運用チームなど）は別の主体</strong>で、ZOA が約束する対象ではありません。つまり ZOA は「<strong>提供者側の人間が悪意を持つ場合</strong>まで含めて、そもそも読めないようにする」という設計目標で、<strong>自社側の担当者が読めるかどうかは、自社の権限設計・鍵管理の話</strong>になります。</p>
+    <div class="table-wrap"><table class="mtable"><thead><tr><th>問い</th><th>ZOAが答える範囲</th><th>注意点</th></tr></thead><tbody>
+      <tr><td><strong>クラウド事業者（運営者）の社員は中身を読めるか</strong></td><td>読めない（設計上・手続き上）</td><td>「読めない」の担保方法は、手続き／鍵／実行環境の3通りあり、強度が違います。</td></tr>
+      <tr><td><strong>自社（そのクラウドを使う企業）の運用担当者は読めるか</strong></td><td><strong>ZOAの対象外</strong></td><td>別の主体です。社内の権限設計次第で読めます。<strong>ZOAは「提供者側が読めない」約束</strong>で、社内の担当者が読めるかどうかは別の問題です。</td></tr>
+      <tr><td><strong>第三者のモデル提供元は読めるか</strong></td><td>経由サービスによって別途明記される</td><td>AWSは Bedrock について「Model providers don't have any access to those accounts. Because the model providers don't have access to those accounts, they don't have access to Amazon Bedrock logs or to customer prompts and completions.」と書いています。<strong>「クラウド事業者（運営者）」と「モデル提供元」は別の主体</strong>です。</td></tr>
+      <tr><td><strong>データを保存しているか</strong></td><td><strong>答えない</strong>（ZDRの担当）</td><td>保存期間は<a href="/glossary/zero-data-retention/">ZDR</a>の話。ZOAは0日でも30日でも成立し得ます。</td></tr>
+      <tr><td><strong>学習に使われるか</strong></td><td><strong>答えない</strong>（契約条項の担当）</td><td>学習への利用は契約側の条項です（<a href="/glossary/four-data-requirements/">第8回</a>の「学ばせない」）。</td></tr>
+      <tr><td><strong>法令に基づく開示請求には耐えるか</strong></td><td>提供元のポリシー次第</td><td>ZOAで中身が読めない設計なら、そもそも提出できる平文が存在しない、という主張になります。<strong>ただし提供元の公表内容の範囲でしか確認できません。</strong></td></tr>
+    </tbody></table></div>
+    <p class="scroll-hint">← 横にスクロールできます →</p>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="sep-h">
+    <h2 class="section-title" id="sep-h" style="font-size:1.2rem;">2. 「保存しない（ZDR）」と「見られない（ZOA）」は別の約束</h2>
+    <p class="section-sub">混同が生まれるのは、<strong>両方を1つの文で説明しているベンダーが多い</strong>からです。しかし、約束の中身はまったく違います。</p>
+    <div class="table-wrap"><table class="mtable"><thead><tr><th>観点</th><th>ZDR（保存しない）</th><th>ZOA（見られない）</th></tr></thead><tbody>
+      <tr><td>対象</td><td>保存されたデータ（保存期間）</td><td>人のアクセス（誰が復号・閲覧できるか）</td></tr>
+      <tr><td>技術的な場所</td><td>ストレージ・ログ</td><td>鍵・実行環境・承認プロセス</td></tr>
+      <tr><td>よくある設定方法</td><td>アカウント／プロジェクト／リクエスト単位の保持モード</td><td>顧客管理鍵の利用、承認フローの有効化、機密コンピューティングの構成</td></tr>
+      <tr><td>破れたときに起きること</td><td>データが残る（期間は提供元次第）</td><td>残ったデータを担当者が読める（保存の有無とは無関係）</td></tr>
+      <tr><td>代表的な落とし穴</td><td><strong>既定で保持される／例外モデルがある</strong></td><td><strong>既定で有効なわけではない・緊急時の例外がある</strong></td></tr>
+    </tbody></table></div>
+    <p class="scroll-hint">← 横にスクロールできます →</p>
+    <div class="quote">
+      <em>“Amazon Bedrock uses a <strong>zero operator access (ZOA)</strong> data security model. This means no operators of the service can access model input or output. Also, Amazon Bedrock uses a <strong>zero data retention (ZDR)</strong> data security model. This means that <strong>by default</strong>, Amazon Bedrock does not store model inputs or outputs.”</em>
+      <span class="who">— AWS 公式ドキュメント「Amazon Bedrock abuse detection」（2026-09-27 取得）</span>
+    </div>
+    <p class="section-sub">ZDR側には「<strong>by default</strong>」という但し書きが付き、さらに保持が必要なモデルの例外リストが続きます。対してZOA側の記述には、この種の但し書きも例外リストもありません。ただし、<strong>これは「ZOAなら人手が一切入らない」という意味ではありません</strong>。AWSはBedrockのZOAを「サービスのオペレーターはモデル入出力にアクセスできない」と説明する一方で、保持モードには<strong>AWS内の人手レビューのために入出力を保持する <code>aws_review</code></strong> を用意しています（逐語は下の「3. アクセスを止める3つの層」で引用）。<strong>ZOAは「運営者がアクセスできない」という約束、保持モードは「保存するかどうか」という別レイヤーの設定</strong>で、ZOAの記述だけから個別のモードに人手レビューがないとは判断できません。<strong>「既定の状態が何か」は要件ごとに別々に確認する必要があります。</strong></p>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="layers-h">
+    <h2 class="section-title" id="layers-h" style="font-size:1.2rem;">3. アクセスを止める3つの層</h2>
+    <p class="section-sub">各社のドキュメントを読むと、アクセスを止める手段は<strong>3つの層</strong>に整理できます。層によって「何を根拠に止めているか」が違います。</p>
+    <div class="fig-wrap">
+      <div class="fig-scroll">
+      <figure class="fig-fig" style="margin:0;">
+        <svg viewBox="0 0 640 360" role="img" aria-labelledby="zfig-t zfig-d" xmlns="http://www.w3.org/2000/svg">
+          <title id="zfig-t">アクセスを止める3つの層</title>
+          <desc id="zfig-d">層1は手続きの層で、誰が承認するか（Microsoft Customer Lockbox、Google Access Approval、Anthropicのcontrolled access path）。層2は鍵の層で、復号できるのは誰か（CMK・BYOK・HYOK）。層3は実行環境の層で、処理中に誰が見えるか（機密コンピューティング・hardware-attested runtime）。この3層とは別に、ZDR（保存しない）という約束がある。</desc>
+          <g font-family="system-ui,Segoe UI,sans-serif">
+            <text x="20" y="26" font-size="14" font-weight="700" fill="#e6e6e6">アクセスを止める3つの層</text>
+            <text x="20" y="42" font-size="11" fill="#9aa0aa">層によって「何を根拠に止めているか」が違う。全部が既定で有効とは限らない。</text>
+
+            <rect x="20" y="56" width="600" height="82" rx="8" fill="#141a24" stroke="#2a3340"/>
+            <circle cx="50" cy="90" r="15" fill="#6aa9ff"/><text x="50" y="95" font-size="13" font-weight="700" fill="#0b0f16" text-anchor="middle">1</text>
+            <text x="76" y="82" font-size="13" font-weight="700" fill="#6aa9ff">手続きの層 — 誰が承認するか</text>
+            <text x="76" y="102" font-size="11.5" fill="#9aa0aa">Microsoft Customer Lockbox（4日で失効・承認／拒否）／ Google Access Approval ／</text>
+            <text x="76" y="120" font-size="11.5" fill="#9aa0aa">Anthropicの controlled access path ／ OpenAIは safety runtime に人間のアクセスを許さない設計</text>
+
+            <rect x="20" y="148" width="600" height="82" rx="8" fill="#1a1410" stroke="#3a2a22"/>
+            <circle cx="50" cy="182" r="15" fill="#d97757"/><text x="50" y="187" font-size="13" font-weight="700" fill="#0b0f16" text-anchor="middle">2</text>
+            <text x="76" y="174" font-size="13" font-weight="700" fill="#d97757">鍵の層 — 復号できるのは誰か</text>
+            <text x="76" y="194" font-size="11.5" fill="#9aa0aa">CMK（鍵素材は提供者のKMS内・管理権限は顧客）／ BYOK（鍵素材を持ち込む）／</text>
+            <text x="76" y="212" font-size="11.5" fill="#9aa0aa">HYOK（鍵素材が提供者の外に出ない = AWS XKS・Google Cloud EKM・Azure Managed HSM など）</text>
+
+            <rect x="20" y="240" width="600" height="82" rx="8" fill="#101a13" stroke="#22342a"/>
+            <circle cx="50" cy="274" r="15" fill="#7bc47f"/><text x="50" y="279" font-size="13" font-weight="700" fill="#0b0f16" text-anchor="middle">3</text>
+            <text x="76" y="266" font-size="13" font-weight="700" fill="#7bc47f">実行環境の層 — 処理中に誰が見えるか</text>
+            <text x="76" y="286" font-size="11.5" fill="#9aa0aa">機密コンピューティング（TEE）／ hardware-attested runtime ／ enclave</text>
+            <text x="76" y="304" font-size="11.5" fill="#9aa0aa">「保存時」と「転送時」の暗号化では止まらない、メモリ上の平文を守る層</text>
+
+            <rect x="20" y="332" width="600" height="22" rx="6" fill="none" stroke="#5a5f6a" stroke-dasharray="5 4"/>
+            <text x="36" y="347" font-size="11.5" fill="#9aa0aa"><tspan font-weight="700" fill="#e6e6e6">ZDR（保存しない）は、この3層の外側にある別の約束。</tspan>3層を満たしても保持期間は別途決まり、逆も同じ。</text>
+          </g>
+        </svg>
+        <figcaption style="font-size:.78rem;color:var(--c-muted);margin-top:.5rem;">作図: 当サイト。各層の名称は、各社が公表している仕組みの呼称をそのまま並べたもの。具体的な提供状況は下の「4. ベンダー別の提供状況」を参照してください。</figcaption>
+      </figure>
+      </div>
+      <p class="fig-hint">← 横にスクロールできます →</p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="key-h">
+    <h2 class="section-title" id="key-h" style="font-size:1.2rem;">4. 鍵管理の3段階 — CMK / BYOK / HYOK</h2>
+    <p class="section-sub">「暗号化しているから運営者は読めない」は、<strong>鍵を誰が持っているか</strong>を確認しないと成り立ちません。用語が似ていて混同しやすいので、3段階に分けます。</p>
+    <div class="table-wrap"><table class="mtable"><thead><tr><th>項目</th><th>CMK（カスタマー管理キー）</th><th>BYOK（Bring Your Own Key）</th><th>HYOK（Hold Your Own Key）</th></tr></thead><tbody>
+      <tr><td><strong>鍵素材の生成</strong></td><td>提供者のKMS／HSMが生成</td><td>顧客が生成して持ち込む</td><td>顧客が自分の環境で生成・保持</td></tr>
+      <tr><td><strong>鍵素材の保管場所</strong></td><td>提供者のKMS／HSM内</td><td>提供者のKMS内（持ち込み後）</td><td><strong>提供者の外</strong>（顧客のHSM／鍵管理システム）</td></tr>
+      <tr><td><strong>暗号演算を行う主体</strong></td><td>提供者</td><td>提供者</td><td><strong>顧客側の鍵管理システム</strong>（提供者は毎回問い合わせる）</td></tr>
+      <tr><td><strong>顧客ができること</strong></td><td>利用者・権限・削除の管理</td><td>失効・有効期限の設定、即時削除</td><td>提供者の外で鍵を止められる（復号要求を拒否できる）</td></tr>
+      <tr><td><strong>提供者が理論上復号できるか</strong></td><td>できる（権限を持つ）</td><td>できる（鍵素材がKMS内にある）</td><td><strong>できない設計</strong>（鍵素材が外に出ない）</td></tr>
+      <tr><td><strong>代表的な実装名</strong></td><td>AWS KMS カスタマー管理キー / Google CMEK / Azure Key Vault</td><td>AWS KMS の鍵素材インポート / Azure Managed HSM へのBYOKインポート</td><td>AWS KMS External Key Store（XKS）/ Google Cloud EKM / Azure Managed HSM の外部鍵管理</td></tr>
+    </tbody></table></div>
+    <p class="scroll-hint">← 横にスクロールできます →</p>
+
+    <h3 style="font-size:1rem;margin:1.6rem 0 .5rem;">HYOKの逐語（AWS KMS External Key Store）</h3>
+    <div class="quote">
+      <em>“Encryption and decryption operations that use a KMS key in an external key store are performed by your external key manager using your cryptographic key material, a feature known as <strong>hold your own keys (HYOKs)</strong>.”<br>“<strong>AWS KMS never interacts directly with your external key manager, and cannot create, view, manage, or delete your keys.</strong> Instead, AWS KMS interacts only with external key store proxy (XKS proxy) software that you provide.”<br>“<strong>Your cryptographic key material never leaves your external key manager.</strong>”</em>
+      <span class="who">— AWS KMS 開発者ガイド「External key stores」（2026-10-01 取得）</span>
+    </div>
+
+    <h3 style="font-size:1rem;margin:1.6rem 0 .5rem;">BYOKの逐語（鍵素材を持ち込む）</h3>
+    <div class="quote">
+      <em>“When you create a KMS key, by default, AWS KMS generates the key material for that KMS key. But you can create a KMS key without key material and then import your own key material into that KMS key, a feature often known as <strong>‘bring your own key’ (BYOK)</strong>.”<br>“You can set an expiration time on import or call DeleteImportedKeyMaterial to revoke access immediately.”</em>
+      <span class="who">— AWS KMS 開発者ガイド「Importing key material」「Key stores」（2026-10-01 確認）</span>
+    </div>
+
+    <h3 style="font-size:1rem;margin:1.6rem 0 .5rem;">HYOKの逐語（Microsoft / Google Cloud）</h3>
+    <div class="quote">
+      <em>“Keys are generated and stored in a single-tenant, FIPS 140-3 Level 3 HSM that only you control: <strong>Microsoft has no access to your key material</strong>, and you govern who can use each key.”<br>“<strong>Microsoft can’t decrypt your key material or recover your HSM cluster without it.</strong>”<br>“The security domain is protected by a quorum of RSA key pairs that you hold offline. Recovery requires your quorum, so <strong>no single person—and no Microsoft operator—can act alone</strong>.”<br>“The external key never resides in or passes through Microsoft infrastructure; only your hardware uses it.”</em>
+      <span class="who">— Azure 公式ブログ「External key management for Azure Managed HSM」（2026-10-01 取得）</span>
+    </div>
+    <div class="quote">
+      <em>“Data encrypted using a Cloud EKM key <strong>can’t be decrypted without both the external key material and the internal key material</strong>.”<br>“With Cloud EKM, you can use keys that you manage within a supported external key management partner to protect data within Google Cloud.”</em>
+      <span class="who">— Google Cloud ドキュメント「Cloud External Key Manager」（2026-10-01 取得）</span>
+    </div>
+
+    <div style="background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-yellow);border-radius:var(--r-md);padding:.8rem 1rem;margin:1rem 0;font-size:.84rem;color:var(--c-muted);">
+      ⚠️ <strong>HYOKの引き換え条件:</strong> 鍵素材を外に置くということは、<strong>暗号演算のたびにあなたの側のシステムが応答する必要がある</strong>ということです。自社HSMが落ちれば、クラウド側のサービスも復号できません。可用性・レイテンシ・運用責任（バックアップ、パッチ、障害対応）は<strong>あなた側に移ります</strong>。AWSのXKSでも「AWS KMS interacts only with external key store proxy (XKS proxy) software that you provide」と、プロキシの提供者・運用者が顧客側であることが明記されています。「最強の設定」ではなく「責任を引き受ける設定」です。
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="appr-h">
+    <h2 class="section-title" id="appr-h" style="font-size:1.2rem;">5. 「利用者の操作なしにアクセスできない」ことをどう担保するか</h2>
+    <p class="section-sub">鍵の層と実行環境の層は技術の話ですが、<strong>現実のクラウドでは「クラウド事業者側の運用担当者がどうしても触る必要がある場面」があります</strong>（障害調査・不正利用の調査など。<strong>そのクラウドを使う企業側の担当者の話ではありません</strong>）。そこで第1層＝<strong>承認フロー</strong>が効きます。「顧客が承認しないと入れない」という仕組みです。</p>
+    <div class="table-wrap"><table class="mtable"><thead><tr><th>提供元</th><th>仕組み</th><th>顧客が握るもの</th><th>例外・注意</th></tr></thead><tbody>
+      <tr><td><strong>Microsoft</strong>（Azure）</td><td>Customer Lockbox</td><td>アクセス要求の<strong>承認・拒否</strong></td><td>要求は顧客のキューに<strong>4日</strong>残り、過ぎると自動的に失効しアクセスは付与されません。<strong>緊急時（break glass）はロックボックスが発動しない</strong>と公式に明記されています。</td></tr>
+      <tr><td><strong>Google Cloud</strong></td><td>Access Approval ＋ Access Transparency ＋ Key Access Justifications（KAJ）</td><td>人によるアクセスの承認と、<strong>暗号鍵へのアクセス要求ごとの承認・拒否</strong></td><td>KAJは<strong>KAJの対象として登録した顧客管理鍵（CMEK）について、各アクセス要求（復号などの暗号操作）ごとに「理由コード」を発行</strong>し、顧客のポリシーで可否を決められます。理由コードの種類によっては拒否すると可用性が下がるもの（例: <code>GOOGLE_INITIATED_SERVICE</code>）があります。</td></tr>
+      <tr><td><strong>Anthropic</strong></td><td>controlled access path（管理されたアクセス経路）</td><td>—（レビューの発生条件が限定される）</td><td>逐語では「<strong>自動の信頼安全性システムがフラグを立てた場合に限り</strong>、管理されたアクセス経路でのみ人間がレビューできる」という構造です。</td></tr>
+      <tr><td><strong>OpenAI</strong></td><td>ZDR with Private Safety Processing（PSP）／ Enterprise Key Management（EKM）</td><td>復号に必要な<strong>権限と鍵の承認</strong></td><td>安全レビュー時に<strong>人間が読める経路を新たに作らない</strong>ことが原則として明記され、復号は<strong>ハードウェア検証された専用ランタイム</strong>で行う設計です。</td></tr>
+      <tr><td><strong>AWS</strong>（Bedrock）</td><td>ZOA モデル ＋ 保持モード（<code>none</code> 等）</td><td>保持モードの選択（アカウント／プロジェクト／リージョン単位）</td><td>保持モードには<code>aws_review</code>（<strong>AWSによる人間レビューのために保持する</strong>モード）が存在します。保持モードは別レイヤーの設定で、<code>aws_review</code> を選べば<strong>AWS内での人手レビューが入り得ます</strong>。ZOAの記述だけから「人手は一切入れない」と結論しないでください。</td></tr>
+    </tbody></table></div>
+    <p class="scroll-hint">← 横にスクロールできます →</p>
+
+    <h3 style="font-size:1rem;margin:1.6rem 0 .5rem;">逐語で確認する</h3>
+    <div class="quote">
+      <em>“In those rare circumstances where Microsoft requires such access, Customer Lockbox for Microsoft Azure provides an interface for your organization to <strong>review and approve or reject customer data access requests</strong>.”<br>“The request remains in the customer queue for <strong>four days</strong>. After this time, the access request automatically expires and <strong>no access is granted to Microsoft engineers</strong>.”<br>“Approve: The Microsoft engineer receives access for the duration specified in the request details …”<br>“Deny: Customer Lockbox rejects the elevated access request by the Microsoft engineer and takes no further action.”</em>
+      <span class="who">— Microsoft Learn「Customer Lockbox for Microsoft Azure」（2026-10-01 取得）</span>
+    </div>
+    <div class="quote">
+      <em>“<strong>Access Approval</strong> lets you authorize requests from Google personnel to access Customer Data, <strong>Access Transparency</strong> helps you discover information about when Customer Data is accessed, and <strong>Key Access Justifications</strong> provides key access control for all interactions with at-rest Customer Data that is encrypted by a customer-managed key.”<br>“Key Access Justifications lets you set a policy on Cloud KMS keys to <strong>view, approve, and deny key access requests</strong> depending on the provided justification code.”<br>“Support tickets typically don’t require this access and our frontline support personnel don’t have this access.”</em>
+      <span class="who">— Google Cloud ドキュメント「Overview of Key Access Justifications」「View and act on justifications」（2026-10-01 取得）</span>
+    </div>
+    <div class="quote">
+      <em>“<strong>Safety review must not create a new way for OpenAI personnel to read protected customer content.</strong> Encrypted customer content is decrypted in an approved, <strong>hardware-attested safety runtime that disables human access</strong>. Only bounded safety signals and operational metadata leave the PSP protected review in plaintext.”<br>“The Safety Review Runtime, a hardware-attested computing environment that disables human access, is designed to be the only workload that can decrypt customer content.”</em>
+      <span class="who">— OpenAI 開発者ドキュメント「ZDR with Private Safety Processing」（2026-10-01 取得）</span>
+    </div>
+    <div class="quote">
+      <em>“By default, <strong>no Anthropic personnel can read your retained conversations</strong>. Human review can occur only through a controlled access path … when content is flagged by our automated trust and safety systems”</em>
+      <span class="who">— Anthropic サポート「Data retention practices for covered models」（2026-09-27 取得）</span>
+    </div>
+    <div class="quote">
+      <em>“This mode allows your inputs and outputs to be retained for <strong>human review by AWS</strong>. Review is carried out by AWS within the AWS boundary — the model provider does not review your content”</em>
+      <span class="who">— AWS 公式ドキュメント「Amazon Bedrock data retention」（<code>aws_review</code> モードの説明・2026-09-27 取得）</span>
+    </div>
+    <div style="background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-red);border-radius:var(--r-md);padding:.8rem 1rem;margin:1rem 0;font-size:.84rem;color:var(--c-muted);">
+      ⚠️ <strong>「承認フローがある＝必ず承認が要る」ではありません。</strong>Microsoft は Customer Lockbox が発動しない例として、逐語で「Emergency scenarios that fall outside of standard operating procedures and require urgent action from Microsoft to restore access to online services or to prevent corruption or loss of customer data, or to investigate a security or abuse incident. … These <strong>“break glass” events</strong> are rare …」と書いています。<strong>ZOAは「絶対に人が入れない」ではなく「通常運用では人が入れない＋例外の条件が明示されている」</strong>と理解するのが正確です。例外の条件そのものが公開されている点に、確認する価値があります。
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="matrix-h">
+    <h2 class="section-title" id="matrix-h" style="font-size:1.2rem;">6. ベンダー別の提供状況（提供有無・対象・有効化方法）</h2>
+    <p class="section-sub">「提供されているか」「どのサービスが対象か」「どうやって有効にするか」を分けて並べます。<strong>提供有無が確認できなかったものは未確認としています。</strong></p>
+    <div class="table-wrap"><table class="mtable"><thead><tr><th>提供元</th><th>提供有無</th><th>対象サービス（確認できた範囲）</th><th>有効化方法</th></tr></thead><tbody>
+      <tr>
+        <td><strong>AWS</strong></td>
+        <td>ZOA：あり（<strong>Bedrockのデータセキュリティモデルとして明記</strong>）／<br>HYOK：あり（KMS External Key Store）</td>
+        <td>ZOAは Amazon Bedrock。HYOKは AWS KMS の外部キーストア。<strong>BedrockがXKS（HYOK）に対応しているかは本調査では未確認。</strong></td>
+        <td>Bedrockのデータ保持モードを設定（アカウント／プロジェクト／リージョン単位、新規は<code>inherit</code>が既定）。HYOKはKMSで外部キーストアを作成し、自社のXKSプロキシを用意。</td>
+      </tr>
+      <tr>
+        <td><strong>Microsoft</strong>（Azure）</td>
+        <td>手続き：あり（Customer Lockbox）／<br>鍵：あり（Managed HSM・Cloud HSM）／<br>実行環境：あり（機密コンピューティング）</td>
+        <td>Customer Lockbox は Azure サービス。Managed HSM は FIPS 140-3 Level 3 のシングルテナントHSM。<strong>Microsoft Foundry 上のモデルに Customer Lockbox がどこまで適用されるかは未確認。</strong></td>
+        <td>Customer Lockbox は対象サービスで有効化すると、以降のアクセス要求が顧客承認制に。鍵は Managed HSM を作成し、ローカルRBACとオフライン保持のクォーラムで運用。実行環境は機密コンピューティングを<strong>有効化して正しく構成</strong>する。</td>
+      </tr>
+      <tr>
+        <td><strong>Google Cloud</strong></td>
+        <td>手続き：あり（Access Approval / Access Transparency）／<br>鍵：あり（Cloud EKM・CMEK）／<br>鍵アクセス制御：あり（Key Access Justifications）</td>
+        <td>Cloud EKM は外部鍵管理パートナー経由。<strong>Vertex AI 上のモデル呼び出しに KAJ が全面的に適用されるかは未確認。</strong></td>
+        <td>Access Approval を有効化して人のアクセスを承認制に。KAJは顧客管理鍵（CMEK）にポリシーを設定し、理由コードごとに可否を決める。外部鍵ならパートナー側のポリシーでも強制可能。</td>
+      </tr>
+      <tr>
+        <td><strong>OpenAI</strong></td>
+        <td>鍵：あり（Enterprise Key Management）／<br>安全レビュー：あり（ZDR with Private Safety Processing）／<br>実行環境：プレビュー（Private Inference・2026年秋予定）</td>
+        <td>APIプラットフォーム。EKMは顧客の外部KMSの鍵で暗号化。PSPは顧客管理ストレージ＋顧客管理のEKM承認を前提とします。</td>
+        <td><strong>本調査で確認した範囲では、いずれも既定では有効にならず、設定・確認が必要です</strong>。EKMは外部KMSの鍵での暗号化、PSPはZDR承認済みの組織が顧客管理ストレージの登録・検証を行って設定します。Private Inference はプレビューです。</td>
+      </tr>
+      <tr>
+        <td><strong>Anthropic</strong></td>
+        <td>アクセス経路の制限：あり（controlled access path）／<br>ZDR：あり（申請制）／<br>カスタマー管理鍵：<strong>未確認</strong></td>
+        <td>Claude API（第一者提供）。<strong>第一者提供でカスタマー管理鍵／HYOK が用意されているかは、本調査では公式記載を確認できませんでした。</strong>Bedrock / Vertex 経由なら各クラウドの鍵管理を使うことになります。</td>
+        <td>ZDRはアカウント担当者経由で申請。ただし<a href="/glossary/zero-data-retention/">第7回</a>で扱ったように、<strong>保持が必須のモデル（Covered Models）はZDRの対象外</strong>です。</td>
+      </tr>
+    </tbody></table></div>
+    <p class="scroll-hint">← 横にスクロールできます →</p>
+    <div style="background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-accent);border-radius:var(--r-md);padding:.8rem 1rem;margin:1rem 0;font-size:.84rem;color:var(--c-muted);">
+      💡 <strong>「未確認」を空欄にしていない理由:</strong> 「書いていない＝提供していない」と読まれると誤情報になります。逆に「提供しているはず」と推測して書くのも誤情報です。<strong>確認できた範囲と、できなかった範囲を分けて示す</strong>のが当サイトの方針です。
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="myth-h">
+    <h2 class="section-title" id="myth-h" style="font-size:1.2rem;">7. 混同しやすい3つの誤解</h2>
+    <div class="faq-block">
+      <dl style="margin:0;">
+        <dt>「ZDRにしたから、運営者にも見られない」</dt>
+        <dd>別の約束です。ZDRは<strong>保存しない</strong>こと、ZOAは<strong>人がアクセスできない</strong>こと。処理中のメモリ上の平文を守るのは第3層（実行環境）の仕事で、保持モードの設定では変わりません。<strong>両方を別々に確認してください。</strong></dd>
+      </dl>
+    </div>
+    <div class="faq-block">
+      <dl style="margin:0;">
+        <dt>「暗号化しているから、運営者も中身は読めない」</dt>
+        <dd>鍵を誰が持っているか次第です。<strong>CMKでも鍵素材は提供者のKMS内にあり、復号を実行するのは提供者側の基盤</strong>です。「提供者の人間が復号できない」ことの保証にはなりません。HYOKまで進めて初めて「鍵素材が提供者の外に出ない」と言えます（AWSの逐語:「Your cryptographic key material never leaves your external key manager.」）。</dd>
+      </dl>
+    </div>
+    <div class="faq-block">
+      <dl style="margin:0;">
+        <dt>「HYOKにすれば全部解決する」</dt>
+        <dd>引き換え条件があります。外部鍵を使う構成では<strong>暗号演算のたびに顧客側システムへの依存が生まれ、その可用性・レイテンシ・運用責任は顧客側に移ります</strong>。またHYOKは「鍵素材を外に置く」話であって、<strong>処理中のメモリ（第3層）を守る話ではありません</strong>。層が違います。</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="steps-h">
+    <h2 class="section-title" id="steps-h" style="font-size:1.2rem;">8. 契約前に確認する5項目</h2>
+    <ol class="steps">
+      <li><strong>「ZOA」という語が、どの層を指しているか</strong>を提供元のドキュメントで特定する。手続きの話なのか、鍵の話なのか、実行環境の話なのかで、あなたがやるべき設定が変わります。</li>
+      <li><strong>ZDRとZOAを別々に確認する。</strong>ZDRの問いは「既定で保持するか／申請制か／例外モデルはどれか」。ZOAの問いは「既定でどう制御されているか／承認フローはあるか／例外条件は何か」。</li>
+      <li><strong>鍵の層の到達点を決める。</strong>CMKで足りるのか、鍵素材を外に置く必要があるのか（HYOK）。HYOKを選ぶなら、自社側の可用性・運用体制まで含めて設計します。</li>
+      <li><strong>「人のアクセス」の承認フローを、実際に有効化して確認する。</strong>ドキュメントに載っていることと、あなたのテナント／プロジェクトで有効になっていることは別です。</li>
+      <li><strong>緊急時の例外条件を読む。</strong>Microsoftの「break glass」、Googleの理由コード、AWSの<code>aws_review</code>のように、<strong>例外の条件は各社が公開しています</strong>。例外を知らずに「絶対に人が入れない」と説明すると、監査で崩れます。</li>
+    </ol>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="faq-h">
+    <h2 class="section-title" id="faq-h" style="font-size:1.2rem;">9. よくある質問</h2>
+    <div class="faq-block">
+      <dl style="margin:0;">
+        <dt>ZOAとZDR、どちらが強い保護ですか</dt>
+        <dd>強弱ではなく<strong>守っている対象が違います</strong>。ZDRは「残さない」、ZOAは「人に見せない」。片方だけでは説明できない事故があります（保存していなくても処理中に見られた／保存しているが誰も復号できない）。<strong>両方を別々に確認するのが正解</strong>です。</dd>
+      </dl>
+    </div>
+    <div class="faq-block">
+      <dl style="margin:0;">
+        <dt>機密コンピューティングを使えば、運営者は絶対に見られませんか</dt>
+        <dd>Azureの公式表現は条件付きです。逐語で「When Azure confidential computing is <strong>enabled and properly configured</strong>, Microsoft can’t access unencrypted customer data.」——<strong>有効化して正しく構成した場合</strong>という条件が明記されています。既定でそうなるわけではなく、設定の確認が必要です。なお、AzureのConfidential VM FAQには「Azure doesn’t have operating procedures for granting confidential VM access to its employees, even if a customer authorizes the access.」という記載もあります。</dd>
+      </dl>
+    </div>
+    <div class="faq-block">
+      <dl style="margin:0;">
+        <dt>「ZOA」という言葉を使っているのはどこですか</dt>
+        <dd>本調査で<strong>定義文として確認できたのはAWS（Amazon Bedrock）</strong>です。Microsoftは「operator access」をリスクとして扱い、Customer Lockbox・機密コンピューティング・Managed HSMの組み合わせで説明しています。Google Cloudは「Google personnelによるアクセスの承認」という言い方で、Access Approval / Access Transparency / KAJの3つに分けて説明しています。<strong>同じ目的を、各社が別の語で説明している</strong>状態です。</dd>
+      </dl>
+    </div>
+    <div class="faq-block">
+      <dl style="margin:0;">
+        <dt>ZOAを自社の監査資料にどう書けばよいですか</dt>
+        <dd>「ZOA対応」ではなく、<strong>「どの層で何を有効化したか」を書く</strong>のが安全です。例: 「保持モードは<code>none</code>」「鍵はCMK」「人のアクセスは承認フローを有効化（例外条件は提供元ドキュメントの◯◯に記載）」——この形なら、後で条件が変わっても説明が破綻しません。</dd>
+      </dl>
+    </div>
+    <div class="faq-block">
+      <dl style="margin:0;">
+        <dt>料金は上がりますか</dt>
+        <dd>本調査では<strong>ZOA関連の設定に伴う料金改定の記載は確認していません</strong>。ただしHYOKは外部のHSM／鍵管理システムの運用コストが別途かかり、提供元側でも専用機能として提供されることがあります。<strong>提供元の料金ページは別途確認してください</strong>（当サイトでは<a href="/pricing/">料金比較</a>を更新しています）。</dd>
+      </dl>
+    </div>
+  </section>
+
+    <section class="section" style="padding-top:0;" aria-labelledby="param-h">
+    <h2 class="section-title" id="param-h" style="font-size:1.1rem;">補足: モデルサイズの「◯B（Active ◯B）」という表記</h2>
+    <div class="tip-box">
+      <p style="font-size:.88rem;color:var(--c-muted);margin:.2rem 0;">モデルの紹介で「320B（18B Active）」のような書き方を見かけます。これは<strong>モデルの大きさを表すパラメータ数の表記</strong>で、<strong>B は 10億（billion）</strong>の意味です。同じ「B」でも、2つは別のものを指しています。</p>
+      <ul style="margin:.5rem 0 0;padding-left:1.2rem;font-size:.88rem;color:var(--c-muted);">
+        <li><strong>総パラメータ数（例: 320B）</strong>＝モデルが持っている重みの合計。<strong>モデルのファイルサイズや、動かすのに必要なメモリの目安</strong>になります。</li>
+        <li><strong>Active（例: 18B Active）</strong>＝1つのトークンを出力するときに<strong>実際に計算へ使われる</strong>パラメータ数。専門家の分岐を持つ構造（MoE）のモデルでは、全体の一部だけが毎回使われます。</li>
+      </ul>
+      <p style="font-size:.88rem;color:var(--c-muted);margin:.6rem 0 0;">つまり「320B（18B Active）」は<strong>「320B 全部を毎回使うわけではない」</strong>という意味です。<strong>総数は載せられるか（メモリ）</strong>に、<strong>Active は計算量・速度・コスト</strong>に効いてくることが多く、総数が同じでも Active が違えば体感速度は変わります（実際の速度・コストは、モデル構造や提供環境にも左右されます）。<strong>当サイトでは、モデル提供元が公表した数値のみを掲載し、非公開の内訳は推測しません。</strong></p>
+    </div>
+  </section>
+<section class="section" style="padding-top:0;" aria-labelledby="rel-h">
+    <h2 class="section-title" id="rel-h" style="font-size:1.1rem;">関連ページ</h2>
+    <div class="card-grid">
+      <article class="card"><div class="card-icon">🗄️</div><h3 class="card-title">ZDR（ゼロデータ保持）とは</h3><p class="card-desc">「保存しない」側の約束を、既定か申請制かで整理した第7回。ZOAと対で読むページです。</p><a href="/glossary/zero-data-retention/" class="card-link">解説を読む →</a></article>
+      <article class="card"><div class="card-icon">🧭</div><h3 class="card-title">LLMデータの4要件</h3><p class="card-desc">残さない・見せない・学ばせない・出さないを分けて確認する第8回。5社マトリクスと確認5ステップ。</p><a href="/glossary/four-data-requirements/" class="card-link">解説を読む →</a></article>
+      <article class="card"><div class="card-icon">🤖</div><h3 class="card-title">Claude Sonnet 5.5</h3><p class="card-desc">2026-09-28公開。$2/$10・1Mコンテキスト。提供5プラットフォームごとにデータ条件が変わる点の入口。</p><a href="/claude-sonnet-5-5/" class="card-link">詳細を見る →</a></article>
+      <article class="card"><div class="card-icon">📊</div><h3 class="card-title">料金比較</h3><p class="card-desc">主要モデルの入力・出力・キャッシュ単価を公式一次情報で比較。</p><a href="/pricing/" class="card-link">料金比較を見る →</a></article>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;">
+    <h2 class="section-title" style="font-size:1.1rem;">出典</h2>
+    <ul class="src-list">
+      <li>AWS「Amazon Bedrock abuse detection」— ZOA と ZDR の定義（<a href="https://docs.aws.amazon.com/bedrock/latest/userguide/abuse-detection.html" target="_blank" rel="noopener">docs.aws.amazon.com</a>・2026-09-27 取得）</li>
+      <li>AWS「Data protection」「Data retention」— モデル提供元の非アクセス、保持モード（<code>none</code> / <code>aws_review</code> 等）（<a href="https://docs.aws.amazon.com/bedrock/latest/userguide/data-retention.html" target="_blank" rel="noopener">docs.aws.amazon.com</a>）</li>
+      <li>AWS KMS「External key stores」「Importing key material」「Key stores」— HYOK と BYOK の定義（<a href="https://docs.aws.amazon.com/kms/latest/developerguide/keystore-external.html" target="_blank" rel="noopener">docs.aws.amazon.com</a>・2026-10-01 取得）</li>
+      <li>Microsoft Learn「Customer Lockbox for Microsoft Azure」— 承認・拒否・4日の失効・break glass 例外（<a href="https://learn.microsoft.com/en-us/azure/security/fundamentals/customer-lockbox-overview" target="_blank" rel="noopener">learn.microsoft.com</a>・2026-10-01 取得）</li>
+      <li>Microsoft Learn「Azure Confidential Computing Overview」「Confidential VM FAQ」（<a href="https://learn.microsoft.com/en-us/azure/confidential-computing/overview" target="_blank" rel="noopener">learn.microsoft.com</a>・2026-10-01 取得）</li>
+      <li>Microsoft Azure 公式ブログ「External key management for Azure Managed HSM」— Microsoftがキー素材にアクセスできないこと、クォーラム、外部鍵がMicrosoft基盤を通らないこと（<a href="https://azure.microsoft.com/en-us/blog/external-key-management-for-azure-managed-hsm-is-now-in-public-preview/" target="_blank" rel="noopener">azure.microsoft.com</a>・2026-10-01 取得）</li>
+      <li>Google Cloud「Overview of Key Access Justifications」— Access Approval / Access Transparency / KAJ の役割分担（<a href="https://docs.cloud.google.com/assured-workloads/key-access-justifications/docs/overview" target="_blank" rel="noopener">docs.cloud.google.com</a>・2026-10-01 取得）</li>
+      <li>Google Cloud「Cloud External Key Manager」（<a href="https://docs.cloud.google.com/kms/docs/ekm" target="_blank" rel="noopener">docs.cloud.google.com</a>・2026-10-01 取得）</li>
+      <li>OpenAI「ZDR with Private Safety Processing」— 安全レビューが人間のアクセス経路を作らないこと、hardware-attested runtime（<a href="https://developers.openai.com/api/docs/guides/private-safety-processing" target="_blank" rel="noopener">developers.openai.com</a>・2026-10-01 取得）</li>
+      <li>OpenAI「Register interest in OpenAI Private Intelligence」— Private Inference はプレビュー（confidential computing と検証可能なコントロールの組み合わせ）（<a href="https://openai.com/form/private-intelligence-interest/" target="_blank" rel="noopener">openai.com</a>・2026-10-01 確認）</li>
+      <li>OpenAI「Data controls in the OpenAI platform」— Enterprise Key Management（<a href="https://developers.openai.com/api/docs/guides/your-data" target="_blank" rel="noopener">developers.openai.com</a>）</li>
+      <li>Anthropic「Data retention practices for covered models」— 既定では担当者が読めないこと、管理されたアクセス経路（<a href="https://support.claude.com/en/articles/15425996-data-retention-practices-for-covered-models" target="_blank" rel="noopener">support.claude.com</a>・2026-09-27 取得）</li>
+    </ul>
+    <p class="section-sub" style="margin-top:1rem;font-size:.82rem;">※ 逐語の日本語訳は当サイトによる要約・補足であり、原文は各リンク先をご確認ください。<strong>原文が正</strong>です。</p>
+  </section>
+
+<div class="tip-box" style="border-left-color:var(--c-red);margin-bottom:2rem;">
+  <h3>⚠️ 免責事項</h3>
+  <ul>
+    <li>本ページの内容は各社公式ドキュメントを<strong>2026-10-01</strong>（一部 2026-09-27）に確認したものです。仕様・提供条件は予告なく変わります。契約前に必ず公式ページをご確認ください。</li>
+    <li><strong>本ページは法的助言ではありません。</strong>監査・契約・規制対応の判断は、各社との契約書・DPAと専門家の確認に基づいて行ってください。</li>
+    <li>「未確認」とした項目（AWS BedrockのXKS対応、Microsoft Foundry上のモデルへのCustomer Lockbox適用範囲、Vertex AIへのKAJ適用範囲、Anthropic第一者提供のカスタマー管理鍵）は、確認でき次第更新します。</li>
+    <li>本サイトは情報提供目的であり、特定プロバイダーの推薦・代理ではありません。</li>
+  </ul>
+</div>
+
+</div></main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>運営: okamoちゃんねる</p><p><a href="/">ホーム</a> · <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a> · <a href="/glossary/">用語説明</a> · <a href="/glossary/zero-data-retention/">ZDR</a> · <a href="/glossary/four-data-requirements/">データの4要件</a></p></div><p class="footer-disclaimer">⚠️ 料金・仕様は予告なく変動します。契約前に必ず各社公式ページでご確認ください。本サイトは各社と提携していません。</p></div></footer>
+</body>
+</html>

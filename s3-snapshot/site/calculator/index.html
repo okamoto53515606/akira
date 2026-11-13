@@ -4,13 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>LLMトークンコスト計算機 — 主要API料金を一括比較 | LLM Data Hub</title>
-  <meta name="description" content="入力・出力トークン数を入れるだけで、Claude・GPT・Gemini・DeepSeek・GLM・Qwenなど主要LLM APIのコストをUSD＋円換算で一括比較。外部通信なし・完全ブラウザ内計算。2026年9月27日更新。">
+  <meta name="description" content="入力・出力トークン数を入れるだけで、Claude・GPT・Gemini・DeepSeek・GLM・Qwenなど主要LLM APIのコストをUSD＋円換算で一括比較。外部通信なし・完全ブラウザ内計算。2026年10月13日更新。">
   <link rel="canonical" href="https://llm.okamomedia.tokyo/calculator/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta property="og:image" content="https://llm.okamomedia.tokyo/assets/og/ja-calculator.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="トークンコスト計算機の画面イメージ（入力・出力トークン数からUSDと円で一括試算）">
+  <meta name="twitter:image" content="https://llm.okamomedia.tokyo/assets/og/ja-calculator.png">
+  <meta name="twitter:image:alt" content="トークンコスト計算機の画面イメージ（入力・出力トークン数からUSDと円で一括試算）">
   <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/calculator/">
   <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/calculator/">
   <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/calculator/">
-  <meta property="og:type" content="website"><meta property="og:url" content="https://llm.okamomedia.tokyo/calculator/"><meta property="og:title" content="LLMトークンコスト計算機"><meta property="og:description" content="主要LLM APIのコストを一括比較。USD＋円換算対応。"><meta property="og:site_name" content="LLM Data Hub"><meta name="twitter:card" content="summary">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"LLMトークンコスト計算機","url":"https://llm.okamomedia.tokyo/calculator/","applicationCategory":"UtilitiesApplication","offers":{"@type":"Offer","price":"0","priceCurrency":"JPY"},"publisher":{"@type":"Organization","name":"okamoちゃんねる"},"dateModified":"2026-09-27"}</script>
+  <meta property="og:type" content="website"><meta property="og:url" content="https://llm.okamomedia.tokyo/calculator/"><meta property="og:title" content="LLMトークンコスト計算機"><meta property="og:description" content="主要LLM APIのコストを一括比較。USD＋円換算対応。"><meta property="og:site_name" content="LLM Data Hub"><meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"LLMトークンコスト計算機","url":"https://llm.okamomedia.tokyo/calculator/","applicationCategory":"UtilitiesApplication","offers":{"@type":"Offer","price":"0","priceCurrency":"JPY"},"publisher":{"@type":"Organization","name":"okamoちゃんねる"},"dateModified":"2026-10-13"}</script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
   <link rel="stylesheet" href="/assets/style.css">
@@ -19,11 +27,12 @@
 <body>
 <header class="site-header"><div class="header-inner"><a href="/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="メインナビゲーション"><a href="/" class="nav-link">ホーム</a><a href="/pricing/" class="nav-link">料金比較</a><a href="/calculator/" class="nav-link active" aria-current="page">トークン計算機</a><a href="/timeline/" class="nav-link">リリース年表</a><a href="/china-ai/" class="nav-link">中国AI</a><a href="/multimodal/" class="nav-link">マルチモーダル</a><a href="/mai/" class="nav-link">MS AI (MAI)</a><a href="/glossary/" class="nav-link">用語説明</a></nav></div></header>
 <main><div class="container">
+<figure class="key-visual" style="margin:1.5rem 0 .5rem;"><img src="/assets/og/ja-calculator.png" alt="トークンコスト計算機の画面イメージ（入力・出力トークン数からUSDと円で一括試算）" width="1200" height="630" loading="eager" decoding="async" style="width:100%;max-width:900px;height:auto;display:block;margin:0 auto;border:1px solid var(--c-border);border-radius:var(--r-md);"></figure>
 <div class="section" style="padding-bottom:0;">
 <h1 class="section-title" style="font-size:1.6rem;">LLMトークンコスト計算機</h1>
 <p class="section-sub" style="max-width:680px;">入力・出力トークン数を入力すると主要LLM APIの費用をUSD・円換算で一括比較。すべてブラウザ内で計算（外部通信なし）。料金の一次情報は<a href="/pricing/">料金比較ページ</a>。</p>
 <p class="token-hint">💡 トークン目安: 日本語1文字≒1〜1.3トークン、英語1単語≒1.3トークン（文章により変動）</p>
-<div class="updated-bar"><span class="dot">●</span>最終更新: <time datetime="2026-09-27">2026年9月27日</time> | 出典は<a href="/pricing/">料金比較ページ</a>に記載</div>
+<div class="updated-bar"><span class="dot">●</span>最終更新: <time datetime="2026-10-13">2026年10月13日</time> | 出典は<a href="/pricing/">料金比較ページ</a>に記載</div>
 </div>
 <div class="calc-card"><div class="calc-grid">
 <div class="calc-field"><label for="input-tokens">入力トークン数</label><input type="number" id="input-tokens" inputmode="numeric" min="0" step="1" value="1000000"><div class="calc-preview" id="input-tokens-preview"></div><div class="preset-row"><button type="button" class="preset-btn" data-target="input-tokens" data-value="1000">1K（千）</button><button type="button" class="preset-btn" data-target="input-tokens" data-value="10000">10K（1万）</button><button type="button" class="preset-btn" data-target="input-tokens" data-value="100000">100K（10万）</button><button type="button" class="preset-btn" data-target="input-tokens" data-value="1000000">1M（100万）</button></div></div>
@@ -32,8 +41,9 @@
 </div></div>
 <section aria-labelledby="rh"><h2 class="section-title" id="rh" style="font-size:1.1rem;">比較結果（総コスト順）</h2>
 <div class="table-wrap"><table><thead><tr><th>モデル</th><th>提供元</th><th>入力単価</th><th>出力単価</th><th>合計(USD)</th><th>参考円換算</th></tr></thead><tbody id="result-body"></tbody></table></div>
-<p class="calc-disclaimer">※ キャッシュなし・標準レートでの計算。Batch割引・長文割増は未反映。GPT-6 Astraは$10/$50（2026-09-03発表）。Claude Fable 5.1は$10/$50（cache読込$0.25・2026-09-01公開）。Claude Sonnet 5は$2/$10（導入価格から恒久化）。GPT-5.6 Solはプロモ価格(〜11/21)。Gemini 3.8/3.7/3.6 Flashは初回価格(〜12/31)。GLM-5.3-Flashはlist価格($0.15/$0.50・プロモ終了)。DeepSeekは<strong>V4.1 Flash</strong>（オフピーク$0.15/$0.60・ピーク$0.30/$1.20）が現行主力で、ピーク/オフピーク両方を列挙（ピークは平日のみ01-04/06-10 UTC。土日は終日オフピーク）。V4 Flash宛はV4.1 FlashへルーティングされFlash価格で課金。V4 Proは2026-09-14以降も提供継続（9/14ルーティング予告は撤回済み）で、V4 Pro単価も現行有効。GPT-5.6 Terra/Lunaは7/30値下げ後。契約前に必ず公式ページで確認を。<a href="/pricing/">料金比較ページ</a>で詳細出典参照。</p>
-</section></div></main>
+<p class="calc-disclaimer">※ キャッシュなし・標準レートでの計算。Batch割引・長文割増は未反映。GPT-6 Astraは$10/$50（2026-09-03発表）。Claude Fable 5.1は$10/$50（cache読込$0.25・2026-09-01公開）。Claude Sonnet 5は$2/$10（導入価格から恒久化）。GPT-5.6 Solはプロモ価格(〜11/21)。Gemini 3.8/3.7/3.6 Flashは初回価格(〜12/31)。Gemini Omni 1.1 Flashは入力$1.50・出力はテキスト$9.00／動画$17.50（表はテキスト出力で計算）。GLM-5.3-Flashはlist価格($0.15/$0.50・プロモ終了)。DeepSeekは<strong>V4.1 Flash</strong>（オフピーク$0.15/$0.60・ピーク$0.30/$1.20）が現行主力で、ピーク/オフピーク両方を列挙（ピークは平日のみ01-04/06-10 UTC。土日は終日オフピーク）。V4 Flash宛はV4.1 FlashへルーティングされFlash価格で課金。V4 Proは2026-09-14以降も提供継続（9/14ルーティング予告は撤回済み）で、V4 Pro単価も現行有効。GPT-5.6 Terra/Lunaは7/30値下げ後。契約前に必ず公式ページで確認を。<a href="/pricing/">料金比較ページ</a>で詳細出典参照。</p>
+</section></div><p style="font-size:.9rem;margin:1.5rem 0 0;"><strong>関連:</strong> <a href="/gemini-4-argon/">Gemini 4 Argon の料金と仕様（1Mコンテキスト・12/1からの予告価格）</a></p>
+</main>
 <footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>運営: okamoちゃんねる</p><p><a href="/">ホーム</a> · <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a> · <a href="/timeline/">年表</a></p></div><p class="footer-disclaimer">⚠️ 料金は予告なく変動します。契約前に必ず各社公式ページでご確認ください。本サイトの情報利用による損害について運営者は責任を負いません。</p></div></footer>
 <script>
 var MODELS=[];

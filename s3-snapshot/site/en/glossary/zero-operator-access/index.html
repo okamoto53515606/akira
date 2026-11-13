@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ZOA (Zero Operator Access): Definition, vs ZDR, 5 Vendors Compared | LLM Data Hub</title>
+  <meta name="description" content="ZOA (zero operator access) means the provider's staff cannot decrypt or read your data, even when asked to. It is not the same promise as zero data retention (ZDR). This page defines ZOA, explains the three layers that block access, compares CMK, BYOK and HYOK, and quotes five vendors verbatim. Updated October 9, 2026.">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/en/glossary/zero-operator-access/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta property="og:image" content="https://llm.okamomedia.tokyo/assets/og/en-zoa.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Diagram of zero operator access: your data encrypted with a key the operator does not hold, so staff cannot read it">
+  <meta name="twitter:image" content="https://llm.okamomedia.tokyo/assets/og/en-zoa.png">
+  <meta name="twitter:image:alt" content="Diagram of zero operator access: your data encrypted with a key the operator does not hold, so staff cannot read it">
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/glossary/zero-operator-access/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/glossary/zero-operator-access/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/glossary/zero-operator-access/">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/en/glossary/zero-operator-access/">
+  <meta property="og:title" content="ZOA (Zero Operator Access): Definition, vs ZDR, 5 Vendors Compared">
+  <meta property="og:description" content="ZOA (zero operator access) means the provider's staff cannot decrypt or read your data, even when asked to. It is not the same promise as zero data retention (ZDR). This page defines ZOA, explains the three layers that block access, compares CMK, BYOK and HYOK, and quotes five vendors verbatim. Updated October 9, 2026.">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"What Is Zero Operator Access (ZOA)? — \"Not Retained\" and \"Not Viewable\" Are Different Promises","datePublished":"2026-10-01","dateModified":"2026-10-09","author":{"@type":"Organization","name":"okamo channel"},"publisher":{"@type":"Organization","name":"okamo channel"},"url":"https://llm.okamomedia.tokyo/en/glossary/zero-operator-access/","inLanguage":"en","description":"Zero operator access explained through three layers of access control, the three stages of key management (CMK/BYOK/HYOK), approval workflows, and per-vendor availability, quoting official documentation."}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://llm.okamomedia.tokyo/en/"},{"@type":"ListItem","position":2,"name":"Glossary","item":"https://llm.okamomedia.tokyo/en/glossary/"},{"@type":"ListItem","position":3,"name":"Zero Operator Access","item":"https://llm.okamomedia.tokyo/en/glossary/zero-operator-access/"}]}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .phrase-box{background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-accent);border-radius:var(--r-md);padding:1rem 1.15rem;margin:1.2rem 0}
+    .phrase-box .phrase{margin:0;font-size:1.02rem;font-weight:700;line-height:1.7}
+    .phrase-box .phrase-meta{margin:.5rem 0 0;font-size:.83rem;color:var(--c-muted);line-height:1.8}
+    .quote{margin:1rem 0;padding:.85rem 1rem;background:var(--c-surface2);border:1px solid var(--c-border);border-radius:var(--r-sm);font-size:.84rem;line-height:1.8;color:var(--c-muted)}
+    .quote em{color:var(--c-text);font-style:italic}
+    .quote .who{display:block;margin-top:.45rem;font-size:.76rem;color:var(--c-muted)}
+    .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+    .mtable{width:100%;border-collapse:collapse;font-size:.79rem;min-width:700px}
+    .mtable th,.mtable td{border:1px solid var(--c-border);padding:.5rem .6rem;text-align:left;vertical-align:top;color:var(--c-muted);line-height:1.7}
+    .mtable thead th{background:var(--c-surface2);color:var(--c-text);font-weight:700;white-space:nowrap}
+    .mtable td strong{color:var(--c-text)}
+    .scroll-hint{font-size:.74rem;color:var(--c-muted);margin:.35rem 0 0}
+    .steps{counter-reset:s;list-style:none;padding-left:0;margin:1rem 0}
+    .steps li{counter-increment:s;position:relative;padding:.6rem 0 .6rem 2.3rem;font-size:.87rem;line-height:1.85;color:var(--c-muted);border-top:1px solid var(--c-border)}
+    .steps li:first-child{border-top:none}
+    .steps li::before{content:counter(s);position:absolute;left:0;top:.6rem;width:1.5rem;height:1.5rem;border-radius:50%;background:var(--c-accent);color:#fff;font-size:.78rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+    .steps li strong{color:var(--c-text)}
+    .faq-block{border-top:1px solid var(--c-border);padding:1rem 0 0;margin:1rem 0 0}
+    .faq-block:first-of-type{border-top:none}
+    .faq-block dt{margin:0;font-size:.95rem;font-weight:700;color:var(--c-text);line-height:1.7}
+    .faq-block dt::before{content:"Q. ";color:var(--c-accent);font-family:var(--font-mono);font-size:.82rem}
+    .faq-block dd{margin:.4rem 0 0;font-size:.87rem;line-height:1.85;color:var(--c-muted)}
+    .faq-block dd::before{content:"A. ";color:var(--c-accent);font-family:var(--font-mono);font-size:.82rem;font-weight:700}
+    .faq-block dd strong{color:var(--c-text)}
+    .src-list{font-size:.8rem;color:var(--c-muted);padding-left:1.1em;line-height:1.85}
+    .fig-wrap{position:relative}.fig-fig{margin:1rem 0 1.2rem}.fig-fig svg{width:100%;height:auto;border:1px solid var(--c-border);border-radius:var(--r-md);background:var(--c-surface);display:block}
+    .fig-hint{display:none;font-size:.75rem;color:var(--c-muted);text-align:center;margin:.3rem 0 0}
+    @media (max-width:680px){.fig-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}.fig-scroll svg{min-width:620px}.fig-hint{display:block}}
+  </style>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/en/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="Main navigation"><a href="/en/" class="nav-link">Home</a><a href="/en/pricing/" class="nav-link">Pricing</a><a href="/en/calculator/" class="nav-link">Token Calculator</a><a href="/en/timeline/" class="nav-link">Release Timeline</a><a href="/en/china-ai/" class="nav-link">China AI</a><a href="/en/multimodal/" class="nav-link">Multimodal</a><a href="/en/mai/" class="nav-link">MS AI (MAI)</a><a href="/en/glossary/" class="nav-link active" aria-current="page">Glossary</a></nav></div></header>
+
+<main><div class="container">
+<figure class="key-visual" style="margin:1.5rem 0 .5rem;"><img src="/assets/og/en-zoa.png" alt="Diagram of zero operator access: your data encrypted with a key the operator does not hold, so staff cannot read it" width="1200" height="630" loading="eager" decoding="async" style="width:100%;max-width:900px;height:auto;display:block;margin:0 auto;border:1px solid var(--c-border);border-radius:var(--r-md);"></figure>
+  <div class="section" style="padding-bottom:0;">
+    <h1 class="section-title" style="font-size:1.55rem;">What Is Zero Operator Access (ZOA)? — "Not Retained" and "Not Viewable" Are Different Promises</h1>
+    <p class="section-sub" style="max-width:790px;">
+      <a href="/en/glossary/">Glossary</a> #9. In <a href="/en/glossary/zero-data-retention/">#7 on ZDR</a> and <a href="/en/glossary/four-data-requirements/">#8 on the four data requirements</a>, ZOA appeared once as the "not viewable" requirement: <strong>the operator's own staff cannot access your content</strong>. This page is the deep dive.
+      <strong>ZDR is about storage; ZOA is about people.</strong> Data that is never stored can still be seen while it is being processed, and data retained for 30 days is unreadable if nobody can decrypt it. <strong>They are independent promises</strong>, and satisfying one does not satisfy the other.
+      We split the controls into <strong>three layers — process, keys, runtime</strong> — and quote each vendor's official text on what is default versus what must be requested.
+    </p>
+    <div class="phrase-box">
+      <p class="phrase">Zero operator access (ZOA) = <strong>the people who run the service cannot decrypt or read your data</strong>.</p>
+      <p class="phrase-meta">AWS defines the term in its Bedrock documentation, verbatim: “Amazon Bedrock uses a <strong>zero operator access (ZOA)</strong> data security model. This means <strong>no operators of the service can access model input or output</strong>.” The very next sentence in the same passage describes ZDR separately — <strong>one passage, two different models</strong>. That is the primary-source basis for treating these as distinct promises.</p>
+    </div>
+    <div class="updated-bar">
+      <span class="dot">●</span>
+      Last updated: <time datetime="2026-10-09">October 9, 2026</time>
+      &ensp;|&ensp; Policy: only content verified verbatim in official documentation. Anything unverified is labelled "not verified"
+    </div>
+  </div>
+
+  <section class="section" style="padding-top:1.5rem;" aria-labelledby="def-h">
+    <h2 class="section-title" id="def-h" style="font-size:1.2rem;">1. What ZOA covers — and what it does not</h2>
+    <p class="section-sub">In this page, "operator" (the party running the service) means <strong>operations staff, support engineers and platform administrators on the cloud provider's side</strong> — for example, AWS staff. It is not attackers, and not other tenants. <strong>Your own staff at the company using that cloud (your in-house IT and operations team) are a separate party</strong> and are not who ZOA covers: whether they can read the data is a question about your own access design and key management. <strong>ZOA aims to make the data unreadable even if the provider's operator were malicious.</strong></p>
+    <div class="table-wrap"><table class="mtable"><thead><tr><th>Question</th><th>What ZOA answers</th><th>Watch out</th></tr></thead><tbody>
+      <tr><td><strong>Can the cloud provider's employees read my content?</strong></td><td>No (by design or by process)</td><td>The enforcement mechanism differs — process, keys or runtime — and so does the strength.</td></tr>
+      <tr><td><strong>Can my own operations staff (at the company using the cloud) read it?</strong></td><td><strong>Out of scope for ZOA</strong></td><td>They are a different party and can read it depending on your own permissions design. <strong>ZOA is a promise about the provider side</strong>; in-house access is a separate question.</td></tr>
+      <tr><td><strong>Can the third-party model provider read it?</strong></td><td>Documented separately by the intermediary</td><td>AWS states for Bedrock: “Model providers don't have any access to those accounts. Because the model providers don't have access to those accounts, they don't have access to Amazon Bedrock logs or to customer prompts and completions.” <strong>The operator (the cloud provider) and the model provider are different parties.</strong></td></tr>
+      <tr><td><strong>Is my data stored?</strong></td><td><strong>Out of scope</strong> (that is ZDR)</td><td>Retention is covered by <a href="/en/glossary/zero-data-retention/">ZDR</a>. ZOA can hold at 0 days or 30 days.</td></tr>
+      <tr><td><strong>Is it used for training?</strong></td><td><strong>Out of scope</strong> (that is a contract term)</td><td>Training use is a contractual clause — see "don't learn from it" in <a href="/en/glossary/four-data-requirements/">#8</a>.</td></tr>
+      <tr><td><strong>Does it survive a legal demand?</strong></td><td>Depends on the provider's policy</td><td>If the design makes plaintext unavailable, there may be nothing to hand over — but this is only verifiable to the extent the provider publishes it.</td></tr>
+    </tbody></table></div>
+    <p class="scroll-hint">← scroll horizontally →</p>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="sep-h">
+    <h2 class="section-title" id="sep-h" style="font-size:1.2rem;">2. ZDR (not retained) and ZOA (not viewable) are separate</h2>
+    <p class="section-sub">Confusion arises because <strong>many vendors describe both in a single sentence</strong>. The obligations themselves share almost nothing.</p>
+    <div class="table-wrap"><table class="mtable"><thead><tr><th>Dimension</th><th>ZDR (not retained)</th><th>ZOA (not viewable)</th></tr></thead><tbody>
+      <tr><td>Subject</td><td>Stored data (retention period)</td><td>Human access (who can decrypt and read)</td></tr>
+      <tr><td>Where it lives</td><td>Storage and logs</td><td>Keys, runtime environment, approval process</td></tr>
+      <tr><td>Typical configuration</td><td>Retention mode per account, project or request</td><td>Customer-managed keys, approval workflows, confidential computing</td></tr>
+      <tr><td>What breaks when it fails</td><td>Data remains (for as long as the vendor keeps it)</td><td>Remaining data is readable by staff — regardless of retention</td></tr>
+      <tr><td>Common trap</td><td><strong>On by default / exception models</strong></td><td><strong>Not on by default / emergency exceptions exist</strong></td></tr>
+    </tbody></table></div>
+    <p class="scroll-hint">← scroll horizontally →</p>
+    <div class="quote">
+      <em>“Amazon Bedrock uses a <strong>zero operator access (ZOA)</strong> data security model. This means no operators of the service can access model input or output. Also, Amazon Bedrock uses a <strong>zero data retention (ZDR)</strong> data security model. This means that <strong>by default</strong>, Amazon Bedrock does not store model inputs or outputs.”</em>
+      <span class="who">— AWS documentation, "Amazon Bedrock abuse detection" (retrieved 2026-09-27)</span>
+    </div>
+    <p class="section-sub">Note the asymmetry: the ZDR sentence carries a "<strong>by default</strong>" qualifier and an exception list of models that must be retained, while the ZOA sentence carries no such caveat. That does <strong>not</strong> mean ZOA rules out human access in every configuration: AWS states that no operator of the service can access model input or output, yet the retention modes include <code>aws_review</code>, which <strong>retains inputs and outputs for human review by AWS</strong> (verbatim quote in section 3 below). <strong>ZOA is a promise about operator access; the retention mode is a separate layer of settings</strong>, so the ZOA wording alone does not settle whether a given retention mode allows human review. <strong>Check the default state separately for each requirement.</strong></p>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="layers-h">
+    <h2 class="section-title" id="layers-h" style="font-size:1.2rem;">3. The three layers that block access</h2>
+    <p class="section-sub">Read across the vendors and the mechanisms collapse into <strong>three layers</strong>, each resting on a different kind of evidence.</p>
+    <div class="fig-wrap">
+      <div class="fig-scroll">
+      <figure class="fig-fig" style="margin:0;">
+        <svg viewBox="0 0 640 360" role="img" aria-labelledby="zfig-t zfig-d" xmlns="http://www.w3.org/2000/svg">
+          <title id="zfig-t">The three layers that block operator access</title>
+          <desc id="zfig-d">Layer 1 is process: who approves access (Microsoft Customer Lockbox, Google Access Approval, Anthropic's controlled access path). Layer 2 is keys: who can decrypt (CMK, BYOK, HYOK). Layer 3 is the runtime: who can see data while it is processed (confidential computing, hardware-attested runtimes). Separately, ZDR governs whether data is retained at all.</desc>
+          <g font-family="system-ui,Segoe UI,sans-serif">
+            <text x="20" y="26" font-size="14" font-weight="700" fill="#e6e6e6">The three layers that block operator access</text>
+            <text x="20" y="42" font-size="11" fill="#9aa0aa">Each layer rests on different evidence — and none of them is necessarily on by default.</text>
+
+            <rect x="20" y="56" width="600" height="82" rx="8" fill="#141a24" stroke="#2a3340"/>
+            <circle cx="50" cy="90" r="15" fill="#6aa9ff"/><text x="50" y="95" font-size="13" font-weight="700" fill="#0b0f16" text-anchor="middle">1</text>
+            <text x="76" y="82" font-size="13" font-weight="700" fill="#6aa9ff">Process — who approves access</text>
+            <text x="76" y="102" font-size="11.5" fill="#9aa0aa">Microsoft Customer Lockbox (expires in 4 days, approve / deny) / Google Access Approval /</text>
+            <text x="76" y="120" font-size="11.5" fill="#9aa0aa">Anthropic's controlled access path / OpenAI's safety runtime with human access disabled</text>
+
+            <rect x="20" y="148" width="600" height="82" rx="8" fill="#1a1410" stroke="#3a2a22"/>
+            <circle cx="50" cy="182" r="15" fill="#d97757"/><text x="50" y="187" font-size="13" font-weight="700" fill="#0b0f16" text-anchor="middle">2</text>
+            <text x="76" y="174" font-size="13" font-weight="700" fill="#d97757">Keys — who can decrypt</text>
+            <text x="76" y="194" font-size="11.5" fill="#9aa0aa">CMK (key material inside the provider's KMS, governance with you) / BYOK (you import it) /</text>
+            <text x="76" y="212" font-size="11.5" fill="#9aa0aa">HYOK (key material never leaves your environment: AWS XKS, Google Cloud EKM, Azure Managed HSM)</text>
+
+            <rect x="20" y="240" width="600" height="82" rx="8" fill="#101a13" stroke="#22342a"/>
+            <circle cx="50" cy="274" r="15" fill="#7bc47f"/><text x="50" y="279" font-size="13" font-weight="700" fill="#0b0f16" text-anchor="middle">3</text>
+            <text x="76" y="266" font-size="13" font-weight="700" fill="#7bc47f">Runtime — who can see it in use</text>
+            <text x="76" y="286" font-size="11.5" fill="#9aa0aa">Confidential computing (TEEs) / hardware-attested runtimes / enclaves</text>
+            <text x="76" y="304" font-size="11.5" fill="#9aa0aa">The layer that protects plaintext in memory, which encryption at rest and in transit does not</text>
+
+            <rect x="20" y="332" width="600" height="22" rx="6" fill="none" stroke="#5a5f6a" stroke-dasharray="5 4"/>
+            <text x="36" y="347" font-size="11.5" fill="#9aa0aa"><tspan font-weight="700" fill="#e6e6e6">ZDR (not retained) sits outside all three layers.</tspan>Satisfying the three layers says nothing about retention — and vice versa.</text>
+          </g>
+        </svg>
+        <figcaption style="font-size:.78rem;color:var(--c-muted);margin-top:.5rem;">Figure by LLM Data Hub. Layer labels use each vendor's own terminology. For concrete availability, see section 6 below.</figcaption>
+      </figure>
+      </div>
+      <p class="fig-hint">← scroll horizontally →</p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="key-h">
+    <h2 class="section-title" id="key-h" style="font-size:1.2rem;">4. The three stages of key management — CMK, BYOK, HYOK</h2>
+    <p class="section-sub">"It's encrypted, so the operator can't read it" only holds if you know <strong>who holds the key</strong>. The terms sound alike; the guarantees do not.</p>
+    <div class="table-wrap"><table class="mtable"><thead><tr><th>Item</th><th>CMK (customer-managed key)</th><th>BYOK (bring your own key)</th><th>HYOK (hold your own key)</th></tr></thead><tbody>
+      <tr><td><strong>Key material generated by</strong></td><td>The provider's KMS / HSM</td><td>You generate it, then import it</td><td>You, in your own environment</td></tr>
+      <tr><td><strong>Key material stored</strong></td><td>Inside the provider's KMS / HSM</td><td>Inside the provider's KMS (after import)</td><td><strong>Outside the provider</strong> (your HSM or key manager)</td></tr>
+      <tr><td><strong>Cryptographic operations performed by</strong></td><td>The provider</td><td>The provider</td><td><strong>Your key manager</strong> (the provider calls out each time)</td></tr>
+      <tr><td><strong>What you control</strong></td><td>Principals, permissions, deletion</td><td>Expiry, revocation, immediate deletion</td><td>You can stop decryption outside the provider entirely</td></tr>
+      <tr><td><strong>Can the provider decrypt in principle?</strong></td><td>Yes — it holds the permissions</td><td>Yes — the material sits in its KMS</td><td><strong>No, by design</strong> — the material never leaves you</td></tr>
+      <tr><td><strong>Typical implementation</strong></td><td>AWS KMS customer managed keys / Google CMEK / Azure Key Vault</td><td>AWS KMS imported key material / BYOK import into Azure Managed HSM</td><td>AWS KMS External Key Store (XKS) / Google Cloud EKM / Azure Managed HSM external key management</td></tr>
+    </tbody></table></div>
+    <p class="scroll-hint">← scroll horizontally →</p>
+
+    <h3 style="font-size:1rem;margin:1.6rem 0 .5rem;">HYOK, verbatim (AWS KMS external key stores)</h3>
+    <div class="quote">
+      <em>“Encryption and decryption operations that use a KMS key in an external key store are performed by your external key manager using your cryptographic key material, a feature known as <strong>hold your own keys (HYOKs)</strong>.”<br>“<strong>AWS KMS never interacts directly with your external key manager, and cannot create, view, manage, or delete your keys.</strong> … Instead, AWS KMS interacts only with external key store proxy (XKS proxy) software that you provide.”<br>“<strong>Your cryptographic key material never leaves your external key manager.</strong>”</em>
+      <span class="who">— AWS KMS Developer Guide, "External key stores" (retrieved 2026-10-01)</span>
+    </div>
+
+    <h3 style="font-size:1rem;margin:1.6rem 0 .5rem;">BYOK, verbatim</h3>
+    <div class="quote">
+      <em>“When you create a KMS key, by default, AWS KMS generates the key material for that KMS key. But you can create a KMS key without key material and then import your own key material into that KMS key, a feature often known as <strong>‘bring your own key’ (BYOK)</strong>.”<br>“You can set an expiration time on import or call DeleteImportedKeyMaterial to revoke access immediately.”</em>
+      <span class="who">— AWS KMS Developer Guide, "Importing key material" and "Key stores" (verified 2026-10-01)</span>
+    </div>
+
+    <h3 style="font-size:1rem;margin:1.6rem 0 .5rem;">HYOK, verbatim (Microsoft and Google Cloud)</h3>
+    <div class="quote">
+      <em>“Keys are generated and stored in a single-tenant, FIPS 140-3 Level 3 HSM that only you control: <strong>Microsoft has no access to your key material</strong>, and you govern who can use each key.”<br>“<strong>Microsoft can’t decrypt your key material or recover your HSM cluster without it.</strong>”<br>“The security domain is protected by a quorum of RSA key pairs that you hold offline. Recovery requires your quorum, so <strong>no single person—and no Microsoft operator—can act alone</strong>.”<br>“The external key never resides in or passes through Microsoft infrastructure; only your hardware uses it.”</em>
+      <span class="who">— Azure blog, "External key management for Azure Managed HSM" (retrieved 2026-10-01)</span>
+    </div>
+    <div class="quote">
+      <em>“Data encrypted using a Cloud EKM key <strong>can’t be decrypted without both the external key material and the internal key material</strong>.”</em>
+      <span class="who">— Google Cloud documentation, "Cloud External Key Manager" (retrieved 2026-10-01)</span>
+    </div>
+
+    <div style="background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-yellow);border-radius:var(--r-md);padding:.8rem 1rem;margin:1rem 0;font-size:.84rem;color:var(--c-muted);">
+      ⚠️ <strong>HYOK is a trade, not a free upgrade.</strong> Keeping key material outside means <strong>your system must answer every cryptographic request</strong>. If your HSM is down, the cloud service cannot decrypt either. Availability, latency and operational responsibility (backups, patching, incident response) move to you — AWS notes the XKS proxy is "software that you provide." Choose it because you have accepted that responsibility, not because it sounds strongest.
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="appr-h">
+    <h2 class="section-title" id="appr-h" style="font-size:1.2rem;">5. How "no access without your action" is actually enforced</h2>
+    <p class="section-sub">Keys and runtimes are technical controls, but <strong>real operations sometimes require a human on the provider side to touch the system</strong> (incident response, abuse investigation — not your own operations team). That is where layer 1 — the <strong>approval workflow</strong> — does the work.</p>
+    <div class="table-wrap"><table class="mtable"><thead><tr><th>Vendor</th><th>Mechanism</th><th>What the customer holds</th><th>Exceptions / caveats</th></tr></thead><tbody>
+      <tr><td><strong>Microsoft</strong> (Azure)</td><td>Customer Lockbox</td><td>Approve or reject each access request</td><td>Requests sit in the customer queue for <strong>four days</strong>, then expire and no access is granted. <strong>Emergency "break glass" scenarios do not trigger Lockbox</strong>, per the official page.</td></tr>
+      <tr><td><strong>Google Cloud</strong></td><td>Access Approval + Access Transparency + Key Access Justifications (KAJ)</td><td>Approval of personnel access, plus <strong>approve/deny per key-access request</strong></td><td>For keys registered for KAJ (customer-managed keys), KAJ issues a <strong>justification code with every request to the key — any cryptographic operation, not only decryption</strong>; your policy decides. Denying some codes (e.g. <code>GOOGLE_INITIATED_SERVICE</code>) reduces availability and reliability.</td></tr>
+      <tr><td><strong>Anthropic</strong></td><td>Controlled access path</td><td>— (review is conditionally triggered)</td><td>Verbatim, human review can occur only when content is <strong>flagged by automated trust and safety systems</strong>.</td></tr>
+      <tr><td><strong>OpenAI</strong></td><td>ZDR with Private Safety Processing (PSP) / Enterprise Key Management (EKM)</td><td>Permissions and key authorisation needed to decrypt</td><td>The stated principle is that <strong>safety review must not create a new way for OpenAI personnel to read content</strong>; decryption happens in a hardware-attested runtime.</td></tr>
+      <tr><td><strong>AWS</strong> (Bedrock)</td><td>ZOA model plus retention modes (<code>none</code> etc.)</td><td>Choice of retention mode per account / project / Region</td><td>Retention modes include <code>aws_review</code>, which <strong>retains inputs and outputs for human review by AWS</strong>. The ZOA description states no exception, but retention modes are a separate layer of settings: choosing <code>aws_review</code> can bring <strong>human review inside AWS</strong>, so do not read "no human can ever look" out of the ZOA wording alone.</td></tr>
+    </tbody></table></div>
+    <p class="scroll-hint">← scroll horizontally →</p>
+
+    <h3 style="font-size:1rem;margin:1.6rem 0 .5rem;">The primary sources, verbatim</h3>
+    <div class="quote">
+      <em>“In those rare circumstances where Microsoft requires such access, Customer Lockbox for Microsoft Azure provides an interface for your organization to <strong>review and approve or reject customer data access requests</strong>.”<br>“The request remains in the customer queue for <strong>four days</strong>. After this time, the access request automatically expires and <strong>no access is granted to Microsoft engineers</strong>.”<br>“Approve: The Microsoft engineer receives access for the duration specified in the request details …”<br>“Deny: Customer Lockbox rejects the elevated access request by the Microsoft engineer and takes no further action.”</em>
+      <span class="who">— Microsoft Learn, "Customer Lockbox for Microsoft Azure" (retrieved 2026-10-01)</span>
+    </div>
+    <div class="quote">
+      <em>“<strong>Access Approval</strong> lets you authorize requests from Google personnel to access Customer Data, <strong>Access Transparency</strong> helps you discover information about when Customer Data is accessed, and <strong>Key Access Justifications</strong> provides key access control for all interactions with at-rest Customer Data that is encrypted by a customer-managed key.”<br>“Key Access Justifications lets you set a policy on Cloud KMS keys to <strong>view, approve, and deny key access requests</strong> depending on the provided justification code.”<br>“Support tickets typically don’t require this access and our frontline support personnel don’t have this access.”</em>
+      <span class="who">— Google Cloud documentation, "Overview of Key Access Justifications" (retrieved 2026-10-01)</span>
+    </div>
+    <div class="quote">
+      <em>“<strong>Safety review must not create a new way for OpenAI personnel to read protected customer content.</strong> Encrypted customer content is decrypted in an approved, <strong>hardware-attested safety runtime that disables human access</strong>.”<br>“The Safety Review Runtime, a hardware-attested computing environment that disables human access, is designed to be the only workload that can decrypt customer content.”</em>
+      <span class="who">— OpenAI developer docs, "ZDR with Private Safety Processing" (retrieved 2026-10-01)</span>
+    </div>
+    <div class="quote">
+      <em>“By default, <strong>no Anthropic personnel can read your retained conversations</strong>. Human review can occur only through a controlled access path … when content is flagged by our automated trust and safety systems”</em>
+      <span class="who">— Anthropic support, "Data retention practices for covered models" (retrieved 2026-09-27)</span>
+    </div>
+    <div class="quote">
+      <em>“This mode allows your inputs and outputs to be retained for <strong>human review by AWS</strong>. Review is carried out by AWS within the AWS boundary — the model provider does not review your content”</em>
+      <span class="who">— AWS documentation, "Amazon Bedrock data retention" (<code>aws_review</code> mode; retrieved 2026-09-27)</span>
+    </div>
+    <div style="background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-red);border-radius:var(--r-md);padding:.8rem 1rem;margin:1rem 0;font-size:.84rem;color:var(--c-muted);">
+      ⚠️ <strong>An approval workflow does not mean approval is always required.</strong> Microsoft's page lists scenarios where Lockbox does not trigger: “Emergency scenarios that fall outside of standard operating procedures and require urgent action from Microsoft to restore access to online services or to prevent corruption or loss of customer data, or to investigate a security or abuse incident. … These <strong>‘break glass’ events</strong> are rare …”. Read ZOA as "<strong>no human access in normal operations, with the exception conditions published</strong>" — and note that the conditions themselves are documented, which is what makes them auditable.
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="matrix-h">
+    <h2 class="section-title" id="matrix-h" style="font-size:1.2rem;">6. Per-vendor availability: whether, what, and how to enable</h2>
+    <p class="section-sub">Three separate questions: <strong>does it exist, which services does it cover, and how do you turn it on</strong>. Anything we could not verify is labelled as such.</p>
+    <div class="table-wrap"><table class="mtable"><thead><tr><th>Vendor</th><th>Available?</th><th>Services (verified scope)</th><th>How to enable</th></tr></thead><tbody>
+      <tr>
+        <td><strong>AWS</strong></td>
+        <td>ZOA: yes — <strong>stated as Amazon Bedrock's data security model</strong><br>HYOK: yes (KMS External Key Store)</td>
+        <td>ZOA on Amazon Bedrock; HYOK on AWS KMS external key stores. <strong>Whether Bedrock itself supports XKS (HYOK) was not verified in this review.</strong></td>
+        <td>Set the Bedrock data retention mode (per account / project / Region; <code>inherit</code> is the default for new projects). For HYOK, create an external key store in KMS and run your own XKS proxy.</td>
+      </tr>
+      <tr>
+        <td><strong>Microsoft</strong> (Azure)</td>
+        <td>Process: yes (Customer Lockbox)<br>Keys: yes (Managed HSM, Cloud HSM)<br>Runtime: yes (confidential computing)</td>
+        <td>Customer Lockbox covers Azure services. Managed HSM is a single-tenant, FIPS 140-3 Level 3 HSM. <strong>How far Customer Lockbox extends to models served through Microsoft Foundry was not verified.</strong></td>
+        <td>Enable Customer Lockbox where supported, after which access requests need your approval. Keys: create a Managed HSM and govern it with local RBAC and an offline quorum. Runtime: confidential computing must be <strong>enabled and properly configured</strong>.</td>
+      </tr>
+      <tr>
+        <td><strong>Google Cloud</strong></td>
+        <td>Process: yes (Access Approval / Access Transparency)<br>Keys: yes (Cloud EKM, CMEK)<br>Key access control: yes (KAJ)</td>
+        <td>Cloud EKM uses a supported external key management partner. <strong>Whether KAJ applies comprehensively to Vertex AI model calls was not verified.</strong></td>
+        <td>Turn on Access Approval to gate personnel access. For KAJ, attach a policy to customer-managed keys and decide per justification code; with external keys the policy can be enforced on the partner side.</td>
+      </tr>
+      <tr>
+        <td><strong>OpenAI</strong></td>
+        <td>Keys: yes (Enterprise Key Management)<br>Safety review: yes (ZDR with PSP)<br>Runtime: preview (Private Inference, expected fall 2026)</td>
+        <td>The API platform. EKM encrypts customer content with keys in your external KMS. PSP assumes customer-controlled storage plus customer-managed EKM authorisation.</td>
+        <td><strong>In our review none of these is on by default; each needs configuration.</strong> Organisations already approved for ZDR configure PSP in the API console, registering and validating storage; EKM uses keys in your own external KMS; Private Inference is in preview.</td>
+      </tr>
+      <tr>
+        <td><strong>Anthropic</strong></td>
+        <td>Restricted access path: yes (controlled access path)<br>ZDR: yes (on request)<br>Customer-managed keys: <strong>not verified</strong></td>
+        <td>The first-party Claude API. <strong>We could not confirm official documentation of customer-managed keys or HYOK for the first-party API.</strong> Via Bedrock or Vertex you inherit the cloud provider's key controls.</td>
+        <td>ZDR is requested through your Anthropic account representative — but note that <strong>models requiring retention (Covered Models) are excluded from ZDR</strong>, as covered in <a href="/en/glossary/zero-data-retention/">#7</a>.</td>
+      </tr>
+    </tbody></table></div>
+    <p class="scroll-hint">← scroll horizontally →</p>
+    <div style="background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-accent);border-radius:var(--r-md);padding:.8rem 1rem;margin:1rem 0;font-size:.84rem;color:var(--c-muted);">
+      💡 <strong>Why we label items "not verified" instead of leaving them blank:</strong> a blank reads as "not offered," and a guess reads as fact. Both would be misinformation. Separating what is confirmed from what is not is the point of this site.
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="myth-h">
+    <h2 class="section-title" id="myth-h" style="font-size:1.2rem;">7. Three common misconceptions</h2>
+    <div class="faq-block">
+      <dl style="margin:0;">
+        <dt>"We enabled ZDR, so the operator can't see our data either."</dt>
+        <dd>Different promise. ZDR is about <strong>not keeping</strong> data; ZOA is about <strong>no human access</strong>. Protecting in-memory plaintext during processing is layer 3's job and does not change when you change retention mode. <strong>Verify both separately.</strong></dd>
+      </dl>
+    </div>
+    <div class="faq-block">
+      <dl style="margin:0;">
+        <dt>"It's encrypted, so the operator can't read it."</dt>
+        <dd>Only if you know who holds the key. <strong>Even with CMK, the key material sits in the provider's KMS and the provider's infrastructure performs decryption</strong> — that is not a guarantee against staff access. Only HYOK reaches "the material never leaves you" (AWS: “Your cryptographic key material never leaves your external key manager.”).</dd>
+      </dl>
+    </div>
+    <div class="faq-block">
+      <dl style="margin:0;">
+        <dt>"HYOK solves everything."</dt>
+        <dd>It comes with trade-offs. External keys make <strong>every cryptographic operation depend on your system</strong>, moving availability, latency and operational responsibility to you. And HYOK addresses <strong>keys</strong>, not the <strong>runtime</strong> — it says nothing about plaintext in memory (layer 3). Different layers.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="steps-h">
+    <h2 class="section-title" id="steps-h" style="font-size:1.2rem;">8. Five checks before you sign</h2>
+    <ol class="steps">
+      <li><strong>Identify which layer the vendor's "ZOA" claim refers to</strong> — process, keys or runtime. The setting you must configure depends on the answer.</li>
+      <li><strong>Verify ZDR and ZOA separately.</strong> For ZDR: default retention, request-only options, exception models. For ZOA: what is default, whether an approval workflow exists, what the exception conditions are.</li>
+      <li><strong>Decide how far up the key ladder you need to go</strong> — CMK or HYOK. If HYOK, design your own availability and operations story before signing.</li>
+      <li><strong>Actually enable the approval workflow and check it</strong>. Documentation existing is not the same as the control being active in your tenant or project.</li>
+      <li><strong>Read the emergency exceptions.</strong> Microsoft's "break glass," Google's justification codes and AWS's <code>aws_review</code> are all published. Claiming "no human can ever get in" without reading them is how audits break.</li>
+    </ol>
+  </section>
+
+  <section class="section" style="padding-top:0;" aria-labelledby="faq-h">
+    <h2 class="section-title" id="faq-h" style="font-size:1.2rem;">9. FAQ</h2>
+    <div class="faq-block">
+      <dl style="margin:0;">
+        <dt>Which is the stronger protection, ZOA or ZDR?</dt>
+        <dd>They protect different things rather than ranking. ZDR is "we do not keep it"; ZOA is "people cannot read it." Neither alone explains every incident — data can be seen in flight without being stored, and stored data can be unreadable. <strong>Check both.</strong></dd>
+      </dl>
+    </div>
+    <div class="faq-block">
+      <dl style="margin:0;">
+        <dt>Does confidential computing guarantee that the operator cannot look in?</dt>
+        <dd>Azure states it conditionally: “When Azure confidential computing is <strong>enabled and properly configured</strong>, Microsoft can’t access unencrypted customer data.” The qualifier is explicit, so confirmation is required rather than assumed. Azure's Confidential VM FAQ adds: “Azure doesn’t have operating procedures for granting confidential VM access to its employees, even if a customer authorizes the access.”</dd>
+      </dl>
+    </div>
+    <div class="faq-block">
+      <dl style="margin:0;">
+        <dt>Who actually uses the term "zero operator access"?</dt>
+        <dd>In this review the term as a <strong>definitive statement was only confirmed at AWS</strong> (Amazon Bedrock). Microsoft frames it as "operator-access risk" and documents Customer Lockbox, confidential computing and Managed HSM separately. Google Cloud describes "requests from Google personnel" and splits the answer across Access Approval, Access Transparency and KAJ. <strong>The same goal is documented under different vocabulary.</strong></dd>
+      </dl>
+    </div>
+    <div class="faq-block">
+      <dl style="margin:0;">
+        <dt>How should I write this up for an audit?</dt>
+        <dd>Not "we use a ZOA provider," but <strong>which control was enabled at which layer</strong>: "retention mode is <code>none</code>; keys are customer-managed; the personnel approval workflow is enabled, with exception conditions documented at [link]." That phrasing survives a change in vendor terms.</dd>
+      </dl>
+    </div>
+    <div class="faq-block">
+      <dl style="margin:0;">
+        <dt>Does any of this cost more?</dt>
+        <dd>We found <strong>no documented price change attached to enabling ZOA controls</strong> in this review. HYOK does carry separate operational cost for your own HSM or key manager, and providers may offer such controls only on higher tiers. Check the provider's pricing pages directly — we track rates in our <a href="/en/pricing/">pricing comparison</a>.</dd>
+      </dl>
+    </div>
+  </section>
+
+    <section class="section" style="padding-top:0;" aria-labelledby="param-h">
+    <h2 class="section-title" id="param-h" style="font-size:1.1rem;">Note: how to read "◯B (Active ◯B)" model sizes</h2>
+    <div class="tip-box">
+      <p style="font-size:.88rem;color:var(--c-muted);margin:.2rem 0;">Model write-ups often show figures like "320B (18B Active)". That is <strong>how parameter counts describe a model's size</strong>, and <strong>B means one billion</strong>. The two numbers are not the same thing.</p>
+      <ul style="margin:.5rem 0 0;padding-left:1.2rem;font-size:.88rem;color:var(--c-muted);">
+        <li><strong>Total parameters (e.g. 320B)</strong> — the sum of all the weights the model holds. It <strong>drives the file size and the memory needed to run it</strong>.</li>
+        <li><strong>Active (e.g. 18B Active)</strong> — the parameters <strong>actually used in the computation</strong> for each generated token. In mixture-of-experts (MoE) models only part of the whole is used each time.</li>
+      </ul>
+      <p style="font-size:.88rem;color:var(--c-muted);margin:.6rem 0 0;">So "320B (18B Active)" means <strong>"all 320B are not used on every token"</strong>. <strong>The total tends to drive memory (can you fit it?)</strong>, while <strong>Active drives compute, speed and cost</strong> — the same total with a different Active count feels faster or slower (actual speed and cost also depend on the model architecture and how it is served). <strong>We only publish figures the model provider itself has released, and we do not infer undisclosed breakdowns.</strong></p>
+    </div>
+  </section>
+<section class="section" style="padding-top:0;" aria-labelledby="rel-h">
+    <h2 class="section-title" id="rel-h" style="font-size:1.1rem;">Related pages</h2>
+    <div class="card-grid">
+      <article class="card"><div class="card-icon">🗄️</div><h3 class="card-title">What is ZDR (zero data retention)?</h3><p class="card-desc">The "not retained" promise, sorted by default versus on-request. Glossary #7 — read alongside this page.</p><a href="/en/glossary/zero-data-retention/" class="card-link">Read it →</a></article>
+      <article class="card"><div class="card-icon">🧭</div><h3 class="card-title">The four data requirements</h3><p class="card-desc">Retention, operator access, training terms and residency, separated. Includes a five-vendor matrix. Glossary #8.</p><a href="/en/glossary/four-data-requirements/" class="card-link">Read it →</a></article>
+      <article class="card"><div class="card-icon">🤖</div><h3 class="card-title">Claude Sonnet 5.5</h3><p class="card-desc">Released 2026-09-28 at $2/$10 with a 1M context — and five platforms whose data terms differ from one another.</p><a href="/en/claude-sonnet-5-5/" class="card-link">Read it →</a></article>
+      <article class="card"><div class="card-icon">📊</div><h3 class="card-title">Pricing comparison</h3><p class="card-desc">Input, output and cache rates for major models, verified against official sources.</p><a href="/en/pricing/" class="card-link">See pricing →</a></article>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0;">
+    <h2 class="section-title" style="font-size:1.1rem;">Sources</h2>
+    <ul class="src-list">
+      <li>AWS, "Amazon Bedrock abuse detection" — definitions of ZOA and ZDR (<a href="https://docs.aws.amazon.com/bedrock/latest/userguide/abuse-detection.html" target="_blank" rel="noopener">docs.aws.amazon.com</a>, retrieved 2026-09-27)</li>
+      <li>AWS, "Data protection" and "Data retention" — model providers' lack of access, retention modes (<code>none</code>, <code>aws_review</code>) (<a href="https://docs.aws.amazon.com/bedrock/latest/userguide/data-retention.html" target="_blank" rel="noopener">docs.aws.amazon.com</a>)</li>
+      <li>AWS KMS, "External key stores," "Importing key material," "Key stores" — HYOK and BYOK (<a href="https://docs.aws.amazon.com/kms/latest/developerguide/keystore-external.html" target="_blank" rel="noopener">docs.aws.amazon.com</a>, retrieved 2026-10-01)</li>
+      <li>Microsoft Learn, "Customer Lockbox for Microsoft Azure" — approval, denial, four-day expiry, break-glass exception (<a href="https://learn.microsoft.com/en-us/azure/security/fundamentals/customer-lockbox-overview" target="_blank" rel="noopener">learn.microsoft.com</a>, retrieved 2026-10-01)</li>
+      <li>Microsoft Learn, "Azure Confidential Computing Overview" and "Confidential VM FAQ" (<a href="https://learn.microsoft.com/en-us/azure/confidential-computing/overview" target="_blank" rel="noopener">learn.microsoft.com</a>, retrieved 2026-10-01)</li>
+      <li>Azure blog, "External key management for Azure Managed HSM" — key material, quorum, external key paths (<a href="https://azure.microsoft.com/en-us/blog/external-key-management-for-azure-managed-hsm-is-now-in-public-preview/" target="_blank" rel="noopener">azure.microsoft.com</a>, retrieved 2026-10-01)</li>
+      <li>Google Cloud, "Overview of Key Access Justifications" — division of labour with Access Approval and Access Transparency (<a href="https://docs.cloud.google.com/assured-workloads/key-access-justifications/docs/overview" target="_blank" rel="noopener">docs.cloud.google.com</a>, retrieved 2026-10-01)</li>
+      <li>Google Cloud, "Cloud External Key Manager" (<a href="https://docs.cloud.google.com/kms/docs/ekm" target="_blank" rel="noopener">docs.cloud.google.com</a>, retrieved 2026-10-01)</li>
+      <li>OpenAI, "ZDR with Private Safety Processing" — no new human access path, hardware-attested runtime (<a href="https://developers.openai.com/api/docs/guides/private-safety-processing" target="_blank" rel="noopener">developers.openai.com</a>, retrieved 2026-10-01)</li>
+      <li>OpenAI, "Data controls in the OpenAI platform" — Enterprise Key Management (<a href="https://developers.openai.com/api/docs/guides/your-data" target="_blank" rel="noopener">developers.openai.com</a>)</li>
+      <li>OpenAI, "Register interest in OpenAI Private Intelligence" — Private Inference is in preview, combining confidential computing with verifiable controls (<a href="https://openai.com/form/private-intelligence-interest/" target="_blank" rel="noopener">openai.com</a>, checked 2026-10-01)</li>
+      <li>Anthropic, "Data retention practices for covered models" — personnel cannot read retained conversations by default; controlled access path (<a href="https://support.claude.com/en/articles/15425996-data-retention-practices-for-covered-models" target="_blank" rel="noopener">support.claude.com</a>, retrieved 2026-09-27)</li>
+    </ul>
+  </section>
+
+<div class="tip-box" style="border-left-color:var(--c-red);margin-bottom:2rem;">
+  <h3>⚠️ Disclaimer</h3>
+  <ul>
+    <li>Content verified against official vendor documentation on <strong>2026-10-01</strong> (some items 2026-09-27). Specifications and terms change without notice — always confirm on the official pages.</li>
+    <li><strong>This page is not legal advice.</strong> Audit, contract and regulatory decisions belong with your agreements, DPAs and qualified advisers.</li>
+    <li>Items marked "not verified" (Bedrock support for XKS, the reach of Customer Lockbox over models in Microsoft Foundry, KAJ coverage for Vertex AI, first-party Anthropic customer-managed keys) will be updated when primary sources allow.</li>
+    <li>This site is informational only and is not affiliated with any provider.</li>
+  </ul>
+</div>
+
+</div></main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>Operated by okamo channel</p><p><a href="/en/">Home</a> · <a href="/en/pricing/">Pricing</a> · <a href="/en/calculator/">Calculator</a> · <a href="/en/glossary/">Glossary</a> · <a href="/en/glossary/zero-data-retention/">ZDR</a> · <a href="/en/glossary/four-data-requirements/">Four requirements</a></p></div><p class="footer-disclaimer">⚠️ Pricing and specifications may change without notice. Always verify on official pages. Not affiliated with any provider.</p></div></footer>
+</body>
+</html>
