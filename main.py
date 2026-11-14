@@ -446,44 +446,72 @@ def _evidence_block(max_files: int = 6, max_chars: int = 6000) -> str:
 _URL_RE = re.compile(r"https?://\S+")
 
 
+_CRIT_COUNT_RE = re.compile(r"クリティカル\s*[:：]?\s*\**\s*(\d+)\s*件")
+_CRIT_HEAD_RE = re.compile(r"^#{1,6}\s*(?:\*\*)?\s*クリティカル")
+_ITEM_RE = re.compile(r"^\s*(?:[-*・]|\d+[.．)])")
+
+
 def _sanitize_review(text: str) -> str:
-    """引用URLの無い『クリティカル』を軽微扱いに落とす（2026-11-14 追加 / 同日 v2）。
+    """引用URLの無い『クリティカル』を軽微扱いに落とす（2026-11-14 追加 / 11-15 v3）。
 
     レビューの格上げ条件（公式URL＋逐語引用がある場合のみクリティカル）を、文章の
     お願いではなく機械で担保する。
 
-    v2: 判定を**行単位から節単位**に変えた。11-14 のテストランで、GPTが
-        「1. tts-1 が Deprecated（本文）／ - 公式URL: https://… ／ - 逐語引用: …」
-        の形で出した critical を、行単位の判定が「URLの無い行」として誤って降格した。
-        主張と引用が別の行に分かれるのは普通なので、**節の中に1つでもURLがあれば
-        引用あり**とみなす。引用が1つも無い節だけを軽微扱いにする。
+    変遷:
+        v1 行単位 → 主張と引用が別の行だと誤爆した（11-14）。
+        v2 節単位 → 本文中に「クリティカル」という単語が出ただけでも節と誤認した
+                    （11-15: 「クリティカルな誤情報は確認できませんでした」を拾い、
+                    実際は critical 0件なのに降格した）。
+        v3 **見出しか件数で判定**する。判定の優先順位は次のとおり:
+           1. 「クリティカル: 0件」と明言があれば、何もしない
+           2. 見出し（`### クリティカル`）があれば、そこから節を取る
+           3. 「クリティカル: N件」(N>0) の行があり、箇条書きが続く場合だけ節を取る
+           4. どれにも当たらなければ、単語が出ただけとみなして何もしない
     """
     if not text or "クリティカル" not in text:
         return text
+
+    counts = [int(m.group(1)) for m in _CRIT_COUNT_RE.finditer(text)]
+    if counts and max(counts) == 0:
+        return text  # 明示的に0件。降格する対象が無い
+
     lines = text.split("\n")
-    start = None
+    start, explicit = None, False
     for i, ln in enumerate(lines):
-        st = ln.strip()
-        if "クリティカル" in st and "軽微" not in st:
-            start = i
+        if _CRIT_HEAD_RE.match(ln.strip()):
+            start, explicit = i, True
             break
     if start is None:
-        return text
+        for i, ln in enumerate(lines):
+            m = _CRIT_COUNT_RE.search(ln)
+            if m and int(m.group(1)) > 0:
+                start = i
+                break
+    if start is None:
+        return text  # 見出しも件数も無い＝本文中の言及。触らない
+
     end = len(lines)
     for j in range(start + 1, len(lines)):
         st = lines[j].strip()
         if re.match(r"^(#+\s|【|>?\s*(?:\*\*)?(軽微|改善|提案|その他|まとめ|結論))", st):
             end = j
             break
-    if _URL_RE.search("\n".join(lines[start:end])):
+    section = lines[start:end]
+    if _URL_RE.search("\n".join(section)):
+        return text  # 節のどこかに引用URLがある
+
+    body = section[1:]
+    # 件数で拾った場合は、箇条書きが無ければ「単語が出ただけ」とみなす
+    if not explicit and not any(_ITEM_RE.match(l) for l in body):
         return text
+
     note = "[軽微として扱う: 引用URLなし] "
-    for j in range(start + 1, end):
-        if lines[j].strip():
-            lines[j] = note + lines[j]
+    for k, ln in enumerate(body):
+        if ln.strip():
+            body[k] = note + ln
             break
     logger.warning("レビュー: 引用URLの無いクリティカル節を軽微扱いにしました")
-    return ("\n".join(lines)
+    return ("\n".join(lines[:start] + [section[0]] + body + lines[end:])
             + "\n\n[ゲート] クリティカルの節に公式URLの引用が無いため軽微として扱う。"
               "事実の断定は当日取得の一次情報で確認すること（恒久ルール2）。")
 

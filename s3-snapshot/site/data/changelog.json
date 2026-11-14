@@ -1,6 +1,13 @@
 {
- "updated": "2026-11-14",
+ "updated": "2026-11-15",
  "events": [
+  {
+   "date": "2026-11-15",
+   "kind": "page",
+   "key": "speech-api-pricing-publish",
+   "ja": "音声・TTS・文字起こしAPIの料金比較（/speech-api-pricing/）を公開。単位の正規化と換算前提を明記し、Deprecated の文字課金TTSを注意ボックスで分離",
+   "en": "Published the speech API pricing comparison (/en/speech-api-pricing/), normalising TTS and transcription rates to a per-minute basis and flagging deprecated character-billed TTS models"
+  },
   {
    "date": "2026-11-14",
    "kind": "page",

@@ -1,6 +1,6 @@
 {
  "schema_note": "事実台帳。1フィールド1値（追記しない）。文章は当分HTML側に残す。status: announced|preview|ga|retired|unknown。sources は url+fetched_at+quote。",
- "updated": "2026-11-14",
+ "updated": "2026-11-15",
  "models": {
   "gemini-4-hydrogen": {
    "id": "gemini-4-hydrogen",
@@ -2779,6 +2779,13 @@
    "key": "timeline-order",
    "ja": "年表を日付降順に再構築し、英語版の欠落5件を補完",
    "en": "Rebuilt the timeline in date order and filled 5 missing English entries"
+  },
+  {
+   "date": "2026-11-15",
+   "kind": "page",
+   "key": "speech-api-pricing-publish",
+   "ja": "音声・TTS・文字起こしAPIの料金比較（/speech-api-pricing/）を公開。単位の正規化と換算前提を明記し、Deprecated の文字課金TTSを注意ボックスで分離",
+   "en": "Published the speech API pricing comparison (/en/speech-api-pricing/), normalising TTS and transcription rates to a per-minute basis and flagging deprecated character-billed TTS models"
   }
  ]
 }

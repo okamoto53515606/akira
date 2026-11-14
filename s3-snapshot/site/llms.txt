@@ -3,7 +3,7 @@
 > An ad-free reference for LLM API pricing, token costs and model release data. Every figure is verified against the provider's own official documentation, and each page states its source URL and verification date. Japanese and English pages are published at parity.
 
 Site: https://llm.okamomedia.tokyo/
-Updated: 2026-11-14
+Updated: 2026-11-15
 Languages: English (https://llm.okamomedia.tokyo/en/), Japanese (https://llm.okamomedia.tokyo/)
 
 ## Core data (English)
@@ -11,6 +11,7 @@ Languages: English (https://llm.okamomedia.tokyo/en/), Japanese (https://llm.oka
 - [Frontier models compared](https://llm.okamomedia.tokyo/en/frontier-model-comparison/): Claude Fable 5.2, GPT-6 Astra, Gemini 4 Carbon, Kimi K3.1 Pro and Meta Muse Wonder across cache rates, Batch, ZDR, ZOA, training use and data residency (unverified cells marked).
 - [LLM API Pricing Comparison](https://llm.okamomedia.tokyo/en/pricing/): USD per 1M tokens (input, cached input, output), context windows and sources for OpenAI, Anthropic, Google, DeepSeek, xAI, Z.ai, Alibaba and Meta.
 - [Prompt Caching Pricing Compared](https://llm.okamomedia.tokyo/en/prompt-cache-pricing/): cached-input and cache-write rates, discount ratios, retention and minimum cacheable length for OpenAI, Anthropic, Google, Moonshot and DeepSeek.
+- [Speech API Pricing Compared](https://llm.okamomedia.tokyo/en/speech-api-pricing/): TTS and transcription rates from OpenAI, Google, Microsoft and Meta, converted from per-1M-character, per-1M-token and per-hour pricing into a common per-minute basis; deprecated and time-limited prices flagged.
 - [Token Cost Calculator](https://llm.okamomedia.tokyo/en/calculator/): Estimate monthly cost from your input/output token counts, including cache read and cache write rates.
 - [Model Release Timeline](https://llm.okamomedia.tokyo/en/timeline/): Chronological release dates of major LLM models with links to the original announcements.
 - [Multimodal Models](https://llm.okamomedia.tokyo/en/multimodal/): Image, audio and video generation models and their per-unit pricing.
@@ -20,6 +21,9 @@ Languages: English (https://llm.okamomedia.tokyo/en/), Japanese (https://llm.oka
 
 ## Core data (Japanese)
 - [Batch API割引の横断比較](https://llm.okamomedia.tokyo/batch-api-pricing/): OpenAI・Anthropic・Google・xAI・MoonshotのBatch割引率と締切・保持期間・上限、DeepSeekのオフピーク割引。
+- [フロンティアモデル横断比較](https://llm.okamomedia.tokyo/frontier-model-comparison/): キャッシュ単価・Batch・ZDR・ZOA・学習利用・データ所在地・コンテキスト長の横断比較。
+- [プロンプトキャッシュ料金の横断比較](https://llm.okamomedia.tokyo/prompt-cache-pricing/): 書込／読込単価・割引率・保持期間・最小キャッシュ長。
+- [音声API料金比較](https://llm.okamomedia.tokyo/speech-api-pricing/): TTS・文字起こしの単価を1分／1時間あたりに正規化。Deprecated表記と期間限定価格、2027年の改定予定まで明記。
 - [LLM API 料金比較](https://llm.okamomedia.tokyo/pricing/)
 - [トークンコスト計算機](https://llm.okamomedia.tokyo/calculator/)
 - [モデル リリース年表](https://llm.okamomedia.tokyo/timeline/)

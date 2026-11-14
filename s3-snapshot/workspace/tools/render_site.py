@@ -295,21 +295,22 @@ def _fmt_date(iso: str, lang: str) -> str:
 
 
 def top_block(events, lang: str, n: int = 5) -> str:
-    """トップに埋め込む「最終更新＋直近の更新＋主要ページ」を組み立てる。"""
+    """トップに埋め込む「直近の更新＋主要ページ」を組み立てる（2026-11-15 改訂）。
+
+    okamoの指摘: 「最終更新: …」の帯と「更新履歴は事実台帳から生成…」の但し書きが
+    見出し「直近の更新」と重複していて冗長。**日付は見出し直下の1行に集約**し、
+    実装の説明文は出さない。
+    """
     latest = events[0]["date"] if events else TODAY
     if lang == "ja":
-        label, h2 = "最終更新", "直近の更新"
-        lead = "直近の変更は下記に自動で反映されます。料金は各社公式ページで最終確認。"
-        sub = "更新履歴は事実台帳（facts.json）から生成しているため、ページ間で食い違いません。"
-        cta = "すべての更新履歴（%d件）を見る →" % len(events)
+        h2, cta = "直近の更新", "すべての更新履歴（%d件）を見る →" % len(events)
+        stamp = '最終更新: <time datetime="%s">%s</time>' % (
+            latest, _fmt_date(latest, lang))
         main, cl_url = "主要ページ", "/changelog/"
     else:
-        label, h2 = "Last updated", "Recent updates"
-        lead = ("The most recent changes are listed below, generated automatically. "
-                "Rates last verified on each provider&rsquo;s official page.")
-        sub = ("The history is generated from a single ledger, so no two pages "
-               "can disagree.")
-        cta = "See all %d updates &rarr;" % len(events)
+        h2, cta = "Recent updates", "See all %d updates &rarr;" % len(events)
+        stamp = 'Last updated: <time datetime="%s">%s</time>' % (
+            latest, _fmt_date(latest, lang))
         main, cl_url = "Main pages", "/en/changelog/"
     rows = "\n".join(
         '<li><span class="cl-date">%s</span> <span class="cl-text">%s</span></li>'
@@ -318,8 +319,6 @@ def top_block(events, lang: str, n: int = 5) -> str:
     links = " · ".join('<a href="%s">%s</a>' % (u, name)
                        for u, name in TOP_MAIN_LINKS[lang])
     return (
-        '<div class="updated-bar" style="margin-top:2rem;"><span class="dot">●</span>'
-        '%s: <time datetime="%s">%s</time> — %s</div>\n'
         '<section class="section" aria-labelledby="cl" style="padding-top:1.25rem;">'
         '<h2 class="section-title" id="cl">%s</h2>'
         '<p class="section-sub">%s</p>\n'
@@ -327,8 +326,7 @@ def top_block(events, lang: str, n: int = 5) -> str:
         '<p style="margin-top:1.25rem;"><a class="hero-cta" href="%s">%s</a></p>\n'
         '<p class="mp-links"><strong>%s:</strong> %s</p>\n'
         '</section>'
-        % (label, latest, _fmt_date(latest, lang), lead, h2, sub, rows,
-           cl_url, cta, main, links))
+        % (h2, stamp, rows, cl_url, cta, main, links))
 
 
 def render_home(site: Path, facts: dict) -> list:
