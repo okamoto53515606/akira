@@ -1005,9 +1005,12 @@ def run_daily(dry_run: bool = False, no_publish: bool = False) -> None:
         system_prompt += "\n\n## Skills\n" + "\n\n".join(
             f"### {s['name']}\n{s['content']}" for s in skills
         )
+    # 不変の運営ルールはコード側（静的）に置く。site_plan には「今の状況」だけを入れる。
+    # 2026-11-15: 規則と経緯が site_plan に溜まり 18,000字まで膨れたため分離した。
+    system_prompt += "\n\n" + prompts.SITE_RULES
     site_plan = config_store.load_config("site_plan")
     if site_plan:
-        system_prompt += f"\n\n## サイト運営計画（自分で更新可能）\n{site_plan}"
+        system_prompt += f"\n\n## サイトの今の状況（自分で更新可能）\n{site_plan}"
 
     # okamoの直近コメント（日報へのフィードバック）をミッションに含める
     # 予算超過で数日〜数週間ノーラン（正確には予算ゲートで停止）が続くことがあるため、

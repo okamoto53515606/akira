@@ -703,10 +703,14 @@ def update_akira_config(key: str, content: str, note: str = "") -> dict:
             "status": "rejected",
             "reason": "keyは lessons / site_plan / skill#<名前> のみ。既定のシステムプロンプトは書き換え不可",
         }
-    if key == "lessons" and len(content) > 8000:
+    limit = 4000 if key == "lessons" else 8000
+    if len(content) > limit:
         return {
             "status": "rejected",
-            "reason": "lessonsは8000文字以内。要点だけ残して整理すること",
+            "reason": ("%sは%d文字以内（現在%d字）。古い記録は archive に退避し、"
+                       "要点だけ残して整理すること。規則は prompts.py の SITE_RULES に"
+                       "あるので site_plan に再掲しない。"
+                       % (key, limit, len(content))),
         }
     config_store.save_config(key, content, note)
     return {"status": "saved", "key": key, "effective": "翌日起動時から"}
