@@ -318,67 +318,134 @@ Phase 5 の降格ゲートを**行単位**で実装していたため、GPTが
 
 **この節が運用の正**。§5・§6 は経緯と実測の記録として残す（数字はこちらが新しい）。
 
-### 8.1 完了
+### 8.1 完了（2026-11-14 / 25件）
 
-| # | タスク | 証拠・成果物 |
-|---|---|---|
-| T1 | 本計画書を作成 | この文書 |
-| T2 | `/timeline/` を降順再構築。`2026-10` → `2026-10-13`、Qwen4 の誤クラス（`dot-anthropic`＋Alibaba）を `dot-other`＋Alibaba/Qwen に修正 | 54件・不正日付0 |
-| T3 | `/en/timeline/` を再構築し欠落5件を英訳。description の「Carbon は限定提供」を GA に修正 | 54件・id 集合一致 |
-| T4 | `/china-ai/` 日英の Qwen 4 二重記述を解消（EN は欠けていた 11-10 Kimi 行も補完） | 本文1箇所・更新履歴1行 |
-| T5 | `/pricing/` `/en/pricing/` に Gemini 4 Hydrogen / Carbon を追加 | ライブ確認済み |
-| T6 | `data/models.json` を 49 → 51 行 | 計算機に反映 |
-| T7 | 日付五点更新＋`prompt-cache-pricing` の `og:image` サイズ宣言を実ファイルに一致 | 既存 ERROR 2件解消 |
-| T8 | `tools/check_facts_consistency.py` を追加し S3 配布 | ERROR 0 / WARN 3 |
-| T9 | S3 アップロード＋invalidation＋ライブ検証 | `I3MA6CAA55EF0PHNE0W2GLPYFY` |
-| T10 | 恒久ルールを `site_plan` に追記（凍結の定義／critical の引用要件／日英同時性／反映先の事前列挙） | — |
-| T11 | K3 の真因を実測で特定 | §3.1（cache 本文との一致） |
-| T12 | レビュー証拠の供給規則を `site_plan` に追記 | 当日分のみ／`fetched_at` が当日でない指摘は棄却 |
-| T13 / Phase 1 | `data/facts.json`（83レコード = timeline 54＋計算機のみ30） | 文章はまだ HTML 側（段階移行） |
-| T14 / Phase 2 | `tools/render_site.py`（timeline・`models.json`・`/changelog/`・sitemap lastmod） | 2回実行して0件＝冪等 |
-| T15 / Phase 3 | `site_upload` に timeline 整合ゲートを内蔵 | 順序破壊・日付破壊・日英差分の3ケースで発火 |
-| T16 / Phase 4 | `tools/discover_sources.py`（Brave）/ `tools/fetch_quote.py`（Firecrawl→cache） | Hydrogen の公式単価取得→cache生成 |
-| T17 / Phase 5 | `main.py _sanitize_review()` | **T24 で v2 に修正**（4ケース PASS） |
-| T18 / Phase 6 | `main.py _evidence_block()`。`gpt_tools` から `list_workspace_files` を除去 | 古い cache を探索できない構成 |
-| T19 | イメージ再ビルド→ECR `:latest` | 本日4回。最終 digest `sha256:1e9bb5ef` |
-| T20 | スケジュールを `cron(0 5 ? * SUN,TUE,THU,SAT *)` に | 11-15 を検証ランに |
-| T21 | `/changelog/` `/en/changelog/` を公開（55件） | 専用 OG のみ未（課題116） |
-| T22 | `fetch_quote` v2: markdown 既定・痩せたら query にフォールバック | 61字/5cr → 68,589字/1cr（同一ページ） |
-| T23 | `--no-publish` を追加 | `--dry-run` は**0ツール呼び出し**で測定不能と判明。実作業は全部やり公開だけ機械的に止める |
-| T24 | 降格ゲート v2（行単位 → **節単位**） | 引用付き critical の誤爆を解消。§6.4 |
-| T25 | `--no-publish` テストランを実施・実測 | 10分45秒 / exit 0 / §6.3 |
+- [x] **T1** 本計画書を作成 — この文書
+- [x] **T2** `/timeline/` を降順再構築。`2026-10` → `2026-10-13`、Qwen4 の誤クラス（`dot-anthropic`＋Alibaba）を `dot-other`＋Alibaba/Qwen に修正 — 54件・不正日付0
+- [x] **T3** `/en/timeline/` を再構築し欠落5件を英訳。description の「Carbon は限定提供」を GA に修正 — 54件・id 集合一致
+- [x] **T4** `/china-ai/` 日英の Qwen 4 二重記述を解消（EN は欠けていた 11-10 Kimi 行も補完） — 本文1箇所・更新履歴1行
+- [x] **T5** `/pricing/` `/en/pricing/` に Gemini 4 Hydrogen / Carbon を追加 — ライブ確認済み
+- [x] **T6** `data/models.json` を 49 → 51 行 — 計算機に反映
+- [x] **T7** 日付五点更新＋`prompt-cache-pricing` の `og:image` サイズ宣言を実ファイルに一致 — 既存 ERROR 2件解消
+- [x] **T8** `tools/check_facts_consistency.py` を追加し S3 配布 — ERROR 0 / WARN 3
+- [x] **T9** S3 アップロード＋invalidation＋ライブ検証 — `I3MA6CAA55EF0PHNE0W2GLPYFY`
+- [x] **T10** 恒久ルールを `site_plan` に追記（凍結の定義／critical の引用要件／日英同時性／反映先の事前列挙）
+- [x] **T11** K3 の真因を実測で特定 — §3.1（cache 本文との一致）
+- [x] **T12** レビュー証拠の供給規則を `site_plan` に追記 — 当日分のみ／`fetched_at` が当日でない指摘は棄却
+- [x] **T13 / Phase 1** `data/facts.json`（83レコード = timeline 54＋計算機のみ30） — 文章はまだ HTML 側（段階移行）
+- [x] **T14 / Phase 2** `tools/render_site.py`（timeline・`models.json`・`/changelog/`・sitemap lastmod） — 2回実行して0件＝冪等
+- [x] **T15 / Phase 3** `site_upload` に timeline 整合ゲートを内蔵 — 順序破壊・日付破壊・日英差分の3ケースで発火
+- [x] **T16 / Phase 4** `tools/discover_sources.py`（Brave）/ `tools/fetch_quote.py`（Firecrawl→cache） — Hydrogen の公式単価取得→cache生成
+- [x] **T17 / Phase 5** `main.py _sanitize_review()` — **T24 で v2 に修正**（4ケース PASS）
+- [x] **T18 / Phase 6** `main.py _evidence_block()`。`gpt_tools` から `list_workspace_files` を除去 — 古い cache を探索できない構成
+- [x] **T19** イメージ再ビルド→ECR `:latest` — 本日4回。最終 digest `sha256:1e9bb5ef`
+- [x] **T20** スケジュールを `cron(0 5 ? * SUN,TUE,THU,SAT *)` に — 11-15 を検証ランに
+- [x] **T21** `/changelog/` `/en/changelog/` を公開（55件） — 専用 OG のみ未（R9）
+- [x] **T22** `fetch_quote` v2: markdown 既定・痩せたら query にフォールバック — 61字/5cr → 68,589字/1cr（同一ページ）
+- [x] **T23** `--no-publish` を追加 — `--dry-run` は**0ツール呼び出し**で測定不能と判明。実作業は全部やり、公開だけ機械的に止める
+- [x] **T24** 降格ゲート v2（行単位 → **節単位**） — 引用付き critical の誤爆を解消。§6.4
+- [x] **T25** `--no-publish` テストランを実施・実測 — 10分45秒 / exit 0 / §6.3
 
-### 8.2 残
+### 8.2 残（10件）
 
-| # | タスク | なぜ要るか | 目安 |
-|---|---|---|---|
-| R1 | **課題117**: `tts-1` Deprecated の反映（`/mai/`・`/pricing/`・計算機・timeline） | 11-14 の GPT 指摘は**引用付きで正しい**。本日は公開を止めたので未反映 | 次ラン |
-| R2 | **課題115 の再確認**: cache の当日分が続くか | 11-14 は10件。1回だけの偶然かを見る | 11-15 |
-| R3 | `render_site` が公開ランで**実際に呼ばれる**か | 11-14 は0回（公開停止のため描画しなかった） | 11-15 |
-| R4 | 「公式URLが見つからなかった」回数を記録する | grounding を足すかの判断材料。今は数えていない | 11-17 |
-| R5 | Phase 1 の続き: prose（title/desc）を台帳へ移す | HTML が器のままでは H1 が残る | 11-19 の結果次第 |
-| R6 | Phase 2 の続き: `/pricing/` 表を台帳から生成 | 手書きが残る限り K7 は再発する | 同上 |
-| R7 | Phase 3 の続き: `check_facts_consistency.py` を `site_upload` から呼ぶ | 今は timeline の整合のみ内蔵 | 11-21 |
-| R8 | Phase 4 の続き: 鮮度キュー（`sources[].fetched_at` が古い順） | 「何が古いか」を機械が言えるようにする | 11-28 |
-| R9 | 課題116: `/changelog/` 専用 OG（1200×630） | この環境に Pillow が無い | 任意 |
-| R10 | 課題103 / 91 / 108 / 109 / 111、`/calculator/` の sitemap lastmod | 既存の積み残し | 任意 |
+各項目に「なぜ」「目安」「完了条件」を付けた。**完了条件を満たしたらチェックを入れる**。
 
-### 8.3 明日以降の確認観点
+- [ ] **R1** 課題117: `tts-1` の Deprecated を反映（`/mai/`・`/pricing/`・`/en/pricing/`・計算機・timeline）
+  - なぜ: 11-14 の GPT 指摘は**引用付きで正しい**。公開を止めていたため未反映
+  - 目安: 11-15（次ラン）。拾えなければ手で直す
+  - 完了条件: 対象ページすべてに「Deprecated / 非推奨」が明記され、`check_site_pages` ERROR 0
+- [ ] **R2** 課題115 の再確認: cache の当日分が続くか
+  - なぜ: 11-14 は10件。1回だけの偶然かを見る
+  - 目安: 11-15
+  - 完了条件: cache の最新 `取得日時:` が当日、かつ当日分が5件以上
+- [ ] **R3** `render_site` が公開ランで実際に呼ばれるか
+  - なぜ: 11-14 は0回（公開停止のため描画しなかった）
+  - 目安: 11-15
+  - 完了条件: ログに `render_site` の実行が1回以上、かつ生成物が S3 に反映
+- [ ] **R4** 「公式URLが見つからなかった」回数を記録する
+  - なぜ: grounding を足すかの判断材料。今は数えていない
+  - 目安: 11-17
+  - 完了条件: ログから集計できる形（1行）で毎ラン出力される
+- [ ] **R5** Phase 1 の続き: prose（title/desc）を台帳へ移す
+  - なぜ: HTML が器のままでは H1 が残る
+  - 目安: 11-19 の結果次第（H1 が反証されなければ前倒し）
+  - 完了条件: timeline の title/desc が `facts.json` から生成され、HTML 直書きが0件
+- [ ] **R6** Phase 2 の続き: `/pricing/` 表を台帳から生成
+  - なぜ: 手書きが残る限り K7 は再発する
+  - 目安: R5 と同じ
+  - 完了条件: pricing 日英の表が `render_site` の出力になり、差分0で再生成できる
+- [ ] **R7** Phase 3 の続き: `check_facts_consistency.py` を `site_upload` から呼ぶ
+  - なぜ: 今は timeline の整合のみ内蔵
+  - 目安: 11-21
+  - 完了条件: ERROR が1件でもあれば該当ファイルのアップロードが拒否される
+- [ ] **R8** Phase 4 の続き: 鮮度キュー（`sources[].fetched_at` が古い順に「今日の再取得対象」を注入）
+  - なぜ: 「何が古いか」を機械が言えるようにする
+  - 目安: 11-28
+  - 完了条件: ミッション先頭に再取得対象が5本出て、`fetch_quote` がそれを消化する
+- [ ] **R9** 課題116: `/changelog/` 専用 OG（1200×630）
+  - なぜ: 今はホームの画像を指している。この環境に Pillow が無い
+  - 目安: 任意
+  - 完了条件: 専用画像が生成され、日英の `og:image` がそれを指す
+- [ ] **R10** 課題103 / 91 / 108 / 109 / 111、`/calculator/` の sitemap lastmod
+  - なぜ: 既存の積み残し
+  - 目安: 任意
+  - 完了条件: 各課題が `site_plan` から消える
+
+### 8.3 明日以降の確認観点（チェック式）
 
 判定の作法: **数値で言える条件だけを合格条件に置く**。GSC は直近2〜3日が未着地なので、11-21 は 11-18 までの確定分で見る。
 
-| 実施日 | 見るもの | 合格条件 | 落ちたら次に疑う仮説 |
-|---|---|---|---|
-| **11-15（日）** | ①cache に当日分 ②GPT の critical に URL ③timeline ja/en の件数・順 ④`render_site` 呼び出し ⑤自動降格の発火回数 ⑥`drafts/` の speech ページが公開されたか | ①10件以上 ②全件引用付き ③54件以上・降順・id一致 ④1回以上 ⑤**0回** ⑥公開済み | ⑤が再発 → ゲート v2 が未反映（digest 確認）／②が0件 → Phase 6-1 が効いていない |
-| 11-17 | `check_facts_consistency` の ERROR/WARN、timeline 差分 | ERROR 0・WARN 3件未満・全 `YYYY-MM-DD`・降順 | H2（出現箇所の一覧が無い） |
-| 11-19 | 新規エントリの位置・append-style 件数 | 末尾追記0・降順維持・append-style が8件から増えない | **H1 が正しい** → R5/R6 を前倒し |
-| 11-21 | checker の指摘件数 | ERROR 0 維持・WARN が3件未満 | H6（検出しても直す仕組みが無い） |
-| 11-21〜（GSC） | 改稿ページの CTR・平均順位 | 未改稿の対照ページ比で悪化なし | 改稿が順位を落とす（11-07 の3連敗） |
-| 11-28 | `price-sot.json` の `last_verified`・状態語の矛盾 | 14日以内・矛盾0 | H3（鮮度トリガーが無い） |
-| 12-01 | Carbon / Argon が $4/$20 に切り替わったか | サイトが新価格を表示 | 期限付き価格の検知が手動のまま |
-| 毎ラン | critical のうち `quote` 無しの件数 | 0 | H4（引用要件が効いていない） |
-| 毎ラン | critical のうち `fetched_at` が当日でない件数 | 0 | Phase 6-1 |
-| 毎ラン | `/workspace/cache/` の最新 `取得日時:` | 当日 | Phase 6-2 |
-| 毎ラン | GPT の critical 誤指摘率 | 0（11-14 は 1/1） | レビュー担当の交代、または価値判定に限定 |
+#### 毎ラン（全ラン共通）
 
-**11-14 の実測基準値（比較用）**: cache 当日分 **10件** / 自動降格 **1回（誤爆・修正済み）** / `render_site` **0回** / GPT critical 誤指摘 **1/1** / 所要 **10分45秒**。
+- [ ] `/workspace/cache/` の最新 `取得日時:` が**当日** — 落ちたら Phase 6-2
+- [ ] critical のうち `quote`（URL）無しが **0件** — 落ちたら H4
+- [ ] critical のうち `fetched_at` が当日でないものが **0件** — 落ちたら Phase 6-1
+- [ ] GPT の critical 誤指摘率（一次情報で否定した数／critical 総数）が **0** — 11-14 は 1/1。落ちたらレビュー担当の交代か、価値判定に限定
+
+#### 2026-11-15（日）— 追加した検証ラン
+
+- [ ] ① cache の当日分が **10件以上**
+- [ ] ② GPT の critical が**全件引用付き**（URL と逐語）
+- [ ] ③ timeline の ja/en が **54件以上・降順・id 集合一致**（54件目のあとも降順）
+- [ ] ④ `render_site` が **1回以上**呼ばれた
+- [ ] ⑤ 自動降格の発火が **0回**（再発なら digest が v2 か確認）
+- [ ] ⑥ `drafts/2026-11-14_speech-api-pricing.md` が**公開された**（→ R1 と連動）
+- 結果: / 判定:
+
+#### 2026-11-17
+
+- [ ] `check_facts_consistency` が **ERROR 0・WARN 3件未満**
+- [ ] timeline の全日付が `YYYY-MM-DD`・降順・ja/en 差分0
+- [ ] R4（URL 未発見の回数）の集計が始まっている — 落ちたら H2（出現箇所の一覧が無い）
+
+#### 2026-11-19（新しいモデルを乗せたラン）
+
+- [ ] 新規エントリが**末尾追記ではなく正しい位置**に入る
+- [ ] `append-style`（追記ブロックを持つページ）が **8件から増えない**
+- 落ちたら **H1 が正しい** → R5 / R6 を前倒し
+
+#### 2026-11-21
+
+- [ ] checker が **ERROR 0 を維持**し、WARN が3件未満 — 落ちたら H6
+- [ ] GSC で改稿ページの CTR・平均順位が未改稿の対照ページ比で**悪化していない**（11-18 までの確定分）
+
+#### 2026-11-28
+
+- [ ] `price-sot.json` の `last_verified` が **14日以内**
+- [ ] 状態語の矛盾が **0件** — 落ちたら H3（鮮度トリガーが無い）
+
+#### 2026-12-01
+
+- [ ] Carbon / Argon が **$4 / $20** に切り替わって表示されている — 落ちたら期限付き価格の検知が手動のまま
+
+### 8.4 記録欄（ランのたびに1行足す）
+
+| 日付 | 実行 | cache 当日分 | critical 引用 | 降格発火 | 判定 | メモ |
+|---|---|---|---|---|---|---|
+| 11-14 | `--no-publish` | 10件 | 1/1 引用あり | 1（誤爆→修正） | 基準値 | `render_site` 0回 |
+| 11-15 | | | | | | |
+| 11-17 | | | | | | |
+| 11-19 | | | | | | |
+| 11-21 | | | | | | |
+| 11-28 | | | | | | |
+| 12-01 | | | | | | |
