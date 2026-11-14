@@ -141,6 +141,25 @@ upsert_fact(...)         → 台帳に1レコード
 
 **grounding は URL 発見にだけ使う。答えの生成には使わない。** grounding の回答は引用が残らず検証できない（K3 と同じ失敗をする）。DeepSeek には grounding が無いので、GPT / Gemini に薄い `discover_sources` を持たせてエンジニアに配るのが最も安い。
 
+#### 4.1.1 実測: 「リサーチが弱い」の正体は抽出モードの誤りだった（2026-11-14）
+
+11-14 の実行はツール67回のうち Web 取得が11回（firecrawl 8・brave 3）で、そのうち**3回が空振り**。
+空振りした2件を「JSページだから取れない」と判断していたが、同じURLで取り比べると:
+
+| ページ | `formats:["query"]`（5クレジット） | `formats:["markdown"]`（1クレジット） |
+|---|---|---|
+| docs.cloud.google.com（Gemini 4 Hydrogen） | **61字**（「料金の情報はありません」） | **68,589字**（全文） |
+| qwencloud.com/benefits/tokenplan | 128字 | **10,683字**（全文） |
+
+**ページは取れていた。要約モードが痩せていただけ。** しかも5倍高い。
+→ `fetch_quote` を **markdown 既定・空なら query にフォールバック**へ変更（同日 v2）。
+キャッシュに落とす用途では全文が正しいので、これで内容もコストも改善する。
+
+つまり **Brave + Firecrawl で種類としては足りている**。足りなかったのは
+①どのURLか（→ `discover_sources`）②取り方（→ markdown 既定）③取りに行く回数の規律。
+grounding を足すのは、この3つを直した後でも「公式URLが見つからない」率が高い場合でよい。
+
+
 ### Phase 5 — レビューの格上げ条件（K3 の再発防止）
 
 GPT税理士の返り値を JSON スキーマで受け、**`severity=critical` は `url` と `quote` が空なら自動的に `minor` へ降格**する。ここは運用ではなくコードで止める。
