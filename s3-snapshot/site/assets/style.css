@@ -323,3 +323,24 @@ tr:hover td { background: rgba(255,255,255,.02); }
   .cl-list li { flex-direction: column; gap: .15rem; }
   .cl-date { flex: none; }
 }
+
+/* 図（CSSのみで描く。画像は使わない） */
+.diagram { display:flex; gap:.6rem; align-items:stretch; flex-wrap:wrap; margin:1.25rem 0;
+  padding:1rem; background:var(--c-surface2); border:1px solid var(--c-border); border-radius:8px; }
+.dg-box { flex:1 1 150px; min-width:140px; padding:.6rem .7rem; border-radius:6px;
+  background:var(--c-surface,#fff); border:1px solid var(--c-border); font-size:.85rem; line-height:1.5; }
+.dg-box b { display:block; font-size:.78rem; color:var(--c-muted); margin-bottom:.25rem; }
+.dg-box.accent { border-color:var(--c-accent); }
+.dg-arrow { align-self:center; color:var(--c-muted); font-weight:700; padding:0 .1rem; }
+.diagram-note { flex-basis:100%; font-size:.8rem; color:var(--c-muted); }
+/* 棒（数値の大小を目で見る。表の代替ではない） */
+.bars { margin:1rem 0; }
+.bar-row { display:grid; grid-template-columns:minmax(130px,1.1fr) 2.4fr minmax(70px,auto);
+  gap:.6rem; align-items:center; margin:.3rem 0; font-size:.85rem; }
+.bar-track { background:var(--c-surface2); border-radius:4px; height:14px; overflow:hidden; }
+.bar-fill { height:100%; background:var(--c-accent); border-radius:4px; }
+.bar-fill.muted { background:var(--c-border); }
+/* 旧モデル（灰色・折りたたみ） */
+.legacy { color:var(--c-muted); font-size:.85rem; line-height:1.7; background:var(--c-surface2);
+  border-left:3px solid var(--c-border); padding:.55rem .8rem; border-radius:0 6px 6px 0; margin:.9rem 0; }
+details.legacy > summary { cursor:pointer; font-weight:700; color:var(--c-muted); }

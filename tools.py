@@ -9,6 +9,8 @@
 import json
 import os
 import re
+import subprocess
+import sys
 import time
 import urllib.error
 import urllib.request
@@ -21,6 +23,7 @@ import budget
 import config_store
 from settings import (
     AWS_REGION,
+    CONFIG_TABLE,
     IMAGE_MODEL_ID,
     JST,
     LLM_DIST_ID,
@@ -318,6 +321,60 @@ def site_download(dest_dir: str | None = None) -> dict:
     return download_site(dest_dir)
 
 
+def _site_integrity_errors(site_dir: str) -> list:
+    """サイト全体の重複・孤立リンクを検査する（決定論的・読取のみ）。
+
+    tools/check_site_integrity.py を subprocess で呼ぶ。戻り値は
+    [(ページ相対パス or "", メッセージ)]。ページが空のものは全体違反（定型文）。
+    """
+    script = os.path.join(WORKSPACE_LOCAL_DIR, "tools", "check_site_integrity.py")
+    if not os.path.exists(script):
+        return []
+    try:
+        r = subprocess.run([sys.executable, script, site_dir],
+                           capture_output=True, text=True, timeout=180)
+    except Exception:
+        return []
+    out = []
+    for raw in (r.stdout or "").splitlines():
+        line = raw.strip()
+        if not line.startswith("[ERROR]"):
+            continue
+        m = re.match(r"\[ERROR\]\s+(page-dup|orphan|shared-text)\s+(\S+?):\s*(.*)",
+                     line)
+        if m:
+            out.append((m.group(2), line))
+        elif line.startswith("[ERROR] boilerplate"):
+            out.append(("", line))
+    return out
+
+
+def _record_gate_lesson(title: str, details) -> None:
+    """公開ゲートが止めた事実を lessons に自動追記する（自己学習の入口）。
+
+    人が気づかなくても、次回のランが「前回ここで止まった」を読めるようにする。
+    失敗しても公開処理は止めない。
+    """
+    try:
+        ddb = boto3.client("dynamodb", region_name=AWS_REGION)
+        key = {"pk": {"S": "config"}, "sk": {"S": "lessons"}}
+        item = ddb.get_item(TableName=CONFIG_TABLE, Key=key).get("Item") or {}
+        cur = (item.get("content") or {}).get("S", "")
+        stamp = datetime.now(JST).strftime("%Y-%m-%d %H:%M")
+        body = "\n".join("- %s" % d for d in list(details)[:5])
+        block = "\n【自動記録 %s 公開ゲート停止】%s\n%s\n" % (stamp, title, body)
+        if "【自動記録" in cur and title in cur:
+            return  # 同じ原因を何度も積まない
+        ddb.update_item(
+            TableName=CONFIG_TABLE, Key=key,
+            UpdateExpression="SET content = :c, updated_at = :u",
+            ExpressionAttributeValues={
+                ":c": {"S": cur + block},
+                ":u": {"S": datetime.now(JST).isoformat()}})
+    except Exception:
+        pass
+
+
 @tool
 def site_upload(local_path: str, site_prefix: str = "") -> dict:
     """ローカル作業フォルダ（SITE_LOCAL_DIR）内のファイル/フォルダをS3に一括アップロードする。
@@ -358,6 +415,12 @@ def site_upload(local_path: str, site_prefix: str = "") -> dict:
     if target_rels & set(TIMELINE_KEYS):
         timeline_errors = _timeline_integrity_errors(base_dir)
 
+    # --- 公開ゲート: 重複・孤立リンク（2026-11-15 追加）---
+    # 同じ文章の重複と「どこからもリンクされないページ」は、人が気づくまで残る。
+    integrity_errors = []
+    if any(r.endswith("index.html") for r in target_rels):
+        integrity_errors = _site_integrity_errors(base_dir)
+
     s3 = boto3.client("s3", region_name=AWS_REGION)
     uploaded, rejected = [], []
     for f in files:
@@ -366,6 +429,12 @@ def site_upload(local_path: str, site_prefix: str = "") -> dict:
         if timeline_errors and rel in TIMELINE_KEYS:
             rejected.append({"key": key, "errors": timeline_errors})
             continue
+        if integrity_errors and rel.endswith("index.html"):
+            hits = [msg for page, msg in integrity_errors
+                    if page == rel or page == ""]
+            if hits:
+                rejected.append({"key": key, "errors": hits})
+                continue
         if key == DATA_MODELS_KEY:
             try:
                 with open(f, "rb") as fh:
@@ -390,6 +459,8 @@ def site_upload(local_path: str, site_prefix: str = "") -> dict:
         result["reason"] = ("契約・整合ゲートに違反するファイルはアップロードしませんでした"
                             "（公開済みサイトは壊れていません）")
         result["rejected"] = rejected
+        _record_gate_lesson("整合ゲートで公開を止めた",
+                            [r.get("errors", [""])[0] for r in rejected])
     return result
 
 

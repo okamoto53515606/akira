@@ -49,139 +49,89 @@
 <main>
 <div class="container" style="padding-top:2rem;">
 <h1 class="section-title" style="font-size:1.6rem;">音声API料金比較 <span style="font-size:1rem;font-weight:500;color:var(--c-muted);">【2026年11月版】</span></h1>
-<p style="font-size:.9rem;background:var(--c-surface2);border:1px solid var(--c-border);border-radius:6px;padding:.6rem .9rem;max-width:880px;"><strong>このページの範囲</strong>: 音声まわりのAPIは、同じ「$」でも<strong>課金の単位が4種類に分かれています</strong>（1M文字・1Mトークン・1分・1時間）。ここでは読み上げ（TTS）と文字起こし（STT）を、<strong>「1分あたり」「1,000文字あたり」に換算して同じ土台に載せます</strong>。換算は当サイトの前提を明示し、公式が秒・分の換算を併記している場合はそれを逐語で引きます。料金以外（品質・レイテンシ）の優劣は各社の主張が割れるため、当サイトは数値を出しません。</p>
-<div class="updated-bar"><span class="dot">●</span>最終更新: <time datetime="2026-11-15">2026年11月15日</time> | 各社の公式ページを2026-11-15に取得。取れなかった項目は「未確認」と明記しています。</div>
+<p style="font-size:.9rem;background:var(--c-surface2);border:1px solid var(--c-border);border-radius:6px;padding:.6rem .9rem;max-width:880px;"><strong>このページの範囲</strong>: 読み上げ（TTS）と文字起こし（STT）の単価を<strong>「1分」「1時間」にそろえて</strong>並べます。課金単位が4種類（1M文字・1Mトークン・1分・1時間）に分かれているため、そのままでは比べられません。換算の前提は折りたたみに明記しています（各社公式ページを2026-11-15に取得）。</p>
 
 <section class="section" style="padding-top:1rem;">
-<h2 class="section-title" style="font-size:1.15rem;">先に結論（数字が逆転する3点）</h2>
-<div style="background:#f4f8f4;border-left:4px solid var(--c-green);padding:.9rem 1rem;margin:.8rem 0 1.2rem;border-radius:6px;"><p style="margin:0 0 .4rem;font-weight:700;">結局どれが安いか（1分＝300文字の前提で計算）</p><ul style="margin:0;padding-left:1.2rem;line-height:1.7;"><li><strong>音声生成（TTS）</strong>: <strong>MAI-Voice-2.1-Flash が $0.0045/分</strong>で最安（文字課金）。ただし価格は Microsoft の公式ブログ記載で、Azure の確認済み料金表には未掲載。同額の OpenAI tts-1 は <strong>Deprecated</strong>。</li><li><strong>文字起こし</strong>: <strong>MAI-Transcribe-2 が $0.10/時間</strong>で最安（<strong>年末までの期間限定</strong>）。通常価格帯は Meta Muse Voice Transcribe $0.18/時間、Gemini 3.5 Transcribe 約$0.18〜0.30/時間。</li><li><strong>リアルタイム双方向</strong>: <strong>Gemini 3.8 Live 系 約$0.023/分（≒$1.38/時間）</strong>。OpenAI の gpt-realtime-2.1 は1分あたりの音声トークン換算が公式に無く、当サイトでは未確認。</li></ul></div>
-<div class="num-grid">
-  <div class="num-card"><div class="k">TTS 最安（1分あたり・現行）</div><div class="v">$0.0045</div><div class="d">MAI-Voice-2.1-Flash（1M文字 $15）。同額の OpenAI tts-1 はモデルページに <strong>Deprecated</strong> 表記があり、新規採用の候補にならない。</div></div>
-  <div class="num-card"><div class="k">文字起こし 最安（1時間）</div><div class="v">$0.10</div><div class="d">MAI-Transcribe-2（年末までの期間限定）。最高値は $1.02 で約10倍の開き。</div></div>
-  <div class="num-card"><div class="k">2027-01-01に2倍</div><div class="v">Gemini TTS 2モデル</div><div class="d">3.8 Flash TTS は $9→$18、3.8 Flash-Lite TTS は $6→$12（出力・1Mトークン）。</div></div>
+<h2 class="section-title" style="font-size:1.15rem;">結論（3行）</h2>
+<ul>
+<li><strong>日本語ナレーション</strong> → <strong>MAI-Voice-2.1-Flash（$0.0045/分）</strong>。OpenAI tts-1 も同額だが <strong>Deprecated</strong> なので現行では選ばない。</li>
+<li><strong>文字起こし（録音ファイル）</strong> → <strong>MAI-Transcribe-2（$0.10/時間）</strong>。年末までの期間限定価格。次点は Meta Muse Voice Transcribe の $0.18/時間。</li>
+<li><strong>リアルタイム対話</strong> → 分単価が1桁違う（$0.023/分〜）。録音ファイルの処理と<strong>同じ表で比べない</strong>。</li>
+</ul>
+
+<h2 class="section-title" style="font-size:1.15rem;">なぜ換算が要るのか</h2>
+<div class="diagram">
+  <div class="dg-box"><b>1M文字</b>OpenAI tts-1 系<br>MAI-Voice</div>
+  <div class="dg-arrow">＋</div>
+  <div class="dg-box"><b>1M音声トークン</b>Gemini TTS<br>（1秒=25トークン）</div>
+  <div class="dg-arrow">＋</div>
+  <div class="dg-box"><b>1時間</b>Transcribe 系</div>
+  <div class="dg-arrow">→</div>
+  <div class="dg-box accent"><b>そろえた土台</b>TTS: 1分／1,000字<br>STT: 1時間</div>
+  <div class="diagram-note">単位をそろえずに「$9 対 $15」を見ると、実際には3分の1のモデルを「3倍高い」と読み違えます。</div>
 </div>
 
-<div class="read-box"><strong>いちばん間違えやすいところ</strong>: TTSの単価は「<strong>1M文字 $15</strong>」（OpenAI tts-1）と「<strong>1M音声トークン $9</strong>」（Gemini 3.8 Flash TTS）のように<strong>単位が違う形で公表</strong>されます。数字だけ見ると $9 のほうが安く見えますが、音声トークンは公式換算で<strong>1秒25トークン＝1分1,500トークン</strong>なので、1分あたりに直すと $0.0135。一方 $15/1M文字は1分300文字の前提で $0.0045 になり、<strong>数字が大きいほうが3分の1安い</strong>という逆転が起きます。単位をそろえずに「$9 対 $15」で比べると、選定を誤ります。なお、この例に使った OpenAI tts-1 は2026-11-15時点で<strong>モデルページに Deprecated 表記</strong>があります（下のTTS表を参照）。</div>
-<p style="font-size:.8rem;color:var(--c-muted);line-height:1.7;margin-top:.6rem;">上の「1分 = 300文字」は<strong>日本語ナレーション前提</strong>です。英語ナレーションは一般に速く（毎分約900文字）、1分の音声に載る文字数は日本語の約3倍になります。<strong>文字課金のモデル</strong>は1分あたりの費用が下の表の約3倍になる一方、1,000文字あたりの費用は変わりません。<strong>トークン課金のモデル</strong>は逆で、読み上げが速いほど1,000文字の音声は短くなるため両方の列が動きます。つまり本ページの「1分あたり」「1,000文字あたり」は<strong>日本語ナレーションでの目安</strong>で、ベンダー間で直接比べられるのは<strong>1M単位の公表単価</strong>です。</p>
-</section>
-
-<section class="section" style="padding-top:0;">
-<h2 class="section-title" style="font-size:1.15rem;">換算の前提（ここを共有しないと数字は意味を持ちません）</h2>
-<div class="table-wrap"><table class="cmp-table">
-<thead><tr><th>項目</th><th>当サイトが使う値</th><th>根拠</th></tr></thead>
+<h2 class="section-title" style="font-size:1.15rem;">読み上げ（TTS）</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>モデル</th><th>1分</th><th>1,000字</th><th>状態</th></tr></thead>
 <tbody>
-<tr><td class="model-name">音声の長さ → 音声トークン</td><td>1秒 = 25トークン（1分 = 1,500トークン）</td><td>Google公式の注記「Audio tokens correspond to 25 tokens per second of audio.」</td></tr>
-<tr><td class="model-name">文字数 → 音声の長さ</td><td>1分 = 300文字（5文字/秒）</td><td><strong>当サイトの前提</strong>。読み上げの速度は公式の料金ページに規定がないため、日本語ナレーションのゆっくりした想定で固定</td></tr>
-<tr><td class="model-name">1,000文字</td><td>3分20秒（200秒）</td><td>上記2つから計算（当サイト換算）</td></tr>
-<tr><td class="model-name">1時間</td><td>60分 = 18,000文字</td><td>上記から計算（当サイト換算）</td></tr>
-<tr><td class="model-name">通貨</td><td>USDのみ・為替換算なし</td><td>各社の公式ページがUSD建てのため</td></tr>
+<tr><td>MAI-Voice-2.1-Flash</td><td>$0.0045</td><td>$0.0150</td><td>現行</td></tr>
+<tr><td>OpenAI tts-1</td><td>$0.0045</td><td>$0.0150</td><td class="na">Deprecated</td></tr>
+<tr><td>MAI-Voice-2.1</td><td>$0.0066</td><td>$0.0220</td><td>現行</td></tr>
+<tr><td>OpenAI tts-1-hd</td><td>$0.0090</td><td>$0.0300</td><td class="na">Deprecated</td></tr>
+<tr><td>Gemini 3.8 Flash-Lite TTS</td><td>$0.0090 → $0.0180</td><td>$0.0300 → $0.0600</td><td>2027-01-01改定</td></tr>
+<tr><td>Gemini 3.8 Flash TTS</td><td>$0.0135 → $0.0270</td><td>$0.0450 → $0.0900</td><td>2027-01-01改定</td></tr>
+<tr><td>OpenAI gpt-4o-mini-tts</td><td>約$0.018</td><td>約$0.060</td><td class="na">Deprecated・概算</td></tr>
+<tr><td>Gemini 3.1 Flash TTS Preview</td><td>$0.0300</td><td>$0.1000</td><td>Preview</td></tr>
 </tbody></table></div>
-<p style="font-size:.8rem;color:var(--c-muted);line-height:1.7;margin-top:.6rem;">† を付けた行は、<strong>音声トークン量の公式換算が無い</strong>ため、Googleの「25トークン/秒」を当てはめた当サイトの概算です（OpenAI gpt-4o-mini-tts）。文字課金とトークン課金が混在するモデルは、この仮定の分だけ誤差が出ます。</p>
-</section>
 
-<section class="section" style="padding-top:0;">
-<h2 class="section-title" style="font-size:1.15rem;">読み上げ（TTS）の比較 — 1分あたり・1,000文字あたり</h2>
-<div class="read-box"><strong>先に読んでください（2026-11-15確認）</strong>: OpenAI の音声生成モデル <code>tts-1</code> / <code>tts-1-hd</code> / <code>gpt-4o-mini-tts</code> は、いずれも<strong>モデルページのモデル名直下に「Deprecated」と明記</strong>されています。単価はそのページに残っているため比較用に掲載しますが、<strong>新規採用の候補にはなりません</strong>。OpenAI の Audio 料金ページにも文字単価のTTSは載っておらず、現行の音声課金は <strong>GPT-Live（$0.05/分・秒単位）</strong>と Realtime 系（トークン課金）に移っています。</div>
-<div class="table-wrap"><table class="cmp-table">
-<thead><tr><th>モデル</th><th>公式の単価（そのまま）</th><th>1分あたり</th><th>1,000文字あたり</th><th>メモ</th></tr></thead>
+<p style="font-size:.88rem;color:var(--c-muted);margin:.9rem 0 .2rem;">同じ数字を棒で見る（1分あたり）</p>
+<div class="bars">
+  <div class="bar-row"><span>MAI-Voice-2.1-Flash</span><span class="bar-track"><span class="bar-fill" style="width:15%"></span></span><span>$0.0045</span></div>
+  <div class="bar-row"><span>OpenAI tts-1（非推奨）</span><span class="bar-track"><span class="bar-fill muted" style="width:15%"></span></span><span>$0.0045</span></div>
+  <div class="bar-row"><span>MAI-Voice-2.1</span><span class="bar-track"><span class="bar-fill" style="width:22%"></span></span><span>$0.0066</span></div>
+  <div class="bar-row"><span>Gemini 3.8 Flash-Lite TTS</span><span class="bar-track"><span class="bar-fill" style="width:30%"></span></span><span>$0.0090</span></div>
+  <div class="bar-row"><span>Gemini 3.8 Flash TTS</span><span class="bar-track"><span class="bar-fill" style="width:45%"></span></span><span>$0.0135</span></div>
+  <div class="bar-row"><span>gpt-4o-mini-tts（非推奨）</span><span class="bar-track"><span class="bar-fill muted" style="width:60%"></span></span><span>約$0.018</span></div>
+  <div class="bar-row"><span>Gemini 3.1 Flash TTS Preview</span><span class="bar-track"><span class="bar-fill" style="width:100%"></span></span><span>$0.0300</span></div>
+</div>
+
+<h2 class="section-title" style="font-size:1.15rem;">文字起こし（STT）</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>モデル</th><th>1時間</th><th>課金単位</th><th>状態</th></tr></thead>
 <tbody>
-<tr><td class="model-name">OpenAI tts-1</td><td>$15.00 / 1M characters</td><td><strong>$0.0045</strong></td><td><strong>$0.0150</strong></td><td>公式が「realtime text-to-speech 向け」と明記。<strong>モデルページに Deprecated 表記</strong></td></tr>
-<tr><td class="model-name">MAI-Voice-2.1-Flash</td><td>$15 / 1M characters</td><td><strong>$0.0045</strong></td><td><strong>$0.0150</strong></td><td>公式ブログの価格。Azure料金表にはまだ行が無い</td></tr>
-<tr><td class="model-name">MAI-Voice-2.1</td><td>$22 / 1M characters</td><td>$0.0066</td><td>$0.0220</td><td>同上</td></tr>
-<tr><td class="model-name">OpenAI tts-1-hd</td><td>$30.00 / 1M characters</td><td>$0.0090</td><td>$0.0300</td><td>モデルページの比較表の値。<strong>Deprecated</strong></td></tr>
-<tr><td class="model-name">Gemini 3.8 Flash-Lite TTS</td><td>$6.00 / 1M audio tokens（〜2026-12-31）<br>→ $12.00（2027-01-01〜）</td><td>$0.0090<br>→ $0.0180</td><td>$0.0300<br>→ $0.0600</td><td>公式併記は $0.0015 / 10秒</td></tr>
-<tr><td class="model-name">Gemini 3.8 Flash TTS</td><td>$9.00 / 1M audio tokens（〜2026-12-31）<br>→ $18.00（2027-01-01〜）</td><td>$0.0135<br>→ $0.0270</td><td>$0.0450<br>→ $0.0900</td><td>公式併記は $0.00225 / 10秒</td></tr>
-<tr><td class="model-name">OpenAI gpt-4o-mini-tts</td><td>入力（テキスト）$0.60 / 1M tokens<br>出力（音声）$12.00 / 1M tokens</td><td>† 約 $0.018</td><td>† 約 $0.060</td><td>音声トークンの秒換算は公式に記載が無い（表下の†参照）。<strong>モデルページに Deprecated 表記</strong></td></tr>
-<tr><td class="model-name">Gemini 3.1 Flash TTS Preview</td><td>$20.00 / 1M audio tokens</td><td>$0.0300</td><td>$0.1000</td><td>名称に Preview</td></tr>
+<tr><td>MAI-Transcribe-2</td><td>$0.10</td><td>時間</td><td>年末までの期間限定</td></tr>
+<tr><td>Meta Muse Voice Transcribe</td><td>$0.18</td><td>時間（秒単位・切り捨て）</td><td>現行</td></tr>
+<tr><td>Gemini 3.5 Transcribe</td><td>$0.18（目安$0.30）</td><td>トークン</td><td>現行</td></tr>
+<tr><td>Gemini 3.5 Transcribe Live</td><td>$0.30（目安$0.54）</td><td>トークン</td><td>現行（双方向）</td></tr>
+<tr><td>MAI-Transcribe-2-Streaming</td><td>$0.54</td><td>時間</td><td>年内の導入価格</td></tr>
+<tr><td>OpenAI gpt-live-transcribe</td><td>$1.02</td><td>分（$0.017/分）</td><td>現行</td></tr>
 </tbody></table></div>
-<p style="font-size:.8rem;color:var(--c-muted);line-height:1.7;margin-top:.6rem;">同じ「Flash-Lite」でも、<strong>Gemini 3.8 Flash-Lite TTS（$0.0090/分）は OpenAI tts-1（$0.0045/分）の2倍</strong>です。1Mトークン建ての$6は、文字建ての$15より小さく見えるだけで、実際には高い。<strong>「安い」と感じた数字ほど単位を疑う</strong>のがこの領域の鉄則です。</p>
-</section>
 
-<section class="section" style="padding-top:0;">
-<h2 class="section-title" style="font-size:1.15rem;">文字起こし（STT）の比較 — 1時間あたりにそろえる</h2>
-<div class="table-wrap"><table class="cmp-table">
-<thead><tr><th>モデル</th><th>公式の単価（そのまま）</th><th>1分あたり</th><th>1時間あたり</th><th>メモ</th></tr></thead>
-<tbody>
-<tr><td class="model-name">MAI-Transcribe-2</td><td>$0.10 / hour of audio（年末までの期間限定）</td><td>$0.0017</td><td><strong>$0.10</strong></td><td>公式ブログの逐語は下の引用参照</td></tr>
-<tr><td class="model-name">Meta Muse Voice Transcribe</td><td>$0.18 / hour of audio</td><td>$0.0030</td><td><strong>$0.18</strong></td><td>秒単位で課金（切り捨て）。ストリーミングも同額</td></tr>
-<tr><td class="model-name">Gemini 3.5 Transcribe</td><td>入力 $2.00 / 1M tokens ＝ $0.003 / 分（音声）<br>公式の目安 約$0.005 / 分（入出力込み）</td><td>$0.0030<br>（目安 $0.0050）</td><td><strong>$0.18</strong><br>（目安 $0.30）</td><td>出力（テキスト）は $12.00 / 1M tokens。公式の $0.002 / 分は<strong>175テキストトークン/分</strong>を前提にした目安</td></tr>
-<tr><td class="model-name">Gemini 3.5 Transcribe Live</td><td>入力 $3.50 / 1M tokens ＝ $0.005 / 分（音声）<br>公式の目安 約$0.009 / 分</td><td>$0.0050<br>（目安 $0.0090）</td><td><strong>$0.30</strong><br>（目安 $0.54）</td><td>WebSocketの双方向ストリーミング</td></tr>
-<tr><td class="model-name">MAI-Transcribe-2-Streaming</td><td>$0.54 / hour of audio（年内の導入価格）</td><td>$0.0090</td><td><strong>$0.54</strong></td><td>最初の部分結果を約100msで返す設計</td></tr>
-<tr><td class="model-name">OpenAI gpt-live-transcribe</td><td>$0.017 / minute</td><td>$0.0170</td><td><strong>$1.02</strong></td><td>音声はストリーミング</td></tr>
-</tbody></table></div>
-<p style="font-size:.8rem;color:var(--c-muted);line-height:1.7;margin-top:.6rem;">文字起こしは<strong>「1時間あたり」に直すと $0.10〜$1.02 で約10倍</strong>の開きがあります。しかも最安の2つ（MAI-Transcribe-2 $0.10、MAI-Transcribe-2-Streaming $0.54）は<strong>どちらも期間限定の価格</strong>で、年明けの更新時に跳ね上がる可能性があります。単価表を「定価」として予算に埋め込むのは危険です。なお OpenAI の <code>gpt-realtime-translate</code>（$0.034 / 分 ＝ $2.04 / 時間）は<strong>翻訳</strong>であって文字起こしではないため、表からは外しました。</p>
-</section>
-
-<section class="section" style="padding-top:0;">
-<h2 class="section-title" style="font-size:1.15rem;">番外: 音声対話（Live / Realtime）は「分」で見ると別物</h2>
-<div class="table-wrap"><table class="cmp-table">
-<thead><tr><th>モデル</th><th>入力（音声）</th><th>出力（音声）</th><th>1分あたり合計の目安</th></tr></thead>
-<tbody>
-<tr><td class="model-name">Gemini 3.8 Live 系</td><td>$3.00 / 1M ＝ $0.005 / 分</td><td>$12.00 / 1M ＝ $0.018 / 分</td><td>約 $0.023 / 分（≒ $1.38 / 時間）</td></tr>
-<tr><td class="model-name">Gemini 3.5 Live Translate</td><td>$3.50 / 1M ＝ $0.0053 / 分</td><td>$21.00 / 1M ＝ $0.0315 / 分</td><td>公式の明記は<strong>約 $0.0368 / 分</strong></td></tr>
-<tr><td class="model-name">OpenAI gpt-realtime-2.1（音声）</td><td>$32.00 / 1M tokens</td><td>$64.00 / 1M tokens</td><td class="na">当サイトでは未確認（1分あたりの音声トークン換算が公式に無い）</td></tr>
-<tr><td class="model-name">OpenAI gpt-live-1</td><td colspan="2">$0.05 / minute（音声セッション。秒単位課金で分への切り上げなし）</td><td>$0.05 / 分</td></tr>
-</tbody></table></div>
-<div class="read-box" style="margin-top:1rem;"><strong>読み方</strong>: 音声対話は<strong>入力も音声</strong>なので、TTSや文字起こしの単価をそのまま当てはめると大きく外します。Gemini 3.8 Live の入出力合計は<strong>約$0.023/分</strong>（1時間で約$1.38）。会話を1時間つなぎっぱなしにする用途では、TTS単体（1,000文字 $0.015）とは桁の違うコストになります。<strong>「音声エージェント」の見積は必ず入出力の両方で計算</strong>してください。</div>
-</section>
-
-<section class="section" style="padding-top:0;">
-<h2 class="section-title" style="font-size:1.15rem;">公式の逐語（2026-11-15取得）</h2>
-<blockquote class="verb">"MAI-Transcribe-2-Streaming is available at an introductory price of $0.54 per hour of audio through the end of the year."<br>— Microsoft AI, Our first streaming transcription model（2026-10-02）</blockquote>
-<blockquote class="verb">"At launch, MAI-Transcribe-2 will be priced at $0.10 per hour as a limited-time offer until the end of the year."<br>"All this performance also comes at the best price on the market, just $0.10 per hour of audio."<br>— Microsoft AI, MAI-Transcribe-2（2026-09-03）</blockquote>
-<blockquote class="verb">"Output price | Free of charge | $9.00 (audio) through December 31, 2026. $18.00 (audio) starting January 1, 2027. Equivalent to $0.00225 per 10s audio through December 31, 2026."<br>"* Audio tokens correspond to 25 tokens per second of audio."<br>— Google, Gemini Developer API pricing（Gemini 3.8 Flash TTS）</blockquote>
-<blockquote class="verb">"Input price | Free of charge | $2.00 or $0.003/min* (audio)" … "* Estimated pricing is based on 25 audio tokens per second for input and 175 text tokens per minute for output, for an effective blended rate of ~$0.005 per min for Transcribe."<br>— Google, Gemini Developer API pricing（Gemini 3.5 Transcribe）</blockquote>
-<blockquote class="verb">"tts-1" … "Deprecated" ／ "GPT-4o mini TTS" … "Deprecated"（モデルページのモデル名直下ラベル）<br>— OpenAI, tts-1 / gpt-4o-mini-tts モデルページ（2026-11-15）</blockquote>
-<blockquote class="verb">"gpt-live-1 | $0.05" … "GPT-Live-1 voice sessions are billed per second, without rounding up to a whole minute. Backend model and tool usage is charged separately."<br>— OpenAI, Pricing（Audio / GPT-Live）</blockquote>
-<blockquote class="verb">"$15.00"（Cost / 1M characters, Speech generation）<br>— OpenAI, tts-1 モデルページ ／ "Input $0.60"・"Audio tokens / Per 1M tokens / Output $12.00" — OpenAI, gpt-4o-mini-tts モデルページ</blockquote>
-<blockquote class="verb">"Streaming and non-streaming transcription are priced the same. Zero data retention (ZDR) is priced at parity with Standard mode. Contributor mode isn't available for Muse Voice Transcribe. Audio time is billed as a separate line item from token usage, rounded down to whole seconds"<br>— Meta, Pricing and rate limits（Model API）</blockquote>
-</section>
-
-<section class="section" style="padding-top:0;">
-<h2 class="section-title" style="font-size:1.15rem;">料金以外の条件（課金の丸め・ストリーミング・期間限定）</h2>
-<div class="table-wrap"><table class="cmp-table">
-<thead><tr><th>項目</th><th>OpenAI</th><th>Google</th><th>Microsoft（MAI）</th><th>Meta</th></tr></thead>
-<tbody>
-<tr><td class="model-name">課金単位</td><td>文字（tts-1）／トークン（gpt-4o-mini-tts・Live系）</td><td>音声トークン（25/秒・公式）</td><td>文字（Voice）／時間（Transcribe）</td><td>時間（秒単位・切り捨て）</td></tr>
-<tr><td class="model-name">ストリーミング</td><td>tts-1 は realtime 向けと明記。リアルタイム文字起こしは gpt-live-transcribe</td><td>Transcribe Live は WebSocket 双方向</td><td>Transcribe-2-Streaming は部分結果を約100ms</td><td>ストリーミングと非ストリーミングが同額</td></tr>
-<tr><td class="model-name">期間限定・改定予定</td><td class="na">当サイトでは未確認</td><td><strong>2027-01-01に出力単価2倍</strong>（TTS 2モデル）</td><td><strong>Transcribe 2モデルは「年末まで」の価格</strong></td><td class="na">記載を確認できず</td></tr>
-<tr><td class="model-name">ZDR（ゼロデータ保持）</td><td class="na">当サイトでは未確認</td><td class="na">当サイトでは未確認</td><td class="na">当サイトでは未確認</td><td>Standardと同額で提供（<a href="/glossary/zero-data-retention/">ZDRの解説</a>）</td></tr>
-<tr><td class="model-name">対応言語数</td><td class="na">当サイトでは未確認</td><td class="na">当サイトでは未確認</td><td>Transcribe-2-Streaming は60言語</td><td class="na">当サイトでは未確認</td></tr>
-<tr><td class="model-name">同時接続の上限</td><td class="na">当サイトでは未確認</td><td class="na">当サイトでは未確認</td><td class="na">当サイトでは未確認</td><td>同時256ストリーム／1時間あたり16,000ストリーム</td></tr>
-</tbody></table></div>
-</section>
-
-<section class="section" style="padding-top:0;">
-<h2 class="section-title" style="font-size:1.15rem;">用途別の選び方</h2>
-<ul style="font-size:.88rem;line-height:1.9;">
-<li><strong>大量の録音をとにかく安く文字起こし</strong> → MAI-Transcribe-2（$0.10/時間・期間限定）。定価前提なら Meta Muse Voice Transcribe か Gemini 3.5 Transcribe（どちらも$0.18/時間）。</li>
-<li><strong>会議のライブ字幕</strong> → 遅延とセットで選ぶ。MAI-Transcribe-2-Streaming（約100msで部分結果・$0.54/時間）／Gemini 3.5 Transcribe Live（$0.30〜$0.54/時間）／OpenAI gpt-live-transcribe（$1.02/時間）。</li>
-<li><strong>ナレーション・読み上げ</strong> → 文字課金で<strong>現行</strong>の最安は MAI-Voice-2.1-Flash（1,000文字 $0.015）。OpenAI の文字課金TTS 3モデルは Deprecated なので、新規は GPT-Live（$0.05/分・秒単位）か Gemini のトークン課金で見積もる。上限側は Gemini 3.1 Flash TTS Preview（1,000文字 $0.10）。</li>
-<li><strong>音声対話エージェント</strong> → 単価表のTTS行ではなく<strong>入出力合計</strong>で見る（Gemini 3.8 Live で約$0.023/分）。会話時間がそのまま課金対象になります。</li>
+<h2 class="section-title" style="font-size:1.15rem;">注意（4点）</h2>
+<ul>
+<li><strong>OpenAI の文字課金TTS 3モデル（tts-1 / tts-1-hd / gpt-4o-mini-tts）は Deprecated</strong>。比較用に残していますが、新規採用の候補ではありません。</li>
+<li><strong>「1分=300文字」は当サイトの前提</strong>です（日本語ナレーション想定）。英語は約3倍速いため、文字課金モデルは1分あたりの消費文字数が増えます。</li>
+<li>Gemini の TTS 2モデルは <strong>2027-01-01 に単価が2倍</strong>になります（表の → の右側）。</li>
+<li>gpt-4o-mini-tts は音声トークンの秒換算が公式に無いため、1分単価は<strong>概算</strong>です。</li>
 </ul>
-<div class="read-box"><strong>注意</strong>: この表は「安さ」の比較であって「良さ」の比較ではありません。音声認識の精度（WER）や声質は各社が自社に有利な条件で主張しており、当サイトが同じ条件で測った数値は持っていません。乗り換え前には<strong>自分の音声で同じファイルを流して確かめる</strong>のが最短です。</div>
-</section>
 
-<section class="section" style="padding-top:0;">
+<details class="legacy"><summary>換算の前提と、公式の逐語（クリックで開く）</summary>
+<ul>
+<li>音声トークン: <strong>1秒 = 25トークン（1分 = 1,500）</strong> — Google公式の注記</li>
+<li>文字→音声の長さ: <strong>1分 = 300文字（5文字/秒）</strong> — 当サイトの前提（公式に読み上げ速度の規定は無い）</li>
+<li>1,000字 = 3分20秒（200秒）／1時間 = 18,000文字 — 上記からの計算</li>
+<li>通貨は USD のみ・為替換算なし</li>
+</ul>
+<blockquote class="verb">Audio tokens correspond to 25 tokens per second of audio.<br>— ai.google.dev/gemini-api/docs/pricing（2026-11-15取得）</blockquote>
+</details>
+
 <h2 class="section-title" style="font-size:1.15rem;">出典（すべて2026-11-15取得）</h2>
-<ul style="font-size:.86rem;line-height:1.9;color:var(--c-muted);">
-<li>OpenAI — <a href="https://platform.openai.com/docs/models/tts-1" target="_blank" rel="noopener">tts-1 モデルページ</a>（$15.00 / 1M characters、tts-1-hd $30.00。<strong>両ページともモデル名直下に Deprecated 表記</strong>）／<a href="https://platform.openai.com/docs/models/gpt-4o-mini-tts" target="_blank" rel="noopener">gpt-4o-mini-tts</a>（入力$0.60・音声出力$12.00 / 1M tokens）／<a href="https://developers.openai.com/api/docs/pricing" target="_blank" rel="noopener">Pricing（Audioセクション）</a>（gpt-live-1 $0.05/分、gpt-live-transcribe $0.017/分、gpt-realtime-translate $0.034/分、gpt-realtime-2.1 音声 $32/$64）</li>
-<li>Google — <a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">Gemini Developer API pricing</a>（Gemini 3.8 Flash TTS $9.00→$18.00、3.8 Flash-Lite TTS $6.00→$12.00、3.1 Flash TTS Preview $20.00、3.5 Transcribe $2.00＝$0.003/分、3.5 Transcribe Live $3.50＝$0.005/分、3.8 Live 音声 $3.00/$12.00、3.5 Live Translate 約$0.0368/分）</li>
-<li>Microsoft — <a href="https://microsoft.ai/news/mai-transcribe-2-is-the-fastest-most-accurate-and-cheapest-speech-recognition-model-in-the-world/" target="_blank" rel="noopener">MAI-Transcribe-2（2026-09-03）</a>（$0.10/時間・期間限定）／<a href="https://microsoft.ai/news/our-first-streaming-transcription-model/" target="_blank" rel="noopener">Our first streaming transcription model（2026-10-02）</a>（Transcribe-2-Streaming $0.54/時間・MAI-Voice-2.1 $22/1M文字・2.1-Flash $15/1M文字）</li>
-<li>Meta — <a href="https://dev.meta.ai/docs/pricing-rate-limits" target="_blank" rel="noopener">Pricing and rate limits（Model API）</a>（Muse Voice Transcribe $0.18/時間、秒単位課金、ZDR同額、同時256ストリーム）</li>
-</ul>
-<p style="font-size:.8rem;color:var(--c-muted);line-height:1.7;">※ Azure Foundry Models pricing のMicrosoftセクションには、2026-11-15時点でMAI-Voice/Transcribeの行がありません。MAIの音声系単価は<strong>公式ブログの数字</strong>であり、Azureの料金表で確認できる価格ではありません（詳細は<a href="/mai/">MS AI (MAI) のページ</a>）。</p>
-</section>
-
-<section class="section" style="padding-top:0;">
-<h2 class="section-title" style="font-size:1.15rem;">関連ページ</h2>
-<ul style="line-height:2;">
-<li><a href="/pricing/">LLM API料金比較</a> — テキストモデルの通常単価（モデル別・確認日つき）</li>
-<li><a href="/calculator/">トークンコスト計算機</a> — 入力／出力トークン数から概算</li>
-<li><a href="/batch-api-pricing/">Batch API割引の横断比較</a> — 音声APIにはBatch割引が無いことの確認にも</li>
-<li><a href="/mai/">MS AI (MAI)</a> — MAI-Voice / MAI-Transcribe の系譜と取得日つき価格</li>
-<li><a href="/multimodal/">マルチモーダル対応LLM一覧</a> — 音声入出力に対応するモデルの整理</li>
-<li><a href="/glossary/zero-data-retention/">用語集: ゼロデータ保持（ZDR）</a></li>
+<ul>
+<li><a href="https://openai.com/api/pricing/" target="_blank" rel="noopener">OpenAI API Pricing</a></li>
+<li><a href="https://platform.openai.com/docs/models/tts-1" target="_blank" rel="noopener">OpenAI tts-1（Deprecated 表記）</a></li>
+<li><a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">Gemini API Pricing</a></li>
+<li><a href="https://learn.microsoft.com/azure/ai-foundry/" target="_blank" rel="noopener">Microsoft Foundry（MAI-Voice / Transcribe）</a></li>
 </ul>
 </section>
 </div>
