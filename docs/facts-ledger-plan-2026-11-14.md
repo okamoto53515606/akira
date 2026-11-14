@@ -318,7 +318,7 @@ Phase 5 の降格ゲートを**行単位**で実装していたため、GPTが
 
 **この節が運用の正**。§5・§6 は経緯と実測の記録として残す（数字はこちらが新しい）。
 
-### 8.1 完了（2026-11-15 / 36件）
+### 8.1 完了（2026-11-15 / 38件）
 
 - [x] **T1** 本計画書を作成 — この文書
 - [x] **T2** `/timeline/` を降順再構築。`2026-10` → `2026-10-13`、Qwen4 の誤クラス（`dot-anthropic`＋Alibaba）を `dot-other`＋Alibaba/Qwen に修正 — 54件・不正日付0
@@ -357,6 +357,8 @@ Phase 5 の降格ゲートを**行単位**で実装していたため、GPTが
 - [x] **T35** `tools/check_site_integrity.py` を新設し `site_upload` の公開ゲートに組込 — **page-dup / boilerplate / orphan** を ERROR で公開拒否。実データで発火を確認（孤立ページは実際に `/frontier-model-comparison/` が両言語で検出→料金比較から導線を追加）
 - [x] **T36** 再発防止の「型」を実装 — CSSコンポーネント（`.diagram` / `.bars` / `.legacy`）、`site_plan` 追記4・5、**ゲート停止時の lessons 自動記録**（自己学習の入口）
 
+- [x] **T37** 結論ボックスと強調セクションを追加（okamo指摘） — `.conclusion`（左に色帯・背景）で冒頭3行を囲み、`なぜ換算が要るのか` は `.tint` で図ごと囲んで背景を付けた
+- [x] **T38** 日本語ページのフォントを和文優先に — `html[lang="ja"] body` に `"Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", Meiryo, sans-serif`。英語ページは `-apple-system` 系を維持
 ### 8.2 残（10件）
 
 各項目に「なぜ」「目安」「完了条件」を付けた。**完了条件を満たしたらチェックを入れる**。

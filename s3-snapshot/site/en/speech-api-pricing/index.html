@@ -52,14 +52,13 @@
 <p style="font-size:.9rem;background:var(--c-surface2);border:1px solid var(--c-border);border-radius:6px;padding:.6rem .9rem;max-width:880px;"><strong>Scope</strong>: text-to-speech (TTS) and transcription (STT) rates, <strong>normalised to one minute and one hour</strong>. Vendors bill in four different units (per 1M characters, per 1M audio tokens, per minute, per hour), so the raw numbers are not comparable. Conversion assumptions are in the collapsed block below (official pages fetched 2026-11-15).</p>
 
 <section class="section" style="padding-top:1rem;">
-<h2 class="section-title" style="font-size:1.15rem;">Bottom line (3 lines)</h2>
-<ul>
+<div class="conclusion"><h2 class="section-title" style="font-size:1.15rem;margin-top:0;">Bottom line (3 lines)</h2><ul>
 <li><strong>Japanese narration</strong> &rarr; <strong>MAI-Voice-2.1-Flash ($0.0045/min)</strong>. OpenAI tts-1 costs the same but is <strong>deprecated</strong>, so it is not the current pick.</li>
 <li><strong>Transcription of recordings</strong> &rarr; <strong>MAI-Transcribe-2 ($0.10/hour)</strong>, a promotional rate valid until the end of this year. Next is Meta Muse Voice Transcribe at $0.18/hour.</li>
 <li><strong>Realtime conversation</strong> &rarr; an order of magnitude more expensive per minute (from $0.023/min). Do not compare it in the same table as file transcription.</li>
-</ul>
+</ul></div>
 
-<h2 class="section-title" style="font-size:1.15rem;">Why normalisation is required</h2>
+<div class="tint"><h2 class="section-title" style="font-size:1.15rem;">Why normalisation is required</h2>
 <div class="diagram">
   <div class="dg-box"><b>Per 1M characters</b>OpenAI tts-1<br>MAI-Voice</div>
   <div class="dg-arrow">+</div>
@@ -69,6 +68,8 @@
   <div class="dg-arrow">&rarr;</div>
   <div class="dg-box accent"><b>Common floor</b>TTS: per min / 1,000 chars<br>STT: per hour</div>
   <div class="diagram-note">Comparing "$9 vs $15" without normalising makes the cheaper model look three times more expensive.</div>
+</div>
+
 </div>
 
 <h2 class="section-title" style="font-size:1.15rem;">Text to speech (TTS)</h2>

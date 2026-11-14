@@ -344,3 +344,35 @@ tr:hover td { background: rgba(255,255,255,.02); }
 .legacy { color:var(--c-muted); font-size:.85rem; line-height:1.7; background:var(--c-surface2);
   border-left:3px solid var(--c-border); padding:.55rem .8rem; border-radius:0 6px 6px 0; margin:.9rem 0; }
 details.legacy > summary { cursor:pointer; font-weight:700; color:var(--c-muted); }
+
+/* 日本語ページのフォント（okamo指定 2026-11-15）
+   欧文フォント優先だと和文がフォールバック任せになり、Windows/Android で
+   ばらつく。和文は日本語フォントを先に指定する。 */
+html[lang="ja"] body {
+  font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP",
+               Meiryo, sans-serif;
+}
+html[lang="en"] body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+}
+/* 結論ボックス（ページ冒頭の「3行」を目立たせる） */
+.conclusion {
+  margin: 1rem 0 1.5rem; padding: 1rem 1.1rem;
+  background: linear-gradient(180deg, rgba(255,255,255,.06), transparent), var(--c-surface2);
+  border: 1px solid var(--c-border); border-left: 4px solid var(--c-accent);
+  border-radius: 8px;
+}
+.conclusion > h2 {
+  margin: 0 0 .5rem; font-size: 1rem; letter-spacing: .02em;
+}
+.conclusion ul { margin: 0; padding-left: 1.1rem; }
+.conclusion li { margin: .35rem 0; }
+.conclusion li strong:first-child { color: var(--c-accent); }
+/* 強調セクション（図・前提など、本文と区別したい塊） */
+.tint {
+  margin: 1.5rem 0; padding: 1rem 1.1rem;
+  background: var(--c-surface2);
+  border: 1px solid var(--c-border); border-radius: 10px;
+}
+.tint > h2 { margin-top: 0; }

@@ -52,14 +52,13 @@
 <p style="font-size:.9rem;background:var(--c-surface2);border:1px solid var(--c-border);border-radius:6px;padding:.6rem .9rem;max-width:880px;"><strong>このページの範囲</strong>: 読み上げ（TTS）と文字起こし（STT）の単価を<strong>「1分」「1時間」にそろえて</strong>並べます。課金単位が4種類（1M文字・1Mトークン・1分・1時間）に分かれているため、そのままでは比べられません。換算の前提は折りたたみに明記しています（各社公式ページを2026-11-15に取得）。</p>
 
 <section class="section" style="padding-top:1rem;">
-<h2 class="section-title" style="font-size:1.15rem;">結論（3行）</h2>
-<ul>
+<div class="conclusion"><h2 class="section-title" style="font-size:1.15rem;margin-top:0;">結論（3行）</h2><ul>
 <li><strong>日本語ナレーション</strong> → <strong>MAI-Voice-2.1-Flash（$0.0045/分）</strong>。OpenAI tts-1 も同額だが <strong>Deprecated</strong> なので現行では選ばない。</li>
 <li><strong>文字起こし（録音ファイル）</strong> → <strong>MAI-Transcribe-2（$0.10/時間）</strong>。年末までの期間限定価格。次点は Meta Muse Voice Transcribe の $0.18/時間。</li>
 <li><strong>リアルタイム対話</strong> → 分単価が1桁違う（$0.023/分〜）。録音ファイルの処理と<strong>同じ表で比べない</strong>。</li>
-</ul>
+</ul></div>
 
-<h2 class="section-title" style="font-size:1.15rem;">なぜ換算が要るのか</h2>
+<div class="tint"><h2 class="section-title" style="font-size:1.15rem;">なぜ換算が要るのか</h2>
 <div class="diagram">
   <div class="dg-box"><b>1M文字</b>OpenAI tts-1 系<br>MAI-Voice</div>
   <div class="dg-arrow">＋</div>
@@ -69,6 +68,8 @@
   <div class="dg-arrow">→</div>
   <div class="dg-box accent"><b>そろえた土台</b>TTS: 1分／1,000字<br>STT: 1時間</div>
   <div class="diagram-note">単位をそろえずに「$9 対 $15」を見ると、実際には3分の1のモデルを「3倍高い」と読み違えます。</div>
+</div>
+
 </div>
 
 <h2 class="section-title" style="font-size:1.15rem;">読み上げ（TTS）</h2>
