@@ -1,0 +1,20 @@
+==== glossary/harness/index.html
+  * 上段の引用以外の項目は、DeepSeek Harness の公式記載（models / tools / skills / sessions / sandboxes / storage / loops / scheduling / UI）を日本語で整理したものです。「採点・評価」はベンチマークを実施する側の設計要素として当サイトが補足しました（DeepSeek Harness の記載項目ではありません）。
+  * 出典: <a href="https://arcprize.org/blog/astra" target="_blank" rel="noopener">ARC Prize「OpenAI's GPT-6 Astra on ARC-AGI-3」</a>・<a href="https://arcprize.org/results/openai-gpt-6-astra" target="_blank" rel="noopener">ARC-AGI Results（個別ページ）</a>・<a href="/glossary/gpt-6-astra-benchmarks/">第1回の解説</a>（2026-09-19確認）
+  * 出典: <a href="https://www.deepseek.com/harness/en/" target="_blank" rel="noopener">DeepSeek Harness 公式ページ</a>・<a href="https://github.com/deepseek-ai/deepseek-harness" target="_blank" rel="noopener">github.com/deepseek-ai/deepseek-harness</a>（2026-09-19確認）
+==== glossary/prompt-cache/index.html
+  * 出典: <a href="https://platform.openai.com/docs/guides/prompt-caching" target="_blank" rel="noopener">OpenAI Prompt caching</a>・<a href="https://platform.claude.com/docs/en/build-with-claude/prompt-caching" target="_blank" rel="noopener">Anthropic Prompt caching（最小トークン数・乗数）</a>・<a href="https://ai.google.dev/gemini-api/docs/caching" target="_blank" rel="noopener">Gemini Context caching（暗黙キャッシュはGemini 2.5以降で既定有効・最小トークン数
+  * 各社公式料金ページの値（当サイトで検証済み）。詳細と出典URLは<a href="/pricing/">料金比較</a>
+  * 単価は各社公式ページの公表値、試算は当サイトによる単純計算です。実際の請求額はキャッシュのヒット状況・TTLの切れ方・出力トークン数で変わります。
+  * 関連: <a href="/kimi-k3-1-pro/">Kimi K3.1 Pro（キャッシュ課金が自動有効な実例）</a>
+==== glossary/one-million-context/index.html
+  * 出典: <a href="https://platform.claude.com/docs/en/build-with-claude/context-windows" target="_blank" rel="noopener">Claude Platform Docs「Context windows」</a>・<a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">Gemini API 料金ページ</a>・<a href="/calculator/">トークン計算機</a>（2026-09-21確認）
+  * 出典: <a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener">Claude Platform Docs「Pricing」</a>・<a href="https://platform.claude.com/docs/en/build-with-claude/context-windows" target="_blank" rel="noopener">「Context windows」</a>（2026-09-21確認）
+  * 単価の出典: <a href="https://developers.openai.com/api/docs/models/gpt-6-astra" target="_blank" rel="noopener">OpenAI モデルページ</a>・<a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">Gemini API 料金ページ</a>・<a href="https://cloud.google.com/vertex-ai/generative-ai/pricing" target="_blank" rel="noopener">Google Cloud（Generative AI の料金ページ）</a>（2026-09-21確認）
+  * 金額は当サイトの単純計算です（入力トークン数の合計 × 単価）。実際の課金ではプロンプトキャッシュ・バッチ割引・キャッシュ書込の料金が別途適用されるため、金額は上限側の目安としてお読みください。なお Anthropic は公式に<strong>コンテキスト圧縮（context compaction、ベータ）</strong>を用意しており、「会話が上限に近づくと古いコンテキストを自動要約し、実効的なコンテキスト長を増やす」と説明しています（<a href="https://www.anthropic.com/news/claude-sonnet-4-6" target="_blank" rel="noopener">Anthropic 公式発表</a>（2026-09-21確認）
+  * 出典: <a href="https://www.trychroma.com/research/context-rot" target="_blank" rel="noopener">Chroma「Context Rot: How Increasing Input Tokens Impacts LLM Performance」</a>（2026-09-21確認）
+==== en/glossary/prompt-cache/index.html
+  * Sources: <a href="https://platform.openai.com/docs/guides/prompt-caching" target="_blank" rel="noopener">OpenAI prompt caching</a>・<a href="https://platform.claude.com/docs/en/build-with-claude/prompt-caching" target="_blank" rel="noopener">Anthropic prompt caching (multipliers and minimum lengths)</a>・<a href="https://ai.google.dev/gemini-api/docs/caching" target="_blank" rel="noopener">Gemini context caching (impli
+  * Values come from each provider's official pricing page (verified on this site; full source URLs are on the <a href="/en/pricing/">pricing comparison</a>
+  * Rates are the published figures from each provider; the arithmetic is ours. Your actual bill depends on hit rates, TTL expiry and output tokens.
+  * Related: <a href="/en/kimi-k3-1-pro/">Kimi K3.1 Pro (cache billing is on by default)</a>

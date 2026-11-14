@@ -1,7 +1,25 @@
 {
- "updated": "2026-11-07",
+ "updated": "2026-11-15",
  "source": "各プロバイダ公式料金ページでfact確認済み（詳細は /pricing/ の出典欄）",
  "models": [
+  {
+   "name": "Muse Ember",
+   "provider": "Meta",
+   "label": "Meta",
+   "input": 0.1,
+   "output": 0.5,
+   "note": "Meta Model API の最小・最効率モデル。$0.10/$0.50（1Mトークン）",
+   "note_en": "Meta's smallest and most efficient model on the Model API. $0.10/$0.50 per 1M tokens"
+  },
+  {
+   "name": "Claude Fable 5.2",
+   "provider": "Anthropic",
+   "label": "Anthropic",
+   "input": 8.0,
+   "output": 40.0,
+   "note": "前世代（Fable 5.1）から入出力とも20%安（$10/$50→$8/$40）。キャッシュ読込$0.20。fast modeは$16/$80。Batch入力$4/MTok",
+   "note_en": "20% cheaper than Fable 5.1 on both input and output ($10/$50 to $8/$40). Cache read $0.20; fast mode $16/$80; Batch input $4/MTok"
+  },
   {
    "name": "Gemini 4 Hydrogen",
    "provider": "google",

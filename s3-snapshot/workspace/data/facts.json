@@ -127,7 +127,14 @@
    },
    "released": "2026-11-09",
    "status": "ga",
-   "price": null,
+   "price": {
+    "name": "Muse Ember",
+    "input": 0.1,
+    "output": 0.5,
+    "note_ja": "Meta Model API の最小・最効率モデル。$0.10/$0.50（1Mトークン）",
+    "note_en": "Meta's smallest and most efficient model on the Model API. $0.10/$0.50 per 1M tokens",
+    "provider": "Meta"
+   },
    "timeline": {
     "ja_id": "muse-ember",
     "en_id": "muse-ember",
@@ -135,7 +142,9 @@
     "title_en": "Muse Ember released — Meta&#39;s smallest and most efficient model at $0.10 / $0.50 New"
    },
    "shown_on": [
-    "timeline"
+    "timeline",
+    "pricing",
+    "calculator"
    ],
    "sources": [
     {
@@ -156,7 +165,14 @@
    },
    "released": "2026-11-09",
    "status": "ga",
-   "price": null,
+   "price": {
+    "name": "Claude Fable 5.2",
+    "input": 8.0,
+    "output": 40.0,
+    "note_ja": "前世代（Fable 5.1）から入出力とも20%安（$10/$50→$8/$40）。キャッシュ読込$0.20。fast modeは$16/$80。Batch入力$4/MTok",
+    "note_en": "20% cheaper than Fable 5.1 on both input and output ($10/$50 to $8/$40). Cache read $0.20; fast mode $16/$80; Batch input $4/MTok",
+    "provider": "Anthropic"
+   },
    "timeline": {
     "ja_id": "claude-fable-5-2",
     "en_id": "claude-fable-5-2",
@@ -164,7 +180,9 @@
     "title_en": "Claude Fable 5.2 / Mythos 5.2 released — 20% cheaper than the previous generation at $8 / $40 New"
    },
    "shown_on": [
-    "timeline"
+    "timeline",
+    "pricing",
+    "calculator"
    ],
    "sources": [
     {

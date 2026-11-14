@@ -62,6 +62,17 @@ TITLE_RE = re.compile(r'<h2 class="tl-title">(.*?)</h2>', re.S)
 APPEND_RE = re.compile(r'(?:<strong>)?\d{4}-\d{2}-\d{2}\s*追記|Update,\s*\d{4}-\d{2}-\d{2}')
 
 
+def _load_facts():
+    """台帳（WORKSPACE_DIR/data/facts.json）を読む。読めなければ None。"""
+    p = Path(WORKSPACE_DIR) / "data" / "facts.json"
+    if not p.exists():
+        return None
+    try:
+        return json.loads(p.read_text(encoding="utf-8"))
+    except Exception:  # noqa: BLE001
+        return None
+
+
 def _norm(text: str) -> str:
     """比較用の正規化（タグ除去・空白/ハイフン除去・小文字化）。"""
     t = re.sub(r"<[^>]+>", "", text)
@@ -186,6 +197,33 @@ def report(site_dir: str) -> str:
             warns.append("coverage: 直近%d日の年表エントリが /pricing/ と計算機データのどちらにも無い %d件: %s"
                          % (RECENT_DAYS, len(missing), ", ".join(missing[:8])))
 
+    # --- 2b. GA なのに料金・掲載先が欠けている（2026-11-15 追加・ERROR）---
+    # 11-15 に Claude Fable 5.2 と Muse Ember が「status=ga なのに price=null」で
+    # 計算機に入っていないことが判明した。ステータスを上げたときに単価を入れ忘れる、
+    # という**毎回起きる**型なので機械で止める。
+    facts = _load_facts()
+    if facts:
+        models = _models_json_names(site)
+        calc_norm = _norm(" ".join(models))
+        tl_norm = _norm((site / "timeline/index.html").read_text(encoding="utf-8", errors="replace")
+                        + (site / "en/timeline/index.html").read_text(encoding="utf-8", errors="replace"))
+        for mid, r in sorted((facts.get("models") or {}).items()):
+            if (r.get("status") or "") != "ga":
+                continue
+            price = r.get("price") or {}
+            if price.get("input") is None or price.get("output") is None:
+                errors.append("ga-without-price: %s は status=ga なのに単価が無い"
+                              "（料金比較と計算機に入らない。sources の逐語から price を埋める）" % mid)
+            names = [((r.get("names") or {}).get(k) or "") for k in ("ja", "en")]
+            cands = [c for n in names for c in _name_candidates(n) if c] or [mid]
+            if not any(_norm(c) in calc_norm for c in cands):
+                errors.append("ga-not-in-calculator: %s が data/models.json に無い"
+                              "（計算機に出ない）" % mid)
+            if not any(_norm(c) in pricing_norm for c in cands):
+                errors.append("ga-not-in-pricing: %s が /pricing/ に無い" % mid)
+            if not any(_norm(c) in tl_norm for c in cands):
+                errors.append("ga-not-in-timeline: %s が /timeline/ に無い" % mid)
+
     # --- 3. SOT の鮮度 ---
     sot_path = Path(WORKSPACE_DIR) / SOT_REL
     if sot_path.exists():
@@ -270,4 +308,6 @@ TOOL = check_facts_consistency
 
 if __name__ == "__main__":
     default = os.environ.get("SITE_LOCAL_DIR", "") or "/tmp/site"
+    if len(sys.argv) > 2:            # ローカル検証用: 第2引数でワークスペースを指定
+        WORKSPACE_DIR = sys.argv[2]
     print(report(sys.argv[1] if len(sys.argv) > 1 else default))

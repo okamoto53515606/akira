@@ -318,7 +318,7 @@ Phase 5 の降格ゲートを**行単位**で実装していたため、GPTが
 
 **この節が運用の正**。§5・§6 は経緯と実測の記録として残す（数字はこちらが新しい）。
 
-### 8.1 完了（2026-11-15 / 45件）
+### 8.1 完了（2026-11-15 / 47件）
 
 - [x] **T1** 本計画書を作成 — この文書
 - [x] **T2** `/timeline/` を降順再構築。`2026-10` → `2026-10-13`、Qwen4 の誤クラス（`dot-anthropic`＋Alibaba）を `dot-other`＋Alibaba/Qwen に修正 — 54件・不正日付0
@@ -368,6 +368,8 @@ Phase 5 の降格ゲートを**行単位**で実装していたため、GPTが
 - [x] **T43** `tools/check_page_shape.py` を新設し `site_upload` のゲートに組込 — **container-escape / ja/en-parity / jp-in-en** を ERROR で公開拒否。実データで **12件の実害**を検出（`/pricing/`「図」も容器外、`/multimodal/` も、EN は図なし、EN pricing だけ用語ブロックがあった）→ 全て修正して ERROR 0
 - [x] **T44** Gemini子育てママのプロンプトを **S1〜S5 のチェックリスト**に具体化（文字が読める／図がある／最初の3行／意味が通る／表が読める）。「機械が判定できる項目は機械の担当」と明記し、返答にIDを付けさせる
 各項目に「なぜ」「目安」「完了条件」を付けた。**完了条件を満たしたらチェックを入れる**。
+- [x] **T45** `Claude Fable 5.2` と `Muse Ember` が計算機に無かった件を修正 — 原因は台帳の `status=ga` なのに **`price` が null**（render が models.json に足せない）。`sources[].quote` に単価があったので `price` を埋め、`shown_on` を3面に。`data/models.json` 51→**53行**、ライブで計算機に表示されることを確認
+- [x] **T46** 「GAなのに単価が無い／計算機に無い」を **ERROR** にする — `check_facts_consistency` に `ga-without-price` / `ga-not-in-calculator` / `ga-not-in-pricing` / `ga-not-in-timeline` を追加し、`site_upload` の公開ゲートに組み込んだ（**毎回起きる型**なので機械で止める）
 
 - [ ] **R1** 課題117: `tts-1` の Deprecated を反映（`/mai/`・`/pricing/`・`/en/pricing/`・計算機・timeline）
   - なぜ: 11-14 の GPT 指摘は**引用付きで正しい**。公開を止めていたため未反映
@@ -490,6 +492,7 @@ Phase 5 の降格ゲートを**行単位**で実装していたため、GPTが
 | 11-14 | `--no-publish` | 10件 | 1/1 引用あり | 1（誤爆→修正） | 基準値 | `render_site` 0回 |
 | 11-15 | 定期（05:00） | **7件** | critical **0件** / 軽微3 | 1（**誤爆→v3で修正**） | **部分合格** | `render_site` **0回**・`discover_sources` 0回・音声ページ公開・課題117クローズ |
 | 11-15 | 手動（改善） | — | — | — | — | 音声 2,010字・図1・表2に短縮／Kimi 792字／integrity ゲート追加／`lessons` 自動記録 |
+| 11-15 | 手動2回目 | — | — | — | **合格** | 7分16秒。音声の比較軸1本化・OG見出し92px・用語集の出典1行化・`sitemap` lastmod修正。**GPT critical 0**（新規数値なしのため）。`check_page_shape` を「存在しないツール」と誤認 → スクリプトだと明記 |
 | 11-17 | | | | | | |
 | 11-17 | | | | | | |
 | 11-19 | | | | | | |

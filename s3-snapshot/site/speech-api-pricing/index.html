@@ -74,16 +74,16 @@
 
 <h2 class="section-title" style="font-size:1.15rem;">読み上げ（TTS）</h2>
 <div class="table-wrap"><table>
-<thead><tr><th>モデル</th><th>1分</th><th>1,000字</th><th>状態</th></tr></thead>
+<thead><tr><th>モデル</th><th>1分</th><th>状態</th></tr></thead>
 <tbody>
-<tr><td>MAI-Voice-2.1-Flash</td><td>$0.0045</td><td>$0.0150</td><td>現行</td></tr>
-<tr><td>OpenAI tts-1</td><td>$0.0045</td><td>$0.0150</td><td class="na">Deprecated</td></tr>
-<tr><td>MAI-Voice-2.1</td><td>$0.0066</td><td>$0.0220</td><td>現行</td></tr>
-<tr><td>OpenAI tts-1-hd</td><td>$0.0090</td><td>$0.0300</td><td class="na">Deprecated</td></tr>
-<tr><td>Gemini 3.8 Flash-Lite TTS</td><td>$0.0090 → $0.0180</td><td>$0.0300 → $0.0600</td><td>2027-01-01改定</td></tr>
-<tr><td>Gemini 3.8 Flash TTS</td><td>$0.0135 → $0.0270</td><td>$0.0450 → $0.0900</td><td>2027-01-01改定</td></tr>
-<tr><td>OpenAI gpt-4o-mini-tts</td><td>約$0.018</td><td>約$0.060</td><td class="na">Deprecated・概算</td></tr>
-<tr><td>Gemini 3.1 Flash TTS Preview</td><td>$0.0300</td><td>$0.1000</td><td>Preview</td></tr>
+<tr><td>MAI-Voice-2.1-Flash</td><td>$0.0045</td><td>現行</td></tr>
+<tr><td>OpenAI tts-1</td><td>$0.0045</td><td class="na">Deprecated</td></tr>
+<tr><td>MAI-Voice-2.1</td><td>$0.0066</td><td>現行</td></tr>
+<tr><td>OpenAI tts-1-hd</td><td>$0.0090</td><td class="na">Deprecated</td></tr>
+<tr><td>Gemini 3.8 Flash-Lite TTS</td><td>$0.0090 → $0.0180</td><td>2027-01-01改定</td></tr>
+<tr><td>Gemini 3.8 Flash TTS</td><td>$0.0135 → $0.0270</td><td>2027-01-01改定</td></tr>
+<tr><td>OpenAI gpt-4o-mini-tts</td><td>約$0.018</td><td class="na">Deprecated・概算</td></tr>
+<tr><td>Gemini 3.1 Flash TTS Preview</td><td>$0.0300</td><td>Preview</td></tr>
 </tbody></table></div>
 
 <p style="font-size:.88rem;color:var(--c-muted);margin:.9rem 0 .2rem;">同じ数字を棒で見る（1分あたり）</p>
@@ -97,16 +97,43 @@
   <div class="bar-row"><span>Gemini 3.1 Flash TTS Preview</span><span class="bar-track"><span class="bar-fill" style="width:100%"></span></span><span>$0.0300</span></div>
 </div>
 
+<details class="legacy"><summary>1,000字あたりの単価と、換算前の課金単位（内訳）</summary>
+<p style="font-size:.88rem;margin:.6rem 0 .3rem;"><strong>TTS: 1,000字あたり</strong>（1,000字 = 3分20秒として換算）</p>
+<div class="table-wrap"><table>
+<thead><tr><th>モデル</th><th>1,000字</th></tr></thead>
+<tbody>
+<tr><td>MAI-Voice-2.1-Flash</td><td>$0.0150</td></tr>
+<tr><td>OpenAI tts-1</td><td>$0.0150</td></tr>
+<tr><td>MAI-Voice-2.1</td><td>$0.0220</td></tr>
+<tr><td>OpenAI tts-1-hd</td><td>$0.0300</td></tr>
+<tr><td>Gemini 3.8 Flash-Lite TTS</td><td>$0.0300 → $0.0600</td></tr>
+<tr><td>Gemini 3.8 Flash TTS</td><td>$0.0450 → $0.0900</td></tr>
+<tr><td>OpenAI gpt-4o-mini-tts</td><td>約$0.060</td></tr>
+<tr><td>Gemini 3.1 Flash TTS Preview</td><td>$0.1000</td></tr>
+</tbody></table></div>
+<p style="font-size:.88rem;margin:1rem 0 .3rem;"><strong>STT: 換算前の課金単位</strong>（上の表はすべて1時間に換算済み）</p>
+<div class="table-wrap"><table>
+<thead><tr><th>モデル</th><th>課金単位</th></tr></thead>
+<tbody>
+<tr><td>MAI-Transcribe-2</td><td>時間</td></tr>
+<tr><td>Meta Muse Voice Transcribe</td><td>時間（秒単位・切り捨て）</td></tr>
+<tr><td>Gemini 3.5 Transcribe</td><td>トークン</td></tr>
+<tr><td>Gemini 3.5 Transcribe Live</td><td>トークン</td></tr>
+<tr><td>MAI-Transcribe-2-Streaming</td><td>時間</td></tr>
+<tr><td>OpenAI gpt-live-transcribe</td><td>分（$0.017/分）</td></tr>
+</tbody></table></div>
+</details>
+
 <h2 class="section-title" style="font-size:1.15rem;">文字起こし（STT）</h2>
 <div class="table-wrap"><table>
-<thead><tr><th>モデル</th><th>1時間</th><th>課金単位</th><th>状態</th></tr></thead>
+<thead><tr><th>モデル</th><th>1時間</th><th>状態</th></tr></thead>
 <tbody>
-<tr><td>MAI-Transcribe-2</td><td>$0.10</td><td>時間</td><td>年末までの期間限定</td></tr>
-<tr><td>Meta Muse Voice Transcribe</td><td>$0.18</td><td>時間（秒単位・切り捨て）</td><td>現行</td></tr>
-<tr><td>Gemini 3.5 Transcribe</td><td>$0.18（目安$0.30）</td><td>トークン</td><td>現行</td></tr>
-<tr><td>Gemini 3.5 Transcribe Live</td><td>$0.30（目安$0.54）</td><td>トークン</td><td>現行（双方向）</td></tr>
-<tr><td>MAI-Transcribe-2-Streaming</td><td>$0.54</td><td>時間</td><td>年内の導入価格</td></tr>
-<tr><td>OpenAI gpt-live-transcribe</td><td>$1.02</td><td>分（$0.017/分）</td><td>現行</td></tr>
+<tr><td>MAI-Transcribe-2</td><td>$0.10</td><td>年末までの期間限定</td></tr>
+<tr><td>Meta Muse Voice Transcribe</td><td>$0.18</td><td>現行</td></tr>
+<tr><td>Gemini 3.5 Transcribe</td><td>$0.18（目安$0.30）</td><td>現行</td></tr>
+<tr><td>Gemini 3.5 Transcribe Live</td><td>$0.30（目安$0.54）</td><td>現行（双方向）</td></tr>
+<tr><td>MAI-Transcribe-2-Streaming</td><td>$0.54</td><td>年内の導入価格</td></tr>
+<tr><td>OpenAI gpt-live-transcribe</td><td>$1.02</td><td>現行</td></tr>
 </tbody></table></div>
 
 <h2 class="section-title" style="font-size:1.15rem;">注意（4点）</h2>

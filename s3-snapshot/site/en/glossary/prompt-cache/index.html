@@ -139,7 +139,7 @@
       <tr><td class="model-name">Google<br>(Gemini)</td><td>Explicit caching adds a separate storage charge</td><td>10% of input</td><td>Implicit caching is automatic; explicit caches take a TTL</td><td>4,096 (3.x Flash family, 3.1 Pro Preview) / 2,048 (2.5 family)</td></tr>
       <tr><td class="model-name">DeepSeek</td><td>No write charge documented (the first send bills as normal input)</td><td>1/50 of a cache miss</td><td>Automatic (on by default, no code change)</td><td>&mdash; (prefix units, automatic)</td></tr>
     </tbody></table></div>
-    <p class="source-note">Sources: <a href="https://platform.openai.com/docs/guides/prompt-caching" target="_blank" rel="noopener">OpenAI prompt caching</a> ・ <a href="https://platform.claude.com/docs/en/build-with-claude/prompt-caching" target="_blank" rel="noopener">Anthropic prompt caching (multipliers and minimum lengths)</a> ・ <a href="https://ai.google.dev/gemini-api/docs/caching" target="_blank" rel="noopener">Gemini context caching (implicit caching on by default for Gemini 2.5 and newer; minimum token counts)</a> ・ <a href="https://api-docs.deepseek.com/guides/kv_cache" target="_blank" rel="noopener">DeepSeek context caching</a> (all checked 2026-09-17). Anthropic's headline multipliers are 5-minute writes at 1.25x, 1-hour writes at 2x, and reads (hits and refreshes) at 0.1x; Fable 5.1 and Mythos 5.1 are documented at 0.025x for reads.</p>
+    <p class="source-note">Sources: <a href="https://platform.openai.com/docs/guides/prompt-caching" target="_blank" rel="noopener">OpenAI prompt caching</a> · <a href="https://platform.claude.com/docs/en/build-with-claude/prompt-caching" target="_blank" rel="noopener">Anthropic prompt caching (multipliers and minimum lengths)</a> · <a href="https://ai.google.dev/gemini-api/docs/caching" target="_blank" rel="noopener">Gemini context caching (implicit caching on by default for Gemini 2.5 and newer; minimum token counts)</a> · <a href="https://api-docs.deepseek.com/guides/kv_cache" target="_blank" rel="noopener">DeepSeek context caching</a> (checked 2026-09-17)</p>
   </section>
 
   <!-- ===== real rates ===== -->
@@ -154,7 +154,7 @@
       <tr><td class="model-name"><a href="/en/glm-5-3-flash/">GLM-5.3-Flash</a></td><td class="price">$0.15</td><td class="price">$0.03</td><td class="price">storage free for a limited time</td></tr>
       <tr><td class="model-name"><a href="/en/mai/">MAI-Thinking-1</a> (Azure Global)</td><td class="price">$2.00</td><td class="price">$0.20</td><td class="price">&mdash;</td></tr>
     </tbody></table></div>
-    <p class="source-note">Values come from each provider's official pricing page (verified on this site; full source URLs are on the <a href="/en/pricing/">pricing comparison</a>). Gemini rates shown are the introductory rates available through December 31, 2026; from January 1, 2027 they rise to $1.50 / $0.15.</p>
+    <p class="source-note">Values come from each provider's official pricing page (verified on this site; full source URLs are on the <a href="/en/pricing/">pricing comparison</a>. Gemini rates are introductory (through 31 December 2026) and rise to $1.50 / $0.15 from 1 January 2027.</p>
   </section>
 
   <!-- ===== example ===== -->
@@ -229,7 +229,7 @@
       <li>Caching behaviour, defaults and multipliers can change; check each provider's current documentation before implementing.</li>
     </ul>
   </div>
-</div><p class="source-note">Related: <a href="/en/kimi-k3-1-pro/">Kimi K3.1 Pro (cache billing is on by default)</a></p>
+</div><p class="source-note">Related: <a href="/en/kimi-k3-1-pro/">Kimi K3.1 Pro (cache billing is on by default)</a>.</p>
 </main>
 <footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong><img src="/logo.svg" class="footer-logo" alt="" width="16" height="16" aria-hidden="true"> LLM Data Hub</strong><p>Operated by okamoちゃんねる</p><p><a href="/en/">Home</a> · <a href="/en/pricing/">Pricing</a> · <a href="/en/calculator/">Calculator</a> · <a href="/en/timeline/">Timeline</a> · <a href="/en/glossary/">Glossary</a> · <a href="/en/gpt-6/">GPT-6 Astra</a></p></div><p class="footer-disclaimer">⚠️ Prices and specifications change without notice. Always confirm on the vendor's official page before you commit. This site is not affiliated with any provider.</p></div></footer>
 </body>

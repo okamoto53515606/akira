@@ -92,7 +92,7 @@
       <tr><td class="model-name">Standard harness（中立）</td><td class="price">62.7%</td><td class="price">$26,098</td><td>モデルが「持ち越すノート」を自分で選ぶ。全モデル共通の最小インターフェース</td></tr>
       <tr><td class="model-name">Provider Adapter harness（OpenAI側）</td><td class="price">99.9%</td><td class="price">約$19K</td><td>非公開の推論状態をリクエスト間で保持し、長い会話は compaction で圧縮</td></tr>
     </tbody></table></div>
-    <p class="source-note">出典: <a href="https://arcprize.org/blog/astra" target="_blank" rel="noopener">ARC Prize「OpenAI's GPT-6 Astra on ARC-AGI-3」</a>・<a href="https://arcprize.org/results/openai-gpt-6-astra" target="_blank" rel="noopener">ARC-AGI Results（個別ページ）</a>（2026-09-15確認）。OpenAI公式発表にも「ARC-AGI-3 は responses API ハーネスで実行し、現実の性能に合わせて2つの設定を変更した」と注記があります。</p>
+    <p class="source-note">出典: <a href="https://arcprize.org/blog/astra" target="_blank" rel="noopener">ARC Prize「OpenAI's GPT-6 Astra on ARC-AGI-3」</a>・<a href="https://arcprize.org/results/openai-gpt-6-astra" target="_blank" rel="noopener">ARC-AGI Results（個別ページ）</a>（2026-09-15確認）（OpenAI公式発表の注記: ARC-AGI-3 は responses API ハーネスで実行し、現実の性能に合わせて2つの設定を変更した）</p>
     <h3 style="font-size:1rem;margin:1.4rem 0 .5rem;">この差は何を意味するのか</h3>
     <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.2em;line-height:1.85;">
       <li><strong>同条件で比較できる数字は 62.7% vs GPT-5.6 Sol 7.8%。</strong>これでも約8倍の跳ね上がりで、ARC Prizeは「インタラクティブ推論における段階的な能力変化」と評価しています。派手な99.9%と7.8%を並べるのは、土俵が違う数字の比較です。</li>
@@ -115,7 +115,7 @@
       <li><strong>汚染（学習データへの露出）の懸念が、ベンダー自身から出ています。</strong>過去の脆弱性に触れている可能性があるため、OpenAIは新規ベンチ2本でも評価を実施。満点の数字はこの留保つきで読む必要があります。</li>
       <li><strong>OpenAIはこのモデルを Preparedness Framework で初めて「Critical」に分類しました。</strong>高度なサイバー能力は開放ではなく、アクセス制限（gated access）付きで提供されます。「最高性能」と「誰でも使える」は別の話です。</li>
     </ul>
-    <p class="source-note">出典: <a href="https://openai.com/index/gpt-6-astra/" target="_blank" rel="noopener">OpenAI公式発表（GPT-6 Astra）</a>（2026-09-15確認）。評価は両モデルとも本番セーフガード無しで実施、との注記があります。</p>
+    <p class="source-note">出典: <a href="https://openai.com/index/gpt-6-astra/" target="_blank" rel="noopener">OpenAI公式発表（GPT-6 Astra）</a>（2026-09-15確認）（評価は両モデルとも本番セーフガード無しで実施）</p>
   </section>
 
   <!-- ===== ③ ===== -->
@@ -136,7 +136,7 @@
       <li><strong>それでもこのベンチは難しく、だから使える数字です。</strong>一般のコーディング系ベンチで80%超を取るモデルでも、実際の科学ワークフローでは大半を落とします。つまり上位の差がそのまま能力差として現れ、飽和していない。</li>
       <li><strong>OpenAIは低コスト設定の値も公表しています。</strong>Terminal-Bench Science 61.1%（約27%低コスト）、GPQA Diamond 94.9%（約37%低コスト）。推論エフォートを下げてもすぐには壊れない、という主張です（自己申告値）。</li>
     </ul>
-    <p class="source-note">出典: <a href="https://openai.com/index/gpt-6-astra/" target="_blank" rel="noopener">OpenAI公式発表</a>・<a href="https://www.tbench.ai/news/terminal-bench-science-0-1" target="_blank" rel="noopener">Terminal-Bench-Science 0.1 発表</a>・<a href="https://github.com/harbor-framework/terminal-bench-science" target="_blank" rel="noopener">GitHub（体制・仕様）</a>・中立リーダーボードのミラー（<a href="https://benchlm.ai/benchmarks/terminal-bench-science" target="_blank" rel="noopener">BenchLM</a>、2026-09時点のスナップショット）（2026-09-15確認）。</p>
+    <p class="source-note">出典: <a href="https://openai.com/index/gpt-6-astra/" target="_blank" rel="noopener">OpenAI公式発表</a>・<a href="https://www.tbench.ai/news/terminal-bench-science-0-1" target="_blank" rel="noopener">Terminal-Bench-Science 0.1 発表</a>・<a href="https://github.com/harbor-framework/terminal-bench-science" target="_blank" rel="noopener">GitHub（体制・仕様）</a>・<a href="https://benchlm.ai/benchmarks/terminal-bench-science" target="_blank" rel="noopener">BenchLM</a>（2026-09-15確認）</p>
   </section>
 
   <!-- ===== 画像 ===== -->
@@ -191,7 +191,7 @@
       <li><strong>出力を長くする設計はコストに直撃します。</strong>出力$50 / 1Mは入力の5倍。128K出力を使い切れば1リクエスト$6.40で、これは272K以下の入力（最大$2.72）より高くつきます。長文を一括生成させるより、分割して必要な分だけ出させるほうが安く済みます。</li>
       <li><strong>「1.05M入る」＝「1.05M入れるべき」ではありません。</strong>272K以下で設計できるなら定価、超えるなら2倍。この境界が、実務上の設計予算になります。試算は<a href="/calculator/">トークン計算機</a>でどうぞ。</li>
     </ul>
-    <p class="source-note">出典: <a href="https://developers.openai.com/api/docs/models/gpt-6-astra" target="_blank" rel="noopener">OpenAI GPT-6 Astra Model Docs</a>（コンテキスト・最大出力・知識カットオフ・料金ルール、2026-09-15確認）。金額は公表単価からの単純計算で、実際の請求額は入力と出力の合計になります。</p>
+    <p class="source-note">出典: <a href="https://developers.openai.com/api/docs/models/gpt-6-astra" target="_blank" rel="noopener">OpenAI GPT-6 Astra Model Docs</a>（2026-09-15確認）</p>
   </section>
 
   <!-- ===== まとめ ===== -->

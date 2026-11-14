@@ -114,7 +114,7 @@
       <span class="en">"A single request can include up to 600 images or PDF pages (100 for models with a 200k-token context window)."</span>
       1回のリクエストに画像・PDFを最大600枚まで——という記載です（和訳は当サイトによるもの）。
     </div>
-    <p class="source-note">出典: <a href="https://platform.claude.com/docs/en/build-with-claude/context-windows" target="_blank" rel="noopener">Claude Platform Docs「Context windows」</a>（2026-09-21確認）・<a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">Gemini API 料金ページ</a>（音声トークンの換算、2026-09-21確認）。英語の語数換算は当サイトによる概算です。<strong>文字数からトークン数への換算はモデルとトークナイザで変わる</strong>ため、見積もりは必ず実測値で行ってください（<a href="/calculator/">トークン計算機</a>は実測トークン数をそのまま入力する方式です）。</p>
+    <p class="source-note">出典: <a href="https://platform.claude.com/docs/en/build-with-claude/context-windows" target="_blank" rel="noopener">Claude Platform Docs「Context windows」</a>・<a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">Gemini API 料金ページ</a>・<a href="/calculator/">トークン計算機</a>（2026-09-21確認）（英語の語数換算は当サイトの概算、トークン数は実測値で見積もる）</p>
   </section>
 
   <!-- ===== 3. 上限値の比較 ===== -->
@@ -135,7 +135,7 @@
       <span class="en">"Claude 4.6 and later models and Claude Mythos Preview include the full 1M token context window at standard pricing. (A 900k-token request is billed at the same per-token rate as a 9k-token request.) Prompt caching and batch processing discounts apply at standard rates across the full context window."</span>
       1Mのコンテキストを<strong>標準価格で</strong>含む。<strong>900Kトークンのリクエストも9Kトークンと同じ単価</strong>——という逐語です（和訳は当サイトによるもの）。つまり Anthropic では、<strong>長文だから単価が上がることはありません</strong>。プロンプトキャッシュとバッチの割引も、コンテキスト全体に標準レートで適用されると書かれています。
     </div>
-    <p class="source-note">出典: <a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener">Claude Platform Docs「Pricing」</a>／<a href="https://platform.claude.com/docs/en/build-with-claude/context-windows" target="_blank" rel="noopener">「Context windows」</a>（いずれも2026-09-21確認）。Anthropic 側の1M対象モデルの逐語列挙は Claude Fable 5.1 / Mythos 5.1 / Fable 5 / Mythos 5 / Opus 5 / Opus 4.8 / Opus 4.7 / Opus 4.6 / Sonnet 5 / Sonnet 4.6 / Mythos Preview です（Sonnet 4.5 など200Kのモデルもあるため、実装時は必ず公式表で確認してください）。</p>
+    <p class="source-note">出典: <a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener">Claude Platform Docs「Pricing」</a>・<a href="https://platform.claude.com/docs/en/build-with-claude/context-windows" target="_blank" rel="noopener">「Context windows」</a>（2026-09-21確認）</p>
   </section>
 
   <!-- ===== 4. 段差を金額で見る ===== -->
@@ -160,7 +160,7 @@
       <span class="en">"If a query input context is longer than 200K tokens, all tokens (input and output) are charged at long context rates."</span>
       入力コンテキストが200Kトークンを超えると、<strong>すべてのトークン（入力も出力も）が長文の単価で課金される</strong>——という脚注です（和訳は当サイトによるもの）。表の「$2.00, prompts &lt;= 200k tokens / $4.00, prompts &gt; 200k tokens」という書き方と合わせて読むと、<strong>超えた分だけではなく、そのリクエストの全体が高い単価に移る</strong>という設計だと分かります。出力側も同じ扱い（$12 → $18）です。
     </div>
-    <p class="source-note">単価の出典: <a href="https://developers.openai.com/api/docs/models/gpt-6-astra" target="_blank" rel="noopener">OpenAI モデルページ</a>（逐語: <span style="font-family:var(--font-mono);font-size:.8rem">"Prompts with more than 272K input tokens are priced at 2x input and cache rates and 1.5x output for the full request."</span>）・<a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">Gemini API 料金ページ</a>（2026-09-21確認）。Google の脚注は <a href="https://cloud.google.com/vertex-ai/generative-ai/pricing" target="_blank" rel="noopener">Google Cloud（Generative AI の料金ページ）</a>の逐語です（2026-09-21確認。ページ内では「200K tokens より長い場合」と記載。Google 側はページや提供経路によって「200K 超」と「200K 以上」で表記が揺れるため、実際の請求前に利用する API・リージョンの料金表をご確認ください）。金額は当サイトの単純計算（入力トークン数 × 単価）で、キャッシュ利用・バッチ割引・キャッシュ書込は含みません。<strong>272K という境界値は GPT-6 Astra 固有のもので、OpenAI の全モデル共通ではありません。</strong>モデルごとに公式ページで確認してください。</p>
+    <p class="source-note">単価の出典: <a href="https://developers.openai.com/api/docs/models/gpt-6-astra" target="_blank" rel="noopener">OpenAI モデルページ</a>・<a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">Gemini API 料金ページ</a>・<a href="https://cloud.google.com/vertex-ai/generative-ai/pricing" target="_blank" rel="noopener">Google Cloud（Generative AI の料金ページ）</a>（2026-09-21確認）</p>
   </section>
 
   <!-- ===== 5. 会話が伸びると増える ===== -->
@@ -182,7 +182,7 @@
       <br><br>
       <strong>対策は「減らす」と「キャッシュする」の2つです。</strong>本当に必要な部分だけを渡す、そして<strong>変わらない前置きはプロンプトキャッシュに載せる</strong>。同じ前置きを繰り返し送る使い方では、キャッシュの有無が請求額を大きく変えます（仕組みと単価差は<a href="/glossary/prompt-cache/">第2回の解説</a>にまとめています）。
     </div>
-    <p class="source-note">金額は当サイトの単純計算です（入力トークン数の合計 × 単価）。実際の課金ではプロンプトキャッシュ・バッチ割引・キャッシュ書込の料金が別途適用されるため、金額は上限側の目安としてお読みください。なお Anthropic は公式に<strong>コンテキスト圧縮（context compaction、ベータ）</strong>を用意しており、「会話が上限に近づくと古いコンテキストを自動要約し、実効的なコンテキスト長を増やす」と説明しています（<a href="https://www.anthropic.com/news/claude-sonnet-4-6" target="_blank" rel="noopener">Anthropic 公式発表</a>、2026-09-21確認）。上限に近づいたら要約して畳む、という設計も各社で進んでいます。</p>
+    <p class="source-note">金額は当サイトの単純計算です（入力トークン数の合計 × 単価）。実際の課金ではプロンプトキャッシュ・バッチ割引・キャッシュ書込の料金が別途適用されるため、金額は上限側の目安としてお読みください。なお Anthropic は公式に<strong>コンテキスト圧縮（context compaction、ベータ）</strong>を用意しており、「会話が上限に近づくと古いコンテキストを自動要約し、実効的なコンテキスト長を増やす」と説明しています（<a href="https://www.anthropic.com/news/claude-sonnet-4-6" target="_blank" rel="noopener">Anthropic 公式発表</a>（2026-09-21確認）</p>
   </section>
 
   <!-- ===== 6. 入る≠使える ===== -->
@@ -204,7 +204,7 @@
       <span style="font-family:var(--font-mono);font-size:.8rem;display:block;margin:.4rem 0">"Whether relevant information is present in a model's context is not all that matters; what matters more is how that information is presented."</span>
       必要な情報が<strong>入っているかどうか</strong>より、<strong>どう見せているか</strong>のほうが重要——という一文です（和訳は当サイトによるもの）。「大きいから入れておく」は、精度の面でも得とは限りません。
     </div>
-    <p class="source-note">出典: <a href="https://www.trychroma.com/research/context-rot" target="_blank" rel="noopener">Chroma「Context Rot: How Increasing Input Tokens Impacts LLM Performance」</a>（2026-09-21確認）。<strong>この検証は2025年7月時点のモデル（GPT-4.1・Claude 4・Gemini 2.5・Qwen3 世代）で行われたものです。</strong>2026年9月時点の最新モデルで同じ傾向が同じ強さで出るかは、当サイトでは確認できていません。当時の結果として読んでください。</p>
+    <p class="source-note">出典: <a href="https://www.trychroma.com/research/context-rot" target="_blank" rel="noopener">Chroma「Context Rot: How Increasing Input Tokens Impacts LLM Performance」</a>（2026-09-21確認）</p>
   </section>
 
   <!-- ===== 図解 ===== -->

@@ -321,6 +321,24 @@ def site_download(dest_dir: str | None = None) -> dict:
     return download_site(dest_dir)
 
 
+def _facts_consistency_errors(site_dir: str) -> list:
+    """台帳とサイトの横断整合（GAなのに単価が無い／計算機に無い等）を検査する。
+
+    tools/check_facts_consistency.py を subprocess で呼ぶ（2026-11-15 追加）。
+    「Aページにだけ追加してBページは漏れ」が毎回起きるため、公開を止める側に回す。
+    """
+    script = os.path.join(WORKSPACE_LOCAL_DIR, "tools", "check_facts_consistency.py")
+    if not os.path.exists(script):
+        return []
+    try:
+        r = subprocess.run([sys.executable, script, site_dir, WORKSPACE_LOCAL_DIR],
+                           capture_output=True, text=True, timeout=180)
+    except Exception:
+        return []
+    return [l.strip() for l in (r.stdout or "").splitlines()
+            if l.strip().startswith("[ERROR]")]
+
+
 def _page_shape_errors(site_dir: str) -> list:
     """ページの形（コンテナ外・日英の同格・英語ページの和文）を検査する。
 
@@ -484,6 +502,9 @@ def site_upload(local_path: str, site_prefix: str = "") -> dict:
     if any(r.endswith("index.html") for r in target_rels):
         integrity_errors = _site_integrity_errors(base_dir)
         shape_errors = _page_shape_errors(base_dir)
+    facts_errors = []
+    if any(r.endswith(("index.html", "models.json")) for r in target_rels):
+        facts_errors = _facts_consistency_errors(base_dir)
 
     s3 = boto3.client("s3", region_name=AWS_REGION)
     uploaded, rejected = [], []
@@ -499,6 +520,9 @@ def site_upload(local_path: str, site_prefix: str = "") -> dict:
             if hits:
                 rejected.append({"key": key, "errors": hits})
                 continue
+        if facts_errors and (rel.endswith("index.html") or rel == DATA_MODELS_KEY):
+            rejected.append({"key": key, "errors": facts_errors})
+            continue
         if shape_errors and rel.endswith("index.html"):
             # 日英の同格違反は ja 側の名前で出るので、en 側の公開も止める
             pair = rel[3:] if rel.startswith("en/") else "en/" + rel

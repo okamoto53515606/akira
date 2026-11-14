@@ -137,7 +137,7 @@
       <tr><td class="model-name">Google<br>（Gemini）</td><td>明示キャッシュは保存料金が別建て</td><td>入力の10%</td><td>暗黙キャッシュは自動／明示キャッシュはTTLを指定</td><td>4,096（3.x Flash系・3.1 Pro Preview）／2,048（2.5系）</td></tr>
       <tr><td class="model-name">DeepSeek</td><td>書込の課金記載なし（初回は通常入力として課金）</td><td>cache miss の 1/50</td><td>自動（既定で有効・コード変更不要）</td><td>—（先頭一致の単位で自動）</td></tr>
     </tbody></table></div>
-    <p class="source-note">出典: <a href="https://platform.openai.com/docs/guides/prompt-caching" target="_blank" rel="noopener">OpenAI Prompt caching</a>・<a href="https://platform.claude.com/docs/en/build-with-claude/prompt-caching" target="_blank" rel="noopener">Anthropic Prompt caching（最小トークン数・乗数）</a>・<a href="https://ai.google.dev/gemini-api/docs/caching" target="_blank" rel="noopener">Gemini Context caching（暗黙キャッシュはGemini 2.5以降で既定有効・最小トークン数）</a>・<a href="https://api-docs.deepseek.com/guides/kv_cache" target="_blank" rel="noopener">DeepSeek Context Caching</a>（いずれも2026-09-17確認）。Anthropicの主な乗数は「5分書込=1.25倍／1時間書込=2倍／読込=0.1倍（ヒットとリフレッシュ）」で、Fable 5.1・Mythos 5.1のみ読込が0.025倍と明記されています。</p>
+    <p class="source-note">出典: <a href="https://platform.openai.com/docs/guides/prompt-caching" target="_blank" rel="noopener">OpenAI Prompt caching</a>・<a href="https://platform.claude.com/docs/en/build-with-claude/prompt-caching" target="_blank" rel="noopener">Anthropic Prompt caching（最小トークン数・乗数）</a>・<a href="https://ai.google.dev/gemini-api/docs/caching" target="_blank" rel="noopener">Gemini Context caching（暗黙キャッシュはGemini 2.5以降で既定有効・最小トークン数）</a>・<a href="https://api-docs.deepseek.com/guides/kv_cache" target="_blank" rel="noopener">DeepSeek Context Caching</a>（2026-09-17確認）</p>
   </section>
 
   <!-- ===== 実額 ===== -->
@@ -152,7 +152,7 @@
       <tr><td class="model-name"><a href="/glm-5-3-flash/">GLM-5.3-Flash</a></td><td class="price">$0.15</td><td class="price">$0.03</td><td class="price">保存は期間限定無料</td></tr>
       <tr><td class="model-name"><a href="/mai/">MAI-Thinking-1</a>（Azure Global）</td><td class="price">$2.00</td><td class="price">$0.20</td><td class="price">—</td></tr>
     </tbody></table></div>
-    <p class="source-note">各社公式料金ページの値（当サイトで検証済み）。詳細と出典URLは<a href="/pricing/">料金比較</a>に掲載しています。Geminiは初回価格（2026年12月31日まで）で、2027年1月1日以降は $1.50 / $0.15 に上がります。</p>
+    <p class="source-note">各社公式料金ページの値（当サイトで検証済み）。詳細と出典URLは<a href="/pricing/">料金比較</a>。Geminiは初回価格（2026年12月31日まで）で、2027年1月1日以降は $1.50 / $0.15 に上がります。</p>
   </section>
 
   <!-- ===== 試算 ===== -->
@@ -226,7 +226,7 @@
       <li>キャッシュの実装・既定値・乗数は各社が変更する可能性があります。実装前に各社の最新ドキュメントをご確認ください。</li>
     </ul>
   </div>
-</div><p class="source-note">関連: <a href="/kimi-k3-1-pro/">Kimi K3.1 Pro（キャッシュ課金が自動有効な実例）</a></p>
+</div><p class="source-note">関連: <a href="/kimi-k3-1-pro/">Kimi K3.1 Pro（キャッシュ課金が自動有効な実例）</a>。</p>
 </main>
 <footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong><img src="/logo.svg" class="footer-logo" alt="" width="16" height="16" aria-hidden="true"> LLM Data Hub</strong><p>運営: okamoちゃんねる</p><p><a href="/">ホーム</a> · <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a> · <a href="/timeline/">年表</a> · <a href="/glossary/">用語説明</a> · <a href="/gpt-6/">GPT-6 Astra</a></p></div><p class="footer-disclaimer">⚠️ 料金・仕様は予告なく変動します。契約前に必ず各社公式ページでご確認ください。本サイトは各社と提携していません。</p></div></footer>
 </body>

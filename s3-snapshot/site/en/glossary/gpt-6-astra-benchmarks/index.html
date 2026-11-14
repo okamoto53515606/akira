@@ -90,7 +90,7 @@
       <tr><td class="model-name">Standard harness (neutral)</td><td class="price">62.7%</td><td class="price">$26,098</td><td>The model chooses which notes to carry forward; the same minimal interface for every model</td></tr>
       <tr><td class="model-name">Provider Adapter harness (OpenAI's)</td><td class="price">99.9%</td><td class="price">~$19K</td><td>Preserves opaque reasoning state between requests and compacts longer conversations</td></tr>
     </tbody></table></div>
-    <p class="source-note">Sources: <a href="https://arcprize.org/blog/astra" target="_blank" rel="noopener">ARC Prize, "OpenAI's GPT-6 Astra on ARC-AGI-3"</a> and <a href="https://arcprize.org/results/openai-gpt-6-astra" target="_blank" rel="noopener">ARC-AGI results page</a> (verified 2026-09-15). OpenAI's own announcement notes that Astra was run on ARC-AGI-3 with its responses API harness, "which changes two settings to better match real-world performance."</p>
+    <p class="source-note">Sources: <a href="https://arcprize.org/blog/astra" target="_blank" rel="noopener">ARC Prize, "OpenAI's GPT-6 Astra on ARC-AGI-3"</a> · <a href="https://arcprize.org/results/openai-gpt-6-astra" target="_blank" rel="noopener">ARC-AGI results page</a> (checked 2026-09-15)(OpenAI's own note: ARC-AGI-3 was run on the responses API harness, with two settings adjusted to real-world performance)</p>
     <h3 style="font-size:1rem;margin:1.4rem 0 .5rem;">What the gap actually means</h3>
     <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.2em;line-height:1.85;">
       <li><strong>The like-for-like comparison is 62.7% vs GPT-5.6 Sol's 7.8%.</strong> That is still a step change — ARC Prize calls it a genuine advance in interactive reasoning. Quoting 99.9% next to 7.8% compares two different harnesses.</li>
@@ -112,7 +112,7 @@
       <li><strong>The contamination caveat comes from the vendor itself.</strong> Because scores may be helped by exposure to historical vulnerabilities, OpenAI also evaluated Astra on two novel benchmarks. Read the perfect score with that reservation attached.</li>
       <li><strong>OpenAI classified Astra as "Critical" under its Preparedness Framework — a first.</strong> The most advanced cyber capability ships gated, not open. "Most capable" and "available to everyone" are separate claims.</li>
     </ul>
-    <p class="source-note">Source: <a href="https://openai.com/index/gpt-6-astra/" target="_blank" rel="noopener">OpenAI's GPT-6 Astra announcement</a> (verified 2026-09-15). Both models were evaluated without production safeguards, per the same announcement.</p>
+    <p class="source-note">Source: <a href="https://openai.com/index/gpt-6-astra/" target="_blank" rel="noopener">OpenAI's GPT-6 Astra announcement</a> (checked 2026-09-15)(both models were evaluated without production safeguards)</p>
   </section>
 
   <section class="section" style="padding-top:0;" aria-labelledby="h3-h">
@@ -132,7 +132,7 @@
       <li><strong>And yet this is the most usable figure of the five</strong>, because the test is genuinely hard: models that clear 80%+ on general terminal/coding benchmarks still fail the large majority of real research workflows.</li>
       <li><strong>OpenAI also published low-effort numbers:</strong> Terminal-Bench Science 61.1% at roughly 27% lower cost, and GPQA Diamond 94.9% at about 37% lower cost. Their claim is that turning reasoning effort down does not immediately break quality — a self-reported figure, not an independently verified one.</li>
     </ul>
-    <p class="source-note">Sources: <a href="https://openai.com/index/gpt-6-astra/" target="_blank" rel="noopener">OpenAI announcement</a> · <a href="https://www.tbench.ai/news/terminal-bench-science-0-1" target="_blank" rel="noopener">Terminal-Bench-Science 0.1 release</a> · <a href="https://github.com/harbor-framework/terminal-bench-science" target="_blank" rel="noopener">GitHub (structure and contributing institutions)</a> · neutral leaderboard mirror (<a href="https://benchlm.ai/benchmarks/terminal-bench-science" target="_blank" rel="noopener">BenchLM</a>, snapshot as of September 2026) (verified 2026-09-15).</p>
+    <p class="source-note">Sources: <a href="https://openai.com/index/gpt-6-astra/" target="_blank" rel="noopener">OpenAI announcement</a> · <a href="https://www.tbench.ai/news/terminal-bench-science-0-1" target="_blank" rel="noopener">Terminal-Bench-Science 0.1 release</a> · <a href="https://github.com/harbor-framework/terminal-bench-science" target="_blank" rel="noopener">GitHub (structure and contributing institutions)</a> · <a href="https://benchlm.ai/benchmarks/terminal-bench-science" target="_blank" rel="noopener">BenchLM</a> (checked 2026-09-15)</p>
   </section>
 
   <figure class="flow-fig">
@@ -185,7 +185,7 @@
       <li><strong>Long output hits the bill hardest.</strong> At $50 / 1M, maxing the 128K output costs $6.40 in a single request — more than a full 272K-token input. Splitting work and generating only what you need is cheaper than one giant generation.</li>
       <li><strong>"It fits 1.05M" does not mean "send 1.05M."</strong> Design under 272K and you pay list price; design over it and everything doubles. That boundary is the real design budget. Run your own numbers in the <a href="/en/calculator/">token calculator</a>.</li>
     </ul>
-    <p class="source-note">Source: <a href="https://developers.openai.com/api/docs/models/gpt-6-astra" target="_blank" rel="noopener">OpenAI GPT-6 Astra model docs</a> (context, max output, cutoff, rate rules; verified 2026-09-15). Dollar figures are simple arithmetic on published rates; an actual invoice sums input and output.</p>
+    <p class="source-note">Source: <a href="https://developers.openai.com/api/docs/models/gpt-6-astra" target="_blank" rel="noopener">OpenAI GPT-6 Astra model docs</a> (checked 2026-09-15)</p>
   </section>
 
   <section class="section" style="padding-top:0;" aria-labelledby="sum-h">

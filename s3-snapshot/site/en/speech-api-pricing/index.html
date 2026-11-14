@@ -74,16 +74,16 @@
 
 <h2 class="section-title" style="font-size:1.15rem;">Text to speech (TTS)</h2>
 <div class="table-wrap"><table>
-<thead><tr><th>Model</th><th>Per minute</th><th>Per 1,000 chars</th><th>Status</th></tr></thead>
+<thead><tr><th>Model</th><th>Per minute</th><th>Status</th></tr></thead>
 <tbody>
-<tr><td>MAI-Voice-2.1-Flash</td><td>$0.0045</td><td>$0.0150</td><td>Current</td></tr>
-<tr><td>OpenAI tts-1</td><td>$0.0045</td><td>$0.0150</td><td class="na">Deprecated</td></tr>
-<tr><td>MAI-Voice-2.1</td><td>$0.0066</td><td>$0.0220</td><td>Current</td></tr>
-<tr><td>OpenAI tts-1-hd</td><td>$0.0090</td><td>$0.0300</td><td class="na">Deprecated</td></tr>
-<tr><td>Gemini 3.8 Flash-Lite TTS</td><td>$0.0090 &rarr; $0.0180</td><td>$0.0300 &rarr; $0.0600</td><td>Change 2027-01-01</td></tr>
-<tr><td>Gemini 3.8 Flash TTS</td><td>$0.0135 &rarr; $0.0270</td><td>$0.0450 &rarr; $0.0900</td><td>Change 2027-01-01</td></tr>
-<tr><td>OpenAI gpt-4o-mini-tts</td><td>~$0.018</td><td>~$0.060</td><td class="na">Deprecated, estimate</td></tr>
-<tr><td>Gemini 3.1 Flash TTS Preview</td><td>$0.0300</td><td>$0.1000</td><td>Preview</td></tr>
+<tr><td>MAI-Voice-2.1-Flash</td><td>$0.0045</td><td>Current</td></tr>
+<tr><td>OpenAI tts-1</td><td>$0.0045</td><td class="na">Deprecated</td></tr>
+<tr><td>MAI-Voice-2.1</td><td>$0.0066</td><td>Current</td></tr>
+<tr><td>OpenAI tts-1-hd</td><td>$0.0090</td><td class="na">Deprecated</td></tr>
+<tr><td>Gemini 3.8 Flash-Lite TTS</td><td>$0.0090 &rarr; $0.0180</td><td>Change 2027-01-01</td></tr>
+<tr><td>Gemini 3.8 Flash TTS</td><td>$0.0135 &rarr; $0.0270</td><td>Change 2027-01-01</td></tr>
+<tr><td>OpenAI gpt-4o-mini-tts</td><td>~$0.018</td><td class="na">Deprecated, estimate</td></tr>
+<tr><td>Gemini 3.1 Flash TTS Preview</td><td>$0.0300</td><td>Preview</td></tr>
 </tbody></table></div>
 
 <p style="font-size:.88rem;color:var(--c-muted);margin:.9rem 0 .2rem;">The same numbers as bars (per minute)</p>
@@ -97,16 +97,43 @@
   <div class="bar-row"><span>Gemini 3.1 Flash TTS Preview</span><span class="bar-track"><span class="bar-fill" style="width:100%"></span></span><span>$0.0300</span></div>
 </div>
 
+<details class="legacy"><summary>Per-1,000-character rates and the raw billing units (breakdown)</summary>
+<p style="font-size:.88rem;margin:.6rem 0 .3rem;"><strong>TTS: per 1,000 characters</strong> (1,000 characters = 3 min 20 s)</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Model</th><th>Per 1,000 chars</th></tr></thead>
+<tbody>
+<tr><td>MAI-Voice-2.1-Flash</td><td>$0.0150</td></tr>
+<tr><td>OpenAI tts-1</td><td>$0.0150</td></tr>
+<tr><td>MAI-Voice-2.1</td><td>$0.0220</td></tr>
+<tr><td>OpenAI tts-1-hd</td><td>$0.0300</td></tr>
+<tr><td>Gemini 3.8 Flash-Lite TTS</td><td>$0.0300 &rarr; $0.0600</td></tr>
+<tr><td>Gemini 3.8 Flash TTS</td><td>$0.0450 &rarr; $0.0900</td></tr>
+<tr><td>OpenAI gpt-4o-mini-tts</td><td>~$0.060</td></tr>
+<tr><td>Gemini 3.1 Flash TTS Preview</td><td>$0.1000</td></tr>
+</tbody></table></div>
+<p style="font-size:.88rem;margin:1rem 0 .3rem;"><strong>STT: raw billing unit</strong> (the table above is already normalised to an hour)</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Model</th><th>Billing unit</th></tr></thead>
+<tbody>
+<tr><td>MAI-Transcribe-2</td><td>Hour</td></tr>
+<tr><td>Meta Muse Voice Transcribe</td><td>Hour (per second, floored)</td></tr>
+<tr><td>Gemini 3.5 Transcribe</td><td>Tokens</td></tr>
+<tr><td>Gemini 3.5 Transcribe Live</td><td>Tokens</td></tr>
+<tr><td>MAI-Transcribe-2-Streaming</td><td>Hour</td></tr>
+<tr><td>OpenAI gpt-live-transcribe</td><td>Minute ($0.017/min)</td></tr>
+</tbody></table></div>
+</details>
+
 <h2 class="section-title" style="font-size:1.15rem;">Transcription (STT)</h2>
 <div class="table-wrap"><table>
-<thead><tr><th>Model</th><th>Per hour</th><th>Billing unit</th><th>Status</th></tr></thead>
+<thead><tr><th>Model</th><th>Per hour</th><th>Status</th></tr></thead>
 <tbody>
-<tr><td>MAI-Transcribe-2</td><td>$0.10</td><td>Hour</td><td>Promo until year end</td></tr>
-<tr><td>Meta Muse Voice Transcribe</td><td>$0.18</td><td>Hour (per second, floored)</td><td>Current</td></tr>
-<tr><td>Gemini 3.5 Transcribe</td><td>$0.18 (est. $0.30)</td><td>Tokens</td><td>Current</td></tr>
-<tr><td>Gemini 3.5 Transcribe Live</td><td>$0.30 (est. $0.54)</td><td>Tokens</td><td>Current (bidirectional)</td></tr>
-<tr><td>MAI-Transcribe-2-Streaming</td><td>$0.54</td><td>Hour</td><td>Introductory price</td></tr>
-<tr><td>OpenAI gpt-live-transcribe</td><td>$1.02</td><td>Minute ($0.017/min)</td><td>Current</td></tr>
+<tr><td>MAI-Transcribe-2</td><td>$0.10</td><td>Promo until year end</td></tr>
+<tr><td>Meta Muse Voice Transcribe</td><td>$0.18</td><td>Current</td></tr>
+<tr><td>Gemini 3.5 Transcribe</td><td>$0.18 (est. $0.30)</td><td>Current</td></tr>
+<tr><td>Gemini 3.5 Transcribe Live</td><td>$0.30 (est. $0.54)</td><td>Current (bidirectional)</td></tr>
+<tr><td>MAI-Transcribe-2-Streaming</td><td>$0.54</td><td>Introductory price</td></tr>
+<tr><td>OpenAI gpt-live-transcribe</td><td>$1.02</td><td>Current</td></tr>
 </tbody></table></div>
 
 <h2 class="section-title" style="font-size:1.15rem;">Caveats (4)</h2>

@@ -113,7 +113,7 @@
       <strong>Anthropic, verbatim:</strong>
       <span class="en">"A single request can include up to 600 images or PDF pages (100 for models with a 200k-token context window)."</span>
     </div>
-    <p class="source-note">Sources: <a href="https://platform.claude.com/docs/en/build-with-claude/context-windows" target="_blank" rel="noopener">Claude Platform Docs, &ldquo;Context windows&rdquo;</a> and <a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">Gemini API pricing</a> (audio token conversion), both checked 2026-09-21. The word-count conversion is ours. <strong>Converting characters to tokens varies by model and tokenizer</strong>, so always estimate from measured token counts — our <a href="/en/calculator/">calculator</a> takes real token counts as input for exactly that reason.</p>
+    <p class="source-note">Sources: <a href="https://platform.claude.com/docs/en/build-with-claude/context-windows" target="_blank" rel="noopener">Claude Platform Docs, &ldquo;Context windows&rdquo;</a> · <a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">Gemini API pricing</a> · <a href="/en/calculator/">calculator</a> (checked 2026-09-21)(word-count conversions are our own approximation; estimate with measured token counts)</p>
   </section>
 
   <!-- ===== 3. Limits ===== -->
@@ -134,7 +134,7 @@
       <span class="en">"Claude 4.6 and later models and Claude Mythos Preview include the full 1M token context window at standard pricing. (A 900k-token request is billed at the same per-token rate as a 9k-token request.) Prompt caching and batch processing discounts apply at standard rates across the full context window."</span>
       In other words, <strong>a long request does not raise the per-token rate</strong>. Prompt caching and batch discounts also apply at standard rates across the whole window.
     </div>
-    <p class="source-note">Sources: <a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener">Claude Platform Docs, &ldquo;Pricing&rdquo;</a> and <a href="https://platform.claude.com/docs/en/build-with-claude/context-windows" target="_blank" rel="noopener">&ldquo;Context windows&rdquo;</a> (checked 2026-09-21). Anthropic's own list of 1M models reads: Claude Fable 5.1, Mythos 5.1, Fable 5, Mythos 5, Opus 5, Opus 4.8, Opus 4.7, Opus 4.6, Sonnet 5, Sonnet 4.6 and Mythos Preview — and other models such as Sonnet 4.5 have a 200k window, so check the official table before you build on it.</p>
+    <p class="source-note">Sources: <a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener">Claude Platform Docs, &ldquo;Pricing&rdquo;</a> · <a href="https://platform.claude.com/docs/en/build-with-claude/context-windows" target="_blank" rel="noopener">&ldquo;Context windows&rdquo;</a> (checked 2026-09-21)</p>
   </section>
 
   <!-- ===== 4. The step in money ===== -->
@@ -159,7 +159,7 @@
       <span class="en">"If a query input context is longer than 200K tokens, all tokens (input and output) are charged at long context rates."</span>
       Read alongside the tier table ($2.00 for prompts &lt;= 200k tokens, $4.00 for prompts &gt; 200k tokens) that confirms the design: <strong>it is not just the excess that moves, the whole request does</strong>. Output follows the same pattern ($12 rising to $18).
     </div>
-    <p class="source-note">Rates from the <a href="https://developers.openai.com/api/docs/models/gpt-6-astra" target="_blank" rel="noopener">OpenAI model page</a> (verbatim: <span style="font-family:var(--font-mono);font-size:.8rem">"Prompts with more than 272K input tokens are priced at 2x input and cache rates and 1.5x output for the full request."</span>) and <a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">Gemini API pricing</a> (checked 2026-09-21). The Google footnote is quoted verbatim from <a href="https://cloud.google.com/vertex-ai/generative-ai/pricing" target="_blank" rel="noopener">Google Cloud's Generative AI pricing page</a> (checked 2026-09-21). Google's own pages vary between "longer than 200K" and "longer than or equal to 200K" depending on the surface, so confirm the rate table for the API and region you use. Dollar figures are our plain multiplication (tokens × rate) and exclude caching, cache writes and batch discounts. <strong>The 272K threshold is specific to GPT-6 Astra</strong> — it is not an OpenAI-wide number, so check each model's own page.</p>
+    <p class="source-note">Rates from the <a href="https://developers.openai.com/api/docs/models/gpt-6-astra" target="_blank" rel="noopener">OpenAI model page</a> · <a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">Gemini API pricing</a> · <a href="https://cloud.google.com/vertex-ai/generative-ai/pricing" target="_blank" rel="noopener">Google Cloud's Generative AI pricing page</a> (checked 2026-09-21)</p>
   </section>
 
   <!-- ===== 5. Growth ===== -->
@@ -181,7 +181,7 @@
       <br><br>
       <strong>Two ways out: send less, and cache what you resend.</strong> Pass only the parts that matter, and put the unchanging prefix in a prompt cache. Where a fixed prefix is sent repeatedly, the cache is the single biggest lever on the bill (see <a href="/en/glossary/prompt-cache/">entry 2 on prompt caching</a>).
     </div>
-    <p class="source-note">Dollar figures are our plain arithmetic (total input tokens × rate). Real bills also involve prompt caching, batch discounts and cache-write charges, so read these as upper-bound estimates. Separately, Anthropic documents <strong>context compaction</strong> (beta), which &ldquo;automatically summarizes older context as conversations approach limits, increasing effective context length&rdquo; (<a href="https://www.anthropic.com/news/claude-sonnet-4-6" target="_blank" rel="noopener">Anthropic announcement</a>, checked 2026-09-21). Summarise-and-fold is a design direction several vendors are moving toward.</p>
+    <p class="source-note">Dollar figures are our plain arithmetic (total input tokens × rate). Real bills also involve prompt caching, batch discounts and cache-write charges, so read these as upper-bound estimates. Separately, Anthropic documents <strong>context compaction</strong> (beta), which &ldquo;automatically summarizes older context as conversations approach limits, increasing effective context length&rdquo; (<a href="https://www.anthropic.com/news/claude-sonnet-4-6" target="_blank" rel="noopener">Anthropic announcement</a> (checked 2026-09-21)</p>
   </section>
 
   <!-- ===== 6. Context rot ===== -->
@@ -203,7 +203,7 @@
       <span style="font-family:var(--font-mono);font-size:.8rem;display:block;margin:.4rem 0">"Whether relevant information is present in a model's context is not all that matters; what matters more is how that information is presented."</span>
       Which means &ldquo;it fits, so include it&rdquo; is not automatically a win for accuracy either.
     </div>
-    <p class="source-note">Source: <a href="https://www.trychroma.com/research/context-rot" target="_blank" rel="noopener">Chroma, &ldquo;Context Rot: How Increasing Input Tokens Impacts LLM Performance&rdquo;</a> (checked 2026-09-21). <strong>That evaluation ran on models current in July 2025</strong> (GPT-4.1, Claude 4, Gemini 2.5, Qwen3 generations). We have not verified whether the current September 2026 models show the same effect at the same strength — read it as a result from that period.</p>
+    <p class="source-note">Source: <a href="https://www.trychroma.com/research/context-rot" target="_blank" rel="noopener">Chroma, &ldquo;Context Rot: How Increasing Input Tokens Impacts LLM Performance&rdquo;</a> (checked 2026-09-21)</p>
   </section>
 
   <!-- ===== Figure ===== -->
