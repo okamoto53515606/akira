@@ -136,8 +136,8 @@ def changelog_events(facts: dict):
             ev.append({
                 "date": r["released"], "kind": "model",
                 "key": r["id"],
-                "ja": "%s を掲載（%s）" % (r["names"]["ja"], r.get("provider", "")),
-                "en": "Listed %s (%s)" % (r["names"]["en"] or r["names"]["ja"], r.get("provider", "")),
+                "ja": "%s を掲載（%s）" % (r["names"]["ja"].strip(), r.get("provider", "")),
+                "en": "Listed %s (%s)" % ((r["names"]["en"] or r["names"]["ja"]).strip(), r.get("provider", "")),
             })
         for e in r.get("events", []):
             ev.append(dict(e, kind=e.get("kind", "update"), key=r["id"]))
@@ -261,6 +261,108 @@ def render_changelog(site: Path, facts: dict) -> list:
     return touched
 
 
+# ---------------------------------------------------------------------------
+# 4. トップページ（最終更新・直近の更新・主要ページ）
+#    「最終更新」を文章で手書きしていたため 11-07 の記述が11-14まで残り、
+#    「Gemini 4 Carbon は限定提供」という事実誤認がトップに居座った（課題103）。
+#    日付も本文も台帳から生成し、手書きを禁止する。
+TOP_BEGIN = "<!-- topcl:begin -->"
+TOP_END = "<!-- topcl:end -->"
+
+TOP_MAIN_LINKS = {
+    "ja": [("/pricing/", "料金比較"), ("/calculator/", "トークン計算機"),
+           ("/timeline/", "リリース年表"), ("/changelog/", "更新履歴"),
+           ("/china-ai/", "中国AI"), ("/glossary/", "用語説明")],
+    "en": [("/en/pricing/", "Pricing"), ("/en/calculator/", "Token calculator"),
+           ("/en/timeline/", "Timeline"), ("/en/changelog/", "Changelog"),
+           ("/en/china-ai/", "China AI"), ("/en/glossary/", "Glossary")],
+}
+_MONTHS = ["January", "February", "March", "April", "May", "June", "July",
+           "August", "September", "October", "November", "December"]
+
+
+def _fmt_date(iso: str, lang: str) -> str:
+    """2026-11-14 -> 2026年11月14日 / November 14, 2026"""
+    try:
+        y, m, d = (int(x) for x in iso.split("-"))
+    except (ValueError, AttributeError):
+        return iso
+    if lang == "ja":
+        return "%d年%d月%d日" % (y, m, d)
+    if not 1 <= m <= 12:
+        return iso
+    return "%s %d, %d" % (_MONTHS[m - 1], d, y)
+
+
+def top_block(events, lang: str, n: int = 5) -> str:
+    """トップに埋め込む「最終更新＋直近の更新＋主要ページ」を組み立てる。"""
+    latest = events[0]["date"] if events else TODAY
+    if lang == "ja":
+        label, h2 = "最終更新", "直近の更新"
+        lead = "直近の変更は下記に自動で反映されます。料金は各社公式ページで最終確認。"
+        sub = "更新履歴は事実台帳（facts.json）から生成しているため、ページ間で食い違いません。"
+        cta = "すべての更新履歴（%d件）を見る →" % len(events)
+        main, cl_url = "主要ページ", "/changelog/"
+    else:
+        label, h2 = "Last updated", "Recent updates"
+        lead = ("The most recent changes are listed below, generated automatically. "
+                "Rates last verified on each provider&rsquo;s official page.")
+        sub = ("The history is generated from a single ledger, so no two pages "
+               "can disagree.")
+        cta = "See all %d updates &rarr;" % len(events)
+        main, cl_url = "Main pages", "/en/changelog/"
+    rows = "\n".join(
+        '<li><span class="cl-date">%s</span> <span class="cl-text">%s</span></li>'
+        % (e.get("date", ""), (e.get(lang) or e.get("ja", "")).strip())
+        for e in events[:n])
+    links = " · ".join('<a href="%s">%s</a>' % (u, name)
+                       for u, name in TOP_MAIN_LINKS[lang])
+    return (
+        '<div class="updated-bar" style="margin-top:2rem;"><span class="dot">●</span>'
+        '%s: <time datetime="%s">%s</time> — %s</div>\n'
+        '<section class="section" aria-labelledby="cl" style="padding-top:1.25rem;">'
+        '<h2 class="section-title" id="cl">%s</h2>'
+        '<p class="section-sub">%s</p>\n'
+        '<ul class="cl-list">\n%s\n</ul>\n'
+        '<p style="margin-top:1.25rem;"><a class="hero-cta" href="%s">%s</a></p>\n'
+        '<p class="mp-links"><strong>%s:</strong> %s</p>\n'
+        '</section>'
+        % (label, latest, _fmt_date(latest, lang), lead, h2, sub, rows,
+           cl_url, cta, main, links))
+
+
+def render_home(site: Path, facts: dict) -> list:
+    """index.html / en/index.html のマーカー間を生成内容で置き換える。
+
+    マーカー（<!-- topcl:begin --> … <!-- topcl:end -->）が無いページは触らない。
+    手書きのトップを機械が壊さないための安全弁。
+    """
+    events = changelog_events(facts)
+    if not events:
+        return []
+    touched = []
+    for rel, lang in (("index.html", "ja"), ("en/index.html", "en")):
+        path = site / rel
+        if not path.exists():
+            continue
+        s = path.read_text(encoding="utf-8")
+        i, j = s.find(TOP_BEGIN), s.find(TOP_END)
+        if i < 0 or j < i:
+            continue
+        new = (s[:i] + TOP_BEGIN + "\n" + top_block(events, lang) + "\n" + TOP_END
+               + s[j + len(TOP_END):])
+        # meta description に日付を埋めている場合も同じ日付に揃える
+        # （手書きの「（2026年11月7日更新）」が11-14まで残っていた）
+        if lang == "ja":
+            new = re.sub(r"（\d{4}年\d{1,2}月\d{1,2}日更新）",
+                         "（%s更新）" % _fmt_date(events[0]["date"], "ja"),
+                         new, count=1)
+        if new != s:
+            path.write_text(new, encoding="utf-8")
+            touched.append(rel)
+    return touched
+
+
 # --------------------------------------------------------------------------- 4. sitemap / llms
 def render_sitemap(site: Path, touched) -> bool:
     path = site / "sitemap.xml"
@@ -297,6 +399,12 @@ def run(site: Path, ws: Path) -> list[str]:
         changed.append("data/models.json")
     touched = render_changelog(site, facts)
     changed.extend(touched)
+    home = render_home(site, facts)
+    changed.extend(home)
+    if home:
+        # トップは日英で同じ台帳から出るので、片方が変われば両方の
+        # sitemap lastmod を揃える（11-14: /en/ だけ 11-07 で残った）
+        touched.extend(["index.html", "en/index.html"])
     if render_sitemap(site, touched):
         changed.append("sitemap.xml")
     return changed

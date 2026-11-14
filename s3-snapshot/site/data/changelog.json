@@ -2,6 +2,27 @@
  "updated": "2026-11-14",
  "events": [
   {
+   "date": "2026-11-14",
+   "kind": "page",
+   "key": "timeline-order",
+   "ja": "年表を日付降順に再構築し、英語版の欠落5件を補完",
+   "en": "Rebuilt the timeline in date order and filled 5 missing English entries"
+  },
+  {
+   "date": "2026-11-14",
+   "kind": "page",
+   "key": "site-changelog",
+   "ja": "更新履歴ページ（/changelog/）を公開。全ページの履歴を台帳から生成する運用に変更",
+   "en": "Published the site-wide changelog; page histories are now generated from the ledger"
+  },
+  {
+   "date": "2026-11-14",
+   "kind": "page",
+   "key": "pricing-hydrogen-carbon",
+   "ja": "料金比較に Gemini 4 Hydrogen / Carbon を追加（計算機データも51件に）",
+   "en": "Added Gemini 4 Hydrogen / Carbon to the pricing tables (calculator data at 51 models)"
+  },
+  {
    "date": "2026-11-12",
    "kind": "model",
    "key": "gemini-4-hydrogen",

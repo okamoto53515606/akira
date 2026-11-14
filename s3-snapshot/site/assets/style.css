@@ -301,3 +301,25 @@ tr:hover td { background: rgba(255,255,255,.02); }
   .footer-inner { flex-direction: column; }
   .lang-switch { margin-left: 0; }
 }
+
+/* トップページ: 直近の更新（render_site が生成。手書き禁止） */
+.cl-list { list-style: none; margin: 1rem 0 0; padding: 0; }
+.cl-list li {
+  display: flex; gap: .9rem; align-items: baseline;
+  padding: .6rem 0; font-size: .95rem;
+  border-bottom: 1px solid rgba(128, 128, 128, .22);
+}
+.cl-list li:last-child { border-bottom: 0; }
+.cl-date {
+  flex: 0 0 6.5rem; color: var(--c-muted, #6b7280);
+  font-variant-numeric: tabular-nums; font-size: .88rem;
+}
+.cl-text { flex: 1 1 auto; }
+.mp-links {
+  margin-top: 1.4rem; font-size: .9rem; line-height: 2.1;
+  color: var(--c-muted, #6b7280);
+}
+@media (max-width: 600px) {
+  .cl-list li { flex-direction: column; gap: .15rem; }
+  .cl-date { flex: none; }
+}
