@@ -76,6 +76,58 @@ MODELS_MIN_ROWS = 10  # 実データは38行。桁違いの縮小（取り違え
 BASELINE_MODELS_PATH = os.path.join(WORKSPACE_LOCAL_DIR, "data", "calculator-models.json")
 _SOT_MARKERS = ("schema_note", "stale_price_patterns", "stale_policy")
 
+# --- timeline の整合ゲート（2026-11-14 追加）------------------------------------
+# 背景: /timeline/ に新規エントリを末尾追記する運用で日付降順が崩れ、`2026-10` という
+# 不正な日付が日英に入り、/en/timeline/ は凍結中に5件欠けたまま公開された。どれも
+# HTTP 200 で本文も読めるため、既存の公開ゲート（HTML構造・日付）をすり抜けた。
+# 対策: 公開直前に並び順・日付形式・日英のエントリ一致を機械検査し、違反したら
+# timeline の2ファイルだけアップロードしない（他のページは止めない）。
+TIMELINE_KEYS = ("timeline/index.html", "en/timeline/index.html")
+_TL_ART_RE = re.compile(r'<article class="tl-item[^"]*" id="([^"]+)">.*?</article>', re.S)
+_TL_DATE_RE = re.compile(r'<div class="tl-date">([0-9-]+)')
+
+
+def _timeline_integrity_errors(site_dir: str) -> list[str]:
+    """timeline の並び順・日付形式・id重複・日英一致を検査する（読取のみ）。"""
+    errors: list[str] = []
+    parsed: dict[str, dict[str, str]] = {}
+    for rel in TIMELINE_KEYS:
+        path = os.path.join(site_dir, rel)
+        if not os.path.exists(path):
+            errors.append("%s: ファイルがありません" % rel)
+            continue
+        try:
+            with open(path, encoding="utf-8", errors="replace") as fh:
+                html = fh.read()
+        except OSError as e:
+            errors.append("%s: 読めません: %s" % (rel, e))
+            continue
+        entries: dict[str, str] = {}
+        for m in _TL_ART_RE.finditer(html):
+            aid = m.group(1)
+            d = _TL_DATE_RE.search(m.group(0))
+            entries[aid] = d.group(1) if d else ""
+        if not entries:
+            errors.append("%s: エントリを1件も検出できません" % rel)
+            continue
+        bad = sorted({d for d in entries.values() if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", d or "")})
+        if bad:
+            errors.append("%s: YYYY-MM-DD でない日付 %d件: %s" % (rel, len(bad), ", ".join(bad[:5])))
+        order = [d for d in entries.values() if re.fullmatch(r"\d{4}-\d{2}-\d{2}", d or "")]
+        if order != sorted(order, reverse=True):
+            errors.append("%s: 日付降順ではありません（新しい順に並べてください）" % rel)
+        if len(entries) != len(set(entries)):
+            errors.append("%s: id が重複しています" % rel)
+        parsed[rel] = entries
+    if len(parsed) == 2:
+        a, b = (set(parsed[k]) for k in TIMELINE_KEYS)
+        if a != b:
+            only_ja = sorted(a - b)
+            only_en = sorted(b - a)
+            errors.append("ja と en のエントリが一致しません（ja のみ %d件: %s / en のみ %d件: %s）"
+                          % (len(only_ja), ",".join(only_ja[:5]), len(only_en), ",".join(only_en[:5])))
+    return errors
+
 
 def _looks_like_price_sot(payload: dict) -> bool:
     """ワークスペース側の料金SOT（真実データ）の形かどうか。"""
@@ -274,6 +326,10 @@ def site_upload(local_path: str, site_prefix: str = "") -> dict:
     ファイルやフォルダをまとめて公開できる。Content-Type判定とCloudFront invalidationは
     自動処理される。レビュー完了後の一括公開に使うこと。
 
+    /timeline/ と /en/timeline/ を含むアップロードでは、先に整合ゲート（並び順・
+    日付形式・日英のエントリ一致）を機械検査し、違反があればその2ファイルだけ
+    アップロードしない（2026-11-14: 追記で降順が崩れ、ENだけ5件欠けたまま公開された）。
+
     Args:
         local_path: SITE_LOCAL_DIR からの相対パス（例: "pricing/" でフォルダ全体、
                     "." でサイト全体）。絶対パスは SITE_LOCAL_DIR 配下のみ許可
@@ -296,11 +352,20 @@ def site_upload(local_path: str, site_prefix: str = "") -> dict:
                     continue
                 files.append(os.path.join(root, name))
 
+    # --- 公開ゲート: timeline の整合（決定論的・LLMコスト0）---
+    timeline_errors = []
+    target_rels = {os.path.relpath(f, base_dir).replace(os.sep, "/") for f in files}
+    if target_rels & set(TIMELINE_KEYS):
+        timeline_errors = _timeline_integrity_errors(base_dir)
+
     s3 = boto3.client("s3", region_name=AWS_REGION)
     uploaded, rejected = [], []
     for f in files:
         rel = os.path.relpath(f, base_dir).replace(os.sep, "/")
         key = rel if not site_prefix else f"{site_prefix.strip('/')}/{rel}"
+        if timeline_errors and rel in TIMELINE_KEYS:
+            rejected.append({"key": key, "errors": timeline_errors})
+            continue
         if key == DATA_MODELS_KEY:
             try:
                 with open(f, "rb") as fh:
@@ -322,7 +387,7 @@ def site_upload(local_path: str, site_prefix: str = "") -> dict:
     result: dict = {"status": "published", "count": len(uploaded), "uploaded": uploaded}
     if rejected:
         result["status"] = "published_partial" if uploaded else "rejected"
-        result["reason"] = ("データ契約に違反するファイルはアップロードしませんでした"
+        result["reason"] = ("契約・整合ゲートに違反するファイルはアップロードしませんでした"
                             "（公開済みサイトは壊れていません）")
         result["rejected"] = rejected
     return result

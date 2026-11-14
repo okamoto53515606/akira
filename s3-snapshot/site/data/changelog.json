@@ -1,0 +1,383 @@
+{
+ "updated": "2026-11-14",
+ "events": [
+  {
+   "date": "2026-11-12",
+   "kind": "model",
+   "key": "gemini-4-hydrogen",
+   "ja": "Gemini 4 Hydrogen を掲載（Google）",
+   "en": "Listed Gemini 4 Hydrogen (Google)"
+  },
+  {
+   "date": "2026-11-11",
+   "kind": "model",
+   "key": "qwen4-max-preview",
+   "ja": "Qwen4-Max-Preview を掲載（Alibaba / Qwen）",
+   "en": "Listed Qwen4-Max-Preview (Alibaba / Qwen)"
+  },
+  {
+   "date": "2026-11-10",
+   "kind": "model",
+   "key": "gemini-4-carbon-ga",
+   "ja": "Gemini 4 Carbon を掲載（Google）",
+   "en": "Listed Gemini 4 Carbon (Google)"
+  },
+  {
+   "date": "2026-11-09",
+   "kind": "model",
+   "key": "muse-ember",
+   "ja": "Muse Ember を掲載（Meta）",
+   "en": "Listed Muse Ember (Meta)"
+  },
+  {
+   "date": "2026-11-09",
+   "kind": "model",
+   "key": "claude-fable-5-2",
+   "ja": "Claude Fable 5.2 / Mythos 5.2 を掲載（Anthropic）",
+   "en": "Listed Claude Fable 5.2 / Mythos 5.2 (Anthropic)"
+  },
+  {
+   "date": "2026-11-05",
+   "kind": "model",
+   "key": "gpt-6-cyber",
+   "ja": "GPT-6 Cyber を掲載（OpenAI）",
+   "en": "Listed GPT-6 Cyber (OpenAI)"
+  },
+  {
+   "date": "2026-10-28",
+   "kind": "model",
+   "key": "gemini-4-carbon",
+   "ja": "Gemini 4 Carbon を掲載（Google）",
+   "en": "Listed Gemini 4 Carbon (Google)"
+  },
+  {
+   "date": "2026-10-26",
+   "kind": "model",
+   "key": "gpt-6-1-terra",
+   "ja": "GPT-6.1 Terra を掲載（OpenAI）",
+   "en": "Listed GPT-6.1 Terra launched (OpenAI)"
+  },
+  {
+   "date": "2026-10-23",
+   "kind": "model",
+   "key": "kimi-k3-1-pro",
+   "ja": "Kimi K3.1 Pro シリーズ を掲載（Moonshot）",
+   "en": "Listed Kimi K3.1 Pro series rolls out (Moonshot)"
+  },
+  {
+   "date": "2026-10-13",
+   "kind": "model",
+   "key": "gemini-4-argon",
+   "ja": "Gemini 4 Argon 公開（GA）— 1Mコンテキストのフラッグシップ推論モデル New を掲載（Google）",
+   "en": "Listed Gemini 4 Argon is generally available (Google)"
+  },
+  {
+   "date": "2026-10-12",
+   "kind": "model",
+   "key": "meta-muse-wonder",
+   "ja": "Meta Muse Wonder / Muse Wonder Full を掲載（Meta）",
+   "en": "Listed Meta launches Muse Wonder / Muse Wonder Full (Meta)"
+  },
+  {
+   "date": "2026-10-07",
+   "kind": "model",
+   "key": "claude-haiku-5-5",
+   "ja": "Claude Haiku 5.5 を掲載（Anthropic）",
+   "en": "Listed Claude Haiku 5.5 (Anthropic)"
+  },
+  {
+   "date": "2026-10-06",
+   "kind": "model",
+   "key": "gemini-nano-banana-2-1",
+   "ja": "Gemini Nano Banana 2.1 を掲載（Google）",
+   "en": "Listed Gemini Nano Banana 2.1 (Google)"
+  },
+  {
+   "date": "2026-09-30",
+   "kind": "model",
+   "key": "gemini-4-argon-announced",
+   "ja": "Gemini 4 Argon を掲載（Google）",
+   "en": "Listed Gemini 4 Argon (Google)"
+  },
+  {
+   "date": "2026-09-29",
+   "kind": "model",
+   "key": "gpt-6-1-sol",
+   "ja": "GPT-6.1 Sol を掲載（OpenAI）",
+   "en": "Listed GPT-6.1 Sol (OpenAI)"
+  },
+  {
+   "date": "2026-09-28",
+   "kind": "model",
+   "key": "claude-sonnet-5-5",
+   "ja": "Claude Sonnet 5.5 を掲載（Anthropic）",
+   "en": "Listed Claude Sonnet 5.5 (Anthropic)"
+  },
+  {
+   "date": "2026-09-22",
+   "kind": "model",
+   "key": "qwen-4-training",
+   "ja": "Qwen 4（Alibaba）— 公式は「学習中」、時期・料金・ベンチマークは未公表 を掲載（Alibaba）",
+   "en": "Listed Qwen 4 (Alibaba) (Alibaba)"
+  },
+  {
+   "date": "2026-09-22",
+   "kind": "model",
+   "key": "qwen-4-in-training",
+   "ja": "Qwen 4 は「学習中」と公式 を掲載（Alibaba / Qwen）",
+   "en": "Listed Qwen 4 announced as “in training” (Alibaba / Qwen)"
+  },
+  {
+   "date": "2026-09-22",
+   "kind": "model",
+   "key": "mimo-v2-6",
+   "ja": "Xiaomi MiMo-V2.6 を掲載（Xiaomi）",
+   "en": "Listed Xiaomi MiMo-V2.6 (Xiaomi)"
+  },
+  {
+   "date": "2026-09-22",
+   "kind": "model",
+   "key": "gpt-6-sol-luna",
+   "ja": "GPT-6 Sol / GPT-6 Luna を掲載（OpenAI）",
+   "en": "Listed GPT-6 Sol and GPT-6 Luna (OpenAI)"
+  },
+  {
+   "date": "2026-09-22",
+   "kind": "model",
+   "key": "claude-opus-5-5",
+   "ja": "Claude Opus 5.5 を掲載（Anthropic）",
+   "en": "Listed Claude Opus 5.5 (Anthropic)"
+  },
+  {
+   "date": "2026-09-21",
+   "kind": "model",
+   "key": "grok-4-7",
+   "ja": "Grok 4.7 を掲載（xAI）",
+   "en": "Listed Grok 4.7 (xAI)"
+  },
+  {
+   "date": "2026-09-13",
+   "kind": "model",
+   "key": "deepseek-v4-pro-continued",
+   "ja": "DeepSeek V4 Pro の提供継続を確認 を掲載（DeepSeek）",
+   "en": "Listed DeepSeek V4 Pro confirmed to continue (DeepSeek)"
+  },
+  {
+   "date": "2026-09-10",
+   "kind": "model",
+   "key": "deepseek-v4-1-flash",
+   "ja": "DeepSeek-V4.1-Flash リリース を掲載（DeepSeek）",
+   "en": "Listed DeepSeek-V4.1-Flash (DeepSeek)"
+  },
+  {
+   "date": "2026-09-03",
+   "kind": "model",
+   "key": "gpt-6",
+   "ja": "GPT-6 Astra を掲載（OpenAI）",
+   "en": "Listed GPT-6 Astra (OpenAI)"
+  },
+  {
+   "date": "2026-09-02",
+   "kind": "model",
+   "key": "gemini-3-8-flash",
+   "ja": "Gemini 3.8 Flash / 3.8 Flash Cyber を掲載（Google）",
+   "en": "Listed Gemini 3.8 Flash / 3.8 Flash Cyber (Google)"
+  },
+  {
+   "date": "2026-09-01",
+   "kind": "model",
+   "key": "claude-fable-5-1",
+   "ja": "Claude Fable 5.1 / Mythos 5.1 を掲載（Anthropic）",
+   "en": "Listed Claude Fable 5.1 / Mythos 5.1 (Anthropic)"
+  },
+  {
+   "date": "2026-08-26",
+   "kind": "model",
+   "key": "qwen-3-8-flash",
+   "ja": "Qwen3.8-Flash を掲載（Alibaba / Qwen）",
+   "en": "Listed Qwen3.8-Flash (Alibaba / Qwen)"
+  },
+  {
+   "date": "2026-08-26",
+   "kind": "model",
+   "key": "glm-5-3-flash",
+   "ja": "GLM 5.3 Flash を掲載（Zhipu / Z.ai）",
+   "en": "Listed GLM 5.3 Flash (Zhipu / Z.ai)"
+  },
+  {
+   "date": "2026-08-21",
+   "kind": "model",
+   "key": "gpt-5-6-sol-promo",
+   "ja": "GPT-5.6 Sol プロモ価格へ を掲載（OpenAI）",
+   "en": "Listed GPT-5.6 Sol promo price (OpenAI)"
+  },
+  {
+   "date": "2026-08-21",
+   "kind": "model",
+   "key": "deepseek-v4-flash-vision-exp",
+   "ja": "DeepSeek V4 Flash Vision Exp 公開（実験的モデル） New を掲載（DeepSeek）",
+   "en": "Listed DeepSeek V4 Flash Vision Exp released (experimental) New (DeepSeek)"
+  },
+  {
+   "date": "2026-08-19",
+   "kind": "model",
+   "key": "cloudflare-sol-discount",
+   "ja": "Cloudflare AI GatewayでGPT-5.6 Solが50%オフ New を掲載（OpenAI / Cloudflare）",
+   "en": "Listed GPT-5.6 Sol 50% off via Cloudflare AI Gateway New (OpenAI / Cloudflare)"
+  },
+  {
+   "date": "2026-08-14",
+   "kind": "model",
+   "key": "gemini-3-7-flash",
+   "ja": "Gemini 3.7 Flash を掲載（Google）",
+   "en": "Listed Gemini 3.7 Flash (Google)"
+  },
+  {
+   "date": "2026-08-13",
+   "kind": "model",
+   "key": "deepseek-v4-pro-ga",
+   "ja": "DeepSeek V4 Pro 正式版（GA）リリース を掲載（DeepSeek）",
+   "en": "Listed DeepSeek V4 Pro GA (DeepSeek)"
+  },
+  {
+   "date": "2026-08-12",
+   "kind": "model",
+   "key": "grok-4-6",
+   "ja": "Grok 4.6 を掲載（xAI）",
+   "en": "Listed Grok 4.6 (xAI)"
+  },
+  {
+   "date": "2026-07-31",
+   "kind": "model",
+   "key": "deepseek-v4-flash",
+   "ja": "DeepSeek V4 Flash 公式リリース（public beta） New を掲載（DeepSeek）",
+   "en": "Listed DeepSeek V4 Flash officially released (public beta) New (DeepSeek)"
+  },
+  {
+   "date": "2026-07-30",
+   "kind": "model",
+   "key": "gpt-5-6-pricecut",
+   "ja": "GPT-5.6 Terra/Luna 大幅値下げ Updated を掲載（OpenAI）",
+   "en": "Listed GPT-5.6 Terra/Luna major price cuts Updated (OpenAI)"
+  },
+  {
+   "date": "2026-07-24",
+   "kind": "model",
+   "key": "claude-opus-5",
+   "ja": "Claude Opus 5 を掲載（Anthropic）",
+   "en": "Listed Claude Opus 5 (Anthropic)"
+  },
+  {
+   "date": "2026-07-21",
+   "kind": "model",
+   "key": "gemini-3-6-flash",
+   "ja": "Gemini 3.6 Flash・3.5 Flash-Lite・3.5 Flash Cyber 公開 New を掲載（Google）",
+   "en": "Listed Gemini 3.6 Flash, 3.5 Flash-Lite, 3.5 Flash Cyber released New (Google)"
+  },
+  {
+   "date": "2026-07-09",
+   "kind": "model",
+   "key": "gpt-5-6",
+   "ja": "GPT-5.6ファミリー を掲載（OpenAI）",
+   "en": "Listed GPT-5.6 family (OpenAI)"
+  },
+  {
+   "date": "2026-06-30",
+   "kind": "model",
+   "key": "claude-sonnet-5",
+   "ja": "Claude Sonnet 5 を掲載（Anthropic）",
+   "en": "Listed Claude Sonnet 5 (Anthropic)"
+  },
+  {
+   "date": "2026-06-09",
+   "kind": "model",
+   "key": "claude-fable-5",
+   "ja": "Claude Fable 5/Mythos 5 を掲載（Anthropic）",
+   "en": "Listed Claude Fable 5 / Mythos 5 (Anthropic)"
+  },
+  {
+   "date": "2026-05-28",
+   "kind": "model",
+   "key": "claude-opus-4-8",
+   "ja": "Claude Opus 4.8 を掲載（Anthropic）",
+   "en": "Listed Claude Opus 4.8 (Anthropic)"
+  },
+  {
+   "date": "2026-05-19",
+   "kind": "model",
+   "key": "gemini-3-5-flash",
+   "ja": "Gemini 3.5 Flash GA を掲載（Google）",
+   "en": "Listed Gemini 3.5 Flash GA (Google)"
+  },
+  {
+   "date": "2026-04-24",
+   "kind": "model",
+   "key": "deepseek-v4",
+   "ja": "DeepSeek V4 Pro/Flash Preview を掲載（DeepSeek）",
+   "en": "Listed DeepSeek V4 Pro/Flash Preview (DeepSeek)"
+  },
+  {
+   "date": "2026-04-23",
+   "kind": "model",
+   "key": "gpt-5-5",
+   "ja": "GPT-5.5 を掲載（OpenAI）",
+   "en": "Listed GPT-5.5 (OpenAI)"
+  },
+  {
+   "date": "2026-04-16",
+   "kind": "model",
+   "key": "claude-opus-4-7",
+   "ja": "Claude Opus 4.7 を掲載（Anthropic）",
+   "en": "Listed Claude Opus 4.7 (Anthropic)"
+  },
+  {
+   "date": "2026-03-05",
+   "kind": "model",
+   "key": "gpt-5-4",
+   "ja": "GPT-5.4 を掲載（OpenAI）",
+   "en": "Listed GPT-5.4 (OpenAI)"
+  },
+  {
+   "date": "2026-02-19",
+   "kind": "model",
+   "key": "gemini-3-1-pro",
+   "ja": "Gemini 3.1 Pro Preview を掲載（Google）",
+   "en": "Listed Gemini 3.1 Pro Preview (Google)"
+  },
+  {
+   "date": "2026-02-17",
+   "kind": "model",
+   "key": "claude-sonnet-4-6",
+   "ja": "Claude Sonnet 4.6 を掲載（Anthropic）",
+   "en": "Listed Claude Sonnet 4.6 (Anthropic)"
+  },
+  {
+   "date": "2026-02-05",
+   "kind": "model",
+   "key": "claude-opus-4-6",
+   "ja": "Claude Opus 4.6 を掲載（Anthropic）",
+   "en": "Listed Claude Opus 4.6 (Anthropic)"
+  },
+  {
+   "date": "2025-11-18",
+   "kind": "model",
+   "key": "gemini-3-pro",
+   "ja": "Gemini 3 Pro を掲載（Google）",
+   "en": "Listed Gemini 3 Pro (Google)"
+  },
+  {
+   "date": "2025-08-07",
+   "kind": "model",
+   "key": "gpt-5",
+   "ja": "GPT-5 を掲載（OpenAI）",
+   "en": "Listed GPT-5 (OpenAI)"
+  },
+  {
+   "date": "2025-01-20",
+   "kind": "model",
+   "key": "deepseek-r1",
+   "ja": "DeepSeek R1 を掲載（DeepSeek）",
+   "en": "Listed DeepSeek R1 (DeepSeek)"
+  }
+ ]
+}

@@ -14,6 +14,7 @@
 import argparse
 import logging
 import os
+import re
 import signal
 import time
 import types
@@ -46,6 +47,7 @@ from settings import (
     LLM_SITE_URL,
     OPENAI_MODEL_ID,
     REPORTS_SITE_URL,
+    WORKSPACE_LOCAL_DIR,
     load_secrets_into_env,
 )
 
@@ -393,6 +395,93 @@ def _create_bigquery_mcp():
     )
 
 
+def _evidence_block(max_files: int = 6, max_chars: int = 6000) -> str:
+    """レビュー担当に渡す「本日取得した一次情報」だけの前置き（2026-11-14 追加）。
+
+    11-14 の GPT税理士は「提示された当日取得のGoogle一次情報によれば」と書いて
+    Carbon を GA ではないと断定し、正しい記述を削らせた。実際には何も提示されておらず、
+    GPTは `/workspace/cache/gemini-4-carbon-2026-11-03.md`（11日前）の判定文を
+    そのまま再生していた。`cache/` の最新は 11-05 で、11-10 以降の事実は1件も無い。
+
+    対策は「古い証拠を読ませない」こと。当日の cache（本文冒頭の『取得日時:』が今日）
+    だけを文字列にして前置きする。mtime は restore/save で毎日当日になるので使わない。
+    """
+    cache_dir = os.path.join(WORKSPACE_LOCAL_DIR, "cache")
+    today = datetime.now(JST).date().isoformat()
+    chunks: list[str] = []
+    try:
+        if os.path.isdir(cache_dir):
+            for name in sorted(os.listdir(cache_dir)):
+                if not name.endswith(".md"):
+                    continue
+                path = os.path.join(cache_dir, name)
+                try:
+                    with open(path, encoding="utf-8", errors="replace") as fh:
+                        if ("取得日時: %s" % today) not in fh.read(300):
+                            continue
+                        fh.seek(0)
+                        chunks.append("### %s\n%s" % (name, fh.read(max_chars)))
+                except OSError:
+                    continue
+                if len(chunks) >= max_files:
+                    break
+    except OSError:
+        chunks = []
+    if not chunks:
+        return (
+            "【本日取得した一次情報: なし】\n"
+            "今日はまだ一次情報を取得していない。**事実の断定をしないこと**。\n"
+            "古い記憶や古いキャッシュを根拠に『クリティカル』と判定してはいけない。\n"
+            "確認したい点だけを挙げ、事実は『未確認』と書く。\n\n"
+        )
+    body = "\n\n".join(chunks)[:max_chars]
+    return (
+        "【本日(%s)取得した一次情報。事実の根拠はこの中だけ】\n%s\n\n"
+        "※ここに無い事実を根拠にクリティカルと判定しないこと。必要なら『未確認』と書く。\n"
+        "※クリティカルには『この中のURL＋逐語引用』を必ず併記する。併記できないものは軽微。\n\n"
+        % (today, body)
+    )
+
+
+_URL_RE = re.compile(r"https?://\S+")
+
+
+def _sanitize_review(text: str) -> str:
+    """引用の無い『クリティカル』を軽微に降格する（2026-11-14 追加）。
+
+    レビューの格上げ条件（URL＋逐語引用がある場合のみクリティカル）を、文章の
+    お願いではなく機械で担保する。判定できない項目は落とさず、降格して残す。
+    """
+    if not text or "クリティカル" not in text:
+        return text
+    lines = text.split("\n")
+    in_critical = False
+    downgraded = 0
+    out = []
+    for line in lines:
+        stripped = line.strip()
+        if "クリティカル" in line and "軽微" not in line:
+            in_critical = True
+            out.append(line)
+            continue
+        if in_critical and re.match(r"^(#+\s|【|>?\s*(?:\*\*)?(軽微|改善|提案|その他|まとめ|結論))", stripped):
+            in_critical = False
+        is_bullet = stripped.startswith(("-", "・", "*"))
+        if in_critical and is_bullet and not _URL_RE.search(line):
+            out.append(line.replace("- ", "[軽微に降格: 引用なし] ", 1)
+                       if line.lstrip().startswith("- ") else
+                       "[軽微に降格: 引用なし] " + line)
+            downgraded += 1
+            continue
+        out.append(line)
+    if not downgraded:
+        return text
+    logger.warning("レビュー: 引用の無いクリティカル %d件を軽微に降格しました", downgraded)
+    return ("\n".join(out)
+            + "\n\n[ゲート] 引用（URL）の無いクリティカル %d件は軽微に降格した。"
+              "事実の断定は当日取得の一次情報で確認すること（恒久ルール2）。" % downgraded)
+
+
 def create_delegation_tools(models, run_budget_jpy: float):
     """3AIを「ツール」としてAkiraに渡す（agent-as-toolパターン）。
 
@@ -487,9 +576,13 @@ def create_delegation_tools(models, run_budget_jpy: float):
     # GPT税理士には Firecrawl を渡さない。
     # 2026-09-09: 同一 gpt_agent が巨大ページを scrape して会話履歴に残し、
     # 2回目以降の TPM が 518052 / 519208 と上限50万を超過した。
-    # 一次情報は /workspace/cache のスナップショット + file_read、足りなければ Brave。
+    #
+    # 2026-11-14: `list_workspace_files` を外した。レビュー担当に /workspace を
+    # 探索させると、古い cache（11-03 の Carbon 判定）を「当日の一次情報」として読み、
+    # 正しい記述を削る事故が起きた（stale cache の再生）。証拠は当日取得分だけを
+    # _evidence_block() で前置きして渡す。探索させなければ古い結論は出てこない。
     gpt_tools = [akira_tools.get_site_file, akira_tools.list_site_files,
-                 akira_tools.list_local_files, akira_tools.list_workspace_files, file_read,
+                 akira_tools.list_local_files, file_read,
                  brave, screenshot_tool, fetch_image, image_reader]
 
     def _new_gpt_agent() -> "Agent":
@@ -541,10 +634,16 @@ def create_delegation_tools(models, run_budget_jpy: float):
     def ask_gpt_tax_advisor(request: str) -> str:
         """GPT税理士にレビューを依頼する（ビジネス価値・PV貢献の観点とfactチェック。門番ではなくアドバイザー）。
 
+        当日取得した一次情報（エビデンスパック）が自動で前置きされる。
+        **クリティカルと判定するには、その中のURLと逐語引用を必ず併記すること。
+        併記できないものは軽微として扱う**（11-14 に引用なしのクリティカルが正しい記述を削った）。
+
         Args:
             request: レビュー対象（サイト内パスや本文）と確認してほしい観点
         """
-        return _run(_new_gpt_agent, OPENAI_MODEL_ID, "GPT税理士", request)
+        result = _run(_new_gpt_agent, OPENAI_MODEL_ID, "GPT税理士",
+                      _evidence_block() + request)
+        return _sanitize_review(result)
 
     @tool
     def ask_gemini_mother(request: str) -> str:

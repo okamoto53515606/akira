@@ -23,6 +23,8 @@
 | K6 | `/china-ai/` で Qwen 4 の記述が二重・矛盾 | 「11-14 追記: プレビュー開始」の直下に「Qwen 4（公式は「学習中」）」が残存。更新履歴も「学習中のみ掲載」のまま＝**同一事実が3箇所で別方向** |
 | K7 | Gemini 4 Hydrogen が pricing / 計算機 / トップに無い | `hydrogen` の出現数: `/pricing/` 0, `/en/pricing/` 0, `/` 0, `/en/` 0, `data/models.json` 0。**timeline のみ** |
 | K8 | 更新履歴が各ページに分散 | 全ページが独自の `changelog` を持つ。全体を俯瞰した履歴は存在しない |
+| K9 | **レビュー担当の証拠が陳腐化している** | `/workspace/cache/` の最新 `取得日時:` は **2026-11-05**。11-10 以降の事実が1件も入っていない。GPT は 11-03 の cache を再生した（§3.1） |
+| K10 | **公開ゲートがページ間の整合を見ていない** | `check_site_pages`=単一ページの構造、`check_dates`=日付のみ。timeline の順序・日英差分・反映漏れは検出対象外だった |
 
 補足（決定的）:
 
@@ -77,6 +79,8 @@ H1〜H3 が主因、H4〜H6 が「検出できず残る」理由、という読�
 ---
 
 ## 4. 解決案
+
+**2026-11-14 に Phase 1〜6 を実装済み**（実装物と検証は §5.1）。以下は設計の記録。
 
 ### Phase 1 — 事実台帳 `data/facts.json`（追記の概念を消す）
 
@@ -168,15 +172,24 @@ Phase 5 は「怪しい指摘を捨てる」だけで、**古い証拠を読ま�
 - [x] **T10** 恒久ルールを `site_plan` に追記（凍結の定義／critical の引用要件／日英同時性／反映先の事前列挙）
 - [x] **T11** K3 の真因を実測で特定し §3.1 に記録（stale cache の再生であることを cache 本文との一致で確認）
 - [x] **T12** レビュー証拠の供給規則を `site_plan` に追記（当日取得のエビデンスパックのみ／cache は当日分を必ず書く／`fetched_at` が当日でない指摘は棄却）
+- [x] **T13 / Phase 1** `data/facts.json`（83レコード: timeline 54＋計算機のみ30）を作成。`status` / `released` / `price` / `sources` / `shown_on` を持つ。**文章はまだHTML側**（転記ミスでサイトを壊すリスクを避けるため段階移行）
+- [x] **T14 / Phase 2** `tools/render_site.py` を追加。台帳から timeline の並び（日付降順・ja/en 同一順）・`data/models.json`・`/changelog/` `/en/changelog/`・sitemap lastmod を生成。**2回実行して0件＝冪等**を確認
+- [x] **T15 / Phase 3** `tools.py` の `site_upload` に timeline 整合ゲートを組み込み。違反時は timeline の2ファイルだけアップロード拒否。**順序破壊・日付破壊・日英差分の3ケースで発火を確認**
+- [x] **T16 / Phase 4** `tools/discover_sources.py`（Brave）と `tools/fetch_quote.py`（Firecrawl→cache に当日付で保存）を追加。**実呼び出しで Hydrogen の公式単価を取得→cache生成を確認**
+- [x] **T17 / Phase 5** `main.py` に `_sanitize_review()`。引用（URL）の無いクリティカルの行を**機械的に軽微へ降格**。テスト3ケースPASS
+- [x] **T18 / Phase 6** `main.py` に `_evidence_block()`。**当日取得の cache だけ**をレビュー依頼の先頭に前置きし、`gpt_tools` から `list_workspace_files` を外した（古い cache を探索できない）。`tools/evidence_pack.py` も配布
+- [x] **T19 / デプロイ** イメージ再ビルド（import検品PASS）→ ECR `:latest`（digest `sha256:56d780ff…`）。**イメージ内で降格・エビデンス無し時の挙動・timelineゲートを実行確認**
+- [x] **T20 / スケジュール** `cron(0 5 ? * TUE,THU,SAT *)` → **`cron(0 5 ? * SUN,TUE,THU,SAT *)`**（11-15 日曜を検証ランにする）
+- [x] **T21** `/changelog/` `/en/changelog/` を公開（55件）。ただし専用OG画像は未生成（この環境にPillowが無い）→ **課題116**
 
 ### 5.2 次回以降（今日はやらない）
 
-- [ ] Phase 1 `facts.json` の設計と、timeline 掲載モデル分の移行
-- [ ] Phase 2 `render_site.py`（まず timeline と `data/models.json` だけ生成）
-- [ ] Phase 3 整合ゲートを `site_upload` に接続
-- [ ] Phase 4 鮮度キュー ＋ `discover_sources` / `fetch_quote` / `upsert_fact`
-- [ ] Phase 5 レビュー結果の JSON スキーマ化（`prompts.py` 変更 → イメージ再ビルドが必要）
-- [ ] **Phase 6 エビデンスパック**（§3.1 の真因に対する本命。レビュー担当に `/workspace` を探索させない／取得時に cache を必ず更新／衝突は新しい一次情報で決着）
+- [ ] Phase 1 の続き: 各エントリの**文章**を台帳へ移す（timeline の title/desc をJSONに持たせ、HTMLを完全な生成物にする）
+- [ ] Phase 2 の続き: `/pricing/` の料金表も台帳から生成（今は表の手書きが残っている）
+- [ ] Phase 3 の続き: `check_facts_consistency.py` を `site_upload` から呼ぶ（今は timeline の整合のみ内蔵）
+- [ ] Phase 4 の続き: **鮮度キュー**（`sources[].fetched_at` が古い順に「今日の再取得対象」をミッション先頭に注入）
+- [ ] **課題116**: `/changelog/` 専用OG（1200×630）。今はホームの画像を指している
+- [ ] **課題115 の検証**: `cache/` に当日分が書かれるようになったかを 11-15 のランで確認（今は 11-05 で停止している）
 
 補足: 凍結ルールは `prompts.py` ではなく `site_plan` 側にあった（`main.py` / `prompts.py` に「凍結」の記述は無い）。よって T10 の追記だけで今日から効く。**イメージ再ビルドが必要なのは Phase 5 だけ**。
 
@@ -206,6 +219,7 @@ Phase 5 は「怪しい指摘を捨てる」だけで、**古い証拠を読ま�
 
 | 実施日 | 見るもの | 合格条件 | 不合格なら次に疑う仮説 |
 |---|---|---|---|
+| 2026-11-15（日曜・追加した検証ラン） | ①timeline ja/en の件数・順序 ②`/workspace/cache/` に当日分ができたか ③GPTのクリティカルにURLが付いたか ④`render_site` が呼ばれたか | ②が「当日」、③が全件引用付き、①が54件目以降も降順 | **Phase 6-1（エビデンスパック）が効いていない** |
 | 2026-11-17（次のラン） | `/timeline/` と `/en/timeline/` のエントリ id 集合・日付順 | 差分0件・全日付が `YYYY-MM-DD`・降順 | H2（出現箇所の一覧が無い）が残っている |
 | 2026-11-19（新しいモデルを乗せたラン） | 新規エントリの位置と `append-style` 件数 | 末尾追記が発生せず降順が保たれ、追記ブロックのページ数が 8件から増えない | **H1 が正しい**（＝HTMLが器のままでは直らない。Phase 2 を前倒し） |
 | 2026-11-21 | `check_facts_consistency.py` の指摘件数 | ERROR 0 を維持し、WARN が本日の3件より減る | H6（検出しても直す仕組みが無い） |

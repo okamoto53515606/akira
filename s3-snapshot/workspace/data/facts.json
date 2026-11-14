@@ -1,0 +1,2761 @@
+{
+ "schema_note": "事実台帳。1フィールド1値（追記しない）。文章は当分HTML側に残す。status: announced|preview|ga|retired|unknown。sources は url+fetched_at+quote。",
+ "updated": "2026-11-14",
+ "models": {
+  "gemini-4-hydrogen": {
+   "id": "gemini-4-hydrogen",
+   "provider": "Google",
+   "provider_class": "dot-google",
+   "names": {
+    "ja": "Gemini 4 Hydrogen",
+    "en": "Gemini 4 Hydrogen"
+   },
+   "released": "2026-11-12",
+   "status": "preview",
+   "price": {
+    "name": "Gemini 4 Hydrogen",
+    "input": 1.5,
+    "output": 7.5,
+    "note_ja": "100万トークン全体にフラット単価（段階課金なし）。キャッシュ$0.075（暗黙のみ）・無料枠あり",
+    "note_en": "Flat rate across the full 1M tokens (no tiers). Cache $0.075 (implicit only). Free tier available",
+    "label": "Google",
+    "provider": "google"
+   },
+   "timeline": {
+    "ja_id": "gemini-4-hydrogen",
+    "en_id": "gemini-4-hydrogen",
+    "title_ja": "Gemini 4 Hydrogen 発表 — 100万トークン全体をフラット単価 $1.50 / $7.50 New",
+    "title_en": "Gemini 4 Hydrogen announced — flat $1.50 / $7.50 across the full 1M tokens New"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-hydrogen/",
+     "fetched_at": "2026-11-14",
+     "quote": "$1.50 per million input tokens and $7.50 per million output tokens"
+    },
+    {
+     "url": "https://ai.google.dev/gemini-api/docs/pricing",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "qwen4-max-preview": {
+   "id": "qwen4-max-preview",
+   "provider": "Alibaba / Qwen",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "Qwen4-Max-Preview",
+    "en": "Qwen4-Max-Preview"
+   },
+   "released": "2026-11-11",
+   "status": "preview",
+   "price": null,
+   "timeline": {
+    "ja_id": "qwen4-max-preview",
+    "en_id": "qwen4-max-preview",
+    "title_ja": "Qwen4-Max-Preview 提供開始 — 100万トークン・Token Plan 経由のみ New",
+    "title_en": "Qwen4-Max-Preview goes live — 1M tokens, Token Plan only New"
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [
+    {
+     "url": "https://www.qwencloud.com/benefits/tokenplan",
+     "fetched_at": "2026-11-14",
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "gemini-4-carbon-ga": {
+   "id": "gemini-4-carbon-ga",
+   "provider": "Google",
+   "provider_class": "dot-google",
+   "names": {
+    "ja": "Gemini 4 Carbon",
+    "en": "Gemini 4 Carbon"
+   },
+   "released": "2026-11-10",
+   "status": "ga",
+   "price": {
+    "name": "Gemini 4 Carbon",
+    "input": 2.0,
+    "output": 10.0,
+    "note_ja": "導入価格(〜2026-11-30)・通常$4/$20。キャッシュ$0.10→$0.20（暗黙のみ）。Batch非対応・無料枠なし",
+    "note_en": "Intro pricing (through 2026-11-30) · list $4/$20. Cache $0.10→$0.20 (implicit only). No Batch API, no free tier",
+    "label": "Google",
+    "provider": "google"
+   },
+   "timeline": {
+    "ja_id": "gemini-4-carbon-ga",
+    "en_id": "gemini-4-carbon-ga",
+    "title_ja": "Gemini 4 Carbon が一般提供へ — 公式料金ページにモデル行が登場 New",
+    "title_en": "Gemini 4 Carbon goes generally available — model row added to the official pricing page New"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-carbon-now-available/",
+     "fetched_at": "2026-11-14",
+     "quote": "Today, we're making Gemini 4 Carbon available to developers, enterprises, scientists, and consumers."
+    },
+    {
+     "url": "https://ai.google.dev/gemini-api/docs/pricing",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "muse-ember": {
+   "id": "muse-ember",
+   "provider": "Meta",
+   "provider_class": "dot-meta",
+   "names": {
+    "ja": "Muse Ember",
+    "en": "Muse Ember"
+   },
+   "released": "2026-11-09",
+   "status": "ga",
+   "price": null,
+   "timeline": {
+    "ja_id": "muse-ember",
+    "en_id": "muse-ember",
+    "title_ja": "Muse Ember 公開 — Metaで最小・最効率のモデル、$0.10 / $0.50 New",
+    "title_en": "Muse Ember released — Meta&#39;s smallest and most efficient model at $0.10 / $0.50 New"
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [
+    {
+     "url": "https://research.meta.ai/blog/muse-ember",
+     "fetched_at": "2026-11-14",
+     "quote": "available today on the Meta Model API, at $0.10 per million input tokens and $0.50 per million output tokens"
+    }
+   ],
+   "events": []
+  },
+  "claude-fable-5-2": {
+   "id": "claude-fable-5-2",
+   "provider": "Anthropic",
+   "provider_class": "dot-anthropic",
+   "names": {
+    "ja": "Claude Fable 5.2 / Mythos 5.2",
+    "en": "Claude Fable 5.2 / Mythos 5.2"
+   },
+   "released": "2026-11-09",
+   "status": "ga",
+   "price": null,
+   "timeline": {
+    "ja_id": "claude-fable-5-2",
+    "en_id": "claude-fable-5-2",
+    "title_ja": "Claude Fable 5.2 / Mythos 5.2 公開 — 前世代から20%安い $8 / $40 New",
+    "title_en": "Claude Fable 5.2 / Mythos 5.2 released — 20% cheaper than the previous generation at $8 / $40 New"
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [
+    {
+     "url": "https://www.anthropic.com/claude-fable-and-mythos-5-2",
+     "fetched_at": "2026-11-14",
+     "quote": "available at a lower price: $8 per million input tokens and $40 per million output tokens"
+    },
+    {
+     "url": "https://platform.claude.com/docs/en/models/fable-5-2/overview",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "gpt-6-cyber": {
+   "id": "gpt-6-cyber",
+   "provider": "OpenAI",
+   "provider_class": "dot-openai",
+   "names": {
+    "ja": "GPT-6 Cyber",
+    "en": "GPT-6 Cyber"
+   },
+   "released": "2026-11-05",
+   "status": "unknown",
+   "price": null,
+   "timeline": {
+    "ja_id": "gpt-6-cyber",
+    "en_id": "gpt-6-cyber",
+    "title_ja": "GPT-6 Cyber 公開 — サイバーセキュリティ特化、承認制Daybreak Redの顧客向け New",
+    "title_en": "GPT-6 Cyber released — a cybersecurity specialist for approved Daybreak Red customers New"
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [
+    {
+     "url": "https://openai.com/index/introducing-gpt-6-cyber/",
+     "fetched_at": null,
+     "quote": null
+    },
+    {
+     "url": "https://deploymentsafety.openai.com/gpt-6-cyber",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "gemini-4-carbon": {
+   "id": "gemini-4-carbon",
+   "provider": "Google",
+   "provider_class": "dot-google",
+   "names": {
+    "ja": "Gemini 4 Carbon",
+    "en": "Gemini 4 Carbon"
+   },
+   "released": "2026-10-28",
+   "status": "unknown",
+   "price": {
+    "name": "Gemini 4 Carbon",
+    "input": 2.0,
+    "output": 10.0,
+    "note_ja": "導入価格(〜2026-11-30)・通常$4/$20。キャッシュ$0.10→$0.20（暗黙のみ）。Batch非対応・無料枠なし",
+    "note_en": "Intro pricing (through 2026-11-30) · list $4/$20. Cache $0.10→$0.20 (implicit only). No Batch API, no free tier",
+    "label": "Google",
+    "provider": "google"
+   },
+   "timeline": {
+    "ja_id": "gemini-4-carbon",
+    "en_id": "gemini-4-carbon",
+    "title_ja": "Gemini 4 Carbon 発表 — サイバー防御重視、当面は限定提供 New",
+    "title_en": "Gemini 4 Carbon announced — cyber-defense focus, limited access for now New"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-carbon/",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "gpt-6-1-terra": {
+   "id": "gpt-6-1-terra",
+   "provider": "OpenAI",
+   "provider_class": "dot-openai",
+   "names": {
+    "ja": "GPT-6.1 Terra",
+    "en": "GPT-6.1 Terra launched"
+   },
+   "released": "2026-10-26",
+   "status": "unknown",
+   "price": {
+    "name": "GPT-6.1 Terra",
+    "input": 1.0,
+    "output": 5.0,
+    "note_ja": "キャッシュ入力$0.05（入力の5%）・272,000トークン超はリクエスト全体が入力2倍/出力1.5倍。1.05Mコンテキスト・128K出力",
+    "note_en": "cached input $0.05 (5% of input) · above 272,000 input tokens the whole request is repriced at 2x input / 1.5x output · 1.05M context, 128K output",
+    "label": "OpenAI",
+    "provider": "openai"
+   },
+   "timeline": {
+    "ja_id": "gpt-6-1-terra",
+    "en_id": "gpt-6-1-terra",
+    "title_ja": "GPT-6.1 Terra 公開 — 「速くて安い」コンピュータ操作モデル New",
+    "title_en": "GPT-6.1 Terra launched — a fast, low-cost computer-use model New"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://openai.com/index/introducing-gpt-6-1-terra/",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "kimi-k3-1-pro": {
+   "id": "kimi-k3-1-pro",
+   "provider": "Moonshot",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "Kimi K3.1 Pro シリーズ",
+    "en": "Kimi K3.1 Pro series rolls out"
+   },
+   "released": "2026-10-23",
+   "status": "unknown",
+   "price": null,
+   "timeline": {
+    "ja_id": "kimi-k3-1-pro",
+    "en_id": "kimi-k3-1-pro",
+    "title_ja": "Kimi K3.1 Pro シリーズ提供開始 — 3Tクラス・1Mコンテキスト New",
+    "title_en": "Kimi K3.1 Pro series rolls out — 3T-class, 1M context New"
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [
+    {
+     "url": "https://www.kimi.com/code/docs/en/kimi-code/whats-new.html",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "gemini-4-argon": {
+   "id": "gemini-4-argon",
+   "provider": "Google",
+   "provider_class": "dot-google",
+   "names": {
+    "ja": "Gemini 4 Argon 公開（GA）— 1Mコンテキストのフラッグシップ推論モデル New",
+    "en": "Gemini 4 Argon is generally available"
+   },
+   "released": "2026-10-13",
+   "status": "unknown",
+   "price": null,
+   "timeline": {
+    "ja_id": "gemini-4-argon",
+    "en_id": "gemini-4-argon",
+    "title_ja": "Gemini 4 Argon 公開（GA）— 1Mコンテキストのフラッグシップ推論モデル New",
+    "title_en": "Gemini 4 Argon is generally available — a 1M-context flagship reasoning model New"
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [
+    {
+     "url": "https://ai.google.dev/gemini-api/docs/models/gemini-4-argon",
+     "fetched_at": null,
+     "quote": null
+    },
+    {
+     "url": "https://ai.google.dev/gemini-api/docs/changelog",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "meta-muse-wonder": {
+   "id": "meta-muse-wonder",
+   "provider": "Meta",
+   "provider_class": "dot-meta",
+   "names": {
+    "ja": "Meta Muse Wonder / Muse Wonder Full",
+    "en": "Meta launches Muse Wonder / Muse Wonder Full"
+   },
+   "released": "2026-10-12",
+   "status": "unknown",
+   "price": {
+    "name": "Meta Muse Wonder",
+    "input": 4.0,
+    "output": 20.0,
+    "note_ja": "2026-10-12公開（muse-wonder-1.0）。キャッシュ入力 $0.20、1Mコンテキスト、長文プレミアムなし。Contributor モードの提供なし",
+    "note_en": "Released 2026-10-12 (muse-wonder-1.0). $0.20 cache input, 1M context, no long-context surcharge, no Contributor mode",
+    "label": "Muse Wonder",
+    "provider": "other"
+   },
+   "timeline": {
+    "ja_id": "meta-muse-wonder",
+    "en_id": "meta-muse-wonder",
+    "title_ja": "Meta Muse Wonder / Muse Wonder Full 公開 — Metaがエージェント特化のフロンティアモデルで本格参入 New",
+    "title_en": "Meta launches Muse Wonder / Muse Wonder Full — its agent-first frontier models New"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://dev.meta.ai/models/muse-wonder",
+     "fetched_at": null,
+     "quote": null
+    },
+    {
+     "url": "https://ai.meta.com/blog/muse-wonder-muse-wonder-full/",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "claude-haiku-5-5": {
+   "id": "claude-haiku-5-5",
+   "provider": "Anthropic",
+   "provider_class": "dot-anthropic",
+   "names": {
+    "ja": "Claude Haiku 5.5",
+    "en": "Claude Haiku 5.5"
+   },
+   "released": "2026-10-07",
+   "status": "unknown",
+   "price": {
+    "name": "Claude Haiku 5.5",
+    "input": 0.1,
+    "output": 0.5,
+    "note_ja": "2026-10-07公開・100,000トークンまで（超は$0.50/$2.50）・cache読込$0.01",
+    "note_en": "Released 2026-10-07 · up to 100,000 tokens ($0.50/$2.50 above) · cache read $0.01",
+    "label": "Anthropic",
+    "provider": "anthropic"
+   },
+   "timeline": {
+    "ja_id": "claude-haiku-5-5",
+    "en_id": "claude-haiku-5-5",
+    "title_ja": "Claude Haiku 5.5 公開 — Claude 5.5世代の最速・最安、料金はHaiku 4.5の10分の1 New",
+    "title_en": "Claude Haiku 5.5 released — fastest and cheapest of the Claude 5.5 family at one tenth of Haiku 4.5 New"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://platform.claude.com/docs/en/models/haiku-5-5/overview",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "gemini-nano-banana-2-1": {
+   "id": "gemini-nano-banana-2-1",
+   "provider": "Google",
+   "provider_class": "dot-google",
+   "names": {
+    "ja": "Gemini Nano Banana 2.1",
+    "en": "Gemini Nano Banana 2.1"
+   },
+   "released": "2026-10-06",
+   "status": "unknown",
+   "price": null,
+   "timeline": {
+    "ja_id": "gemini-nano-banana-2-1",
+    "en_id": "gemini-nano-banana-2-1",
+    "title_ja": "Gemini Nano Banana 2.1 公開 — 画像生成・会話編集の更新版、Nano Banana 2（3.1 Flash Image）は非推奨へ New",
+    "title_en": "Gemini Nano Banana 2.1 released — updated image generation and conversational editing; Nano Banana 2 (3.1 Flash Image) deprecated New"
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [
+    {
+     "url": "https://ai.google.dev/gemini-api/docs/models/gemini-nano-banana-2.1",
+     "fetched_at": null,
+     "quote": null
+    },
+    {
+     "url": "https://ai.google.dev/gemini-api/docs/changelog",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "gemini-4-argon-announced": {
+   "id": "gemini-4-argon-announced",
+   "provider": "Google",
+   "provider_class": "dot-google",
+   "names": {
+    "ja": "Gemini 4 Argon",
+    "en": "Gemini 4 Argon"
+   },
+   "released": "2026-09-30",
+   "status": "unknown",
+   "price": {
+    "name": "Gemini 4 Argon",
+    "input": 2.0,
+    "output": 10.0,
+    "note_ja": "導入価格(〜2026-11-30)・通常$4/$20。キャッシュ$0.10→$0.20。無料枠なし",
+    "note_en": "Intro pricing (through 2026-11-30) · list $4/$20. Cache $0.10→$0.20. No free tier",
+    "label": "Google",
+    "provider": "google"
+   },
+   "timeline": {
+    "ja_id": "gemini-4-argon-announced",
+    "en_id": "gemini-4-argon-announced",
+    "title_ja": "Gemini 4 Argon 発表 — サイバー防御の「信頼できるテスター」へ先行提供、一般提供は段階的 GA済",
+    "title_en": "Gemini 4 Argon announced — rolling out to trusted cyber defenders first, general access phased GA済"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-argon/",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "gpt-6-1-sol": {
+   "id": "gpt-6-1-sol",
+   "provider": "OpenAI",
+   "provider_class": "dot-openai",
+   "names": {
+    "ja": "GPT-6.1 Sol",
+    "en": "GPT-6.1 Sol"
+   },
+   "released": "2026-09-29",
+   "status": "unknown",
+   "price": {
+    "name": "GPT-6.1 Sol",
+    "input": 2.0,
+    "output": 10.0,
+    "note_ja": "cache入力$0.10・272,000トークン超はリクエスト全体が入力2倍/出力1.5倍",
+    "note_en": "cached input $0.10 · above 272,000 input tokens the whole request is repriced at 2x input / 1.5x output",
+    "label": "OpenAI",
+    "provider": "openai"
+   },
+   "timeline": {
+    "ja_id": "gpt-6-1-sol",
+    "en_id": "gpt-6-1-sol",
+    "title_ja": "GPT-6.1 Sol 公開 — GPT-6世代のバランス型、Solと同額でキャッシュ入力は半額に New",
+    "title_en": "GPT-6.1 Sol released — the balanced GPT-6 model, same price as Sol with cached input halved New"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://developers.openai.com/api/docs/models/gpt-6.1-sol",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "claude-sonnet-5-5": {
+   "id": "claude-sonnet-5-5",
+   "provider": "Anthropic",
+   "provider_class": "dot-anthropic",
+   "names": {
+    "ja": "Claude Sonnet 5.5",
+    "en": "Claude Sonnet 5.5"
+   },
+   "released": "2026-09-28",
+   "status": "unknown",
+   "price": {
+    "name": "Claude Sonnet 5.5",
+    "input": 2.0,
+    "output": 10.0,
+    "note_ja": "2026-09-28公開・Sonnet 5と同額",
+    "note_en": "Released 2026-09-28 · same price as Sonnet 5",
+    "label": "Anthropic",
+    "provider": "anthropic"
+   },
+   "timeline": {
+    "ja_id": "claude-sonnet-5-5",
+    "en_id": "claude-sonnet-5-5",
+    "title_ja": "Claude Sonnet 5.5 公開 — Claude 5.5世代のバランス型、Sonnet 5と同額で世代更新 New",
+    "title_en": "Claude Sonnet 5.5 released — the balanced model of the Claude 5.5 family, at the same price as Sonnet 5 New"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://platform.claude.com/docs/en/models/sonnet-5-5/overview",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "claude-opus-5-5": {
+   "id": "claude-opus-5-5",
+   "provider": "Anthropic",
+   "provider_class": "dot-anthropic",
+   "names": {
+    "ja": "Claude Opus 5.5",
+    "en": "Claude Opus 5.5"
+   },
+   "released": "2026-09-22",
+   "status": "unknown",
+   "price": {
+    "name": "Claude Opus 5.5",
+    "input": 4.0,
+    "output": 20.0,
+    "note_ja": "2026-09-22公開・cache読込$0.20",
+    "note_en": "Released 2026-09-22 · cache read $0.20",
+    "label": "Anthropic",
+    "provider": "anthropic"
+   },
+   "timeline": {
+    "ja_id": "claude-opus-5-5",
+    "en_id": "claude-opus-5-5",
+    "title_ja": "Claude Opus 5.5 公開 — Claude 5.5世代の第一弾、Opus 5より安く New",
+    "title_en": "Claude Opus 5.5 released — first of the Claude 5.5 family, cheaper than Opus 5 New"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://www.anthropic.com/claude-opus-5-5",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "mimo-v2-6": {
+   "id": "mimo-v2-6",
+   "provider": "Xiaomi",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "Xiaomi MiMo-V2.6",
+    "en": "Xiaomi MiMo-V2.6"
+   },
+   "released": "2026-09-22",
+   "status": "unknown",
+   "price": null,
+   "timeline": {
+    "ja_id": "mimo-v2-6",
+    "en_id": "mimo-v2-6",
+    "title_ja": "Xiaomi MiMo-V2.6 公開 — ネイティブ・オムニモーダル・1Mコンテキスト、料金はV2.5から据え置き New",
+    "title_en": "Xiaomi MiMo-V2.6 released — natively omnimodal, 1M context, pricing unchanged from V2.5 New"
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [
+    {
+     "url": "https://mimo.xiaomi.com/mimo-v2-6",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "gpt-6-sol-luna": {
+   "id": "gpt-6-sol-luna",
+   "provider": "OpenAI",
+   "provider_class": "dot-openai",
+   "names": {
+    "ja": "GPT-6 Sol / GPT-6 Luna",
+    "en": "GPT-6 Sol and GPT-6 Luna"
+   },
+   "released": "2026-09-22",
+   "status": "unknown",
+   "price": {
+    "name": "GPT-6 Sol",
+    "input": 2.0,
+    "output": 10.0,
+    "note_ja": "2026-09-22公開・cache入力$0.20",
+    "note_en": "Released 2026-09-22 · cached input $0.20",
+    "label": "OpenAI",
+    "provider": "openai"
+   },
+   "timeline": {
+    "ja_id": "gpt-6-sol-luna",
+    "en_id": "gpt-6-sol-luna",
+    "title_ja": "GPT-6 Sol / GPT-6 Luna 公開 — GPT-5.6版から50%値下げ New",
+    "title_en": "GPT-6 Sol and GPT-6 Luna released — 50% cheaper than the GPT-5.6 versions New"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://openai.com/index/introducing-gpt-6-sol-and-luna/",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "qwen-4-in-training": {
+   "id": "qwen-4-in-training",
+   "provider": "Alibaba / Qwen",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "Qwen 4 は「学習中」と公式",
+    "en": "Qwen 4 announced as “in training”"
+   },
+   "released": "2026-09-22",
+   "status": "unknown",
+   "price": null,
+   "timeline": {
+    "ja_id": "qwen-4-in-training",
+    "en_id": "qwen-4-in-training",
+    "title_ja": "Qwen 4 は「学習中」と公式発表 — リリース日・料金・重みは未公表 New",
+    "title_en": "Qwen 4 announced as “in training” — no date, price or weights New"
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [
+    {
+     "url": "https://www.media-outreach.com/news/singapore/2026/09/22/489176/alibaba-unveils-roadmap-on-full-stack-ai-strategy-from-chips-cloud-infrastructure-models-to-agents/",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "qwen-4-training": {
+   "id": "qwen-4-training",
+   "provider": "Alibaba",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "Qwen 4（Alibaba）— 公式は「学習中」、時期・料金・ベンチマークは未公表",
+    "en": "Qwen 4 (Alibaba)"
+   },
+   "released": "2026-09-22",
+   "status": "unknown",
+   "price": null,
+   "timeline": {
+    "ja_id": "qwen-4-training",
+    "en_id": "qwen-4-training",
+    "title_ja": "Qwen 4（Alibaba）— 公式は「学習中」、時期・料金・ベンチマークは未公表",
+    "title_en": "Qwen 4 (Alibaba) — officially \"in training\"; no date, price or benchmarks published"
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "grok-4-7": {
+   "id": "grok-4-7",
+   "provider": "xAI",
+   "provider_class": "dot-xai",
+   "names": {
+    "ja": "Grok 4.7",
+    "en": "Grok 4.7"
+   },
+   "released": "2026-09-21",
+   "status": "unknown",
+   "price": {
+    "name": "Grok 4.7",
+    "input": 2.0,
+    "output": 6.0,
+    "note_ja": "2026-09-21公開・200K超は$4/$12",
+    "note_en": "Released 2026-09-21 · $4/$12 above 200K",
+    "label": "xAI",
+    "provider": "other"
+   },
+   "timeline": {
+    "ja_id": "grok-4-7",
+    "en_id": "grok-4-7",
+    "title_ja": "Grok 4.7 公開 — ベースモデルを大型化、価格は$2/$6で据え置き New",
+    "title_en": "Grok 4.7 released — larger base model, $2/$6 pricing unchanged New"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://x.ai/news/grok-4-7",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "deepseek-v4-pro-continued": {
+   "id": "deepseek-v4-pro-continued",
+   "provider": "DeepSeek",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "DeepSeek V4 Pro の提供継続を確認",
+    "en": "DeepSeek V4 Pro confirmed to continue"
+   },
+   "released": "2026-09-13",
+   "status": "unknown",
+   "price": null,
+   "timeline": {
+    "ja_id": "deepseek-v4-pro-continued",
+    "en_id": "deepseek-v4-pro-continued",
+    "title_ja": "DeepSeek V4 Pro の提供継続を確認 — 9/14 の V4.1 Flash ルーティング予告は撤回",
+    "title_en": "DeepSeek V4 Pro confirmed to continue — the 9/14 routing notice is withdrawn"
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [
+    {
+     "url": "https://api-docs.deepseek.com/quick_start/pricing",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "deepseek-v4-1-flash": {
+   "id": "deepseek-v4-1-flash",
+   "provider": "DeepSeek",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "DeepSeek-V4.1-Flash リリース",
+    "en": "DeepSeek-V4.1-Flash"
+   },
+   "released": "2026-09-10",
+   "status": "unknown",
+   "price": null,
+   "timeline": {
+    "ja_id": "deepseek-v4-1-flash",
+    "en_id": "deepseek-v4-1-flash",
+    "title_ja": "DeepSeek-V4.1-Flash リリース — 大幅値下げ・ネイティブ画像入力（V4 Pro の 9/14 ルーティングはのちに撤回） New",
+    "title_en": "DeepSeek-V4.1-Flash released — steep price cuts, native image input (V4 Pro routing later withdrawn) New"
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [
+    {
+     "url": "https://api-docs.deepseek.com/updates/",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "gpt-6": {
+   "id": "gpt-6",
+   "provider": "OpenAI",
+   "provider_class": "dot-openai",
+   "names": {
+    "ja": "GPT-6 Astra",
+    "en": "GPT-6 Astra"
+   },
+   "released": "2026-09-03",
+   "status": "unknown",
+   "price": {
+    "name": "GPT-6 Astra",
+    "input": 10.0,
+    "output": 50.0,
+    "note_ja": "2026-09-03発表・最上位モデル・cache読込$1.00",
+    "note_en": "New flagship (2026-09-03) · cache read $1.00",
+    "label": "OpenAI",
+    "provider": "openai"
+   },
+   "timeline": {
+    "ja_id": "gpt-6",
+    "en_id": "gpt-6",
+    "title_ja": "GPT-6 Astra 公開 — 新世代フラッグシップ（$10/$50） New",
+    "title_en": "GPT-6 Astra released — new-generation flagship ($10/$50) New"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://openai.com/index/gpt-6-astra/",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "gemini-3-8-flash": {
+   "id": "gemini-3-8-flash",
+   "provider": "Google",
+   "provider_class": "dot-google",
+   "names": {
+    "ja": "Gemini 3.8 Flash / 3.8 Flash Cyber",
+    "en": "Gemini 3.8 Flash / 3.8 Flash Cyber"
+   },
+   "released": "2026-09-02",
+   "status": "unknown",
+   "price": {
+    "name": "Gemini 3.8 Flash",
+    "input": 0.75,
+    "output": 3.75,
+    "note_ja": "導入価格(〜2026-12-31)・通常$1.50/$7.50",
+    "note_en": "Intro pricing (through 2026-12-31) · list $1.50/$7.50",
+    "label": "Google",
+    "provider": "google"
+   },
+   "timeline": {
+    "ja_id": "gemini-3-8-flash",
+    "en_id": "gemini-3-8-flash",
+    "title_ja": "Gemini 3.8 Flash / 3.8 Flash Cyber 公開 — 推論・コーディング最強Flash New",
+    "title_en": "Gemini 3.8 Flash / 3.8 Flash Cyber released — best reasoning & coding Flash New"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/3-8-flash-and-3-8-flash-cyber/",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "claude-fable-5-1": {
+   "id": "claude-fable-5-1",
+   "provider": "Anthropic",
+   "provider_class": "dot-anthropic",
+   "names": {
+    "ja": "Claude Fable 5.1 / Mythos 5.1",
+    "en": "Claude Fable 5.1 / Mythos 5.1"
+   },
+   "released": "2026-09-01",
+   "status": "unknown",
+   "price": {
+    "name": "Claude Fable 5.1",
+    "input": 10.0,
+    "output": 50.0,
+    "note_ja": "2026-09-01公開・cache読込$0.25",
+    "note_en": "Released 2026-09-01 · cache read $0.25",
+    "label": "Anthropic",
+    "provider": "anthropic"
+   },
+   "timeline": {
+    "ja_id": "claude-fable-5-1",
+    "en_id": "claude-fable-5-1",
+    "title_ja": "Claude Fable 5.1 / Mythos 5.1 公開 — Mythosクラス新フラッグシップ New",
+    "title_en": "Claude Fable 5.1 / Mythos 5.1 released — new Mythos-class flagship New"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://www.anthropic.com/claude-fable-and-mythos-5-1",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "glm-5-3-flash": {
+   "id": "glm-5-3-flash",
+   "provider": "Zhipu / Z.ai",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "GLM 5.3 Flash",
+    "en": "GLM 5.3 Flash"
+   },
+   "released": "2026-08-26",
+   "status": "unknown",
+   "price": {
+    "name": "GLM-5.3-Flash",
+    "input": 0.15,
+    "output": 0.5,
+    "note_ja": "プロモ終了(9/9)・list $0.15/$0.50",
+    "note_en": "Promo ended 9/9 · list $0.15/$0.50",
+    "label": "Zhipu/Z.ai",
+    "provider": "other"
+   },
+   "timeline": {
+    "ja_id": "glm-5-3-flash",
+    "en_id": "glm-5-3-flash",
+    "title_ja": "GLM 5.3 Flash 公開 — ネイティブマルチモーダル×Flash価格 New",
+    "title_en": "GLM 5.3 Flash released — natively multimodal at Flash cost New"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://z.ai/blog/glm-5.3-flash",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "qwen-3-8-flash": {
+   "id": "qwen-3-8-flash",
+   "provider": "Alibaba / Qwen",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "Qwen3.8-Flash",
+    "en": "Qwen3.8-Flash"
+   },
+   "released": "2026-08-26",
+   "status": "unknown",
+   "price": {
+    "name": "Qwen3.8-Flash",
+    "input": 0.15,
+    "output": 0.47,
+    "note_ja": "2026-08-26公開・国際版",
+    "note_en": "Released 2026-08-26 · intl",
+    "label": "Alibaba",
+    "provider": "other"
+   },
+   "timeline": {
+    "ja_id": "qwen-3-8-flash",
+    "en_id": "qwen-3-8-flash",
+    "title_ja": "Qwen3.8-Flash 公開 — Qwen4アーキテクチャのプレビュー・低コストマルチモーダル New",
+    "title_en": "Qwen3.8-Flash released — low-cost multimodal, Qwen4 architecture preview New"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://qwen.ai/blog?id=qwen3.8-flash-next",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "deepseek-v4-flash-vision-exp": {
+   "id": "deepseek-v4-flash-vision-exp",
+   "provider": "DeepSeek",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "DeepSeek V4 Flash Vision Exp 公開（実験的モデル） New",
+    "en": "DeepSeek V4 Flash Vision Exp released (experimental) New"
+   },
+   "released": "2026-08-21",
+   "status": "unknown",
+   "price": null,
+   "timeline": {
+    "ja_id": "deepseek-v4-flash-vision-exp",
+    "en_id": "deepseek-v4-flash-vision-exp",
+    "title_ja": "DeepSeek V4 Flash Vision Exp 公開（実験的モデル） New",
+    "title_en": "DeepSeek V4 Flash Vision Exp released (experimental) New"
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [
+    {
+     "url": "https://api-docs.deepseek.com/updates/",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "gpt-5-6-sol-promo": {
+   "id": "gpt-5-6-sol-promo",
+   "provider": "OpenAI",
+   "provider_class": "dot-openai",
+   "names": {
+    "ja": "GPT-5.6 Sol プロモ価格へ",
+    "en": "GPT-5.6 Sol promo price"
+   },
+   "released": "2026-08-21",
+   "status": "unknown",
+   "price": null,
+   "timeline": {
+    "ja_id": "gpt-5-6-sol-promo",
+    "en_id": "gpt-5-6-sol-promo",
+    "title_ja": "GPT-5.6 Sol プロモ価格へ — $4/$20（少なくとも〜11/21） New",
+    "title_en": "GPT-5.6 Sol promo price — $4/$20 (at least through 11/21) New"
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [
+    {
+     "url": "https://community.openai.com/t/20-price-reduction-for-gpt-5-6-sol-api-codex-credits-and-chatgpt-work/1391726",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "cloudflare-sol-discount": {
+   "id": "cloudflare-sol-discount",
+   "provider": "OpenAI / Cloudflare",
+   "provider_class": "dot-openai",
+   "names": {
+    "ja": "Cloudflare AI GatewayでGPT-5.6 Solが50%オフ New",
+    "en": "GPT-5.6 Sol 50% off via Cloudflare AI Gateway New"
+   },
+   "released": "2026-08-19",
+   "status": "unknown",
+   "price": null,
+   "timeline": {
+    "ja_id": "cloudflare-sol-discount",
+    "en_id": "cloudflare-sol-discount",
+    "title_ja": "Cloudflare AI GatewayでGPT-5.6 Solが50%オフ New",
+    "title_en": "GPT-5.6 Sol 50% off via Cloudflare AI Gateway New"
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [
+    {
+     "url": "https://developers.cloudflare.com/changelog/post/2026-08-19-gpt-5-6-sol-discount/",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "gemini-3-7-flash": {
+   "id": "gemini-3-7-flash",
+   "provider": "Google",
+   "provider_class": "dot-google",
+   "names": {
+    "ja": "Gemini 3.7 Flash",
+    "en": "Gemini 3.7 Flash"
+   },
+   "released": "2026-08-14",
+   "status": "unknown",
+   "price": {
+    "name": "Gemini 3.7 Flash",
+    "input": 0.75,
+    "output": 3.75,
+    "note_ja": "導入価格(〜2026-12-31)・通常$1.50/$7.50。提供終了予定（2027-01-28・移行先 Gemini 3.8 Flash）",
+    "note_en": "Intro pricing (through 2026-12-31) · list $1.50/$7.50. Scheduled for retirement 2027-01-28 (replacement: Gemini 3.8 Flash)",
+    "label": "Google",
+    "provider": "google"
+   },
+   "timeline": {
+    "ja_id": "gemini-3-7-flash",
+    "en_id": "gemini-3-7-flash",
+    "title_ja": "Gemini 3.7 Flash 公開 — コーディング・エージェント最強Flash",
+    "title_en": "Gemini 3.7 Flash released — most capable Flash for coding & agents"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://blog.google/intl/ja-jp/company-news/technology/gemini-37-flash/",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "deepseek-v4-pro-ga": {
+   "id": "deepseek-v4-pro-ga",
+   "provider": "DeepSeek",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "DeepSeek V4 Pro 正式版（GA）リリース",
+    "en": "DeepSeek V4 Pro GA"
+   },
+   "released": "2026-08-13",
+   "status": "unknown",
+   "price": null,
+   "timeline": {
+    "ja_id": "deepseek-v4-pro-ga",
+    "en_id": "deepseek-v4-pro-ga",
+    "title_ja": "DeepSeek V4 Pro 正式版（GA）リリース — ピーク/オフピーク価格制へ移行 New",
+    "title_en": "DeepSeek V4 Pro GA released — peak/off-peak pricing introduced New"
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [
+    {
+     "url": "https://api-docs.deepseek.com/news/news260813/",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "grok-4-6": {
+   "id": "grok-4-6",
+   "provider": "xAI",
+   "provider_class": "dot-xai",
+   "names": {
+    "ja": "Grok 4.6",
+    "en": "Grok 4.6"
+   },
+   "released": "2026-08-12",
+   "status": "unknown",
+   "price": {
+    "name": "Grok 4.6",
+    "input": 2.0,
+    "output": 6.0,
+    "note_ja": "2026-08-12公開",
+    "note_en": "Released 2026-08-12",
+    "label": "xAI",
+    "provider": "other"
+   },
+   "timeline": {
+    "ja_id": "grok-4-6",
+    "en_id": "grok-4-6",
+    "title_ja": "Grok 4.6 公開 — コード・エージェント特化の最新フラッグシップ",
+    "title_en": "Grok 4.6 released — new flagship for code & agents"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://x.ai/news/grok-4-6",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "deepseek-v4-flash": {
+   "id": "deepseek-v4-flash",
+   "provider": "DeepSeek",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "DeepSeek V4 Flash 公式リリース（public beta） New",
+    "en": "DeepSeek V4 Flash officially released (public beta) New"
+   },
+   "released": "2026-07-31",
+   "status": "unknown",
+   "price": null,
+   "timeline": {
+    "ja_id": "deepseek-v4-flash",
+    "en_id": "deepseek-v4-flash",
+    "title_ja": "DeepSeek V4 Flash 公式リリース（public beta） New",
+    "title_en": "DeepSeek V4 Flash officially released (public beta) New"
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [
+    {
+     "url": "https://api-docs.deepseek.com/updates/",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "gpt-5-6-pricecut": {
+   "id": "gpt-5-6-pricecut",
+   "provider": "OpenAI",
+   "provider_class": "dot-openai",
+   "names": {
+    "ja": "GPT-5.6 Terra/Luna 大幅値下げ Updated",
+    "en": "GPT-5.6 Terra/Luna major price cuts Updated"
+   },
+   "released": "2026-07-30",
+   "status": "unknown",
+   "price": {
+    "name": "GPT-5.6 Terra",
+    "input": 2.0,
+    "output": 12.0,
+    "note_ja": "7/30値下げ",
+    "note_en": "Price cut 7/30",
+    "label": "OpenAI",
+    "provider": "openai"
+   },
+   "timeline": {
+    "ja_id": "gpt-5-6-pricecut",
+    "en_id": "gpt-5-6-pricecut",
+    "title_ja": "GPT-5.6 Terra/Luna 大幅値下げ Updated",
+    "title_en": "GPT-5.6 Terra/Luna major price cuts Updated"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://developers.openai.com/api/docs/pricing",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "claude-opus-5": {
+   "id": "claude-opus-5",
+   "provider": "Anthropic",
+   "provider_class": "dot-anthropic",
+   "names": {
+    "ja": "Claude Opus 5",
+    "en": "Claude Opus 5"
+   },
+   "released": "2026-07-24",
+   "status": "unknown",
+   "price": {
+    "name": "Claude Opus 5",
+    "input": 5.0,
+    "output": 25.0,
+    "note_ja": "2026-07-24発表",
+    "note_en": "Released 2026-07-24",
+    "label": "Anthropic",
+    "provider": "anthropic"
+   },
+   "timeline": {
+    "ja_id": "claude-opus-5",
+    "en_id": "claude-opus-5",
+    "title_ja": "Claude Opus 5 公開 — Opus 4.8後継・同価格で性能向上 New",
+    "title_en": "Claude Opus 5 released — Opus 4.8 successor, same price, better performance New"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://www.anthropic.com/news/claude-opus-5",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "gemini-3-6-flash": {
+   "id": "gemini-3-6-flash",
+   "provider": "Google",
+   "provider_class": "dot-google",
+   "names": {
+    "ja": "Gemini 3.6 Flash・3.5 Flash-Lite・3.5 Flash Cyber 公開 New",
+    "en": "Gemini 3.6 Flash, 3.5 Flash-Lite, 3.5 Flash Cyber released New"
+   },
+   "released": "2026-07-21",
+   "status": "unknown",
+   "price": null,
+   "timeline": {
+    "ja_id": "gemini-3-6-flash",
+    "en_id": "gemini-3-6-flash",
+    "title_ja": "Gemini 3.6 Flash・3.5 Flash-Lite・3.5 Flash Cyber 公開 New",
+    "title_en": "Gemini 3.6 Flash, 3.5 Flash-Lite, 3.5 Flash Cyber released New"
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [
+    {
+     "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-6-flash-3-5-flash-lite-3-5-flash-cyber/",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "gpt-5-6": {
+   "id": "gpt-5-6",
+   "provider": "OpenAI",
+   "provider_class": "dot-openai",
+   "names": {
+    "ja": "GPT-5.6ファミリー",
+    "en": "GPT-5.6 family"
+   },
+   "released": "2026-07-09",
+   "status": "unknown",
+   "price": null,
+   "timeline": {
+    "ja_id": "gpt-5-6",
+    "en_id": "gpt-5-6",
+    "title_ja": "GPT-5.6ファミリー公開 — Sol/Terra/Luna",
+    "title_en": "GPT-5.6 family released — Sol / Terra / Luna"
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [
+    {
+     "url": "https://openai.com/index/gpt-5-6/",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "claude-sonnet-5": {
+   "id": "claude-sonnet-5",
+   "provider": "Anthropic",
+   "provider_class": "dot-anthropic",
+   "names": {
+    "ja": "Claude Sonnet 5",
+    "en": "Claude Sonnet 5"
+   },
+   "released": "2026-06-30",
+   "status": "unknown",
+   "price": {
+    "name": "Claude Sonnet 5",
+    "input": 2.0,
+    "output": 10.0,
+    "note_ja": "$2/$10（恒久化）",
+    "note_en": "Permanent price",
+    "label": "Anthropic",
+    "provider": "anthropic"
+   },
+   "timeline": {
+    "ja_id": "claude-sonnet-5",
+    "en_id": "claude-sonnet-5",
+    "title_ja": "Claude Sonnet 5 公開",
+    "title_en": "Claude Sonnet 5 released"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://www.anthropic.com/news/claude-sonnet-5",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "claude-fable-5": {
+   "id": "claude-fable-5",
+   "provider": "Anthropic",
+   "provider_class": "dot-anthropic",
+   "names": {
+    "ja": "Claude Fable 5/Mythos 5",
+    "en": "Claude Fable 5 / Mythos 5"
+   },
+   "released": "2026-06-09",
+   "status": "unknown",
+   "price": {
+    "name": "Claude Fable 5",
+    "input": 10.0,
+    "output": 50.0,
+    "note_ja": "前世代",
+    "note_en": "Previous gen",
+    "label": "Anthropic",
+    "provider": "anthropic"
+   },
+   "timeline": {
+    "ja_id": "claude-fable-5",
+    "en_id": "claude-fable-5",
+    "title_ja": "Claude Fable 5/Mythos 5 公開 — 新ティア「Mythosクラス」",
+    "title_en": "Claude Fable 5 / Mythos 5 released — new \"Mythos class\" tier"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://www.anthropic.com/news/claude-fable-5-mythos-5",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "claude-opus-4-8": {
+   "id": "claude-opus-4-8",
+   "provider": "Anthropic",
+   "provider_class": "dot-anthropic",
+   "names": {
+    "ja": "Claude Opus 4.8",
+    "en": "Claude Opus 4.8"
+   },
+   "released": "2026-05-28",
+   "status": "unknown",
+   "price": {
+    "name": "Claude Opus 4.8",
+    "input": 5.0,
+    "output": 25.0,
+    "note_ja": "",
+    "note_en": "",
+    "label": "Anthropic",
+    "provider": "anthropic"
+   },
+   "timeline": {
+    "ja_id": "claude-opus-4-8",
+    "en_id": "claude-opus-4-8",
+    "title_ja": "Claude Opus 4.8 公開",
+    "title_en": "Claude Opus 4.8 released"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://www.anthropic.com/news/claude-opus-4-8",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "gemini-3-5-flash": {
+   "id": "gemini-3-5-flash",
+   "provider": "Google",
+   "provider_class": "dot-google",
+   "names": {
+    "ja": "Gemini 3.5 Flash GA",
+    "en": "Gemini 3.5 Flash GA"
+   },
+   "released": "2026-05-19",
+   "status": "unknown",
+   "price": null,
+   "timeline": {
+    "ja_id": "gemini-3-5-flash",
+    "en_id": "gemini-3-5-flash",
+    "title_ja": "Gemini 3.5 Flash GA — Google I/O 2026",
+    "title_en": "Gemini 3.5 Flash GA — Google I/O 2026"
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [
+    {
+     "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-5/",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "deepseek-v4": {
+   "id": "deepseek-v4",
+   "provider": "DeepSeek",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "DeepSeek V4 Pro/Flash Preview",
+    "en": "DeepSeek V4 Pro/Flash Preview"
+   },
+   "released": "2026-04-24",
+   "status": "unknown",
+   "price": {
+    "name": "DeepSeek V4 Pro",
+    "input": 0.66,
+    "output": 1.98,
+    "note_ja": "オフピーク(cache miss)・2026-09-14以降も提供継続（公式が告知）",
+    "note_en": "Off-peak (cache miss) · continues after 2026-09-14 per DeepSeek's notice",
+    "label": "DeepSeek",
+    "provider": "deepseek"
+   },
+   "timeline": {
+    "ja_id": "deepseek-v4",
+    "en_id": "deepseek-v4",
+    "title_ja": "DeepSeek V4 Pro/Flash Preview 公開",
+    "title_en": "DeepSeek V4 Pro/Flash Preview released"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://api-docs.deepseek.com/news/news260424",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "gpt-5-5": {
+   "id": "gpt-5-5",
+   "provider": "OpenAI",
+   "provider_class": "dot-openai",
+   "names": {
+    "ja": "GPT-5.5",
+    "en": "GPT-5.5"
+   },
+   "released": "2026-04-23",
+   "status": "unknown",
+   "price": {
+    "name": "GPT-5.5",
+    "input": 5.0,
+    "output": 30.0,
+    "note_ja": "",
+    "note_en": "",
+    "label": "OpenAI",
+    "provider": "openai"
+   },
+   "timeline": {
+    "ja_id": "gpt-5-5",
+    "en_id": "gpt-5-5",
+    "title_ja": "GPT-5.5 公開",
+    "title_en": "GPT-5.5 released"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://openai.com/index/introducing-gpt-5-5/",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "claude-opus-4-7": {
+   "id": "claude-opus-4-7",
+   "provider": "Anthropic",
+   "provider_class": "dot-anthropic",
+   "names": {
+    "ja": "Claude Opus 4.7",
+    "en": "Claude Opus 4.7"
+   },
+   "released": "2026-04-16",
+   "status": "unknown",
+   "price": null,
+   "timeline": {
+    "ja_id": "claude-opus-4-7",
+    "en_id": "claude-opus-4-7",
+    "title_ja": "Claude Opus 4.7 公開 — xhigh推論エフォート新設",
+    "title_en": "Claude Opus 4.7 released — new xhigh reasoning effort"
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [
+    {
+     "url": "https://www.anthropic.com/news/claude-opus-4-7",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "gpt-5-4": {
+   "id": "gpt-5-4",
+   "provider": "OpenAI",
+   "provider_class": "dot-openai",
+   "names": {
+    "ja": "GPT-5.4",
+    "en": "GPT-5.4"
+   },
+   "released": "2026-03-05",
+   "status": "unknown",
+   "price": {
+    "name": "GPT-5.4",
+    "input": 2.5,
+    "output": 15.0,
+    "note_ja": "",
+    "note_en": "",
+    "label": "OpenAI",
+    "provider": "openai"
+   },
+   "timeline": {
+    "ja_id": "gpt-5-4",
+    "en_id": "gpt-5-4",
+    "title_ja": "GPT-5.4 公開 — ネイティブComputer Use API初搭載",
+    "title_en": "GPT-5.4 released — native Computer Use API debut"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://techcrunch.com/2026/03/05/openai-launches-gpt-5-4-with-pro-and-thinking-versions/",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "gemini-3-1-pro": {
+   "id": "gemini-3-1-pro",
+   "provider": "Google",
+   "provider_class": "dot-google",
+   "names": {
+    "ja": "Gemini 3.1 Pro Preview",
+    "en": "Gemini 3.1 Pro Preview"
+   },
+   "released": "2026-02-19",
+   "status": "unknown",
+   "price": {
+    "name": "Gemini 3.1 Pro Preview",
+    "input": 2.0,
+    "output": 12.0,
+    "note_ja": "≤200K・200K超は$4/$18",
+    "note_en": "≤200K · above 200K is $4/$18",
+    "label": "Google",
+    "provider": "google"
+   },
+   "timeline": {
+    "ja_id": "gemini-3-1-pro",
+    "en_id": "gemini-3-1-pro",
+    "title_ja": "Gemini 3.1 Pro Preview 公開",
+    "title_en": "Gemini 3.1 Pro Preview released"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-1-pro/",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "claude-sonnet-4-6": {
+   "id": "claude-sonnet-4-6",
+   "provider": "Anthropic",
+   "provider_class": "dot-anthropic",
+   "names": {
+    "ja": "Claude Sonnet 4.6",
+    "en": "Claude Sonnet 4.6"
+   },
+   "released": "2026-02-17",
+   "status": "unknown",
+   "price": {
+    "name": "Claude Sonnet 4.6",
+    "input": 3.0,
+    "output": 15.0,
+    "note_ja": "",
+    "note_en": "",
+    "label": "Anthropic",
+    "provider": "anthropic"
+   },
+   "timeline": {
+    "ja_id": "claude-sonnet-4-6",
+    "en_id": "claude-sonnet-4-6",
+    "title_ja": "Claude Sonnet 4.6 公開",
+    "title_en": "Claude Sonnet 4.6 released"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://www.anthropic.com/news/claude-sonnet-4-6",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "claude-opus-4-6": {
+   "id": "claude-opus-4-6",
+   "provider": "Anthropic",
+   "provider_class": "dot-anthropic",
+   "names": {
+    "ja": "Claude Opus 4.6",
+    "en": "Claude Opus 4.6"
+   },
+   "released": "2026-02-05",
+   "status": "unknown",
+   "price": null,
+   "timeline": {
+    "ja_id": "claude-opus-4-6",
+    "en_id": "claude-opus-4-6",
+    "title_ja": "Claude Opus 4.6 公開 — フラッグシップに1Mトークンコンテキスト",
+    "title_en": "Claude Opus 4.6 released — 1M-token context on the flagship"
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [
+    {
+     "url": "https://www.codecademy.com/article/anthropic-claude-opus-4-6",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "gemini-3-pro": {
+   "id": "gemini-3-pro",
+   "provider": "Google",
+   "provider_class": "dot-google",
+   "names": {
+    "ja": "Gemini 3 Pro",
+    "en": "Gemini 3 Pro"
+   },
+   "released": "2025-11-18",
+   "status": "unknown",
+   "price": null,
+   "timeline": {
+    "ja_id": "gemini-3-pro",
+    "en_id": "gemini-3-pro",
+    "title_ja": "Gemini 3 Pro 公開 — 1Mトークン・マルチモーダル理解でLMArena首位",
+    "title_en": "Gemini 3 Pro released — 1M-token multimodal understanding tops LMArena"
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [
+    {
+     "url": "https://blog.google/products/gemini/gemini-3/",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "gpt-5": {
+   "id": "gpt-5",
+   "provider": "OpenAI",
+   "provider_class": "dot-openai",
+   "names": {
+    "ja": "GPT-5",
+    "en": "GPT-5"
+   },
+   "released": "2025-08-07",
+   "status": "unknown",
+   "price": null,
+   "timeline": {
+    "ja_id": "gpt-5",
+    "en_id": "gpt-5",
+    "title_ja": "GPT-5 公開 — 高速応答と推論を統合したルーター方式",
+    "title_en": "GPT-5 released — router-based system unifying fast response and reasoning"
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [
+    {
+     "url": "https://openai.com/index/introducing-gpt-5/",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "deepseek-r1": {
+   "id": "deepseek-r1",
+   "provider": "DeepSeek",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "DeepSeek R1",
+    "en": "DeepSeek R1"
+   },
+   "released": "2025-01-20",
+   "status": "unknown",
+   "price": null,
+   "timeline": {
+    "ja_id": "deepseek-r1",
+    "en_id": "deepseek-r1",
+    "title_ja": "DeepSeek R1 公開 — 「DeepSeekショック」の起点",
+    "title_en": "DeepSeek R1 released — the origin of the \"DeepSeek Shock\""
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [
+    {
+     "url": "https://api-docs.deepseek.com/news/news250120",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "claude-fable-5-1-calc": {
+   "id": "claude-fable-5-1-calc",
+   "provider": "Anthropic",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "Claude Fable 5.1",
+    "en": "Claude Fable 5.1"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "Claude Fable 5.1",
+    "input": 10.0,
+    "output": 50.0,
+    "note_ja": "2026-09-01公開・cache読込$0.25",
+    "note_en": "Released 2026-09-01 · cache read $0.25",
+    "label": "Anthropic",
+    "provider": "anthropic"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "claude-fable-5-calc": {
+   "id": "claude-fable-5-calc",
+   "provider": "Anthropic",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "Claude Fable 5",
+    "en": "Claude Fable 5"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "Claude Fable 5",
+    "input": 10.0,
+    "output": 50.0,
+    "note_ja": "前世代",
+    "note_en": "Previous gen",
+    "label": "Anthropic",
+    "provider": "anthropic"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "claude-haiku-4-5": {
+   "id": "claude-haiku-4-5",
+   "provider": "Anthropic",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "Claude Haiku 4.5",
+    "en": "Claude Haiku 4.5"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "Claude Haiku 4.5",
+    "input": 1.0,
+    "output": 5.0,
+    "note_ja": "",
+    "note_en": "",
+    "label": "Anthropic",
+    "provider": "anthropic"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "gpt-6-sol": {
+   "id": "gpt-6-sol",
+   "provider": "OpenAI",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "GPT-6 Sol",
+    "en": "GPT-6 Sol"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "GPT-6 Sol",
+    "input": 2.0,
+    "output": 10.0,
+    "note_ja": "2026-09-22公開・cache入力$0.20",
+    "note_en": "Released 2026-09-22 · cached input $0.20",
+    "label": "OpenAI",
+    "provider": "openai"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "gpt-6-luna": {
+   "id": "gpt-6-luna",
+   "provider": "OpenAI",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "GPT-6 Luna",
+    "en": "GPT-6 Luna"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "GPT-6 Luna",
+    "input": 0.1,
+    "output": 0.5,
+    "note_ja": "2026-09-22公開・cache入力$0.01",
+    "note_en": "Released 2026-09-22 · cached input $0.01",
+    "label": "OpenAI",
+    "provider": "openai"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "gpt-5-6-sol": {
+   "id": "gpt-5-6-sol",
+   "provider": "OpenAI",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "GPT-5.6 Sol",
+    "en": "GPT-5.6 Sol"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "GPT-5.6 Sol",
+    "input": 4.0,
+    "output": 20.0,
+    "note_ja": "旧版（2026-09-22にGPT-6 Solへ後継）・cache読込$0.20",
+    "note_en": "Legacy — superseded by GPT-6 Sol on 2026-09-22 · cache read $0.20",
+    "label": "OpenAI",
+    "provider": "openai"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "gpt-5-6-terra": {
+   "id": "gpt-5-6-terra",
+   "provider": "OpenAI",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "GPT-5.6 Terra",
+    "en": "GPT-5.6 Terra"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "GPT-5.6 Terra",
+    "input": 2.0,
+    "output": 12.0,
+    "note_ja": "7/30値下げ",
+    "note_en": "Price cut 7/30",
+    "label": "OpenAI",
+    "provider": "openai"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "gpt-5-6-luna": {
+   "id": "gpt-5-6-luna",
+   "provider": "OpenAI",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "GPT-5.6 Luna",
+    "en": "GPT-5.6 Luna"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "GPT-5.6 Luna",
+    "input": 0.2,
+    "output": 1.2,
+    "note_ja": "旧版（2026-09-22にGPT-6 Lunaへ後継）・cache入力$0.02",
+    "note_en": "Legacy — superseded by GPT-6 Luna on 2026-09-22 · cached input $0.02",
+    "label": "OpenAI",
+    "provider": "openai"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "gpt-5-4-mini": {
+   "id": "gpt-5-4-mini",
+   "provider": "OpenAI",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "GPT-5.4 mini",
+    "en": "GPT-5.4 mini"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "GPT-5.4 mini",
+    "input": 0.75,
+    "output": 4.5,
+    "note_ja": "",
+    "note_en": "",
+    "label": "OpenAI",
+    "provider": "openai"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "gpt-5-4-nano": {
+   "id": "gpt-5-4-nano",
+   "provider": "OpenAI",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "GPT-5.4 nano",
+    "en": "GPT-5.4 nano"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "GPT-5.4 nano",
+    "input": 0.2,
+    "output": 1.25,
+    "note_ja": "",
+    "note_en": "",
+    "label": "OpenAI",
+    "provider": "openai"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "gemini-3-8-flash-calc": {
+   "id": "gemini-3-8-flash-calc",
+   "provider": "Google",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "Gemini 3.8 Flash",
+    "en": "Gemini 3.8 Flash"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "Gemini 3.8 Flash",
+    "input": 0.75,
+    "output": 3.75,
+    "note_ja": "導入価格(〜2026-12-31)・通常$1.50/$7.50",
+    "note_en": "Intro pricing (through 2026-12-31) · list $1.50/$7.50",
+    "label": "Google",
+    "provider": "google"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "gemini-3-6-flash-calc": {
+   "id": "gemini-3-6-flash-calc",
+   "provider": "Google",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "Gemini 3.6 Flash",
+    "en": "Gemini 3.6 Flash"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "Gemini 3.6 Flash",
+    "input": 0.75,
+    "output": 3.75,
+    "note_ja": "導入価格(〜2026-12-31)・通常$1.50/$7.50",
+    "note_en": "Intro pricing (through 2026-12-31) · list $1.50/$7.50",
+    "label": "Google",
+    "provider": "google"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "gemini-3-5-flash-calc": {
+   "id": "gemini-3-5-flash-calc",
+   "provider": "Google",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "Gemini 3.5 Flash",
+    "en": "Gemini 3.5 Flash"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "Gemini 3.5 Flash",
+    "input": 1.5,
+    "output": 9.0,
+    "note_ja": "",
+    "note_en": "",
+    "label": "Google",
+    "provider": "google"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "gemini-3-5-flash-lite": {
+   "id": "gemini-3-5-flash-lite",
+   "provider": "Google",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "Gemini 3.5 Flash-Lite",
+    "en": "Gemini 3.5 Flash-Lite"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "Gemini 3.5 Flash-Lite",
+    "input": 0.3,
+    "output": 2.5,
+    "note_ja": "2026年7月GA",
+    "note_en": "GA July 2026",
+    "label": "Google",
+    "provider": "google"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "gemini-3-1-flash-lite": {
+   "id": "gemini-3-1-flash-lite",
+   "provider": "Google",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "Gemini 3.1 Flash-Lite",
+    "en": "Gemini 3.1 Flash-Lite"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "Gemini 3.1 Flash-Lite",
+    "input": 0.25,
+    "output": 1.5,
+    "note_ja": "音声入力は$0.50",
+    "note_en": "audio input $0.50",
+    "label": "Google",
+    "provider": "google"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "gemini-omni-1-1-flash": {
+   "id": "gemini-omni-1-1-flash",
+   "provider": "Google",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "Gemini Omni 1.1 Flash",
+    "en": "Gemini Omni 1.1 Flash"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "Gemini Omni 1.1 Flash",
+    "input": 1.5,
+    "output": 9.0,
+    "note_ja": "動画生成・編集向け。出力はテキスト$9.00・動画$17.50",
+    "note_en": "Video generation/editing. Output: $9.00 text, $17.50 video",
+    "label": "Google",
+    "provider": "google"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "gemini-2-5-pro": {
+   "id": "gemini-2-5-pro",
+   "provider": "Google",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "Gemini 2.5 Pro",
+    "en": "Gemini 2.5 Pro"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "Gemini 2.5 Pro",
+    "input": 1.25,
+    "output": 10.0,
+    "note_ja": "",
+    "note_en": "",
+    "label": "Google",
+    "provider": "google"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "gemini-2-5-flash": {
+   "id": "gemini-2-5-flash",
+   "provider": "Google",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "Gemini 2.5 Flash",
+    "en": "Gemini 2.5 Flash"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "Gemini 2.5 Flash",
+    "input": 0.3,
+    "output": 2.5,
+    "note_ja": "",
+    "note_en": "",
+    "label": "Google",
+    "provider": "google"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "gemini-2-5-flash-lite": {
+   "id": "gemini-2-5-flash-lite",
+   "provider": "Google",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "Gemini 2.5 Flash-Lite",
+    "en": "Gemini 2.5 Flash-Lite"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "Gemini 2.5 Flash-Lite",
+    "input": 0.1,
+    "output": 0.4,
+    "note_ja": "",
+    "note_en": "",
+    "label": "Google",
+    "provider": "google"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "deepseek-v4-1-flash-calc": {
+   "id": "deepseek-v4-1-flash-calc",
+   "provider": "DeepSeek",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "DeepSeek V4.1 Flash",
+    "en": "DeepSeek V4.1 Flash"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "DeepSeek V4.1 Flash",
+    "input": 0.3,
+    "output": 1.2,
+    "note_ja": "ピーク(cache miss)・旧名 deepseek-v4-flash / deepseek-v4-flash-vision-exp はこのモデルへルーティング（Flash価格で課金）",
+    "note_en": "Peak (cache miss) · legacy names deepseek-v4-flash / deepseek-v4-flash-vision-exp route here (billed at Flash price)",
+    "label": "DeepSeek",
+    "provider": "deepseek"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "deepseek-v4-pro": {
+   "id": "deepseek-v4-pro",
+   "provider": "DeepSeek",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "DeepSeek V4 Pro",
+    "en": "DeepSeek V4 Pro"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "DeepSeek V4 Pro",
+    "input": 0.66,
+    "output": 1.98,
+    "note_ja": "オフピーク(cache miss)・2026-09-14以降も提供継続（公式が告知）",
+    "note_en": "Off-peak (cache miss) · continues after 2026-09-14 per DeepSeek's notice",
+    "label": "DeepSeek",
+    "provider": "deepseek"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "deepseek-v4-pro-calc": {
+   "id": "deepseek-v4-pro-calc",
+   "provider": "DeepSeek",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "DeepSeek V4 Pro",
+    "en": "DeepSeek V4 Pro"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "DeepSeek V4 Pro",
+    "input": 1.32,
+    "output": 3.96,
+    "note_ja": "ピーク(cache miss)・提供継続・Vision非対応",
+    "note_en": "Peak (cache miss) · still available · no vision support",
+    "label": "DeepSeek",
+    "provider": "deepseek"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "qwen3-8-max": {
+   "id": "qwen3-8-max",
+   "provider": "Alibaba",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "Qwen3.8-Max",
+    "en": "Qwen3.8-Max"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "Qwen3.8-Max",
+    "input": 2.0,
+    "output": 6.0,
+    "note_ja": "フラッグシップ",
+    "note_en": "Flagship",
+    "label": "Alibaba",
+    "provider": "other"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "kimi-k3-1-pro-calc": {
+   "id": "kimi-k3-1-pro-calc",
+   "provider": "Moonshot (Kimi)",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "Kimi K3.1 Pro",
+    "en": "Kimi K3.1 Pro"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "Kimi K3.1 Pro",
+    "input": 2.0,
+    "output": 10.0,
+    "note_ja": "cache入力$0.20・書込は5分$2.00/1時間$4.00・1,048,576コンテキスト・Batchは標準の60%",
+    "note_en": "cached input $0.20 · cache writes $2.00 (5m) / $4.00 (1h) · 1,048,576 context · Batch at 60%",
+    "label": "Moonshot (Kimi)",
+    "provider": "other"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "kimi-k3": {
+   "id": "kimi-k3",
+   "provider": "Moonshot AI",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "Kimi K3",
+    "en": "Kimi K3"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "Kimi K3",
+    "input": 3.0,
+    "output": 15.0,
+    "note_ja": "1Mコンテキスト・2026-09-18 Amazon Bedrock提供開始（cacheヒット$0.30）",
+    "note_en": "1M context · on Amazon Bedrock since 2026-09-18 · cached hit $0.30",
+    "label": "Moonshot AI",
+    "provider": "other"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "mimo-v2-6-pro": {
+   "id": "mimo-v2-6-pro",
+   "provider": "Xiaomi",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "MiMo-V2.6-Pro",
+    "en": "MiMo-V2.6-Pro"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "MiMo-V2.6-Pro",
+    "input": 0.435,
+    "output": 0.87,
+    "note_ja": "2026-09-22発表・1Mコンテキスト・入力4モダリティ（cacheヒット$0.0036）",
+    "note_en": "Announced 2026-09-22 · 1M context · 4 input modalities (cached hit $0.0036)",
+    "label": "Xiaomi",
+    "provider": "other"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "mimo-v2-6-flash": {
+   "id": "mimo-v2-6-flash",
+   "provider": "Xiaomi",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "MiMo-V2.6-Flash",
+    "en": "MiMo-V2.6-Flash"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "MiMo-V2.6-Flash",
+    "input": 0.14,
+    "output": 0.28,
+    "note_ja": "同シリーズのバランス型・Batch APIは50%価格（cacheヒット$0.0028）",
+    "note_en": "Balanced model · Batch API at 50% (cached hit $0.0028)",
+    "label": "Xiaomi",
+    "provider": "other"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "mimo-v2-6-pro-ultraspeed": {
+   "id": "mimo-v2-6-pro-ultraspeed",
+   "provider": "Xiaomi",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "MiMo-V2.6-Pro-UltraSpeed",
+    "en": "MiMo-V2.6-Pro-UltraSpeed"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "MiMo-V2.6-Pro-UltraSpeed",
+    "input": 4.35,
+    "output": 8.7,
+    "note_ja": "Proの高速API版（単価10倍・最大20倍速）",
+    "note_en": "High-speed API variant of Pro (10x price, up to 20x faster)",
+    "label": "Xiaomi",
+    "provider": "other"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "meta-muse-wonder-calc": {
+   "id": "meta-muse-wonder-calc",
+   "provider": "Muse Wonder",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "Meta Muse Wonder",
+    "en": "Meta Muse Wonder"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "Meta Muse Wonder",
+    "input": 4.0,
+    "output": 20.0,
+    "note_ja": "2026-10-12公開（muse-wonder-1.0）。キャッシュ入力 $0.20、1Mコンテキスト、長文プレミアムなし。Contributor モードの提供なし",
+    "note_en": "Released 2026-10-12 (muse-wonder-1.0). $0.20 cache input, 1M context, no long-context surcharge, no Contributor mode",
+    "label": "Muse Wonder",
+    "provider": "other"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  }
+ }
+}
