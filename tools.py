@@ -321,6 +321,33 @@ def site_download(dest_dir: str | None = None) -> dict:
     return download_site(dest_dir)
 
 
+def _page_shape_errors(site_dir: str) -> list:
+    """ページの形（コンテナ外・日英の同格・英語ページの和文）を検査する。
+
+    tools/check_page_shape.py を subprocess で呼ぶ。戻り値は [(ページ or "", メッセージ)]。
+    2026-11-15 追加: /timeline/ にだけ図を足して /en/timeline/ に無い、
+    図がコンテナの外に出てレイアウトが崩れる、という事故が実際に起きた。
+    """
+    script = os.path.join(WORKSPACE_LOCAL_DIR, "tools", "check_page_shape.py")
+    if not os.path.exists(script):
+        return []
+    try:
+        r = subprocess.run([sys.executable, script, site_dir],
+                           capture_output=True, text=True, timeout=180)
+    except Exception:
+        return []
+    out = []
+    for raw in (r.stdout or "").splitlines():
+        line = raw.strip()
+        if not line.startswith("[ERROR]"):
+            continue
+        m = re.match(r"\[ERROR\]\s+(container-escape|jp-in-en|ja/en-parity)\s+(\S+?):",
+                     line)
+        if m:
+            out.append((m.group(2), line))
+    return out
+
+
 def _site_integrity_errors(site_dir: str) -> list:
     """サイト全体の重複・孤立リンクを検査する（決定論的・読取のみ）。
 
@@ -453,8 +480,10 @@ def site_upload(local_path: str, site_prefix: str = "") -> dict:
     # --- 公開ゲート: 重複・孤立リンク（2026-11-15 追加）---
     # 同じ文章の重複と「どこからもリンクされないページ」は、人が気づくまで残る。
     integrity_errors = []
+    shape_errors = []
     if any(r.endswith("index.html") for r in target_rels):
         integrity_errors = _site_integrity_errors(base_dir)
+        shape_errors = _page_shape_errors(base_dir)
 
     s3 = boto3.client("s3", region_name=AWS_REGION)
     uploaded, rejected = [], []
@@ -467,6 +496,14 @@ def site_upload(local_path: str, site_prefix: str = "") -> dict:
         if integrity_errors and rel.endswith("index.html"):
             hits = [msg for page, msg in integrity_errors
                     if page == rel or page == ""]
+            if hits:
+                rejected.append({"key": key, "errors": hits})
+                continue
+        if shape_errors and rel.endswith("index.html"):
+            # 日英の同格違反は ja 側の名前で出るので、en 側の公開も止める
+            pair = rel[3:] if rel.startswith("en/") else "en/" + rel
+            hits = [msg for page, msg in shape_errors
+                    if page in (rel, pair, "")]
             if hits:
                 rejected.append({"key": key, "errors": hits})
                 continue
