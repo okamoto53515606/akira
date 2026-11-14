@@ -1,12 +1,47 @@
 {
- "updated": "2026-11-15",
+ "updated": "2026-11-14",
  "events": [
+  {
+   "date": "2026-11-15",
+   "kind": "page",
+   "key": "timeline-lifecycle-figure",
+   "ja": "年表に「発表→提供開始→価格改定→旧版化」の4段階図を追加（年表の読み方）",
+   "en": "Added a four-stage lifecycle figure (announcement → availability → price change → legacy) to the timeline"
+  },
   {
    "date": "2026-11-15",
    "kind": "page",
    "key": "speech-api-pricing-publish",
    "ja": "音声・TTS・文字起こしAPIの料金比較（/speech-api-pricing/）を公開。単位の正規化と換算前提を明記し、Deprecated の文字課金TTSを注意ボックスで分離",
    "en": "Published the speech API pricing comparison (/en/speech-api-pricing/), normalising TTS and transcription rates to a per-minute basis and flagging deprecated character-billed TTS models"
+  },
+  {
+   "date": "2026-11-15",
+   "kind": "page",
+   "key": "pricing-status-column",
+   "ja": "料金比較（日英）に状態列を追加。旧世代・提供終了予定の行を「旧版」「提供終了予定」として明示（行は削除しない）。出力単価の相場を掴む図も掲載",
+   "en": "Added a status column (Current / Legacy / Sunset announced) to the pricing tables, ja and en. Rows are never removed; also added a bar figure for output-price spread"
+  },
+  {
+   "date": "2026-11-15",
+   "kind": "page",
+   "key": "multimodal-modality-figure",
+   "ja": "マルチモーダル特集を2026年11月版に更新。入力→換算→課金の3段図を追加（Google料金・OpenAI音声・Azure MAIを11-15に再確認）",
+   "en": "Updated the multimodal guide to the November 2026 edition; added an input → conversion → billing figure (Google pricing, OpenAI audio and Azure MAI re-checked on Nov 15)"
+  },
+  {
+   "date": "2026-11-15",
+   "kind": "page",
+   "key": "mai-november-edition",
+   "ja": "Microsoft AI（MAI）特集を2026年11月版に更新。Azure Foundry料金表が9行のままであることと各単価を11-15に再確認",
+   "en": "Updated the Microsoft AI (MAI) guide to the November 2026 edition; re-confirmed the Azure Foundry table still has nine model rows and the same unit prices"
+  },
+  {
+   "date": "2026-11-15",
+   "kind": "page",
+   "key": "glossary-fold-sources",
+   "ja": "用語集14ページの「出典」セクションを折りたたみ表示に（本文3,000字超のページの可読性対策）",
+   "en": "Collapsed the sources section on 14 glossary pages to make long entries easier to scan"
   },
   {
    "date": "2026-11-14",

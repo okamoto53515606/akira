@@ -14,7 +14,7 @@ import sys
 import time
 import urllib.error
 import urllib.request
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 
 import boto3
 from strands import tool
@@ -375,6 +375,41 @@ def _record_gate_lesson(title: str, details) -> None:
         pass
 
 
+def _bump_sitemap_lastmod(site_dir: str, rels, s3) -> bool:
+    """アップロードしたページの sitemap lastmod を今日に揃える（2026-11-15 追加）。
+
+    背景: sitemap の lastmod は render_site が「自分が書いたファイル」だけ更新していた。
+    手で直したページ（/pricing/・/multimodal/ 等）は lastmod が古いまま残り、
+    11-15 のランで **9 URL が「本文は11-15・lastmodは10-17」** という不整合になった。
+    公開した瞬間に lastmod を動かせば、構造的にズレない。
+    """
+    path = os.path.join(site_dir, "sitemap.xml")
+    if not os.path.exists(path):
+        return False
+    today = datetime.now(JST).strftime("%Y-%m-%d")
+    with open(path, encoding="utf-8") as fh:
+        s = fh.read()
+    orig = s
+    for rel in rels:
+        if not rel.endswith("index.html") or rel == "sitemap.xml":
+            continue
+        prefix = "en/" if rel.startswith("en/") else ""
+        key = rel[len(prefix):-len("index.html")]
+        url = "https://llm.okamomedia.tokyo/%s%s" % (prefix, key)
+        if "<loc>%s</loc>" not in s:
+            continue
+        s = re.sub(r"(<loc>%s</loc>\s*<lastmod>)[0-9-]+(</lastmod>)" % re.escape(url),
+                   r"\g<1>%s\g<2>" % today, s)
+    if orig == s:
+        return False
+    with open(path, "w", encoding="utf-8") as fh:
+        fh.write(s)
+    s3.upload_file(path, LLM_SITE_BUCKET, "sitemap.xml",
+                   ExtraArgs={"ContentType": _content_type("sitemap.xml")})
+    _invalidation_paths.append("/sitemap.xml")
+    return True
+
+
 @tool
 def site_upload(local_path: str, site_prefix: str = "") -> dict:
     """ローカル作業フォルダ（SITE_LOCAL_DIR）内のファイル/フォルダをS3に一括アップロードする。
@@ -453,7 +488,12 @@ def site_upload(local_path: str, site_prefix: str = "") -> dict:
             s3.upload_file(f, LLM_SITE_BUCKET, key, ExtraArgs={"ContentType": _content_type(key)})
         _invalidation_paths.append("/" + key)
         uploaded.append(key)
+    # 公開したページの sitemap lastmod を揃える（render_site の出力に限らない）
+    sitemap_bumped = bool(uploaded and _bump_sitemap_lastmod(base_dir, uploaded, s3))
+
     result: dict = {"status": "published", "count": len(uploaded), "uploaded": uploaded}
+    if sitemap_bumped:
+        result["sitemap"] = "lastmod updated"
     if rejected:
         result["status"] = "published_partial" if uploaded else "rejected"
         result["reason"] = ("契約・整合ゲートに違反するファイルはアップロードしませんでした"

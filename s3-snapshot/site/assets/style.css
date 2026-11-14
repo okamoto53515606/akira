@@ -60,7 +60,7 @@ img { max-width: 100%; height: auto; }
   color: var(--c-text); white-space: nowrap;
   display: flex; align-items: center; gap: .4rem;
 }
-.site-logo .logo-icon { font-size: 1.3rem; }
+.site-logo .logo-icon { width: 1.4rem; height: 1.4rem; display: block; flex: 0 0 auto; }   /* 2026-11-15: ⚡ を favicon と同じマークのSVGに置換 */
 .site-logo:hover { text-decoration: none; }
 
 nav { display: flex; gap: 0; flex: 1; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; }
@@ -376,3 +376,11 @@ html[lang="en"] body {
   border: 1px solid var(--c-border); border-radius: 10px;
 }
 .tint > h2 { margin-top: 0; }
+
+.footer-brand .footer-logo { width: 1rem; height: 1rem; vertical-align: -2px; }
+
+/* 状態列（旧世代を消さずに明示する） */
+.st-cell { white-space:nowrap; font-size:.8rem; font-weight:700; }
+.st-cur { color:var(--c-muted); font-weight:500; }
+.st-old { color:#b45309; }
+.st-sun { color:#b91c1c; }

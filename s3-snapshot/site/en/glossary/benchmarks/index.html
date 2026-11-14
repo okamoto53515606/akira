@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>What is a benchmark? Sorting them by who runs it | LLM Data Hub</title>
-  <meta name="description" content="DeepSWE, GDPval-AA, Terminal-Bench, OSWorld — too many benchmarks to make sense of. This entry sorts six of them along three questions: who runs it, what it measures, and how it measures it (harness and settings). Every fact is traced to the operator's own repository, site or paper, including why GDPval and GDPval-AA are not the same number.">
+  <meta name="description" content="DeepSWE, GDPval-AA, Terminal-Bench, OSWorld — too many benchmarks to make sense of. This entry sorts six of them along three questions: who runs it, what it measures, and how it measures it (harness and settings).">
   <link rel="canonical" href="https://llm.okamomedia.tokyo/en/glossary/benchmarks/">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -23,7 +23,7 @@
   <meta property="og:description" content="Not a list of benchmark names, but a way to sort them: operator, measurement target, and harness. DeepSWE, GDPval, GDPval-AA, Terminal-Bench, Terminal-Bench-Science and OSWorld, each traced to its operator's own publication.">
   <meta property="og:site_name" content="LLM Data Hub">
   <meta name="twitter:card" content="summary_large_image">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"What is a benchmark? Sorting them by who runs it, what it measures, and how","datePublished":"2026-09-23","dateModified":"2026-09-23","author":{"@type":"Organization","name":"LLM Data Hub"},"publisher":{"@type":"Organization","name":"okamoちゃんねる"},"url":"https://llm.okamomedia.tokyo/en/glossary/benchmarks/","inLanguage":"en","about":"Classifying AI benchmarks by operator, measurement target and harness, and a checklist for reading benchmark scores"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"What is a benchmark? Sorting them by who runs it, what it measures, and how","datePublished":"2026-09-23","dateModified":"2026-11-15","author":{"@type":"Organization","name":"LLM Data Hub"},"publisher":{"@type":"Organization","name":"okamoちゃんねる"},"url":"https://llm.okamomedia.tokyo/en/glossary/benchmarks/","inLanguage":"en","about":"Classifying AI benchmarks by operator, measurement target and harness, and a checklist for reading benchmark scores"}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://llm.okamomedia.tokyo/en/"},{"@type":"ListItem","position":2,"name":"Glossary","item":"https://llm.okamomedia.tokyo/en/glossary/"},{"@type":"ListItem","position":3,"name":"What is a benchmark?","item":"https://llm.okamomedia.tokyo/en/glossary/benchmarks/"}]}</script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
@@ -79,7 +79,7 @@
   </style>
 </head>
 <body>
-<header class="site-header"><div class="header-inner"><a href="/en/" class="site-logo"><span class="logo-icon">⚡</span>LLM Data Hub</a><nav aria-label="Main navigation"><a href="/en/" class="nav-link">Home</a><a href="/en/pricing/" class="nav-link">Pricing</a><a href="/en/calculator/" class="nav-link">Token Calculator</a><a href="/en/timeline/" class="nav-link">Release Timeline</a><a href="/en/china-ai/" class="nav-link">China AI</a><a href="/en/multimodal/" class="nav-link">Multimodal</a><a href="/en/mai/" class="nav-link">MS AI (MAI)</a><a href="/en/glossary/" class="nav-link">Glossary</a></nav></div></header>
+<header class="site-header"><div class="header-inner"><a href="/en/" class="site-logo"><img src="/logo.svg" class="logo-icon" alt="" width="22" height="22" aria-hidden="true">LLM Data Hub</a><nav aria-label="Main navigation"><a href="/en/" class="nav-link">Home</a><a href="/en/pricing/" class="nav-link">Pricing</a><a href="/en/calculator/" class="nav-link">Token Calculator</a><a href="/en/timeline/" class="nav-link">Release Timeline</a><a href="/en/china-ai/" class="nav-link">China AI</a><a href="/en/multimodal/" class="nav-link">Multimodal</a><a href="/en/mai/" class="nav-link">MS AI (MAI)</a><a href="/en/glossary/" class="nav-link">Glossary</a></nav></div></header>
 
 <main><div class="container">
   <div class="section" style="padding-bottom:0;">
@@ -99,7 +99,7 @@
     </div>
     <div class="updated-bar">
       <span class="dot">●</span>
-      Last updated: <time datetime="2026-09-23">September 23, 2026</time>
+      Last updated: <time datetime="2026-11-15">November 15, 2026</time>
       &ensp;|&ensp; Policy: only what we can confirm in the operator's own repository, site or paper. If it cannot be confirmed, it is not published here
     </div>
   </div>
@@ -355,7 +355,8 @@
   </section>
 
   <section class="section" style="padding-top:.5rem;" aria-labelledby="src-h">
-    <h2 class="section-title" id="src-h" style="font-size:1.2rem;">Sources (all checked September 23, 2026)</h2>
+    <details class="legacy" style="margin:1rem 0;"><summary>Sources (all checked September 23, 2026) (click to expand)</summary>
+
     <ul style="font-size:.84rem;line-height:1.9;color:var(--c-muted);padding-left:1.2rem;">
       <li>DeepSWE — <a href="https://github.com/datacurve-ai/deep-swe" target="_blank" rel="noopener">github.com/datacurve-ai/deep-swe</a> (operator: Datacurve)</li>
       <li>GDPval — <a href="https://openai.com/index/gdpval/" target="_blank" rel="noopener">openai.com/index/gdpval</a> / paper <a href="https://arxiv.org/abs/2510.04374" target="_blank" rel="noopener">arXiv:2510.04374</a> (OpenAI)</li>
@@ -365,8 +366,9 @@
       <li>OSWorld — <a href="https://osworld-v1.xlang.ai/" target="_blank" rel="noopener">osworld-v1.xlang.ai</a> / paper <a href="https://arxiv.org/abs/2404.07972" target="_blank" rel="noopener">arXiv:2404.07972</a> / <a href="https://xlang.ai/blog/osworld-verified" target="_blank" rel="noopener">OSWorld-Verified</a> / <a href="https://osworld-v2.xlang.ai/" target="_blank" rel="noopener">OSWorld 2.0</a> (XLANG Lab)</li>
     </ul>
     <p style="font-size:.8rem;color:var(--c-muted);margin-top:.6rem;">See also: <a href="/en/glossary/">Glossary index</a> · <a href="/en/glossary/harness/">Agent harnesses</a> · <a href="/en/glossary/gpt-6-astra-benchmarks/">Reading GPT-6 Astra's benchmarks</a> · <a href="/en/glossary/one-million-context/">1M-token context</a> · <a href="/en/timeline/">Release timeline</a></p>
-  </section>
+  </details>
+</section>
 </div></main>
-<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong>⚡ LLM Data Hub</strong><p>Operated by okamoちゃんねる</p><p><a href="/en/">Home</a> · <a href="/en/pricing/">Pricing</a> · <a href="/en/calculator/">Calculator</a> · <a href="/en/timeline/">Timeline</a> · <a href="/en/glossary/">Glossary</a> · <a href="/en/gpt-6/">GPT-6 Astra</a></p></div><p class="footer-disclaimer">⚠️ Prices and specifications change without notice. Always confirm on the vendor's official page before you commit. This site is not affiliated with any provider.</p></div></footer>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong><img src="/logo.svg" class="footer-logo" alt="" width="16" height="16" aria-hidden="true"> LLM Data Hub</strong><p>Operated by okamoちゃんねる</p><p><a href="/en/">Home</a> · <a href="/en/pricing/">Pricing</a> · <a href="/en/calculator/">Calculator</a> · <a href="/en/timeline/">Timeline</a> · <a href="/en/glossary/">Glossary</a> · <a href="/en/gpt-6/">GPT-6 Astra</a></p></div><p class="footer-disclaimer">⚠️ Prices and specifications change without notice. Always confirm on the vendor's official page before you commit. This site is not affiliated with any provider.</p></div></footer>
 </body>
 </html>

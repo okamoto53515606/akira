@@ -1007,7 +1007,10 @@ def run_daily(dry_run: bool = False, no_publish: bool = False) -> None:
         )
     # 不変の運営ルールはコード側（静的）に置く。site_plan には「今の状況」だけを入れる。
     # 2026-11-15: 規則と経緯が site_plan に溜まり 18,000字まで膨れたため分離した。
-    system_prompt += "\n\n" + prompts.SITE_RULES
+    # 注意: prompts は他関数内で import されている（モジュール直下には無い）。
+    # 2026-11-15 にモジュール直下で参照して NameError で即死した。
+    import prompts as _prompts
+    system_prompt += "\n\n" + _prompts.SITE_RULES
     site_plan = config_store.load_config("site_plan")
     if site_plan:
         system_prompt += f"\n\n## サイトの今の状況（自分で更新可能）\n{site_plan}"
