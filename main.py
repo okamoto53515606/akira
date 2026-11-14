@@ -447,42 +447,48 @@ _URL_RE = re.compile(r"https?://\S+")
 
 
 def _sanitize_review(text: str) -> str:
-    """引用の無い『クリティカル』を軽微に降格する（2026-11-14 追加）。
+    """引用URLの無い『クリティカル』を軽微扱いに落とす（2026-11-14 追加 / 同日 v2）。
 
-    レビューの格上げ条件（URL＋逐語引用がある場合のみクリティカル）を、文章の
-    お願いではなく機械で担保する。判定できない項目は落とさず、降格して残す。
+    レビューの格上げ条件（公式URL＋逐語引用がある場合のみクリティカル）を、文章の
+    お願いではなく機械で担保する。
+
+    v2: 判定を**行単位から節単位**に変えた。11-14 のテストランで、GPTが
+        「1. tts-1 が Deprecated（本文）／ - 公式URL: https://… ／ - 逐語引用: …」
+        の形で出した critical を、行単位の判定が「URLの無い行」として誤って降格した。
+        主張と引用が別の行に分かれるのは普通なので、**節の中に1つでもURLがあれば
+        引用あり**とみなす。引用が1つも無い節だけを軽微扱いにする。
     """
     if not text or "クリティカル" not in text:
         return text
     lines = text.split("\n")
-    in_critical = False
-    downgraded = 0
-    out = []
-    for line in lines:
-        stripped = line.strip()
-        if "クリティカル" in line and "軽微" not in line:
-            in_critical = True
-            out.append(line)
-            continue
-        if in_critical and re.match(r"^(#+\s|【|>?\s*(?:\*\*)?(軽微|改善|提案|その他|まとめ|結論))", stripped):
-            in_critical = False
-        is_bullet = stripped.startswith(("-", "・", "*"))
-        if in_critical and is_bullet and not _URL_RE.search(line):
-            out.append(line.replace("- ", "[軽微に降格: 引用なし] ", 1)
-                       if line.lstrip().startswith("- ") else
-                       "[軽微に降格: 引用なし] " + line)
-            downgraded += 1
-            continue
-        out.append(line)
-    if not downgraded:
+    start = None
+    for i, ln in enumerate(lines):
+        st = ln.strip()
+        if "クリティカル" in st and "軽微" not in st:
+            start = i
+            break
+    if start is None:
         return text
-    logger.warning("レビュー: 引用の無いクリティカル %d件を軽微に降格しました", downgraded)
-    return ("\n".join(out)
-            + "\n\n[ゲート] 引用（URL）の無いクリティカル %d件は軽微に降格した。"
-              "事実の断定は当日取得の一次情報で確認すること（恒久ルール2）。" % downgraded)
+    end = len(lines)
+    for j in range(start + 1, len(lines)):
+        st = lines[j].strip()
+        if re.match(r"^(#+\s|【|>?\s*(?:\*\*)?(軽微|改善|提案|その他|まとめ|結論))", st):
+            end = j
+            break
+    if _URL_RE.search("\n".join(lines[start:end])):
+        return text
+    note = "[軽微として扱う: 引用URLなし] "
+    for j in range(start + 1, end):
+        if lines[j].strip():
+            lines[j] = note + lines[j]
+            break
+    logger.warning("レビュー: 引用URLの無いクリティカル節を軽微扱いにしました")
+    return ("\n".join(lines)
+            + "\n\n[ゲート] クリティカルの節に公式URLの引用が無いため軽微として扱う。"
+              "事実の断定は当日取得の一次情報で確認すること（恒久ルール2）。")
 
 
-def create_delegation_tools(models, run_budget_jpy: float):
+def create_delegation_tools(models, run_budget_jpy: float, block_publish: bool = False):
     """3AIを「ツール」としてAkiraに渡す（agent-as-toolパターン）。
 
     各呼び出しのトークン使用量は個別モデルIDで akira-usage に記録する。
@@ -658,14 +664,32 @@ def create_delegation_tools(models, run_budget_jpy: float):
         return _run(_new_gemini_agent, GEMINI_MODEL_ID, "Gemini子育てママ", request)
 
     # Claudeエンジニアの追加ツール（オプショナル）
+    # 2026-11-14: ドライランは「Akiraへの一文」だけで、エンジニアは普通に公開できた。
+    # テストランのために `--dry-run` は**物理的に公開できない**ようにする
+    # （サイトを触らずに仕組みの挙動だけ測るための安全弁）。
+    if block_publish:
+        @tool
+        def publish_file_to_site(*args, **kwargs) -> dict:
+            """【ドライラン】公開は行わない。"""
+            return {"status": "dry_run", "note": "本日はドライランのため公開していません"}
+
+        @tool
+        def site_upload(*args, **kwargs) -> dict:
+            """【ドライラン】公開は行わない。"""
+            return {"status": "dry_run", "note": "本日はドライランのため公開していません"}
+
+        _publish, _upload = publish_file_to_site, site_upload
+    else:
+        _publish, _upload = akira_tools.publish_file_to_site, akira_tools.site_upload
+
     claude_tools = [
-        akira_tools.publish_file_to_site,
+        _publish,
         akira_tools.get_site_file,
         akira_tools.list_site_files,
         akira_tools.list_local_files,
         akira_tools.list_workspace_files,
         akira_tools.site_download,
-        akira_tools.site_upload,
+        _upload,
         # 画像生成はエージェント経由ではなく直接叩けるようにする。
         # 2026-09-15: ask_gemini_mother（エージェント）が400で不通になり画像が作れなかった。
         # 画像生成自体は APIキー1コールの決定論的な処理なので、依頼先のLLMが落ちても
@@ -860,7 +884,7 @@ DAILY_MISSION_TEMPLATE = """今日は {today} です。LLM Data Hub（{site_url}
 """
 
 
-def run_daily(dry_run: bool = False) -> None:
+def run_daily(dry_run: bool = False, no_publish: bool = False) -> None:
     from strands import Agent
 
     load_secrets_into_env()
@@ -995,7 +1019,10 @@ def run_daily(dry_run: bool = False) -> None:
     if ENABLE_BIGQUERY_MCP:
         akira_extra_tools.append(_create_bigquery_mcp())
 
-    delegation = create_delegation_tools(models, run_budget_jpy=budget_status["remaining_jpy"])
+    delegation = create_delegation_tools(
+        models, run_budget_jpy=budget_status["remaining_jpy"],
+        block_publish=(dry_run or no_publish),
+    )
 
     # Akira自身のツール（delegation + 直接使うツール）
     # ※画像系（take_screenshot / image_reader / fetch_image_from_url）はAkiraから外す
@@ -1036,6 +1063,12 @@ def run_daily(dry_run: bool = False) -> None:
     )
     if dry_run:
         mission += "\n\n【重要】今日はドライランです。公開・依頼は行わず、計画の提示だけしてください。"
+    if no_publish:
+        mission += ("\n\n【重要】今日はテストランです。**作業は通常どおり最後まで行う**"
+                    "（リサーチ・cache保存・執筆・レビューまで）。ただし site_upload と "
+                    "publish_file_to_site は無効化されており公開できません。"
+                    "日報も公開しない。公開以外は本番と同じ手順で進め、"
+                    "「何を取得し・何を根拠に・何を作ったか」を最後に詳しく報告すること。")
 
     _debug_log_io("指示", "Akira本体", f"system_prompt:\n{system_prompt}\n\nmission:\n{mission}")
     usage_model_id = DEEPSEEK_MODEL_ID if AKIRA_USE_DEEPSEEK else AKIRA_MODEL_ID
@@ -1121,7 +1154,7 @@ def run_daily(dry_run: bool = False) -> None:
                 logger.exception("ワークスペースの保存に失敗しました（続行します）")
 
     # --- 4. 後処理 ---
-    if not dry_run:
+    if not dry_run and not no_publish:
         # 公開後の健全性チェック（その日の公開で壊れた場合に翌朝まで気づかない、を防ぐ）。
         # 結果は body_md に直に足して日報に必ず載せる（LLMの書き忘れに依存させない）。
         try:
@@ -1165,7 +1198,12 @@ def run_daily(dry_run: bool = False) -> None:
             "- " + post_line + "\n"
         )
         akira_tools.flush_invalidations()
-        publish_daily_report(collected, budget_status)
+        if no_publish:
+            # テストラン: 日報は公開しない（同日の日報を上書きしないため）。
+            # 成果はCloudWatchログに残す。
+            logger.info("テストランのため日報は公開しません")
+        else:
+            publish_daily_report(collected, budget_status)
         # 日報を出し終えてからマーカーを進める（ドライランでは進めない）。
         # フォールバック日報（クラッシュ・デッドライン・空応答）のときは okamoコメントが
         # 実際には反映されていないため進めない＝次回に読み直して取りこぼしを防ぐ。
@@ -1224,13 +1262,16 @@ def run_wi_test() -> None:
 def main():
     parser = argparse.ArgumentParser(description="Akira — LLM Data Hub 運営エージェント")
     parser.add_argument("--dry-run", action="store_true", help="公開せず計画のみ")
+    parser.add_argument("--no-publish", action="store_true",
+                        help="作業は本番どおり行うが公開しない（テストラン）。"
+                             "site_upload/publish_file_to_site を無効化し、日報も出さない")
     parser.add_argument("--test-wi", action="store_true",
                          help="GCP Workload Identityの疎通テストのみ実行（LLM呼び出し・予算ゲートなし）")
     args = parser.parse_args()
     if args.test_wi:
         run_wi_test()
         return
-    run_daily(dry_run=args.dry_run)
+    run_daily(dry_run=args.dry_run, no_publish=args.no_publish)
 
 
 if __name__ == "__main__":
