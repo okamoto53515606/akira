@@ -8,6 +8,7 @@
 
 import json
 import os
+import pathlib
 import re
 import subprocess
 import sys
@@ -366,6 +367,29 @@ def _page_shape_errors(site_dir: str) -> list:
     return out
 
 
+def _css_contract_errors(site_dir: str) -> list:
+    """CSS部品が「描画されるための必須プロパティ」を持つか検査する。
+
+    2026-11-15 追加。`/image-api-pricing/` の棒グラフが空だった原因は
+    `.bar-fill` が span のまま `display:block` を持たず **height が効かない**こと。
+    HTMLは正しかったので、ページの検査では捕まらない。CSSを直接見る。
+    """
+    script = os.path.join(WORKSPACE_LOCAL_DIR, "tools", "check_css_contract.py")
+    if not os.path.exists(script):
+        return []
+    try:
+        r = subprocess.run([sys.executable, script, site_dir],
+                           capture_output=True, text=True, timeout=60)
+    except Exception:
+        return []
+    out = []
+    for raw in (r.stdout or "").splitlines():
+        line = raw.strip()
+        if line.startswith("[ERROR]"):
+            out.append(("assets/style.css", line))
+    return out
+
+
 def _site_integrity_errors(site_dir: str) -> list:
     """サイト全体の重複・孤立リンクを検査する（決定論的・読取のみ）。
 
@@ -456,6 +480,111 @@ def _bump_sitemap_lastmod(site_dir: str, rels, s3) -> bool:
 
 
 @tool
+def _register_site_event(rel: str, base_dir: str) -> str:
+    """新しく公開したページを台帳の `site_events` に自動で1件足す（2026-11-15 / 課題141）。
+
+    なぜ:
+        トップの「直近の更新」と `/changelog/` は `facts.json` の `site_events` から
+        生成される。ページを作っても**イベントを書き忘れる**と、誰も辿れないページに
+        なる（11-15 に実際に起きた）。人の手順に頼らず、公開時に機械が足す。
+
+    戻り値: 追加したキー（足さなかった場合は空文字）。
+    """
+    if not rel.endswith("index.html"):
+        return ""
+    slug = rel[:-len("/index.html")] if rel != "index.html" else ""
+    if not slug:
+        return ""
+    if slug.startswith("en/"):
+        slug = slug[3:]
+    # 一覧・固定ページはイベントにしない
+    if slug.split("/")[0] in ("changelog", "glossary", "404"):
+        return ""
+
+    def _title(path: str) -> str:
+        try:
+            html = open(path, encoding="utf-8").read()
+        except OSError:
+            return ""
+        m = re.search(r"<title>(.*?)</title>", html, re.S)
+        if not m:
+            return ""
+        t = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", "", m.group(1))).strip()
+        return re.split(r"\s+[—-]\s+LLM Data Hub", t)[0].strip()
+
+    ja_title = _title(os.path.join(base_dir, slug, "index.html"))
+    en_title = _title(os.path.join(base_dir, "en", slug, "index.html"))
+    if not ja_title and not en_title:
+        return ""
+
+    facts_path = os.path.join(WORKSPACE_LOCAL_DIR, "data", "facts.json")
+    try:
+        with open(facts_path, encoding="utf-8") as fh:
+            facts = json.load(fh)
+    except Exception:  # noqa: BLE001
+        return ""
+    events = facts.setdefault("site_events", [])
+    if any(e.get("key") == slug for e in events):
+        return ""   # 登録済み
+    today = datetime.now(JST).strftime("%Y-%m-%d")
+    events.append({
+        "date": today, "kind": "page", "key": slug,
+        "ja": "%s（/%s/）を公開" % (ja_title or en_title, slug),
+        "en": "Published %s (/en/%s/)" % (en_title or ja_title, slug),
+    })
+    try:
+        with open(facts_path, "w", encoding="utf-8") as fh:
+            json.dump(facts, fh, ensure_ascii=False, indent=1)
+    except Exception:  # noqa: BLE001
+        return ""
+    return slug
+
+
+def _render_and_publish_entrypoints(base_dir: str, s3) -> list:
+    """新規ページ登録の直後に、トップ・更新履歴・sitemap を作り直して公開する。
+
+    なぜ（2026-11-15 の実測）:
+        手順は「render_site → site_upload」なので、`site_upload` が
+        `site_events` を登録した時点では**すでに描画が終わっている**。
+        そのため新しいページは台帳には載るのに、**トップと /changelog/ には
+        翌ランまで出ない**（okamo「毎回俺が手でHTMLを直してる」の正体）。
+        登録したら**その場で描き直して公開する**。
+
+    戻り値: 公開したキーの一覧。
+    """
+    import importlib.util
+
+    script = os.path.join(WORKSPACE_LOCAL_DIR, "tools", "render_site.py")
+    if not os.path.exists(script):
+        return []
+    try:
+        spec = importlib.util.spec_from_file_location("akira_render_after", script)
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        changed = mod.run(pathlib.Path(base_dir), pathlib.Path(WORKSPACE_LOCAL_DIR))
+    except Exception:  # noqa: BLE001
+        return []
+
+    # 生成物のうち「入り口」になるものだけ公開する（ページ本体は既に上がっている）
+    targets = ["index.html", "en/index.html", "changelog/index.html",
+               "en/changelog/index.html", "sitemap.xml", "data/changelog.json"]
+    published = []
+    for rel in targets:
+        f = os.path.join(base_dir, rel)
+        if not os.path.exists(f):
+            continue
+        try:
+            s3.upload_file(f, LLM_SITE_BUCKET, rel,
+                           ExtraArgs={"ContentType": _content_type(rel)})
+            _invalidation_paths.append("/" + rel)
+            published.append(rel)
+        except Exception:  # noqa: BLE001
+            continue
+    # 変化が無いならアップロードもしない（無駄な invalidation を避ける）
+    return published if changed else []
+
+
+@tool
 def site_upload(local_path: str, site_prefix: str = "") -> dict:
     """ローカル作業フォルダ（SITE_LOCAL_DIR）内のファイル/フォルダをS3に一括アップロードする。
 
@@ -505,9 +634,12 @@ def site_upload(local_path: str, site_prefix: str = "") -> dict:
     facts_errors = []
     if any(r.endswith(("index.html", "models.json")) for r in target_rels):
         facts_errors = _facts_consistency_errors(base_dir)
+    css_errors = []
+    if any(r.endswith(("index.html", "style.css")) for r in target_rels):
+        css_errors = _css_contract_errors(base_dir)
 
     s3 = boto3.client("s3", region_name=AWS_REGION)
-    uploaded, rejected = [], []
+    uploaded, rejected, registered = [], [], []
     for f in files:
         rel = os.path.relpath(f, base_dir).replace(os.sep, "/")
         key = rel if not site_prefix else f"{site_prefix.strip('/')}/{rel}"
@@ -531,6 +663,11 @@ def site_upload(local_path: str, site_prefix: str = "") -> dict:
             if hits:
                 rejected.append({"key": key, "errors": hits})
                 continue
+        # CSS部品の契約（描画されるための必須プロパティ）はサイト全体の話なので、
+        # style.css だけでなく index.html の公開時にも一緒に止める。
+        if css_errors and (rel == "assets/style.css" or rel.endswith("index.html")):
+            rejected.append({"key": key, "errors": [msg for _, msg in css_errors]})
+            continue
         if key == DATA_MODELS_KEY:
             try:
                 with open(f, "rb") as fh:
@@ -549,10 +686,25 @@ def site_upload(local_path: str, site_prefix: str = "") -> dict:
             s3.upload_file(f, LLM_SITE_BUCKET, key, ExtraArgs={"ContentType": _content_type(key)})
         _invalidation_paths.append("/" + key)
         uploaded.append(key)
+        # 新規ページなら site_events を自動登録（課題141）
+        try:
+            reg = _register_site_event(rel, base_dir)
+            if reg:
+                registered.append(reg)
+        except Exception:  # noqa: BLE001
+            pass
     # 公開したページの sitemap lastmod を揃える（render_site の出力に限らない）
     sitemap_bumped = bool(uploaded and _bump_sitemap_lastmod(base_dir, uploaded, s3))
+    # 新規ページを登録したなら、トップ・更新履歴を作り直して即公開する
+    rendered = []
+    if registered:
+        rendered = _render_and_publish_entrypoints(base_dir, s3)
 
     result: dict = {"status": "published", "count": len(uploaded), "uploaded": uploaded}
+    if registered:
+        result["site_events_added"] = registered   # トップ/更新履歴に自動で載る
+    if rendered:
+        result["entrypoints_refreshed"] = rendered
     if sitemap_bumped:
         result["sitemap"] = "lastmod updated"
     if rejected:

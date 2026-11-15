@@ -753,6 +753,7 @@ def create_delegation_tools(models, run_budget_jpy: float, block_publish: bool =
     # --- 永続ワークスペースの自作ツール（/workspace/tools/*.py の TOOL 変数を自動登録） ---
     # エンジニアが前日までに作ったツールが翌朝から使える＝自己拡張ループ。
     # 1個の壊れたファイルで実行が止まらないよう、ロード失敗はスキップして続行
+    ws_tools = []
     try:
         ws_tools = akira_tools.load_workspace_tools()
         if ws_tools:
@@ -864,6 +865,243 @@ def publish_daily_report(collected: dict, budget_status: dict) -> None:
 # =====================================================================
 # 日次運用
 # =====================================================================
+def _freshness_queue_line(today: str) -> str:
+    """鮮度キュー（R8）をプロンプト用のテキストにする。
+
+    /workspace/tools/_freshness.py は _ 始まりなのでツールとしてはロードされない
+    （ヘルパー扱い）。ここで読めない場合は空文字を返し、本処理は止めない。
+    """
+    import glob
+    import importlib.util
+
+    cand = glob.glob(os.path.join(os.path.abspath(WORKSPACE_LOCAL_DIR), "tools", "_freshness.py"))
+    if not cand:
+        return ""
+    try:
+        spec = importlib.util.spec_from_file_location("akira_freshness", cand[0])
+        if spec is None or spec.loader is None:
+            return ""
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        facts_path = os.path.join(os.path.abspath(WORKSPACE_LOCAL_DIR), "data", "facts.json")
+        return module.build_queue(facts_path, today).strip()
+    except Exception as e:  # noqa: BLE001
+        logger.warning("鮮度キューの生成に失敗（本処理は続行）: %s", e)
+        return ""
+
+
+def _refresh_freshness_queue(today: str, limit: int = 3) -> str:
+    """鮮度キューの先頭 N 件を**コードで取得**する（2026-11-15 / R8 の続き）。
+
+    なぜ:
+        キューをプロンプトに注入する方式は**2ラン連続で0件**だった（11-15）。
+        Akira は「システムプロンプトに再取得対象が見当たらない」と述べ、
+        自分が選んだURLを取りに行った。**毎回必ずやるべきことをモデルに頼むのを
+        やめ、コードでやる**。
+
+    戻り値はミッションに差し込む1〜3行のテキスト（失敗も書く）。
+    """
+    import glob
+    import importlib.util
+
+    tools_dir = os.path.join(os.path.abspath(WORKSPACE_LOCAL_DIR), "tools")
+    facts_path = os.path.join(os.path.abspath(WORKSPACE_LOCAL_DIR), "data", "facts.json")
+
+    def _load(name, module_id):
+        p = os.path.join(tools_dir, name)
+        if not os.path.exists(p):
+            return None
+        try:
+            spec = importlib.util.spec_from_file_location(module_id, p)
+            mod = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(mod)
+            return mod
+        except Exception:  # noqa: BLE001
+            return None
+
+    fresh = _load("_freshness.py", "akira_freshness_q")
+    fq = _load("fetch_quote.py", "akira_fetch_quote_q")
+    if fresh is None or fq is None:
+        return "鮮度キュー: 取得をスキップ（ツールを読み込めませんでした）"
+
+    try:
+        items = fresh.queue_items(facts_path, today, limit=limit)
+    except Exception as e:  # noqa: BLE001
+        return "鮮度キュー: 生成に失敗（%s）" % type(e).__name__
+
+    if not items:
+        return "鮮度キュー: **対象0件**（全部が7日以内に取得済み）"
+
+    ok, ng = [], []
+    for it in items:
+        try:
+            r = fq.fetch_quote(url=it["url"], key=it["key"])
+        except Exception as e:  # noqa: BLE001
+            r = {"status": "failed", "reason": type(e).__name__}
+        if r.get("status") == "ok":
+            ok.append("%s（%d字）" % (it["key"], r.get("chars", 0)))
+        else:
+            ng.append("%s（%s）" % (it["key"], str(r.get("reason", ""))[:40]))
+
+    lines = ["## 鮮度キュー（この3件は**コードが取得済み**。取り直す必要はない）"]
+    if ok:
+        lines.append("- 取得OK: " + ", ".join(ok) +
+                     " ※`fetched_at` は自動で今日に更新済み")
+    if ng:
+        lines.append("- **取得失敗**: " + ", ".join(ng) +
+                     " → `source_gap_report` で理由を見て、URLを疑うか okamo に確認する")
+    lines.append("- 失敗が1件でもあれば**日報に1行書く**（黙って取れていないことが一番まずい）")
+    return "\n".join(lines)
+
+
+def _missing_tool_warning(mod) -> str:
+    """必須ツールに @tool が付いているかを起動時に確認する（2026-11-15 追加）。
+
+    なぜ:
+        2026-11-15 のランで `tools.py` の `@tool` が1行消え、エンジニアに
+        `site_upload` が渡らなかった。エンジニアは「ツールが無い」と判断して
+        **boto3 でバケット名を総当たり**し（`llm.okamomedia.tokyo` 等で NoSuchBucket 4件）、
+        最後は 8ファイルを `publish_file_to_site` で送ろうとして
+        **出力だけで約45kトークン**を使った。デコレータ1行の欠落は
+        `import main` の検品では見つからない（importは成功する）。
+    """
+    need = ("site_upload", "publish_file_to_site", "site_download", "get_site_file",
+            "list_site_files", "generate_and_publish_image")
+    missing = [n for n in need if not hasattr(getattr(mod, n, None), "tool_spec")]
+    if not missing:
+        return ""
+    logger.error("必須ツールに @tool が無い: %s", missing)
+    return ("## ⚠️ ツール欠落（機械検知・最優先で報告）\n"
+            "- 使えないツール: %s\n"
+            "- **S3へ shell/boto3 で直接アクセスして回避するな**（バケット名の推測は必ず失敗する）。"
+            "まず publish_file_to_site などの残った手段で最小限を公開し、"
+            "**この欠落を日報の冒頭と site_plan に書け**。\n" % ", ".join(missing))
+
+
+def _propose_themes(today: str, limit: int = 3) -> str:
+    """今日の企画候補を**台帳とサイトから機械的に**出す（2026-11-15 / ★3）。
+
+    なぜ:
+        `site_plan` は okamo の指示で埋まっており、Akira は「今日なにを作るか」の
+        入力を持っていなかった。入力が無いので毎回「何をしましょうか」と人に聞く
+        ＝**企画の主体が okamo に移る**。プロンプトに「ネタはAkiraが考える」と
+        書いても実行されない（この1週間の一貫した観測）ので、候補をコードで出す。
+        Akira は「選ぶ」だけでよい。自分の案を出すのは自由。
+    """
+    import datetime as _dt
+    import glob
+    import json
+    import re as _re
+
+    facts_path = os.path.join(os.path.abspath(WORKSPACE_LOCAL_DIR), "data", "facts.json")
+    site_dir = os.path.abspath(getattr(akira_tools, "SITE_LOCAL_DIR", "/tmp/site"))
+    try:
+        with open(facts_path, encoding="utf-8") as f:
+            facts = json.load(f)
+    except Exception as e:  # noqa: BLE001
+        return "企画候補: 台帳を読めず（%s）" % e
+    try:
+        today_d = _dt.date.fromisoformat(today)
+    except ValueError:
+        return "企画候補: 日付が不正（%s）" % today
+
+    cands = []
+    models = facts.get("models") or {}
+
+    # A0. 新モデルのリサーチと掲載（**毎回の最優先**。okamo確認 2026-11-15）
+    #     直近21日のリリースで「単価が無い」または「料金比較/計算機/年表のどれかに未掲載」
+    #     のものを機械で挙げる。ここが空なら新モデルの漏れは無い。
+    recent = []
+    for k, v in models.items():
+        try:
+            age = (today_d - _dt.date.fromisoformat(v.get("released") or "")).days
+        except ValueError:
+            continue
+        if age < 0 or age > 21:
+            continue
+        shown = set(v.get("shown_on") or [])
+        missing = [x for x in ("timeline", "pricing", "calculator") if x not in shown]
+        price = v.get("price") or {}
+        no_price = not (price.get("input") and price.get("output"))
+        if missing or no_price:
+            why = []
+            if missing:
+                why.append("未掲載: " + "/".join(missing))
+            if no_price:
+                why.append("単価未取得")
+            recent.append("%s（%s・%s）" % (k, v.get("released"), "、".join(why)))
+    if recent:
+        cands.append("**【最優先】新モデルのリサーチと掲載**: %s → 公式で単価・提供段階を"
+                     "確認して台帳に入れ、料金比較・計算機・年表の3面に載せる"
+                     % "、".join(recent[:5]))
+    else:
+        cands.append("**【最優先】新モデルのリサーチと掲載**: 直近21日で漏れ 0件"
+                     "（載っていない新モデルは無い）")
+
+    # A. 最終更新が30日以上前のページ（更新が止まっている＝価値が落ちている）
+    stale = []
+    for p in glob.glob(os.path.join(site_dir, "**", "index.html"), recursive=True):
+        rel = os.path.relpath(p, site_dir).replace(os.sep, "/")
+        if rel == "index.html" or rel.startswith("en/"):
+            continue
+        try:
+            with open(p, encoding="utf-8") as f:
+                t = f.read()
+        except Exception:  # noqa: BLE001
+            continue
+        m = _re.search(r'class="updated-bar"[^>]*>.*?<time datetime="(\d{4}-\d{2}-\d{2})"',
+                       t, _re.S)
+        if not m:
+            continue
+        try:
+            age = (today_d - _dt.date.fromisoformat(m.group(1))).days
+        except ValueError:
+            continue
+        if age >= 30:
+            stale.append((age, "/" + rel[:-len("index.html")]))
+    stale.sort(reverse=True)
+    if stale:
+        cands.append("**更新が止まっているページ**: %s → 料金・状態を再取得して更新する"
+                     % "、".join("%s（%d日）" % (r, a) for a, r in stale[:5]))
+
+    # B. 提供状態が未確認のモデル（料金表の「状態」列が埋まらない原因）
+    unknown = [k for k, v in models.items() if v.get("status") == "unknown"]
+    if len(unknown) >= 10:
+        cands.append("**提供状態が未確認のモデル %d件**（例: %s）→ 公式で状態を確認し "
+                     "`status` を確定させる"
+                     % (len(unknown), ", ".join(unknown[:4])))
+
+    # C. preview のまま14日以上（GA/終了の判断が止まっている）
+    long_preview = []
+    for k, v in models.items():
+        if v.get("status") != "preview":
+            continue
+        try:
+            age = (today_d - _dt.date.fromisoformat(v.get("released") or "")).days
+        except ValueError:
+            continue
+        if age >= 14:
+            long_preview.append("%s（%d日）" % (k, age))
+    if long_preview:
+        cands.append("**preview のまま14日以上**: %s → GA/終了を公式で確認"
+                     % ", ".join(long_preview[:4]))
+
+    if not cands:
+        return ("## 今日の企画候補\n- 台帳からは候補が出なかった（更新もれ・状態未確認なし）。"
+                "**自分で企画を出せ**（okamoに聞くな）")
+
+    lines = ["## 今日の企画候補（**コードが台帳とサイトから出した**）"]
+    for i, c in enumerate(cands[:limit], 1):
+        lines.append("%d. %s" % (i, c))
+    lines += [
+        "- この中から1〜2件を選べ。**自分で別案を出すのは自由**（そのほうが良い）。",
+        "- 選んだテーマは `update_akira_config(key=\"site_plan\", ...)` に"
+        "「Akira企画 %s: …」として残す。" % today,
+        "- **okamoに「何を作りましょうか」と聞くな。** 企画と優先度はAkiraの仕事。",
+    ]
+    return "\n".join(lines)
+
+
 DAILY_MISSION_TEMPLATE = """今日は {today} です。LLM Data Hub（{site_url}）の定期運用を開始してください。
 
 ## 前回の作業日
@@ -877,15 +1115,27 @@ DAILY_MISSION_TEMPLATE = """今日は {today} です。LLM Data Hub（{site_url}
 - **この結果は日報に必ず1行書く**（違反0件でも「異常なし」と書け。
   黙ってちゃ伝わらんぞ。表が空になった事故を人間が3.5時間気づかなかった実例がある）
 
+{freshness_line}
+
+- 上の取得は**このランが始まる前に機械が済ませている**。同じURLを二度取りに行くな
+- 失敗があれば、その理由を確かめて（`source_gap_report`）、URL自体を疑うか
+  okamo に確認する。**失敗を黙って流すな**
+- 余力があればキューの4件目以降を `fetch_quote` で拾ってよい（任意）
+
 ## 利用可能なWEBツール（すべて無料枠。factチェックはBrave→Firecrawlの順で）
 - Brave Search（Web検索。factチェック第一選択）/ Firecrawl（URL指定でMarkdown取得。JSサイト対応。第二選択）
 - GitHub MCP（公開リポジトリ読み取り専用）
 
 ## 今回の進め方
 1. list_site_files で現在のサイト状態を軽く確認する（大きいHTMLは読まない）
-2. 今回の作業テーマ（新規ページ or 既存ページ更新、1〜2件まで）の方向性だけ決める
+2. 今回の作業テーマ（新規ページ or 既存ページ更新、1〜2件まで）を**自分で決める**。
+   下の「今日の企画候補」はコードが台帳から出したものなので、ここから選べばよい
+   （的外れなら自分で別案を出せ。**okamoに何を作るか聞くな**）。
+   決めたテーマは site_plan に「Akira企画 YYYY-MM-DD: …」として残す
    （/workspace は前回から持ち越しの永続ワークスペース。drafts/に未完了作業が残っていれば
    その続きを優先テーマにする。参照はエンジニアに任せてよい）
+
+{theme_line}
 3. ask_claude_engineer に今回分をまとめて1回で依頼する。リサーチ・執筆・GPT税理士へのレビュー
    依頼・（必要なら）Gemini子育てママへの画像/UX依頼・クリティカルな指摘がなければ公開・軽微な
    指摘のsite_plan記録まで、Claudeエンジニアが現場責任者として自律的に行う。テーマ候補
@@ -894,8 +1144,11 @@ DAILY_MISSION_TEMPLATE = """今日は {today} です。LLM Data Hub（{site_url}
    よほど気になる点がない限り、あなた自身がask_gpt_tax_advisor/ask_gemini_motherを直接呼ぶ必要はない
    （通常はClaudeエンジニアに任せる）
 5. 最後に write_daily_report で日報を書く（Claudeエンジニアの報告をもとにまとめる。
-   okamoへの依頼事項があれば必ず書け。黙ってちゃ伝わらんぞ。依頼事項は俺の口調で書く
-   こと。【確認】【意向確認】等の事務的な見出しはやめだ。身内に話すように書け）
+   **依頼事項は原則0件**。書いてよいのは「okamoにしか決められないこと」だけ:
+   予算・契約やアカウント・法務判断・okamo本人の意向・外にしか無い事実。
+   **企画・優先度・ページ構成の相談は書くな**（自分で決めて、決めたことと理由を日報に
+   1行書く）。どうしても聞くときは俺の口調で書け。【確認】【意向確認】等の事務的な
+   見出しはやめだ。身内に話すように書け）
 
 ## 注意（重要）
 - 自分で考え込んだりWeb検索・factチェックを自分でやったりせず、Claudeエンジニアに一括委任すること。
@@ -1015,6 +1268,12 @@ def run_daily(dry_run: bool = False, no_publish: bool = False) -> None:
     if site_plan:
         system_prompt += f"\n\n## サイトの今の状況（自分で更新可能）\n{site_plan}"
 
+    # 2026-11-15: 鮮度キュー（R8）。台帳の fetched_at から「今日取り直すべきキー」を
+    # 機械的に並べて注入する。LLMの判断は挟まない。
+    # これが無いと「古い quote が新しい事実を上書きする」経路が塞げない。
+    # 2026-11-15: テキスト注入は廃止。モデルは読んでも動かなかった（2ラン連続0件）。
+    # いまは _refresh_freshness_queue() がミッションの直前に**コードで取得**する。
+
     # okamoの直近コメント（日報へのフィードバック）をミッションに含める
     # 予算超過で数日〜数週間ノーラン（正確には予算ゲートで停止）が続くことがあるため、
     # 固定日数ではなく「前回実際にAkiraがコメントを確認した日」からの差分を必ず取得する。
@@ -1077,6 +1336,16 @@ def run_daily(dry_run: bool = False, no_publish: bool = False) -> None:
         _create_brave_mcp(),
         *akira_extra_tools,
     ]
+    # 自己点検（全ゲート＋決定事項＋台帳ズレを1回で返す）は**Akiraも持つ**。
+    # 2026-11-15: 6本のゲートを個別に叩く手順は踏まれなかった（Akiraは
+    # 「check_page_shape は存在しない」と誤認した）。1呼び出しにまとめて渡す。
+    try:
+        for _t in (akira_tools.load_workspace_tools() or []):
+            if getattr(_t, "tool_name", "") == "self_check":
+                akira_tools_list.append(_t)
+                logger.info("Akiraに self_check ツールを追加しました")
+    except Exception:  # noqa: BLE001
+        logger.exception("self_check の登録に失敗しました（続行）")
     firecrawl = _create_firecrawl_mcp()
     if firecrawl:
         akira_tools_list.append(firecrawl)
@@ -1091,10 +1360,21 @@ def run_daily(dry_run: bool = False, no_publish: bool = False) -> None:
         tools=akira_tools_list,
     )
 
+    # 鮮度キューの先頭3件は**コードで取得**する（モデルに頼むと0件が続いた）。
+    freshness_line = _refresh_freshness_queue(today, limit=3)
+    logger.info("鮮度キュー: %s", freshness_line.replace("\n", " / ")[:220])
+
+    theme_line = _propose_themes(today, limit=3)
+    logger.info("企画候補: %s", theme_line.replace("\n", " / ")[:220])
+
+    tool_warn_line = _missing_tool_warning(akira_tools)
     mission = DAILY_MISSION_TEMPLATE.format(
         today=today, site_url=LLM_SITE_URL, last_work_line=last_work_line,
-        health_line=health_line,
+        health_line=health_line, freshness_line=freshness_line,
+        theme_line=theme_line,
     )
+    if tool_warn_line:
+        mission = tool_warn_line + "\n" + mission
     if dry_run:
         mission += "\n\n【重要】今日はドライランです。公開・依頼は行わず、計画の提示だけしてください。"
     if no_publish:

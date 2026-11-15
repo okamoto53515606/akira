@@ -17,6 +17,18 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /usr/local/bin/
 RUN curl -fL https://storage.googleapis.com/genai-toolbox/v0.10.0/linux/amd64/toolbox -o /usr/local/bin/toolbox && \
     chmod +x /usr/local/bin/toolbox
 
+# 日本語フォントを**焼き込む**（2026-11-15）。
+# slim イメージにはフォントが1つも無く、OG画像スクリプトが毎回 Noto を
+# ネットから落として凌いでいた（実行のたび9.1MB・URLが死ぬと全滅）。
+# ここで1回だけ入れておけば、実行時はネットワークに出ない。
+# ライセンス: Noto は SIL OFL 1.1（同梱・再配布可）。
+RUN mkdir -p /tmp/ogfonts && \
+    curl -fsSL https://raw.githubusercontent.com/googlefonts/noto-cjk/main/Sans/SubsetOTF/JP/NotoSansJP-Bold.otf \
+      -o /tmp/ogfonts/NotoSansJP-Bold.otf && \
+    curl -fsSL https://raw.githubusercontent.com/googlefonts/noto-cjk/main/Sans/SubsetOTF/JP/NotoSansJP-Regular.otf \
+      -o /tmp/ogfonts/NotoSansJP-Regular.otf && \
+    ls -l /tmp/ogfonts
+
 WORKDIR /app
 
 # 依存インストール（uv.lock で再現性を担保）
