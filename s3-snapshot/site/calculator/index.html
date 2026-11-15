@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>LLMトークンコスト計算機 — 主要API料金を一括比較 | LLM Data Hub</title>
-  <meta name="description" content="入力・出力トークン数を入れるだけで、Claude・GPT・Gemini・DeepSeek・GLM・Qwenなど主要LLM APIのコストをUSD＋円換算で一括比較。外部通信なし・完全ブラウザ内計算。2026年10月13日更新。">
+  <meta name="description" content="入力・出力トークン数を入れるだけで、Claude・GPT・Gemini・DeepSeek・GLM・Qwenなど主要LLM APIのコストをUSD＋円換算で一括比較。外部通信なし・完全ブラウザ内計算。">
   <link rel="canonical" href="https://llm.okamomedia.tokyo/calculator/">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -32,12 +32,12 @@
 <h1 class="section-title" style="font-size:1.6rem;">LLMトークンコスト計算機</h1>
 <p class="section-sub" style="max-width:680px;">入力・出力トークン数を入力すると主要LLM APIの費用をUSD・円換算で一括比較。すべてブラウザ内で計算（外部通信なし）。料金の一次情報は<a href="/pricing/">料金比較ページ</a>。</p>
 <p class="token-hint">💡 トークン目安: 日本語1文字≒1〜1.3トークン、英語1単語≒1.3トークン（文章により変動）</p>
-<div class="updated-bar"><span class="dot">●</span>最終更新: <time datetime="2026-10-13">2026年10月13日</time> | 出典は<a href="/pricing/">料金比較ページ</a>に記載</div>
+<div class="updated-bar"><span class="dot">●</span>最終更新: <time id="data-updated" datetime="2026-10-13">2026年10月13日</time> | 出典は<a href="/pricing/">料金比較ページ</a>に記載</div>
 </div>
 <div class="calc-card"><div class="calc-grid">
 <div class="calc-field"><label for="input-tokens">入力トークン数</label><input type="number" id="input-tokens" inputmode="numeric" min="0" step="1" value="1000000"><div class="calc-preview" id="input-tokens-preview"></div><div class="preset-row"><button type="button" class="preset-btn" data-target="input-tokens" data-value="1000">1K（千）</button><button type="button" class="preset-btn" data-target="input-tokens" data-value="10000">10K（1万）</button><button type="button" class="preset-btn" data-target="input-tokens" data-value="100000">100K（10万）</button><button type="button" class="preset-btn" data-target="input-tokens" data-value="1000000">1M（100万）</button></div></div>
 <div class="calc-field"><label for="output-tokens">出力トークン数</label><input type="number" id="output-tokens" inputmode="numeric" min="0" step="1" value="200000"><div class="calc-preview" id="output-tokens-preview"></div><div class="preset-row"><button type="button" class="preset-btn" data-target="output-tokens" data-value="1000">1K（千）</button><button type="button" class="preset-btn" data-target="output-tokens" data-value="10000">10K（1万）</button><button type="button" class="preset-btn" data-target="output-tokens" data-value="100000">100K（10万）</button><button type="button" class="preset-btn" data-target="output-tokens" data-value="1000000">1M（100万）</button></div></div>
-<div class="calc-field"><label for="fx-rate">為替レート（円/USD）</label><input type="number" id="fx-rate" inputmode="decimal" min="0" step="0.01" value="155"><p class="fx-note">参考換算用デフォルト値。実勢レートに変更してください。</p></div>
+<div class="calc-field"><label for="fx-rate">為替レート（円/USD）</label><input type="number" id="fx-rate" inputmode="decimal" min="0" step="0.01" value=""><p class="fx-note">為替は1ドル=155円で固定（サイト全体のルール）。必要なら一時的に変更できます。</p></div>
 </div></div>
 <section aria-labelledby="rh"><h2 class="section-title" id="rh" style="font-size:1.1rem;">比較結果（総コスト順）</h2>
 <div class="table-wrap"><table><thead><tr><th>モデル</th><th>提供元</th><th>入力単価</th><th>出力単価</th><th>合計(USD)</th><th>参考円換算</th></tr></thead><tbody id="result-body"></tbody></table></div>
@@ -45,9 +45,13 @@
 </section></div></main>
 <footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong><img src="/logo.svg" class="footer-logo" alt="" width="16" height="16" aria-hidden="true"> LLM Data Hub</strong><p>運営: okamoちゃんねる</p><p><a href="/">ホーム</a> · <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a> · <a href="/timeline/">年表</a></p></div><p class="footer-disclaimer">⚠️ 料金は予告なく変動します。契約前に必ず各社公式ページでご確認ください。本サイトの情報利用による損害について運営者は責任を負いません。</p></div></footer>
 <script>
+var LANG="ja";
+function fmtDate(iso){var p=String(iso).split("-");if(p.length!==3)return iso;return LANG==="en"?(p[0]+"-"+p[1]+"-"+p[2]):(p[0]+"年"+parseInt(p[1],10)+"月"+parseInt(p[2],10)+"日")}
 var MODELS=[];
 function showLoadError(msg,detail){var tb=document.getElementById("result-body");if(tb)tb.innerHTML='<tr><td colspan="6" style="color:var(--c-muted)">'+msg+'</td></tr>';if(detail!==undefined)console.error("[calculator] "+msg,detail);}
-fetch("/data/models.json").then(function(r){if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}).then(function(d){
+fetch("/data/models.json",{cache:"no-cache"}).then(function(r){if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}).then(function(d){
+  if(d&&d.fx&&d.fx.usd_jpy){var el=document.getElementById("fx-rate");if(el)el.value=d.fx.usd_jpy;}
+  if(d&&d.updated){var el2=document.getElementById("data-updated");if(el2){el2.dateTime=d.updated;el2.textContent=fmtDate(d.updated);}}
   if(!d||!Array.isArray(d.models)){showLoadError('計算機データの形式が不正です（models が配列ではありません）。運営が復旧します。',d&&d.models);return;}
   MODELS=d.models.map(function(m){return{name:m.name,provider:m.provider,label:m.label,input:m.input,output:m.output,note:m.note||""}});render();
 }).catch(function(e){showLoadError('モデルデータの読み込みに失敗しました。ページを再読み込みしてください。',e);});

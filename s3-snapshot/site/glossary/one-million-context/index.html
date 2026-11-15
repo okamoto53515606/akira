@@ -57,9 +57,7 @@
     <h1 class="section-title" style="font-size:1.55rem;">1Mコンテキストとは — 100万トークンで何が入るか、いくらになるか</h1>
     <p class="section-sub" style="max-width:760px;">
       <a href="/glossary/">用語説明</a> 第4回。今回のテーマは <strong>1Mコンテキスト</strong> です。
-      「100万トークンまで入ります」と書いてあっても、そこには<strong>2つの別の話</strong>が混ざっています。1つは<strong>何が入るのか</strong>（容量の話）、もう1つは<strong>入れたらいくらになるのか</strong>（料金の話）。
-      そして料金のほうは、<strong>OpenAI・Google・Anthropic の3社で設計が大きく違います</strong>（OpenAI と Google は境界を超えると全体の単価が上がり、Anthropic は対象の1Mモデルで標準単価のままです）。しかも長く入れれば賢くなるわけでもありません。
-      数字と出典を並べながら、最後には「自分の使い方だとどうなるか」まで持って帰れる形にします。
+      「100万トークンまで入ります」と書いてあっても、そこには<strong>2つの別の話</strong>が混ざっています。1つは<strong>何が入るのか</strong>（容量の話）、もう1つは<strong>入れたらいくらになるのか</strong>（料金の話）。そして料金のほうは、<strong>OpenAI・Google・Anthropic の3社で設計が大きく違います</strong>（OpenAI と Google は境界を超えると全体の単価が上がり、Anthropic は対象の1Mモデルで標準単価のままです）。しかも長く入れれば賢くなるわけでもありません。数字と出典を並べながら、最後には「自分の使い方だとどうなるか」まで持って帰れる形にします。
     </p>
     <div class="phrase-box">
       <p class="phrase">「1Mトークンまで入る」＝「100万トークンぶん賢く使える」ではない</p>
@@ -77,7 +75,24 @@
   </div>
 
   <!-- ===== 1. 定義 ===== -->
-  <section class="section" style="padding-top:1.5rem;" aria-labelledby="def-h">
+  <div class="section" style="padding-top:1.25rem;padding-bottom:0;">
+  <nav class="toc" aria-label="目次">
+    <p class="toc-title">目次</p>
+    <ol>
+      <li><a href="#def-h">結論 — 上限は「入る量」、課金は「入れた瞬間のルール」</a></li>
+      <li><a href="#what-h">1Mトークンとは、実際どれくらいか</a></li>
+      <li><a href="#limit-h">主要モデルの上限値（公式表記のまま）</a></li>
+      <li><a href="#cliff-h">境界線をまたぐと、いくらになるのか（試算）</a></li>
+      <li><a href="#grow-h">もう1つの落とし穴 — 会話が伸びると入力が積み上がる</a></li>
+      <li><a href="#rot-h">3つめの落とし穴 — 「入る」と「均等に使える」は別</a></li>
+      <li><a href="#fig-h">図で整理 — 上限・課金の境界・実効的な使いやすさは別物</a></li>
+      <li><a href="#analogy-h">生活に置き換えると — 大きな机と、荷物の重さ</a></li>
+      <li><a href="#use-h">実務では、どう使うか</a></li>
+      <li><a href="#sum-h">まとめ — ひと言でいうと</a></li>
+    </ol>
+  </nav>
+</div>
+<section class="section" style="padding-top:1.5rem;" aria-labelledby="def-h">
     <h2 class="section-title" id="def-h" style="font-size:1.2rem;">結論 — 上限は「入る量」、課金は「入れた瞬間のルール」</h2>
     <div class="read-box">
       <strong>コンテキストウィンドウは、モデルが1回のリクエストで同時に見られる情報量の上限です。</strong>
@@ -94,8 +109,7 @@
       同じ「1Mコンテキスト」でも、<strong>同じ100万トークンを送ったときの請求額が全く違う</strong>ということです。
     </div>
     <p style="font-size:.9rem;color:var(--c-muted);max-width:760px;">
-      なお、この言葉が料金表で使われるときは3つの数字が紛れ込みがちです。<strong>①入力の上限</strong>（コンテキストウィンドウ）、<strong>②出力の上限</strong>（max output tokens）、<strong>③長文課金の境界</strong>。
-      たとえば GPT-6 Astra は<span style="font-family:var(--font-mono)">1,050,000 / 128,000 / 272K</span> の3つが別々に存在します。この記事ではこの3つを区別して扱います。
+      なお、この言葉が料金表で使われるときは3つの数字が紛れ込みがちです。<strong>①入力の上限</strong>（コンテキストウィンドウ）、<strong>②出力の上限</strong>（max output tokens）、<strong>③長文課金の境界</strong>。たとえば GPT-6 Astra は<span style="font-family:var(--font-mono)">1,050,000 / 128,000 / 272K</span> の3つが別々に存在します。この記事ではこの3つを区別して扱います。
     </p>
   </section>
 
@@ -150,8 +164,7 @@
     </tbody></table></div>
     <div class="read-box">
       <strong>境界線を100トークン超えただけで、入力の請求額が約2倍になります。</strong>
-      100トークンは日本語で数百文字ぶんです。<strong>「あと1行足すかどうか」で請求が倍変わる</strong>——これが段階課金の意味です。
-      同じリクエストで出力も発生する場合、出力側にも1.5倍（$50 → $75 / 1M）がかかるため、<strong>請求総額の差はさらに広がります</strong>。入力だけを見れば約2倍ですが、総額の倍率は入力と出力の比率によって変わります。
+      100トークンは日本語で数百文字ぶんです。<strong>「あと1行足すかどうか」で請求が倍変わる</strong>——これが段階課金の意味です。同じリクエストで出力も発生する場合、出力側にも1.5倍（$50 → $75 / 1M）がかかるため、<strong>請求総額の差はさらに広がります</strong>。入力だけを見れば約2倍ですが、総額の倍率は入力と出力の比率によって変わります。
       <br><br>
       Google 側も同じ形です。Gemini 3.1 Pro の入力は 200K以下が $2.00 / 1M、200K超が $4.00 / 1M。<strong>199,000トークンなら $0.398、201,000トークンなら $0.804</strong>（いずれも当サイトの単純計算）で、やはり<strong>超えた分だけでなく全体の単価が上がります</strong>。
     </div>
@@ -175,8 +188,7 @@
     </tbody></table></div>
     <div class="read-box">
       <strong>10往復で、送った入力の合計は245,000トークン（$2.45）になります。</strong>
-      内訳は <span style="font-family:var(--font-mono)">8,000×10 ＋ 3,000×(1+2+…+10) ＝ 80,000 ＋ 165,000 ＝ 245,000</span>。
-      実際に新しい情報として増えたのは 8,000 ＋ 3,000×10 ＝ 38,000トークン（$0.38）だけです。<strong>6倍以上を「同じ前置きの再送」に払っている</strong>計算になります。
+      内訳は <span style="font-family:var(--font-mono)">8,000×10 ＋ 3,000×(1+2+…+10) ＝ 80,000 ＋ 165,000 ＝ 245,000</span>。実際に新しい情報として増えたのは 8,000 ＋ 3,000×10 ＝ 38,000トークン（$0.38）だけです。<strong>6倍以上を「同じ前置きの再送」に払っている</strong>計算になります。
       <br><br>
       しかもこの増え方は<strong>往復数の二乗で効いてきます</strong>。100往復なら送る入力の合計は1,595万トークン（$159.50）です。1Mの上限に一度も触れていないのに、です。
       <br><br>

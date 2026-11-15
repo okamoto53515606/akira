@@ -48,17 +48,32 @@
 <header class="site-header"><div class="header-inner"><a href="/" class="site-logo"><img src="/logo.svg" class="logo-icon" alt="" width="22" height="22" aria-hidden="true">LLM Data Hub</a><nav aria-label="メインナビゲーション"><a href="/" class="nav-link">ホーム</a><a href="/pricing/" class="nav-link">料金比較</a><a href="/calculator/" class="nav-link">トークン計算機</a><a href="/timeline/" class="nav-link">リリース年表</a><a href="/china-ai/" class="nav-link">中国AI</a><a href="/multimodal/" class="nav-link">マルチモーダル</a><a href="/mai/" class="nav-link">MS AI (MAI)</a><a href="/glossary/" class="nav-link">用語説明</a></nav></div></header>
 <main>
 <div class="container" style="padding-top:2rem;">
-<h1 class="section-title" style="font-size:1.6rem;">音声API料金比較 <span style="font-size:1rem;font-weight:500;color:var(--c-muted);">【2026年11月版】</span></h1>
-<p style="font-size:.9rem;background:var(--c-surface2);border:1px solid var(--c-border);border-radius:6px;padding:.6rem .9rem;max-width:880px;"><strong>このページの範囲</strong>: 読み上げ（TTS）と文字起こし（STT）の単価を<strong>「1分」「1時間」にそろえて</strong>並べます。課金単位が4種類（1M文字・1Mトークン・1分・1時間）に分かれているため、そのままでは比べられません。換算の前提は折りたたみに明記しています（各社公式ページを2026-11-15に取得）。</p>
+<figure class="key-visual" style="margin:1.5rem 0 .5rem;"><img src="/assets/og/ja-speech-api-pricing.png" alt="このページの内容を1枚にまとめた画像" width="1200" height="630" loading="eager" decoding="async" style="width:100%;max-width:900px;height:auto;display:block;margin:0 auto;border:1px solid var(--c-border);border-radius:var(--r-md);"></figure>
 
+<h1 class="section-title" style="font-size:1.6rem;">音声API料金比較 <span style="font-size:1rem;font-weight:500;color:var(--c-muted);">【2026年11月版】</span></h1>
+<p style="font-size:.9rem;background:var(--c-surface2);border:1px solid var(--c-border);border-radius:6px;padding:.6rem .9rem;"><strong>このページの範囲</strong>: 読み上げ（TTS）と文字起こし（STT）の単価を<strong>「1分」「1時間」にそろえて</strong>並べます。課金単位が4種類（1M文字・1Mトークン・1分・1時間）に分かれているため、そのままでは比べられません。換算の前提は折りたたみに明記しています（各社公式ページを2026-11-15に取得）。</p>
+
+<div class="section" style="padding-top:1.25rem;padding-bottom:0;">
+  <nav class="toc" aria-label="目次">
+    <p class="toc-title">目次</p>
+    <ol>
+      <li><a href="#sec-1">結論（3行）</a></li>
+      <li><a href="#sec-2">なぜ換算が要るのか</a></li>
+      <li><a href="#sec-3">読み上げ（TTS）</a></li>
+      <li><a href="#sec-4">文字起こし（STT）</a></li>
+      <li><a href="#sec-5">注意（4点）</a></li>
+      <li><a href="#sec-6">出典（すべて2026-11-15取得）</a></li>
+    </ol>
+  </nav>
+</div>
 <section class="section" style="padding-top:1rem;">
-<div class="conclusion"><h2 class="section-title" style="font-size:1.15rem;margin-top:0;">結論（3行）</h2><ul>
+<div class="conclusion"><h2 class="section-title" style="font-size:1.15rem;margin-top:0;" id="sec-1">結論（3行）</h2><ul>
 <li><strong>日本語ナレーション</strong> → <strong>MAI-Voice-2.1-Flash（$0.0045/分）</strong>。OpenAI tts-1 も同額だが <strong>Deprecated</strong> なので現行では選ばない。</li>
 <li><strong>文字起こし（録音ファイル）</strong> → <strong>MAI-Transcribe-2（$0.10/時間）</strong>。年末までの期間限定価格。次点は Meta Muse Voice Transcribe の $0.18/時間。</li>
 <li><strong>リアルタイム対話</strong> → 分単価が1桁違う（$0.023/分〜）。録音ファイルの処理と<strong>同じ表で比べない</strong>。</li>
 </ul></div>
 
-<div class="tint"><h2 class="section-title" style="font-size:1.15rem;">なぜ換算が要るのか</h2>
+<div class="tint"><h2 class="section-title" style="font-size:1.15rem;" id="sec-2">なぜ換算が要るのか</h2>
 <div class="diagram">
   <div class="dg-box"><b>1M文字</b>OpenAI tts-1 系<br>MAI-Voice</div>
   <div class="dg-arrow">＋</div>
@@ -72,7 +87,7 @@
 
 </div>
 
-<h2 class="section-title" style="font-size:1.15rem;">読み上げ（TTS）</h2>
+<h2 class="section-title" style="font-size:1.15rem;" id="sec-3">読み上げ（TTS）</h2>
 <div class="table-wrap"><table>
 <thead><tr><th>モデル</th><th>1分</th><th>状態</th></tr></thead>
 <tbody>
@@ -124,7 +139,7 @@
 </tbody></table></div>
 </details>
 
-<h2 class="section-title" style="font-size:1.15rem;">文字起こし（STT）</h2>
+<h2 class="section-title" style="font-size:1.15rem;" id="sec-4">文字起こし（STT）</h2>
 <div class="table-wrap"><table>
 <thead><tr><th>モデル</th><th>1時間</th><th>状態</th></tr></thead>
 <tbody>
@@ -136,7 +151,7 @@
 <tr><td>OpenAI gpt-live-transcribe</td><td>$1.02</td><td>現行</td></tr>
 </tbody></table></div>
 
-<h2 class="section-title" style="font-size:1.15rem;">注意（4点）</h2>
+<h2 class="section-title" style="font-size:1.15rem;" id="sec-5">注意（4点）</h2>
 <ul>
 <li><strong>OpenAI の文字課金TTS 3モデル（tts-1 / tts-1-hd / gpt-4o-mini-tts）は Deprecated</strong>。比較用に残していますが、新規採用の候補ではありません。</li>
 <li><strong>「1分=300文字」は当サイトの前提</strong>です（日本語ナレーション想定）。英語は約3倍速いため、文字課金モデルは1分あたりの消費文字数が増えます。</li>
@@ -154,7 +169,7 @@
 <blockquote class="verb">Audio tokens correspond to 25 tokens per second of audio.<br>— ai.google.dev/gemini-api/docs/pricing（2026-11-15取得）</blockquote>
 </details>
 
-<h2 class="section-title" style="font-size:1.15rem;">出典（すべて2026-11-15取得）</h2>
+<h2 class="section-title" style="font-size:1.15rem;" id="sec-6">出典（すべて2026-11-15取得）</h2>
 <ul>
 <li><a href="https://openai.com/api/pricing/" target="_blank" rel="noopener">OpenAI API Pricing</a></li>
 <li><a href="https://platform.openai.com/docs/models/tts-1" target="_blank" rel="noopener">OpenAI tts-1（Deprecated 表記）</a></li>

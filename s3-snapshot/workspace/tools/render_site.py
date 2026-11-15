@@ -28,6 +28,7 @@ import os
 import re
 import sys
 from datetime import date, timedelta, timezone
+from html import escape
 from pathlib import Path
 
 from strands import tool
@@ -44,6 +45,8 @@ def _date_text(lang: str) -> str:
     return "%d年%d月%d日" % (d.year, d.month, d.day) if lang == "ja" else d.isoformat()
 
 ART_RE = re.compile(r'<article class="tl-item[^"]*" id="([^"]+)">.*?</article>\n?', re.S)
+# 見出し・説明文の書き戻し用（本文を取り出すので group が要る）
+ART_BODY_RE = re.compile(r'(<article class="tl-item[^"]*" id="([^"]+)">)(.*?)(</article>)', re.S)
 DIVIDER_RE = re.compile(r'<div class="year-divider">[^<]*</div>\n?')
 
 
@@ -62,6 +65,52 @@ def ordered_records(facts: dict):
 
 
 # --------------------------------------------------------------------------- 1. timeline
+def render_timeline_prose(site: Path, rel: str, lang: str, facts: dict) -> list:
+    """見出しと説明文を台帳から書き戻す（2026-11-15 / R5）。
+
+    これが無いと、同じ文章が ja/en の2つのHTMLに直書きされたままになり、
+    「片方だけ直して片方が漏れる」事故が構造的に消えない（§8.5.3）。
+    台帳が正で、HTMLは成果物。手でHTMLを直しても次回の描画で戻る。
+
+    戻り値は「書き換えた記事のid」のリスト（0件なら往復で壊れていない証拠）。
+    """
+    path = site / rel
+    html = path.read_text(encoding="utf-8")
+    changed = []
+
+    def patch(m):
+        aid, body = m.group(2), m.group(3)
+        rec = None
+        for r in facts.get("models", {}).values():
+            t = r.get("timeline") or {}
+            if t.get("ja_id") == aid or t.get("en_id") == aid:
+                rec = r
+                break
+        if rec is None:
+            return m.group(0)
+        t = rec.get("timeline") or {}
+        want_title = (t.get("title_%s" % lang) or "").strip()
+        want_desc = (t.get("desc_%s" % lang) or "").strip()
+        new_body = body
+        if want_title:
+            tm = re.search(r'(<h2[^>]*class="tl-title"[^>]*>)(.*?)(</h2>)', new_body, re.S)
+            if tm:
+                new_body = (new_body[:tm.start(2)] + escape(want_title)
+                            + new_body[tm.end(2):])
+        if want_desc:
+            dm = re.search(r'(<p class="tl-desc">)(.*?)(</p>)', new_body, re.S)
+            if dm:
+                new_body = new_body[:dm.start(2)] + want_desc + new_body[dm.end(2):]
+        if new_body != body:
+            changed.append(aid)
+        return m.group(1) + new_body + m.group(4)
+
+    out = ART_BODY_RE.sub(patch, html)
+    if changed:
+        path.write_text(out, encoding="utf-8")
+    return changed
+
+
 def render_timeline(site: Path, rel: str, lang: str, order_ids) -> bool:
     """エントリを released 降順に並べ直す。ja/en で同一順になるよう (日付, id) で決める。
 
@@ -100,6 +149,46 @@ def render_timeline(site: Path, rel: str, lang: str, order_ids) -> bool:
 
 
 # --------------------------------------------------------------------------- 2. 計算機
+# --------------------------------------------------------------------- 1b. 料金表
+TABLE_RE = re.compile(r"<table[^>]*>.*?</table>", re.S)
+TBODY_RE = re.compile(r"(<tbody[^>]*>)(.*?)(</tbody>)", re.S)
+
+
+def render_pricing(site: Path, rel: str, lang: str, facts: dict) -> int:
+    """`/pricing/` の各表の <tbody> を台帳から書き戻す（R6）。
+
+    台帳の `pricing_tables[i].rows[j][lang]` は `<tr>…</tr>` ごとの生HTML。
+    日英が同じレコードに並んでいるので、片方だけ直す事故が起きない。
+    戻り値は書き換えた表の数。
+    """
+    tables = facts.get("pricing_tables") or []
+    if not tables:
+        return 0
+    path = site / rel
+    if not path.exists():
+        return 0
+    html = path.read_text(encoding="utf-8")
+
+    for spec in tables:
+        idx = spec.get("index")
+        rows = [r.get(lang) for r in spec.get("rows", [])]
+        if not rows or any(r is None for r in rows):
+            continue
+        new_body = "\n" + "\n".join(rows) + "\n"
+        ms = list(TABLE_RE.finditer(html))
+        if idx is None or idx >= len(ms):
+            continue
+        tstart, tend = ms[idx].span()
+        seg = html[tstart:tend]
+        m = TBODY_RE.search(seg)
+        if not m:
+            continue
+        seg2 = seg[:m.start(2)] + new_body + seg[m.end(2):]
+        html = html[:tstart] + seg2 + html[tend:]
+    path.write_text(html, encoding="utf-8")
+    return len(tables)
+
+
 def render_models_json(site: Path, facts: dict) -> bool:
     path = site / "data" / "models.json"
     cur = json.loads(path.read_text(encoding="utf-8"))
@@ -141,9 +230,17 @@ def changelog_events(facts: dict):
             })
         for e in r.get("events", []):
             ev.append(dict(e, kind=e.get("kind", "update"), key=r["id"]))
+    # site_events は「後ろに足したものが新しい」。同じ日付では**足した順の逆**を先に出す。
+    # 2026-11-15: key のアルファベット順で並べていたため、その日に公開した新ページが
+    # トップの「直近5件」から外れた（課題141 の実体）。
     for e in facts.get("site_events", []):
         ev.append(e)
-    return sorted(ev, key=lambda e: (e.get("date", ""), e.get("key", "")), reverse=True)
+    for i, e in enumerate(ev):
+        e["_seq"] = i
+    ev.sort(key=lambda e: (e.get("date", ""), e.get("_seq", 0)), reverse=True)
+    for e in ev:
+        e.pop("_seq", None)
+    return ev
 
 
 def _header_footer(site: Path, lang: str):
@@ -180,9 +277,8 @@ def render_changelog(site: Path, facts: dict) -> list:
             sub = "What was added to this site and when. Page-level histories are generated from this ledger, so they cannot drift apart."
             canon = "https://llm.okamomedia.tokyo/en/changelog/"
             th_date, th_kind = "Date", "Change"
-        # 専用OGはまだ無い（この環境にPillowが無いため）。実在する画像を指す。
-        # 課題116: /changelog/ 専用の1200x630を生成して差し替える。
-        og = "https://llm.okamomedia.tokyo/assets/og/%s-home.png" % lang
+        # 専用OG（ja-changelog.png / en-changelog.png）。2026-11-15 に生成済み。
+        og = "https://llm.okamomedia.tokyo/assets/og/%s-changelog.png" % lang
         ld = {"@context": "https://schema.org", "@type": "WebPage", "name": title,
               "dateModified": TODAY, "inLanguage": lang, "url": canon,
               "isAccessibleForFree": True, "description": desc}
@@ -385,14 +481,150 @@ def render_sitemap(site: Path, touched) -> bool:
     return True
 
 
+# ----------------------------------------------------------------- 5. 特集ページ本文（R16-a）
+# 背景（2026-11-15）:
+#   特集ページ（/china-ai/ 等）の本文は ja/en で別々のHTMLに手書きされていたため、
+#   「Aだけ直してB漏れ」が構造的に起きる。本文を台帳の**1レコード2フィールド**
+#   （heading.ja / heading.en, body.ja / body.en）に移し、日英を同じレコードから
+#   出す。片方だけ直すことは物理的にできなくなる。
+FEATURE_PAGES = (
+    "china-ai",
+    "multimodal",
+    "mai",
+    "speech-api-pricing",
+    "image-api-pricing",
+)
+H2_BLOCK_RE = re.compile(r'<h2([^>]*\bclass="section-title"[^>]*)>(.*?)</h2>', re.S)
+H2_ID_RE = re.compile(r'\bid="([^"]+)"')
+
+
+def _block_spans(text: str) -> list:
+    """`class="section-title"` の h2 を区切りに本文ブロックの位置を返す。
+
+    本文の終端は「次の h2」と「</section>」の**近いほう**にする。こうすると
+    1セクションに複数 h2 があるページ（/speech-api-pricing/）でも、h2 ごとに
+    セクションが分かれるページ（/china-ai/）でも同じ規則で切り出せる。
+    """
+    spans = []
+    ms = list(H2_BLOCK_RE.finditer(text))
+    for i, m in enumerate(ms):
+        idm = H2_ID_RE.search(m.group(1))
+        hid = idm.group(1) if idm else "block-%d" % i
+        ends = [len(text)]
+        if i + 1 < len(ms):
+            ends.append(ms[i + 1].start())
+        sec_end = text.find("</section>", m.end())
+        if sec_end != -1:
+            ends.append(sec_end)
+        spans.append({
+            "start": m.start(),
+            "open_end": m.start(2),      # `<h2 ...>` の直後（見出し本体の直前）
+            "inner": m.group(2),
+            "body_start": m.end(),       # `</h2>` の直後
+            "body_end": min(ends),
+            "id": hid,
+        })
+    return spans
+
+
+def extract_features(site: Path, ws: Path) -> dict:
+    """ページ本文を台帳へ写す（移行用。通常の run() からは呼ばない）。"""
+    fp = ws / FACTS_REL
+    facts = json.loads(fp.read_text(encoding="utf-8"))
+    features = dict(facts.get("features") or {})
+    for slug in FEATURE_PAGES:
+        ja_p = site / slug / "index.html"
+        en_p = site / "en" / slug / "index.html"
+        if not (ja_p.exists() and en_p.exists()):
+            print("  skip（未作成）: %s" % slug)
+            continue
+        tj = ja_p.read_text(encoding="utf-8")
+        te = en_p.read_text(encoding="utf-8")
+        sj, se = _block_spans(tj), _block_spans(te)
+        if len(sj) != len(se):
+            raise SystemExit("%s: 日英でブロック数が違う (ja=%d en=%d)" % (slug, len(sj), len(se)))
+        blocks = []
+        for a, b in zip(sj, se):
+            if a["id"] != b["id"]:
+                raise SystemExit("%s: 見出しidが違う (%s / %s)" % (slug, a["id"], b["id"]))
+            body = {"ja": tj[a["body_start"]:a["body_end"]],
+                    "en": te[b["body_start"]:b["body_end"]]}
+            for lang, bd in body.items():
+                if "</section>" in bd or 'class="section-title"' in bd:
+                    raise SystemExit("%s/%s/%s: 本文にブロック境界が混ざっている"
+                                     % (slug, a["id"], lang))
+            blocks.append({
+                "id": a["id"],
+                "heading": {"ja": a["inner"], "en": b["inner"]},
+                "body": body,
+            })
+        features[slug] = {"blocks": blocks}
+        print("  %-22s %d blocks" % (slug, len(blocks)))
+    facts["features"] = features
+    fp.write_text(json.dumps(facts, ensure_ascii=False, indent=1), encoding="utf-8")
+    return features
+
+
+def render_features(site: Path, facts: dict) -> list:
+    """特集ページの本文を台帳から書き戻す（ja/en を同一レコードから出す）。"""
+    changed = []
+    for slug, rec in sorted((facts.get("features") or {}).items()):
+        blocks = rec.get("blocks") or []
+        for lang, rel in (("ja", "%s/index.html" % slug),
+                          ("en", "en/%s/index.html" % slug)):
+            p = site / rel
+            if not p.exists():
+                continue
+            text = p.read_text(encoding="utf-8")
+            spans = _block_spans(text)
+            if len(spans) != len(blocks):
+                print("  !! %s: 台帳%d件 / ページ%d件 で不一致（触らない）"
+                      % (rel, len(blocks), len(spans)))
+                continue
+            out = text
+            ok = True
+            for sp, blk in reversed(list(zip(spans, blocks))):
+                if sp["id"] != blk["id"]:
+                    print("  !! %s: 見出しid不一致 %s != %s（触らない）"
+                          % (rel, sp["id"], blk["id"]))
+                    ok = False
+                    break
+                head = blk["heading"].get(lang, "")
+                body = blk["body"].get(lang, "")
+                if not head or not body.strip():
+                    print("  !! %s/%s: %s が空（触らない）" % (rel, sp["id"], lang))
+                    ok = False
+                    break
+                rep = text[sp["start"]:sp["open_end"]] + head + "</h2>" + body
+                out = out[:sp["start"]] + rep + out[sp["body_end"]:]
+            if ok and out != text:
+                p.write_text(out, encoding="utf-8")
+                changed.append(rel)
+    return changed
+
+
 def run(site: Path, ws: Path) -> list[str]:
     """台帳から生成し、変更したファイルの一覧を返す（冪等）。"""
     facts = load_facts(ws)
     ids = [r["id"] for r in ordered_records(facts) if r.get("timeline", {}).get("ja_id")]
     changed = []
     for rel, lang in (("timeline/index.html", "ja"), ("en/timeline/index.html", "en")):
-        if render_timeline(site, rel, lang, ids):
+        # 先に見出し・説明文を台帳から書き戻す（R5）。並べ替えはその後。
+        prose = render_timeline_prose(site, rel, lang, facts)
+        did = render_timeline(site, rel, lang, ids)
+        if prose:
+            print("  timeline prose: %s %d件" % (rel, len(prose)))
+        if prose or did:
             changed.append(rel)
+    for rel, lang in (("pricing/index.html", "ja"), ("en/pricing/index.html", "en")):
+        before = (site / rel).read_text(encoding="utf-8") if (site / rel).exists() else ""
+        render_pricing(site, rel, lang, facts)
+        after = (site / rel).read_text(encoding="utf-8") if (site / rel).exists() else ""
+        if before != after:
+            changed.append(rel)
+    # 特集ページの本文（R16-a）。台帳が正で、HTMLの手編集は次の描画で戻る。
+    for rel in render_features(site, facts):
+        changed.append(rel)
     if render_models_json(site, facts):
         changed.append("data/models.json")
     touched = render_changelog(site, facts)
@@ -443,7 +675,13 @@ def main(argv):
             site, ws = (v, ws) if attr == "site" else (site, v)
     if "--check" in argv:
         facts = load_facts(ws)
-        print("[check] facts.models=%d" % len(facts.get("models", {})))
+        print("[check] facts.models=%d / features=%d"
+              % (len(facts.get("models", {})), len(facts.get("features") or {})))
+        return
+    if "--extract-features" in argv:
+        # 移行用（1回だけ）。ページ本文を台帳の1レコード2フィールドへ写す。
+        feats = extract_features(site, ws)
+        print("extract: %d page(s)" % len(feats))
         return
     changed = run(site, ws)
     print("render: %d file(s) changed" % len(changed))

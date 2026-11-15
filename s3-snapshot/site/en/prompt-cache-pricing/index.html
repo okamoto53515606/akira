@@ -49,11 +49,26 @@
 
 <main>
 <div class="container" style="padding-top:2rem;">
+<figure class="key-visual" style="margin:1.5rem 0 .5rem;"><img src="/assets/og/en-prompt-cache-pricing.png" alt="A single image summarising this page" width="1200" height="630" loading="eager" decoding="async" style="width:100%;max-width:900px;height:auto;display:block;margin:0 auto;border:1px solid var(--c-border);border-radius:var(--r-md);"></figure>
+
 <h1 class="section-title" style="font-size:1.6rem;">Prompt Caching Pricing Compared <span style="font-size:1rem;font-weight:500;color:var(--c-muted);">[November 2026]</span></h1>
 <p class="section-sub" style="max-width:760px;">How far does the input rate drop when you reuse the same long prefix (system prompt, document set, codebase) with each vendor's cache? This page is the <strong>rate-and-terms comparison</strong>; the concept is explained in the <a href="/en/glossary/prompt-cache/">glossary entry on prompt caching</a>, and standard (non-cached) rates are in the <a href="/en/pricing/">LLM API pricing comparison</a>.</p>
 <div class="updated-bar"><span class="dot">●</span>Last updated: <time datetime="2026-11-14">November 14, 2026</time> | Every vendor page was fetched on 10 Nov 2026; quotations are verbatim and the ratio/absolute conversions are ours.</div>
+<div class="section" style="padding-top:1.25rem;padding-bottom:0;">
+  <nav class="toc" aria-label="Contents">
+    <p class="toc-title">Contents</p>
+    <ol>
+      <li><a href="#sec-1">Three things to know first</a></li>
+      <li><a href="#sec-2">Cache rates by model (USD per 1M tokens)</a></li>
+      <li><a href="#sec-3">Write versus read: when caching pays off</a></li>
+      <li><a href="#sec-4">What we could not confirm (we do not guess)</a></li>
+      <li><a href="#sec-5">Sources (all fetched 10 Nov 2026)</a></li>
+      <li><a href="#sec-6">Related pages</a></li>
+    </ol>
+  </nav>
+</div>
 <section class="section" style="padding-top:1rem;">
-<h2 class="section-title" style="font-size:1.15rem;">Three things to know first</h2>
+<h2 class="section-title" style="font-size:1.15rem;" id="sec-1">Three things to know first</h2>
 <ul style="max-width:760px;line-height:1.9;">
 <li><strong>Reads are cheap, writes are expensive.</strong> Cache reads land at 0.025x to 0.1x of the normal input rate, while writes cost 1.25x to 2x (OpenAI and Anthropic both work this way). <strong>Caching a prefix you will only send once costs you more than not caching it.</strong></li>
 <li><strong>Discounts are quoted against the normal input rate.</strong> "90% off" means different money on a $0.10 model than on a $10 model, so the table shows both the multiplier and the absolute rate.</li>
@@ -61,7 +76,7 @@
 </ul>
 </section>
 <section class="section" style="padding-top:0;">
-<h2 class="section-title" style="font-size:1.15rem;">Cache rates by model (USD per 1M tokens)</h2>
+<h2 class="section-title" style="font-size:1.15rem;" id="sec-2">Cache rates by model (USD per 1M tokens)</h2>
 <div class="table-wrap"><table>
 <thead><tr><th>Vendor</th><th>Model</th><th>Normal input</th><th>Cached input (hit)</th><th>Read discount</th><th>Write (5 min)</th><th>Write (1 hour)</th><th>Minimum tokens</th><th>Retention / billing unit</th></tr></thead>
 <tbody>
@@ -83,13 +98,13 @@
 <p style="font-size:.78rem;color:var(--c-muted);max-width:820px;">OpenAI write rates are the official multipliers (1.25x for the 30-minute lifetime, 2.5x for 12 hours) applied to normal input; the docs stress that a cache write is not an additive fee but a replacement rate. Anthropic writes are 1.25x (5 min) and 2x (1 hour), reads are 0.1x (0.025x on Fable 5.1 and Mythos 5.1, 0.05x on Opus 5.5 and Sonnet 5.5). DeepSeek shows off-peak / peak.</p>
 </section>
 <section class="section" style="padding-top:0;">
-<h2 class="section-title" style="font-size:1.15rem;">Write versus read: when caching pays off</h2>
+<h2 class="section-title" style="font-size:1.15rem;" id="sec-3">Write versus read: when caching pays off</h2>
 <p style="max-width:820px;line-height:1.9;">OpenAI states the break-even arithmetic verbatim:</p>
 <div class="note-bar" style="max-width:820px;">"At the 0.1× read rate with 30-minute writes, writing a prefix once and fully reusing it once costs <strong>1.35×</strong> its ordinary input cost, compared with <strong>2×</strong> for processing it twice without caching."</div>
 <p style="max-width:820px;line-height:1.9;">The same structure holds elsewhere. For Moonshot's kimi-k3.1-pro a 5-minute write ($2.00) equals the normal input rate ($2.00) while reads fall to $0.20. Anthropic charges 1.25x or 2x on writes in exchange for reads down to 0.025x-0.1x. <strong>How many times you reuse the prefix is what decides the bill.</strong></p>
 </section>
 <section class="section" style="padding-top:0;">
-<h2 class="section-title" style="font-size:1.15rem;">What we could not confirm (we do not guess)</h2>
+<h2 class="section-title" style="font-size:1.15rem;" id="sec-4">What we could not confirm (we do not guess)</h2>
 <div class="table-wrap"><table><thead><tr><th>Item</th><th>Status</th><th>Note</th></tr></thead><tbody>
 <tr><td class="model-name">Anthropic minimum cacheable length</td><td><strong>Not confirmed</strong></td><td>Neither the pricing page nor the prompt-caching docs we fetched on 2026-11-14 state a minimum token count. We will add per-model values from the model docs once verified.</td></tr>
 <tr><td class="model-name">Per-model attribution of Google cache rates</td><td><strong>Not confirmed</strong></td><td>Model names sit outside the pricing tables on ai.google.dev, so quoting a cache row alone does not establish which model it belongs to. We associate the Gemini 4 Argon row because its input/output rates ($2.00/$10.00) match that model's table.</td></tr>
@@ -99,7 +114,7 @@
 </tbody></table></div>
 </section>
 <section class="section" style="padding-top:0;">
-<h2 class="section-title" style="font-size:1.15rem;">Sources (all fetched 10 Nov 2026)</h2>
+<h2 class="section-title" style="font-size:1.15rem;" id="sec-5">Sources (all fetched 10 Nov 2026)</h2>
 <ul style="line-height:1.9;max-width:820px;">
 <li>OpenAI pricing: <a href="https://developers.openai.com/api/docs/pricing" target="_blank" rel="noopener">developers.openai.com/api/docs/pricing</a> (GPT-6.1 Terra quoted at $1.00 input / $0.05 cached input / $5.00 output)</li>
 <li>OpenAI prompt caching: <a href="https://developers.openai.com/api/docs/guides/prompt-caching" target="_blank" rel="noopener">developers.openai.com/api/docs/guides/prompt-caching</a> (1,024-token minimum, 1.25x write for 30 min / 2.5x for 12 h, 0.1x reads, 0.05x on GPT-6.1 Sol and Terra, the 1.35x vs 2x example)</li>
@@ -110,7 +125,7 @@
 </ul>
 </section>
 <section class="section" style="padding-top:0;">
-<h2 class="section-title" style="font-size:1.15rem;">Related pages</h2>
+<h2 class="section-title" style="font-size:1.15rem;" id="sec-6">Related pages</h2>
 <ul style="line-height:2;">
 <li><a href="/en/batch-api-pricing/">Batch API discounts compared</a> — discounts, turnaround and retention for asynchronous jobs</li>
 <li><a href="/en/pricing/">LLM API pricing comparison</a> - standard input, cached input and output rates</li>

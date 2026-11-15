@@ -55,6 +55,18 @@
 <p style="font-size:.9rem;color:var(--c-muted);margin-top:1rem;"><strong>MAI（Microsoft AI）</strong>は、Microsoft が自社で開発する基盤モデル群です。Azure の <strong>Microsoft Foundry</strong>（旧 Azure AI Foundry）でホスト・課金され、<strong>Azure-first</strong> で配布されます。OpenAI モデル（Azure OpenAI 経由）とは別に、Microsoft 自身が開発・提供する基盤モデルファミリーとして位置づけられます。具体的な価格は下記の料金表の通りで、エンタープライズ向けのコスト・ライセンス・データ主権の選択肢を広げることが狙いです。</p>
 
 <!-- 最新モデル -->
+<div class="section" style="padding-top:1.25rem;padding-bottom:0;">
+  <nav class="toc" aria-label="目次">
+    <p class="toc-title">目次</p>
+    <ol>
+      <li><a href="#latest-h">最新モデル（2026年10月）</a></li>
+      <li><a href="#pricing-h">モデル別・料金（Azure Foundry 確認済み）</a></li>
+      <li><a href="#api-h">使い方（API / アクセス方法）</a></li>
+      <li><a href="#timeline-h">MAI リリース年表</a></li>
+      <li><a href="#notes-h">押さえておきたいポイント</a></li>
+    </ol>
+  </nav>
+</div>
 <section class="section" style="padding-top:0;" aria-labelledby="latest-h">
 <h2 class="section-title" id="latest-h">最新モデル（2026年10月）</h2>
 <p class="section-sub">microsoft.ai 公式ブログで確認できる直近の発表（2026-10-02分を含む）。いずれも Microsoft Foundry / MAI Playground などで試せます。</p>
@@ -78,8 +90,7 @@
 <!-- 料金 -->
 <p style="font-size:.85rem;color:var(--c-muted);margin:.9rem 0 0;border-left:2px solid var(--c-border);padding-left:.7rem;"><strong>料金表の読み方（画像生成と画像理解の違い）:</strong> Azure Foundry Models pricing の Microsoft セクションでは、モデルごとに「入力」欄の種類が違います。<strong>MAI-Image-2.5 / 2.5 Flash / 2.5 Pro は入力が Text / Image の2種類に分けて掲載</strong>され、画像を入力として渡す使い方の単価が別建てです。一方 <strong>MAI-Image-2 / MAI-Image-2-Efficient は入力がテキスト1種類のみ</strong>で、MAI-Thinking-1 などのテキスト系も入力欄はテキストのみの掲載です。つまり入力欄が「Text / Image」に分かれているモデル＝画像を入力（理解）に使えるモデル、出力欄が画像のモデル＝画像を生成するモデル、と読み分けられます。（2026-10-17 に公式料金ページで再確認）</p><h3 style="font-size:1rem;margin:1.6rem 0 .5rem;">参考価格: MAI-Transcribe-2-Streaming / MAI-Voice-2.1 / 2.1-Flash（公式ブログの記載・Azure料金表には未掲載）</h3>
 <p style="font-size:.88rem;color:var(--c-muted);margin-bottom:.6rem;">
-  これら3モデルも、上の確認済み料金表（Azure Foundry Models pricing・Microsoft セクション）には<strong>掲載されていません</strong>（2026-10-03に再確認。MAI の行は9行のままで、Transcribe 系・Voice 系の行はありません）。
-  そのため <a href="https://microsoft.ai/news/our-first-streaming-transcription-model/" target="_blank" rel="noopener">Our first streaming transcription model（2026-10-02）</a> の記載をそのまま掲載します。
+  これら3モデルも、上の確認済み料金表（Azure Foundry Models pricing・Microsoft セクション）には<strong>掲載されていません</strong>（2026-10-03に再確認。MAI の行は9行のままで、Transcribe 系・Voice 系の行はありません）。そのため <a href="https://microsoft.ai/news/our-first-streaming-transcription-model/" target="_blank" rel="noopener">Our first streaming transcription model（2026-10-02）</a> の記載をそのまま掲載します。
 </p>
 <div class="table-wrap"><table><thead><tr><th>モデル</th><th>種別</th><th>公式ブログの記載</th></tr></thead><tbody>
 <tr><td class="model-name">MAI-Transcribe-2-Streaming</td><td>ストリーミング音声認識</td><td class="price">$0.54 / 音声1時間（年内の導入価格）</td></tr>
@@ -103,9 +114,7 @@
 
 <h3 style="font-size:1rem;margin:1.6rem 0 .5rem;">参考価格: MAI-Image-2.6 / 2.6-Flash（公式ブログの記載・Azure料金表には未掲載）</h3>
 <p style="font-size:.88rem;color:var(--c-muted);margin-bottom:.6rem;">
-  この2モデルは、上の確認済み料金表（Azure Foundry Models pricing・Microsoft セクション）には<strong>まだ掲載されていません</strong>（2026-09-19に再確認）。
-  そのため <a href="https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/mai-image-2-6-and-mai-image-2-6-flash-quality-and-speed-at-production-scale/4550970" target="_blank" rel="noopener">MAI-Image-2.6 and MAI-Image-2.6-Flash（2026-09-04）</a> に書かれている価格を、そのまま掲載します。
-  表記はすべて <strong>starts at（最低価格）</strong>、提供は <strong>public preview</strong> です。
+  この2モデルは、上の確認済み料金表（Azure Foundry Models pricing・Microsoft セクション）には<strong>まだ掲載されていません</strong>（2026-09-19に再確認）。そのため <a href="https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/mai-image-2-6-and-mai-image-2-6-flash-quality-and-speed-at-production-scale/4550970" target="_blank" rel="noopener">MAI-Image-2.6 and MAI-Image-2.6-Flash（2026-09-04）</a> に書かれている価格を、そのまま掲載します。表記はすべて <strong>starts at（最低価格）</strong>、提供は <strong>public preview</strong> です。
 </p>
 <div class="table-wrap"><table><thead><tr><th>モデル</th><th>テキスト入力 / 1M</th><th>画像入力 / 1M</th><th>画像出力 / 1M</th></tr></thead><tbody>
 <tr><td class="model-name">MAI-Image-2.6</td><td class="price">$5</td><td class="price">$8</td><td class="price">$38</td></tr>

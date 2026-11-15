@@ -85,10 +85,7 @@
   <div class="section" style="padding-bottom:0;">
     <h1 class="section-title" style="font-size:1.55rem;">ベンチマークとは — 「誰が・何を・どう測るか」で仕分ける</h1>
     <p class="section-sub" style="max-width:760px;">
-      <a href="/glossary/">用語説明</a> 第5回。今回のテーマは <strong>ベンチマーク</strong> です。
-      きっかけは読者からの素直な疑問でした——「<strong>開発者による実測では、DeepSWE、GDPval-AA、Terminal-bench、OSWorld など複数のベンチマーク</strong>」と書いてあっても、<strong>誰が具体的に何を計測しているのか分からない。ベンチマークが多すぎて訳が分からない</strong>。
-      そこでこのページでは、<strong>ベンチ名を暗記するのをやめます</strong>。代わりに<strong>①誰が運営しているか ②何を測っているか ③どう測るか（ハーネス・設定）</strong>という3つの質問で仕分ける道具を持ち帰ってもらいます。
-      第3回の<a href="/glossary/harness/">ハーネス（harness）</a>と対になる内容です。
+      <a href="/glossary/">用語説明</a> 第5回。今回のテーマは <strong>ベンチマーク</strong> です。きっかけは読者からの素直な疑問でした——「<strong>開発者による実測では、DeepSWE、GDPval-AA、Terminal-bench、OSWorld など複数のベンチマーク</strong>」と書いてあっても、<strong>誰が具体的に何を計測しているのか分からない。ベンチマークが多すぎて訳が分からない</strong>。そこでこのページでは、<strong>ベンチ名を暗記するのをやめます</strong>。代わりに<strong>①誰が運営しているか ②何を測っているか ③どう測るか（ハーネス・設定）</strong>という3つの質問で仕分ける道具を持ち帰ってもらいます。第3回の<a href="/glossary/harness/">ハーネス（harness）</a>と対になる内容です。
     </p>
     <div class="phrase-box">
       <p class="phrase">「同じベンチ名でも、運営・版・ハーネス・設定が違えば、数字は比較できない」</p>
@@ -101,12 +98,22 @@
     </div>
   </div>
 
-  <section class="section" style="padding-top:1.5rem;" aria-labelledby="why-h">
+  <div class="section" style="padding-top:1.25rem;padding-bottom:0;">
+  <nav class="toc" aria-label="目次">
+    <p class="toc-title">目次</p>
+    <ol>
+      <li><a href="#why-h">なぜ「多すぎて分からない」と感じるのか</a></li>
+      <li><a href="#table-h">6つのベンチを3つの質問で仕分ける</a></li>
+      <li><a href="#detail-h">1つずつ、「誰が・何を・どう測るか」を確認する</a></li>
+      <li><a href="#check-h">次にベンチの数字を見たら、この5つを確認する</a></li>
+      <li><a href="#rel-h">関連する用語説明</a></li>
+    </ol>
+  </nav>
+</div>
+<section class="section" style="padding-top:1.5rem;" aria-labelledby="why-h">
     <h2 class="section-title" id="why-h" style="font-size:1.2rem;">なぜ「多すぎて分からない」と感じるのか</h2>
     <p style="max-width:820px;font-size:.92rem;line-height:1.85;">
-      理由はシンプルで、<strong>ベンチマークは「モデルを比較するため」ではなく「特定の能力を測るため」に、測りたい人がそれぞれ作っている</strong>からです。
-      コーディングを測りたい会社、実務の経済価値を測りたい研究所、ターミナル操作を測りたい大学のグループ——目的が違えば、当然テストの形も違います。
-      にもかかわらず、ニュースでは全部が「ベンチマークのスコア」という同じ言葉で並べられます。ここで情報が潰れてしまうわけです。
+      理由はシンプルで、<strong>ベンチマークは「モデルを比較するため」ではなく「特定の能力を測るため」に、測りたい人がそれぞれ作っている</strong>からです。コーディングを測りたい会社、実務の経済価値を測りたい研究所、ターミナル操作を測りたい大学のグループ——目的が違えば、当然テストの形も違います。にもかかわらず、ニュースでは全部が「ベンチマークのスコア」という同じ言葉で並べられます。ここで情報が潰れてしまうわけです。
     </p>
     <p style="max-width:820px;font-size:.92rem;line-height:1.85;">
       だから覚えるべきはベンチ名の一覧ではなく、<strong>「この数字は誰の・何の・どう測った数字か」を引き出す手順</strong>です。次の図がその全体像です。
@@ -365,7 +372,6 @@
       <li>Terminal-Bench-Science — <a href="https://github.com/harbor-framework/terminal-bench-science" target="_blank" rel="noopener">github.com/harbor-framework/terminal-bench-science</a>（Stanford + Laude Institute）</li>
       <li>OSWorld — <a href="https://osworld-v1.xlang.ai/" target="_blank" rel="noopener">osworld-v1.xlang.ai</a> / 原論文 <a href="https://arxiv.org/abs/2404.07972" target="_blank" rel="noopener">arXiv:2404.07972</a> / <a href="https://xlang.ai/blog/osworld-verified" target="_blank" rel="noopener">OSWorld-Verified</a> / <a href="https://osworld-v2.xlang.ai/" target="_blank" rel="noopener">OSWorld 2.0</a>（XLANG Lab）</li>
     </ul>
-    <p style="font-size:.8rem;color:var(--c-muted);margin-top:.6rem;">関連: <a href="/glossary/">用語説明 一覧</a> · <a href="/glossary/harness/">ハーネス（harness）</a> · <a href="/glossary/gpt-6-astra-benchmarks/">GPT-6 Astra のベンチマークの読み方</a> · <a href="/glossary/one-million-context/">1Mコンテキスト</a> · <a href="/timeline/">リリース年表</a></p>
   </details>
 </section>
 </div></main>

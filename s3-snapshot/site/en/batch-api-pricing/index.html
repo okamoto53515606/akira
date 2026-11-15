@@ -46,12 +46,29 @@
 <header class="site-header"><div class="header-inner"><a href="/en/" class="site-logo"><img src="/logo.svg" class="logo-icon" alt="" width="22" height="22" aria-hidden="true">LLM Data Hub</a><nav aria-label="Main navigation"><a href="/en/" class="nav-link">Home</a><a href="/en/pricing/" class="nav-link">Pricing</a><a href="/en/calculator/" class="nav-link">Token calculator</a><a href="/en/timeline/" class="nav-link">Timeline</a><a href="/en/china-ai/" class="nav-link">China AI</a><a href="/en/multimodal/" class="nav-link">Multimodal</a><a href="/en/mai/" class="nav-link">MS AI (MAI)</a><a href="/en/glossary/" class="nav-link">Glossary</a></nav></div></header>
 <main>
 <div class="container" style="padding-top:2rem;">
+<figure class="key-visual" style="margin:1.5rem 0 .5rem;"><img src="/assets/og/en-batch-api-pricing.png" alt="A single image summarising this page" width="1200" height="630" loading="eager" decoding="async" style="width:100%;max-width:900px;height:auto;display:block;margin:0 auto;border:1px solid var(--c-border);border-radius:var(--r-md);"></figure>
+
 <h1 class="section-title" style="font-size:1.6rem;">Batch API discounts compared <span style="font-size:1rem;font-weight:500;color:var(--c-muted);">(November 2026)</span></h1>
-<p style="font-size:.9rem;background:var(--c-surface2);border:1px solid var(--c-border);border-radius:6px;padding:.6rem .9rem;max-width:880px;"><strong>What a Batch API is</strong>: you submit a large volume of requests asynchronously and collect the results later. You give up real-time latency, and the per-token price drops to roughly 50-60% of standard.</p>
+<p style="font-size:.9rem;background:var(--c-surface2);border:1px solid var(--c-border);border-radius:6px;padding:.6rem .9rem;"><strong>What a Batch API is</strong>: you submit a large volume of requests asynchronously and collect the results later. You give up real-time latency, and the per-token price drops to roughly 50-60% of standard.</p>
 <p class="section-sub" style="max-width:780px;">How far the per-token price drops when you send a large volume of requests <strong>asynchronously</strong>, in one table. You trade real-time latency for a lower rate, so <strong>"can this job wait?" is the deciding question</strong>. Standard rates live in the <a href="/en/pricing/">LLM API pricing comparison</a>; reuse of the same prefix is covered in <a href="/en/prompt-cache-pricing/">prompt caching rates compared</a>.</p>
 <div class="updated-bar"><span class="dot">●</span>Last updated: <time datetime="2026-11-12">November 12, 2026</time> | Official pages fetched on 2026-11-12; quotations are verbatim. Amounts derived by applying a published discount to a standard rate are labelled "calculated".</div>
+<div class="section" style="padding-top:1.25rem;padding-bottom:0;">
+  <nav class="toc" aria-label="Contents">
+    <p class="toc-title">Contents</p>
+    <ol>
+      <li><a href="#sec-1">Three things to know first</a></li>
+      <li><a href="#sec-2">Batch discounts at a glance (USD per 1M tokens)</a></li>
+      <li><a href="#sec-3">Anthropic batch input rates by model (verbatim from the official table)</a></li>
+      <li><a href="#sec-4">When it pays off: a nightly classification job</a></li>
+      <li><a href="#sec-5">Batch is a latency and deadline trade-off</a></li>
+      <li><a href="#sec-6">What we could not confirm (no guessing)</a></li>
+      <li><a href="#sec-7">Sources (all fetched 2026-11-12)</a></li>
+      <li><a href="#sec-8">Related pages</a></li>
+    </ol>
+  </nav>
+</div>
 <section class="section" style="padding-top:1rem;">
-<h2 class="section-title" style="font-size:1.15rem;">Three things to know first</h2>
+<h2 class="section-title" style="font-size:1.15rem;" id="sec-1">Three things to know first</h2>
 <ul style="max-width:840px;line-height:1.9;">
 <li><strong>The big three all sit at 50% off.</strong> OpenAI, Anthropic and Google each halve the standard rate. The discount alone does not separate them, so <strong>deadlines, retention and caps do</strong>.</li>
 <li><strong>Some providers set the discount per model.</strong> xAI varies by model and gives no discount to models outside its table. Moonshot charges 60% of standard, which is shallower than a 50% cut.</li>
@@ -59,7 +76,7 @@
 </ul>
 </section>
 <section class="section" style="padding-top:0;">
-<h2 class="section-title" style="font-size:1.15rem;">Batch discounts at a glance (USD per 1M tokens)</h2>
+<h2 class="section-title" style="font-size:1.15rem;" id="sec-2">Batch discounts at a glance (USD per 1M tokens)</h2>
 <p style="max-width:880px;font-size:.86rem;color:var(--c-muted);">The first five rows are <strong>asynchronous Batch APIs</strong>. The last row (<strong>DeepSeek</strong>) is not a batch API at all; it is a time-of-day discount included for reference.</p>
 <div class="table-wrap"><table>
 <thead><tr><th>Provider</th><th>Models</th><th>Discount vs standard</th><th>Standard (in / out)</th><th>Batch (in / out)</th><th>Turnaround</th><th>Result retention</th><th>Caps and limits</th><th>Source (fetched)</th></tr></thead>
@@ -74,7 +91,7 @@
 <p style="font-size:.78rem;color:var(--c-muted);max-width:880px;">"Calculated" means we applied the published discount (50% for OpenAI and Google, 20% for xAI, 60% of standard for Moonshot) to the standard rate. For Anthropic, the input side is quoted from the official batch table and the output side is derived from "50 percent discount on both input and output tokens". Standard rates are those published on 2026-11-12 (Gemini 4 Argon at its introductory price through Nov 30).</p>
 </section>
 <section class="section" style="padding-top:0;">
-<h2 class="section-title" style="font-size:1.15rem;">Anthropic batch input rates by model (verbatim from the official table)</h2>
+<h2 class="section-title" style="font-size:1.15rem;" id="sec-3">Anthropic batch input rates by model (verbatim from the official table)</h2>
 <div class="table-wrap"><table>
 <thead><tr><th>Model</th><th>Batch input</th></tr></thead>
 <tbody>
@@ -94,7 +111,7 @@
 </tbody></table></div>
 </section>
 <section class="section" style="padding-top:0;">
-<h2 class="section-title" style="font-size:1.15rem;">When it pays off: a nightly classification job</h2>
+<h2 class="section-title" style="font-size:1.15rem;" id="sec-4">When it pays off: a nightly classification job</h2>
 <p style="max-width:840px;line-height:1.9;">Say you classify <strong>200,000 support tickets overnight</strong> into issue types. At 1,500 input tokens and 200 output tokens per ticket, that is 300M input tokens and 40M output tokens.</p>
 <div class="table-wrap"><table>
 <thead><tr><th>Model</th><th>Standard API</th><th>Batch</th><th>Difference</th></tr></thead>
@@ -107,13 +124,13 @@
 <p style="max-width:840px;line-height:1.9;">If every request carries the same prefix (instructions, category definitions), combine this with <a href="/en/prompt-cache-pricing/">prompt caching</a> to cut the input side further. Anthropic explicitly allows the combination; OpenAI and Google treat caching and batch as separate discount axes (check each provider's docs for the order of application).</p>
 </section>
 <section class="section" style="padding-top:0;">
-<h2 class="section-title" style="font-size:1.15rem;">Batch is a latency and deadline trade-off</h2>
+<h2 class="section-title" style="font-size:1.15rem;" id="sec-5">Batch is a latency and deadline trade-off</h2>
 <p style="max-width:840px;line-height:1.9;">Batch APIs are <strong>asynchronous</strong>: you submit a job, get an ID, and collect results later. OpenAI states "Each batch completes within 24 hours (and often more quickly)" and the completion window can only be set to 24h. Google states "The target turnaround time is 24 hours, but in majority of cases, it is much quicker." xAI says batch requests are "queued and processed in the background, with most completing within 24 hours". <strong>The docs state an upper bound ("within 24 hours"); they do not say when inside that window a batch will finish.</strong> For business-day use, submit the night before and collect in the morning.</p>
 <p style="max-width:840px;line-height:1.9;">Expired requests are handled differently too. OpenAI writes them to an error file (code <code>batch_expired</code>), so you receive the successful subset only, which means designing for partial results and reruns. Rate limits also differ: xAI notes batch requests "don't count towards rate limits". <strong>Cheaper, but you own the deadline, partial-failure and collection logic.</strong></p>
 <div class="read-box"><strong>Retention can be short.</strong> OpenAI states "The output file will automatically be deleted 30 days after the batch is complete." Copy results into your own storage as soon as a batch finishes. Retention for the other providers is shown as "Not confirmed" in the table above and will be added when we can quote it.</div>
 </section>
 <section class="section" style="padding-top:0;">
-<h2 class="section-title" style="font-size:1.15rem;">What we could not confirm (no guessing)</h2>
+<h2 class="section-title" style="font-size:1.15rem;" id="sec-6">What we could not confirm (no guessing)</h2>
 <div class="table-wrap"><table><thead><tr><th>Item</th><th>Status</th><th>Note</th></tr></thead><tbody>
 <tr><td class="model-name">Anthropic turnaround, result retention and request caps</td><td><strong>Not confirmed</strong></td><td>The pricing docs we fetched contain no verbatim on batch deadlines, retention or caps (we are not claiming they do not exist).</td></tr>
 <tr><td class="model-name">OpenAI per-model eligibility</td><td><strong>Not confirmed</strong></td><td>The batch guide states the discount, window and limits, but we could not capture a model list.</td></tr>
@@ -123,7 +140,7 @@
 </tbody></table></div>
 </section>
 <section class="section" style="padding-top:0;">
-<h2 class="section-title" style="font-size:1.15rem;">Sources (all fetched 2026-11-12)</h2>
+<h2 class="section-title" style="font-size:1.15rem;" id="sec-7">Sources (all fetched 2026-11-12)</h2>
 <ul style="line-height:1.9;max-width:840px;">
 <li>OpenAI Batch API: <a href="https://developers.openai.com/api/docs/guides/batch" target="_blank" rel="noopener">developers.openai.com/api/docs/guides/batch</a> ("50% cost discount compared to synchronous APIs", "Each batch completes within 24 hours", "The output file will automatically be deleted 30 days after the batch is complete.", "A single batch may include up to 50,000 requests, and a batch input file can be up to 200 MB in size.")</li>
 <li>OpenAI pricing: <a href="https://developers.openai.com/api/docs/pricing" target="_blank" rel="noopener">developers.openai.com/api/docs/pricing</a> (GPT-6.1 Terra $1.00 input / $5.00 output)</li>
@@ -137,7 +154,7 @@
 </ul>
 </section>
 <section class="section" style="padding-top:0;">
-<h2 class="section-title" style="font-size:1.15rem;">Related pages</h2>
+<h2 class="section-title" style="font-size:1.15rem;" id="sec-8">Related pages</h2>
 <ul style="line-height:2;">
 <li><a href="/en/pricing/">LLM API pricing comparison</a> — standard rates by model, with verification dates</li>
 <li><a href="/en/prompt-cache-pricing/">Prompt caching rates compared</a> — read and write rates when you reuse a prefix</li>

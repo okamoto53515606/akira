@@ -53,7 +53,6 @@
 <header class="site-header"><div class="header-inner"><a href="/en/" class="site-logo"><img src="/logo.svg" class="logo-icon" alt="" width="22" height="22" aria-hidden="true">LLM Data Hub</a><nav aria-label="Main navigation"><a href="/en/" class="nav-link">Home</a><a href="/en/pricing/" class="nav-link">Pricing</a><a href="/en/calculator/" class="nav-link">Token Calculator</a><a href="/en/timeline/" class="nav-link">Release Timeline</a><a href="/en/china-ai/" class="nav-link">China AI</a><a href="/en/multimodal/" class="nav-link">Multimodal</a><a href="/en/mai/" class="nav-link">MS AI (MAI)</a><a href="/en/glossary/" class="nav-link">Glossary</a></nav></div></header>
 
 <main><div class="container">
-<figure class="key-visual" style="margin:1.5rem 0 .5rem;"><img src="/assets/og-image.png" alt="LLM Data Hub — 1M-token context window explained" width="1200" height="630" loading="eager" decoding="async" style="width:100%;max-width:900px;height:auto;display:block;margin:0 auto;border:1px solid var(--c-border);border-radius:var(--r-md);"></figure>
   <div class="section" style="padding-bottom:0;">
     <h1 class="section-title" style="font-size:1.55rem;">What is a 1M-token context window? The limit, the price step, and the accuracy ceiling</h1>
     <p class="section-sub" style="max-width:760px;">
@@ -78,7 +77,24 @@
   </div>
 
   <!-- ===== 1. Definition ===== -->
-  <section class="section" style="padding-top:1.5rem;" aria-labelledby="def-h">
+  <div class="section" style="padding-top:1.25rem;padding-bottom:0;">
+  <nav class="toc" aria-label="Contents">
+    <p class="toc-title">Contents</p>
+    <ol>
+      <li><a href="#def-h">Short version: the ceiling is capacity, the bill is a separate rule</a></li>
+      <li><a href="#what-h">What a million tokens actually holds</a></li>
+      <li><a href="#limit-h">The ceilings, as the vendors themselves state them</a></li>
+      <li><a href="#cliff-h">What crossing the threshold costs, in dollars</a></li>
+      <li><a href="#grow-h">The second trap: input piles up as a conversation grows</a></li>
+      <li><a href="#rot-h">The third trap: &ldquo;it fits&rdquo; is not &ldquo;it is used evenly&rdquo;</a></li>
+      <li><a href="#fig-h">The picture: the ceiling, the price step and the accuracy ceiling are three different lines</a></li>
+      <li><a href="#analogy-h">Everyday version: a huge desk and a shipping charge</a></li>
+      <li><a href="#use-h">How to use this at work</a></li>
+      <li><a href="#sum-h">In one sentence</a></li>
+    </ol>
+  </nav>
+</div>
+<section class="section" style="padding-top:1.5rem;" aria-labelledby="def-h">
     <h2 class="section-title" id="def-h" style="font-size:1.2rem;">Short version: the ceiling is capacity, the bill is a separate rule</h2>
     <div class="read-box">
       <strong>A context window is the maximum amount of information a model can look at in a single request.</strong>

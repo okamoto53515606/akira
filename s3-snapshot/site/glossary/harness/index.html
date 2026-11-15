@@ -56,9 +56,7 @@
   <div class="section" style="padding-bottom:0;">
     <h1 class="section-title" style="font-size:1.55rem;">ハーネス（harness）とは — 「モデルを動かす側」の総体</h1>
     <p class="section-sub" style="max-width:760px;">
-      <a href="/glossary/">用語説明</a> 第3回。今回のテーマは <strong>ハーネス（harness）</strong> です。
-      第1回で扱った「同じベンチでも Standard harness（中立的な条件）では62.7%」という一行——<strong>なぜ同じモデル・同じベンチなのに、数字が変わるのか</strong>。
-      その答えがこの言葉に入っています。用語の定義から始めて、最後には「次にベンチの数字を見たときに何を確認すればいいか」まで持って帰れる形にします。
+      <a href="/glossary/">用語説明</a> 第3回。今回のテーマは <strong>ハーネス（harness）</strong> です。第1回で扱った「同じベンチでも Standard harness（中立的な条件）では62.7%」という一行——<strong>なぜ同じモデル・同じベンチなのに、数字が変わるのか</strong>。その答えがこの言葉に入っています。用語の定義から始めて、最後には「次にベンチの数字を見たときに何を確認すればいいか」まで持って帰れる形にします。
     </p>
     <div class="phrase-box">
       <p class="phrase">「Agent = Model + Harness」</p>
@@ -73,16 +71,30 @@
   </div>
 
   <!-- ===== 1. 結論 ===== -->
-  <section class="section" style="padding-top:1.5rem;" aria-labelledby="def-h">
+  <div class="section" style="padding-top:1.25rem;padding-bottom:0;">
+  <nav class="toc" aria-label="目次">
+    <p class="toc-title">目次</p>
+    <ol>
+      <li><a href="#def-h">結論 — ハーネスは「モデル以外の全部」</a></li>
+      <li><a href="#brain-h">まずイメージ — モデルは「頭脳」、ハーネスは「身体・道具・段取り」</a></li>
+      <li><a href="#parts-h">ハーネスに入っているもの（公式の一覧）</a></li>
+      <li><a href="#arc-h">なぜ数字が変わるのか — ARC-AGI-3 の実例（測定条件つき）</a></li>
+      <li><a href="#dsh-h">具体的には何のこと？ — DeepSeek Harness という実物</a></li>
+      <li><a href="#fig-h">図で整理 — モデルの外側がハーネス</a></li>
+      <li><a href="#analogy-h">生活に置き換えると — 同じ選手でも、点数は変わる</a></li>
+      <li><a href="#use-h">実務では、どう使うか</a></li>
+      <li><a href="#sum-h">まとめ — ひと言でいうと</a></li>
+    </ol>
+  </nav>
+</div>
+<section class="section" style="padding-top:1.5rem;" aria-labelledby="def-h">
     <h2 class="section-title" id="def-h" style="font-size:1.2rem;">結論 — ハーネスは「モデル以外の全部」</h2>
     <div class="read-box">
       <strong>ハーネスとは、モデルを実際に働かせるために外側に用意する足回りの総体です。</strong>
-      システムプロンプト、渡すツール、何回まで試させるか、どんなサンドボックスで動かすか、前の会話をどう持ち越すか、そして<strong>その結果をどう採点するか</strong>まで含みます。
-      モデルの重み（学習済みのパラメータ）は1つも変えないのに、この足回りだけでベンチのスコアは大きく動きます。
+      システムプロンプト、渡すツール、何回まで試させるか、どんなサンドボックスで動かすか、前の会話をどう持ち越すか、そして<strong>その結果をどう採点するか</strong>まで含みます。モデルの重み（学習済みのパラメータ）は1つも変えないのに、この足回りだけでベンチのスコアは大きく動きます。
     </div>
     <p style="font-size:.9rem;color:var(--c-muted);max-width:760px;">
-      <strong>なお、ハーネスは料金（APIの単価）そのものを変える話ではありません。</strong>単価は各社の料金表で決まり、ハーネスは「同じ単価で何ができるか（スコア・速度・トークン消費）」に効く設計の話です。
-      エンジニアリングの現場では「モデルを替える」「プロンプトを直す」が話題になりがちですが、実際に数字を動かしているのは<strong>その外側の設計</strong>であることが多い——だからこの言葉が単独の用語として使われます。
+      <strong>なお、ハーネスは料金（APIの単価）そのものを変える話ではありません。</strong>単価は各社の料金表で決まり、ハーネスは「同じ単価で何ができるか（スコア・速度・トークン消費）」に効く設計の話です。エンジニアリングの現場では「モデルを替える」「プロンプトを直す」が話題になりがちですが、実際に数字を動かしているのは<strong>その外側の設計</strong>であることが多い——だからこの言葉が単独の用語として使われます。
       「どのモデルか」だけでなく「どのハーネスか」まで言わないと、性能の話が噛み合わないのです。
     </p>
   </section>
@@ -142,8 +154,7 @@
     </div>
     <div class="read-box">
       <strong>差の中身は「何を持ち越せるか」です。</strong>
-      Standard harness（中立）は、モデルが<strong>自分で選んだノート</strong>だけを持ち越します。一方の Provider Adapter は、<strong>リクエストをまたいで推論状態そのものを保持</strong>し、長い会話は圧縮して再利用します。
-      モデルの重みは同じでも、<strong>持ち越せる記憶の量と質が違います</strong>——これが 62.7% と 99.9% を分けた<strong>主な条件差</strong>です（ただしモデル設定も max / high で異なるため、差のすべてがハーネス起因と断定はできません）。
+      Standard harness（中立）は、モデルが<strong>自分で選んだノート</strong>だけを持ち越します。一方の Provider Adapter は、<strong>リクエストをまたいで推論状態そのものを保持</strong>し、長い会話は圧縮して再利用します。モデルの重みは同じでも、<strong>持ち越せる記憶の量と質が違います</strong>——これが 62.7% と 99.9% を分けた<strong>主な条件差</strong>です（ただしモデル設定も max / high で異なるため、差のすべてがハーネス起因と断定はできません）。
     </div>
     <ul style="font-size:.88rem;color:var(--c-muted);padding-left:1.2em;line-height:1.85;">
       <li><strong>どちらも「その条件での」最高値です。</strong>ARC Prize は両方を SOTA（最先端）と扱っています。片方が誇張で片方が正しい、という話ではありません。</li>

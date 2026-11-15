@@ -4,30 +4,23 @@
   {
    "date": "2026-11-15",
    "kind": "page",
-   "key": "timeline-lifecycle-figure",
-   "ja": "年表に「発表→提供開始→価格改定→旧版化」の4段階図を追加（年表の読み方）",
-   "en": "Added a four-stage lifecycle figure (announcement → availability → price change → legacy) to the timeline"
+   "key": "frontier-model-comparison",
+   "ja": "フロンティア5モデル横断比較【2026年11月版】キャッシュ・Batch・ZDR・ZOA（/frontier-model-comparison/）を公開",
+   "en": "Published Frontier Models Compared (Nov 2026): Cache, Batch, ZDR, ZOA (/en/frontier-model-comparison/)"
   },
   {
    "date": "2026-11-15",
    "kind": "page",
-   "key": "speech-api-pricing-publish",
-   "ja": "音声・TTS・文字起こしAPIの料金比較（/speech-api-pricing/）を公開。単位の正規化と換算前提を明記し、Deprecated の文字課金TTSを注意ボックスで分離",
-   "en": "Published the speech API pricing comparison (/en/speech-api-pricing/), normalising TTS and transcription rates to a per-minute basis and flagging deprecated character-billed TTS models"
+   "key": "image-api-pricing",
+   "ja": "画像・動画生成APIの料金比較を新規公開。1枚／1Mトークン／1秒の単位差を公式の換算値でそろえ、未確認は明記",
+   "en": "Published the image and video generation pricing comparison, normalising per-image, per-1M-token and per-second rates on the providers' own conversion figures"
   },
   {
    "date": "2026-11-15",
    "kind": "page",
-   "key": "pricing-status-column",
-   "ja": "料金比較（日英）に状態列を追加。旧世代・提供終了予定の行を「旧版」「提供終了予定」として明示（行は削除しない）。出力単価の相場を掴む図も掲載",
-   "en": "Added a status column (Current / Legacy / Sunset announced) to the pricing tables, ja and en. Rows are never removed; also added a bar figure for output-price spread"
-  },
-  {
-   "date": "2026-11-15",
-   "kind": "page",
-   "key": "multimodal-modality-figure",
-   "ja": "マルチモーダル特集を2026年11月版に更新。入力→換算→課金の3段図を追加（Google料金・OpenAI音声・Azure MAIを11-15に再確認）",
-   "en": "Updated the multimodal guide to the November 2026 edition; added an input → conversion → billing figure (Google pricing, OpenAI audio and Azure MAI re-checked on Nov 15)"
+   "key": "glossary-fold-sources",
+   "ja": "用語集14ページの「出典」セクションを折りたたみ表示に（本文3,000字超のページの可読性対策）",
+   "en": "Collapsed the sources section on 14 glossary pages to make long entries easier to scan"
   },
   {
    "date": "2026-11-15",
@@ -39,9 +32,30 @@
   {
    "date": "2026-11-15",
    "kind": "page",
-   "key": "glossary-fold-sources",
-   "ja": "用語集14ページの「出典」セクションを折りたたみ表示に（本文3,000字超のページの可読性対策）",
-   "en": "Collapsed the sources section on 14 glossary pages to make long entries easier to scan"
+   "key": "multimodal-modality-figure",
+   "ja": "マルチモーダル特集を2026年11月版に更新。入力→換算→課金の3段図を追加（Google料金・OpenAI音声・Azure MAIを11-15に再確認）",
+   "en": "Updated the multimodal guide to the November 2026 edition; added an input → conversion → billing figure (Google pricing, OpenAI audio and Azure MAI re-checked on Nov 15)"
+  },
+  {
+   "date": "2026-11-15",
+   "kind": "page",
+   "key": "timeline-lifecycle-figure",
+   "ja": "年表に「発表→提供開始→価格改定→旧版化」の4段階図を追加（年表の読み方）",
+   "en": "Added a four-stage lifecycle figure (announcement → availability → price change → legacy) to the timeline"
+  },
+  {
+   "date": "2026-11-15",
+   "kind": "page",
+   "key": "pricing-status-column",
+   "ja": "料金比較（日英）に状態列を追加。旧世代・提供終了予定の行を「旧版」「提供終了予定」として明示（行は削除しない）。出力単価の相場を掴む図も掲載",
+   "en": "Added a status column (Current / Legacy / Sunset announced) to the pricing tables, ja and en. Rows are never removed; also added a bar figure for output-price spread"
+  },
+  {
+   "date": "2026-11-15",
+   "kind": "page",
+   "key": "speech-api-pricing-publish",
+   "ja": "音声・TTS・文字起こしAPIの料金比較（/speech-api-pricing/）を公開。単位の正規化と換算前提を明記し、Deprecated の文字課金TTSを注意ボックスで分離",
+   "en": "Published the speech API pricing comparison (/en/speech-api-pricing/), normalising TTS and transcription rates to a per-minute basis and flagging deprecated character-billed TTS models"
   },
   {
    "date": "2026-11-14",
@@ -53,16 +67,16 @@
   {
    "date": "2026-11-14",
    "kind": "page",
-   "key": "site-changelog",
-   "ja": "更新履歴ページ（/changelog/）を公開。全ページの履歴を台帳から生成する運用に変更",
-   "en": "Published the site-wide changelog; page histories are now generated from the ledger"
+   "key": "pricing-hydrogen-carbon",
+   "ja": "料金比較に Gemini 4 Hydrogen / Carbon を追加（計算機データも51件に）",
+   "en": "Added Gemini 4 Hydrogen / Carbon to the pricing tables (calculator data at 51 models)"
   },
   {
    "date": "2026-11-14",
    "kind": "page",
-   "key": "pricing-hydrogen-carbon",
-   "ja": "料金比較に Gemini 4 Hydrogen / Carbon を追加（計算機データも51件に）",
-   "en": "Added Gemini 4 Hydrogen / Carbon to the pricing tables (calculator data at 51 models)"
+   "key": "site-changelog",
+   "ja": "更新履歴ページ（/changelog/）を公開。全ページの履歴を台帳から生成する運用に変更",
+   "en": "Published the site-wide changelog; page histories are now generated from the ledger"
   },
   {
    "date": "2026-11-12",
@@ -88,16 +102,16 @@
   {
    "date": "2026-11-09",
    "kind": "model",
-   "key": "muse-ember",
-   "ja": "Muse Ember を掲載（Meta）",
-   "en": "Listed Muse Ember (Meta)"
+   "key": "claude-fable-5-2",
+   "ja": "Claude Fable 5.2 / Mythos 5.2 を掲載（Anthropic）",
+   "en": "Listed Claude Fable 5.2 / Mythos 5.2 (Anthropic)"
   },
   {
    "date": "2026-11-09",
    "kind": "model",
-   "key": "claude-fable-5-2",
-   "ja": "Claude Fable 5.2 / Mythos 5.2 を掲載（Anthropic）",
-   "en": "Listed Claude Fable 5.2 / Mythos 5.2 (Anthropic)"
+   "key": "muse-ember",
+   "ja": "Muse Ember を掲載（Meta）",
+   "en": "Listed Muse Ember (Meta)"
   },
   {
    "date": "2026-11-05",
@@ -179,6 +193,27 @@
   {
    "date": "2026-09-22",
    "kind": "model",
+   "key": "mimo-v2-6-pro-ultraspeed",
+   "ja": "MiMo-V2.6-Pro-UltraSpeed を掲載（Xiaomi）",
+   "en": "Listed MiMo-V2.6-Pro-UltraSpeed (Xiaomi)"
+  },
+  {
+   "date": "2026-09-22",
+   "kind": "model",
+   "key": "mimo-v2-6-flash",
+   "ja": "MiMo-V2.6-Flash を掲載（Xiaomi）",
+   "en": "Listed MiMo-V2.6-Flash (Xiaomi)"
+  },
+  {
+   "date": "2026-09-22",
+   "kind": "model",
+   "key": "mimo-v2-6-pro",
+   "ja": "MiMo-V2.6-Pro を掲載（Xiaomi）",
+   "en": "Listed MiMo-V2.6-Pro (Xiaomi)"
+  },
+  {
+   "date": "2026-09-22",
+   "kind": "model",
    "key": "qwen-4-training",
    "ja": "Qwen 4（Alibaba）— 公式は「学習中」、時期・料金・ベンチマークは未公表 を掲載（Alibaba）",
    "en": "Listed Qwen 4 (Alibaba) (Alibaba)"
@@ -193,16 +228,16 @@
   {
    "date": "2026-09-22",
    "kind": "model",
-   "key": "mimo-v2-6",
-   "ja": "Xiaomi MiMo-V2.6 を掲載（Xiaomi）",
-   "en": "Listed Xiaomi MiMo-V2.6 (Xiaomi)"
+   "key": "gpt-6-sol-luna",
+   "ja": "GPT-6 Sol / GPT-6 Luna を掲載（OpenAI）",
+   "en": "Listed GPT-6 Sol and GPT-6 Luna (OpenAI)"
   },
   {
    "date": "2026-09-22",
    "kind": "model",
-   "key": "gpt-6-sol-luna",
-   "ja": "GPT-6 Sol / GPT-6 Luna を掲載（OpenAI）",
-   "en": "Listed GPT-6 Sol and GPT-6 Luna (OpenAI)"
+   "key": "mimo-v2-6",
+   "ja": "Xiaomi MiMo-V2.6 を掲載（Xiaomi）",
+   "en": "Listed Xiaomi MiMo-V2.6 (Xiaomi)"
   },
   {
    "date": "2026-09-22",

@@ -74,9 +74,7 @@
     <h1 class="section-title" style="font-size:1.55rem;">出さない（データレジデンシー）とは — データが国外に出ない＝「保存」と「処理」は別の約束</h1>
     <p class="section-sub" style="max-width:780px;">
       <a href="/glossary/">用語説明</a> 第11回。第10回 <a href="/glossary/no-training/">no-training（学ばせない）</a> に続いて、<a href="/glossary/four-data-requirements/">4要件</a>の④<strong>「出さない（データレジデンシー）」</strong>を深掘りします。
-      「海外リージョンを使わなければデータは国外に出ない」「リージョンを選べるから安心」——どちらも<strong>半分だけ正しい</strong>答えです。
-      理由は、データレジデンシーが<strong>「保存する場所（at rest）」と「処理する場所（推論）」という2つの別々の問い</strong>に分かれているからです。
-      このページでは、AWS Bedrock・Microsoft Foundry・Google Cloud・OpenAI・Anthropic の5系統について、<strong>保存と処理を分けた表</strong>を作り、各社公式ドキュメントの<strong>逐語</strong>で確認します。
+      「海外リージョンを使わなければデータは国外に出ない」「リージョンを選べるから安心」——どちらも<strong>半分だけ正しい</strong>答えです。理由は、データレジデンシーが<strong>「保存する場所（at rest）」と「処理する場所（推論）」という2つの別々の問い</strong>に分かれているからです。このページでは、AWS Bedrock・Microsoft Foundry・Google Cloud・OpenAI・Anthropic の5系統について、<strong>保存と処理を分けた表</strong>を作り、各社公式ドキュメントの<strong>逐語</strong>で確認します。
       「どの設定を、誰が、いつ固定するのか」まで書くので、そのまま社内説明に使えます。
     </p>
     <div class="phrase-box">
@@ -90,7 +88,23 @@
     </div>
   </div>
 
-  <section class="section" style="padding-top:1.5rem;" aria-labelledby="why-h">
+  <div class="section" style="padding-top:1.25rem;padding-bottom:0;">
+  <nav class="toc" aria-label="目次">
+    <p class="toc-title">目次</p>
+    <ol>
+      <li><a href="#why-h">なぜ「出さない」は2つの問いに分かれるのか</a></li>
+      <li><a href="#matrix-h">先に結論 — 5系統を「保存」と「処理」で分けた表</a></li>
+      <li><a href="#b1-h">分岐① 「保存」と「処理」を分けて公表している例（OpenAI）</a></li>
+      <li><a href="#b2-h">分岐② 同じクラウドでも「どの設定か」で3段階に変わる（Microsoft / AWS / Google）</a></li>
+      <li><a href="#b3-h">分岐③ 第一者 API は「選択肢が少ない」ことがある（Anthropic）</a></li>
+      <li><a href="#sep-h">「出さない」は「残さない」「見せない」「学ばせない」と別の約束</a></li>
+      <li><a href="#steps-h">確認する4ステップ</a></li>
+      <li><a href="#myth-h">よくある誤解 4つ</a></li>
+      <li><a href="#faq-h">よくある質問</a></li>
+    </ol>
+  </nav>
+</div>
+<section class="section" style="padding-top:1.5rem;" aria-labelledby="why-h">
     <h2 class="section-title" id="why-h" style="font-size:1.2rem;">なぜ「出さない」は2つの問いに分かれるのか</h2>
     <p class="section-sub">
       同じプロンプトでも、<strong>「置いておく場所」と「計算する場所」は別</strong>です。分岐はこの4つです。
@@ -325,7 +339,6 @@
       <li>Google Cloud — <a href="https://docs.cloud.google.com/gemini-enterprise-agent-platform/resources/data-residency" target="_blank" rel="noopener">Data residency</a>（at rest は選んだロケーション・jurisdictional / global エンドポイントの違い／2026-10-05 取得）／<a href="https://cloud.google.com/terms/data-residency" target="_blank" rel="noopener">Cloud Data Residency Terms</a>（対象外サービスの一覧）</li>
       <li>OpenAI — <a href="https://developers.openai.com/api/docs/guides/your-data" target="_blank" rel="noopener">Data controls in the OpenAI platform</a>（プロジェクト単位の設定・地域ごとの Storage / Processing の別判定・US 以外の承認要件・「Support for regional storage does not imply support for regional processing.」／2026-10-05 取得）</li>
       <li>Anthropic — <a href="https://platform.claude.com/docs/en/manage-claude/data-residency" target="_blank" rel="noopener">Data residency</a>（inference geo と workspace geo・米国限定 1.1 倍・workspace geo は変更不可／2026-10-05 取得）／<a href="https://claude.com/regional-compliance" target="_blank" rel="noopener">Regional compliance</a>（地域別レジデンシーの提供範囲／2026-09-29 取得）</li>
-      <li>関連: <a href="/glossary/four-data-requirements/">データを守る4要件</a>・<a href="/glossary/zero-data-retention/">ZDR（ゼロデータ保持）</a>・<a href="/glossary/zero-operator-access/">ZOA（ゼロオペレーターアクセス）</a>・<a href="/glossary/no-training/">no-training（学ばせない）</a>・<a href="/glossary/">用語説明の一覧</a></li>
     </ul>
   </details>
 </section>

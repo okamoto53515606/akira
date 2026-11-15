@@ -392,6 +392,29 @@ def _og_image_problems(site):
         if not talt:
             errors.append("og-wiring: %s: twitter:image:alt empty" % rel)
 
+    # 2026-11-15 追加: EXPECTED_OG_IMAGES に無い新ページも、宣言サイズと実画像の
+    # 一致を必ず見る（image-api-pricing が 1424x752 を 1200x630 と宣言していて
+    # すり抜けた。T7 と同じ型なので、一覧に依存しない検査にする）。
+    for p in sorted(site.rglob("index.html")):
+        rel = p.relative_to(site).as_posix()
+        if rel in EXPECTED_OG_IMAGES:
+            continue
+        text = _read(p)
+        og = _meta_content(text, "property", "og:image") or ""
+        if "/assets/og/" not in og:
+            continue
+        fname = og.rsplit("/assets/og/", 1)[1]
+        target = ogdir / fname
+        if not target.exists():
+            errors.append("og-wiring: %s: og:image=%r の実ファイルが無い" % (rel, fname))
+            continue
+        w = _meta_content(text, "property", "og:image:width")
+        h = _meta_content(text, "property", "og:image:height")
+        exp_w, exp_h = _image_px(target) or ("1200", "630")
+        if (w, h) != (exp_w, exp_h):
+            errors.append("og-wiring: %s: og:image size %sx%s (actual file is %sx%s)"
+                          % (rel, w, h, exp_w, exp_h))
+
     for fname in sorted(present - referenced):
         warns.append("og-wiring: assets/og/%s exists but is not referenced by any table page" % fname)
 

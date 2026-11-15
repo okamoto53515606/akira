@@ -25,6 +25,14 @@ from pathlib import Path
 
 SKIP_TAGS = {"script", "style"}
 WATCH_CLASSES = {"diagram", "bars", "conclusion", "tint", "section"}
+# 「色で区別している」とみなすクラス（2026-11-15: okamo「色の変化が少なすぎる」）
+PROVIDER_CLASSES = {"provider-tag", "tl-provider-tag", "badge", "st-cur", "st-old", "st-sun"}
+ALT_TAG_RE = re.compile(r'<(\w+)([^>]*style="([^"]*)"[^>]*)>', re.S)
+MEDIA_TAGS = {"img", "video", "iframe", "figure", "picture", "svg"}
+INDEX_LIKE = {"index.html", "en/index.html",
+              "changelog/index.html", "en/changelog/index.html"}  # 一覧が主役のページ
+MONOTONE_ROWS = 10          # これ以上の行数の表が続くなら色分けを要求する
+MIN_FIGURE_TEXT = 2000      # この文字数を超えるページは図が要る
 MAX_TEXT = {"ja": 3000, "en": 4500}
 MAX_COLS = 5
 HIRA = re.compile(r"[\u3041-\u309F]")
@@ -41,6 +49,12 @@ class ShapeParser(HTMLParser):
         self.cur_cols = 0
         self.counts = {"table": 0, "diagram": 0, "bars": 0, "details": 0, "h2": 0}
         self.hiragana = 0
+        self.has_toc = False
+        self.has_key_visual = False
+        self.has_conclusion = False
+        self.provider_color = 0          # provider-tag / dot-xxx などの色分け
+        self.max_rows = 0               # 一番大きい表の行数
+        self._rows = 0
 
     # --- helpers ---
     def _has_container(self) -> bool:
@@ -51,6 +65,8 @@ class ShapeParser(HTMLParser):
         classes = set((a.get("class") or "").split())
         if tag in SKIP_TAGS:
             self.skip += 1
+        if tag == "table":
+            self._rows = 0
         if tag == "div" and "container" in classes:
             pass
         if classes & WATCH_CLASSES and not self._has_container():
@@ -68,6 +84,17 @@ class ShapeParser(HTMLParser):
             self.counts["diagram"] += 1
         if "bars" in classes:
             self.counts["bars"] += 1
+        if "toc" in classes:
+            self.has_toc = True
+        if "key-visual" in classes:
+            self.has_key_visual = True
+        if "conclusion" in classes:
+            self.has_conclusion = True
+        if classes & PROVIDER_CLASSES:
+            self.provider_color += 1
+        if tag == "tr":
+            self._rows += 1
+            self.max_rows = max(self.max_rows, self._rows)
         if tag in ("br", "img", "input", "meta", "link", "hr"):
             return
         self.stack.append((tag, classes))
@@ -91,6 +118,28 @@ class ShapeParser(HTMLParser):
         self.text_len += len(t)
         # 組織名「okamoちゃんねる」は英語ページでも日本語のまま（固有名詞）
         self.hiragana += len(HIRA.findall(t.replace("okamoちゃんねる", "")))
+
+
+def _og_key(path: Path) -> str:
+    """そのページの og:image が指すローカル実ファイルのキー（無ければ空）。
+
+    ファイルが実在するときだけ「貼り忘れ」と判定する（画像が無いページを
+    ヒーロー画像なしで責めても直せないため）。
+    """
+    try:
+        html = path.read_text(encoding="utf-8")
+    except OSError:
+        return ""
+    m = re.search(r'<meta property="og:image" content="([^"]+)"', html)
+    if not m or "/assets/og/" not in m.group(1):
+        return ""
+    key = "assets/og/" + m.group(1).rsplit("/assets/og/", 1)[1]
+    site = path
+    for _ in range(6):
+        site = site.parent
+        if (site / key).exists():
+            return key
+    return ""
 
 
 def _analyse(path: Path) -> ShapeParser:
@@ -130,6 +179,60 @@ def main(argv: list[str]) -> int:
         if a.text_len > MAX_TEXT[lang]:
             warns.append("long-text %s: 本文 約%d字（上限%d）"
                          % (rel, a.text_len, MAX_TEXT[lang]))
+        # P7 OG画像を作ってあるのにページに貼っていない（2026-11-15 追加）
+        # okamo「/image-api-pricing/ はイメージ図がない」＝実際はOG画像が
+        # できていたのに key-visual を入れ忘れていた。SNSで見る絵とページが別物。
+        if not a.has_key_visual and rel not in INDEX_LIKE:
+            og_key = _og_key(path)
+            if og_key:
+                errors.append("no-key-visual %s: og:image (%s) があるのに本文に貼って"
+                              "いない → <figure class=\"key-visual\"> を入れる"
+                              % (rel, og_key))
+        # P8 長いのに図が1つも無い（2026-11-15 追加）
+        if a.text_len > MIN_FIGURE_TEXT and not (a.counts.get("diagram") or a.counts.get("bars")):
+            warns.append("no-figure %s: 本文 約%d字で .diagram も .bars も無い"
+                          % (rel, a.text_len))
+        # P12 箱（背景・枠線）に max-width を付けて右端が揃わない（2026-11-15 追加）
+        # okamo「表の幅がずれてる」の実体。`.updated-bar` は容器いっぱい(1080px)
+        # なのに、隣の「このページの範囲」だけ max-width:880px で右端が170pxずれる。
+        # 文字だけの <p> は行長を抑えるため max-width を持ってよい。**箱はダメ**。
+        for m in ALT_TAG_RE.finditer(path.read_text(encoding="utf-8")):
+            tag, style = m.group(1).lower(), m.group(3)
+            if tag in MEDIA_TAGS or "max-width" not in style:
+                continue
+            if not re.search(r"background|border", style):
+                continue
+            if "margin:0 auto" in style.replace(" ", ""):
+                continue  # 中央寄せの画像・図は意図的
+            warns.append("box-width %s: <%s> が箱なのに max-width を持つ（右端が揃わない）"
+                         % (rel, tag))
+        # P11 棒グラフが「何も語っていない」（2026-11-15 追加）
+        # okamo 指摘: /image-api-pricing/ の棒が全部同じ長さ／空だった。
+        # 数値の大小を見せるのが目的なので、幅が1種類しか無いなら図の意味が無い。
+        widths = [float(x) for x in re.findall(
+            r'class="bar-fill[^"]*"[^>]*style="width:\s*([0-9.]+)%', path.read_text(encoding="utf-8"))]
+        if len(widths) >= 3 and len(set(widths)) == 1:
+            errors.append("bar-flat %s: 棒%d本がすべて同じ幅(%.0f%%)で大小が伝わらない"
+                          % (rel, len(widths), widths[0]))
+        if widths and min(widths) <= 0:
+            errors.append("bar-flat %s: 幅0%%の棒がある（値の取り違え）" % rel)
+        # P9 色の変化が乏しい（2026-11-15 追加・okamo「色の変化が少なすぎる」）
+        # 機械が見るのは「色分けクラスが0なのに大きな表がある」ケースだけ。
+        # 色の良し悪し（単調かどうか）は Gemini の担当。
+        if a.max_rows >= MONOTONE_ROWS and a.provider_color == 0:
+            warns.append("monotone %s: %d行の表があるのに色分けクラスが0"
+                         "（provider-tag / badge / 状態列など）"
+                         % (rel, a.max_rows))
+        # P10 長いのに結論ボックスが無い
+        if a.text_len > MIN_FIGURE_TEXT * 1.5 and not a.has_conclusion:
+            warns.append("no-conclusion %s: 本文 約%d字で .conclusion が無い"
+                         % (rel, a.text_len))
+        # P6 長いのに目次が無い（2026-11-15 追加）
+        # 「長すぎる」を削って解決しようとすると出典を捨てることになる。
+        # 実際の不満は「読めない」なので、h2が多くて長いページは目次を必須にする。
+        if a.text_len > MAX_TEXT[lang] * 0.6 and 4 <= a.counts.get("h2", 0) <= 25 and not a.has_toc:
+            errors.append("no-toc %s: 本文 約%d字 / h2 %d本なのに目次が無い"
+                        % (rel, a.text_len, a.counts.get("h2", 0)))
         # P5 列が多すぎ
         wide = [n for n in a.tables if n > MAX_COLS]
         if wide:

@@ -48,17 +48,32 @@
 <header class="site-header"><div class="header-inner"><a href="/en/" class="site-logo"><img src="/logo.svg" class="logo-icon" alt="" width="22" height="22" aria-hidden="true">LLM Data Hub</a><nav aria-label="Main navigation"><a href="/en/" class="nav-link">Home</a><a href="/en/pricing/" class="nav-link">Pricing</a><a href="/en/calculator/" class="nav-link">Token calculator</a><a href="/en/timeline/" class="nav-link">Timeline</a><a href="/en/china-ai/" class="nav-link">China AI</a><a href="/en/multimodal/" class="nav-link">Multimodal</a><a href="/en/mai/" class="nav-link">MS AI (MAI)</a><a href="/en/glossary/" class="nav-link">Glossary</a></nav></div></header>
 <main>
 <div class="container" style="padding-top:2rem;">
-<h1 class="section-title" style="font-size:1.6rem;">Speech API Pricing <span style="font-size:1rem;font-weight:500;color:var(--c-muted);">[Nov 2026]</span></h1>
-<p style="font-size:.9rem;background:var(--c-surface2);border:1px solid var(--c-border);border-radius:6px;padding:.6rem .9rem;max-width:880px;"><strong>Scope</strong>: text-to-speech (TTS) and transcription (STT) rates, <strong>normalised to one minute and one hour</strong>. Vendors bill in four different units (per 1M characters, per 1M audio tokens, per minute, per hour), so the raw numbers are not comparable. Conversion assumptions are in the collapsed block below (official pages fetched 2026-11-15).</p>
+<figure class="key-visual" style="margin:1.5rem 0 .5rem;"><img src="/assets/og/en-speech-api-pricing.png" alt="A single image summarising this page" width="1200" height="630" loading="eager" decoding="async" style="width:100%;max-width:900px;height:auto;display:block;margin:0 auto;border:1px solid var(--c-border);border-radius:var(--r-md);"></figure>
 
+<h1 class="section-title" style="font-size:1.6rem;">Speech API Pricing <span style="font-size:1rem;font-weight:500;color:var(--c-muted);">[Nov 2026]</span></h1>
+<p style="font-size:.9rem;background:var(--c-surface2);border:1px solid var(--c-border);border-radius:6px;padding:.6rem .9rem;"><strong>Scope</strong>: text-to-speech (TTS) and transcription (STT) rates, <strong>normalised to one minute and one hour</strong>. Vendors bill in four different units (per 1M characters, per 1M audio tokens, per minute, per hour), so the raw numbers are not comparable. Conversion assumptions are in the collapsed block below (official pages fetched 2026-11-15).</p>
+
+<div class="section" style="padding-top:1.25rem;padding-bottom:0;">
+  <nav class="toc" aria-label="Contents">
+    <p class="toc-title">Contents</p>
+    <ol>
+      <li><a href="#sec-1">Bottom line (3 lines)</a></li>
+      <li><a href="#sec-2">Why normalisation is required</a></li>
+      <li><a href="#sec-3">Text to speech (TTS)</a></li>
+      <li><a href="#sec-4">Transcription (STT)</a></li>
+      <li><a href="#sec-5">Caveats (4)</a></li>
+      <li><a href="#sec-6">Sources (all fetched 2026-11-15)</a></li>
+    </ol>
+  </nav>
+</div>
 <section class="section" style="padding-top:1rem;">
-<div class="conclusion"><h2 class="section-title" style="font-size:1.15rem;margin-top:0;">Bottom line (3 lines)</h2><ul>
+<div class="conclusion"><h2 class="section-title" style="font-size:1.15rem;margin-top:0;" id="sec-1">Bottom line (3 lines)</h2><ul>
 <li><strong>Japanese narration</strong> &rarr; <strong>MAI-Voice-2.1-Flash ($0.0045/min)</strong>. OpenAI tts-1 costs the same but is <strong>deprecated</strong>, so it is not the current pick.</li>
 <li><strong>Transcription of recordings</strong> &rarr; <strong>MAI-Transcribe-2 ($0.10/hour)</strong>, a promotional rate valid until the end of this year. Next is Meta Muse Voice Transcribe at $0.18/hour.</li>
 <li><strong>Realtime conversation</strong> &rarr; an order of magnitude more expensive per minute (from $0.023/min). Do not compare it in the same table as file transcription.</li>
 </ul></div>
 
-<div class="tint"><h2 class="section-title" style="font-size:1.15rem;">Why normalisation is required</h2>
+<div class="tint"><h2 class="section-title" style="font-size:1.15rem;" id="sec-2">Why normalisation is required</h2>
 <div class="diagram">
   <div class="dg-box"><b>Per 1M characters</b>OpenAI tts-1<br>MAI-Voice</div>
   <div class="dg-arrow">+</div>
@@ -72,7 +87,7 @@
 
 </div>
 
-<h2 class="section-title" style="font-size:1.15rem;">Text to speech (TTS)</h2>
+<h2 class="section-title" style="font-size:1.15rem;" id="sec-3">Text to speech (TTS)</h2>
 <div class="table-wrap"><table>
 <thead><tr><th>Model</th><th>Per minute</th><th>Status</th></tr></thead>
 <tbody>
@@ -124,7 +139,7 @@
 </tbody></table></div>
 </details>
 
-<h2 class="section-title" style="font-size:1.15rem;">Transcription (STT)</h2>
+<h2 class="section-title" style="font-size:1.15rem;" id="sec-4">Transcription (STT)</h2>
 <div class="table-wrap"><table>
 <thead><tr><th>Model</th><th>Per hour</th><th>Status</th></tr></thead>
 <tbody>
@@ -136,7 +151,7 @@
 <tr><td>OpenAI gpt-live-transcribe</td><td>$1.02</td><td>Current</td></tr>
 </tbody></table></div>
 
-<h2 class="section-title" style="font-size:1.15rem;">Caveats (4)</h2>
+<h2 class="section-title" style="font-size:1.15rem;" id="sec-5">Caveats (4)</h2>
 <ul>
 <li><strong>OpenAI's three character-billed TTS models (tts-1 / tts-1-hd / gpt-4o-mini-tts) are deprecated.</strong> They stay in the table for comparison, not as a recommendation.</li>
 <li><strong>"300 characters per minute" is this site's assumption</strong> (slow Japanese narration). English is roughly three times faster, so character-billed models consume more characters per minute.</li>
@@ -154,7 +169,7 @@
 <blockquote class="verb">Audio tokens correspond to 25 tokens per second of audio.<br>&mdash; ai.google.dev/gemini-api/docs/pricing (fetched 2026-11-15)</blockquote>
 </details>
 
-<h2 class="section-title" style="font-size:1.15rem;">Sources (all fetched 2026-11-15)</h2>
+<h2 class="section-title" style="font-size:1.15rem;" id="sec-6">Sources (all fetched 2026-11-15)</h2>
 <ul>
 <li><a href="https://openai.com/api/pricing/" target="_blank" rel="noopener">OpenAI API Pricing</a></li>
 <li><a href="https://platform.openai.com/docs/models/tts-1" target="_blank" rel="noopener">OpenAI tts-1 (deprecation notice)</a></li>

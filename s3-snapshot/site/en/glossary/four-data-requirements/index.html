@@ -86,7 +86,23 @@
     </div>
   </div>
 
-  <section class="section" style="padding-top:1.5rem;" aria-labelledby="why-h">
+  <div class="section" style="padding-top:1.25rem;padding-bottom:0;">
+  <nav class="toc" aria-label="Contents">
+    <p class="toc-title">Contents</p>
+    <ol>
+      <li><a href="#why-h">Why split them into four</a></li>
+      <li><a href="#req1-h">① Not stored — zero data retention (ZDR)</a></li>
+      <li><a href="#req2-h">② Not seen — zero operator access (ZOA)</a></li>
+      <li><a href="#req3-h">③ Not learned from — training restrictions</a></li>
+      <li><a href="#req4-h">④ Not sent abroad — data residency</a></li>
+      <li><a href="#matrix-h">Five-provider matrix — what is default and what must be requested</a></li>
+      <li><a href="#steps-h">A five-step check before you sign</a></li>
+      <li><a href="#myth-h">Four myths</a></li>
+      <li><a href="#faq-h">FAQ</a></li>
+    </ol>
+  </nav>
+</div>
+<section class="section" style="padding-top:1.5rem;" aria-labelledby="why-h">
     <h2 class="section-title" id="why-h" style="font-size:1.2rem;">Why split them into four</h2>
     <p class="section-sub">
       Because <strong>different providers satisfy different requirements by default</strong>. Technically the four map to different stages of the same request.
@@ -307,7 +323,6 @@
       <li>Anthropic — <a href="https://claude.com/regional-compliance" target="_blank" rel="noopener">Regional compliance</a> (<code>inference_geo</code>, default global, 1.1× pricing, 400 error on older models; retrieved 2026-09-27)</li>
       <li>OpenAI — ZDR, abuse monitoring controls and data residency (application process, conditions outside the US, additional UAE approval; retrieved 2026-09-27)</li>
       <li>Google Cloud — <a href="https://docs.cloud.google.com/vertex-ai/generative-ai/docs/data-governance" target="_blank" rel="noopener">Data governance and generative AI</a> and <a href="https://docs.cloud.google.com/generative-ai-app-builder/docs/data-governance" target="_blank" rel="noopener">AI/ML Privacy Commitment</a> (storage vs processing, the three endpoint tiers, jurisdictional guarantees; retrieved 2026-09-29)</li>
-      <li>Related: <a href="/en/glossary/zero-data-retention/">zero data retention (ZDR)</a> · <a href="/en/china-ai/">China AI</a> · <a href="/en/deepseek-v4-1-flash/">DeepSeek V4.1 Flash (Azure walkthrough)</a> · <a href="/en/glossary/">all glossary entries</a></li>
     </ul>
   </details>
 </section>

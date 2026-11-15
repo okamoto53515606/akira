@@ -82,7 +82,25 @@
     </div>
   </div>
 
-  <section class="section" style="padding-top:1.5rem;" aria-labelledby="def-h">
+  <div class="section" style="padding-top:1.25rem;padding-bottom:0;">
+  <nav class="toc" aria-label="Contents">
+    <p class="toc-title">Contents</p>
+    <ol>
+      <li><a href="#def-h">1. What ZOA covers — and what it does not</a></li>
+      <li><a href="#sep-h">2. ZDR (not retained) and ZOA (not viewable) are separate</a></li>
+      <li><a href="#layers-h">3. The three layers that block access</a></li>
+      <li><a href="#key-h">4. The three stages of key management — CMK, BYOK, HYOK</a></li>
+      <li><a href="#appr-h">5. How "no access without your action" is actually enforced</a></li>
+      <li><a href="#matrix-h">6. Per-vendor availability: whether, what, and how to enable</a></li>
+      <li><a href="#myth-h">7. Three common misconceptions</a></li>
+      <li><a href="#steps-h">8. Five checks before you sign</a></li>
+      <li><a href="#faq-h">9. FAQ</a></li>
+      <li><a href="#param-h">Note: how to read "◯B (Active ◯B)" model sizes</a></li>
+      <li><a href="#rel-h">Related pages</a></li>
+    </ol>
+  </nav>
+</div>
+<section class="section" style="padding-top:1.5rem;" aria-labelledby="def-h">
     <h2 class="section-title" id="def-h" style="font-size:1.2rem;">1. What ZOA covers — and what it does not</h2>
     <p class="section-sub">In this page, "operator" (the party running the service) means <strong>operations staff, support engineers and platform administrators on the cloud provider's side</strong> — for example, AWS staff. It is not attackers, and not other tenants. <strong>Your own staff at the company using that cloud (your in-house IT and operations team) are a separate party</strong> and are not who ZOA covers: whether they can read the data is a question about your own access design and key management. <strong>ZOA aims to make the data unreadable even if the provider's operator were malicious.</strong></p>
     <div class="table-wrap"><table class="mtable"><thead><tr><th>Question</th><th>What ZOA answers</th><th>Watch out</th></tr></thead><tbody>

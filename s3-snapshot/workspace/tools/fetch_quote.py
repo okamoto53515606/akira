@@ -40,6 +40,11 @@ from datetime import datetime, timedelta, timezone
 
 from strands import tool
 
+import sys as _sys
+
+_sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from _gap_log import record_call  # noqa: E402  (R4: 取れなかった回数を数える)
+
 JST = timezone(timedelta(hours=9))
 WORKSPACE = os.environ.get("WORKSPACE_LOCAL_DIR", "/workspace")
 CACHE_DIR = os.path.join(WORKSPACE, "cache")
@@ -62,6 +67,38 @@ def _scrape(url: str, formats, api: str) -> str:
     return d.get("markdown") or d.get("answer") or ""
 
 
+
+def _write_back(url: str, today: str, n_chars: int) -> int:
+    """取得成功を台帳に書き戻す（2026-11-15 / T50）。
+
+    なぜ:
+        鮮度キューは `sources[].fetched_at` を見て「今日取り直すべきキー」を出す。
+        取り直しても書き戻さないと、**毎日同じキーが出続ける**（11-15 は12件中
+        0件しか消化されず、書き戻しもされなかった）。
+    `quote` は自動で埋めない（逐語の選択は中身の判断が要る）。`fetched_at` だけ
+    今日にし、`quote` が空なら rank 2 として残す（＝まだ裏付けが無い、が正しい）。
+    """
+    path = os.path.join(WORKSPACE, "data", "facts.json")
+    try:
+        with open(path, encoding="utf-8") as fh:
+            facts = json.load(fh)
+    except Exception:  # noqa: BLE001
+        return 0
+    n = 0
+    for rec in (facts.get("models") or {}).values():
+        for src in (rec.get("sources") or []):
+            if isinstance(src, dict) and src.get("url") == url:
+                src["fetched_at"] = today
+                n += 1
+    if n:
+        try:
+            with open(path, "w", encoding="utf-8") as fh:
+                json.dump(facts, fh, ensure_ascii=False, indent=1)
+        except Exception:  # noqa: BLE001
+            return 0
+    return n
+
+
 @tool
 def fetch_quote(url: str, key: str, hint: str = "") -> dict:
     """URLの本文を取得し、cache/<key>-<当日>.md に保存する（逐語の一次情報）。
@@ -76,14 +113,17 @@ def fetch_quote(url: str, key: str, hint: str = "") -> dict:
     """
     api = os.environ.get("FIRECRAWL_API_KEY", "")
     if not api:
+        record_call("fetch", key, ok=False, reason="no_api_key")
         return {"status": "failed", "reason": "FIRECRAWL_API_KEY がありません"}
     today = datetime.now(JST).date().isoformat()
     mode = "markdown"
     try:
         body = _scrape(url, ["markdown"], api)
     except urllib.error.HTTPError as e:
+        record_call("fetch", key, ok=False, reason="http_%s" % e.code)
         return {"status": "failed", "reason": "firecrawl http %s" % e.code, "url": url}
     except Exception as e:  # noqa: BLE001
+        record_call("fetch", key, ok=False, reason=type(e).__name__)
         return {"status": "failed", "reason": "%s: %s" % (type(e).__name__, e), "url": url}
 
     if len(body) < MIN_USABLE and hint:
@@ -96,6 +136,7 @@ def fetch_quote(url: str, key: str, hint: str = "") -> dict:
 
     if len(body) < MIN_USABLE:
         # 空応答は「無い」と同義ではない（2026-11-07 教訓）。URL自体を疑う。
+        record_call("fetch", key, ok=False, reason="empty_body_%d" % (len(body) // 100))
         return {"status": "failed",
                 "reason": "本文が %d 字しか取れませんでした。URL違い（一覧ページ・別ドメイン）か、"
                           "本文が画像/PDFの可能性。discover_sources でURLを探し直すこと" % len(body),
@@ -110,8 +151,11 @@ def fetch_quote(url: str, key: str, hint: str = "") -> dict:
         fh.write("出典: %s\n" % url)
         fh.write("取得方法: firecrawl scrape / %s / %d字\n\n" % (mode, len(body)))
         fh.write(body)
+    record_call("fetch", key, ok=True)
+    wrote = _write_back(url, today, len(body))
     return {"status": "ok", "cache": path, "chars": len(body), "mode": mode,
-            "date": today, "head": re.sub(r"\s+", " ", body[:300])}
+            "date": today, "ledger_updated": wrote,
+            "head": re.sub(r"\s+", " ", body[:300])}
 
 
 TOOL = fetch_quote

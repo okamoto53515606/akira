@@ -1,0 +1,18 @@
+{
+ "days": {
+  "2026-11-15": {
+   "fetch": {
+    "failed": 2,
+    "names": {
+     "image-api-meta-pricing": 1,
+     "image-api-meta-verify": 1
+    },
+    "reasons": {
+     "http_403": 2
+    },
+    "total": 12
+   }
+  }
+ },
+ "version": 1
+}

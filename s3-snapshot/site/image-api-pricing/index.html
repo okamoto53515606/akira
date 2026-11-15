@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>画像・動画生成API料金比較【2026年11月版】1枚・1秒に揃えて読む — LLM Data Hub</title>
+  <meta name="description" content="画像・動画生成APIの単価を「1枚」「1秒」にそろえて横断比較。GoogleのNano Banana系は1Kで$0.0336〜$0.134/枚（公式換算）、MicrosoftのMAI-Imageは出力$19〜$106/1Mトークン、MetaのMuse Imageは$0.01/枚、OpenAIのGPT-Image-2.6は$30/1M画像出力トークン。換算の前提・未確認事項・2026-11-15取得の逐語を明記。">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/image-api-pricing/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta property="og:image" content="https://llm.okamomedia.tokyo/assets/og/ja-image-api-pricing.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="画像・動画生成API料金比較：1枚・1秒に揃えて読む（LLM Data Hub）">
+  <meta name="twitter:image" content="https://llm.okamomedia.tokyo/assets/og/ja-image-api-pricing.png">
+  <meta name="twitter:image:alt" content="画像・動画生成API料金比較：1枚・1秒に揃えて読む（LLM Data Hub）">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/image-api-pricing/">
+  <meta property="og:title" content="画像・動画生成API料金比較【2026年11月版】1枚・1秒に揃えて読む — LLM Data Hub">
+  <meta property="og:description" content="画像・動画生成APIの単価を「1枚」「1秒」にそろえて横断比較。GoogleのNano Banana系は1Kで$0.0336〜$0.134/枚（公式換算）、MicrosoftのMAI-Imageは出力$19〜$106/1Mトークン、MetaのMuse Imageは$0.01/枚、OpenAIのGPT-Image-2.6は$30/1M画像出力トークン。換算の前提・未確認事項・2026-11-15取得の逐語を明記。">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "画像・動画生成API料金比較【2026年11月版】1枚・1秒に揃えて読む", "datePublished": "2026-11-15", "dateModified": "2026-11-15", "author": {"@type": "Organization", "name": "LLM Data Hub"}, "publisher": {"@type": "Organization", "name": "okamoちゃんねる"}, "url": "https://llm.okamomedia.tokyo/image-api-pricing/", "inLanguage": "ja", "isAccessibleForFree": true, "description": "画像・動画生成APIの単価を「1枚」「1秒」にそろえて横断比較。GoogleのNano Banana系は1Kで$0.0336〜$0.134/枚（公式換算）、MicrosoftのMAI-Imageは出力$19〜$106/1Mトークン、MetaのMuse Imageは$0.01/枚、OpenAIのGPT-Image-2.6は$30/1M画像出力トークン。換算の前提・未確認事項・2026-11-15取得の逐語を明記。"}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .cmp-table th,.cmp-table td{font-size:.84rem;vertical-align:top}
+    .cmp-table td.na{color:var(--c-muted)}
+    .table-wrap{overflow-x:auto}
+    .num-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:.8rem;margin:1rem 0 1.6rem}
+    .num-card{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r-md);padding:.9rem 1rem}
+    .num-card .k{font-family:var(--font-mono);font-size:.74rem;color:var(--c-muted);font-weight:600;letter-spacing:.02em}
+    .num-card .v{font-family:var(--font-mono);font-size:1.05rem;font-weight:700;margin:.15rem 0 .2rem}
+    .num-card .d{font-size:.8rem;color:var(--c-muted);line-height:1.6}
+    .read-box{background:var(--c-surface);border:1px solid var(--c-border);border-left:3px solid var(--c-green);border-radius:var(--r-md);padding:1rem 1.2rem;margin:1rem 0 1.6rem;font-size:.88rem;color:var(--c-muted)}
+    .read-box strong{color:var(--c-text)}
+    blockquote.verb{margin:.6rem 0 1rem;padding:.7rem .9rem;border-left:2px solid var(--c-border);background:var(--c-surface2);font-family:ui-monospace,Menlo,monospace;font-size:.78rem;line-height:1.7;color:var(--c-muted)}
+  </style>
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/image-api-pricing/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/image-api-pricing/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/image-api-pricing/">
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/" class="site-logo"><img src="/logo.svg" class="logo-icon" alt="" width="22" height="22" aria-hidden="true">LLM Data Hub</a><nav aria-label="メインナビゲーション"><a href="/" class="nav-link">ホーム</a><a href="/pricing/" class="nav-link">料金比較</a><a href="/calculator/" class="nav-link">トークン計算機</a><a href="/timeline/" class="nav-link">リリース年表</a><a href="/china-ai/" class="nav-link">中国AI</a><a href="/multimodal/" class="nav-link">マルチモーダル</a><a href="/mai/" class="nav-link">MS AI (MAI)</a><a href="/glossary/" class="nav-link">用語説明</a></nav></div></header>
+<main>
+<div class="container" style="padding-top:2rem;">
+<figure class="key-visual" style="margin:1.5rem 0 .5rem;"><img src="/assets/og/ja-image-api-pricing.png" alt="このページの内容を1枚にまとめた画像" width="1200" height="630" loading="eager" decoding="async" style="width:100%;max-width:900px;height:auto;display:block;margin:0 auto;border:1px solid var(--c-border);border-radius:var(--r-md);"></figure>
+
+<h1 class="section-title" style="font-size:1.6rem;">画像・動画生成APIの料金比較 <span style="font-size:1rem;font-weight:500;color:var(--c-muted);">【2026年11月版】</span></h1>
+<p style="font-size:.9rem;background:var(--c-surface2);border:1px solid var(--c-border);border-radius:6px;padding:.6rem .9rem;"><strong>このページの範囲</strong>: 画像生成・動画生成APIの単価を<strong>「1枚あたり」「1秒あたり」</strong>にそろえて並べます。課金単位は3種類（1枚・1Mトークン・1秒）に分かれており、そのままでは比べられません。1枚あたりの換算値は<strong>各社公式が明記している数字だけ</strong>を使い、当サイトで独自にトークン数を見積もった箇所はありません（各社公式ページを2026-11-15に取得）。</p>
+<div class="updated-bar"><span class="dot">●</span>最終更新: <time datetime="2026-11-15">2026年11月15日</time> | 各社公式ページを2026-11-15に取得。Googleの1枚あたり単価は公式記載の換算値、Microsoft・OpenAIは1枚あたりのトークン数が非公開のため「非公開」と表示しています。</div>
+
+<div class="section" style="padding-top:1.25rem;padding-bottom:0;">
+  <nav class="toc" aria-label="目次">
+    <p class="toc-title">目次</p>
+    <ol>
+      <li><a href="#sec-1">結論（3行）</a></li>
+      <li><a href="#sec-2">なぜ単位が3つに分かれるのか</a></li>
+      <li><a href="#sec-3">画像生成（1枚あたり）</a></li>
+      <li><a href="#sec-4">動画生成（1秒あたり・別表）</a></li>
+      <li><a href="#sec-5">注意（4点）</a></li>
+      <li><a href="#sec-6">出典（すべて2026-11-15取得）</a></li>
+    </ol>
+  </nav>
+</div>
+<section class="section" style="padding-top:1rem;">
+<div class="conclusion"><h2 class="section-title" style="font-size:1.15rem;margin-top:0;" id="sec-1">結論（3行）</h2><ul>
+<li><strong>トークン課金のモデルで1枚あたりの換算値を公開しているのはGoogleだけ</strong>（Metaは固定の1枚単価を公開）。Nano Banana 2.1 は1K（1024×1024px）で<strong>$0.0336/枚</strong>、Nano Banana Pro は1K/2Kで<strong>$0.134/枚</strong>。一方Metaの Muse Image は<strong>$0.01/枚の固定</strong>で、公表単価の中では最も安い（品質は別問題）。</li>
+<li><strong>MicrosoftのMAI-Imageは出力トークン単価が$19〜$106/1M</strong>と5倍以上ひらく。ただし1枚あたりのトークン数が公開されていないため、1枚単価は公式の計算機で試算するまで確定しません。</li>
+<li><strong>動画は別表</strong>。Gemini Omni 1.2 Flash は720pで<strong>約$0.07/秒（10秒で約$0.70）</strong>が公式の換算値。OpenAIの料金ページに動画生成モデルの単価行は見当たらず、Googleの「Veo」名のモデルも現行料金ページには記載がないため<strong>未確認</strong>として扱います。</li>
+</ul></div>
+
+<div class="tint"><h2 class="section-title" style="font-size:1.15rem;" id="sec-2">なぜ単位が3つに分かれるのか</h2>
+<div class="diagram">
+  <div class="dg-box provider-meta"><b>1枚 $0.01</b>Meta Muse Image</div>
+  <div class="dg-arrow">＋</div>
+  <div class="dg-box provider-google"><b>1Mトークン</b>Google / Microsoft / OpenAI</div>
+  <div class="dg-arrow">＋</div>
+  <div class="dg-box provider-openai"><b>1秒</b>動画（実質ここに収束）</div>
+  <div class="dg-arrow">→</div>
+  <div class="dg-box accent"><b>そろえた土台</b>画像＝1枚あたり<br>動画＝1秒あたり</div>
+  <div class="diagram-note">「$30/1Mトークン」と「$0.01/枚」をそのまま並べても、どちらが高いかは決まりません。1枚あたり何トークン消費するかが分かって初めて比較できます。</div>
+</div>
+<ul>
+<li><strong>画像は「出力トークン」課金が主流</strong>（Google・Microsoft・OpenAI）。トークン数は解像度と品質で変わるため、同じ「$30/1M」でも1枚単価は変わります。Googleは1K＝1,120トークン、4K＝3,780トークンと公表しています（Nano Banana 2.1）。</li>
+<li><strong>Metaだけが「1枚 $0.01」の固定単価</strong>。単価が読める代わりに、解像度や品質ごとの値段の差は表からは分かりません。</li>
+<li><strong>動画は「出力トークン×秒数」</strong>。実質は秒課金なので、Googleは注記で秒あたり換算を出しています。</li>
+<li><strong>入力側は別単価</strong>。参照画像を何度も入れる編集用途では入力が効きます（Nano Banana Pro は入力画像 560トークン＝$0.0011/枚）。</li>
+</ul>
+</div>
+
+<h2 class="section-title" style="font-size:1.15rem;" id="sec-3">画像生成（1枚あたり）</h2>
+<p style="font-size:.9rem;color:var(--c-muted);">GPT-Image（OpenAI）・Nano Banana（Google）・MAI-Image（Microsoft）・Muse Image（Meta）の料金を、提供元をまたいで同じ列に並べています。通称と正式名（例: Nano Banana Pro＝Gemini 3 Pro Image）は併記しました。</p>
+<div class="table-wrap"><table class="cmp-table">
+<thead><tr><th>モデル（提供元）</th><th>課金単位の公式単価</th><th>1枚あたり</th><th>状態</th></tr></thead>
+<tbody>
+<tr><td>Nano Banana 2.1（Google）</td><td>$30 / 1M画像出力トークン</td><td>$0.0336（1K）<br>$0.0504（2K）<br>$0.113（4K）<span class="na">※公式換算</span></td><td>現行</td></tr>
+<tr><td>Nano Banana 2 Lite ＝ Gemini 3.1 Flash Lite Image（Google）</td><td>$30 / 1M画像出力トークン</td><td>$0.0336（1K）<span class="na">※公式換算</span></td><td>現行</td></tr>
+<tr><td>Nano Banana Pro ＝ Gemini 3 Pro Image（Google）</td><td>$120 / 1M画像出力トークン</td><td>$0.134（1K・2K）<br>$0.24（4K）<span class="na">※公式換算</span></td><td>現行</td></tr>
+<tr><td>Nano Banana 2 ＝ Gemini 3.1 Flash Image（Google）</td><td>$60 / 1M画像出力トークン</td><td>$0.067（1K）<br>$0.101（2K）<br>$0.151（4K）<span class="na">※公式換算</span></td><td>現行</td></tr>
+<tr><td>Nano Banana ＝ Gemini 2.5 Flash Image（Google）</td><td>$0.039 / 枚</td><td>$0.039（1,024px）</td><td><span class="na">Deprecated（2027-03-15終了）</span></td></tr>
+<tr><td>Meta Muse Image（Meta）</td><td>$0.01 / 枚（固定）</td><td>$0.01</td><td>現行</td></tr>
+<tr><td>MAI-Image-2.6-Flash（Microsoft）</td><td>$19 / 1M画像出力トークン</td><td><span class="na">非公開（公式の計算機で試算）</span></td><td>パブリックプレビュー</td></tr>
+<tr><td>MAI-Image-2.6（Microsoft）</td><td>$38 / 1M画像出力トークン</td><td><span class="na">非公開（同上）</span></td><td>パブリックプレビュー</td></tr>
+<tr><td>MAI-Image-2.5 Flash（Microsoft）</td><td>$19.50 / 1M出力トークン</td><td><span class="na">非公開</span></td><td>現行</td></tr>
+<tr><td>MAI-Image-2.5（Microsoft）</td><td>$47 / 1M出力トークン</td><td><span class="na">非公開</span></td><td>現行</td></tr>
+<tr><td>MAI-Image-2.5 Pro Global（Microsoft）</td><td>$106 / 1M出力トークン</td><td><span class="na">非公開</span></td><td>現行</td></tr>
+<tr><td>MAI-Image-2 Global（Microsoft）</td><td>$33 / 1M出力トークン</td><td><span class="na">非公開</span></td><td>現行</td></tr>
+<tr><td>MAI-Image-2-Efficient Global（Microsoft）</td><td>$19.50 / 1M出力トークン</td><td><span class="na">非公開</span></td><td>現行</td></tr>
+<tr><td>gpt-image-2.6-sunburst / flare（OpenAI）</td><td>$30 / 1M画像出力トークン<br><span class="na">Batch は $15</span></td><td><span class="na">非公開（公式の計算機で試算）</span></td><td>現行</td></tr>
+</tbody></table></div>
+
+<p class="read-box"><strong>読み方</strong>: 「1枚あたり」が数字で埋まっているのはGoogleの4モデルとMetaだけです。MicrosoftとOpenAIは<strong>出力トークン単価</strong>しか公開していないため、同じ表に実額を書くと誤解を招きます（当サイトでは推測値を入れません）。ここは各社公式の計算機で、解像度と品質を固定して試算してください。</p>
+
+<p style="font-size:.88rem;color:var(--c-muted);margin:.9rem 0 .2rem;">1K画像の1枚単価で見る（公式換算値のあるものだけ）</p>
+<div class="bars">
+  <div class="bar-row"><span>Meta Muse Image（固定）</span><span class="bar-track"><span class="bar-fill" style="width:9%"></span></span><span>$0.01</span></div>
+  <div class="bar-row"><span>Nano Banana 2.1 / 2 Lite（1K）</span><span class="bar-track"><span class="bar-fill" style="width:30%"></span></span><span>$0.0336</span></div>
+  <div class="bar-row"><span>Nano Banana（2.5 Flash Image）</span><span class="bar-track"><span class="bar-fill muted" style="width:35%"></span></span><span>$0.039</span></div>
+  <div class="bar-row"><span>Nano Banana 2（1K）</span><span class="bar-track"><span class="bar-fill" style="width:60%"></span></span><span>$0.067</span></div>
+  <div class="bar-row"><span>Nano Banana Pro（1K・2K）</span><span class="bar-track"><span class="bar-fill" style="width:100%"></span></span><span>$0.134</span></div>
+</div>
+
+<h2 class="section-title" style="font-size:1.15rem;" id="sec-4">動画生成（1秒あたり・別表）</h2>
+<p style="font-size:.9rem;color:var(--c-muted);">画像と同じ表に入れません。尺（秒）で課金が伸びるため、1枚あたりと並べると誤読します。</p>
+<div class="table-wrap"><table class="cmp-table">
+<thead><tr><th>モデル（提供元）</th><th>課金単位の公式単価</th><th>秒あたり</th><th>状態</th></tr></thead>
+<tbody>
+<tr><td>Gemini Omni 1.2 Flash（Google）</td><td>$12 / 1M映像出力トークン<br><span class="na">入力 $1.50</span></td><td>720p 約$0.07<br>1080p 約$0.104<br>4K 約$0.209<span class="na">※公式換算</span></td><td>現行（有料枠・最大15秒）</td></tr>
+<tr><td>Gemini Omni 1.1 Flash（Google）</td><td>$17.50 / 1M映像出力トークン</td><td>720p 約$0.10<span class="na">※公式換算</span></td><td><span class="na">2026-12-03から1.2へ自動ルーティング</span></td></tr>
+<tr><td>Veo 系（Google）</td><td><span class="na">—</span></td><td><span class="na">—</span></td><td><span class="na">現行料金ページに記載なし（未確認）</span></td></tr>
+<tr><td>OpenAIの動画生成モデル</td><td><span class="na">—</span></td><td><span class="na">—</span></td><td><span class="na">現行料金ページに単価行なし（未確認）</span></td></tr>
+</tbody></table></div>
+<p class="read-box"><strong>10秒クリップの実額</strong>: Gemini Omni 1.2 Flash の720pなら<strong>約$0.70</strong>（公式の換算例そのまま）、4Kなら<strong>約$2.09</strong>。尺を伸ばすより解像度を上げるほうが効く、というのが公式の数字から読めます。</p>
+
+<h2 class="section-title" style="font-size:1.15rem;" id="sec-5">注意（4点）</h2>
+<ul>
+<li><strong>MAI-Image-2.6 / 2.6-Flash の単価はブログにしか載っていません</strong>。Azureの「Foundry Models pricing」表は今回も MAI-Image-2 / 2-Efficient / 2.5 / 2.5 Flash / 2.5 Pro の5行で、2.6 は未反映でした。契約前に必ずFoundryの価格ページで再確認してください。</li>
+<li><strong>Googleの1枚単価は解像度で3倍以上変わります</strong>（Nano Banana 2.1：1K $0.0336 ↔ 4K $0.113）。「1枚$0.03」で見積もると、4K運用で請求が3倍になります。</li>
+<li><strong>GPT-Image-2.6 の1枚単価は公式の計算機で確認が必要</strong>。公開されているのは$30/1M画像出力トークンで、1枚あたりのトークン数の固定表があるのは gpt-image-2 より前のモデルです。</li>
+<li><strong>Batch（非同期）は概ね半額</strong>（Google $15/1M、OpenAI $15/1M）。速度要件が無い処理はBatch前提で見積もってください。</li>
+</ul>
+
+<details class="legacy"><summary>換算の前提と、公式の逐語（クリックで開く）</summary>
+<ul>
+<li>1枚あたりの換算は<strong>各社公式の明記値</strong>を使っています（当サイトでトークン数を見積もった箇所はありません）。</li>
+<li>MAI-Image-2.5系のAzure表記は「Output (Per 1M tokens)」で、画像出力とテキスト出力の内訳は分かれていません。</li>
+<li>通貨はUSDのみ・為替換算なし。税・検索連携（グラウンディング）料金は含みません。</li>
+</ul>
+<blockquote class="verb">Output images at 1K(1024x1024px) consume 1120 tokens and are equivalent to $0.0336 per image.<br>— ai.google.dev/gemini-api/docs/pricing（2026-11-15取得）</blockquote>
+<blockquote class="verb">MAI-Image-2.6 pricing starts at $5 USD per 1M tokens for text input, $8 USD per 1M tokens for image input, and $38 USD per 1M tokens for image output.<br>— Microsoft Foundry Blog（2026-11-15取得）</blockquote>
+<blockquote class="verb">Billing is based on total output token consumption, calculated at a rate of 5,792 tokens per second of 720p video ... this equates to an effective price of approximately $0.07 per second<br>— ai.google.dev/gemini-api/docs/pricing（2026-11-15取得）</blockquote>
+<blockquote class="verb">Generated image | $0.01 per image（表の列は Usage | Price）<br>— dev.meta.ai/docs/pricing-rate-limits（2026-11-15取得）</blockquote>
+</details>
+
+<h2 class="section-title" style="font-size:1.15rem;" id="sec-6">出典（すべて2026-11-15取得）</h2>
+<ul>
+<li><a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">Google Gemini API Pricing</a>（Nano Banana系・Gemini Omni）</li>
+<li><a href="https://developers.openai.com/api/docs/pricing" target="_blank" rel="noopener">OpenAI API Pricing</a>（GPT-Image-2.6）</li>
+<li><a href="https://developers.openai.com/api/docs/guides/image-generation#calculating-costs" target="_blank" rel="noopener">OpenAI Image generation — Calculating costs</a></li>
+<li><a href="https://azure.microsoft.com/en-us/pricing/details/ai-foundry-models/microsoft/" target="_blank" rel="noopener">Microsoft Foundry Models pricing</a>（MAI-Image-2 / 2.5 系）</li>
+<li><a href="https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/mai-image-2-6-and-mai-image-2-6-flash-quality-and-speed-at-production-scale/4550970" target="_blank" rel="noopener">Foundry Blog — MAI-Image-2.6 and MAI-Image-2.6-Flash</a></li>
+<li><a href="https://dev.meta.ai/docs/pricing-rate-limits" target="_blank" rel="noopener">Meta Model API — Pricing and rate limits</a>（Muse Image）</li>
+</ul>
+</section>
+</div>
+</main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong><img src="/logo.svg" class="footer-logo" alt="" width="16" height="16" aria-hidden="true"> LLM Data Hub</strong><p>運営: okamoちゃんねる</p><p><a href="/">ホーム</a> · <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a> · <a href="/timeline/">年表</a> · <a href="/glossary/">用語説明</a> · <a href="/multimodal/">マルチモーダル</a></p></div><p class="footer-disclaimer">⚠️ 料金・仕様は予告なく変動します。契約前に必ず各社公式ページでご確認ください。本サイトは各社と提携していません。</p></div></footer>
+</body>
+</html>

@@ -85,9 +85,23 @@
 </div></section>
 
 <main><div class="container">
+<figure class="key-visual" style="margin:1.5rem 0 .5rem;"><img src="/assets/og/ja-multimodal.png" alt="このページの内容を1枚にまとめた画像" width="1200" height="630" loading="eager" decoding="async" style="width:100%;max-width:900px;height:auto;display:block;margin:0 auto;border:1px solid var(--c-border);border-radius:var(--r-md);"></figure>
+
 <div class="updated-bar" style="margin-top:2rem;"><span class="dot">●</span>最終更新: <time datetime="2026-11-15">2026年11月15日</time> | 出典: <a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank" rel="noopener">Google AI 料金ページ</a> · <a href="https://developers.openai.com/api/docs/models/gpt-6-astra" target="_blank" rel="noopener">OpenAI GPT-6 Astra Docs</a> · <a href="https://platform.claude.com/docs/ja/build-with-claude/pdf-support" target="_blank" rel="noopener">Claude PDFサポート</a> · <a href="https://api-docs.deepseek.com/" target="_blank" rel="noopener">DeepSeek API Docs</a> ほか各社公式 | <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a></div>
 
 <!-- 対応マトリクス -->
+<div class="section" style="padding-top:1.25rem;padding-bottom:0;">
+  <nav class="toc" aria-label="目次">
+    <p class="toc-title">目次</p>
+    <ol>
+      <li><a href="#matrix-h">主要LLM マルチモーダル対応マトリクス</a></li>
+      <li><a href="#billing-h">モダリティ別の課金ルール全モデル共通の注意点</a></li>
+      <li><a href="#dedicated-h">ライブストリーミング・音声/画像/動画生成は「別モデル」に分化</a></li>
+      <li><a href="#usecase-h">「この入力・出力をしたい」ときのモデル選び</a></li>
+      <li><a href="#diagram-modality">モダリティは「入力→換算→課金」の3段で見る</a></li>
+    </ol>
+  </nav>
+</div>
 <section class="section" style="padding-top:0;" aria-labelledby="matrix-h">
 <h2 class="section-title" id="matrix-h" style="font-size:1.2rem;">主要LLM マルチモーダル対応マトリクス</h2>
 <p class="section-sub">全モデル共通で<b>テキスト入出力は対応</b>。表はテキスト以外だけ。列は「入力」「出力」の2本。<b>出ているアイコンがそのモデルが扱える形式</b>。注記付きは条件付き（下の説明）。アイコンが無いものは非対応。$は <em>USD / 1M tokens</em>（テキスト基準の標準料金）。</p><p class="icon-key"><span><svg class="ico-img" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><rect x="1.1" y="2.2" width="13.8" height="11.6" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.35"/><circle cx="5.3" cy="6.2" r="1.35" fill="currentColor"/><path d="M2.3 12.6l3.9-4.1 2.3 2.3 2.3-2.9 3.2 4.7H2.3z" fill="currentColor"/></svg> 画像</span><span>🔊 音声</span><span>🎬 動画</span><span><svg class="ico-pdf" viewBox="0 0 28 16" width="28" height="16" aria-hidden="true"><rect width="28" height="16" rx="3" fill="#e11d48"/><text x="14" y="11.6" text-anchor="middle" font-size="8.2" font-weight="800" font-family="ui-sans-serif,system-ui,-apple-system,sans-serif" fill="#fff">PDF</text></svg> PDF</span><span>📝 DOCX</span><span>📊 XLSX</span><span>📑 PPTX</span></p>

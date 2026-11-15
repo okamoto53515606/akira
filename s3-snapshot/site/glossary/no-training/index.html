@@ -75,10 +75,7 @@
     <h1 class="section-title" style="font-size:1.55rem;">学習に使わせない（no-training）とは — 「無料で試す」と「契約して使う」で答えが変わる</h1>
     <p class="section-sub" style="max-width:780px;">
       <a href="/glossary/">用語説明</a> 第10回。第9回 <a href="/glossary/zero-operator-access/">ZOA（見せない）</a> に続いて、<a href="/glossary/four-data-requirements/">4要件</a>の③<strong>「学ばせない（学習条項）」</strong>を深掘りします。
-      「ChatGPTは学習に使うのに、APIは使わないって本当？」「有料プランなら安心？」——この2つの質問は、<strong>同じ会社の同じモデルでも答えが変わります</strong>。
-      理由は<strong>「どの層（プラン・契約）で使っているか」で適用される条項が違う</strong>からです。
-      このページでは、OpenAI・Anthropic・Google・Microsoft・AWS の5系統について、<strong>「個人向けアプリ」「無料枠」「API・商用契約」の3層</strong>に分け、各社公式ドキュメントの<strong>逐語</strong>で確認します。
-      オプトアウト（学習に使わせない設定）をしても<strong>残る例外</strong>まで書くので、そのまま社内説明に使えます。
+      「ChatGPTは学習に使うのに、APIは使わないって本当？」「有料プランなら安心？」——この2つの質問は、<strong>同じ会社の同じモデルでも答えが変わります</strong>。理由は<strong>「どの層（プラン・契約）で使っているか」で適用される条項が違う</strong>からです。このページでは、OpenAI・Anthropic・Google・Microsoft・AWS の5系統について、<strong>「個人向けアプリ」「無料枠」「API・商用契約」の3層</strong>に分け、各社公式ドキュメントの<strong>逐語</strong>で確認します。オプトアウト（学習に使わせない設定）をしても<strong>残る例外</strong>まで書くので、そのまま社内説明に使えます。
     </p>
     <div class="phrase-box">
       <p class="phrase">「学習に使われるかどうか」を決めるのは、<strong>どの会社かではなく「どの契約・どの層か」</strong>です。</p>
@@ -91,7 +88,23 @@
     </div>
   </div>
 
-  <section class="section" style="padding-top:1.5rem;" aria-labelledby="branch-h">
+  <div class="section" style="padding-top:1.25rem;padding-bottom:0;">
+  <nav class="toc" aria-label="目次">
+    <p class="toc-title">目次</p>
+    <ol>
+      <li><a href="#branch-h">なぜ「同じ会社で答えが変わる」のか</a></li>
+      <li><a href="#matrix-h">先に結論 — 5系統を「層」で分けた表</a></li>
+      <li><a href="#b1-h">分岐① 個人向けアプリか、API・商用契約か</a></li>
+      <li><a href="#b2-h">分岐② 「無料枠」かどうかは、料金ではなく請求先で決まる（Google）</a></li>
+      <li><a href="#b3-h">分岐③ オプトアウトしても残る例外</a></li>
+      <li><a href="#sep-h">「学習に使わない」は「人が見ない」「保存しない」と別の約束</a></li>
+      <li><a href="#steps-h">確認する4ステップ</a></li>
+      <li><a href="#myth-h">よくある誤解 4つ</a></li>
+      <li><a href="#faq-h">よくある質問</a></li>
+    </ol>
+  </nav>
+</div>
+<section class="section" style="padding-top:1.5rem;" aria-labelledby="branch-h">
     <h2 class="section-title" id="branch-h" style="font-size:1.2rem;">なぜ「同じ会社で答えが変わる」のか</h2>
     <p class="section-sub">
       学習条項は、<strong>契約の種類ごとに別の文書</strong>に書かれています。個人向けアプリの利用規約と、法人向けの商用契約は別の文書で、書いてあることが違います。分岐はこの3つです。
@@ -337,7 +350,6 @@
       <li>Google — <a href="https://ai.google.dev/gemini-api/terms" target="_blank" rel="noopener">Gemini API Additional Terms of Service</a>（Unpaid / Paid の区分・人間のレビュー・EEA等の扱い／2026-10-03 取得）</li>
       <li>Microsoft — <a href="https://learn.microsoft.com/en-us/azure/foundry/responsible-ai/openai/data-privacy" target="_blank" rel="noopener">Data, privacy, and security for Azure direct models</a>（「NOT used to train any generative AI foundation models without your permission or instruction.」・乱用監視の自動／人間レビュー／2026-09-29 取得）</li>
       <li>AWS — <a href="https://aws.amazon.com/bedrock/faqs/" target="_blank" rel="noopener">Amazon Bedrock FAQs</a>（「will not use any inputs to or outputs from Amazon Bedrock to train Amazon Nova, Amazon Titan, or any third-party models.」／2026-10-03 取得）</li>
-      <li>関連: <a href="/glossary/four-data-requirements/">データを守る4要件</a>・<a href="/glossary/zero-data-retention/">ZDR（ゼロデータ保持）</a>・<a href="/glossary/zero-operator-access/">ZOA（ゼロオペレーターアクセス）</a>・<a href="/glossary/">用語説明の一覧</a></li>
     </ul>
   </details>
 </section>

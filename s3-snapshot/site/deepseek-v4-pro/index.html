@@ -101,16 +101,14 @@
 
   <main>
     <div class="container">
-<p style="font-size:.9rem;background:var(--c-surface2);border:1px solid var(--c-border);border-radius:6px;padding:.6rem .9rem;max-width:820px;">2026-11-12 追記: DeepSeek公式の MODEL VERSION は <code>DeepSeek-V4-Pro-0813</code> です（Azure / Microsoft Foundry 側のバージョン表記は当サイト未確認）。料金・提供継続の記述に変更はありません。</p>
+<p style="font-size:.9rem;background:var(--c-surface2);border:1px solid var(--c-border);border-radius:6px;padding:.6rem .9rem;">2026-11-12 追記: DeepSeek公式の MODEL VERSION は <code>DeepSeek-V4-Pro-0813</code> です（Azure / Microsoft Foundry 側のバージョン表記は当サイト未確認）。料金・提供継続の記述に変更はありません。</p>
 
       <div class="section" style="padding-bottom:0;">
         <h1 class="section-title" style="font-size:1.55rem;">
           DeepSeek V4 Pro は提供継続へ — 9/14 の V4.1 Flash ルーティング予告は撤回
         </h1>
         <p class="lead-note">
-          2026-09-10、DeepSeek は新世代の <strong>DeepSeek-V4.1-Flash</strong> をリリースした際、あわせて <strong>V4 Pro を順次 retire し、2026-09-14 以降 <code>deepseek-v4-pro</code> 宛のリクエストを V4.1 Flash へルーティングする</strong>と予告していました。
-          その後 <strong>DeepSeek はこの予告を撤回</strong>し、現在は「<strong>2026-09-14 以降も V4 Pro の API 提供を継続し、課金方法は変更しない</strong>」と公式に告知しています。
-          このページは、V4 Pro を使い続けている人・これから導入する人のために、<strong>現行のステータス・料金・仕様</strong>と、<strong>撤回の経緯</strong>、そして <strong>V4.1 Flash との使い分け</strong>を公式ドキュメントの記述だけで整理したものです。
+          2026-09-10、DeepSeek は新世代の <strong>DeepSeek-V4.1-Flash</strong> をリリースした際、あわせて <strong>V4 Pro を順次 retire し、2026-09-14 以降 <code>deepseek-v4-pro</code> 宛のリクエストを V4.1 Flash へルーティングする</strong>と予告していました。その後 <strong>DeepSeek はこの予告を撤回</strong>し、現在は「<strong>2026-09-14 以降も V4 Pro の API 提供を継続し、課金方法は変更しない</strong>」と公式に告知しています。このページは、V4 Pro を使い続けている人・これから導入する人のために、<strong>現行のステータス・料金・仕様</strong>と、<strong>撤回の経緯</strong>、そして <strong>V4.1 Flash との使い分け</strong>を公式ドキュメントの記述だけで整理したものです。
           V4.1 Flash 本体の料金・スペック・ベンチマーク・導入手順は <a href="/deepseek-v4-1-flash/">DeepSeek V4.1 Flash 実践ガイド</a>にまとめています。
         </p>
 
@@ -122,7 +120,26 @@
         </div>
       </div>
 
-      <section class="section" style="padding-top:1.5rem;" aria-labelledby="sum-heading">
+      <div class="section" style="padding-top:1.25rem;padding-bottom:0;">
+  <nav class="toc" aria-label="目次">
+    <p class="toc-title">目次</p>
+    <ol>
+      <li><a href="#sum-heading">✅ 結論（3行）</a></li>
+      <li><a href="#fix-heading">【重要】当サイトの旧記載の訂正と、公式予告の撤回について</a></li>
+      <li><a href="#fix-inner">何が撤回されたのか</a></li>
+      <li><a href="#status-heading">現行ステータス（2026-09-13 時点の公式記載）</a></li>
+      <li><a href="#price-heading">V4 Pro の現行料金（2026-09-13 時点で有効）</a></li>
+      <li><a href="#impact-heading">V4 Pro と V4.1 Flash の違い・使い分け</a></li>
+      <li><a href="#hist-heading">ここまでの経緯（公式発表ベース）</a></li>
+      <li><a href="#mig-heading">いま確認しておきたいこと（チェックリスト）</a></li>
+      <li><a href="#setup-heading">導入手順（VS Code GitHub Copilot Chat・3ステップ）</a></li>
+      <li><a href="#cmp-heading">参考: V4 Pro と Claude Sonnet の実測比較（当時の記録）</a></li>
+      <li><a href="#faq-heading">よくある質問</a></li>
+      <li><a href="#sec-12">出典</a></li>
+    </ol>
+  </nav>
+</div>
+<section class="section" style="padding-top:1.5rem;" aria-labelledby="sum-heading">
         <div class="warn-box">
           <h2 id="sum-heading">✅ 結論（3行）</h2>
           <ul>
@@ -145,16 +162,13 @@
             <strong>この記述は公式に撤回されました。現在は誤りです。</strong>
           </p>
           <p style="margin-bottom:.6rem;">
-            当時 DeepSeek は、V4.1 Flash が「性能・コスト・速度・総時間のいずれでも V4 Pro を上回る」として <strong>V4 Pro を順次 retire する</strong>と表明していました。
-            しかしその後、公式料金ページの注記(2) および Change Log（2026-09-10 エントリ）の両方が、次の文面に<strong>差し替え</strong>られています（原文）:
+            当時 DeepSeek は、V4.1 Flash が「性能・コスト・速度・総時間のいずれでも V4 Pro を上回る」として <strong>V4 Pro を順次 retire する</strong>と表明していました。しかしその後、公式料金ページの注記(2) および Change Log（2026-09-10 エントリ）の両方が、次の文面に<strong>差し替え</strong>られています（原文）:
           </p>
           <blockquote style="font-size:.84rem;color:var(--c-muted);border-left:3px solid var(--c-border);margin:0 0 .6rem 1rem;padding:.3rem 0 .3rem .9rem;">
             "In response to user demand, we have decided to continue providing API services for DeepSeek V4 Pro after September 14, 2026, with the billing method remaining unchanged. We will provide further notice should there be any changes."
           </blockquote>
           <p style="margin-bottom:0;">
-            つまり <strong>以前に予告されていた退役と 9/14 のルーティングは、2026-09-13 現在の公式記載には存在しません</strong>。
-            本ページの記載は、この撤回を反映した内容に全面的に書き換えました（最終更新 2026-09-13）。
-            なお V4 Pro を「退役する」と書いた外部のまとめ記事や、9/11 時点で配信された告知を引用した情報が今も見つかりますが、
+            つまり <strong>以前に予告されていた退役と 9/14 のルーティングは、2026-09-13 現在の公式記載には存在しません</strong>。本ページの記載は、この撤回を反映した内容に全面的に書き換えました（最終更新 2026-09-13）。なお V4 Pro を「退役する」と書いた外部のまとめ記事や、9/11 時点で配信された告知を引用した情報が今も見つかりますが、
             <strong>2026-09-13 時点の公式一次情報は「提供継続」です</strong>。古い情報に触れた場合はこの点にご注意ください。
           </p>
           <p style="margin:.6rem 0 0;font-size:.82rem;color:var(--c-muted);">
@@ -224,10 +238,7 @@
           </table>
         </div>
         <p style="font-size:.86rem;color:var(--c-muted);margin-top:.8rem;">
-          💡 使い分けの目安: <strong>同じ 1M コンテキスト・384K 出力</strong>なので、差は「単価・Vision の有無・同時実行数・推論の深さ」です。
-          大量処理や画像を含むワークロードは V4.1 Flash、深い推論や複雑なエージェント処理で品質が効く場面は V4 Pro、という切り分けが素直です。
-          ただし <strong>「V4.1 Flash の方が高精度」という公式の説明は 2026-09-10 の告知時にありましたが、その告知文自体が今回差し替えられています</strong>。
-          どちらが自分のタスクに良いかは、代表的なプロンプトで実測して決めるのが確実です。コスト試算は <a href="/calculator/">トークン計算機</a>で両モデル・両時間帯を比較できます。
+          💡 使い分けの目安: <strong>同じ 1M コンテキスト・384K 出力</strong>なので、差は「単価・Vision の有無・同時実行数・推論の深さ」です。大量処理や画像を含むワークロードは V4.1 Flash、深い推論や複雑なエージェント処理で品質が効く場面は V4 Pro、という切り分けが素直です。ただし <strong>「V4.1 Flash の方が高精度」という公式の説明は 2026-09-10 の告知時にありましたが、その告知文自体が今回差し替えられています</strong>。どちらが自分のタスクに良いかは、代表的なプロンプトで実測して決めるのが確実です。コスト試算は <a href="/calculator/">トークン計算機</a>で両モデル・両時間帯を比較できます。
         </p>
       </section>
 
@@ -297,13 +308,11 @@
       <section class="section" style="padding-top:0;" aria-labelledby="cmp-heading">
         <h2 class="section-title" id="cmp-heading" style="font-size:1.2rem;">参考: V4 Pro と Claude Sonnet の実測比較（当時の記録）</h2>
         <p style="font-size:.88rem;color:var(--c-muted);">
-          運営者が V4 Pro を使っていた時点の体感では、テキスト中心のコーディングタスクで Claude Sonnet に近い実用感が得られ、コストは大きく下回りました。
-          ただし比較実験は Sonnet 側が「まとめ役＋辛口エンジニア」の2人分、DeepSeek 側は「辛口エンジニア」1人分のコストという<strong>条件差</strong>があり、厳密な同一処理の比較ではありません。
+          運営者が V4 Pro を使っていた時点の体感では、テキスト中心のコーディングタスクで Claude Sonnet に近い実用感が得られ、コストは大きく下回りました。ただし比較実験は Sonnet 側が「まとめ役＋辛口エンジニア」の2人分、DeepSeek 側は「辛口エンジニア」1人分のコストという<strong>条件差</strong>があり、厳密な同一処理の比較ではありません。
         </p>
         <p style="font-size:.88rem;color:var(--c-muted);">
           なお本ページの旧版に掲載していた「Claude Sonnet $5.33 vs DeepSeek V4 Pro $0.26（約95%減）」という実測コスト事例は、
-          <strong>旧プロモ価格（$0.435/$0.87）時代の計測値</strong>であり、現行の V4 Pro 単価（出力 オフピーク $1.98）とは前提が異なるため削除しました。
-          現在のコスト比較は <a href="/calculator/">トークン計算機</a>と<a href="/pricing/">料金比較ページ</a>で行ってください。
+          <strong>旧プロモ価格（$0.435/$0.87）時代の計測値</strong>であり、現行の V4 Pro 単価（出力 オフピーク $1.98）とは前提が異なるため削除しました。現在のコスト比較は <a href="/calculator/">トークン計算機</a>と<a href="/pricing/">料金比較ページ</a>で行ってください。
         </p>
         <p style="font-size:.84rem;color:var(--c-muted);">
           元レポート:
@@ -340,7 +349,7 @@
 
       <!-- ===== 出典 ===== -->
       <section class="section" style="padding-top:0;">
-        <h2 class="section-title" style="font-size:1.1rem;">出典</h2>
+        <h2 class="section-title" style="font-size:1.1rem;" id="sec-12">出典</h2>
         <ul style="font-size:.84rem;color:var(--c-muted);padding-left:1.1em;">
           <li><a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">DeepSeek API Docs — Models &amp; Pricing</a>（2026-09-13 取得。注記(2)に V4 Pro 提供継続、V4 Pro の価格行も掲載中）</li>
           <li><a href="https://api-docs.deepseek.com/updates/" target="_blank" rel="noopener">DeepSeek API Docs — Change Log</a>（2026-09-10 エントリに V4 Pro 提供継続を追記、2026-08-13 エントリに V4-Pro GA）</li>

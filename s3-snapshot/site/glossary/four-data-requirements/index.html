@@ -73,8 +73,7 @@
     <p class="section-sub" style="max-width:780px;">
       <a href="/glossary/">用語説明</a> 第8回。第7回で扱った <a href="/glossary/zero-data-retention/">ZDR（ゼロデータ保持）</a> の読者から、こんな質問が続きました。
       <strong>「ZDRに対応しているベンダーなら、担当者にも見られないし、学習にも使われないし、データは日本から出ない——で合っていますか？」</strong>
-      答えは<strong>「いいえ」</strong>です。この4つは<strong>別々の約束</strong>で、片方を満たしてももう片方は満たしません。
-      このページでは、混同されがちな4つを<strong>① 残さない（ZDR）② 見せない（ZOA）③ 学ばせない（学習条項）④ 出さない（データレジデンシー）</strong>として分け、
+      答えは<strong>「いいえ」</strong>です。この4つは<strong>別々の約束</strong>で、片方を満たしてももう片方は満たしません。このページでは、混同されがちな4つを<strong>① 残さない（ZDR）② 見せない（ZOA）③ 学ばせない（学習条項）④ 出さない（データレジデンシー）</strong>として分け、
       5社の公式ドキュメントの<strong>逐語</strong>で「どこが既定で、どこが申請制・審査制か」を並べます。契約前のチェックリストとして使える形にしました。
     </p>
     <div class="phrase-box">
@@ -88,7 +87,23 @@
     </div>
   </div>
 
-  <section class="section" style="padding-top:1.5rem;" aria-labelledby="why-h">
+  <div class="section" style="padding-top:1.25rem;padding-bottom:0;">
+  <nav class="toc" aria-label="目次">
+    <p class="toc-title">目次</p>
+    <ol>
+      <li><a href="#why-h">なぜ「4要件」に分けるのか</a></li>
+      <li><a href="#req1-h">① 残さない — ZDR（ゼロデータ保持）</a></li>
+      <li><a href="#req2-h">② 見せない — ZOA（ゼロオペレーターアクセス）</a></li>
+      <li><a href="#req3-h">③ 学ばせない — 学習に使わせない条項</a></li>
+      <li><a href="#req4-h">④ 出さない — データレジデンシー</a></li>
+      <li><a href="#matrix-h">5社マトリクス — どこが「既定」でどこが「申請制」か</a></li>
+      <li><a href="#steps-h">契約前に確認する5ステップ</a></li>
+      <li><a href="#myth-h">よくある誤解 3つ</a></li>
+      <li><a href="#faq-h">よくある質問</a></li>
+    </ol>
+  </nav>
+</div>
+<section class="section" style="padding-top:1.5rem;" aria-labelledby="why-h">
     <h2 class="section-title" id="why-h" style="font-size:1.2rem;">なぜ「4要件」に分けるのか</h2>
     <p class="section-sub">
       理由は単純で、<strong>提供元が違えば当たり前のように満たしている要件が違う</strong>からです。技術的に見ると、4つは処理の流れの別々の段階に対応しています。
@@ -309,7 +324,6 @@
       <li>Anthropic — <a href="https://claude.com/regional-compliance" target="_blank" rel="noopener">Regional compliance</a>（<code>inference_geo</code>・既定 global・1.1倍・400エラー／2026-09-27 取得）</li>
       <li>OpenAI — ZDR／abuse monitoring controls／データレジデンシー（申請制・US以外の条件・UAE追加承認／2026-09-27 取得）</li>
       <li>Google Cloud — <a href="https://docs.cloud.google.com/vertex-ai/generative-ai/docs/data-governance" target="_blank" rel="noopener">Data governance and generative AI</a>・<a href="https://docs.cloud.google.com/generative-ai-app-builder/docs/data-governance" target="_blank" rel="noopener">AI/ML Privacy Commitment</a>（保存と処理の別・エンドポイント3段階・jurisdictional の保証／2026-09-29 取得）</li>
-      <li>関連: <a href="/glossary/zero-data-retention/">ZDR（ゼロデータ保持）</a>・<a href="/china-ai/">中国AI</a>・<a href="/deepseek-v4-1-flash/">DeepSeek V4.1 Flash（Azure経由の実測）</a>・<a href="/glossary/">用語説明の一覧</a></li>
     </ul>
   </details>
 </section>

@@ -63,9 +63,7 @@
   <div class="section" style="padding-bottom:0;">
     <h1 class="section-title" style="font-size:1.55rem;">ZDR（ゼロデータ保持）とは — 「保存しない」の3つの落とし穴</h1>
     <p class="section-sub" style="max-width:780px;">
-      <a href="/glossary/">用語説明</a> 第7回。2026年9月25日に<a href="/china-ai/">中国AI</a>へ「Amazon Bedrock 経由のデータ取扱い」を追記したとき、読者から<strong>「ZDRって書いてあるけど、じゃあずっと保存されないの？」</strong>という質問が来ました。答えは<strong>「いいえ」</strong>です。
-      このページは、そこで出てきた <strong>ZDR（ゼロデータ保持）</strong>と<strong>ZOA（ゼロオペレーターアクセス）</strong>を、ベンダー固有の話ではなく<strong>業界共通の用語</strong>として独立させたものです。
-      一次情報は各社の公式ドキュメントだけ。5社の入手方法と、実際に公開されている<strong>保持必須モデルの例外リスト</strong>まで並べます。
+      <a href="/glossary/">用語説明</a> 第7回。2026年9月25日に<a href="/china-ai/">中国AI</a>へ「Amazon Bedrock 経由のデータ取扱い」を追記したとき、読者から<strong>「ZDRって書いてあるけど、じゃあずっと保存されないの？」</strong>という質問が来ました。答えは<strong>「いいえ」</strong>です。このページは、そこで出てきた <strong>ZDR（ゼロデータ保持）</strong>と<strong>ZOA（ゼロオペレーターアクセス）</strong>を、ベンダー固有の話ではなく<strong>業界共通の用語</strong>として独立させたものです。一次情報は各社の公式ドキュメントだけ。5社の入手方法と、実際に公開されている<strong>保持必須モデルの例外リスト</strong>まで並べます。
     </p>
     <div class="phrase-box">
       <p class="phrase">ZDR（ゼロデータ保持）＝「保存しない」。ただし<strong>「既定で保存しない」であって、「常時有効」ではありません</strong>。</p>
@@ -78,7 +76,20 @@
     </div>
   </div>
 
-  <section class="section" style="padding-top:1.5rem;" aria-labelledby="motto-h">
+  <div class="section" style="padding-top:1.25rem;padding-bottom:0;">
+  <nav class="toc" aria-label="目次">
+    <p class="toc-title">目次</p>
+    <ol>
+      <li><a href="#motto-h">3語で覚える — 「既定・例外・明示」</a></li>
+      <li><a href="#fig-h">図: ZDR は「③ 保存する」の話</a></li>
+      <li><a href="#three-h">いちばん多い誤解 — 「保存しない」「見られない」「学習に使わない」は別物</a></li>
+      <li><a href="#five-h">5社の ZDR — 「既定」か「審査制」かで全然ちがう</a></li>
+      <li><a href="#exc-h">例外リスト — 実際に公開されている「保持必須モデル」</a></li>
+      <li><a href="#qa-h">実務チェック — よくある6つの質問</a></li>
+    </ol>
+  </nav>
+</div>
+<section class="section" style="padding-top:1.5rem;" aria-labelledby="motto-h">
     <h2 class="section-title" id="motto-h" style="font-size:1.2rem;">3語で覚える — 「既定・例外・明示」</h2>
     <p class="section-sub">ZDR の混乱は、ほぼこの3語に集約できます。長い説明を覚える必要はありません。</p>
     <div class="motto-grid">
@@ -98,8 +109,7 @@
     <div class="tip-box">
       <h3>📝 たとえ話（技術的な定義ではありません）</h3>
       <p style="font-size:.85rem;line-height:1.8;color:var(--c-muted);margin:0;">
-        避難の標語と同じで、<strong>覚えられる短さ</strong>にしないと現場では使えません。「押さない・駆けない・しゃべらない」に相当するのが、上の<strong>「既定・例外・明示」</strong>です。
-        ただし標語は<strong>記憶の道具であって定義ではありません</strong>。実際の契約では、各社の公式ドキュメントの文面が正になります。
+        避難の標語と同じで、<strong>覚えられる短さ</strong>にしないと現場では使えません。「押さない・駆けない・しゃべらない」に相当するのが、上の<strong>「既定・例外・明示」</strong>です。ただし標語は<strong>記憶の道具であって定義ではありません</strong>。実際の契約では、各社の公式ドキュメントの文面が正になります。
       </p>
     </div>
   </section>
@@ -171,8 +181,7 @@
     <div class="tip-box">
       <h3>💡 なぜ「保存」が起きるのか</h3>
       <p style="font-size:.85rem;line-height:1.8;color:var(--c-muted);margin:0;">
-        理由はほぼ<strong>不正利用（abuse）の検知</strong>です。1件ずつ見ても分からない攻撃（分散した脱獄の試行など）は、<strong>一定期間ためてから比較しないと見つかりません</strong>。だから「安全性のためだけに、限られた期間だけ保持する」という例外が生まれます。
-        これが<strong>「保持必須モデル」</strong>の正体です。ただし保持される範囲はモデルごとに異なり、分類器がフラグを立てた通信のみのことも、全通信のこともあり、AWSの担当者による人間レビューが付く場合もあります。このページの後半で、実際に公開されている例外リストを並べます。
+        理由はほぼ<strong>不正利用（abuse）の検知</strong>です。1件ずつ見ても分からない攻撃（分散した脱獄の試行など）は、<strong>一定期間ためてから比較しないと見つかりません</strong>。だから「安全性のためだけに、限られた期間だけ保持する」という例外が生まれます。これが<strong>「保持必須モデル」</strong>の正体です。ただし保持される範囲はモデルごとに異なり、分類器がフラグを立てた通信のみのことも、全通信のこともあり、AWSの担当者による人間レビューが付く場合もあります。このページの後半で、実際に公開されている例外リストを並べます。
       </p>
     </div>
   </section>
@@ -233,8 +242,7 @@
     <div class="tip-box">
       <h3>📌 2026年9月27日時点で、例外リストに入っていないモデル</h3>
       <p style="font-size:.85rem;line-height:1.8;color:var(--c-muted);margin:0;">
-        Bedrock の例外リストを<strong>当日に実取得して全文確認</strong>した範囲では、<strong>Kimi K3 と MiMo-V2.6 は含まれていません</strong>（＝Bedrock 経由では保持必須の条件が課されていない）。
-        ただし<strong>リストは追記されます</strong>。新しいフロンティアモデルが追加されたときにここが更新されるので、<strong>契約前と導入後に一度ずつ</strong>公式ページを見るのが安全です。
+        Bedrock の例外リストを<strong>当日に実取得して全文確認</strong>した範囲では、<strong>Kimi K3 と MiMo-V2.6 は含まれていません</strong>（＝Bedrock 経由では保持必須の条件が課されていない）。ただし<strong>リストは追記されます</strong>。新しいフロンティアモデルが追加されたときにここが更新されるので、<strong>契約前と導入後に一度ずつ</strong>公式ページを見るのが安全です。
       </p>
     </div>
   </section>
@@ -287,7 +295,6 @@
       <li>Google AI for Developers「Zero data retention in the Gemini Developer API」（Vertex AI への案内・メモリ内キャッシュ） — <a href="https://ai.google.dev/gemini-api/docs/zdr" target="_blank" rel="noopener">ai.google.dev/gemini-api/docs/zdr</a></li>
       <li>Microsoft Learn「Data, privacy, and security for Foundry Models sold by Azure in Microsoft Foundry」（modified abuse monitoring） — <a href="https://learn.microsoft.com/en-us/azure/foundry/responsible-ai/openai/data-privacy" target="_blank" rel="noopener">learn.microsoft.com/.../openai/data-privacy</a></li>
     </ul>
-    <p style="font-size:.8rem;color:var(--c-muted);margin-top:.6rem;">関連: <a href="/glossary/">用語説明 一覧</a> · <a href="/china-ai/">中国AI（Bedrock 経由のデータ取扱いを追記）</a> · <a href="/glossary/harness/">ハーネス（第3回）</a> · <a href="/glossary/benchmarks/">ベンチマークとは（第5回）</a> · <a href="/glossary/benchmark-orgs/">ベンチマークを運営している組織（第6回）</a> · <a href="/glossary/four-data-requirements/">データの4要件（第8回・続編）</a> · <a href="/glossary/zero-operator-access/">ZOA（第9回）</a> · <a href="/glossary/no-training/">no-training（第10回）</a> · <a href="/glossary/data-residency/">データレジデンシー（第11回）</a> · <a href="/glossary/prompt-cache/">プロンプトキャッシュ（第2回）</a></p>
   </details>
 </section>
 

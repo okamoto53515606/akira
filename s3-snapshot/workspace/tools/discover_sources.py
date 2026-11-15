@@ -19,6 +19,11 @@ import urllib.request
 
 from strands import tool
 
+import sys as _sys
+
+_sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from _gap_log import record_call  # noqa: E402  (R4: 見つからなかった回数を数える)
+
 TIMEOUT = 30
 
 
@@ -32,6 +37,7 @@ def discover_sources(query: str, count: int = 5) -> dict:
     """
     key = os.environ.get("BRAVE_API_KEY", "")
     if not key:
+        record_call("discover", query[:40], ok=False, reason="no_api_key")
         return {"status": "failed", "reason": "BRAVE_API_KEY がありません"}
     n = max(1, min(int(count or 5), 10))
     url = ("https://api.search.brave.com/res/v1/web/search?q=%s&count=%d"
@@ -42,11 +48,15 @@ def discover_sources(query: str, count: int = 5) -> dict:
         with urllib.request.urlopen(req, timeout=TIMEOUT) as res:
             data = json.loads(res.read().decode("utf-8"))
     except urllib.error.HTTPError as e:
+        record_call("discover", query[:40], ok=False, reason="http_%s" % e.code)
         return {"status": "failed", "reason": "brave http %s" % e.code, "query": query}
     except Exception as e:  # noqa: BLE001
+        record_call("discover", query[:40], ok=False, reason=type(e).__name__)
         return {"status": "failed", "reason": "%s: %s" % (type(e).__name__, e), "query": query}
     hits = [{"title": r.get("title", ""), "url": r.get("url", "")}
             for r in (data.get("web") or {}).get("results", [])[:n]]
+    # 0件は「検索語が悪い」のか「そもそも情報が無い」のかを分けて数える
+    record_call("discover", query[:40], ok=bool(hits), reason="zero_hits" if not hits else "")
     return {"status": "ok", "query": query, "count": len(hits), "results": hits,
             "next": "候補のうち公式ドメインを fetch_quote で取得すること"}
 

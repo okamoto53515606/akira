@@ -89,7 +89,23 @@
     </div>
   </div>
 
-  <section class="section" style="padding-top:1.5rem;" aria-labelledby="why-h">
+  <div class="section" style="padding-top:1.25rem;padding-bottom:0;">
+  <nav class="toc" aria-label="Contents">
+    <p class="toc-title">Contents</p>
+    <ol>
+      <li><a href="#why-h">Why “not sent abroad” splits into two questions</a></li>
+      <li><a href="#matrix-h">The answer up front: five providers split by storage and processing</a></li>
+      <li><a href="#b1-h">Branch ① Where a provider publishes the two separately (OpenAI)</a></li>
+      <li><a href="#b2-h">Branch ② In the clouds, the setting decides between three layers (Microsoft / AWS / Google)</a></li>
+      <li><a href="#b3-h">Branch ③ On a first-party API the menu can be shorter (Anthropic)</a></li>
+      <li><a href="#sep-h">“Not sent abroad” is a different promise from not stored, not seen and not trained on</a></li>
+      <li><a href="#steps-h">A four-step check</a></li>
+      <li><a href="#myth-h">Four common misconceptions</a></li>
+      <li><a href="#faq-h">Questions</a></li>
+    </ol>
+  </nav>
+</div>
+<section class="section" style="padding-top:1.5rem;" aria-labelledby="why-h">
     <h2 class="section-title" id="why-h" style="font-size:1.2rem;">Why “not sent abroad” splits into two questions</h2>
     <p class="section-sub">
       Even for the same prompt, <strong>the place it is kept and the place it is computed are different</strong>. There are four branches.
@@ -323,7 +339,6 @@
       <li>Google Cloud — <a href="https://docs.cloud.google.com/gemini-enterprise-agent-platform/resources/data-residency" target="_blank" rel="noopener">Data residency</a> (at-rest location independent of endpoint; jurisdictional vs global endpoints / retrieved 2026-10-05) · <a href="https://cloud.google.com/terms/data-residency" target="_blank" rel="noopener">Cloud Data Residency Terms</a> (excluded services)</li>
       <li>OpenAI — <a href="https://developers.openai.com/api/docs/guides/your-data" target="_blank" rel="noopener">Data controls in the OpenAI platform</a> (per-project configuration; separate Storage and Processing per region; non-US approval requirements; “Support for regional storage does not imply support for regional processing.” / retrieved 2026-10-05)</li>
       <li>Anthropic — <a href="https://platform.claude.com/docs/en/manage-claude/data-residency" target="_blank" rel="noopener">Data residency</a> (inference geo and workspace geo; 1.1x for US-only; workspace geo immutable / retrieved 2026-10-05) · <a href="https://claude.com/regional-compliance" target="_blank" rel="noopener">Regional compliance</a> (regions offered / retrieved 2026-09-29)</li>
-      <li>Related: <a href="/en/glossary/four-data-requirements/">the four data-protection requirements</a> · <a href="/en/glossary/zero-data-retention/">ZDR</a> · <a href="/en/glossary/zero-operator-access/">ZOA</a> · <a href="/en/glossary/no-training/">no-training</a> · <a href="/en/glossary/">all glossary entries</a></li>
     </ul>
   </details>
 </section>

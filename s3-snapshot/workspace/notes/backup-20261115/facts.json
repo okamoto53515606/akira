@@ -1,0 +1,3540 @@
+{
+ "schema_note": "事実台帳。1フィールド1値（追記しない）。文章は当分HTML側に残す。status: announced|preview|ga|retired|unknown。sources は url+fetched_at+quote。",
+ "updated": "2026-11-15",
+ "models": {
+  "gemini-4-hydrogen": {
+   "id": "gemini-4-hydrogen",
+   "provider": "Google",
+   "provider_class": "dot-google",
+   "names": {
+    "ja": "Gemini 4 Hydrogen",
+    "en": "Gemini 4 Hydrogen"
+   },
+   "released": "2026-11-12",
+   "status": "preview",
+   "price": {
+    "name": "Gemini 4 Hydrogen",
+    "input": 1.5,
+    "output": 7.5,
+    "note_ja": "100万トークン全体にフラット単価（段階課金なし）。キャッシュ$0.075（暗黙のみ）・無料枠あり",
+    "note_en": "Flat rate across the full 1M tokens (no tiers). Cache $0.075 (implicit only). Free tier available",
+    "label": "Google",
+    "provider": "google"
+   },
+   "timeline": {
+    "ja_id": "gemini-4-hydrogen",
+    "en_id": "gemini-4-hydrogen",
+    "title_ja": "Gemini 4 Hydrogen 発表 — 100万トークン全体をフラット単価 $1.50 / $7.50",
+    "title_en": "Gemini 4 Hydrogen announced — flat $1.50 / $7.50 across the full 1M tokens",
+    "desc_ja": "Google が「agentic workflows の daily driver」と位置づける新モデル。公式ブログの逐語で「$1.50 per million input tokens and $7.50 per million output tokens」、<strong>100万トークンのコンテキスト全体にフラット単価</strong>（段階課金なし）と明記されています。コンテキストは100万トークン、出力も最大100万トークン。提供先は Google AI Studio・Gemini API・Gemini for business・Gemini アプリ・Google Search・Antigravity・Android Studio・Google Sheets で、「rolling out globally」。<strong>当サイトは提供段階を「段階提供（GA表記なし）」と判断</strong>しました。料金ページにはモデル行があり、入力$1.50／出力$7.50／コンテキストキャッシュ$0.075（暗黙キャッシュのみ・明示キャッシュ非対応）。Batch の記載は料金ページに見当たりません。<span class=\"tl-price-badge\">$1.50 / $7.50</span>",
+    "desc_en": "Google positions it as the &ldquo;daily driver for agentic workflows&rdquo;. The official blog states &ldquo;$1.50 per million input tokens and $7.50 per million output tokens&rdquo; with a <strong>flat rate across the entire one-million-token context</strong> (no tiered pricing). Context is 1M tokens and output can reach 1M tokens. It is available in Google AI Studio, the Gemini API, Gemini for business, the Gemini app, Google Search, Antigravity, Android Studio and Google Sheets, &ldquo;rolling out globally&rdquo;. <strong>We read the release stage as a staged rollout with no GA label.</strong> The pricing page lists the model at $1.50 input / $7.50 output / $0.075 context caching (implicit caching only; explicit caching is not supported). No batch pricing is listed.<span class=\"tl-price-badge\">$1.50 / $7.50</span>"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-hydrogen/",
+     "fetched_at": "2026-11-14",
+     "quote": "$1.50 per million input tokens and $7.50 per million output tokens"
+    },
+    {
+     "url": "https://ai.google.dev/gemini-api/docs/pricing",
+     "fetched_at": "2026-11-15",
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "qwen4-max-preview": {
+   "id": "qwen4-max-preview",
+   "provider": "Alibaba / Qwen",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "Qwen4-Max-Preview",
+    "en": "Qwen4-Max-Preview"
+   },
+   "released": "2026-11-11",
+   "status": "preview",
+   "price": null,
+   "timeline": {
+    "ja_id": "qwen4-max-preview",
+    "en_id": "qwen4-max-preview",
+    "title_ja": "Qwen4-Max-Preview 提供開始 — 100万トークン・Token Plan 経由のみ",
+    "title_en": "Qwen4-Max-Preview goes live — 1M tokens, Token Plan only",
+    "desc_ja": "Qwen 公式Xが2026-11-11（UTC 02:01）に「Qwen4 is coming.」と投稿し、同時に <code>qwen4-max-preview</code>（別名 <code>qwen4.0-max-preview</code>）が Alibaba Cloud の Token Plan に掲載されました。仕様は<strong>100万トークンのコンテキスト・最大出力393,216トークン・text/image/video入力・thinking既定ON</strong>。提供は Token Plan 契約者向けの<strong>プレビューで、2026-11-11〜11-25（CST）の期間限定</strong>、期間終了後にモデルは退役するとされています。<strong>トークン従量の単価は公表されておらず、Token Plan のクレジット消費のみ</strong>（月$6のPersonal Lite〜）。当サイトは10-29時点で「公式に学習中」と記載していましたが、その前提を本エントリで更新します。<span class=\"tl-price-badge\">プレビュー（従量単価なし）</span>",
+    "desc_en": "Qwen&#39;s official X account posted &ldquo;Qwen4 is coming.&rdquo; on 2026-11-11 (02:01 UTC), and <code>qwen4-max-preview</code> (alias <code>qwen4.0-max-preview</code>) appeared in Alibaba Cloud&#39;s Token Plan at the same time. Specs: <strong>1M-token context, up to 393,216 output tokens, text/image/video input, thinking on by default</strong>. Access is a <strong>preview for Token Plan subscribers from 2026-11-11 to 11-25 (CST)</strong>, after which Alibaba says the model is retired. <strong>No per-token list price is published</strong>; usage draws on Token Plan credits (Personal Lite from $6/month). This entry supersedes our 2026-10-29 note that the model was still &ldquo;in training&rdquo;. Benchmarks and weight availability are unconfirmed.<span class=\"tl-price-badge\">Preview (no per-token price)</span>"
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [
+    {
+     "url": "https://www.qwencloud.com/benefits/tokenplan",
+     "fetched_at": "2026-11-14",
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "gemini-4-carbon-ga": {
+   "id": "gemini-4-carbon-ga",
+   "provider": "Google",
+   "provider_class": "dot-google",
+   "names": {
+    "ja": "Gemini 4 Carbon",
+    "en": "Gemini 4 Carbon"
+   },
+   "released": "2026-11-10",
+   "status": "ga",
+   "price": {
+    "name": "Gemini 4 Carbon",
+    "input": 2.0,
+    "output": 10.0,
+    "note_ja": "導入価格(〜2026-11-30)・通常$4/$20。キャッシュ$0.10→$0.20（暗黙のみ）。Batch非対応・無料枠なし",
+    "note_en": "Intro pricing (through 2026-11-30) · list $4/$20. Cache $0.10→$0.20 (implicit only). No Batch API, no free tier",
+    "label": "Google",
+    "provider": "google"
+   },
+   "timeline": {
+    "ja_id": "gemini-4-carbon-ga",
+    "en_id": "gemini-4-carbon-ga",
+    "title_ja": "Gemini 4 Carbon が一般提供へ — 公式料金ページにモデル行が登場",
+    "title_en": "Gemini 4 Carbon goes generally available — model row added to the official pricing page",
+    "desc_ja": "2026-11-03時点では限定提供（cyber defenders・Fairwind）で、公式料金ページにモデル行がありませんでした。今回の公式ブログは「Today, we're making Gemini 4 Carbon available to developers, enterprises, scientists, and consumers.」と発表し、Google AI Studio・Gemini for business のAPIで<strong>支払いのある開発者・企業すべて</strong>が利用可能になりました。料金は導入価格で<strong>入力$2.00 / 出力$10.00</strong>（2026-11-30まで）、<strong>12月1日から入力$4.00 / 出力$20.00</strong>。ただしCarbonは<strong>Batch API非対応</strong>（公式料金ページに「Batch API isn't supported」）。<span class=\"tl-price-badge\">$2.00 / $10.00（11/30まで）</span>",
+    "desc_en": "As of 2026-11-03 Carbon was invitation-only (cyber defenders and the Fairwind programme) and had no model row on the official pricing page. The official blog now says &ldquo;Today, we&#39;re making Gemini 4 Carbon available to developers, enterprises, scientists, and consumers.&rdquo;, so any paying developer or business can use it through Google AI Studio and the Gemini for business API. Introductory pricing is <strong>$2.00 input / $10.00 output</strong> through 2026-11-30, then <strong>$4.00 / $20.00 from December 1</strong>. Carbon does <strong>not</strong> support the Batch API (&ldquo;Batch API isn&#39;t supported&rdquo; on the official pricing page).<span class=\"tl-price-badge\">$2.00 / $10.00 (to 11/30)</span>"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-carbon-now-available/",
+     "fetched_at": "2026-11-14",
+     "quote": "Today, we're making Gemini 4 Carbon available to developers, enterprises, scientists, and consumers."
+    },
+    {
+     "url": "https://ai.google.dev/gemini-api/docs/pricing",
+     "fetched_at": "2026-11-15",
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "muse-ember": {
+   "id": "muse-ember",
+   "provider": "Meta",
+   "provider_class": "dot-meta",
+   "names": {
+    "ja": "Muse Ember",
+    "en": "Muse Ember"
+   },
+   "released": "2026-11-09",
+   "status": "ga",
+   "price": {
+    "name": "Muse Ember",
+    "input": 0.1,
+    "output": 0.5,
+    "note_ja": "Meta Model API の最小・最効率モデル。$0.10/$0.50（1Mトークン）",
+    "note_en": "Meta's smallest and most efficient model on the Model API. $0.10/$0.50 per 1M tokens",
+    "provider": "Meta"
+   },
+   "timeline": {
+    "ja_id": "muse-ember",
+    "en_id": "muse-ember",
+    "title_ja": "Muse Ember 公開 — Metaで最小・最効率のモデル、$0.10 / $0.50",
+    "title_en": "Muse Ember released — Meta&#39;s smallest and most efficient model at $0.10 / $0.50",
+    "desc_ja": "Muse Wonder（最も難しい問題向け）・Muse Spark（コーディング／エージェント）に続く小型モデルで、ツール呼び出し・コーディングのサブタスク・ルーティング・抽出・長文書パースなど「エージェントが一日中くり返す作業」向けと位置づけられています。公式ブログの逐語は「available today on the Meta Model API, at $0.10 per million input tokens and $0.50 per million output tokens」。<code>muse-ember-1.0</code> として Muse Code と Meta Model API で提供され、Google Cloud・Oracle Cloud からも利用できます。<span class=\"tl-price-badge\">$0.10 / $0.50</span>",
+    "desc_en": "A small model that follows Muse Wonder (hardest problems) and Muse Spark (coding and agents), positioned for &ldquo;the work an agent repeats all day&rdquo;: tool calls, coding subtasks, routing, extraction and long-document parsing. The official blog says &ldquo;available today on the Meta Model API, at $0.10 per million input tokens and $0.50 per million output tokens&rdquo;. It ships as <code>muse-ember-1.0</code> in Muse Code and the Meta Model API, and is also available through Google Cloud and Oracle Cloud.<span class=\"tl-price-badge\">$0.10 / $0.50</span>"
+   },
+   "shown_on": [
+    "timeline",
+    "pricing",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://research.meta.ai/blog/muse-ember",
+     "fetched_at": "2026-11-14",
+     "quote": "available today on the Meta Model API, at $0.10 per million input tokens and $0.50 per million output tokens"
+    }
+   ],
+   "events": []
+  },
+  "claude-fable-5-2": {
+   "id": "claude-fable-5-2",
+   "provider": "Anthropic",
+   "provider_class": "dot-anthropic",
+   "names": {
+    "ja": "Claude Fable 5.2 / Mythos 5.2",
+    "en": "Claude Fable 5.2 / Mythos 5.2"
+   },
+   "released": "2026-11-09",
+   "status": "ga",
+   "price": {
+    "name": "Claude Fable 5.2",
+    "input": 8.0,
+    "output": 40.0,
+    "note_ja": "前世代（Fable 5.1）から入出力とも20%安（$10/$50→$8/$40）。キャッシュ読込$0.20。fast modeは$16/$80。Batch入力$4/MTok",
+    "note_en": "20% cheaper than Fable 5.1 on both input and output ($10/$50 to $8/$40). Cache read $0.20; fast mode $16/$80; Batch input $4/MTok",
+    "provider": "Anthropic"
+   },
+   "timeline": {
+    "ja_id": "claude-fable-5-2",
+    "en_id": "claude-fable-5-2",
+    "title_ja": "Claude Fable 5.2 / Mythos 5.2 公開 — 前世代から20%安い $8 / $40",
+    "title_en": "Claude Fable 5.2 / Mythos 5.2 released — 20% cheaper than the previous generation at $8 / $40",
+    "desc_ja": "コーディング・推論・視覚がFable 5.1 / Mythos 5.1から改善し、出力生成は最大30%高速化。料金は公式ブログの逐語で「available at a lower price: $8 per million input tokens and $40 per million output tokens」、前世代の$10 / $50から入出力とも20%安くなりました。fast modeは$16 / $80。<strong>Fable 5.2は全ユーザー向け</strong>（「available today on all platforms, including Amazon Web Services, Google Cloud, and Microsoft Azure」）、Mythos 5.2はサイバー／ライフサイエンスの検証プログラム経由の提供です。Batchは入力$4 / MTok（通常の50%）。<span class=\"tl-price-badge\">$8 / $40</span>",
+    "desc_en": "Coding, reasoning and vision improved over Fable 5.1 / Mythos 5.1, with output generation up to 30% faster. The official blog states &ldquo;available at a lower price: $8 per million input tokens and $40 per million output tokens&rdquo; &mdash; 20% below the previous $10 / $50 on both input and output. Fast mode is $16 / $80. <strong>Fable 5.2 is available to all users</strong> (&ldquo;available today on all platforms, including Amazon Web Services, Google Cloud, and Microsoft Azure&rdquo;); Mythos 5.2 is offered through the cyber and life-sciences validation programme. Batch input is $4 / MTok (50% of standard).<span class=\"tl-price-badge\">$8 / $40</span>"
+   },
+   "shown_on": [
+    "timeline",
+    "pricing",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://www.anthropic.com/claude-fable-and-mythos-5-2",
+     "fetched_at": "2026-11-14",
+     "quote": "available at a lower price: $8 per million input tokens and $40 per million output tokens"
+    },
+    {
+     "url": "https://platform.claude.com/docs/en/models/fable-5-2/overview",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "gpt-6-cyber": {
+   "id": "gpt-6-cyber",
+   "provider": "OpenAI",
+   "provider_class": "dot-openai",
+   "names": {
+    "ja": "GPT-6 Cyber",
+    "en": "GPT-6 Cyber"
+   },
+   "released": "2026-11-05",
+   "status": "unknown",
+   "price": null,
+   "timeline": {
+    "ja_id": "gpt-6-cyber",
+    "en_id": "gpt-6-cyber",
+    "title_ja": "GPT-6 Cyber 公開 — サイバーセキュリティ特化、承認制Daybreak Redの顧客向け",
+    "title_en": "GPT-6 Cyber released — a cybersecurity specialist for approved Daybreak Red customers",
+    "desc_ja": "脆弱性の発見・検証に特化し、研究者が設定した範囲を守るよう訓練したモデル。ExploitGymは<strong>48.5%</strong>（GPT-5.6 Cyberは32.1%）、範囲外サービスへの攻撃回避はデプロイ用プロンプトなしで99.93%。公式の逐語は「initially available through the API and Codex to a select group of approved Daybreak Red customers」で<strong>限定提供</strong>。<strong>価格はブログに記載がなく未公表</strong>、APIのモデルID・コンテキスト長も公式ページに記載なし。限定提供（承認顧客のみ）かつ価格未公表のため、<strong>料金比較表には掲載していません</strong>。<br><small>※既存のGPT-6系（Sol／Terra）とは別系統のサイバー特化モデルで、通常のAPI料金表の後継関係にはありません。</small><span class=\"tl-price-badge\">価格未公表（限定提供）</span>",
+    "desc_en": "A model trained to find and validate exploitable vulnerabilities while staying inside the scope researchers set. It scores <strong>48.5%</strong> on ExploitGym (GPT-5.6 Cyber: 32.1%) and avoided out-of-scope services in 99.93% of tests without its deployment prompt. Verbatim: \"initially available through the API and Codex to a select group of approved Daybreak Red customers\", so access is <strong>limited</strong>. <strong>No price is given in the launch post</strong>, and the post states neither an API model ID nor a context length. It is not generally available, so we are <strong>covering it in the timeline rather than as a dedicated page</strong>.<br><small>Note: this is a separate cybersecurity line, not a successor to the mainstream GPT-6 Sol / Terra models.</small><span class=\"tl-price-badge\">Price not published (limited access)</span>"
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [
+    {
+     "url": "https://openai.com/index/introducing-gpt-6-cyber/",
+     "fetched_at": null,
+     "quote": null
+    },
+    {
+     "url": "https://deploymentsafety.openai.com/gpt-6-cyber",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "gemini-4-carbon": {
+   "id": "gemini-4-carbon",
+   "provider": "Google",
+   "provider_class": "dot-google",
+   "names": {
+    "ja": "Gemini 4 Carbon",
+    "en": "Gemini 4 Carbon"
+   },
+   "released": "2026-10-28",
+   "status": "unknown",
+   "price": {
+    "name": "Gemini 4 Carbon",
+    "input": 2.0,
+    "output": 10.0,
+    "note_ja": "導入価格(〜2026-11-30)・通常$4/$20。キャッシュ$0.10→$0.20（暗黙のみ）。Batch非対応・無料枠なし",
+    "note_en": "Intro pricing (through 2026-11-30) · list $4/$20. Cache $0.10→$0.20 (implicit only). No Batch API, no free tier",
+    "label": "Google",
+    "provider": "google"
+   },
+   "timeline": {
+    "ja_id": "gemini-4-carbon",
+    "en_id": "gemini-4-carbon",
+    "title_ja": "Gemini 4 Carbon 発表 — サイバー防御重視、当面は限定提供",
+    "title_en": "Gemini 4 Carbon announced — cyber-defense focus, limited access for now",
+    "desc_ja": "<strong>提供段階</strong>: <strong>GAではなく限定提供（発表のみ）</strong>。公式逐語は「Starting this week, we will make Carbon available to a subset of cyber defenders and will gradually phase access to additional trusted partners through our Fairwind Program」。開発者・企業・消費者向けは「as soon as possible」＝<strong>未提供</strong>で、米政府の事前検証プロセスに参加中と明記。<br><strong>料金: 未掲載</strong>。Google公式料金ページ（ai.google.dev/gemini-api/docs/pricing）に Gemini 4 Carbon の行はなく、2026-11-03時点で確認できた Gemini 4 系の行は Gemini 4 Argon のみ。ブログには<strong>予告</strong>として「will launch at the same introductory price as Argon at $2 per million input tokens and $10 per million output tokens, with cached input tokens priced at 95% off input token price」、脚注で導入期間終了後は入力$4.00／出力$20.00と記載。ただし<strong>料金ページに未掲載のため確定価格としては扱わない</strong>。<br><strong>ベンチ</strong>: Artificial Analysis Intelligence Index v5.0 で59・1位（Artificial Analysisの指標）。SEC-bench Pro 88.2%（sec-bench）・ExploitGym 54.8%（sunblaze-ucb/exploitgym）・CWE-bench 71.0%（Collinear）はいずれも外部ベンチで、公式は「evaluated without guardrails」（ガードレール無しの評価）と明記。WebDev Arenaは1768で4位（+89 elo）。「Argon比で安全なコード生成の成功率2倍超」「Chromeチームが他社フラッグシップ比10倍超のパッチ品質」はGoogle社内・提携先の主張。<br><strong>未公表</strong>: APIモデル名・コンテキスト長・出力上限・知識カットオフ・段階課金は当該ブログに記載が無いため、確認できるまで当サイトでは書かない。<span class=\"tl-price-badge\">料金未掲載（予告 $2.00/$10.00）</span>",
+    "desc_en": "<strong>Availability</strong>: <strong>limited access, not GA</strong>. Verbatim: \"Starting this week, we will make Carbon available to a subset of cyber defenders and will gradually phase access to additional trusted partners through our Fairwind Program.\" Access for developers, businesses and consumers is \"as soon as possible\" i.e. <strong>not available yet</strong>; Google says it is taking part in the U.S. government's voluntary pre-release testing process.<br><strong>Price: not listed</strong>. Google's official pricing page (ai.google.dev/gemini-api/docs/pricing) has no Gemini 4 Carbon row; as of Nov 3, 2026 the only Gemini 4 row there is Gemini 4 Argon. The blog <strong>announces</strong> a launch price: \"will launch at the same introductory price as Argon at $2 per million input tokens and $10 per million output tokens, with cached input tokens priced at 95% off input token price\", with a footnote adding $4.00 input / $20.00 output after the introductory period. We do not treat these as shipping prices.<br><strong>Benchmarks</strong>: #1 at 59 on Artificial Analysis Intelligence Index v5.0 (Artificial Analysis's own index). SEC-bench Pro 88.2% (sec-bench), ExploitGym 54.8% (sunblaze-ucb/exploitgym) and CWE-bench 71.0% (Collinear) are third-party benchmarks, and Google notes they were \"evaluated without guardrails\". WebDev Arena: #4 at 1768 (+89 elo). Claims such as \"more than 2x uplift\" in secure code generation versus Argon and the Chrome team's \"more than 10X better\" patch quality are Google-internal or partner claims.<br><strong>Not disclosed</strong>: API model name, context window, output limit, knowledge cutoff and tiered pricing are absent from the post, so we do not state them.<span class=\"tl-price-badge\">Price not listed (announced $2.00/$10.00)</span>"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-carbon/",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "gpt-6-1-terra": {
+   "id": "gpt-6-1-terra",
+   "provider": "OpenAI",
+   "provider_class": "dot-openai",
+   "names": {
+    "ja": "GPT-6.1 Terra",
+    "en": "GPT-6.1 Terra launched"
+   },
+   "released": "2026-10-26",
+   "status": "unknown",
+   "price": {
+    "name": "GPT-6.1 Terra",
+    "input": 1.0,
+    "output": 5.0,
+    "note_ja": "キャッシュ入力$0.05（入力の5%）・272,000トークン超はリクエスト全体が入力2倍/出力1.5倍。1.05Mコンテキスト・128K出力",
+    "note_en": "cached input $0.05 (5% of input) · above 272,000 input tokens the whole request is repriced at 2x input / 1.5x output · 1.05M context, 128K output",
+    "label": "OpenAI",
+    "provider": "openai"
+   },
+   "timeline": {
+    "ja_id": "gpt-6-1-terra",
+    "en_id": "gpt-6-1-terra",
+    "title_ja": "GPT-6.1 Terra 公開 — 「速くて安い」コンピュータ操作モデル",
+    "title_en": "GPT-6.1 Terra launched — a fast, low-cost computer-use model",
+    "desc_ja": "GPT-5.6 Terraの上位後継（公式逐語は「A significant step up from GPT-5.6 Terra」）。標準APIは入力$1.00・キャッシュ入力$0.05・出力$5.00（1Mトークン）で、公式ブログは「GPT-5.6 TerraとGPT-6.1 Solの50%下」と明記。1,050,000コンテキスト・128,000出力、272,000トークン超はリクエスト全体が入力2倍/出力1.5倍。ChatGPT Work・Codex（Plus/Pro/Enterprise/Edu）とAPI（<code>gpt-6.1-terra</code>）で提供。<br><small>※公式ブログにリリース日の明記なし（「Starting today」）。第三者報道は2026-10-26で一致。</small><span class=\"tl-price-badge\">$1.00/$5.00（キャッシュ$0.05）</span>",
+    "desc_en": "The step up from GPT-5.6 Terra (\"A significant step up from GPT-5.6 Terra\" in OpenAI's own words). Standard API pricing is $1.00 input / $0.05 cached input / $5.00 output per 1M tokens, which the launch post describes as 50% lower than GPT-5.6 Terra and GPT-6.1 Sol. 1,050,000-token context, 128,000 max output; above 272,000 input tokens the whole request is repriced at 2x input and 1.5x output. Available in ChatGPT Work and Codex (Plus/Pro/Enterprise/Edu) and via API as <code>gpt-6.1-terra</code>.<br><small>Note: the launch post gives no explicit date (\"Starting today\"); third-party coverage agrees on 2026-10-26.</small> <span class=\"tl-price-badge\">$1.00/$5.00 (cached $0.05)</span>"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://openai.com/index/introducing-gpt-6-1-terra/",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "kimi-k3-1-pro": {
+   "id": "kimi-k3-1-pro",
+   "provider": "Moonshot",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "Kimi K3.1 Pro シリーズ",
+    "en": "Kimi K3.1 Pro series rolls out"
+   },
+   "released": "2026-10-23",
+   "status": "unknown",
+   "price": null,
+   "timeline": {
+    "ja_id": "kimi-k3-1-pro",
+    "en_id": "kimi-k3-1-pro",
+    "title_ja": "Kimi K3.1 Pro シリーズ提供開始 — 3Tクラス・1Mコンテキスト",
+    "title_en": "Kimi K3.1 Pro series rolls out — 3T-class, 1M context",
+    "desc_ja": "新しいK3.1シリーズの第1弾。Kimi Code公式の表現は「our most capable 3T-class model to date」で、1Mトークンコンテキストとコーディング・3D制作・財務リサーチ等の長時間エージェント能力を強化。同品質で約2〜3倍速の<strong>K3.1 Pro Highspeed</strong>も同時提供（Kimi Codeの提供条件は K3.1 Pro が Plus/Moderato 以上・Pro/Allegretto 以上で最大1Mコンテキスト、Highspeed は Pro/Allegretto 以上）。thinkingは low/high/max（既定high）のみ。（2026-11-07追記：公式料金ページに <code>kimi-k3.1-pro</code> 行を確認。入力$2.00・出力$10.00・キャッシュ入力$0.20。1,048,576コンテキスト、Batchは標準の60%）<span class=\"tl-price-badge\">$2.00/$10.00（キャッシュ$0.20）</span>",
+    "desc_en": "First model in the new K3.1 series. In Kimi's own words, \"our most capable 3T-class model to date\", with a 1M-token context and stronger coding, 3D creation, financial research and long-horizon agent work. <strong>K3.1 Pro Highspeed</strong> ships alongside it at roughly 2-3x the speed with the same quality (K3.1 Pro on Plus/Moderato and above; Pro/Allegretto and above unlock up to 1M context; Highspeed on Pro/Allegretto and above). Thinking mode only: low/high/max, default high.  (2026-11-07 update: the official pricing page now has a <code>kimi-k3.1-pro</code> row: $2.00 input, $10.00 output, $0.20 cached input, 1,048,576 context, Batch at 60%.)<span class=\"tl-price-badge\">$2.00/$10.00 (cached $0.20)</span>"
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [
+    {
+     "url": "https://www.kimi.com/code/docs/en/kimi-code/whats-new.html",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "gemini-4-argon": {
+   "id": "gemini-4-argon",
+   "provider": "Google",
+   "provider_class": "dot-google",
+   "names": {
+    "ja": "Gemini 4 Argon 公開（GA）— 1Mコンテキストのフラッグシップ推論モデル New",
+    "en": "Gemini 4 Argon is generally available"
+   },
+   "released": "2026-10-13",
+   "status": "unknown",
+   "price": null,
+   "timeline": {
+    "ja_id": "gemini-4-argon",
+    "en_id": "gemini-4-argon",
+    "title_ja": "Gemini 4 Argon 公開（GA）— 1Mコンテキストのフラッグシップ推論モデル",
+    "title_en": "Gemini 4 Argon is generally available — a 1M-context flagship reasoning model",
+    "desc_ja": "<strong>料金</strong>: 入力$2.00・出力$10.00（思考トークン含む）・コンテキストキャッシュ$0.10（USD/1M）。いずれも<strong>2026年11月30日までの導入価格</strong>で、12月1日から$4.00 / $20.00 / $0.20に改定。<strong>暗黙キャッシュのみ</strong>対応（明示キャッシュは非対応）、無料枠は「Not available」。<br><strong>仕様</strong>: コンテキストウィンドウ1,048,576（入力と出力の統合上限）・最大出力65,536（同期）、long decodeで最大1,048,576。モデルID <code>gemini-4-argon</code>、ステータスはStable（GA＝一般提供）。公式モデルページの記載は「Latest update: October 2026」。<br><strong>位置づけ</strong>: 複雑なソフトウェアエンジニアリング、数学・科学の難問、自律的なマルチステップエージェント、長い出力（long decode）向けのフラッグシップ推論モデル。<span class=\"tl-price-badge\">$2.00 / $10.00（〜11/30・キャッシュ$0.10）</span>",
+    "desc_en": "<strong>Pricing</strong>: $2.00 input / $10.00 output (including thinking tokens) / $0.10 context caching per 1M tokens. All are <strong>introductory rates through November 30, 2026</strong>, rising to $4.00 / $20.00 / $0.20 on December 1. <strong>Implicit caching only</strong> (explicit caching is not supported) and no free tier (&ldquo;Not available&rdquo;).<br><strong>Specs</strong>: 1,048,576-token context window (a unified input and output limit), 65,536 max output synchronously and up to 1,048,576 with long decode. Model ID <code>gemini-4-argon</code>, status Stable (GA); the official model page states &ldquo;Latest update: October 2026&rdquo;.<br><strong>Positioning</strong>: built for complex software engineering, hard maths and science, autonomous multi-step agents and long decode.<span class=\"tl-price-badge\">$2.00 / $10.00 (through 11/30, cache $0.10)</span>"
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [
+    {
+     "url": "https://ai.google.dev/gemini-api/docs/models/gemini-4-argon",
+     "fetched_at": null,
+     "quote": null
+    },
+    {
+     "url": "https://ai.google.dev/gemini-api/docs/changelog",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "meta-muse-wonder": {
+   "id": "meta-muse-wonder",
+   "provider": "Meta",
+   "provider_class": "dot-meta",
+   "names": {
+    "ja": "Meta Muse Wonder / Muse Wonder Full",
+    "en": "Meta launches Muse Wonder / Muse Wonder Full"
+   },
+   "released": "2026-10-12",
+   "status": "unknown",
+   "price": {
+    "name": "Meta Muse Wonder",
+    "input": 4.0,
+    "output": 20.0,
+    "note_ja": "2026-10-12公開（muse-wonder-1.0）。キャッシュ入力 $0.20、1Mコンテキスト、長文プレミアムなし。Contributor モードの提供なし",
+    "note_en": "Released 2026-10-12 (muse-wonder-1.0). $0.20 cache input, 1M context, no long-context surcharge, no Contributor mode",
+    "label": "Muse Wonder",
+    "provider": "other"
+   },
+   "timeline": {
+    "ja_id": "meta-muse-wonder",
+    "en_id": "meta-muse-wonder",
+    "title_ja": "Meta Muse Wonder / Muse Wonder Full 公開 — Metaがエージェント特化のフロンティアモデルで本格参入",
+    "title_en": "Meta launches Muse Wonder / Muse Wonder Full — its agent-first frontier models",
+    "desc_ja": "<strong>料金</strong>: <code>muse-wonder-1.0</code> は入力$4.00・キャッシュ入力$0.20・出力$20.00（USD/1M）。<strong>長文プレミアムなし</strong>（コンテキストの埋まり具合で単価は変わらない）・Contributorモードの提供なし。Web検索グラウンディングは$2.50/1,000クエリの別建て。<br><strong>仕様</strong>: 1Mコンテキスト。長時間走るエージェント、サブエージェントへの委譲、高度なコンピュータ操作（ブラウザ・デスクトップ・モバイル）向け。<br><strong>上位モデル</strong>: Muse Wonder Full はトークン従量ではなく Muse Code サブスク限定（Power $50/月・Maximum $200/月）。Muse Code の通常プランで使う <code>muse-spark-1.3 / 1.2 / 1.1</code> は入力$1.25・キャッシュ入力$0.15・出力$4.25（Contributorモードは$0.10/$0.002/$0.20、Spark 1.1はStandardのみ）。<span class=\"tl-price-badge\">$4.00 / $0.20 / $20.00</span>",
+    "desc_en": "<strong>Pricing</strong>: <code>muse-wonder-1.0</code> is $4.00 input / $0.20 cached input / $20.00 output per 1M tokens. <strong>No long-context premium</strong> (rate is flat whether the window is nearly empty or nearly full) and no Contributor mode. Web search grounding is billed separately at $2.50 per 1,000 queries.<br><strong>Specs</strong>: 1M context, built for long-running agents, sub-agent delegation and advanced computer use (browser, desktop, mobile).<br><strong>Tier above</strong>: Muse Wonder Full is not token-priced; it ships by subscription in Muse Code (Power $50/mo, Maximum $200/mo). Muse Code plans also serve <code>muse-spark-1.3 / 1.2 / 1.1</code> at $1.25 input / $0.15 cached / $4.25 output (Contributor mode $0.10 / $0.002 / $0.20; Spark 1.1 is Standard mode only).<span class=\"tl-price-badge\">$4.00 / $0.20 / $20.00</span>"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://dev.meta.ai/models/muse-wonder",
+     "fetched_at": null,
+     "quote": null
+    },
+    {
+     "url": "https://ai.meta.com/blog/muse-wonder-muse-wonder-full/",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "claude-haiku-5-5": {
+   "id": "claude-haiku-5-5",
+   "provider": "Anthropic",
+   "provider_class": "dot-anthropic",
+   "names": {
+    "ja": "Claude Haiku 5.5",
+    "en": "Claude Haiku 5.5"
+   },
+   "released": "2026-10-07",
+   "status": "unknown",
+   "price": {
+    "name": "Claude Haiku 5.5",
+    "input": 0.1,
+    "output": 0.5,
+    "note_ja": "2026-10-07公開・100,000トークンまで（超は$0.50/$2.50）・cache読込$0.01",
+    "note_en": "Released 2026-10-07 · up to 100,000 tokens ($0.50/$2.50 above) · cache read $0.01",
+    "label": "Anthropic",
+    "provider": "anthropic"
+   },
+   "timeline": {
+    "ja_id": "claude-haiku-5-5",
+    "en_id": "claude-haiku-5-5",
+    "title_ja": "Claude Haiku 5.5 公開 — Claude 5.5世代の最速・最安、料金はHaiku 4.5の10分の1",
+    "title_en": "Claude Haiku 5.5 released — fastest and cheapest of the Claude 5.5 family at one tenth of Haiku 4.5",
+    "desc_ja": "<strong>料金</strong>: 入力$0.10・出力$0.50（USD/1M、100,000トークンまで）でHaiku 4.5の$1.00/$5.00から<strong>10分の1</strong>。100,000トークン超は入力$0.50・出力$2.50の2段階。キャッシュ読込$0.01（100k超は$0.05）、キャッシュ書込は5分$0.125／1時間$0.20。<br><strong>仕様</strong>: 1Mコンテキスト・最大出力128K（Batch APIのベータヘッダで300K）・thinkingはAdaptiveで既定ON（既定effort <code>medium</code>）・レイテンシはFastest・知識カットオフ2026年6月。<br><strong>注意</strong>: Claude 4.7以降と同じ新しいトークナイザーのため、同じ文面が Haiku 4.5 より<strong>約30%多くトークンとしてカウント</strong>されます。<code>temperature</code>・<code>top_p</code>・<code>top_k</code>は非デフォルト値で400エラー。<span class=\"tl-price-badge\">$0.10/$0.50（100k超 $0.50/$2.50）</span>",
+    "desc_en": "<strong>Pricing</strong>: $0.10 input / $0.50 output per 1M tokens up to 100,000 tokens — <strong>one tenth of Haiku 4.5</strong> ($1.00/$5.00). Above 100,000 tokens the rates become $0.50 / $2.50. Cache reads $0.01 ($0.05 above 100k); cache writes $0.125 for 5 minutes and $0.20 for one hour.<br><strong>Specs</strong>: 1M context, 128K max output (300K on the Batch API with a beta header), adaptive thinking on by default at effort <code>medium</code>, Fastest latency, knowledge cutoff June 2026.<br><strong>Caveats</strong>: the new tokenizer shared with Claude 4.7 and later counts the same text as <strong>roughly 30% more tokens</strong> than Haiku 4.5, and <code>temperature</code>, <code>top_p</code> or <code>top_k</code> return a 400 error when set to non-default values. <span class=\"tl-price-badge\">$0.10/$0.50 (above 100k: $0.50/$2.50)</span>"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://platform.claude.com/docs/en/models/haiku-5-5/overview",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "gemini-nano-banana-2-1": {
+   "id": "gemini-nano-banana-2-1",
+   "provider": "Google",
+   "provider_class": "dot-google",
+   "names": {
+    "ja": "Gemini Nano Banana 2.1",
+    "en": "Gemini Nano Banana 2.1"
+   },
+   "released": "2026-10-06",
+   "status": "unknown",
+   "price": null,
+   "timeline": {
+    "ja_id": "gemini-nano-banana-2-1",
+    "en_id": "gemini-nano-banana-2-1",
+    "title_ja": "Gemini Nano Banana 2.1 公開 — 画像生成・会話編集の更新版、Nano Banana 2（3.1 Flash Image）は非推奨へ",
+    "title_en": "Gemini Nano Banana 2.1 released — updated image generation and conversational editing; Nano Banana 2 (3.1 Flash Image) deprecated",
+    "desc_ja": "<strong>位置づけ</strong>: 公式リリースノート（2026-10-06）で一般提供（GA）を確認。Nano Banana 2（<code>gemini-3.1-flash-image</code>）の更新版で、Flash水準の速度とコスト効率を保ちながら、視覚品質・プロンプト追従・マルチターンのキャラクター一貫性・テキスト描画と、<code>1:4</code>・<code>4:1</code>・<code>1:8</code>・<code>8:1</code> のワイド/パノラマ比率を <code>1K</code>/<code>2K</code>/<code>4K</code> で改善。<br><strong>料金</strong>: 入力$1.50、出力（テキスト・思考）$7.50、画像出力$30/1Mトークン。画像1枚の目安は <strong>1K=$0.0336・2K=$0.0504・4K=$0.113</strong>（Batchは半額）。出力解像度は1K（既定）/2K/4K、思考レベルは <code>minimal</code>/<code>medium</code>（既定）/<code>high</code>。<br><strong>同時発表</strong>: <code>gemini-3.1-flash-image</code>（Nano Banana 2）は<strong>非推奨</strong>（シャットダウン日は未発表）となり、<code>gemini-nano-banana-2.1</code> への移行が公式に案内されています。<span class=\"tl-price-badge\">$1.50 / $7.50（画像$30/M・1K=$0.0336）</span>",
+    "desc_en": "<strong>Status</strong>: generally available per Google&rsquo;s official release notes (Oct 6, 2026). An update to Nano Banana 2 (<code>gemini-3.1-flash-image</code>) that keeps Flash-level speed and cost efficiency while improving visual quality, prompt adherence, multi-turn character consistency, text rendering, and wide / panoramic ratios (<code>1:4</code>, <code>4:1</code>, <code>1:8</code>, <code>8:1</code>) at <code>1K</code>, <code>2K</code> and <code>4K</code>.<br><strong>Pricing</strong>: $1.50 input, $7.50 output (text and thinking), $30 per 1M image tokens — roughly <strong>$0.0336 at 1K, $0.0504 at 2K and $0.113 at 4K per image</strong> (half on Batch). Output resolutions 1K (default) / 2K / 4K; thinking levels <code>minimal</code> / <code>medium</code> (default) / <code>high</code>.<br><strong>Also announced</strong>: <code>gemini-3.1-flash-image</code> (Nano Banana 2) is now <strong>deprecated</strong> (no shutdown date announced) and Google points users to <code>gemini-nano-banana-2.1</code>.<span class=\"tl-price-badge\">$1.50 / $7.50 ($30/M images · $0.0336 at 1K)</span>"
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [
+    {
+     "url": "https://ai.google.dev/gemini-api/docs/models/gemini-nano-banana-2.1",
+     "fetched_at": null,
+     "quote": null
+    },
+    {
+     "url": "https://ai.google.dev/gemini-api/docs/changelog",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "gemini-4-argon-announced": {
+   "id": "gemini-4-argon-announced",
+   "provider": "Google",
+   "provider_class": "dot-google",
+   "names": {
+    "ja": "Gemini 4 Argon",
+    "en": "Gemini 4 Argon"
+   },
+   "released": "2026-09-30",
+   "status": "unknown",
+   "price": {
+    "name": "Gemini 4 Argon",
+    "input": 2.0,
+    "output": 10.0,
+    "note_ja": "導入価格(〜2026-11-30)・通常$4/$20。キャッシュ$0.10→$0.20。無料枠なし",
+    "note_en": "Intro pricing (through 2026-11-30) · list $4/$20. Cache $0.10→$0.20. No free tier",
+    "label": "Google",
+    "provider": "google"
+   },
+   "timeline": {
+    "ja_id": "gemini-4-argon-announced",
+    "en_id": "gemini-4-argon-announced",
+    "title_ja": "Gemini 4 Argon 発表 — サイバー防御の「信頼できるテスター」へ先行提供、一般提供は段階的",
+    "title_en": "Gemini 4 Argon announced — rolling out to trusted cyber defenders first, general access phased",
+    "desc_ja": "新フロンティアモデル。<br><strong>提供段階</strong>: ①Fairwind Program（公式ブログの表現は trusted cyber defenders＝<strong>信頼できるサイバー防御のテスター</strong>。一般公募ではなく、セキュリティ専門家など<strong>招待されたテスター</strong>向けの限定プログラム）で段階提供中 → ②開発者・企業・消費者へ「as soon as possible（できるだけ早く）」で、<strong>その順序は paid API customers と Google AI Ultra 購読者から</strong>と公式ブログに明記。米国政府の事前アクセス自主プロセスにも参加しています。<br><strong>現時点でできること</strong>: 入手経路は Fairwind Program（招待制）のみで、一般の API・コンシューマ経路は未提供です（<strong>この価格ではまだ購入できません</strong>）。コンテキストは <strong>100万トークン</strong>（ブログ要旨）。<br><strong>価格</strong>: 正式提供時の<strong>導入価格（introductory price）として 入力 $2 / 出力 $10 / キャッシュ入力は入力価格から95%off</strong> が<strong>予告</strong>されています（公式ブログに課金開始の記載はありません）。<br><strong>ベンチマーク</strong>: 公式ブログに表は未掲載のため、当サイトでは集約サイトのスコアを数値として掲載しません（言及する場合は「〜との報道」に留めます）。<span class=\"tl-price-badge\">導入価格 予告 $2/$10（キャッシュ入力95%off）</span><br><strong>2026年10月に一般提供（GA）を開始。料金は下記の項目と<a href=\"/pricing/#gh\">料金比較</a>を参照。</strong>",
+    "desc_en": "A new frontier model.<br><strong>Release stages</strong>: (1) rolling out now through the Fairwind Program — the post's term is \"trusted cyber defenders\"; a limited program for invited testers such as security specialists, not an open sign-up; (2) to developers, enterprises and consumers \"as soon as possible\", <strong>starting with paid API customers and Google AI Ultra subscribers</strong> per the official post. Google says it is engaged in the U.S. government's voluntary pre-release access process while it iterates on guardrails and expands access.<br><strong>What you can do today</strong>: the only route is the Fairwind Program (invitation-based) — no general API or consumer access yet, and <strong>you cannot buy at this price yet</strong>. Context: <strong>1 million tokens</strong> (per the post summary).<br><strong>Pricing</strong>: <strong>$2 per 1M input tokens / $10 per 1M output tokens, with cached input at 95% off the input price, is announced as an introductory price for launch</strong>; the post does not state that billing has started.<br><strong>Benchmarks</strong>: the official post publishes no benchmark table, so we do not list aggregate-site scores as numbers here (any mention stays at the level of \"as reported by ...\").<span class=\"tl-price-badge\">Announced intro price $2/$10 (cached input 95% off)</span><br><strong>Gemini 4 Argon became generally available in October 2026; see the entry below and the <a href=\"/en/pricing/#gh\">pricing comparison</a>.</strong>"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-argon/",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "gpt-6-1-sol": {
+   "id": "gpt-6-1-sol",
+   "provider": "OpenAI",
+   "provider_class": "dot-openai",
+   "names": {
+    "ja": "GPT-6.1 Sol",
+    "en": "GPT-6.1 Sol"
+   },
+   "released": "2026-09-29",
+   "status": "unknown",
+   "price": {
+    "name": "GPT-6.1 Sol",
+    "input": 2.0,
+    "output": 10.0,
+    "note_ja": "cache入力$0.10・272,000トークン超はリクエスト全体が入力2倍/出力1.5倍",
+    "note_en": "cached input $0.10 · above 272,000 input tokens the whole request is repriced at 2x input / 1.5x output",
+    "label": "OpenAI",
+    "provider": "openai"
+   },
+   "timeline": {
+    "ja_id": "gpt-6-1-sol",
+    "en_id": "gpt-6-1-sol",
+    "title_ja": "GPT-6.1 Sol 公開 — GPT-6世代のバランス型、Solと同額でキャッシュ入力は半額に",
+    "title_en": "GPT-6.1 Sol released — the balanced GPT-6 model, same price as Sol with cached input halved",
+    "desc_ja": "<strong>位置づけ</strong>: 公式モデルページの説明は「Near-Astra performance for complex work at a lower cost」。GPT-6世代のバランス型で、モデルIDは <code>gpt-6.1-sol</code>。<br><strong>料金</strong>: 入力$2・出力$10（GPT-6 Solと同額）、<strong>キャッシュ入力$0.10（入力の5%）</strong>、キャッシュ書込$2.50。<strong>272,000トークン超の入力はリクエスト全体が入力2倍・出力1.5倍</strong>。Fastは2倍・Ultrafastは6倍・Batch/Flexは50%引き。<br><strong>仕様</strong>: 1,050,000コンテキスト・最大出力128,000・最大入力922,000・知識カットオフ2026-04-30。reasoning effortはlow/medium（既定）/high/xhigh/maxで、<code>none</code>と<code>minimal</code>は非対応（GPT-6 Solは<code>none</code>対応）。<br><strong>日付について</strong>: OpenAIのモデルページにリリース日の記載がないため、当サイトは第三者報道の日付を「第三者情報」と明記して掲載しています。<span class=\"tl-price-badge\">$2/$10（キャッシュ入力$0.10・書込$2.50）</span>",
+    "desc_en": "<strong>Positioning</strong>: the official model page says “Near-Astra performance for complex work at a lower cost”. Model ID <code>gpt-6.1-sol</code>.<br><strong>Pricing</strong>: $2 input / $10 output (same as GPT-6 Sol), <strong>$0.10 cached input (5% of input)</strong>, $2.50 cache writes. <strong>Prompts above 272,000 input tokens are repriced at 2x input and 1.5x output for the whole request.</strong> Fast 2x, Ultrafast 6x, Batch/Flex 50% off.<br><strong>Specs</strong>: 1,050,000 context, 128,000 max output, 922,000 max input, knowledge cutoff 2026-04-30. Reasoning effort low / medium (default) / high / xhigh / max; <code>none</code> and <code>minimal</code> are not supported (GPT-6 Sol supports <code>none</code>).<br><strong>On the date</strong>: the model page states no release date, so we publish the date reported by third parties and label it as third-party information. <span class=\"tl-price-badge\">$2/$10 ($0.10 cached input, $2.50 writes)</span>"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://developers.openai.com/api/docs/models/gpt-6.1-sol",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "claude-sonnet-5-5": {
+   "id": "claude-sonnet-5-5",
+   "provider": "Anthropic",
+   "provider_class": "dot-anthropic",
+   "names": {
+    "ja": "Claude Sonnet 5.5",
+    "en": "Claude Sonnet 5.5"
+   },
+   "released": "2026-09-28",
+   "status": "unknown",
+   "price": {
+    "name": "Claude Sonnet 5.5",
+    "input": 2.0,
+    "output": 10.0,
+    "note_ja": "2026-09-28公開・Sonnet 5と同額",
+    "note_en": "Released 2026-09-28 · same price as Sonnet 5",
+    "label": "Anthropic",
+    "provider": "anthropic"
+   },
+   "timeline": {
+    "ja_id": "claude-sonnet-5-5",
+    "en_id": "claude-sonnet-5-5",
+    "title_ja": "Claude Sonnet 5.5 公開 — Claude 5.5世代のバランス型、Sonnet 5と同額で世代更新",
+    "title_en": "Claude Sonnet 5.5 released — the balanced model of the Claude 5.5 family, at the same price as Sonnet 5",
+    "desc_ja": "AnthropicのClaude 5.5ファミリー2番目のモデル。公式の説明は「The best combination of speed and intelligence」。入力$2・出力$10は前世代Sonnet 5と同額、キャッシュ読込は入力の5%（<strong>$0.10</strong>）でSonnet 5の$0.20から半減。5分キャッシュ書込$2.50・1時間$4。1Mコンテキスト・128K出力・知識カットオフ2026年6月。thinkingはAdaptiveで既定ON、既定エフォート<code>high</code>、<code>between_tools</code>で事前思考をオフにできます。<strong>公式ページにベンチマーク表は未掲載</strong>。提供はClaude API・Amazon Bedrock・Vertex AI・Microsoft Foundry・Claude Platform on AWSの5つ。<span class=\"tl-price-badge\">$2/$10（キャッシュ読込$0.10・書込$2.50）</span>",
+    "desc_en": "The second model in Anthropic's Claude 5.5 family; the docs call it \"the best combination of speed and intelligence\". $2 input / $10 output, the same as the previous-generation Sonnet 5, and $0.10 cache reads — <strong>half of Sonnet 5&#39;s $0.20</strong>; $2.50 5-minute and $4 one-hour cache writes. 1M context, 128K max output, knowledge cutoff June 2026. Adaptive thinking is on by default with a default effort of <code>high</code>, and <code>between_tools</code> turns off up-front thinking. <strong>No benchmark table is published.</strong> Available on the Claude API, Amazon Bedrock, Vertex AI, Microsoft Foundry and Claude Platform on AWS. <span class=\"tl-price-badge\">$2/$10 (cache read $0.10, write $2.50)</span>"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://platform.claude.com/docs/en/models/sonnet-5-5/overview",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "claude-opus-5-5": {
+   "id": "claude-opus-5-5",
+   "provider": "Anthropic",
+   "provider_class": "dot-anthropic",
+   "names": {
+    "ja": "Claude Opus 5.5",
+    "en": "Claude Opus 5.5"
+   },
+   "released": "2026-09-22",
+   "status": "unknown",
+   "price": {
+    "name": "Claude Opus 5.5",
+    "input": 4.0,
+    "output": 20.0,
+    "note_ja": "2026-09-22公開・cache読込$0.20",
+    "note_en": "Released 2026-09-22 · cache read $0.20",
+    "label": "Anthropic",
+    "provider": "anthropic"
+   },
+   "timeline": {
+    "ja_id": "claude-opus-5-5",
+    "en_id": "claude-opus-5-5",
+    "title_ja": "Claude Opus 5.5 公開 — Claude 5.5世代の第一弾、Opus 5より安く",
+    "title_en": "Claude Opus 5.5 released — first of the Claude 5.5 family, cheaper than Opus 5",
+    "desc_ja": "Anthropicが「Claude 5.5ファミリー」最初のモデルとして公開。公式の主張は「many work で Fable 5.1 と同等の性能を、typical workload で Opus 5 より40%安いコストで」。入力$5→$4・出力$25→$20・キャッシュ読込$0.50→$0.20（60%減）、Fast modeは$8/$40。1Mコンテキスト・128K出力・知識カットオフ2026年6月。<strong>thinkingは無効化できず</strong>、<code>effort</code>で深さを調整（既定medium）。Sonnet 5.5 は 9/28 に公開済み（下の項目）。Haiku 5.5 は「coming weeks」のままで未確認。<span class=\"tl-price-badge\">$4/$20（キャッシュ読込$0.20・書込$5）</span>",
+    "desc_en": "Anthropic&#39;s first model in the new Claude 5.5 family. The official claim: performance at the level of Fable 5.1 on most work at 40% lower cost than Opus 5 on typical workloads. Input $5&rarr;$4, output $25&rarr;$20, cache reads $0.50&rarr;$0.20 (down 60%); Fast mode $8/$40. 1M context, 128K max output, June 2026 knowledge cutoff. <strong>Thinking can no longer be disabled</strong> — depth is set with <code>effort</code> (default medium). Sonnet 5.5 shipped on 9/28 (see the entry below); Haiku 5.5 is still unconfirmed. <span class=\"tl-price-badge\">$4/$20 (cache read $0.20, write $5)</span>"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://www.anthropic.com/claude-opus-5-5",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "mimo-v2-6": {
+   "id": "mimo-v2-6",
+   "provider": "Xiaomi",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "Xiaomi MiMo-V2.6",
+    "en": "Xiaomi MiMo-V2.6"
+   },
+   "released": "2026-09-22",
+   "status": "unknown",
+   "price": null,
+   "timeline": {
+    "ja_id": "mimo-v2-6",
+    "en_id": "mimo-v2-6",
+    "title_ja": "Xiaomi MiMo-V2.6 公開 — ネイティブ・オムニモーダル・1Mコンテキスト、料金はV2.5から据え置き",
+    "title_en": "Xiaomi MiMo-V2.6 released — natively omnimodal, 1M context, pricing unchanged from V2.5",
+    "desc_ja": "Pro / Flash / Pro-UltraSpeed の3種。<strong>公式モデルページで入力＝テキスト・画像・動画・音声、出力＝テキスト、1Mコンテキストを確認</strong>。料金は Flash $0.14/$0.28、Pro $0.435/$0.87、Pro-UltraSpeed $4.35/$8.7（cache hit は $0.0028 / $0.0036 / $0.036）。公式は「Artificial Analysis Intelligence Index v4.3で46.32、現時点で最強のオープンソースモデル」と主張。technical report・学習環境・RLコードを公開し、RLの本番学習はライブ配信。<span class=\"tl-price-badge\">$0.14 / $0.435 / $4.35（入力・1Mトークン）</span>",
+    "desc_en": "Three variants: Pro, Flash and Pro-UltraSpeed. <strong>Its official model page confirms text, image, video and audio input, text output and a 1M-token context.</strong> Pricing: Flash $0.14/$0.28, Pro $0.435/$0.87, Pro-UltraSpeed $4.35/$8.7 (cache hits $0.0028 / $0.0036 / $0.036). Xiaomi claims 46.32 on the Artificial Analysis Intelligence Index v4.3 and calls it &ldquo;the strongest open-source model to date&rdquo;. Technical report, training environment and RL code are released, with the production RL run live-streamed. <span class=\"tl-price-badge\">$0.14 / $0.435 / $4.35 (input per 1M)</span>"
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [
+    {
+     "url": "https://mimo.xiaomi.com/mimo-v2-6",
+     "fetched_at": "2026-11-15",
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "gpt-6-sol-luna": {
+   "id": "gpt-6-sol-luna",
+   "provider": "OpenAI",
+   "provider_class": "dot-openai",
+   "names": {
+    "ja": "GPT-6 Sol / GPT-6 Luna",
+    "en": "GPT-6 Sol and GPT-6 Luna"
+   },
+   "released": "2026-09-22",
+   "status": "unknown",
+   "price": {
+    "name": "GPT-6 Sol",
+    "input": 2.0,
+    "output": 10.0,
+    "note_ja": "2026-09-22公開・cache入力$0.20",
+    "note_en": "Released 2026-09-22 · cached input $0.20",
+    "label": "OpenAI",
+    "provider": "openai"
+   },
+   "timeline": {
+    "ja_id": "gpt-6-sol-luna",
+    "en_id": "gpt-6-sol-luna",
+    "title_ja": "GPT-6 Sol / GPT-6 Luna 公開 — GPT-5.6版から50%値下げ",
+    "title_en": "GPT-6 Sol and GPT-6 Luna released — 50% cheaper than the GPT-5.6 versions",
+    "desc_ja": "GPT-6世代の実用2モデル。Solは入力$4→$2・出力$20→$10、Lunaは$0.20/$1.20→$0.10/$0.50。キャッシュ入力は90%割引（Sol $0.20・Luna $0.01）。1,050,000コンテキスト・128K出力・知識カットオフはSol 2026年4月/Sol以外はLuna 2026年5月。<strong>GPT-5.6 Sol / Luna は旧版に</strong>。ChatGPT Work / Codexで提供、Free / GoはデスクトップアプリでLuna利用可。エフォート変更でキャッシュを壊さない改善・診断ツールも同時発表。<span class=\"tl-price-badge\">$2/$10（Sol）・$0.10/$0.50（Luna）</span>",
+    "desc_en": "The two practical tiers of the GPT-6 generation. Sol falls from $4/$20 to $2/$10; Luna from $0.20/$1.20 to $0.10/$0.50. Cached input is discounted 90% ($0.20 for Sol, $0.01 for Luna). 1,050,000-token context, 128K max output. <strong>GPT-5.6 Sol and Luna become legacy.</strong> Available in ChatGPT Work and Codex; Free and Go users get Luna in the desktop app. Announced alongside prompt-caching improvements that let you change reasoning effort without invalidating the cache. <span class=\"tl-price-badge\">$2/$10 (Sol) · $0.10/$0.50 (Luna)</span>"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://openai.com/index/introducing-gpt-6-sol-and-luna/",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "qwen-4-in-training": {
+   "id": "qwen-4-in-training",
+   "provider": "Alibaba / Qwen",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "Qwen 4 は「学習中」と公式",
+    "en": "Qwen 4 announced as “in training”"
+   },
+   "released": "2026-09-22",
+   "status": "unknown",
+   "price": null,
+   "timeline": {
+    "ja_id": "qwen-4-in-training",
+    "en_id": "qwen-4-in-training",
+    "title_ja": "Qwen 4 は「学習中」と公式発表 — リリース日・料金・重みは未公表",
+    "title_en": "Qwen 4 announced as “in training” — no date, price or weights",
+    "desc_ja": "Apsara Conference 2026（9/22・杭州）の Alibaba 公式プレスリリースで、次世代モデル <strong>Qwen 4 が現在学習中（currently in training）</strong>とだけ発表されました。<strong>リリース日・パラメータ数・ライセンス・料金・API ID はいずれも未公表</strong>です。同じ発表では、後続の <strong>Qwen 4.5 / Qwen 5 を 5〜10兆パラメータ規模へ</strong>というロードマップも示されています（これは Qwen 4 の仕様ではありません）。あわせて Qwen3.8-LiveTranslate・Qwen-Audio-3.1 系・スマホ向けエージェント基盤 Qwen Intelligence を発表し、Qwen-Image 3.1 は 2026年内の提供予定としています。<br><strong>当サイトの扱い</strong>: 予告・学習中の段階のため、本ページの年表に記録します。提供開始後に価格と仕様を一次情報で確認して掲載します。<span class=\"tl-price-badge\">価格未公表</span>",
+    "desc_en": "In its own press release at Apsara Conference 2026 (Sep 22, Hangzhou), Alibaba said only that its next-generation model, <strong>Qwen 4, is currently in training</strong>. <strong>No release date, parameter count, licence, price or API identifier has been published.</strong> The same release sets out a roadmap in which the following <strong>Qwen 4.5 and Qwen 5 series are projected to scale to 5–10 trillion parameters</strong> (that is not a Qwen 4 specification). Also announced: Qwen3.8-LiveTranslate, the Qwen-Audio-3.1 family, the Qwen Intelligence agent platform for phones, and Qwen-Image 3.1 later in 2026.<br><strong>How we treat it</strong>: announced but not shipped, so no dedicated page — recorded here, and we will publish pricing and specs once confirmed in primary sources.<span class=\"tl-price-badge\">Price not published</span>"
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [
+    {
+     "url": "https://www.media-outreach.com/news/singapore/2026/09/22/489176/alibaba-unveils-roadmap-on-full-stack-ai-strategy-from-chips-cloud-infrastructure-models-to-agents/",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "qwen-4-training": {
+   "id": "qwen-4-training",
+   "provider": "Alibaba",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "Qwen 4（Alibaba）— 公式は「学習中」、時期・料金・ベンチマークは未公表",
+    "en": "Qwen 4 (Alibaba)"
+   },
+   "released": "2026-09-22",
+   "status": "unknown",
+   "price": null,
+   "timeline": {
+    "ja_id": "qwen-4-training",
+    "en_id": "qwen-4-training",
+    "title_ja": "Qwen 4（Alibaba）— 公式は「学習中」、時期・料金・ベンチマークは未公表",
+    "title_en": "Qwen 4 (Alibaba) — officially \"in training\"; no date, price or benchmarks published",
+    "desc_ja": "ApsaraカンファレンスでAlibabaが次世代モデル<strong>Qwen 4が「currently in training（学習中）」</strong>と公式に表明。会場では Qwen4 Max / Flash / Plus / 27B の4階層名が示された<strong>との報道</strong>がありますが、公式の文書には仕様・料金・ベンチマークの記載がありません。<strong>「10月末リリース予定」は公式に記載がなく、報道・コミュニティの推測</strong>です。当サイトは公式に数値が出るまで掲載しません。<span class=\"tl-price-badge\">料金未確認</span>",
+    "desc_en": "At its Apsara conference Alibaba confirmed that its next-generation model <strong>Qwen 4 is \"currently in training\"</strong>. The four-tier lineup (Qwen4 Max / Flash / Plus / 27B) was shown on stage according to <strong>press reports</strong>, but no official document lists specs, prices or benchmarks. <strong>The \"end of October\" release window is not in any official statement</strong> — it is press and community speculation. We publish no numbers until Alibaba does. <span class=\"tl-price-badge\">Pricing unconfirmed</span>"
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "grok-4-7": {
+   "id": "grok-4-7",
+   "provider": "xAI",
+   "provider_class": "dot-xai",
+   "names": {
+    "ja": "Grok 4.7",
+    "en": "Grok 4.7"
+   },
+   "released": "2026-09-21",
+   "status": "unknown",
+   "price": {
+    "name": "Grok 4.7",
+    "input": 2.0,
+    "output": 6.0,
+    "note_ja": "2026-09-21公開・200K超は$4/$12",
+    "note_en": "Released 2026-09-21 · $4/$12 above 200K",
+    "label": "xAI",
+    "provider": "other"
+   },
+   "timeline": {
+    "ja_id": "grok-4-7",
+    "en_id": "grok-4-7",
+    "title_ja": "Grok 4.7 公開 — ベースモデルを大型化、価格は$2/$6で据え置き",
+    "title_en": "Grok 4.7 released — larger base model, $2/$6 pricing unchanged",
+    "desc_ja": "Grok 4.6後継。500Kコンテキスト・知識カットオフ2026年5月。公式ベンチ7項目すべてで4.6を上回り、EEBenchとHarvey Legal Agent Benchmarkは比較4モデル中トップ。第三者計測では総合知能指数46でFable 5.1/GPT-6（53）に及ばず。<span class=\"tl-price-badge\">$2/$6（Fast 2倍・200K超 $4/$12）</span>",
+    "desc_en": "Successor to Grok 4.6. 500K context, May 2026 knowledge cutoff. Beats Grok 4.6 on all seven official benchmarks and leads the four-model field on EEBench and the Harvey Legal Agent Benchmark. Third-party testing puts it at 46 on the Artificial Analysis Intelligence Index versus 53 for Fable 5.1 and GPT-6. <span class=\"tl-price-badge\">$2/$6 (Fast 2x · $4/$12 above 200K)</span>"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://x.ai/news/grok-4-7",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "deepseek-v4-pro-continued": {
+   "id": "deepseek-v4-pro-continued",
+   "provider": "DeepSeek",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "DeepSeek V4 Pro の提供継続を確認",
+    "en": "DeepSeek V4 Pro confirmed to continue"
+   },
+   "released": "2026-09-13",
+   "status": "unknown",
+   "price": null,
+   "timeline": {
+    "ja_id": "deepseek-v4-pro-continued",
+    "en_id": "deepseek-v4-pro-continued",
+    "title_ja": "DeepSeek V4 Pro の提供継続を確認 — 9/14 の V4.1 Flash ルーティング予告は撤回",
+    "title_en": "DeepSeek V4 Pro confirmed to continue — the 9/14 routing notice is withdrawn",
+    "desc_ja": "公式の料金ページ注記(2) と Change Log が「ユーザーの要望を受け、2026-09-14 以降も DeepSeek V4 Pro の API サービス提供を継続する。課金方法は変更しない」という文面に差し替えられ、V4 Pro の価格行（オフピーク 入力 $0.66 / 出力 $1.98）も維持された。<code>deepseek-v4-pro</code> は V4 Pro 専用の単価のまま使い続けられる。<span class=\"tl-price-badge\">$0.66/$1.98（オフピーク・cache miss入力/出力）</span>",
+    "desc_en": "Footnote (2) of the official pricing page and the change log now read: \"In response to user demand, we have decided to continue providing API services for DeepSeek V4 Pro after September 14, 2026, with the billing method remaining unchanged.\" The V4 Pro price row (off-peak input $0.66 / output $1.98) is retained, so <code>deepseek-v4-pro</code> keeps its own rates. <span class=\"tl-price-badge\">$0.66/$1.98 (off-peak, cache-miss input/output)</span>"
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [
+    {
+     "url": "https://api-docs.deepseek.com/quick_start/pricing",
+     "fetched_at": "2026-11-15",
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "deepseek-v4-1-flash": {
+   "id": "deepseek-v4-1-flash",
+   "provider": "DeepSeek",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "DeepSeek-V4.1-Flash リリース",
+    "en": "DeepSeek-V4.1-Flash"
+   },
+   "released": "2026-09-10",
+   "status": "unknown",
+   "price": null,
+   "timeline": {
+    "ja_id": "deepseek-v4-1-flash",
+    "en_id": "deepseek-v4-1-flash",
+    "title_ja": "DeepSeek-V4.1-Flash リリース — 大幅値下げ・ネイティブ画像入力（V4 Pro の 9/14 ルーティングはのちに撤回）",
+    "title_en": "DeepSeek-V4.1-Flash released — steep price cuts, native image input (V4 Pro routing later withdrawn)",
+    "desc_ja": "新アーキテクチャ世代の最小モデル。1Mコンテキスト・384K出力・ネイティブ画像入力・thinking既定。API名は<code>deepseek-flash</code>。V4 Flash / V4 Flash Vision Exp は退役し V4.1 Flash へ統合。<strong>当初は V4 Pro を 2026-09-14 から V4.1 Flash へルーティングすると告知されたが、のちに撤回され V4 Pro の提供は継続</strong>（V4.1 Pro のリリース時期は未発表）。<span class=\"tl-price-badge\">$0.15/$0.60（オフピーク・cache miss入力/出力）</span>",
+    "desc_en": "The smallest model in the new architecture family: 1M context, 384K output, native image input, thinking by default. API name <code>deepseek-flash</code>. V4 Flash and V4 Flash Vision Exp are retired and consolidated into V4.1 Flash. <strong>DeepSeek initially said V4 Pro requests would route to V4.1 Flash from 2026-09-14, but that notice was later withdrawn and V4 Pro continues</strong> (no V4.1 Pro release date announced). <span class=\"tl-price-badge\">$0.15/$0.60 (off-peak, cache-miss input/output)</span>"
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [
+    {
+     "url": "https://api-docs.deepseek.com/updates/",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "gpt-6": {
+   "id": "gpt-6",
+   "provider": "OpenAI",
+   "provider_class": "dot-openai",
+   "names": {
+    "ja": "GPT-6 Astra",
+    "en": "GPT-6 Astra"
+   },
+   "released": "2026-09-03",
+   "status": "unknown",
+   "price": {
+    "name": "GPT-6 Astra",
+    "input": 10.0,
+    "output": 50.0,
+    "note_ja": "2026-09-03発表・最上位モデル・cache読込$1.00",
+    "note_en": "New flagship (2026-09-03) · cache read $1.00",
+    "label": "OpenAI",
+    "provider": "openai"
+   },
+   "timeline": {
+    "ja_id": "gpt-6",
+    "en_id": "gpt-6",
+    "title_ja": "GPT-6 Astra 公開 — 新世代フラッグシップ（$10/$50）",
+    "title_en": "GPT-6 Astra released — new-generation flagship ($10/$50)",
+    "desc_ja": "GPT-5.6 Sol後継。「世界で最も知能が高く、アライメントされたモデル」。ARC-AGI-3 99.9%・ExploitBench 100%・Terminal-Bench Science 64.6%。1.05Mコンテキスト・128K出力。段階的ロールアウト（Daybreak→API/Plus）。<span class=\"tl-price-badge\">$10/$50</span>",
+    "desc_en": "Successor to GPT-5.6 Sol. State-of-the-art computer use, coding, cybersecurity and science. ARC-AGI-3 99.9% · ExploitBench 100% · Terminal-Bench Science 64.6%. 1.05M context, 128K output. Staged rollout (Daybreak → API/Plus). <span class=\"tl-price-badge\">$10/$50</span>"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://openai.com/index/gpt-6-astra/",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "gemini-3-8-flash": {
+   "id": "gemini-3-8-flash",
+   "provider": "Google",
+   "provider_class": "dot-google",
+   "names": {
+    "ja": "Gemini 3.8 Flash / 3.8 Flash Cyber",
+    "en": "Gemini 3.8 Flash / 3.8 Flash Cyber"
+   },
+   "released": "2026-09-02",
+   "status": "unknown",
+   "price": {
+    "name": "Gemini 3.8 Flash",
+    "input": 0.75,
+    "output": 3.75,
+    "note_ja": "導入価格(〜2026-12-31)・通常$1.50/$7.50",
+    "note_en": "Intro pricing (through 2026-12-31) · list $1.50/$7.50",
+    "label": "Google",
+    "provider": "google"
+   },
+   "timeline": {
+    "ja_id": "gemini-3-8-flash",
+    "en_id": "gemini-3-8-flash",
+    "title_ja": "Gemini 3.8 Flash / 3.8 Flash Cyber 公開 — 推論・コーディング最強Flash",
+    "title_en": "Gemini 3.8 Flash / 3.8 Flash Cyber released — best reasoning &amp; coding Flash",
+    "desc_ja": "3.7 Flashから3週間、6週間で3回目のFlashリリース。初回$0.75/$3.75（〜12/31 → $1.50/$7.50）。DeepSWE 73.8%・HLE-Verified 54.9%。サイバー特化の3.8 Flash CyberはFairwind Program限定。<span class=\"tl-price-badge\">$0.75/$3.75（〜12/31）</span>",
+    "desc_en": "Three weeks after 3.7 Flash — third Flash release in six weeks. Intro $0.75/$3.75 (thru 12/31 → $1.50/$7.50). DeepSWE 73.8% · HLE-Verified 54.9%. Cybersecurity-focused 3.8 Flash Cyber is Fairwind Program-only. <span class=\"tl-price-badge\">$0.75/$3.75 (thru 12/31)</span>"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/3-8-flash-and-3-8-flash-cyber/",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "claude-fable-5-1": {
+   "id": "claude-fable-5-1",
+   "provider": "Anthropic",
+   "provider_class": "dot-anthropic",
+   "names": {
+    "ja": "Claude Fable 5.1 / Mythos 5.1",
+    "en": "Claude Fable 5.1 / Mythos 5.1"
+   },
+   "released": "2026-09-01",
+   "status": "unknown",
+   "price": {
+    "name": "Claude Fable 5.1",
+    "input": 10.0,
+    "output": 50.0,
+    "note_ja": "2026-09-01公開・cache読込$0.25",
+    "note_en": "Released 2026-09-01 · cache read $0.25",
+    "label": "Anthropic",
+    "provider": "anthropic"
+   },
+   "timeline": {
+    "ja_id": "claude-fable-5-1",
+    "en_id": "claude-fable-5-1",
+    "title_ja": "Claude Fable 5.1 / Mythos 5.1 公開 — Mythosクラス新フラッグシップ",
+    "title_en": "Claude Fable 5.1 / Mythos 5.1 released — new Mythos-class flagship",
+    "desc_ja": "コーディング・知識労働・長期間エージェントで新境地。同一モデル・セーフガード違いの2種（Fable 5.1一般提供 / Mythos 5.1トラステッドアクセス限定）。キャッシュ読込を75%減（$1.00→$0.25）。1Mコンテキスト・128K出力。Terminal-Bench-Science 52.6%（Fable 5の24.7%から倍増）。<span class=\"tl-price-badge\">$10/$50・キャッシュ読込$0.25</span>",
+    "desc_en": "A new frontier for coding, knowledge work and long-horizon agents. Same model, different safeguards (Fable 5.1 generally available / Mythos 5.1 trusted-access only). Cache reads cut 75% ($1.00→$0.25). 1M context, 128K output. Terminal-Bench-Science 52.6% (more than double Fable 5's 24.7%). <span class=\"tl-price-badge\">$10/$50 · cache read $0.25</span>"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://www.anthropic.com/claude-fable-and-mythos-5-1",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "glm-5-3-flash": {
+   "id": "glm-5-3-flash",
+   "provider": "Zhipu / Z.ai",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "GLM 5.3 Flash",
+    "en": "GLM 5.3 Flash"
+   },
+   "released": "2026-08-26",
+   "status": "unknown",
+   "price": {
+    "name": "GLM-5.3-Flash",
+    "input": 0.15,
+    "output": 0.5,
+    "note_ja": "プロモ終了(9/9)・list $0.15/$0.50",
+    "note_en": "Promo ended 9/9 · list $0.15/$0.50",
+    "label": "Zhipu/Z.ai",
+    "provider": "other"
+   },
+   "timeline": {
+    "ja_id": "glm-5-3-flash",
+    "en_id": "glm-5-3-flash",
+    "title_ja": "GLM 5.3 Flash 公開 — ネイティブマルチモーダル×Flash価格",
+    "title_en": "GLM 5.3 Flash released — natively multimodal at Flash cost",
+    "desc_ja": "GLM-5シリーズ初のネイティブマルチモーダル。320B/18B MoE・1Mコンテキスト・128K出力・MIT。GLM-5.2を上回るコーディング/エージェント性能を約1/10の価格で。<span class=\"tl-price-badge\">$0.15/$0.50（list・プロモ終了後）</span>",
+    "desc_en": "The first natively multimodal GLM-5 model. 320B/18B MoE, 1M context, 128K output, MIT. Beats GLM-5.2 on coding/agentic benchmarks at ~1/10 the price. <span class=\"tl-price-badge\">$0.15/$0.50 (list)</span>"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://z.ai/blog/glm-5.3-flash",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "qwen-3-8-flash": {
+   "id": "qwen-3-8-flash",
+   "provider": "Alibaba / Qwen",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "Qwen3.8-Flash",
+    "en": "Qwen3.8-Flash"
+   },
+   "released": "2026-08-26",
+   "status": "unknown",
+   "price": {
+    "name": "Qwen3.8-Flash",
+    "input": 0.15,
+    "output": 0.47,
+    "note_ja": "2026-08-26公開・国際版",
+    "note_en": "Released 2026-08-26 · intl",
+    "label": "Alibaba",
+    "provider": "other"
+   },
+   "timeline": {
+    "ja_id": "qwen-3-8-flash",
+    "en_id": "qwen-3-8-flash",
+    "title_ja": "Qwen3.8-Flash 公開 — Qwen4アーキテクチャのプレビュー・低コストマルチモーダル",
+    "title_en": "Qwen3.8-Flash released — low-cost multimodal, Qwen4 architecture preview",
+    "desc_ja": "125B（6B active）+51B N-gramのマルチモーダルMoE。GDN+QSAハイブリッドで、Qwen3.7-Plusの約1/9のトレーニングコストでコーディング・Office・エージェント性能を上回る。オープンウェイト版（Flash-Next）もHF/ModelScopeで公開。<span class=\"tl-price-badge\">$0.15/$0.47（国際版）</span>",
+    "desc_en": "A 125B (6B active) + 51B N-gram multimodal MoE. The GDN+QSA hybrid beats Qwen3.7-Plus on coding, office and agentic benchmarks at ~1/9 the training cost. Open-weight Flash-Next also on HF/ModelScope. <span class=\"tl-price-badge\">$0.15/$0.47 (international)</span>"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://qwen.ai/blog?id=qwen3.8-flash-next",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "deepseek-v4-flash-vision-exp": {
+   "id": "deepseek-v4-flash-vision-exp",
+   "provider": "DeepSeek",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "DeepSeek V4 Flash Vision Exp 公開（実験的モデル） New",
+    "en": "DeepSeek V4 Flash Vision Exp released (experimental) New"
+   },
+   "released": "2026-08-21",
+   "status": "unknown",
+   "price": null,
+   "timeline": {
+    "ja_id": "deepseek-v4-flash-vision-exp",
+    "en_id": "deepseek-v4-flash-vision-exp",
+    "title_ja": "DeepSeek V4 Flash Vision Exp 公開（実験的モデル）",
+    "title_en": "DeepSeek V4 Flash Vision Exp released (experimental)",
+    "desc_ja": "マルチモーダル視覚理解の実験的モデル。APIは<code>model=&#39;deepseek-v4-flash-vision-exp&#39;</code>。純テキスト能力はV4 Flashと同等、視覚理解を要するエージェントベンチマークで大幅向上。",
+    "desc_en": "Experimental multimodal vision model, accessed via <code>model=&#39;deepseek-v4-flash-vision-exp&#39;</code>. On par with V4 Flash on pure text; large gains on vision agent benchmarks."
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [
+    {
+     "url": "https://api-docs.deepseek.com/updates/",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "gpt-5-6-sol-promo": {
+   "id": "gpt-5-6-sol-promo",
+   "provider": "OpenAI",
+   "provider_class": "dot-openai",
+   "names": {
+    "ja": "GPT-5.6 Sol プロモ価格へ",
+    "en": "GPT-5.6 Sol promo price"
+   },
+   "released": "2026-08-21",
+   "status": "unknown",
+   "price": null,
+   "timeline": {
+    "ja_id": "gpt-5-6-sol-promo",
+    "en_id": "gpt-5-6-sol-promo",
+    "title_ja": "GPT-5.6 Sol プロモ価格へ — $4/$20（少なくとも〜11/21）",
+    "title_en": "GPT-5.6 Sol promo price — $4/$20 (at least through 11/21)",
+    "desc_ja": "フラッグシップSolを$5→$4（入力）/ $30→$20（出力）に値下げ（3ヶ月間）。Fast mode・long-context・Batch/Flexにも適用。旧標準$5/$30。プロモは「少なくとも2026-11-21まで」。<span class=\"tl-price-badge\">$4/$20（Short context）</span>",
+    "desc_en": "Flagship Sol cut from $5→$4 input / $30→$20 output for 3 months. Applies to Fast mode, long-context, and Batch/Flex too. Was $5/$30. Promo guaranteed \"at least through 2026-11-21\".<span class=\"tl-price-badge\">$4/$20 (Short context)</span>"
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [
+    {
+     "url": "https://community.openai.com/t/20-price-reduction-for-gpt-5-6-sol-api-codex-credits-and-chatgpt-work/1391726",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "cloudflare-sol-discount": {
+   "id": "cloudflare-sol-discount",
+   "provider": "OpenAI / Cloudflare",
+   "provider_class": "dot-openai",
+   "names": {
+    "ja": "Cloudflare AI GatewayでGPT-5.6 Solが50%オフ New",
+    "en": "GPT-5.6 Sol 50% off via Cloudflare AI Gateway New"
+   },
+   "released": "2026-08-19",
+   "status": "unknown",
+   "price": null,
+   "timeline": {
+    "ja_id": "cloudflare-sol-discount",
+    "en_id": "cloudflare-sol-discount",
+    "title_ja": "Cloudflare AI GatewayでGPT-5.6 Solが50%オフ",
+    "title_en": "GPT-5.6 Sol 50% off via Cloudflare AI Gateway",
+    "desc_ja": "Cloudflare AI Gateway（Unified Billing限定・Bring Your Own Keys対象外）で <code>openai/gpt-5.6-sol</code> を指定すると自動で50%オフ。入力$2.50/出力$15/キャッシュ読込$0.25（〜2026-09-18）。",
+    "desc_en": "Routing to <code>openai/gpt-5.6-sol</code> through Cloudflare AI Gateway applies 50% off automatically (Unified Billing only; Bring Your Own Keys excluded). Input $2.50 / output $15 / cache read $0.25 (through 2026-09-18)."
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [
+    {
+     "url": "https://developers.cloudflare.com/changelog/post/2026-08-19-gpt-5-6-sol-discount/",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "gemini-3-7-flash": {
+   "id": "gemini-3-7-flash",
+   "provider": "Google",
+   "provider_class": "dot-google",
+   "names": {
+    "ja": "Gemini 3.7 Flash",
+    "en": "Gemini 3.7 Flash"
+   },
+   "released": "2026-08-14",
+   "status": "unknown",
+   "price": {
+    "name": "Gemini 3.7 Flash",
+    "input": 0.75,
+    "output": 3.75,
+    "note_ja": "導入価格(〜2026-12-31)・通常$1.50/$7.50。提供終了予定（2027-01-28・移行先 Gemini 3.8 Flash）",
+    "note_en": "Intro pricing (through 2026-12-31) · list $1.50/$7.50. Scheduled for retirement 2027-01-28 (replacement: Gemini 3.8 Flash)",
+    "label": "Google",
+    "provider": "google"
+   },
+   "timeline": {
+    "ja_id": "gemini-3-7-flash",
+    "en_id": "gemini-3-7-flash",
+    "title_ja": "Gemini 3.7 Flash 公開 — コーディング・エージェント最強Flash",
+    "title_en": "Gemini 3.7 Flash released — most capable Flash for coding &amp; agents",
+    "desc_ja": "3.6 Flashから3週間で公開。初回価格は半額（$0.75/$3.75 〜12/31 → $1.50/$7.50）。FrontierCode 43.6%・DeepSWE 65.3%。<span class=\"tl-price-badge\">$0.75/$3.75（〜12/31）</span>",
+    "desc_en": "Three weeks after 3.6 Flash. Intro price at half ($0.75/$3.75 thru 12/31 → $1.50/$7.50). FrontierCode 43.6% · DeepSWE 65.3%. <span class=\"tl-price-badge\">$0.75/$3.75 (thru 12/31)</span>"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://blog.google/intl/ja-jp/company-news/technology/gemini-37-flash/",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "deepseek-v4-pro-ga": {
+   "id": "deepseek-v4-pro-ga",
+   "provider": "DeepSeek",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "DeepSeek V4 Pro 正式版（GA）リリース",
+    "en": "DeepSeek V4 Pro GA"
+   },
+   "released": "2026-08-13",
+   "status": "unknown",
+   "price": null,
+   "timeline": {
+    "ja_id": "deepseek-v4-pro-ga",
+    "en_id": "deepseek-v4-pro-ga",
+    "title_ja": "DeepSeek V4 Pro 正式版（GA）リリース — ピーク/オフピーク価格制へ移行",
+    "title_en": "DeepSeek V4 Pro GA released — peak/off-peak pricing introduced",
+    "desc_ja": "APP/Web/APIにGA展開（APIは<code>deepseek-v4-pro</code>）。Responses API対応、thinking effort 3段階（low/high/max）。8/16 16:00 UTCよりピーク/オフピーク価格制（オフピークはピークの半額）。8/23より土日は終日オフピーク。<span class=\"tl-price-badge\">V4 Pro 出力 オフピーク$1.98 / ピーク$3.96</span>",
+    "desc_en": "GA rollout on APP, Web and API (model name <code>deepseek-v4-pro</code>). Responses API support, three thinking-effort levels (low/high/max). Peak/off-peak pricing from 8/16 16:00 UTC (off-peak = half of peak). Weekends off-peak all day since 8/23. <span class=\"tl-price-badge\">V4 Pro output off-peak $1.98 / peak $3.96</span>"
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [
+    {
+     "url": "https://api-docs.deepseek.com/news/news260813/",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "grok-4-6": {
+   "id": "grok-4-6",
+   "provider": "xAI",
+   "provider_class": "dot-xai",
+   "names": {
+    "ja": "Grok 4.6",
+    "en": "Grok 4.6"
+   },
+   "released": "2026-08-12",
+   "status": "unknown",
+   "price": {
+    "name": "Grok 4.6",
+    "input": 2.0,
+    "output": 6.0,
+    "note_ja": "2026-08-12公開",
+    "note_en": "Released 2026-08-12",
+    "label": "xAI",
+    "provider": "other"
+   },
+   "timeline": {
+    "ja_id": "grok-4-6",
+    "en_id": "grok-4-6",
+    "title_ja": "Grok 4.6 公開 — コード・エージェント特化の最新フラッグシップ",
+    "title_en": "Grok 4.6 released — new flagship for code &amp; agents",
+    "desc_ja": "Grok 4.5後継。AA Intelligence Index 61でGPT-5.6 Solと並ぶ。500Kコンテキスト・知識カットオフ2026/2/1。<span class=\"tl-price-badge\">$2/$6（fast 2倍）</span>",
+    "desc_en": "Successor to Grok 4.5. Scores 61 on the AA Intelligence Index, matching GPT-5.6 Sol. 500K context, knowledge cutoff Feb 1 2026. <span class=\"tl-price-badge\">$2/$6 (fast 2×)</span>"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://x.ai/news/grok-4-6",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "deepseek-v4-flash": {
+   "id": "deepseek-v4-flash",
+   "provider": "DeepSeek",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "DeepSeek V4 Flash 公式リリース（public beta） New",
+    "en": "DeepSeek V4 Flash officially released (public beta) New"
+   },
+   "released": "2026-07-31",
+   "status": "unknown",
+   "price": null,
+   "timeline": {
+    "ja_id": "deepseek-v4-flash",
+    "en_id": "deepseek-v4-flash",
+    "title_ja": "DeepSeek V4 Flash 公式リリース（public beta）",
+    "title_en": "DeepSeek V4 Flash officially released (public beta)",
+    "desc_ja": "APIは<code>deepseek-v4-flash</code>。Responses APIネイティブ対応・Codex対応。AgentベンチマークでV4-Pro-Previewを大きく上回る。V4-Pro API・APP/WEBは変更なし。",
+    "desc_en": "API model name <code>deepseek-v4-flash</code>. Native Responses API and Codex support. Agent benchmarks far exceed V4-Pro-Preview. V4-Pro API and APP/WEB unchanged."
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [
+    {
+     "url": "https://api-docs.deepseek.com/updates/",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "gpt-5-6-pricecut": {
+   "id": "gpt-5-6-pricecut",
+   "provider": "OpenAI",
+   "provider_class": "dot-openai",
+   "names": {
+    "ja": "GPT-5.6 Terra/Luna 大幅値下げ Updated",
+    "en": "GPT-5.6 Terra/Luna major price cuts Updated"
+   },
+   "released": "2026-07-30",
+   "status": "unknown",
+   "price": {
+    "name": "GPT-5.6 Terra",
+    "input": 2.0,
+    "output": 12.0,
+    "note_ja": "7/30値下げ",
+    "note_en": "Price cut 7/30",
+    "label": "OpenAI",
+    "provider": "openai"
+   },
+   "timeline": {
+    "ja_id": "gpt-5-6-pricecut",
+    "en_id": "gpt-5-6-pricecut",
+    "title_ja": "GPT-5.6 Terra/Luna 大幅値下げ",
+    "title_en": "GPT-5.6 Terra/Luna major price cuts",
+    "desc_ja": "Terra: $2.50→$2.00 / $15.00→$12.00。Luna: $1.00→$0.20 / $6.00→$1.20（80%削減）。Priority processing→Fast modeに名称変更も同日実施。<span class=\"tl-price-badge\">Terra $2/$12・Luna $0.20/$1.20</span>",
+    "desc_en": "Terra: $2.50→$2.00 / $15.00→$12.00. Luna: $1.00→$0.20 / $6.00→$1.20 (80% cut). Priority processing → Fast mode renamed the same day. <span class=\"tl-price-badge\">Terra $2/$12 · Luna $0.20/$1.20</span>"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://developers.openai.com/api/docs/pricing",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "claude-opus-5": {
+   "id": "claude-opus-5",
+   "provider": "Anthropic",
+   "provider_class": "dot-anthropic",
+   "names": {
+    "ja": "Claude Opus 5",
+    "en": "Claude Opus 5"
+   },
+   "released": "2026-07-24",
+   "status": "unknown",
+   "price": {
+    "name": "Claude Opus 5",
+    "input": 5.0,
+    "output": 25.0,
+    "note_ja": "2026-07-24発表",
+    "note_en": "Released 2026-07-24",
+    "label": "Anthropic",
+    "provider": "anthropic"
+   },
+   "timeline": {
+    "ja_id": "claude-opus-5",
+    "en_id": "claude-opus-5",
+    "title_ja": "Claude Opus 5 公開 — Opus 4.8後継・同価格で性能向上",
+    "title_en": "Claude Opus 5 released — Opus 4.8 successor, same price, better performance",
+    "desc_ja": "Opus 4.8の後継プレミアムモデル。Opus 4.8と同価格（$5/$25）ながらコーディング・専門業務で改善。Fast mode（$10/$50）対応。安全分類器の介入がFable 5比約85%減。<span class=\"tl-price-badge\">$5.00/$25.00</span>",
+    "desc_en": "Premium successor to Opus 4.8. Same price ($5/$25) with improved coding and professional tasks. Fast mode ($10/$50). ~85% fewer safety-classifier interventions vs Fable 5. <span class=\"tl-price-badge\">$5.00/$25.00</span>"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://www.anthropic.com/news/claude-opus-5",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "gemini-3-6-flash": {
+   "id": "gemini-3-6-flash",
+   "provider": "Google",
+   "provider_class": "dot-google",
+   "names": {
+    "ja": "Gemini 3.6 Flash・3.5 Flash-Lite・3.5 Flash Cyber 公開 New",
+    "en": "Gemini 3.6 Flash, 3.5 Flash-Lite, 3.5 Flash Cyber released New"
+   },
+   "released": "2026-07-21",
+   "status": "unknown",
+   "price": null,
+   "timeline": {
+    "ja_id": "gemini-3-6-flash",
+    "en_id": "gemini-3-6-flash",
+    "title_ja": "Gemini 3.6 Flash・3.5 Flash-Lite・3.5 Flash Cyber 公開",
+    "title_en": "Gemini 3.6 Flash, 3.5 Flash-Lite, 3.5 Flash Cyber released",
+    "desc_ja": "3.6 Flashは3.5 Flashより出力安価（$7.50 vs $9.00）。3.5 Flash-LiteはGemini 3.x最安（$0.30/$2.50）で高スループットエージェント向け。3.5 Flash Cyberはサイバーセキュリティ特化。<span class=\"tl-price-badge\">3.6 Flash $1.50/$7.50・Flash-Lite $0.30/$2.50</span>",
+    "desc_en": "3.6 Flash has cheaper output than 3.5 Flash ($7.50 vs $9.00). 3.5 Flash-Lite is the cheapest Gemini 3.x ($0.30/$2.50) for high-throughput agents. 3.5 Flash Cyber is cybersecurity-focused. <span class=\"tl-price-badge\">3.6 Flash $1.50/$7.50 · Flash-Lite $0.30/$2.50</span>"
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [
+    {
+     "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-6-flash-3-5-flash-lite-3-5-flash-cyber/",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "gpt-5-6": {
+   "id": "gpt-5-6",
+   "provider": "OpenAI",
+   "provider_class": "dot-openai",
+   "names": {
+    "ja": "GPT-5.6ファミリー",
+    "en": "GPT-5.6 family"
+   },
+   "released": "2026-07-09",
+   "status": "unknown",
+   "price": null,
+   "timeline": {
+    "ja_id": "gpt-5-6",
+    "en_id": "gpt-5-6",
+    "title_ja": "GPT-5.6ファミリー公開 — Sol/Terra/Luna",
+    "title_en": "GPT-5.6 family released — Sol / Terra / Luna",
+    "desc_ja": "新フラッグシップSol・バランス型Terra・最速低コストLunaの3モデル同時公開。7/30にTerra/Luna値下げ。<span class=\"tl-price-badge\">Sol $5/$30・Terra $2/$12・Luna $0.20/$1.20（7/30改定後）</span>",
+    "desc_en": "New flagship Sol, balanced Terra, and fastest low-cost Luna released together. Terra/Luna price cuts on 7/30. <span class=\"tl-price-badge\">Sol $5/$30 · Terra $2/$12 · Luna $0.20/$1.20 (after 7/30)</span>"
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [
+    {
+     "url": "https://openai.com/index/gpt-5-6/",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "claude-sonnet-5": {
+   "id": "claude-sonnet-5",
+   "provider": "Anthropic",
+   "provider_class": "dot-anthropic",
+   "names": {
+    "ja": "Claude Sonnet 5",
+    "en": "Claude Sonnet 5"
+   },
+   "released": "2026-06-30",
+   "status": "unknown",
+   "price": {
+    "name": "Claude Sonnet 5",
+    "input": 2.0,
+    "output": 10.0,
+    "note_ja": "$2/$10（恒久化）",
+    "note_en": "Permanent price",
+    "label": "Anthropic",
+    "provider": "anthropic"
+   },
+   "timeline": {
+    "ja_id": "claude-sonnet-5",
+    "en_id": "claude-sonnet-5",
+    "title_ja": "Claude Sonnet 5 公開",
+    "title_en": "Claude Sonnet 5 released",
+    "desc_ja": "「最もエージェント的」なSonnet。Opus 4.8に近い性能を低価格で。導入価格$2/$10は2026-08-10に恒久化（9/1の$3/$15値上げは実施されず）。<span class=\"tl-price-badge\">$2.00/$10.00（恒久化）</span>",
+    "desc_en": "The \"most agentic\" Sonnet. Near-Opus 4.8 performance at a low price. The $2/$10 introductory price was made permanent on 2026-08-10 (the $3/$15 increase scheduled for Sep 1 will not occur). <span class=\"tl-price-badge\">$2.00/$10.00 (permanent)</span>"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://www.anthropic.com/news/claude-sonnet-5",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "claude-fable-5": {
+   "id": "claude-fable-5",
+   "provider": "Anthropic",
+   "provider_class": "dot-anthropic",
+   "names": {
+    "ja": "Claude Fable 5/Mythos 5",
+    "en": "Claude Fable 5 / Mythos 5"
+   },
+   "released": "2026-06-09",
+   "status": "unknown",
+   "price": {
+    "name": "Claude Fable 5",
+    "input": 10.0,
+    "output": 50.0,
+    "note_ja": "前世代",
+    "note_en": "Previous gen",
+    "label": "Anthropic",
+    "provider": "anthropic"
+   },
+   "timeline": {
+    "ja_id": "claude-fable-5",
+    "en_id": "claude-fable-5",
+    "title_ja": "Claude Fable 5/Mythos 5 公開 — 新ティア「Mythosクラス」",
+    "title_en": "Claude Fable 5 / Mythos 5 released — new \"Mythos class\" tier",
+    "desc_ja": "Opus上位の新ティア。Fable 5一般提供、Mythos 5限定提供。6/12一時停止→7/1復旧。<span class=\"tl-price-badge\">Fable 5 $10.00/$50.00</span>",
+    "desc_en": "New tier above Opus. Fable 5 general availability, Mythos 5 limited. Paused 6/12 → restored 7/1. <span class=\"tl-price-badge\">Fable 5 $10.00/$50.00</span>"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://www.anthropic.com/news/claude-fable-5-mythos-5",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "claude-opus-4-8": {
+   "id": "claude-opus-4-8",
+   "provider": "Anthropic",
+   "provider_class": "dot-anthropic",
+   "names": {
+    "ja": "Claude Opus 4.8",
+    "en": "Claude Opus 4.8"
+   },
+   "released": "2026-05-28",
+   "status": "unknown",
+   "price": {
+    "name": "Claude Opus 4.8",
+    "input": 5.0,
+    "output": 25.0,
+    "note_ja": "",
+    "note_en": "",
+    "label": "Anthropic",
+    "provider": "anthropic"
+   },
+   "timeline": {
+    "ja_id": "claude-opus-4-8",
+    "en_id": "claude-opus-4-8",
+    "title_ja": "Claude Opus 4.8 公開",
+    "title_en": "Claude Opus 4.8 released",
+    "desc_ja": "コード欠陥見逃しを約1/4に低減。Dynamic Workflows研究プレビュー。<span class=\"tl-price-badge\">$5.00/$25.00</span>",
+    "desc_en": "Code-defect misses reduced to roughly 1/4. Dynamic Workflows research preview. <span class=\"tl-price-badge\">$5.00/$25.00</span>"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://www.anthropic.com/news/claude-opus-4-8",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "gemini-3-5-flash": {
+   "id": "gemini-3-5-flash",
+   "provider": "Google",
+   "provider_class": "dot-google",
+   "names": {
+    "ja": "Gemini 3.5 Flash GA",
+    "en": "Gemini 3.5 Flash GA"
+   },
+   "released": "2026-05-19",
+   "status": "unknown",
+   "price": null,
+   "timeline": {
+    "ja_id": "gemini-3-5-flash",
+    "en_id": "gemini-3-5-flash",
+    "title_ja": "Gemini 3.5 Flash GA — Google I/O 2026",
+    "title_en": "Gemini 3.5 Flash GA — Google I/O 2026",
+    "desc_ja": "エージェント・コーディング向け最適化。3.1 Pro上回るベンチマークを4倍速。<span class=\"tl-price-badge\">$1.50/$9.00</span>",
+    "desc_en": "Optimized for agents and coding. Beats 3.1 Pro benchmarks at 4× speed. <span class=\"tl-price-badge\">$1.50/$9.00</span>"
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [
+    {
+     "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-5/",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "deepseek-v4": {
+   "id": "deepseek-v4",
+   "provider": "DeepSeek",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "DeepSeek V4 Pro/Flash Preview",
+    "en": "DeepSeek V4 Pro/Flash Preview"
+   },
+   "released": "2026-04-24",
+   "status": "unknown",
+   "price": {
+    "name": "DeepSeek V4 Pro",
+    "input": 0.66,
+    "output": 1.98,
+    "note_ja": "オフピーク(cache miss)・2026-09-14以降も提供継続（公式が告知）",
+    "note_en": "Off-peak (cache miss) · continues after 2026-09-14 per DeepSeek's notice",
+    "label": "DeepSeek",
+    "provider": "deepseek"
+   },
+   "timeline": {
+    "ja_id": "deepseek-v4",
+    "en_id": "deepseek-v4",
+    "title_ja": "DeepSeek V4 Pro/Flash Preview 公開",
+    "title_en": "DeepSeek V4 Pro/Flash Preview released",
+    "desc_ja": "1Mトークンコンテキスト・MITライセンス。V4 Pro（1.6T/49B active）・V4 Flash（284B/13B active）。<span class=\"tl-price-badge\">V4 Pro $0.435/$0.87（当時プロモ・現在は廃止）</span>",
+    "desc_en": "1M-token context, MIT license. V4 Pro (1.6T/49B active) · V4 Flash (284B/13B active). <span class=\"tl-price-badge\">V4 Pro $0.435/$0.87 (promo at the time, now retired)</span>"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://api-docs.deepseek.com/news/news260424",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "gpt-5-5": {
+   "id": "gpt-5-5",
+   "provider": "OpenAI",
+   "provider_class": "dot-openai",
+   "names": {
+    "ja": "GPT-5.5",
+    "en": "GPT-5.5"
+   },
+   "released": "2026-04-23",
+   "status": "unknown",
+   "price": {
+    "name": "GPT-5.5",
+    "input": 5.0,
+    "output": 30.0,
+    "note_ja": "",
+    "note_en": "",
+    "label": "OpenAI",
+    "provider": "openai"
+   },
+   "timeline": {
+    "ja_id": "gpt-5-5",
+    "en_id": "gpt-5-5",
+    "title_ja": "GPT-5.5 公開",
+    "title_en": "GPT-5.5 released",
+    "desc_ja": "エージェント的コンピュータ操作・科学研究支援を強化した当時のフラッグシップ。<span class=\"tl-price-badge\">$5.00/$30.00</span>",
+    "desc_en": "Then-flagship with stronger agentic computer use and scientific research support. <span class=\"tl-price-badge\">$5.00/$30.00</span>"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://openai.com/index/introducing-gpt-5-5/",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "claude-opus-4-7": {
+   "id": "claude-opus-4-7",
+   "provider": "Anthropic",
+   "provider_class": "dot-anthropic",
+   "names": {
+    "ja": "Claude Opus 4.7",
+    "en": "Claude Opus 4.7"
+   },
+   "released": "2026-04-16",
+   "status": "unknown",
+   "price": null,
+   "timeline": {
+    "ja_id": "claude-opus-4-7",
+    "en_id": "claude-opus-4-7",
+    "title_ja": "Claude Opus 4.7 公開 — xhigh推論エフォート新設",
+    "title_en": "Claude Opus 4.7 released — new xhigh reasoning effort",
+    "desc_ja": "コーディング（SWE-bench Pro 64.3%）・視覚認識強化。新トークナイザー採用開始。",
+    "desc_en": "Coding (SWE-bench Pro 64.3%) and vision gains. Began adopting a new tokenizer."
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [
+    {
+     "url": "https://www.anthropic.com/news/claude-opus-4-7",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "gpt-5-4": {
+   "id": "gpt-5-4",
+   "provider": "OpenAI",
+   "provider_class": "dot-openai",
+   "names": {
+    "ja": "GPT-5.4",
+    "en": "GPT-5.4"
+   },
+   "released": "2026-03-05",
+   "status": "unknown",
+   "price": {
+    "name": "GPT-5.4",
+    "input": 2.5,
+    "output": 15.0,
+    "note_ja": "",
+    "note_en": "",
+    "label": "OpenAI",
+    "provider": "openai"
+   },
+   "timeline": {
+    "ja_id": "gpt-5-4",
+    "en_id": "gpt-5-4",
+    "title_ja": "GPT-5.4 公開 — ネイティブComputer Use API初搭載",
+    "title_en": "GPT-5.4 released — native Computer Use API debut",
+    "desc_ja": "Computer Use機能ネイティブ搭載（OSWorld 75%）。5段階推論エフォート制御。<span class=\"tl-price-badge\">$2.50/$15.00</span>",
+    "desc_en": "Native Computer Use (OSWorld 75%). Five-level reasoning effort control. <span class=\"tl-price-badge\">$2.50/$15.00</span>"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://techcrunch.com/2026/03/05/openai-launches-gpt-5-4-with-pro-and-thinking-versions/",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "gemini-3-1-pro": {
+   "id": "gemini-3-1-pro",
+   "provider": "Google",
+   "provider_class": "dot-google",
+   "names": {
+    "ja": "Gemini 3.1 Pro Preview",
+    "en": "Gemini 3.1 Pro Preview"
+   },
+   "released": "2026-02-19",
+   "status": "unknown",
+   "price": {
+    "name": "Gemini 3.1 Pro Preview",
+    "input": 2.0,
+    "output": 12.0,
+    "note_ja": "≤200K・200K超は$4/$18",
+    "note_en": "≤200K · above 200K is $4/$18",
+    "label": "Google",
+    "provider": "google"
+   },
+   "timeline": {
+    "ja_id": "gemini-3-1-pro",
+    "en_id": "gemini-3-1-pro",
+    "title_ja": "Gemini 3.1 Pro Preview 公開",
+    "title_en": "Gemini 3.1 Pro Preview released",
+    "desc_ja": "抽象推論を大幅強化。ARC-AGI-2で77.1%記録。<span class=\"tl-price-badge\">$2.00/$12.00（≤200K）</span>",
+    "desc_en": "Major abstract reasoning gains. 77.1% on ARC-AGI-2. <span class=\"tl-price-badge\">$2.00/$12.00 (≤200K)</span>"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-1-pro/",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "claude-sonnet-4-6": {
+   "id": "claude-sonnet-4-6",
+   "provider": "Anthropic",
+   "provider_class": "dot-anthropic",
+   "names": {
+    "ja": "Claude Sonnet 4.6",
+    "en": "Claude Sonnet 4.6"
+   },
+   "released": "2026-02-17",
+   "status": "unknown",
+   "price": {
+    "name": "Claude Sonnet 4.6",
+    "input": 3.0,
+    "output": 15.0,
+    "note_ja": "",
+    "note_en": "",
+    "label": "Anthropic",
+    "provider": "anthropic"
+   },
+   "timeline": {
+    "ja_id": "claude-sonnet-4-6",
+    "en_id": "claude-sonnet-4-6",
+    "title_ja": "Claude Sonnet 4.6 公開",
+    "title_en": "Claude Sonnet 4.6 released",
+    "desc_ja": "コーディング・コンピュータ操作・長文推論・エージェントプランニングを全面強化したバランス型。<span class=\"tl-price-badge\">$3.00/$15.00</span>",
+    "desc_en": "Balanced model with upgraded coding, computer use, long-form reasoning and agentic planning. <span class=\"tl-price-badge\">$3.00/$15.00</span>"
+   },
+   "shown_on": [
+    "timeline",
+    "calculator"
+   ],
+   "sources": [
+    {
+     "url": "https://www.anthropic.com/news/claude-sonnet-4-6",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "claude-opus-4-6": {
+   "id": "claude-opus-4-6",
+   "provider": "Anthropic",
+   "provider_class": "dot-anthropic",
+   "names": {
+    "ja": "Claude Opus 4.6",
+    "en": "Claude Opus 4.6"
+   },
+   "released": "2026-02-05",
+   "status": "unknown",
+   "price": null,
+   "timeline": {
+    "ja_id": "claude-opus-4-6",
+    "en_id": "claude-opus-4-6",
+    "title_ja": "Claude Opus 4.6 公開 — フラッグシップに1Mトークンコンテキスト",
+    "title_en": "Claude Opus 4.6 released — 1M-token context on the flagship",
+    "desc_ja": "Anthropicフラッグシップに1Mトークンコンテキストウィンドウ導入。長文検索精度が大幅改善。",
+    "desc_en": "Introduced a 1M-token context window to Anthropic's flagship. Long-document retrieval accuracy significantly improved."
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [
+    {
+     "url": "https://www.codecademy.com/article/anthropic-claude-opus-4-6",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "gemini-3-pro": {
+   "id": "gemini-3-pro",
+   "provider": "Google",
+   "provider_class": "dot-google",
+   "names": {
+    "ja": "Gemini 3 Pro",
+    "en": "Gemini 3 Pro"
+   },
+   "released": "2025-11-18",
+   "status": "unknown",
+   "price": null,
+   "timeline": {
+    "ja_id": "gemini-3-pro",
+    "en_id": "gemini-3-pro",
+    "title_ja": "Gemini 3 Pro 公開 — 1Mトークン・マルチモーダル理解でLMArena首位",
+    "title_en": "Gemini 3 Pro released — 1M-token multimodal understanding tops LMArena",
+    "desc_ja": "1Mトークンコンテキストウィンドウと強化されたマルチモーダル理解力。LMArenaで1501 Eloを記録。",
+    "desc_en": "1M-token context window and enhanced multimodal understanding. Recorded 1501 Elo on LMArena."
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [
+    {
+     "url": "https://blog.google/products/gemini/gemini-3/",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "gpt-5": {
+   "id": "gpt-5",
+   "provider": "OpenAI",
+   "provider_class": "dot-openai",
+   "names": {
+    "ja": "GPT-5",
+    "en": "GPT-5"
+   },
+   "released": "2025-08-07",
+   "status": "unknown",
+   "price": null,
+   "timeline": {
+    "ja_id": "gpt-5",
+    "en_id": "gpt-5",
+    "title_ja": "GPT-5 公開 — 高速応答と推論を統合したルーター方式",
+    "title_en": "GPT-5 released — router-based system unifying fast response and reasoning",
+    "desc_ja": "高速応答モデルと推論モデルをリアルタイムルーターで自動選択するOpenAI初の統合型システム。現行はGPT-5.6系。",
+    "desc_en": "OpenAI's first unified system that auto-selects between a fast-response model and a reasoning model via a real-time router. Current generation is the GPT-5.6 family."
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [
+    {
+     "url": "https://openai.com/index/introducing-gpt-5/",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "deepseek-r1": {
+   "id": "deepseek-r1",
+   "provider": "DeepSeek",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "DeepSeek R1",
+    "en": "DeepSeek R1"
+   },
+   "released": "2025-01-20",
+   "status": "unknown",
+   "price": null,
+   "timeline": {
+    "ja_id": "deepseek-r1",
+    "en_id": "deepseek-r1",
+    "title_ja": "DeepSeek R1 公開 — 「DeepSeekショック」の起点",
+    "title_en": "DeepSeek R1 released — the origin of the \"DeepSeek Shock\"",
+    "desc_ja": "推論特化のオープンウェイトモデルをMITライセンスで公開。OpenAI o1相当の推論性能を低コストで実現し「DeepSeekショック」を引き起こした。",
+    "desc_en": "Open-weight reasoning model released under the MIT license. Achieved OpenAI o1-class reasoning at low cost, triggering the \"DeepSeek Shock.\""
+   },
+   "shown_on": [
+    "timeline"
+   ],
+   "sources": [
+    {
+     "url": "https://api-docs.deepseek.com/news/news250120",
+     "fetched_at": null,
+     "quote": null
+    }
+   ],
+   "events": []
+  },
+  "claude-fable-5-1-calc": {
+   "id": "claude-fable-5-1-calc",
+   "provider": "Anthropic",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "Claude Fable 5.1",
+    "en": "Claude Fable 5.1"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "Claude Fable 5.1",
+    "input": 10.0,
+    "output": 50.0,
+    "note_ja": "2026-09-01公開・cache読込$0.25",
+    "note_en": "Released 2026-09-01 · cache read $0.25",
+    "label": "Anthropic",
+    "provider": "anthropic"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "claude-fable-5-calc": {
+   "id": "claude-fable-5-calc",
+   "provider": "Anthropic",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "Claude Fable 5",
+    "en": "Claude Fable 5"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "Claude Fable 5",
+    "input": 10.0,
+    "output": 50.0,
+    "note_ja": "前世代",
+    "note_en": "Previous gen",
+    "label": "Anthropic",
+    "provider": "anthropic"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "claude-haiku-4-5": {
+   "id": "claude-haiku-4-5",
+   "provider": "Anthropic",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "Claude Haiku 4.5",
+    "en": "Claude Haiku 4.5"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "Claude Haiku 4.5",
+    "input": 1.0,
+    "output": 5.0,
+    "note_ja": "",
+    "note_en": "",
+    "label": "Anthropic",
+    "provider": "anthropic"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "gpt-6-sol": {
+   "id": "gpt-6-sol",
+   "provider": "OpenAI",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "GPT-6 Sol",
+    "en": "GPT-6 Sol"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "GPT-6 Sol",
+    "input": 2.0,
+    "output": 10.0,
+    "note_ja": "2026-09-22公開・cache入力$0.20",
+    "note_en": "Released 2026-09-22 · cached input $0.20",
+    "label": "OpenAI",
+    "provider": "openai"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "gpt-6-luna": {
+   "id": "gpt-6-luna",
+   "provider": "OpenAI",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "GPT-6 Luna",
+    "en": "GPT-6 Luna"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "GPT-6 Luna",
+    "input": 0.1,
+    "output": 0.5,
+    "note_ja": "2026-09-22公開・cache入力$0.01",
+    "note_en": "Released 2026-09-22 · cached input $0.01",
+    "label": "OpenAI",
+    "provider": "openai"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "gpt-5-6-sol": {
+   "id": "gpt-5-6-sol",
+   "provider": "OpenAI",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "GPT-5.6 Sol",
+    "en": "GPT-5.6 Sol"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "GPT-5.6 Sol",
+    "input": 4.0,
+    "output": 20.0,
+    "note_ja": "旧版（2026-09-22にGPT-6 Solへ後継）・cache読込$0.20",
+    "note_en": "Legacy — superseded by GPT-6 Sol on 2026-09-22 · cache read $0.20",
+    "label": "OpenAI",
+    "provider": "openai"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "gpt-5-6-terra": {
+   "id": "gpt-5-6-terra",
+   "provider": "OpenAI",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "GPT-5.6 Terra",
+    "en": "GPT-5.6 Terra"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "GPT-5.6 Terra",
+    "input": 2.0,
+    "output": 12.0,
+    "note_ja": "7/30値下げ",
+    "note_en": "Price cut 7/30",
+    "label": "OpenAI",
+    "provider": "openai"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "gpt-5-6-luna": {
+   "id": "gpt-5-6-luna",
+   "provider": "OpenAI",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "GPT-5.6 Luna",
+    "en": "GPT-5.6 Luna"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "GPT-5.6 Luna",
+    "input": 0.2,
+    "output": 1.2,
+    "note_ja": "旧版（2026-09-22にGPT-6 Lunaへ後継）・cache入力$0.02",
+    "note_en": "Legacy — superseded by GPT-6 Luna on 2026-09-22 · cached input $0.02",
+    "label": "OpenAI",
+    "provider": "openai"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "gpt-5-4-mini": {
+   "id": "gpt-5-4-mini",
+   "provider": "OpenAI",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "GPT-5.4 mini",
+    "en": "GPT-5.4 mini"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "GPT-5.4 mini",
+    "input": 0.75,
+    "output": 4.5,
+    "note_ja": "",
+    "note_en": "",
+    "label": "OpenAI",
+    "provider": "openai"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "gpt-5-4-nano": {
+   "id": "gpt-5-4-nano",
+   "provider": "OpenAI",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "GPT-5.4 nano",
+    "en": "GPT-5.4 nano"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "GPT-5.4 nano",
+    "input": 0.2,
+    "output": 1.25,
+    "note_ja": "",
+    "note_en": "",
+    "label": "OpenAI",
+    "provider": "openai"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "gemini-3-8-flash-calc": {
+   "id": "gemini-3-8-flash-calc",
+   "provider": "Google",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "Gemini 3.8 Flash",
+    "en": "Gemini 3.8 Flash"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "Gemini 3.8 Flash",
+    "input": 0.75,
+    "output": 3.75,
+    "note_ja": "導入価格(〜2026-12-31)・通常$1.50/$7.50",
+    "note_en": "Intro pricing (through 2026-12-31) · list $1.50/$7.50",
+    "label": "Google",
+    "provider": "google"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "gemini-3-6-flash-calc": {
+   "id": "gemini-3-6-flash-calc",
+   "provider": "Google",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "Gemini 3.6 Flash",
+    "en": "Gemini 3.6 Flash"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "Gemini 3.6 Flash",
+    "input": 0.75,
+    "output": 3.75,
+    "note_ja": "導入価格(〜2026-12-31)・通常$1.50/$7.50",
+    "note_en": "Intro pricing (through 2026-12-31) · list $1.50/$7.50",
+    "label": "Google",
+    "provider": "google"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "gemini-3-5-flash-calc": {
+   "id": "gemini-3-5-flash-calc",
+   "provider": "Google",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "Gemini 3.5 Flash",
+    "en": "Gemini 3.5 Flash"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "Gemini 3.5 Flash",
+    "input": 1.5,
+    "output": 9.0,
+    "note_ja": "",
+    "note_en": "",
+    "label": "Google",
+    "provider": "google"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "gemini-3-5-flash-lite": {
+   "id": "gemini-3-5-flash-lite",
+   "provider": "Google",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "Gemini 3.5 Flash-Lite",
+    "en": "Gemini 3.5 Flash-Lite"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "Gemini 3.5 Flash-Lite",
+    "input": 0.3,
+    "output": 2.5,
+    "note_ja": "2026年7月GA",
+    "note_en": "GA July 2026",
+    "label": "Google",
+    "provider": "google"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "gemini-3-1-flash-lite": {
+   "id": "gemini-3-1-flash-lite",
+   "provider": "Google",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "Gemini 3.1 Flash-Lite",
+    "en": "Gemini 3.1 Flash-Lite"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "Gemini 3.1 Flash-Lite",
+    "input": 0.25,
+    "output": 1.5,
+    "note_ja": "音声入力は$0.50",
+    "note_en": "audio input $0.50",
+    "label": "Google",
+    "provider": "google"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "gemini-omni-1-1-flash": {
+   "id": "gemini-omni-1-1-flash",
+   "provider": "Google",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "Gemini Omni 1.1 Flash",
+    "en": "Gemini Omni 1.1 Flash"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "Gemini Omni 1.1 Flash",
+    "input": 1.5,
+    "output": 9.0,
+    "note_ja": "動画生成・編集向け。出力はテキスト$9.00・動画$17.50",
+    "note_en": "Video generation/editing. Output: $9.00 text, $17.50 video",
+    "label": "Google",
+    "provider": "google"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "gemini-2-5-pro": {
+   "id": "gemini-2-5-pro",
+   "provider": "Google",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "Gemini 2.5 Pro",
+    "en": "Gemini 2.5 Pro"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "Gemini 2.5 Pro",
+    "input": 1.25,
+    "output": 10.0,
+    "note_ja": "",
+    "note_en": "",
+    "label": "Google",
+    "provider": "google"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "gemini-2-5-flash": {
+   "id": "gemini-2-5-flash",
+   "provider": "Google",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "Gemini 2.5 Flash",
+    "en": "Gemini 2.5 Flash"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "Gemini 2.5 Flash",
+    "input": 0.3,
+    "output": 2.5,
+    "note_ja": "",
+    "note_en": "",
+    "label": "Google",
+    "provider": "google"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "gemini-2-5-flash-lite": {
+   "id": "gemini-2-5-flash-lite",
+   "provider": "Google",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "Gemini 2.5 Flash-Lite",
+    "en": "Gemini 2.5 Flash-Lite"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "Gemini 2.5 Flash-Lite",
+    "input": 0.1,
+    "output": 0.4,
+    "note_ja": "",
+    "note_en": "",
+    "label": "Google",
+    "provider": "google"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "deepseek-v4-1-flash-calc": {
+   "id": "deepseek-v4-1-flash-calc",
+   "provider": "DeepSeek",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "DeepSeek V4.1 Flash",
+    "en": "DeepSeek V4.1 Flash"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "DeepSeek V4.1 Flash",
+    "input": 0.3,
+    "output": 1.2,
+    "note_ja": "ピーク(cache miss)・旧名 deepseek-v4-flash / deepseek-v4-flash-vision-exp はこのモデルへルーティング（Flash価格で課金）",
+    "note_en": "Peak (cache miss) · legacy names deepseek-v4-flash / deepseek-v4-flash-vision-exp route here (billed at Flash price)",
+    "label": "DeepSeek",
+    "provider": "deepseek"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "deepseek-v4-pro": {
+   "id": "deepseek-v4-pro",
+   "provider": "DeepSeek",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "DeepSeek V4 Pro",
+    "en": "DeepSeek V4 Pro"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "DeepSeek V4 Pro",
+    "input": 0.66,
+    "output": 1.98,
+    "note_ja": "オフピーク(cache miss)・2026-09-14以降も提供継続（公式が告知）",
+    "note_en": "Off-peak (cache miss) · continues after 2026-09-14 per DeepSeek's notice",
+    "label": "DeepSeek",
+    "provider": "deepseek"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "deepseek-v4-pro-calc": {
+   "id": "deepseek-v4-pro-calc",
+   "provider": "DeepSeek",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "DeepSeek V4 Pro",
+    "en": "DeepSeek V4 Pro"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "DeepSeek V4 Pro",
+    "input": 1.32,
+    "output": 3.96,
+    "note_ja": "ピーク(cache miss)・提供継続・Vision非対応",
+    "note_en": "Peak (cache miss) · still available · no vision support",
+    "label": "DeepSeek",
+    "provider": "deepseek"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "qwen3-8-max": {
+   "id": "qwen3-8-max",
+   "provider": "Alibaba",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "Qwen3.8-Max",
+    "en": "Qwen3.8-Max"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "Qwen3.8-Max",
+    "input": 2.0,
+    "output": 6.0,
+    "note_ja": "フラッグシップ",
+    "note_en": "Flagship",
+    "label": "Alibaba",
+    "provider": "other"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "kimi-k3-1-pro-calc": {
+   "id": "kimi-k3-1-pro-calc",
+   "provider": "Moonshot (Kimi)",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "Kimi K3.1 Pro",
+    "en": "Kimi K3.1 Pro"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "Kimi K3.1 Pro",
+    "input": 2.0,
+    "output": 10.0,
+    "note_ja": "cache入力$0.20・書込は5分$2.00/1時間$4.00・1,048,576コンテキスト・Batchは標準の60%",
+    "note_en": "cached input $0.20 · cache writes $2.00 (5m) / $4.00 (1h) · 1,048,576 context · Batch at 60%",
+    "label": "Moonshot (Kimi)",
+    "provider": "other"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "kimi-k3": {
+   "id": "kimi-k3",
+   "provider": "Moonshot AI",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "Kimi K3",
+    "en": "Kimi K3"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "Kimi K3",
+    "input": 3.0,
+    "output": 15.0,
+    "note_ja": "1Mコンテキスト・2026-09-18 Amazon Bedrock提供開始（cacheヒット$0.30）",
+    "note_en": "1M context · on Amazon Bedrock since 2026-09-18 · cached hit $0.30",
+    "label": "Moonshot AI",
+    "provider": "other"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "mimo-v2-6-pro": {
+   "id": "mimo-v2-6-pro",
+   "provider": "Xiaomi",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "MiMo-V2.6-Pro",
+    "en": "MiMo-V2.6-Pro"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "MiMo-V2.6-Pro",
+    "input": 0.435,
+    "output": 0.87,
+    "note_ja": "2026-09-22発表・1Mコンテキスト・入力4モダリティ（cacheヒット$0.0036）",
+    "note_en": "Announced 2026-09-22 · 1M context · 4 input modalities (cached hit $0.0036)",
+    "label": "Xiaomi",
+    "provider": "other"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "mimo-v2-6-flash": {
+   "id": "mimo-v2-6-flash",
+   "provider": "Xiaomi",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "MiMo-V2.6-Flash",
+    "en": "MiMo-V2.6-Flash"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "MiMo-V2.6-Flash",
+    "input": 0.14,
+    "output": 0.28,
+    "note_ja": "同シリーズのバランス型・Batch APIは50%価格（cacheヒット$0.0028）",
+    "note_en": "Balanced model · Batch API at 50% (cached hit $0.0028)",
+    "label": "Xiaomi",
+    "provider": "other"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "mimo-v2-6-pro-ultraspeed": {
+   "id": "mimo-v2-6-pro-ultraspeed",
+   "provider": "Xiaomi",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "MiMo-V2.6-Pro-UltraSpeed",
+    "en": "MiMo-V2.6-Pro-UltraSpeed"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "MiMo-V2.6-Pro-UltraSpeed",
+    "input": 4.35,
+    "output": 8.7,
+    "note_ja": "Proの高速API版（単価10倍・最大20倍速）",
+    "note_en": "High-speed API variant of Pro (10x price, up to 20x faster)",
+    "label": "Xiaomi",
+    "provider": "other"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  },
+  "meta-muse-wonder-calc": {
+   "id": "meta-muse-wonder-calc",
+   "provider": "Muse Wonder",
+   "provider_class": "dot-other",
+   "names": {
+    "ja": "Meta Muse Wonder",
+    "en": "Meta Muse Wonder"
+   },
+   "released": null,
+   "status": "unknown",
+   "price": {
+    "name": "Meta Muse Wonder",
+    "input": 4.0,
+    "output": 20.0,
+    "note_ja": "2026-10-12公開（muse-wonder-1.0）。キャッシュ入力 $0.20、1Mコンテキスト、長文プレミアムなし。Contributor モードの提供なし",
+    "note_en": "Released 2026-10-12 (muse-wonder-1.0). $0.20 cache input, 1M context, no long-context surcharge, no Contributor mode",
+    "label": "Muse Wonder",
+    "provider": "other"
+   },
+   "timeline": {
+    "ja_id": null,
+    "en_id": null,
+    "title_ja": "",
+    "title_en": ""
+   },
+   "shown_on": [
+    "calculator"
+   ],
+   "sources": [],
+   "events": []
+  }
+ },
+ "site_events": [
+  {
+   "date": "2026-11-14",
+   "kind": "page",
+   "key": "site-changelog",
+   "ja": "更新履歴ページ（/changelog/）を公開。全ページの履歴を台帳から生成する運用に変更",
+   "en": "Published the site-wide changelog; page histories are now generated from the ledger"
+  },
+  {
+   "date": "2026-11-14",
+   "kind": "page",
+   "key": "pricing-hydrogen-carbon",
+   "ja": "料金比較に Gemini 4 Hydrogen / Carbon を追加（計算機データも51件に）",
+   "en": "Added Gemini 4 Hydrogen / Carbon to the pricing tables (calculator data at 51 models)"
+  },
+  {
+   "date": "2026-11-14",
+   "kind": "page",
+   "key": "timeline-order",
+   "ja": "年表を日付降順に再構築し、英語版の欠落5件を補完",
+   "en": "Rebuilt the timeline in date order and filled 5 missing English entries"
+  },
+  {
+   "date": "2026-11-15",
+   "kind": "page",
+   "key": "speech-api-pricing-publish",
+   "ja": "音声・TTS・文字起こしAPIの料金比較（/speech-api-pricing/）を公開。単位の正規化と換算前提を明記し、Deprecated の文字課金TTSを注意ボックスで分離",
+   "en": "Published the speech API pricing comparison (/en/speech-api-pricing/), normalising TTS and transcription rates to a per-minute basis and flagging deprecated character-billed TTS models"
+  },
+  {
+   "date": "2026-11-15",
+   "kind": "page",
+   "key": "pricing-status-column",
+   "ja": "料金比較（日英）に状態列を追加。旧世代・提供終了予定の行を「旧版」「提供終了予定」として明示（行は削除しない）。出力単価の相場を掴む図も掲載",
+   "en": "Added a status column (Current / Legacy / Sunset announced) to the pricing tables, ja and en. Rows are never removed; also added a bar figure for output-price spread"
+  },
+  {
+   "date": "2026-11-15",
+   "kind": "page",
+   "key": "timeline-lifecycle-figure",
+   "ja": "年表に「発表→提供開始→価格改定→旧版化」の4段階図を追加（年表の読み方）",
+   "en": "Added a four-stage lifecycle figure (announcement → availability → price change → legacy) to the timeline"
+  },
+  {
+   "date": "2026-11-15",
+   "kind": "page",
+   "key": "multimodal-modality-figure",
+   "ja": "マルチモーダル特集を2026年11月版に更新。入力→換算→課金の3段図を追加（Google料金・OpenAI音声・Azure MAIを11-15に再確認）",
+   "en": "Updated the multimodal guide to the November 2026 edition; added an input → conversion → billing figure (Google pricing, OpenAI audio and Azure MAI re-checked on Nov 15)"
+  },
+  {
+   "date": "2026-11-15",
+   "kind": "page",
+   "key": "mai-november-edition",
+   "ja": "Microsoft AI（MAI）特集を2026年11月版に更新。Azure Foundry料金表が9行のままであることと各単価を11-15に再確認",
+   "en": "Updated the Microsoft AI (MAI) guide to the November 2026 edition; re-confirmed the Azure Foundry table still has nine model rows and the same unit prices"
+  },
+  {
+   "date": "2026-11-15",
+   "kind": "page",
+   "key": "glossary-fold-sources",
+   "ja": "用語集14ページの「出典」セクションを折りたたみ表示に（本文3,000字超のページの可読性対策）",
+   "en": "Collapsed the sources section on 14 glossary pages to make long entries easier to scan"
+  },
+  {
+   "date": "2026-11-15",
+   "kind": "page",
+   "key": "image-api-pricing",
+   "ja": "画像・動画生成APIの料金比較を新規公開。1枚／1Mトークン／1秒の単位差を公式の換算値でそろえ、未確認は明記",
+   "en": "Published the image and video generation pricing comparison, normalising per-image, per-1M-token and per-second rates on the providers' own conversion figures"
+  }
+ ],
+ "fx": {
+  "usd_jpy": 155,
+  "fixed_since": "2026-11-15",
+  "note_ja": "為替は1ドル155円で固定（計算機の初期値と同一）。日付で変動させない。円換算を出すページは必ず「1ドル=155円で換算」と明記する",
+  "note_en": "USD/JPY is fixed at 155 for all conversions (same as the calculator default). Pages that show yen amounts must state the rate."
+ },
+ "pricing_tables": [
+  {
+   "index": 0,
+   "headers": {
+    "ja": [
+     "モデル",
+     "入力",
+     "キャッシュ入力",
+     "出力",
+     "備考",
+     "状態"
+    ],
+    "en": [
+     "Model",
+     "Input",
+     "Cached Input",
+     "Output",
+     "Notes",
+     "Status"
+    ]
+   },
+   "header_text": {
+    "ja": [
+     "モデル",
+     "入力",
+     "キャッシュ入力",
+     "出力",
+     "備考",
+     "状態"
+    ],
+    "en": [
+     "Model",
+     "Input",
+     "Cached Input",
+     "Output",
+     "Notes",
+     "Status"
+    ]
+   },
+   "rows": [
+    {
+     "ja": "<tr><td class=\"model-name\">GPT-6 Astra </td><td class=\"price\">$10.00</td><td class=\"price\">$1.00</td><td class=\"price\">$50.00</td><td>新フラッグシップ（2026-09-03発表）。Long: $20/$2/$75。Fast mode 2倍 <a href=\"/gpt-6/\" style=\"font-weight:700;\">→詳細ページ</a></td><td class=\"st-cell st-cur\">現行</td></tr>",
+     "en": "<tr><td class=\"model-name\">GPT-6 Astra </td><td class=\"price\">$10.00</td><td class=\"price\">$1.00</td><td class=\"price\">$50.00</td><td>New flagship (announced 2026-09-03). Long: $20/$2/$75. Fast mode 2× <a href=\"/en/gpt-6/\" style=\"font-weight:700;\">→Deep dive</a></td><td class=\"st-cell st-cur\">Current</td></tr>"
+    },
+    {
+     "ja": "<tr><td class=\"model-name\">GPT-6 Sol </td><td class=\"price\">$2.00</td><td class=\"price\">$0.20</td><td class=\"price\">$10.00</td><td>2026-09-22公開。GPT-5.6 Solの後継で<strong>50%値下げ</strong>（旧$4/$20）。1,050,000コンテキスト・128K出力 <a href=\"/gpt-6-sol-luna/\" style=\"font-weight:700;\">→詳細ページ</a></td><td class=\"st-cell st-cur\">現行</td></tr>",
+     "en": "<tr><td class=\"model-name\">GPT-6 Sol </td><td class=\"price\">$2.00</td><td class=\"price\">$0.20</td><td class=\"price\">$10.00</td><td>Released 2026-09-22. Successor to GPT-5.6 Sol at <strong>50% off</strong> (was $4/$20). 1,050,000 context, 128K output <a href=\"/en/gpt-6-sol-luna/\" style=\"font-weight:700;\">→Deep dive</a></td><td class=\"st-cell st-cur\">Current</td></tr>"
+    },
+    {
+     "ja": "<tr><td class=\"model-name\">GPT-6.1 Sol </td><td class=\"price\">$2.00</td><td class=\"price\">$0.10</td><td class=\"price\">$10.00</td><td>入力$2・出力$10はGPT-6 Solと同額で、<strong>キャッシュ入力は$0.10（入力の5%）</strong>。キャッシュ書込$2.50・Fastは2倍・Ultrafastは6倍・Batch/Flexは50%引き。<strong>272,000トークン超の入力はリクエスト全体が入力2倍・出力1.5倍</strong> <a href=\"/gpt-6-1-sol/\" style=\"font-weight:700;\">→詳細ページ</a></td><td class=\"st-cell st-cur\">現行</td></tr>",
+     "en": "<tr><td class=\"model-name\">GPT-6.1 Sol </td><td class=\"price\">$2.00</td><td class=\"price\">$0.10</td><td class=\"price\">$10.00</td><td>Input $2 / output $10 matches GPT-6 Sol, but <strong>cached input is $0.10 (5% of input)</strong>. Cache writes $2.50, Fast 2x, Ultrafast 6x, Batch/Flex 50% off. <strong>Prompts above 272,000 input tokens are repriced at 2x input and 1.5x output for the whole request</strong> <a href=\"/en/gpt-6-1-sol/\">Details →</a></td><td class=\"st-cell st-cur\">Current</td></tr>"
+    },
+    {
+     "ja": "<tr><td class=\"model-name\">GPT-6.1 Terra </td><td class=\"price\">$1.00</td><td class=\"price\">$0.05</td><td class=\"price\">$5.00</td><td>2026-10-26公開。キャッシュ読込$0.05は入力の5%。OpenAI公式料金ページで再確認（2026-11-10） <a href=\"/gpt-6-1-terra/\" style=\"font-weight:700;\">→詳細ページ</a></td><td class=\"st-cell st-cur\">現行</td></tr>",
+     "en": "<tr><td class=\"model-name\">GPT-6.1 Terra </td><td class=\"price\">$1.00</td><td class=\"price\">$0.05</td><td class=\"price\">$5.00</td><td>Released 2026-10-26. Cache read $0.05 = 5% of input. Re-checked on the OpenAI pricing page (2026-11-10). <a href=\"/en/gpt-6-1-terra/\" style=\"font-weight:700;\">→ details</a></td><td class=\"st-cell st-cur\">Current</td></tr>"
+    },
+    {
+     "ja": "<tr><td class=\"model-name\">GPT-6 Luna </td><td class=\"price\">$0.10</td><td class=\"price\">$0.01</td><td class=\"price\">$0.50</td><td>2026-09-22公開。GPT-5.6 Lunaの後継で<strong>50%値下げ</strong>（旧$0.20/$1.20）。Free/Goはデスクトップアプリで利用可 <a href=\"/gpt-6-sol-luna/\" style=\"font-weight:700;\">→詳細ページ</a></td><td class=\"st-cell st-cur\">現行</td></tr>",
+     "en": "<tr><td class=\"model-name\">GPT-6 Luna </td><td class=\"price\">$0.10</td><td class=\"price\">$0.01</td><td class=\"price\">$0.50</td><td>Released 2026-09-22. Successor to GPT-5.6 Luna at <strong>50% off</strong> (was $0.20/$1.20). Free/Go tiers get it in the desktop app <a href=\"/en/gpt-6-sol-luna/\" style=\"font-weight:700;\">→Deep dive</a></td><td class=\"st-cell st-cur\">Current</td></tr>"
+    },
+    {
+     "ja": "<tr><td class=\"model-name\">GPT-5.6 Sol </td><td class=\"price\">$4.00 <span class=\"badge badge-intro\">〜11/21</span></td><td class=\"price\">$0.40</td><td class=\"price\">$20.00</td><td>GPT-6 Solの前世代（<strong>旧版</strong>）。プロモ価格（旧$5/$30）。Long: $8/$0.80/$30 <a href=\"/gpt-5-6-sol/\" style=\"font-weight:700;\">→詳細ページ</a></td><td class=\"st-cell st-old\">旧版</td></tr>",
+     "en": "<tr><td class=\"model-name\">GPT-5.6 Sol </td><td class=\"price\">$4.00 <span class=\"badge badge-intro\">thru 11/21</span></td><td class=\"price\">$0.40</td><td class=\"price\">$20.00</td><td>Previous generation of GPT-6 Sol (<strong>legacy</strong>). Promo (was $5/$30). Long: $8/$0.80/$30 <a href=\"/en/gpt-5-6-sol/\" style=\"font-weight:700;\">→Deep dive</a></td><td class=\"st-cell st-old\">Legacy</td></tr>"
+    },
+    {
+     "ja": "<tr><td class=\"model-name\">GPT-5.6 Terra </td><td class=\"price\">$2.00</td><td class=\"price\">$0.20</td><td class=\"price\">$12.00</td><td>2026-07-30値下げ（旧$2.50/$15）。Long: $4/$0.40/$18</td><td class=\"st-cell st-old\">旧版</td></tr>",
+     "en": "<tr><td class=\"model-name\">GPT-5.6 Terra </td><td class=\"price\">$2.00</td><td class=\"price\">$0.20</td><td class=\"price\">$12.00</td><td>Cut 2026-07-30 (was $2.50/$15). Long: $4/$0.40/$18</td><td class=\"st-cell st-old\">Legacy</td></tr>"
+    },
+    {
+     "ja": "<tr><td class=\"model-name\">GPT-5.6 Luna </td><td class=\"price\">$0.20</td><td class=\"price\">$0.02</td><td class=\"price\">$1.20</td><td>GPT-6 Lunaの前世代（<strong>旧版</strong>）。2026-07-30値下げ（旧$1/$6）。Long: $0.40/$0.04/$1.80 <a href=\"/gpt-5-6-luna/\" style=\"font-weight:700;\">→詳細ページ</a></td><td class=\"st-cell st-old\">旧版</td></tr>",
+     "en": "<tr><td class=\"model-name\">GPT-5.6 Luna </td><td class=\"price\">$0.20</td><td class=\"price\">$0.02</td><td class=\"price\">$1.20</td><td>Previous generation of GPT-6 Luna (<strong>legacy</strong>). Cut 2026-07-30 (was $1/$6). Long: $0.40/$0.04/$1.80 <a href=\"/en/gpt-5-6-luna/\" style=\"font-weight:700;\">→Deep dive</a></td><td class=\"st-cell st-old\">Legacy</td></tr>"
+    },
+    {
+     "ja": "<tr><td class=\"model-name\">GPT-5.5</td><td class=\"price\">$5.00</td><td class=\"price\">$0.50</td><td class=\"price\">$30.00</td><td>前世代フラッグシップ</td><td class=\"st-cell st-old\">旧版</td></tr>",
+     "en": "<tr><td class=\"model-name\">GPT-5.5</td><td class=\"price\">$5.00</td><td class=\"price\">$0.50</td><td class=\"price\">$30.00</td><td>Previous flagship</td><td class=\"st-cell st-old\">Legacy</td></tr>"
+    },
+    {
+     "ja": "<tr><td class=\"model-name\">GPT-5.4</td><td class=\"price\">$2.50</td><td class=\"price\">$0.25</td><td class=\"price\">$15.00</td><td>バランス型</td><td class=\"st-cell st-old\">旧版</td></tr>",
+     "en": "<tr><td class=\"model-name\">GPT-5.4</td><td class=\"price\">$2.50</td><td class=\"price\">$0.25</td><td class=\"price\">$15.00</td><td>Balanced (superseded by Terra)</td><td class=\"st-cell st-old\">Legacy</td></tr>"
+    },
+    {
+     "ja": "<tr><td class=\"model-name\">GPT-5.4 mini</td><td class=\"price\">$0.75</td><td class=\"price\">$0.075</td><td class=\"price\">$4.50</td><td>軽量・低コスト版</td><td class=\"st-cell st-old\">旧版</td></tr>",
+     "en": "<tr><td class=\"model-name\">GPT-5.4 mini</td><td class=\"price\">$0.75</td><td class=\"price\">$0.075</td><td class=\"price\">$4.50</td><td>Lightweight tier</td><td class=\"st-cell st-old\">Legacy</td></tr>"
+    },
+    {
+     "ja": "<tr><td class=\"model-name\">GPT-5.4 nano</td><td class=\"price\">$0.20</td><td class=\"price\">$0.02</td><td class=\"price\">$1.25</td><td>最軽量・最安</td><td class=\"st-cell st-old\">旧版</td></tr>",
+     "en": "<tr><td class=\"model-name\">GPT-5.4 nano</td><td class=\"price\">$0.20</td><td class=\"price\">$0.02</td><td class=\"price\">$1.25</td><td>Cheapest tier</td><td class=\"st-cell st-old\">Legacy</td></tr>"
+    }
+   ]
+  },
+  {
+   "index": 1,
+   "headers": {
+    "ja": [
+     "モデル",
+     "入力",
+     "書込5分",
+     "読込",
+     "出力",
+     "備考",
+     "状態"
+    ],
+    "en": [
+     "Model",
+     "Input",
+     "Cache Write 5m",
+     "Cache Hit",
+     "Output",
+     "Notes",
+     "Status"
+    ]
+   },
+   "header_text": {
+    "ja": [
+     "モデル",
+     "入力",
+     "書込5分",
+     "読込",
+     "出力",
+     "備考",
+     "状態"
+    ],
+    "en": [
+     "Model",
+     "Input",
+     "Cache Write 5m",
+     "Cache Hit",
+     "Output",
+     "Notes",
+     "Status"
+    ]
+   },
+   "rows": [
+    {
+     "ja": "<tr><td class=\"model-name\">Claude Fable 5.2 </td><td class=\"price\">$8.00</td><td class=\"price\">$10.00</td><td class=\"price\">$0.20</td><td class=\"price\">$40.00</td><td>2026-11-09公開（単価は2026-11-12確認、キャッシュ単価は2026-11-14確認）。Fable 5.1の後継で入出力とも20%安（$10/$50→$8/$40）。fast modeは$16/$80。全ユーザー向けに提供（公式「available today on all platforms」）。Batchは入力$4/MTok <a href=\"/claude-fable-5-1/\" style=\"font-weight:700;\">→前世代の詳細</a></td><td class=\"st-cell st-cur\">現行</td></tr>",
+     "en": "<tr><td class=\"model-name\">Claude Fable 5.2 </td><td class=\"price\">$8.00</td><td class=\"price\">$10.00</td><td class=\"price\">$0.20</td><td class=\"price\">$40.00</td><td>Released 2026-11-09 (rates verified 2026-11-12; cache rates verified 2026-11-14). Successor to Fable 5.1 at 20% lower rates ($10/$50 → $8/$40); fast mode $16/$80. Available to all users (\"available today on all platforms\"). Batch input $4/MTok <a href=\"/en/claude-fable-5-1/\" style=\"font-weight:700;\">→ previous generation</a></td><td class=\"st-cell st-cur\">Current</td></tr>"
+    },
+    {
+     "ja": "<tr><td class=\"model-name\">Claude Fable 5.1 </td><td class=\"price\">$10.00</td><td class=\"price\">$12.50</td><td class=\"price\">$0.25</td><td class=\"price\">$50.00</td><td>2026-09-01公開。Fable 5後継。キャッシュ読込75%減（$1.00→$0.25） <a href=\"/claude-fable-5-1/\" style=\"font-weight:700;\">→詳細ページ</a></td><td class=\"st-cell st-cur\">現行</td></tr>",
+     "en": "<tr><td class=\"model-name\">Claude Fable 5.1 </td><td class=\"price\">$10.00</td><td class=\"price\">$12.50</td><td class=\"price\">$0.25</td><td class=\"price\">$50.00</td><td>Released 2026-09-01. Fable 5 successor. Cache read 75% off ($1.00→$0.25) <a href=\"/en/claude-fable-5-1/\" style=\"font-weight:700;\">→Deep dive</a></td><td class=\"st-cell st-cur\">Current</td></tr>"
+    },
+    {
+     "ja": "<tr><td class=\"model-name\">Claude Fable 5</td><td class=\"price\">$10.00</td><td class=\"price\">$12.50</td><td class=\"price\">$1.00</td><td class=\"price\">$50.00</td><td>前世代フラッグシップ。キャッシュ読込$1.00</td><td class=\"st-cell st-old\">旧版</td></tr>",
+     "en": "<tr><td class=\"model-name\">Claude Fable 5</td><td class=\"price\">$10.00</td><td class=\"price\">$12.50</td><td class=\"price\">$1.00</td><td class=\"price\">$50.00</td><td>Previous-gen flagship. Cache read $1.00</td><td class=\"st-cell st-old\">Legacy</td></tr>"
+    },
+    {
+     "ja": "<tr><td class=\"model-name\">Claude Opus 5.5 </td><td class=\"price\">$4.00</td><td class=\"price\">$5.00</td><td class=\"price\">$0.20</td><td class=\"price\">$20.00</td><td>2026-09-22公開。Claude 5.5系の第一弾。<strong>Opus 5より安い</strong>（$5/$25→$4/$20）・キャッシュ読込60%減（$0.50→$0.20）。Fast mode $8/$40 <a href=\"/claude-opus-5-5/\" style=\"font-weight:700;\">→詳細ページ</a></td><td class=\"st-cell st-cur\">現行</td></tr>",
+     "en": "<tr><td class=\"model-name\">Claude Opus 5.5 </td><td class=\"price\">$4.00</td><td class=\"price\">$5.00</td><td class=\"price\">$0.20</td><td class=\"price\">$20.00</td><td>Released 2026-09-22. First of the Claude 5.5 family. <strong>Cheaper than Opus 5</strong> ($5/$25→$4/$20); cache reads down 60% ($0.50→$0.20). Fast mode $8/$40 <a href=\"/en/claude-opus-5-5/\" style=\"font-weight:700;\">→Deep dive</a></td><td class=\"st-cell st-cur\">Current</td></tr>"
+    },
+    {
+     "ja": "<tr><td class=\"model-name\">Claude Opus 5 </td><td class=\"price\">$5.00</td><td class=\"price\">$6.25</td><td class=\"price\">$0.50</td><td class=\"price\">$25.00</td><td>2026-07-24発表。Opus 4.8後継。Fast mode $10/$50。<strong>Opus 5.5の前世代</strong></td><td class=\"st-cell st-old\">旧版</td></tr>",
+     "en": "<tr><td class=\"model-name\">Claude Opus 5 </td><td class=\"price\">$5.00</td><td class=\"price\">$6.25</td><td class=\"price\">$0.50</td><td class=\"price\">$25.00</td><td>Released 2026-07-24. Same price as Opus 4.8. Fast mode $10/$50. <strong>Previous generation to Opus 5.5</strong></td><td class=\"st-cell st-old\">Legacy</td></tr>"
+    },
+    {
+     "ja": "<tr><td class=\"model-name\">Claude Opus 4.8</td><td class=\"price\">$5.00</td><td class=\"price\">$6.25</td><td class=\"price\">$0.50</td><td class=\"price\">$25.00</td><td>前世代Opus。フォールバックモデル</td><td class=\"st-cell st-old\">旧版</td></tr>",
+     "en": "<tr><td class=\"model-name\">Claude Opus 4.8</td><td class=\"price\">$5.00</td><td class=\"price\">$6.25</td><td class=\"price\">$0.50</td><td class=\"price\">$25.00</td><td>Previous Opus. Fallback for Claude Max</td><td class=\"st-cell st-old\">Legacy</td></tr>"
+    },
+    {
+     "ja": "<tr><td class=\"model-name\">Claude Sonnet 5.5 </td><td class=\"price\">$2.00</td><td class=\"price\">$2.50</td><td class=\"price\">$0.10</td><td class=\"price\">$10.00</td><td>2026-09-28公開。入力・出力は前世代Sonnet 5と<strong>同額</strong>（世代更新）。キャッシュ読込は$0.20→$0.10に修正（2026-10-09に公式ページで確認）。<a href=\"/claude-sonnet-5-5/\">詳細 →</a></td><td class=\"st-cell st-cur\">現行</td></tr>",
+     "en": "<tr><td class=\"model-name\">Claude Sonnet 5.5 </td><td class=\"price\">$2.00</td><td class=\"price\">$2.50</td><td class=\"price\">$0.10</td><td class=\"price\">$10.00</td><td>Released 2026-09-28. <strong>Input/output the same as Sonnet 5</strong>; cache reads halved from $0.20 to $0.10 (corrected 2026-10-09 against the official page). <a href=\"/en/claude-sonnet-5-5/\">Details →</a></td><td class=\"st-cell st-cur\">Current</td></tr>"
+    },
+    {
+     "ja": "<tr><td class=\"model-name\">Claude Sonnet 5</td><td class=\"price\">$2.00</td><td class=\"price\">$2.50</td><td class=\"price\">$0.20</td><td class=\"price\">$10.00</td><td>2026-06-30公開（前世代）。$2/$10は恒久化（2026-08-10発表）</td><td class=\"st-cell st-old\">旧版</td></tr>",
+     "en": "<tr><td class=\"model-name\">Claude Sonnet 5</td><td class=\"price\">$2.00</td><td class=\"price\">$2.50</td><td class=\"price\">$0.20</td><td class=\"price\">$10.00</td><td>Released 2026-06-30 (previous generation). $2/$10 now permanent (announced 2026-08-10)</td><td class=\"st-cell st-old\">Legacy</td></tr>"
+    },
+    {
+     "ja": "<tr><td class=\"model-name\">Claude Sonnet 4.6</td><td class=\"price\">$3.00</td><td class=\"price\">$3.75</td><td class=\"price\">$0.30</td><td class=\"price\">$15.00</td><td>旧世代バランス型</td><td class=\"st-cell st-old\">旧版</td></tr>",
+     "en": "<tr><td class=\"model-name\">Claude Sonnet 4.6</td><td class=\"price\">$3.00</td><td class=\"price\">$3.75</td><td class=\"price\">$0.30</td><td class=\"price\">$15.00</td><td>Older balanced model</td><td class=\"st-cell st-old\">Legacy</td></tr>"
+    },
+    {
+     "ja": "<tr><td class=\"model-name\">Claude Haiku 5.5 </td><td class=\"price\">$0.10</td><td class=\"price\">$0.125</td><td class=\"price\">$0.01</td><td class=\"price\">$0.50</td><td>2026-10-07公開。Claude 5.5世代の最速・最安。<strong>100,000トークン超は入力$0.50・出力$2.50・キャッシュ読込$0.05・キャッシュ書込$0.625（5分TTL）／$1（1時間TTL）</strong>の2段階。Batch APIは入出力とも50%引き。トークナイザー変更で同じ文面は約30%多くカウント <a href=\"/claude-haiku-5-5/\" style=\"font-weight:700;\">→詳細ページ</a></td><td class=\"st-cell st-cur\">現行</td></tr>",
+     "en": "<tr><td class=\"model-name\">Claude Haiku 5.5 </td><td class=\"price\">$0.10</td><td class=\"price\">$0.125</td><td class=\"price\">$0.01</td><td class=\"price\">$0.50</td><td>Released 2026-10-07. Fastest and cheapest of the Claude 5.5 family. <strong>Above 100,000 tokens: $0.50 input / $2.50 output / $0.05 cache reads / $0.625 (5-min TTL) and $1 (1-hour TTL) cache writes.</strong> Batch API is 50% off input and output. The new tokenizer counts the same text as roughly 30% more tokens. <a href=\"/en/claude-haiku-5-5/\">Details →</a></td><td class=\"st-cell st-cur\">Current</td></tr>"
+    },
+    {
+     "ja": "<tr><td class=\"model-name\">Claude Haiku 4.5</td><td class=\"price\">$1.00</td><td class=\"price\">$1.25</td><td class=\"price\">$0.10</td><td class=\"price\">$5.00</td><td>大量処理・分類向け</td><td class=\"st-cell st-old\">旧版</td></tr>",
+     "en": "<tr><td class=\"model-name\">Claude Haiku 4.5</td><td class=\"price\">$1.00</td><td class=\"price\">$1.25</td><td class=\"price\">$0.10</td><td class=\"price\">$5.00</td><td>High-volume, classification</td><td class=\"st-cell st-old\">Legacy</td></tr>"
+    }
+   ]
+  },
+  {
+   "index": 2,
+   "headers": {
+    "ja": [
+     "モデル",
+     "入力",
+     "入力&gt;200K",
+     "出力",
+     "出力&gt;200K",
+     "備考",
+     "状態"
+    ],
+    "en": [
+     "Model",
+     "Input",
+     "Input&gt;200K",
+     "Output",
+     "Output&gt;200K",
+     "Notes",
+     "Status"
+    ]
+   },
+   "header_text": {
+    "ja": [
+     "モデル",
+     "入力",
+     "入力&gt;200K",
+     "出力",
+     "出力&gt;200K",
+     "備考",
+     "状態"
+    ],
+    "en": [
+     "Model",
+     "Input",
+     "Input&gt;200K",
+     "Output",
+     "Output&gt;200K",
+     "Notes",
+     "Status"
+    ]
+   },
+   "rows": [
+    {
+     "ja": "<tr><td class=\"model-name\">Gemini 4 Hydrogen <br><small>(gemini-4-hydrogen)</small></td><td class=\"price\">$1.50</td><td class=\"price\">—</td><td class=\"price\">$7.50</td><td class=\"price\">—</td><td>2026-11-12発表。100万トークン全体に<strong>フラット単価</strong>（段階課金なし）。キャッシュは<strong>暗黙キャッシュのみ</strong>（$0.075）。無料枠あり・Batchの記載なし。<a href=\"/timeline/\" style=\"font-weight:700;\">→年表</a></td><td class=\"st-cell st-cur\">現行</td></tr>",
+     "en": "<tr><td class=\"model-name\">Gemini 4 Hydrogen <br><small>(gemini-4-hydrogen)</small></td><td class=\"price\">$1.50</td><td class=\"price\">—</td><td class=\"price\">$7.50</td><td class=\"price\">—</td><td>Announced 2026-11-12. <strong>Flat rate across the full 1M tokens</strong> (no tiered pricing). <strong>Implicit caching only</strong> ($0.075). Free tier available, no batch pricing listed. <a href=\"/en/timeline/\" style=\"font-weight:700;\">→timeline</a></td><td class=\"st-cell st-cur\">Current</td></tr>"
+    },
+    {
+     "ja": "<tr><td class=\"model-name\">Gemini 4 Carbon <br><small>(gemini-4-carbon)</small></td><td class=\"price\">$2.00 <span class=\"badge badge-intro\">〜11/30</span><br><small>$4.00(12/1〜)</small></td><td class=\"price\">—</td><td class=\"price\">$10.00 <span class=\"badge badge-intro\">〜11/30</span><br><small>$20.00(12/1〜)</small></td><td class=\"price\">—</td><td>2026-11-10に一般提供（公式「available to developers, enterprises, scientists, and consumers」）。キャッシュは<strong>暗黙キャッシュのみ</strong>（$0.10〜11/30）。<strong>Batch API非対応</strong>・無料枠なし。コンテキスト長は未確認。<a href=\"/timeline/\" style=\"font-weight:700;\">→年表</a></td><td class=\"st-cell st-cur\">現行</td></tr>",
+     "en": "<tr><td class=\"model-name\">Gemini 4 Carbon <br><small>(gemini-4-carbon)</small></td><td class=\"price\">$2.00 <span class=\"badge badge-intro\">until 11/30</span><br><small>$4.00(12/1~)</small></td><td class=\"price\">—</td><td class=\"price\">$10.00 <span class=\"badge badge-intro\">until 11/30</span><br><small>$20.00(12/1~)</small></td><td class=\"price\">—</td><td>Generally available on 2026-11-10 (\"available to developers, enterprises, scientists, and consumers\"). <strong>Implicit caching only</strong> ($0.10 until 11/30). <strong>Batch API not supported</strong>, no free tier. Context length unconfirmed. <a href=\"/en/timeline/\" style=\"font-weight:700;\">→timeline</a></td><td class=\"st-cell st-cur\">Current</td></tr>"
+    },
+    {
+     "ja": "<tr><td class=\"model-name\">Gemini 4 Argon <br><small>(gemini-4-argon)</small></td><td class=\"price\">$2.00 <span class=\"badge badge-intro\">〜11/30</span><br><small>$4.00(12/1〜)</small></td><td class=\"price\">—</td><td class=\"price\">$10.00 <span class=\"badge badge-intro\">〜11/30</span><br><small>$20.00(12/1〜)</small></td><td class=\"price\">—</td><td>2026年10月にGA（<code>gemini-4-argon</code>）。1Mコンテキスト・最大出力65,536（long decodeで最大1,048,576）。キャッシュは<strong>暗黙キャッシュのみ</strong>（$0.10〜11/30）・無料枠なし。<a href=\"/timeline/\" style=\"font-weight:700;\">→年表</a></td><td class=\"st-cell st-cur\">現行</td></tr>",
+     "en": "<tr><td class=\"model-name\">Gemini 4 Argon <br><small>(gemini-4-argon)</small></td><td class=\"price\">$2.00 <span class=\"badge badge-intro\">until 11/30</span><br><small>$4.00(12/1~)</small></td><td class=\"price\">—</td><td class=\"price\">$10.00 <span class=\"badge badge-intro\">until 11/30</span><br><small>$20.00(12/1~)</small></td><td class=\"price\">—</td><td>GA in October 2026 (<code>gemini-4-argon</code>). 1M context, 65,536 max output (up to 1,048,576 with long decode). <strong>Implicit caching only</strong> ($0.10 until 11/30), no free tier. <a href=\"/en/timeline/\" style=\"font-weight:700;\">→timeline</a></td><td class=\"st-cell st-cur\">Current</td></tr>"
+    },
+    {
+     "ja": "<tr><td class=\"model-name\">Gemini 3.8 Flash </td><td class=\"price\">$0.75 <span class=\"badge badge-intro\">〜12/31</span><br><small>$1.50(1/1〜)</small></td><td class=\"price\">—</td><td class=\"price\">$3.75 <span class=\"badge badge-intro\">〜12/31</span><br><small>$7.50(1/1〜)</small></td><td class=\"price\">—</td><td>2026-09-02公開。推論/コーディング最強Flash。3.8 Flash CyberはFairwind限定 <a href=\"/gemini-3-8-flash/\" style=\"font-weight:700;\">→詳細ページ</a></td><td class=\"st-cell st-cur\">現行</td></tr>",
+     "en": "<tr><td class=\"model-name\">Gemini 3.8 Flash </td><td class=\"price\">$0.75 <span class=\"badge badge-intro\">until 12/31</span><br><small>$1.50(1/1~)</small></td><td class=\"price\">—</td><td class=\"price\">$3.75 <span class=\"badge badge-intro\">until 12/31</span><br><small>$7.50(1/1~)</small></td><td class=\"price\">—</td><td>Released 2026-09-02. Best reasoning/coding Flash. 3.8 Flash Cyber is Fairwind-only <a href=\"/en/gemini-3-8-flash/\" style=\"font-weight:700;\">→Deep dive</a></td><td class=\"st-cell st-cur\">Current</td></tr>"
+    },
+    {
+     "ja": "<tr><td class=\"model-name\">Gemini 3.7 Flash <span class=\"badge badge-intro\">終了予定</span></td><td class=\"price\">$0.75 <span class=\"badge badge-intro\">〜12/31</span><br><small>$1.50(1/1〜)</small></td><td class=\"price\">—</td><td class=\"price\">$3.75 <span class=\"badge badge-intro\">〜12/31</span><br><small>$7.50(1/1〜)</small></td><td class=\"price\">—</td><td>2026-08-14公開。コーディング/エージェント向け最強Flash <a href=\"/gemini-3-7-flash/\" style=\"font-weight:700;\">→詳細ページ</a><br><strong>提供終了予定（2027-01-28・移行先 Gemini 3.8 Flash）</strong>: Google Cloud のモデル ライフサイクルで廃止日と交換用モデルIDを確認（2026-11-10）。AI Studio では選択不可・APIリクエストは 3.8 Flash へ自動ルーティング。</td><td class=\"st-cell st-sun\">提供終了予定</td></tr>",
+     "en": "<tr><td class=\"model-name\">Gemini 3.7 Flash <span class=\"badge badge-intro\">Sunset</span></td><td class=\"price\">$0.75 <span class=\"badge badge-intro\">until 12/31</span><br><small>$1.50(1/1~)</small></td><td class=\"price\">—</td><td class=\"price\">$3.75 <span class=\"badge badge-intro\">until 12/31</span><br><small>$7.50(1/1~)</small></td><td class=\"price\">—</td><td>Released 2026-08-14. Most capable Flash for coding/agents <a href=\"/en/gemini-3-7-flash/\" style=\"font-weight:700;\">→Deep dive</a><br><strong>Scheduled for retirement (2027-01-28; replacement model gemini-3.8-flash)</strong>: retirement date and replacement model ID checked in Google Cloud model lifecycle docs (2026-11-10). Not selectable in AI Studio; API requests are auto-routed to 3.8 Flash.</td><td class=\"st-cell st-sun\">Sunset announced</td></tr>"
+    },
+    {
+     "ja": "<tr><td class=\"model-name\">Gemini 3.6 Flash </td><td class=\"price\">$0.75 <span class=\"badge badge-intro\">〜12/31</span><br><small>$1.50(1/1〜)</small></td><td class=\"price\">—</td><td class=\"price\">$3.75 <span class=\"badge badge-intro\">〜12/31</span><br><small>$7.50(1/1〜)</small></td><td class=\"price\">—</td><td>初回価格へ値下げ（旧$1.50/$7.50）</td><td class=\"st-cell st-old\">旧版</td></tr>",
+     "en": "<tr><td class=\"model-name\">Gemini 3.6 Flash </td><td class=\"price\">$0.75 <span class=\"badge badge-intro\">until 12/31</span><br><small>$1.50(1/1~)</small></td><td class=\"price\">—</td><td class=\"price\">$3.75 <span class=\"badge badge-intro\">until 12/31</span><br><small>$7.50(1/1~)</small></td><td class=\"price\">—</td><td>Cut to introductory price (was $1.50/$7.50)</td><td class=\"st-cell st-old\">Legacy</td></tr>"
+    },
+    {
+     "ja": "<tr><td class=\"model-name\">Gemini 3.5 Flash</td><td class=\"price\">$1.50</td><td class=\"price\">—</td><td class=\"price\">$9.00</td><td class=\"price\">—</td><td>2026年5月GA</td><td class=\"st-cell st-old\">旧版</td></tr>",
+     "en": "<tr><td class=\"model-name\">Gemini 3.5 Flash</td><td class=\"price\">$1.50</td><td class=\"price\">—</td><td class=\"price\">$9.00</td><td class=\"price\">—</td><td>GA May 2026</td><td class=\"st-cell st-old\">Legacy</td></tr>"
+    },
+    {
+     "ja": "<tr><td class=\"model-name\">Gemini 3.5 Flash-Lite</td><td class=\"price\">$0.30</td><td class=\"price\">—</td><td class=\"price\">$2.50</td><td class=\"price\">—</td><td>2026年7月GA。Gemini 3.x最安</td><td class=\"st-cell st-old\">旧版</td></tr>",
+     "en": "<tr><td class=\"model-name\">Gemini 3.5 Flash-Lite</td><td class=\"price\">$0.30</td><td class=\"price\">—</td><td class=\"price\">$2.50</td><td class=\"price\">—</td><td>GA July 2026. Cheapest Gemini 3.x</td><td class=\"st-cell st-old\">Legacy</td></tr>"
+    },
+    {
+     "ja": "<tr><td class=\"model-name\">Gemini 3.1 Pro Preview <span class=\"badge badge-preview\">Preview</span></td><td class=\"price\">$2.00</td><td class=\"price\">$4.00</td><td class=\"price\">$12.00</td><td class=\"price\">$18.00</td><td>Preview価格</td><td class=\"st-cell st-cur\">現行</td></tr>",
+     "en": "<tr><td class=\"model-name\">Gemini 3.1 Pro Preview <span class=\"badge badge-preview\">Preview</span></td><td class=\"price\">$2.00</td><td class=\"price\">$4.00</td><td class=\"price\">$12.00</td><td class=\"price\">$18.00</td><td>Preview pricing</td><td class=\"st-cell st-cur\">Current</td></tr>"
+    },
+    {
+     "ja": "<tr><td class=\"model-name\">Gemini 3.1 Flash-Lite</td><td class=\"price\">$0.25</td><td class=\"price\">—</td><td class=\"price\">$1.50</td><td class=\"price\">—</td><td>audio $0.50</td><td class=\"st-cell st-cur\">現行</td></tr>",
+     "en": "<tr><td class=\"model-name\">Gemini 3.1 Flash-Lite</td><td class=\"price\">$0.25</td><td class=\"price\">—</td><td class=\"price\">$1.50</td><td class=\"price\">—</td><td>Audio $0.50</td><td class=\"st-cell st-cur\">Current</td></tr>"
+    },
+    {
+     "ja": "<tr><td class=\"model-name\">Gemini 2.5 Pro</td><td class=\"price\">$1.25</td><td class=\"price\">$2.50</td><td class=\"price\">$10.00</td><td class=\"price\">$15.00</td><td></td><td class=\"st-cell st-old\">旧版</td></tr>",
+     "en": "<tr><td class=\"model-name\">Gemini 2.5 Pro</td><td class=\"price\">$1.25</td><td class=\"price\">$2.50</td><td class=\"price\">$10.00</td><td class=\"price\">$15.00</td><td></td><td class=\"st-cell st-old\">Legacy</td></tr>"
+    },
+    {
+     "ja": "<tr><td class=\"model-name\">Gemini 2.5 Flash</td><td class=\"price\">$0.30</td><td class=\"price\">—</td><td class=\"price\">$2.50</td><td class=\"price\">—</td><td>audio $1.00</td><td class=\"st-cell st-old\">旧版</td></tr>",
+     "en": "<tr><td class=\"model-name\">Gemini 2.5 Flash</td><td class=\"price\">$0.30</td><td class=\"price\">—</td><td class=\"price\">$2.50</td><td class=\"price\">—</td><td>Audio $1.00</td><td class=\"st-cell st-old\">Legacy</td></tr>"
+    },
+    {
+     "ja": "<tr><td class=\"model-name\">Gemini 2.5 Flash-Lite</td><td class=\"price\">$0.10</td><td class=\"price\">—</td><td class=\"price\">$0.40</td><td class=\"price\">—</td><td>audio $0.30</td><td class=\"st-cell st-old\">旧版</td></tr>",
+     "en": "<tr><td class=\"model-name\">Gemini 2.5 Flash-Lite</td><td class=\"price\">$0.10</td><td class=\"price\">—</td><td class=\"price\">$0.40</td><td class=\"price\">—</td><td>Audio $0.30</td><td class=\"st-cell st-old\">Legacy</td></tr>"
+    }
+   ]
+  },
+  {
+   "index": 3,
+   "headers": {
+    "ja": [
+     "モデル",
+     "入力(cache miss)",
+     "入力(cache hit)",
+     "出力",
+     "備考",
+     "状態"
+    ],
+    "en": [
+     "Model",
+     "Input (miss)",
+     "Input (hit)",
+     "Output",
+     "Notes",
+     "Status"
+    ]
+   },
+   "header_text": {
+    "ja": [
+     "モデル",
+     "入力(cache miss)",
+     "入力(cache hit)",
+     "出力",
+     "備考",
+     "状態"
+    ],
+    "en": [
+     "Model",
+     "Input (miss)",
+     "Input (hit)",
+     "Output",
+     "Notes",
+     "Status"
+    ]
+   },
+   "rows": [
+    {
+     "ja": "<tr><td class=\"model-name\">DeepSeek V4.1 Flash <br><small>(deepseek-flash)</small></td><td class=\"price\">$0.15（オフピーク）<br>$0.30（ピーク）</td><td class=\"price\">$0.003（オフピーク）<br>$0.006（ピーク）</td><td class=\"price\">$0.60（オフピーク）<br>$1.20（ピーク）</td><td>1Mコンテキスト・384K出力。ネイティブVision対応（画像入力可）。2026-09-10リリース <a href=\"/deepseek-v4-1-flash/\" style=\"font-weight:700;\">→詳細・導入手順</a></td><td class=\"st-cell st-cur\">現行</td></tr>",
+     "en": "<tr><td class=\"model-name\">DeepSeek V4.1 Flash <br><small>(deepseek-flash)</small></td><td class=\"price\">$0.15 (off-peak)<br>$0.30 (peak)</td><td class=\"price\">$0.003 (off-peak)<br>$0.006 (peak)</td><td class=\"price\">$0.60 (off-peak)<br>$1.20 (peak)</td><td>1M ctx, 384K out. Native vision (image input). Released 2026-09-10 <a href=\"/en/deepseek-v4-1-flash/\" style=\"font-weight:700;\">→ guide</a></td><td class=\"st-cell st-cur\">Current</td></tr>"
+    },
+    {
+     "ja": "<tr><td class=\"model-name\">DeepSeek V4 Pro<br><small>(-0813)・提供中</small></td><td class=\"price\">$0.66（オフピーク）<br>$1.32（ピーク）</td><td class=\"price\">$0.022（オフピーク）<br>$0.044（ピーク）</td><td class=\"price\">$1.98（オフピーク）<br>$3.96（ピーク）</td><td><strong>この単価は現行も有効。</strong>公式は「2026-09-14 以降も V4 Pro の API サービス提供を継続し、課金方法は変更しない」と告知済み（9/14 の V4.1 Flash ルーティング予告は撤回）。Vision 非対応・同時実行数 500。 <a href=\"/deepseek-v4-pro/\" style=\"font-weight:700;\">→提供継続のまとめ</a></td><td class=\"st-cell st-cur\">現行</td></tr>",
+     "en": "<tr><td class=\"model-name\">DeepSeek V4 Pro<br><small>(-0813) · live</small></td><td class=\"price\">$0.66 (off-peak)<br>$1.32 (peak)</td><td class=\"price\">$0.022 (off-peak)<br>$0.044 (peak)</td><td class=\"price\">$1.98 (off-peak)<br>$3.96 (peak)</td><td><strong>These rates are current.</strong> DeepSeek states V4 Pro keeps running after 2026-09-14 with billing unchanged (the 9/14 routing notice was withdrawn). No vision; concurrency 500. <a href=\"/en/deepseek-v4-pro/\" style=\"font-weight:700;\">→ continuation details</a></td><td class=\"st-cell st-cur\">Current</td></tr>"
+    }
+   ]
+  },
+  {
+   "index": 4,
+   "headers": {
+    "ja": [
+     "モデル",
+     "入力",
+     "出力",
+     "備考",
+     "状態"
+    ],
+    "en": [
+     "Model",
+     "Input",
+     "Output",
+     "Notes",
+     "Status"
+    ]
+   },
+   "header_text": {
+    "ja": [
+     "モデル",
+     "入力",
+     "出力",
+     "備考",
+     "状態"
+    ],
+    "en": [
+     "Model",
+     "Input",
+     "Output",
+     "Notes",
+     "Status"
+    ]
+   },
+   "rows": [
+    {
+     "ja": "<tr><td class=\"model-name\">Grok 4.7 </td><td class=\"price\">$2.00</td><td class=\"price\">$6.00</td><td>2026-09-21公開。fast variantは2倍（$4/$12）・200K超は $4/$12（long context） <a href=\"/grok-4-7/\" style=\"font-weight:700;\">→詳細ページ</a></td><td class=\"st-cell st-cur\">現行</td></tr>",
+     "en": "<tr><td class=\"model-name\">Grok 4.7 </td><td class=\"price\">$2.00</td><td class=\"price\">$6.00</td><td>Released 2026-09-21. Fast variant 2× ($4/$12) · long context $4/$12 above 200K <a href=\"/en/grok-4-7/\" style=\"font-weight:700;\">→Deep dive</a></td><td class=\"st-cell st-cur\">Current</td></tr>"
+    },
+    {
+     "ja": "<tr><td class=\"model-name\">Grok 4.6</td><td class=\"price\">$2.00</td><td class=\"price\">$6.00</td><td>2026-08-12公開。fast variantは2倍（$4/$12） <a href=\"/grok-4-6/\" style=\"font-weight:700;\">→詳細ページ</a></td><td class=\"st-cell st-old\">旧版</td></tr>",
+     "en": "<tr><td class=\"model-name\">Grok 4.6</td><td class=\"price\">$2.00</td><td class=\"price\">$6.00</td><td>Released 2026-08-12. Fast variant 2× ($4/$12) <a href=\"/en/grok-4-6/\" style=\"font-weight:700;\">→Deep dive</a></td><td class=\"st-cell st-old\">Legacy</td></tr>"
+    }
+   ]
+  },
+  {
+   "index": 5,
+   "headers": {
+    "ja": [
+     "モデル",
+     "入力",
+     "キャッシュ入力",
+     "出力",
+     "備考",
+     "状態"
+    ],
+    "en": [
+     "Model",
+     "Input",
+     "Cached Input",
+     "Output",
+     "Notes",
+     "Status"
+    ]
+   },
+   "header_text": {
+    "ja": [
+     "モデル",
+     "入力",
+     "キャッシュ入力",
+     "出力",
+     "備考",
+     "状態"
+    ],
+    "en": [
+     "Model",
+     "Input",
+     "Cached Input",
+     "Output",
+     "Notes",
+     "Status"
+    ]
+   },
+   "rows": [
+    {
+     "ja": "<tr><td class=\"model-name\">GLM-5.3-Flash </td><td class=\"price\">$0.15</td><td class=\"price\">$0.03</td><td class=\"price\">$0.50</td><td>320B/18B MoE・1Mコンテキスト・128K出力・MIT。ネイティブマルチモーダル <a href=\"/glm-5-3-flash/\" style=\"font-weight:700;\">→詳細ページ</a></td><td class=\"st-cell st-cur\">現行</td></tr>",
+     "en": "<tr><td class=\"model-name\">GLM-5.3-Flash </td><td class=\"price\">$0.15</td><td class=\"price\">$0.03</td><td class=\"price\">$0.50</td><td>320B/18B MoE, 1M ctx, 128K out, MIT. Natively multimodal <a href=\"/en/glm-5-3-flash/\" style=\"font-weight:700;\">→Deep dive</a></td><td class=\"st-cell st-cur\">Current</td></tr>"
+    },
+    {
+     "ja": "<tr><td class=\"model-name\">GLM-5.3</td><td class=\"price\">$1.40</td><td class=\"price\">$0.26</td><td class=\"price\">$4.40</td><td>推論モデル。キャッシュ保存は期間限定無料</td><td class=\"st-cell st-cur\">現行</td></tr>",
+     "en": "<tr><td class=\"model-name\">GLM-5.3</td><td class=\"price\">$1.40</td><td class=\"price\">$0.26</td><td class=\"price\">$4.40</td><td>Reasoning model. Cache storage limited-time free</td><td class=\"st-cell st-cur\">Current</td></tr>"
+    },
+    {
+     "ja": "<tr><td class=\"model-name\">GLM-5.2</td><td class=\"price\">$1.40</td><td class=\"price\">$0.26</td><td class=\"price\">$4.40</td><td>MITライセンス。キャッシュ保存は期間限定無料</td><td class=\"st-cell st-old\">旧版</td></tr>",
+     "en": "<tr><td class=\"model-name\">GLM-5.2</td><td class=\"price\">$1.40</td><td class=\"price\">$0.26</td><td class=\"price\">$4.40</td><td>MIT license. Cache storage limited-time free</td><td class=\"st-cell st-old\">Legacy</td></tr>"
+    }
+   ]
+  },
+  {
+   "index": 6,
+   "headers": {
+    "ja": [
+     "モデル",
+     "入力",
+     "出力",
+     "備考",
+     "状態"
+    ],
+    "en": [
+     "Model",
+     "Input",
+     "Output",
+     "Notes",
+     "Status"
+    ]
+   },
+   "header_text": {
+    "ja": [
+     "モデル",
+     "入力",
+     "出力",
+     "備考",
+     "状態"
+    ],
+    "en": [
+     "Model",
+     "Input",
+     "Output",
+     "Notes",
+     "Status"
+    ]
+   },
+   "rows": [
+    {
+     "ja": "<tr><td class=\"model-name\">Qwen3.8-Flash </td><td class=\"price\">$0.15</td><td class=\"price\">$0.47</td><td>2026-08-26公開。125B/6B active MoE・256K→1Mコンテキスト・マルチモーダル。Qwen4プレビュー <a href=\"/qwen-3-8-flash/\" style=\"font-weight:700;\">→詳細ページ</a></td><td class=\"st-cell st-cur\">現行</td></tr>",
+     "en": "<tr><td class=\"model-name\">Qwen3.8-Flash </td><td class=\"price\">$0.15</td><td class=\"price\">$0.47</td><td>Released 2026-08-26. 125B/6B active MoE, 256K→1M context, multimodal. Qwen4 preview <a href=\"/en/qwen-3-8-flash/\" style=\"font-weight:700;\">→Deep dive</a></td><td class=\"st-cell st-cur\">Current</td></tr>"
+    },
+    {
+     "ja": "<tr><td class=\"model-name\">Qwen3.8-Max</td><td class=\"price\">$2.00</td><td class=\"price\">$6.00</td><td>フラッグシップ（2.4T MoE・1Mコンテキスト）。暗黙キャッシュ$0.25</td><td class=\"st-cell st-cur\">現行</td></tr>",
+     "en": "<tr><td class=\"model-name\">Qwen3.8-Max</td><td class=\"price\">$2.00</td><td class=\"price\">$6.00</td><td>Flagship (2.4T MoE, 1M context). Implicit cache $0.25</td><td class=\"st-cell st-cur\">Current</td></tr>"
+    }
+   ]
+  },
+  {
+   "index": 7,
+   "headers": {
+    "ja": [
+     "モデル",
+     "入力",
+     "キャッシュ入力",
+     "出力",
+     "備考",
+     "状態"
+    ],
+    "en": [
+     "Model",
+     "Input",
+     "Cached input",
+     "Output",
+     "Notes",
+     "Status"
+    ]
+   },
+   "header_text": {
+    "ja": [
+     "モデル",
+     "入力",
+     "キャッシュ入力",
+     "出力",
+     "備考",
+     "状態"
+    ],
+    "en": [
+     "Model",
+     "Input",
+     "Cached input",
+     "Output",
+     "Notes",
+     "Status"
+    ]
+   },
+   "rows": [
+    {
+     "ja": "<tr><td class=\"model-name\">Kimi K3.1 Pro </td><td class=\"price\">$2.00</td><td class=\"price\">$0.20</td><td class=\"price\">$10.00</td><td>1,048,576コンテキスト。キャッシュ課金は<strong>既定で自動有効</strong>（書込は5分$2.00/1時間$4.00）。Batchは標準の60%。<code>kimi-k3.1-pro</code> <a href=\"/kimi-k3-1-pro/\" style=\"font-weight:700;\">→詳細ページ</a></td><td class=\"st-cell st-cur\">現行</td></tr>",
+     "en": "<tr><td class=\"model-name\">Kimi K3.1 Pro </td><td class=\"price\">$2.00</td><td class=\"price\">$0.20</td><td class=\"price\">$10.00</td><td>1,048,576 context. Cache billing is <strong>on by default</strong> (writes $2.00 for 5m, $4.00 for 1h). Batch at 60% of standard. <code>kimi-k3.1-pro</code> <a href=\"/en/kimi-k3-1-pro/\" style=\"font-weight:700;\">→Deep dive</a></td><td class=\"st-cell st-cur\">Current</td></tr>"
+    },
+    {
+     "ja": "<tr><td class=\"model-name\">Kimi K3.1 Pro Highspeed</td><td class=\"price\">$4.00</td><td class=\"price\">$0.20</td><td class=\"price\">$20.00</td><td>同品質の高速版（単価2倍）。書込は5分$4.00/1時間$8.00</td><td class=\"st-cell st-cur\">現行</td></tr>",
+     "en": "<tr><td class=\"model-name\">Kimi K3.1 Pro Highspeed</td><td class=\"price\">$4.00</td><td class=\"price\">$0.20</td><td class=\"price\">$20.00</td><td>Same quality, faster (2x rates). Writes $4.00 (5m) / $8.00 (1h)</td><td class=\"st-cell st-cur\">Current</td></tr>"
+    },
+    {
+     "ja": "<tr><td class=\"model-name\">Kimi K3</td><td class=\"price\">$3.00</td><td class=\"price\">$0.30</td><td class=\"price\">$15.00</td><td>前世代。K2系は2026-10-31以降 新規登録者に非開放・12月末で終了予定</td><td class=\"st-cell st-old\">旧版</td></tr>",
+     "en": "<tr><td class=\"model-name\">Kimi K3</td><td class=\"price\">$3.00</td><td class=\"price\">$0.30</td><td class=\"price\">$15.00</td><td>Previous generation. K2 closes to new users from 2026-10-31 and retires end of Dec 2026</td><td class=\"st-cell st-old\">Legacy</td></tr>"
+    }
+   ]
+  },
+  {
+   "index": 8,
+   "headers": {
+    "ja": [
+     "モデル",
+     "入力",
+     "キャッシュ入力",
+     "出力",
+     "備考",
+     "状態"
+    ],
+    "en": [
+     "Model",
+     "Input",
+     "Cached input",
+     "Output",
+     "Notes",
+     "Status"
+    ]
+   },
+   "header_text": {
+    "ja": [
+     "モデル",
+     "入力",
+     "キャッシュ入力",
+     "出力",
+     "備考",
+     "状態"
+    ],
+    "en": [
+     "Model",
+     "Input",
+     "Cached input",
+     "Output",
+     "Notes",
+     "Status"
+    ]
+   },
+   "rows": [
+    {
+     "ja": "<tr><td class=\"model-name\">Muse Ember <br><small>(muse-ember-1.0)</small></td><td class=\"price\">$0.10</td><td class=\"price\">未確認</td><td class=\"price\">$0.50</td><td>2026-11-09公開（単価は2026-11-12確認）。Museシリーズ最小・最効率。ツール呼び出し・ルーティング・抽出・長文パースなど反復タスク向け。Meta Model API／Muse Code／Google Cloud／Oracle Cloudで提供 <a href=\"/timeline/#muse-ember\" style=\"font-weight:700;\">→年表</a></td><td class=\"st-cell st-cur\">現行</td></tr>",
+     "en": "<tr><td class=\"model-name\">Muse Ember <br><small>(muse-ember-1.0)</small></td><td class=\"price\">$0.10</td><td class=\"price\">Not confirmed</td><td class=\"price\">$0.50</td><td>Released 2026-11-09 (rates verified 2026-11-12). Smallest and most efficient Muse model, built for tool calls, routing, extraction and long-document parsing. On the Meta Model API, Muse Code, Google Cloud and Oracle Cloud <a href=\"/en/timeline/#muse-ember\" style=\"font-weight:700;\">→ timeline</a></td><td class=\"st-cell st-cur\">Current</td></tr>"
+    },
+    {
+     "ja": "<tr><td class=\"model-name\">Muse Wonder <br><small>(muse-wonder-1.0)</small></td><td class=\"price\">$4.00</td><td class=\"price\">$0.20</td><td class=\"price\">$20.00</td><td>2026-10-12公開。1Mコンテキスト・長文プレミアムなし。Web検索グラウンディングは $2.50 / 1,000クエリの別建て <a href=\"/timeline/\" style=\"font-weight:700;\">→年表</a></td><td class=\"st-cell st-cur\">現行</td></tr>",
+     "en": "<tr><td class=\"model-name\">Muse Wonder <br><small>(muse-wonder-1.0)</small></td><td class=\"price\">$4.00</td><td class=\"price\">$0.20</td><td class=\"price\">$20.00</td><td>Launched 2026-10-12. 1M context, no long-context premium. Web search grounding is billed separately at $2.50 per 1,000 queries <a href=\"/en/timeline/\" style=\"font-weight:700;\">→ timeline</a></td><td class=\"st-cell st-cur\">Current</td></tr>"
+    },
+    {
+     "ja": "<tr><td class=\"model-name\">Muse Spark<br><small>(muse-spark-1.3 / 1.2 / 1.1)</small></td><td class=\"price\">$1.25<br><small>Contributor $0.10</small></td><td class=\"price\">$0.15<br><small>Contributor $0.002</small></td><td class=\"price\">$4.25<br><small>Contributor $0.20</small></td><td>Muse Spark 1.1 は Standard モードのみ。Contributor モードは <code>muse-spark-1.3-contributor</code> / <code>1.2-contributor</code> で利用</td><td class=\"st-cell st-cur\">現行</td></tr>",
+     "en": "<tr><td class=\"model-name\">Muse Spark<br><small>(muse-spark-1.3 / 1.2 / 1.1)</small></td><td class=\"price\">$1.25<br><small>Contributor $0.10</small></td><td class=\"price\">$0.15<br><small>Contributor $0.002</small></td><td class=\"price\">$4.25<br><small>Contributor $0.20</small></td><td>Muse Spark 1.1 is Standard mode only. Contributor mode is available via the <code>muse-spark-1.3-contributor</code> / <code>1.2-contributor</code> variants</td><td class=\"st-cell st-cur\">Current</td></tr>"
+    }
+   ]
+  }
+ ]
+}

@@ -63,12 +63,12 @@
 <header class="site-header"><div class="header-inner"><a href="/" class="site-logo"><img src="/logo.svg" class="logo-icon" alt="" width="22" height="22" aria-hidden="true">LLM Data Hub</a><nav aria-label="メインナビゲーション"><a href="/" class="nav-link">ホーム</a><a href="/pricing/" class="nav-link">料金比較</a><a href="/calculator/" class="nav-link">トークン計算機</a><a href="/timeline/" class="nav-link">リリース年表</a><a href="/china-ai/" class="nav-link">中国AI</a><a href="/multimodal/" class="nav-link">マルチモーダル</a><a href="/mai/" class="nav-link">MS AI (MAI)</a><a href="/glossary/" class="nav-link active" aria-current="page">用語説明</a></nav></div></header>
 
 <main><div class="container">
+<figure class="key-visual" style="margin:1.5rem 0 .5rem;"><img src="/assets/og/ja-zoa.png" alt="このページの内容を1枚にまとめた画像" width="1200" height="630" loading="eager" decoding="async" style="width:100%;max-width:900px;height:auto;display:block;margin:0 auto;border:1px solid var(--c-border);border-radius:var(--r-md);"></figure>
+
   <div class="section" style="padding-bottom:0;">
     <h1 class="section-title" style="font-size:1.55rem;">ZOA（ゼロオペレーターアクセス）とは — 「保存しない」と「見られない」は別の約束</h1>
     <p class="section-sub" style="max-width:790px;">
-      <a href="/glossary/">用語説明</a> 第9回。第7回の <a href="/glossary/zero-data-retention/">ZDR（ゼロデータ保持）</a> と第8回の <a href="/glossary/four-data-requirements/">データの4要件</a> で、ZOAは<strong>「見せない」＝サービス運営者側の人間が中身にアクセスできないこと</strong>として一度だけ登場しました。
-      このページはそこを深掘りします。<strong>ZDRが「保存の話」なら、ZOAは「人のアクセスの話」</strong>です。保存していなくても処理の途中で見ることは理論上でき、逆に30日保存していても運営者が復号できなければ中身は読めません。<strong>2つは独立した約束</strong>で、片方を満たしてももう片方は満たしません。
-      ここでは、アクセスを止める仕組みを<strong>① 手続き ② 鍵 ③ 実行環境</strong>の3層に分け、各社が公開している<strong>逐語</strong>で「何が既定で、何が申請制か」を並べます。
+      <a href="/glossary/">用語説明</a> 第9回。第7回の <a href="/glossary/zero-data-retention/">ZDR（ゼロデータ保持）</a> と第8回の <a href="/glossary/four-data-requirements/">データの4要件</a> で、ZOAは<strong>「見せない」＝サービス運営者側の人間が中身にアクセスできないこと</strong>として一度だけ登場しました。このページはそこを深掘りします。<strong>ZDRが「保存の話」なら、ZOAは「人のアクセスの話」</strong>です。保存していなくても処理の途中で見ることは理論上でき、逆に30日保存していても運営者が復号できなければ中身は読めません。<strong>2つは独立した約束</strong>で、片方を満たしてももう片方は満たしません。ここでは、アクセスを止める仕組みを<strong>① 手続き ② 鍵 ③ 実行環境</strong>の3層に分け、各社が公開している<strong>逐語</strong>で「何が既定で、何が申請制か」を並べます。
     </p>
     <div class="phrase-box">
       <p class="phrase">ZOA（ゼロオペレーターアクセス）＝ <strong>サービスを運営している側の人間が、あなたのデータを復号・閲覧できない</strong>という約束。</p>
@@ -81,7 +81,25 @@
     </div>
   </div>
 
-  <section class="section" style="padding-top:1.5rem;" aria-labelledby="def-h">
+  <div class="section" style="padding-top:1.25rem;padding-bottom:0;">
+  <nav class="toc" aria-label="目次">
+    <p class="toc-title">目次</p>
+    <ol>
+      <li><a href="#def-h">1. ZOAが防ぐもの・防がないもの</a></li>
+      <li><a href="#sep-h">2. 「保存しない（ZDR）」と「見られない（ZOA）」は別の約束</a></li>
+      <li><a href="#layers-h">3. アクセスを止める3つの層</a></li>
+      <li><a href="#key-h">4. 鍵管理の3段階 — CMK / BYOK / HYOK</a></li>
+      <li><a href="#appr-h">5. 「利用者の操作なしにアクセスできない」ことをどう担保するか</a></li>
+      <li><a href="#matrix-h">6. ベンダー別の提供状況（提供有無・対象・有効化方法）</a></li>
+      <li><a href="#myth-h">7. 混同しやすい3つの誤解</a></li>
+      <li><a href="#steps-h">8. 契約前に確認する5項目</a></li>
+      <li><a href="#faq-h">9. よくある質問</a></li>
+      <li><a href="#param-h">補足: モデルサイズの「◯B（Active ◯B）」という表記</a></li>
+      <li><a href="#rel-h">関連ページ</a></li>
+    </ol>
+  </nav>
+</div>
+<section class="section" style="padding-top:1.5rem;" aria-labelledby="def-h">
     <h2 class="section-title" id="def-h" style="font-size:1.2rem;">1. ZOAが防ぐもの・防がないもの</h2>
     <p class="section-sub">このページで「オペレーター（運営者）」というときは、<strong>クラウド事業者＝サービスを提供する側の運用担当者・サポートエンジニア・基盤管理者</strong>を指します（例: AWS の運用担当者）。攻撃者や他テナントの話ではありません。一方、<strong>そのクラウドを使う企業側の担当者（自社の情報システム部門・運用チームなど）は別の主体</strong>で、ZOA が約束する対象ではありません。つまり ZOA は「<strong>提供者側の人間が悪意を持つ場合</strong>まで含めて、そもそも読めないようにする」という設計目標で、<strong>自社側の担当者が読めるかどうかは、自社の権限設計・鍵管理の話</strong>になります。</p>
     <div class="table-wrap"><table class="mtable"><thead><tr><th>問い</th><th>ZOAが答える範囲</th><th>注意点</th></tr></thead><tbody>
