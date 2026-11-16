@@ -32,6 +32,7 @@ DEFAULT_SITE = os.environ.get("SITE_LOCAL_DIR", "") or "/tmp/site"
 DEFAULT_WS = os.environ.get("WORKSPACE_DIR", "") or "/workspace"
 
 SECTION_RE = re.compile(r"<section\b[^>]*aria-labelledby=\"([^\"]+)\"[^>]*>", re.I)
+H2_RE = re.compile(r"<h2[^>]*>(.*?)</h2>", re.S)
 ID_RE = re.compile(r"id=\"([^\"]+)\"")
 TABLE_RE = re.compile(r"<table[^>]*>.*?</table>", re.S)
 TBODY_RE = re.compile(r"<tbody[^>]*>(.*?)</tbody>", re.S)
@@ -45,6 +46,13 @@ def _model_name_of(row_html: str) -> str:
         return ""
     txt = re.sub(r"<[^>]+>", " ", m.group(1))
     return re.sub(r"\s+", " ", txt).strip()
+
+
+def _section_title(seg: str) -> str:
+    m = H2_RE.search(seg or "")
+    if not m:
+        return ""
+    return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", m.group(1))).strip()
 
 
 def _first_row_name(tbody_html: str) -> str:
@@ -102,22 +110,29 @@ def check_pricing_tables(site: Path, ws: Path) -> tuple:
         for anchor, seg in _sections(html):
             t = TABLE_RE.search(seg)
             if t and anchor not in spans:
-                spans[anchor] = t.group(0)
+                spans[anchor] = (seg, t.group(0))
         for spec in specs:
             anchor = spec.get("anchor") or ""
             rows = [r.get(lang) for r in spec.get("rows", [])]
             if not anchor or not rows or any(r is None for r in rows):
                 continue
-            table = spans.get(anchor)
-            if table is None:
+            hit = spans.get(anchor)
+            if hit is None:
                 errors.append("pricing-tables %s: #%s のセクション/表が無い"
                               % (rel, anchor))
                 continue
+            sec, table = hit
             m = TBODY_RE.search(table)
             if not m:
                 errors.append("pricing-tables %s: #%s の <tbody> が無い"
                               % (rel, anchor))
                 continue
+            title = (spec.get("title") or {}).get(lang)
+            got_title = _section_title(sec)
+            if title and got_title and re.sub(r"\s+", " ", title).strip() != got_title:
+                errors.append(
+                    "pricing-tables %s: #%s の見出しが台帳と違う（ページ=%r / 台帳=%r）"
+                    % (rel, anchor, got_title, title))
             got = _first_row_name(m.group(1))
             want = _model_name_of(rows[0])
             if got != want:

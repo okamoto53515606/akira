@@ -7,6 +7,7 @@
 # - 自己改善系: システムプロンプト/skillsの書き換え（翌日起動時に反映）
 
 import json
+import logging
 import os
 import pathlib
 import re
@@ -38,6 +39,8 @@ from settings import (
 )
 
 _invalidation_paths: list[str] = []  # 実行終盤にまとめてinvalidation
+
+logger = logging.getLogger("akira.tools")
 
 # サイト全体をローカルに展開する作業フォルダ。タスク開始時に run_daily が S3 から全件DLする。
 SITE_LOCAL_DIR = os.getenv("SITE_LOCAL_DIR", "/tmp/site")
@@ -595,6 +598,31 @@ def _s3_key_is_new(s3, key: str) -> bool:
         return False
 
 
+def _render_site_from_ledger(base_dir: str) -> list:
+    """台帳（/workspace/data/facts.json）からサイトを描画する（LLMコスト0）。
+
+    2026-11-17 追加・順序の変更:
+        描画を「公開の後ろ」でしか呼んでいなかったため、**レビュー通過後に描画で
+        料金表の `<tbody>` が入れ替わり、誰も見ていない状態で公開された**
+        （Xiaomi の表に Kimi の行が入っていた事故）。
+        公開の**前**に描画し、その結果にゲートを当てる（描画→検査→公開）。
+    失敗しても公開は止めない（描画できない＝従来どおり手編集のまま公開）。
+    """
+    import importlib.util
+
+    script = os.path.join(WORKSPACE_LOCAL_DIR, "tools", "render_site.py")
+    if not os.path.exists(script):
+        return []
+    try:
+        spec = importlib.util.spec_from_file_location("akira_render_pre", script)
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        return mod.run(pathlib.Path(base_dir), pathlib.Path(WORKSPACE_LOCAL_DIR))
+    except Exception:  # noqa: BLE001
+        logger.exception("公開前の描画に失敗しました（描画なしで公開を続行します）")
+        return []
+
+
 def _render_and_publish_entrypoints(base_dir: str, s3) -> list:
     """新規ページ登録の直後に、トップ・更新履歴・sitemap を作り直して公開する。
 
@@ -607,18 +635,7 @@ def _render_and_publish_entrypoints(base_dir: str, s3) -> list:
 
     戻り値: 公開したキーの一覧。
     """
-    import importlib.util
-
-    script = os.path.join(WORKSPACE_LOCAL_DIR, "tools", "render_site.py")
-    if not os.path.exists(script):
-        return []
-    try:
-        spec = importlib.util.spec_from_file_location("akira_render_after", script)
-        mod = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(mod)
-        changed = mod.run(pathlib.Path(base_dir), pathlib.Path(WORKSPACE_LOCAL_DIR))
-    except Exception:  # noqa: BLE001
-        return []
+    changed = _render_site_from_ledger(base_dir)
 
     # 生成物のうち「入り口」になるものだけ公開する（ページ本体は既に上がっている）
     targets = ["index.html", "en/index.html", "changelog/index.html",
@@ -660,6 +677,13 @@ def site_upload(local_path: str, site_prefix: str = "") -> dict:
     src = _resolve_local_path(local_path)
     if not os.path.exists(src):
         return {"status": "failed", "reason": f"存在しません: {local_path}"}
+
+    # --- 公開前に台帳から描画する（2026-11-17 追加）---
+    # 2026-11-17 05:33 の事故: レビュー通過後に（この site_upload の後半で）描画が
+    # 走り、料金表の <tbody> が位置ずれで入れ替わった。それがそのまま公開された。
+    # レビューは「描画前のファイル」を見ていたので、誰も気づけない構造だった。
+    # 描画→ゲート→公開の順に固定し、**公開する実物**にゲートを当てる。
+    render_changed = _render_site_from_ledger(base_dir)
 
     if os.path.isfile(src):
         if _is_skipped_upload_name(os.path.basename(src)):
@@ -769,6 +793,8 @@ def site_upload(local_path: str, site_prefix: str = "") -> dict:
         rendered = _render_and_publish_entrypoints(base_dir, s3)
 
     result: dict = {"status": "published", "count": len(uploaded), "uploaded": uploaded}
+    if render_changed:
+        result["rendered_before_publish"] = render_changed
     if registered:
         result["site_events_added"] = registered   # トップ/更新履歴に自動で載る
     if rendered:

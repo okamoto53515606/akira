@@ -159,9 +159,11 @@ TBODY_RE = re.compile(r"(<tbody[^>]*>)(.*?)(</tbody>)", re.S)
 SECTION_RE = re.compile(r'<section\b[^>]*aria-labelledby="([^"]+)"[^>]*>', re.I)
 # 表の1行目が「誰の表か」を判定するためのセル
 MODEL_CELL_RE = re.compile(r'<td class="model-name">(.*?)</td>', re.S)
+H2_RE = re.compile(r"<h2[^>]*>(.*?)</h2>", re.S)
 
 # render_pricing が書き込みを見送った理由（run() がログに出す）
 PRICING_ERRORS: list[str] = []
+PRICING_REPAIRED: list[str] = []  # 台帳に合わせて直した表
 
 
 def _model_name_of(row_html: str) -> str:
@@ -171,6 +173,14 @@ def _model_name_of(row_html: str) -> str:
         return ""
     txt = re.sub(r"<[^>]+>", " ", m.group(1))
     return re.sub(r"\s+", " ", txt).strip()
+
+
+def _section_title(seg: str) -> str:
+    """セクション内の最初の <h2> の文字列（タグ除去・空白正規化）。"""
+    m = H2_RE.search(seg or "")
+    if not m:
+        return ""
+    return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", m.group(1))).strip()
 
 
 def _first_row_name(tbody_html: str) -> str:
@@ -218,6 +228,7 @@ def render_pricing(site: Path, rel: str, lang: str, facts: dict) -> int:
     """
     tables = facts.get("pricing_tables") or []
     PRICING_ERRORS.clear()
+    PRICING_REPAIRED.clear()
     if not tables:
         return 0
     path = site / rel
@@ -258,14 +269,23 @@ def render_pricing(site: Path, rel: str, lang: str, facts: dict) -> int:
         if not m:
             PRICING_ERRORS.append("%s: #%s の <tbody> が無い" % (rel, anchor))
             continue
+        # 同一性は「セクション見出し」で確認する（anchor だけだと、同じ id の
+        # セクションが別の場所に増えたときに気づけない）。
+        want_title = (spec.get("title") or {}).get(lang)
+        got_title = _section_title(seg)
+        if want_title and got_title and \
+                re.sub(r"\s+", " ", want_title).strip() != got_title:
+            PRICING_ERRORS.append(
+                "%s: #%s の見出しが台帳と違う（ページ=%r / 台帳=%r）。"
+                "セクション境界がずれている可能性があるため書き込みません"
+                % (rel, anchor, got_title, want_title))
+            continue
         cur_first = _first_row_name(m.group(2))
         want_first = _model_name_of(rows[0])
         if cur_first and want_first and cur_first != want_first:
-            PRICING_ERRORS.append(
-                "%s: #%s の1行目が台帳と違う（ページ=%r / 台帳=%r）。"
-                "表の取り違えを防ぐため書き込まない"
-                % (rel, anchor, cur_first, want_first))
-            continue
+            # 表の中身が台帳とずれている＝台帳が正。ここは「直す」のが仕事。
+            PRICING_REPAIRED.append("%s #%s: 1行目を台帳に合わせる（%r → %r）"
+                                    % (rel, anchor, cur_first, want_first))
         planned.append((tstart + m.start(2), tstart + m.end(2),
                         "\n" + "\n".join(rows) + "\n", anchor))
 

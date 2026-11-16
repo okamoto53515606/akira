@@ -516,6 +516,62 @@ def _sanitize_review(text: str) -> str:
               "事実の断定は当日取得の一次情報で確認すること（恒久ルール2）。")
 
 
+# MCPクライアントを「Agentの寿命」から切り離すための常駐consumer id。
+# strands の MCPClient は consumer が0になると stop() する。委任先のAgentは
+# 毎回作り直す設計なので、そのままだと1回の依頼が終わるたびに MCP サーバーを
+# 落として次の依頼で起動し直す（その窓で回線が死んだままになる事故がある）。
+_MCP_KEEPALIVE = "akira-harness-keepalive"
+
+
+def _iter_mcp_clients(tools):
+    """ツール一覧から MCPClient（= ToolProvider）だけを取り出す。"""
+    try:
+        from strands.tools.mcp import MCPClient
+    except Exception:  # noqa: BLE001
+        return
+    for t in tools or []:
+        if isinstance(t, MCPClient):
+            yield t
+
+
+def _revive_dead_mcp(tools, where: str) -> int:
+    """死んだMCP接続を「次にload_toolsで起動し直される」状態に戻す（2026-11-17）。
+
+    なぜ:
+        strands の MCPClient は「started=True のまま回線だけ閉じる」ことがある。
+        その状態で Agent を作ると load_tools() が start() をスキップし、
+        `RuntimeError: Connection to the MCP server was closed` で**Agentの生成
+        そのものが落ちる**。2026-11-17 05:34 の2回目の依頼がこれで全滅した
+        （エンジニアのAgent生成時 / 3つのMCPを共有していた）。
+    何をするか:
+        started なのに session が生きていないクライアントを stop() で初期化し、
+        次の load_tools() で start() させる。戻り値は復旧した数。
+    """
+    revived = 0
+    for c in _iter_mcp_clients(tools):
+        try:
+            if not getattr(c, "_tool_provider_started", False):
+                continue
+            active = bool(c._is_session_active())
+        except Exception:  # noqa: BLE001
+            active = False
+        if active:
+            continue
+        logger.warning("MCP接続が切れたままだったので作り直します（%s）", where)
+        try:
+            c.stop(None, None, None)
+        except Exception:  # noqa: BLE001
+            logger.exception("MCPクライアントの停止に失敗（%s）", where)
+        try:
+            c._tool_provider_started = False
+            c._loaded_tools = None
+            c.add_consumer(_MCP_KEEPALIVE)
+        except Exception:  # noqa: BLE001
+            pass
+        revived += 1
+    return revived
+
+
 def create_delegation_tools(models, run_budget_jpy: float, block_publish: bool = False):
     """3AIを「ツール」としてAkiraに渡す（agent-as-toolパターン）。
 
@@ -544,7 +600,26 @@ def create_delegation_tools(models, run_budget_jpy: float, block_publish: bool =
             if spent >= run_budget_jpy:
                 logger.warning("予算ガード発動: spent=%.1f remaining_limit=%.1f", spent, run_budget_jpy)
                 return _STOP_WORK_MSG
-            agent = make_agent()
+            # MCPが死んだままだと Agent の生成そのものが落ちる（2026-11-17）。
+            # 毎回ここで健康確認してから作る。
+            _revive_dead_mcp(_shared_mcp, name)
+            try:
+                agent = make_agent()
+            except Exception as e:  # noqa: BLE001
+                logger.warning("%s のAgent生成に失敗（%s: %s）。MCPを作り直して1回だけ再試行します",
+                               name, type(e).__name__, str(e)[:160])
+                _revive_dead_mcp(_shared_mcp, name + "/再試行")
+                try:
+                    agent = make_agent()
+                except Exception as e2:  # noqa: BLE001
+                    logger.error("%s のAgent生成に再試行しても失敗（%s: %s）",
+                                 name, type(e2).__name__, str(e2)[:160])
+                    return (
+                        f"【{name}: 起動できず】{type(e2).__name__}: {str(e2)[:200]}\n"
+                        f"MCPクライアントの再接続に失敗した。作業は何も実行していない。"
+                        f"同じ依頼をこのランで送り直さず、日報に「{name}が起動できなかった」"
+                        f"と書いて終了せよ。"
+                    )
             tools_before = _tool_call_count(agent)
             _debug_log_io("指示", name, request_to_send)
             try:
@@ -598,6 +673,14 @@ def create_delegation_tools(models, run_budget_jpy: float, block_publish: bool =
     # --- 共通WEBツール（全員に配布）---
     firecrawl = _create_firecrawl_mcp()
     brave = _create_brave_mcp()
+    # MCPクライアントは委任先のAgentをまたいで共有する。共有する以上、
+    # 「Agentが消えたら接続も閉じる」という strands の既定動作は邪魔になる（下の注記）。
+    _shared_mcp = [c for c in (brave, firecrawl) if c is not None]
+    for _c in _shared_mcp:
+        try:
+            _c.add_consumer(_MCP_KEEPALIVE)
+        except Exception:  # noqa: BLE001
+            pass
     screenshot_tool = akira_tools.take_screenshot
     fetch_image = akira_tools.fetch_image_from_url
     from strands_tools import file_read, image_reader
@@ -741,6 +824,11 @@ def create_delegation_tools(models, run_budget_jpy: float, block_publish: bool =
     github = _create_github_mcp()
     if github:
         claude_tools.append(github)
+        _shared_mcp.append(github)
+        try:
+            github.add_consumer(_MCP_KEEPALIVE)
+        except Exception:  # noqa: BLE001
+            pass
 
     # shell / editor / file_read / file_write（Claudeエンジニアのみ。BYPASS_TOOL_CONSENT=true 要）
     try:
