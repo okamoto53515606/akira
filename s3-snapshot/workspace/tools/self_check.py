@@ -8,7 +8,8 @@
     というのがこの1週間の一貫した観測）。だから1呼び出しにまとめる。
 
 検査するもの:
-    1. 既存の6ゲート（page_shape / css_contract / site_integrity / dates /
+    1. 既存の7ゲート（page_shape / css_contract / site_integrity / dates /
+       facts_consistency / site_pages / sections）
        facts_consistency / site_pages）
     2. 決定事項の機械照合（蒸し返し禁止のうち、機械で見えるものだけ）
     3. 台帳とのズレ（render_site を1回かけたときに差分が出るか＝HTMLの手編集が
@@ -44,6 +45,7 @@ GATES = [
     ("dates", "check_dates.py", []),
     ("facts_consistency", "check_facts_consistency.py", ["__WS__"]),
     ("site_pages", "check_site_pages.py", []),
+    ("sections", "check_sections.py", ["__WS__"]),
 ]
 SUM_RE = re.compile(r"ERROR:\s*(\d+)(?:\s*/\s*WARN:\s*(\d+))?")
 ERR_LINE_RE = re.compile(r"\[ERROR\](.*)")

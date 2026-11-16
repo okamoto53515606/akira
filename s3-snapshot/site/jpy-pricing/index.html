@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LLM API 日本円換算の料金表【1ドル=155円・2026年11月版】 — LLM Data Hub</title>
+  <meta name="description" content="主要LLM APIの単価を1ドル=155円で日本円に換算した表。100万トークンあたりの入力・出力をUSD単価と併記し、現行／旧版の状態列も掲載。GPT-6.1・Claude Opus 5.5・Gemini 4 Argon・Kimi K3・DeepSeek V4.1 Flash の16モデル（2026年11月15日更新）。">
+  <link rel="canonical" href="https://llm.okamomedia.tokyo/jpy-pricing/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta property="og:image" content="https://llm.okamomedia.tokyo/assets/og/ja-jpy-pricing.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="1ドル=155円で換算した主要LLM APIの日本円料金表（LLM Data Hub）">
+  <meta name="twitter:image" content="https://llm.okamomedia.tokyo/assets/og/ja-jpy-pricing.png">
+  <meta name="twitter:image:alt" content="1ドル=155円で換算した主要LLM APIの日本円料金表（LLM Data Hub）">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://llm.okamomedia.tokyo/jpy-pricing/">
+  <meta property="og:title" content="LLM API 日本円換算の料金表【1ドル=155円・2026年11月版】 — LLM Data Hub">
+  <meta property="og:description" content="主要LLM APIの単価を1ドル=155円で日本円に換算した表。100万トークンあたりの入力・出力をUSD単価と併記し、現行／旧版の状態列も掲載。GPT-6.1・Claude Opus 5.5・Gemini 4 Argon・Kimi K3・DeepSeek V4.1 Flash の16モデル（2026年11月15日更新）。">
+  <meta property="og:site_name" content="LLM Data Hub">
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "LLM API 日本円換算の料金表【1ドル=155円・2026年11月版】", "datePublished": "2026-11-15", "dateModified": "2026-11-15", "author": {"@type": "Organization", "name": "LLM Data Hub"}, "publisher": {"@type": "Organization", "name": "okamoちゃんねる"}, "url": "https://llm.okamomedia.tokyo/jpy-pricing/", "inLanguage": "ja", "isAccessibleForFree": true, "description": "主要LLM APIの単価を1ドル=155円で日本円に換算した表。100万トークンあたりの入力・出力をUSD単価と併記し、現行／旧版の状態列も掲載。GPT-6.1・Claude Opus 5.5・Gemini 4 Argon・Kimi K3・DeepSeek V4.1 Flash の16モデル（2026年11月15日更新）。"}</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .cmp-table th,.cmp-table td{font-size:.84rem;vertical-align:top}
+    .cmp-table td.num{font-family:var(--font-mono);font-weight:600;white-space:nowrap}
+    .cmp-table td.mono{font-family:var(--font-mono);font-size:.8rem;color:var(--c-muted);white-space:nowrap}
+    .cmp-table span.na,.cmp-table td.na{color:var(--c-muted);font-weight:400}
+    .table-wrap{overflow-x:auto}
+    .bar-row .mono{font-family:var(--font-mono);font-size:.82rem;color:var(--c-muted);text-align:right}
+    .rate-box{background:var(--c-surface);border:1px solid var(--c-border);border-left:4px solid var(--c-accent);border-radius:var(--r-md);padding:.9rem 1.1rem;margin:1rem 0;font-size:.9rem}
+    .rate-box b{font-family:var(--font-mono);font-size:1.15rem;color:var(--c-accent)}
+    .src-list{font-size:.8rem;color:var(--c-muted);line-height:1.9}
+  </style>
+  <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/jpy-pricing/">
+  <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/jpy-pricing/">
+  <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/jpy-pricing/">
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="/" class="site-logo"><img src="/logo.svg" class="logo-icon" alt="" width="22" height="22" aria-hidden="true">LLM Data Hub</a><nav aria-label="メインナビゲーション"><a href="/" class="nav-link">ホーム</a><a href="/pricing/" class="nav-link">料金比較</a><a href="/calculator/" class="nav-link">トークン計算機</a><a href="/timeline/" class="nav-link">リリース年表</a><a href="/china-ai/" class="nav-link">中国AI</a><a href="/multimodal/" class="nav-link">マルチモーダル</a><a href="/mai/" class="nav-link">MS AI (MAI)</a><a href="/glossary/" class="nav-link">用語説明</a></nav></div></header>
+<main>
+<div class="container" style="padding-top:2rem;">
+<figure class="key-visual" style="margin:1.5rem 0 .5rem;"><img src="/assets/og/ja-jpy-pricing.png" alt="このページの内容を1枚にまとめた画像" width="1200" height="630" loading="eager" decoding="async" style="width:100%;max-width:900px;height:auto;display:block;margin:0 auto;border:1px solid var(--c-border);border-radius:var(--r-md);"></figure>
+<h1 class="section-title" style="font-size:1.6rem;">LLM API 日本円換算の料金表 <span style="font-size:1rem;font-weight:500;color:var(--c-muted);">【2026年11月版】</span></h1>
+<div class="rate-box"><strong>1ドル=155円で換算</strong>しています（<b>&yen;155 / $1</b> 固定）。円の列は<b>100万トークンあたり</b>の金額です。USD単価は data/price-sot.json の値をそのまま使い、円はそこから機械計算しています。</div>
+<div class="updated-bar"><span class="dot">●</span>最終更新: <time datetime="2026-11-15">2026年11月15日</time> | 各社公式料金ページの最終確認日は出典欄に併記しています。</div>
+<div class="section" style="padding-top:1.25rem;padding-bottom:0;">
+<nav class="toc" aria-label="目次"><p class="toc-title">目次</p><ol>
+<li><a href="#sec-1">結論（3行）</a></li>
+<li><a href="#sec-2">換算のルール</a></li>
+<li><a href="#sec-3">円換算表（16モデル）</a></li>
+<li><a href="#sec-4">出力単価の差</a></li>
+<li><a href="#sec-5">注意（3点）</a></li>
+<li><a href="#sec-6">出典</a></li>
+</ol></nav></div>
+<div class="conclusion"><h2 class="section-title" style="font-size:1.15rem;margin-top:0;" id="sec-1">結論（3行）</h2><ul>
+<li><strong>円建ての出力単価は 43円〜3,100円/100万トークン</strong>。Claude Opus 5.5 が <b>3,100円</b>、MiMo-V2.6-Flash が <b>43円</b>で、同じ100万トークンでも約71倍ひらきます。</li>
+<li><strong>入力と出力は別単価</strong>。多くのモデルで出力は入力の約5倍（GPT-6.1 Sol は入力310円／出力1,550円）。</li>
+<li><strong>DeepSeek だけは時間帯で2本建て</strong>。オフピークはピーク時の半額。表では両方を併記しています。</li>
+</ul></div>
+<div class="tint"><h2 class="section-title" style="font-size:1.15rem;" id="sec-2">換算のルール</h2>
+<div class="diagram">
+<div class="dg-box provider-openai"><b>USD単価</b>$2.00 / 1M</div>
+<div class="dg-arrow">&times;</div>
+<div class="dg-box accent"><b>固定レート</b>155</div>
+<div class="dg-arrow">=</div>
+<div class="dg-box provider-anthropic"><b>円換算</b>&yen;310</div>
+<div class="diagram-note">USD単価×155が円の列です（10円未満は小数第1位、それ以上は1円未満を四捨五入）。</div>
+</div>
+<ul><li><strong>何あたりか</strong>: すべて<b>100万トークンあたり</b>。10万トークンなら表の1/10です。</li><li><strong>含まないもの</strong>: 消費税・カード手数料・為替スプレッド。請求書の額そのものではありません。</li><li><strong>別単価</strong>: キャッシュ入力、Batch、長文（272Kトークン超など）、優先処理。表は標準の入力・出力のみ。</li></ul>
+</div>
+<h2 class="section-title" style="font-size:1.15rem;" id="sec-3">円換算表（16モデル）</h2>
+<p style="font-size:.9rem;color:var(--c-muted);">USD単価は各社公式の数字をそのまま残しています。為替が変わったら<b>USD列だけ差し替えれば再計算できます</b>。キャッシュ・Batch・長文の条件は<a href="/pricing/">LLM API 料金比較</a>へ。</p>
+<div class="table-wrap"><table class="cmp-table">
+<thead><tr><th>モデル（提供元）</th><th>状態</th><th>入力<br>円 / 100万トークン</th><th>出力<br>円 / 100万トークン</th><th>USD 単価（入力 / 出力）</th></tr></thead>
+<tbody>
+<tr><td>GPT-6.1 Sol（OpenAI）</td><td><span class="st-cur">現行</span></td><td class="num">310</td><td class="num">1,550</td><td class="mono">$2.00 / $10.00</td></tr>
+<tr><td>GPT-6.1 Terra（OpenAI）</td><td><span class="st-cur">現行</span></td><td class="num">155</td><td class="num">775</td><td class="mono">$1.00 / $5.00</td></tr>
+<tr><td>GPT-6 Luna（OpenAI）</td><td><span class="st-cur">現行</span></td><td class="num">16</td><td class="num">78</td><td class="mono">$0.10 / $0.50</td></tr>
+<tr><td>Claude Opus 5.5（Anthropic）</td><td><span class="st-cur">現行</span></td><td class="num">620</td><td class="num">3,100</td><td class="mono">$4.00 / $20.00</td></tr>
+<tr><td>Claude Sonnet 5.5（Anthropic）</td><td><span class="st-cur">現行</span></td><td class="num">310</td><td class="num">1,550</td><td class="mono">$2.00 / $10.00</td></tr>
+<tr><td>Claude Haiku 5.5（Anthropic）</td><td><span class="st-cur">現行</span></td><td class="num">16</td><td class="num">78</td><td class="mono">$0.10 / $0.50</td></tr>
+<tr><td>Gemini 4 Argon（Google）</td><td><span class="st-cur">現行</span></td><td class="num">310</td><td class="num">1,550</td><td class="mono">$2.00<br><span class="na">2026-12-01 から $4.00</span> / $10.00<br><span class="na">2026-12-01 から $20.00</span></td></tr>
+<tr><td>Gemini 3.8 Flash（Google）</td><td><span class="st-cur">現行</span></td><td class="num">116</td><td class="num">581</td><td class="mono">$0.75 / $3.75</td></tr>
+<tr><td>Gemini 3.5 Flash Lite（Google）</td><td><span class="st-cur">現行</span></td><td class="num">47</td><td class="num">388</td><td class="mono">$0.30 / $2.50</td></tr>
+<tr><td>Kimi K3（Moonshot AI）</td><td><span class="st-cur">現行</span></td><td class="num">465</td><td class="num">2,325</td><td class="mono">$3.00 / $15.00</td></tr>
+<tr><td>DeepSeek V4.1 Flash（DeepSeek）</td><td><span class="st-cur">現行</span></td><td class="num">23<br><span class="na">ピーク時 47</span></td><td class="num">93<br><span class="na">ピーク時 186</span></td><td class="mono">$0.15<br><span class="na">ピーク時 $0.30</span> / $0.60<br><span class="na">ピーク時 $1.20</span></td></tr>
+<tr><td>DeepSeek V4 Pro（DeepSeek）</td><td><span class="st-cur">現行</span></td><td class="num">102<br><span class="na">ピーク時 205</span></td><td class="num">307<br><span class="na">ピーク時 614</span></td><td class="mono">$0.66<br><span class="na">ピーク時 $1.32</span> / $1.98<br><span class="na">ピーク時 $3.96</span></td></tr>
+<tr><td>MiMo-V2.6-Pro（Xiaomi）</td><td><span class="st-cur">現行</span></td><td class="num">67</td><td class="num">135</td><td class="mono">$0.43 / $0.87</td></tr>
+<tr><td>MiMo-V2.6-Flash（Xiaomi）</td><td><span class="st-cur">現行</span></td><td class="num">22</td><td class="num">43</td><td class="mono">$0.14 / $0.28</td></tr>
+<tr><td>Step 5 Preview（StepFun）</td><td><span class="st-cur">現行</span></td><td class="num">155</td><td class="num">419</td><td class="mono">$1.00 / $2.70</td></tr>
+<tr><td>DeepSeek V4 Flash（DeepSeek）</td><td><span class="st-old">旧版</span></td><td class="num">34<br><span class="na">ピーク時 68</span></td><td class="num">102<br><span class="na">ピーク時 205</span></td><td class="mono">$0.22<br><span class="na">ピーク時 $0.44</span> / $0.66<br><span class="na">ピーク時 $1.32</span></td></tr>
+</tbody></table></div>
+<p class="na" style="font-size:.78rem;">※ DeepSeek V4 Flash は 2026-09-10 に V4.1 Flash へ統合（旧プロモ価格も廃止）。推移を見るため旧版として残しています。</p>
+<div class="tint"><h2 class="section-title" style="font-size:1.15rem;" id="sec-4">出力単価の差</h2>
+<p style="font-size:.9rem;color:var(--c-muted);">出力100万トークンの円換算額。棒の長さは金額に比例（最長＝Claude Opus 5.5 の3,100円）。</p>
+<div class="bars">
+<div class="bar-row"><span>Claude Opus 5.5</span><span class="bar-track"><span class="bar-fill" style="width:100.0%"></span></span><span class="mono">3,100円</span></div>
+<div class="bar-row"><span>Kimi K3</span><span class="bar-track"><span class="bar-fill" style="width:75.0%"></span></span><span class="mono">2,325円</span></div>
+<div class="bar-row"><span>GPT-6.1 Sol</span><span class="bar-track"><span class="bar-fill" style="width:50.0%"></span></span><span class="mono">1,550円</span></div>
+<div class="bar-row"><span>Gemini 4 Argon</span><span class="bar-track"><span class="bar-fill" style="width:50.0%"></span></span><span class="mono">1,550円</span></div>
+<div class="bar-row"><span>DeepSeek V4.1 Flash（オフピーク）</span><span class="bar-track"><span class="bar-fill" style="width:3.0%"></span></span><span class="mono">93円</span></div>
+<div class="bar-row"><span>Claude Haiku 5.5</span><span class="bar-track"><span class="bar-fill" style="width:2.5%"></span></span><span class="mono">78円</span></div>
+<div class="bar-row"><span>MiMo-V2.6-Flash</span><span class="bar-track"><span class="bar-fill" style="width:1.5%"></span></span><span class="mono">43円</span></div>
+</div>
+</div>
+<h2 class="section-title" style="font-size:1.15rem;" id="sec-5">注意（3点）</h2>
+<ul><li><strong>1ドル=155円は固定</strong>（2026年11月15日に換算基準として設定した値。実勢レートの追跡はしません）。為替が動いても表は動きません。請求は USD 建てなので、決済時レートで円の負担は変わります。</li><li><strong>為替では更新日を動かしません</strong>。動くのはUSD単価が変わったときだけです。</li><li><strong>自分の請求額</strong>はトークン数で決まります。<a href="/calculator/">トークン計算機</a>ならUSDと円の両方で試算できます。</li></ul>
+<p class="note">「最終更新: 2026-11-15」はページを更新した日です。各モデルの単価の確認日は下の出典一覧に併記しています（2026年9〜10月に各社公式料金ページで確認）。ページの更新日とは別の情報です。USD単価が変われば表と確認日を更新します。</p>
+<h2 class="section-title" style="font-size:1.15rem;" id="sec-6">出典</h2>
+<ul class="src-list">
+<li>OpenAI: <a href="https://developers.openai.com/api/docs/models/gpt-6.1-sol" rel="nofollow noopener">developers.openai.com</a>（確認日 2026-10-09）</li>
+<li>OpenAI: <a href="https://openai.com/index/introducing-gpt-6-1-terra/" rel="nofollow noopener">openai.com</a>（確認日 2026-10-29）</li>
+<li>OpenAI: <a href="https://openai.com/index/introducing-gpt-6-sol-and-luna/" rel="nofollow noopener">openai.com</a>（確認日 2026-09-25）</li>
+<li>Anthropic: <a href="https://www.anthropic.com/claude-opus-5-5" rel="nofollow noopener">www.anthropic.com</a>（確認日 2026-09-25）</li>
+<li>Anthropic: <a href="https://platform.claude.com/docs/en/models/sonnet-5-5/overview" rel="nofollow noopener">platform.claude.com</a>（確認日 2026-10-01）</li>
+<li>Anthropic: <a href="https://platform.claude.com/docs/en/models/haiku-5-5/overview" rel="nofollow noopener">platform.claude.com</a>（確認日 2026-10-09）</li>
+<li>Google: <a href="https://ai.google.dev/gemini-api/docs/pricing" rel="nofollow noopener">ai.google.dev</a>（確認日 2026-10-17）</li>
+<li>Google: <a href="https://ai.google.dev/gemini-api/docs/pricing" rel="nofollow noopener">ai.google.dev</a>（確認日 2026-10-09）</li>
+<li>Moonshot AI: <a href="https://platform.kimi.ai/docs/pricing/chat-k3" rel="nofollow noopener">platform.kimi.ai</a>（確認日 2026-09-25）</li>
+<li>Xiaomi: <a href="https://mimo.xiaomi.com/mimo-v2-6" rel="nofollow noopener">mimo.xiaomi.com</a>（確認日 2026-09-27）</li>
+<li>StepFun: <a href="https://platform.stepfun.ai/docs/en/guides/pricing/details" rel="nofollow noopener">platform.stepfun.ai</a>（確認日 2026-10-24）</li>
+</ul>
+<p class="na" style="font-size:.78rem;">為替は1ドル=155円の固定で、外部の為替データは使っていません。</p>
+</div>
+</main>
+
+<footer class="site-footer"><div class="footer-inner"><div class="footer-brand"><strong><img src="/logo.svg" class="footer-logo" alt="" width="16" height="16" aria-hidden="true"> LLM Data Hub</strong><p>運営: okamoちゃんねる</p><p><a href="/">ホーム</a> · <a href="/pricing/">料金比較</a> · <a href="/calculator/">計算機</a> · <a href="/timeline/">年表</a> · <a href="/glossary/">用語説明</a> · <a href="/multimodal/">マルチモーダル</a></p></div><p class="footer-disclaimer">⚠️ 料金・仕様は予告なく変動します。契約前に必ず各社公式ページでご確認ください。本サイトは各社と提携していません。</p></div></footer>
+</body>
+</html>

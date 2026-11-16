@@ -27,7 +27,7 @@ import json
 import os
 import re
 import sys
-from datetime import date, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from html import escape
 from pathlib import Path
 
@@ -37,7 +37,9 @@ DEFAULT_SITE = os.environ.get("SITE_LOCAL_DIR", "") or "/tmp/site"
 DEFAULT_WS = os.environ.get("WORKSPACE_DIR", "") or "/workspace"
 FACTS_REL = "data/facts.json"
 JST = timezone(timedelta(hours=9))
-TODAY = date.today().isoformat()
+# 2026-11-17: コンテナは UTC なので date.today() だと JST 05:00 のランで
+# 「1日前」の日付が焼かれる（課題155）。サイトは日本時間で運用するので JST 固定。
+TODAY = datetime.now(JST).date().isoformat()
 
 
 def _date_text(lang: str) -> str:
@@ -152,6 +154,48 @@ def render_timeline(site: Path, rel: str, lang: str, order_ids) -> bool:
 # --------------------------------------------------------------------- 1b. 料金表
 TABLE_RE = re.compile(r"<table[^>]*>.*?</table>", re.S)
 TBODY_RE = re.compile(r"(<tbody[^>]*>)(.*?)(</tbody>)", re.S)
+# セクションの見出しアンカー（<section aria-labelledby="kimi-h">）
+SECTION_RE = re.compile(r'<section\b[^>]*aria-labelledby="([^"]+)"[^>]*>', re.I)
+# 表の1行目が「誰の表か」を判定するためのセル
+MODEL_CELL_RE = re.compile(r'<td class="model-name">(.*?)</td>', re.S)
+
+# render_pricing が書き込みを見送った理由（run() がログに出す）
+PRICING_ERRORS: list[str] = []
+
+
+def _model_name_of(row_html: str) -> str:
+    """`<tr>…</tr>` から model-name セルの文字列だけを取り出す（比較用）。"""
+    m = MODEL_CELL_RE.search(row_html or "")
+    if not m:
+        return ""
+    txt = re.sub(r"<[^>]+>", " ", m.group(1))
+    return re.sub(r"\s+", " ", txt).strip()
+
+
+def _first_row_name(tbody_html: str) -> str:
+    if "</tr>" not in tbody_html:
+        return ""
+    return _model_name_of(tbody_html.split("</tr>")[0] + "</tr>")
+
+
+def _pricing_table_spans(html: str) -> dict:
+    """`aria-labelledby` の id → そのセクション内の最初の <table> の (start, end, seg)。
+
+    2026-11-17 追加。以前は「ページの i 番目の表」で書き戻していたため、
+    途中に表を1つ挿しただけで以降が全部ずれた（Xiaomi の表に Kimi の行が入った）。
+    セクションの id を手掛かりにすれば、表が増えても位置がずれない。
+    """
+    marks = list(SECTION_RE.finditer(html))
+    spans: dict = {}
+    for n, m in enumerate(marks):
+        anchor = m.group(1)
+        seg_end = marks[n + 1].start() if n + 1 < len(marks) else len(html)
+        seg = html[m.start():seg_end]
+        t = TABLE_RE.search(seg)
+        if not t:
+            continue
+        spans.setdefault(anchor, (m.start() + t.start(), m.start() + t.end(), seg))
+    return spans
 
 
 def render_pricing(site: Path, rel: str, lang: str, facts: dict) -> int:
@@ -159,34 +203,106 @@ def render_pricing(site: Path, rel: str, lang: str, facts: dict) -> int:
 
     台帳の `pricing_tables[i].rows[j][lang]` は `<tr>…</tr>` ごとの生HTML。
     日英が同じレコードに並んでいるので、片方だけ直す事故が起きない。
-    戻り値は書き換えた表の数。
+
+    2026-11-17 の事故と対策（重要）:
+        旧実装は `pricing_tables[i]["index"]` を「ページの i 番目の <table>」と
+        みなしていた。担当AIが Xiaomi の表を**途中に挿し込んだ**ため、以降の表が
+        1つずつずれ、**Xiaomi の表に Kimi の行、Kimi の表に Meta の行**が入った
+        状態で公開された（人が見るまで気づかない）。
+        → 以降は **`anchor`（セクションの id）で表を特定**し、書き込みの前後で
+          「1行目のモデル名が台帳と一致するか」を検証する。一致しなければ**その表
+          は書かずに理由を残す**（fail-closed。誤った表を黙って上書きしない）。
+
+    戻り値は書き換えた表の数。見送った理由は PRICING_ERRORS に入る。
     """
     tables = facts.get("pricing_tables") or []
+    PRICING_ERRORS.clear()
     if not tables:
         return 0
     path = site / rel
     if not path.exists():
         return 0
     html = path.read_text(encoding="utf-8")
+    original = html
 
+    anchors = [t.get("anchor") or "" for t in tables]
+    if not all(anchors):
+        PRICING_ERRORS.append(
+            "%s: anchor の無い pricing_tables がある（位置指定 index は廃止）" % rel)
+        return 0
+    if len(anchors) != len(set(anchors)):
+        PRICING_ERRORS.append("%s: 台帳 pricing_tables の anchor が重複" % rel)
+        return 0
+
+    spans = _pricing_table_spans(html)
+    n_tables_before = len(TABLE_RE.findall(html))
+    planned = []            # (tbody_start, tbody_end, 新しい中身, anchor)
     for spec in tables:
-        idx = spec.get("index")
+        anchor = spec["anchor"]
         rows = [r.get(lang) for r in spec.get("rows", [])]
         if not rows or any(r is None for r in rows):
             continue
-        new_body = "\n" + "\n".join(rows) + "\n"
-        ms = list(TABLE_RE.finditer(html))
-        if idx is None or idx >= len(ms):
+        hit = spans.get(anchor)
+        if not hit:
+            PRICING_ERRORS.append(
+                "%s: #%s のセクション（表）が見つからない" % (rel, anchor))
             continue
-        tstart, tend = ms[idx].span()
-        seg = html[tstart:tend]
-        m = TBODY_RE.search(seg)
+        tstart, tend, seg = hit
+        if ('id="%s"' % anchor) not in seg:
+            PRICING_ERRORS.append(
+                '%s: #%s のセクション内に id="%s" が無い（セクション境界が壊れて'
+                "いる）" % (rel, anchor, anchor))
+            continue
+        m = TBODY_RE.search(html[tstart:tend])
+        if not m:
+            PRICING_ERRORS.append("%s: #%s の <tbody> が無い" % (rel, anchor))
+            continue
+        cur_first = _first_row_name(m.group(2))
+        want_first = _model_name_of(rows[0])
+        if cur_first and want_first and cur_first != want_first:
+            PRICING_ERRORS.append(
+                "%s: #%s の1行目が台帳と違う（ページ=%r / 台帳=%r）。"
+                "表の取り違えを防ぐため書き込まない"
+                % (rel, anchor, cur_first, want_first))
+            continue
+        planned.append((tstart + m.start(2), tstart + m.end(2),
+                        "\n" + "\n".join(rows) + "\n", anchor))
+
+    # 後ろから置換すれば offset がずれない
+    for b, e, body, _anchor in sorted(planned, reverse=True):
+        html = html[:b] + body + html[e:]
+
+    if html == original:
+        return 0
+
+    # 検算: 表の数が変わっていないこと／書いた表の1行目が台帳どおりであること
+    if len(TABLE_RE.findall(html)) != n_tables_before:
+        PRICING_ERRORS.append(
+            "%s: 書き込みで表の数が変わった（%d→%d）。中止"
+            % (rel, n_tables_before, len(TABLE_RE.findall(html))))
+        return 0
+    spans_after = _pricing_table_spans(html)
+    for spec in tables:
+        anchor = spec["anchor"]
+        rows = [r.get(lang) for r in spec.get("rows", [])]
+        if not rows or any(r is None for r in rows):
+            continue
+        hit = spans_after.get(anchor)
+        if not hit:
+            continue
+        m = TBODY_RE.search(html[hit[0]:hit[1]])
         if not m:
             continue
-        seg2 = seg[:m.start(2)] + new_body + seg[m.end(2):]
-        html = html[:tstart] + seg2 + html[tend:]
+        got = _first_row_name(m.group(2))
+        want = _model_name_of(rows[0])
+        if got != want:
+            PRICING_ERRORS.append(
+                "%s: 書き込み後の検算で #%s が台帳と不一致（%r != %r）。中止"
+                % (rel, anchor, got, want))
+            return 0
+
     path.write_text(html, encoding="utf-8")
-    return len(tables)
+    return len(planned)
 
 
 def render_models_json(site: Path, facts: dict) -> bool:
@@ -619,6 +735,8 @@ def run(site: Path, ws: Path) -> list[str]:
     for rel, lang in (("pricing/index.html", "ja"), ("en/pricing/index.html", "en")):
         before = (site / rel).read_text(encoding="utf-8") if (site / rel).exists() else ""
         render_pricing(site, rel, lang, facts)
+        for err in PRICING_ERRORS:
+            print("  pricing SKIP: %s" % err)
         after = (site / rel).read_text(encoding="utf-8") if (site / rel).exists() else ""
         if before != after:
             changed.append(rel)

@@ -367,6 +367,32 @@ def _page_shape_errors(site_dir: str) -> list:
     return out
 
 
+def _section_errors(site_dir: str) -> list:
+    """セクション境界と料金表の「持ち主」を検査する（2026-11-17 追加）。
+
+    tools/check_sections.py を subprocess で呼ぶ。戻り値は [(ページ or "", メッセージ)]。
+    11-17 に /pricing/ で「Xiaomi の表に Kimi の行、Kimi の表に Meta の行」が入り、
+    **どのゲートも通して公開された**。HTML の見た目ではなく、セクションの境界と
+    表の持ち主がずれたことが原因。機械で見る（読取のみ・LLMコスト0）。
+    """
+    script = os.path.join(WORKSPACE_LOCAL_DIR, "tools", "check_sections.py")
+    if not os.path.exists(script):
+        return []
+    try:
+        r = subprocess.run([sys.executable, script, site_dir, WORKSPACE_LOCAL_DIR],
+                           capture_output=True, text=True, timeout=180)
+    except Exception:  # noqa: BLE001
+        return []
+    out = []
+    for raw in (r.stdout or "").splitlines():
+        line = raw.strip()
+        if not line.startswith("[ERROR]"):
+            continue
+        m = re.match(r"\[ERROR\]\s+(section-anchor|pricing-tables)\s+(\S+?):", line)
+        out.append((m.group(2) if m else "", line))
+    return out
+
+
 def _css_contract_errors(site_dir: str) -> list:
     """CSS部品が「描画されるための必須プロパティ」を持つか検査する。
 
@@ -480,7 +506,7 @@ def _bump_sitemap_lastmod(site_dir: str, rels, s3) -> bool:
 
 
 @tool
-def _register_site_event(rel: str, base_dir: str) -> str:
+def _register_site_event(rel: str, base_dir: str, is_new: bool = False) -> str:
     """新しく公開したページを台帳の `site_events` に自動で1件足す（2026-11-15 / 課題141）。
 
     なぜ:
@@ -488,8 +514,17 @@ def _register_site_event(rel: str, base_dir: str) -> str:
         生成される。ページを作っても**イベントを書き忘れる**と、誰も辿れないページに
         なる（11-15 に実際に起きた）。人の手順に頼らず、公開時に機械が足す。
 
+    2026-11-17 の事故と対策（重要）:
+        `site_upload(".")` でサイト全体を上げ直したとき、**既存ページまで「本日
+        公開」として32件登録され、トップと /changelog/ が同じ日付の“を公開”で
+        埋まった**（実際に公開された日と違う＝嘘の履歴）。
+        → 登録するのは **S3 に事前に存在しなかったキー（=新規ページ）だけ**にした。
+          呼び出し側がアップロード前に `is_new` を判定して渡す。
+
     戻り値: 追加したキー（足さなかった場合は空文字）。
     """
+    if not is_new:
+        return ""
     if not rel.endswith("index.html"):
         return ""
     slug = rel[:-len("/index.html")] if rel != "index.html" else ""
@@ -497,8 +532,9 @@ def _register_site_event(rel: str, base_dir: str) -> str:
         return ""
     if slug.startswith("en/"):
         slug = slug[3:]
-    # 一覧・固定ページはイベントにしない
-    if slug.split("/")[0] in ("changelog", "glossary", "404"):
+    # 一覧・固定ページ・言語ルートはイベントにしない
+    # （en/index.html は slug が "en" になり "en/" 判定をすり抜けていた）
+    if slug in ("en", "ja") or slug.split("/")[0] in ("changelog", "glossary", "404"):
         return ""
 
     def _title(path: str) -> str:
@@ -538,6 +574,25 @@ def _register_site_event(rel: str, base_dir: str) -> str:
     except Exception:  # noqa: BLE001
         return ""
     return slug
+
+
+def _s3_key_is_new(s3, key: str) -> bool:
+    """S3 に無いキーなら True（＝このランで新規に公開されるページ）。
+
+    2026-11-17: サイト全体を上げ直したときに既存ページまで site_events に
+    「本日公開」で登録してしまった反省から、**アップロード前に存在したか**で
+    判定する。判定できないときは False（履歴に嘘を書くより、足りない方がましい）。
+    """
+    from botocore.exceptions import ClientError
+
+    try:
+        s3.head_object(Bucket=LLM_SITE_BUCKET, Key=key)
+        return False
+    except ClientError as e:  # noqa: PERF203
+        code = str(e.response.get("Error", {}).get("Code", ""))
+        return code in ("404", "NoSuchKey", "NotFound")
+    except Exception:  # noqa: BLE001
+        return False
 
 
 def _render_and_publish_entrypoints(base_dir: str, s3) -> list:
@@ -634,6 +689,9 @@ def site_upload(local_path: str, site_prefix: str = "") -> dict:
     facts_errors = []
     if any(r.endswith(("index.html", "models.json")) for r in target_rels):
         facts_errors = _facts_consistency_errors(base_dir)
+    section_errors = []
+    if any(r.endswith("index.html") for r in target_rels):
+        section_errors = _section_errors(base_dir)
     css_errors = []
     if any(r.endswith(("index.html", "style.css")) for r in target_rels):
         css_errors = _css_contract_errors(base_dir)
@@ -663,11 +721,21 @@ def site_upload(local_path: str, site_prefix: str = "") -> dict:
             if hits:
                 rejected.append({"key": key, "errors": hits})
                 continue
+        if section_errors and rel.endswith("index.html"):
+            # セクション境界・料金表の取り違え（2026-11-17）。日英は対で見る。
+            pair = rel[3:] if rel.startswith("en/") else "en/" + rel
+            hits = [msg for page, msg in section_errors
+                    if page in (rel, pair, "")]
+            if hits:
+                rejected.append({"key": key, "errors": hits})
+                continue
         # CSS部品の契約（描画されるための必須プロパティ）はサイト全体の話なので、
         # style.css だけでなく index.html の公開時にも一緒に止める。
         if css_errors and (rel == "assets/style.css" or rel.endswith("index.html")):
             rejected.append({"key": key, "errors": [msg for _, msg in css_errors]})
             continue
+        # 新規ページ判定は「アップロード前」に取る（上書き後は常に既存になる）
+        is_new = _s3_key_is_new(s3, key)
         if key == DATA_MODELS_KEY:
             try:
                 with open(f, "rb") as fh:
@@ -688,7 +756,7 @@ def site_upload(local_path: str, site_prefix: str = "") -> dict:
         uploaded.append(key)
         # 新規ページなら site_events を自動登録（課題141）
         try:
-            reg = _register_site_event(rel, base_dir)
+            reg = _register_site_event(rel, base_dir, is_new=is_new)
             if reg:
                 registered.append(reg)
         except Exception:  # noqa: BLE001

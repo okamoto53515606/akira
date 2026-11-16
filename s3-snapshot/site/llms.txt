@@ -13,6 +13,7 @@ Languages: English (https://llm.okamomedia.tokyo/en/), Japanese (https://llm.oka
 - [Prompt Caching Pricing Compared](https://llm.okamomedia.tokyo/en/prompt-cache-pricing/): cached-input and cache-write rates, discount ratios, retention and minimum cacheable length for OpenAI, Anthropic, Google, Moonshot and DeepSeek.
 - [Speech API Pricing Compared](https://llm.okamomedia.tokyo/en/speech-api-pricing/): TTS and transcription rates from OpenAI, Google, Microsoft and Meta, converted from per-1M-character, per-1M-token and per-hour pricing into a common per-minute basis; deprecated and time-limited prices flagged.
 - [Image & Video API Pricing](https://llm.okamomedia.tokyo/en/image-api-pricing/): per-image, per-1M-token and per-second rates for image and video generation (Google, Microsoft, Meta, OpenAI), using each provider's own per-image conversion and marking unconfirmed cells.
+- [LLM API Pricing in Japanese Yen](https://llm.okamomedia.tokyo/en/jpy-pricing/): the USD rates converted at a fixed ¥155 = $1, given per 1M tokens for input and output alongside the USD figure, with a current/legacy column and each rate's verification date.
 - [Token Cost Calculator](https://llm.okamomedia.tokyo/en/calculator/): Estimate monthly cost from your input/output token counts, including cache read and cache write rates.
 - [Model Release Timeline](https://llm.okamomedia.tokyo/en/timeline/): Chronological release dates of major LLM models with links to the original announcements.
 - [Multimodal Models](https://llm.okamomedia.tokyo/en/multimodal/): Image, audio and video generation models and their per-unit pricing.
@@ -27,6 +28,7 @@ Languages: English (https://llm.okamomedia.tokyo/en/), Japanese (https://llm.oka
 - [音声API料金比較](https://llm.okamomedia.tokyo/speech-api-pricing/): TTS・文字起こしの単価を1分／1時間あたりに正規化。Deprecated表記と期間限定価格、2027年の改定予定まで明記。
 - [LLM API 料金比較](https://llm.okamomedia.tokyo/pricing/)
 - [画像・動画API料金比較](https://llm.okamomedia.tokyo/image-api-pricing/): 1枚・1Mトークン・1秒の課金単位を公式の換算値で1枚／1秒あたりにそろえて比較。未確認セルは明記。
+- [LLM API 日本円換算（1ドル=155円）](https://llm.okamomedia.tokyo/jpy-pricing/): USD単価を1ドル=155円で固定換算し、100万トークンあたりの入力・出力を円とUSDで併記。現行／旧版の状態列と各単価の確認日つき。
 - [トークンコスト計算機](https://llm.okamomedia.tokyo/calculator/)
 - [モデル リリース年表](https://llm.okamomedia.tokyo/timeline/)
 - [マルチモーダル特集](https://llm.okamomedia.tokyo/multimodal/)

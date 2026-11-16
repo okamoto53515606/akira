@@ -10,7 +10,15 @@
     "reasons": {
      "http_403": 2
     },
-    "total": 12
+    "total": 15
+   }
+  },
+  "2026-11-17": {
+   "fetch": {
+    "failed": 0,
+    "names": {},
+    "reasons": {},
+    "total": 4
    }
   }
  },

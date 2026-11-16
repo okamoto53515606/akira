@@ -76,6 +76,10 @@ def check(site_dir: Path) -> dict:
             for i, line in enumerate(text.splitlines(), 1):
                 if "deepseek" not in line.lower():
                     continue
+                # 旧版として明示的に併記している行（st-old / 旧版 / Legacy バッジ）は
+                # 退役単価の「残存」ではなく意図的な表示なので対象外
+                if any(mk in line for mk in ("st-old", "旧版", ">Legacy<")):
+                    continue
                 hits = [p for p in patterns if p in line]
                 if hits:
                     stale.append((rel, i, hits, line.strip()[:160]))

@@ -666,7 +666,7 @@
    "sources": [
     {
      "url": "https://www.anthropic.com/claude-opus-5-5",
-     "fetched_at": null,
+     "fetched_at": "2026-11-17",
      "quote": null
     }
    ],
@@ -697,7 +697,7 @@
    "sources": [
     {
      "url": "https://mimo.xiaomi.com/mimo-v2-6",
-     "fetched_at": "2026-11-15",
+     "fetched_at": "2026-11-17",
      "quote": null
     }
    ],
@@ -1410,7 +1410,7 @@
    "sources": [
     {
      "url": "https://www.anthropic.com/news/claude-opus-5",
-     "fetched_at": null,
+     "fetched_at": "2026-11-17",
      "quote": null
     }
    ],
@@ -1592,7 +1592,7 @@
    "sources": [
     {
      "url": "https://www.anthropic.com/news/claude-opus-4-8",
-     "fetched_at": null,
+     "fetched_at": "2026-11-17",
      "quote": null
     }
    ],
@@ -2856,7 +2856,7 @@
    "sources": [
     {
      "url": "https://mimo.xiaomi.com/mimo-v2-6",
-     "fetched_at": "2026-11-15",
+     "fetched_at": "2026-11-17",
      "quote": "MiMo-V2.6 \\| Xiaomi September 22nd, 2026 … The MiMo-V2.6 series keeps the API pricing of the V2.5 series."
     }
    ],
@@ -2893,7 +2893,7 @@
    "sources": [
     {
      "url": "https://mimo.xiaomi.com/mimo-v2-6",
-     "fetched_at": "2026-11-15",
+     "fetched_at": "2026-11-17",
      "quote": "MiMo-V2.6 \\| Xiaomi September 22nd, 2026 … The MiMo-V2.6 series keeps the API pricing of the V2.5 series."
     }
    ],
@@ -2930,7 +2930,7 @@
    "sources": [
     {
      "url": "https://mimo.xiaomi.com/mimo-v2-6",
-     "fetched_at": "2026-11-15",
+     "fetched_at": "2026-11-17",
      "quote": "MiMo-V2.6 \\| Xiaomi September 22nd, 2026 … The MiMo-V2.6 series keeps the API pricing of the V2.5 series."
     }
    ],
@@ -3052,6 +3052,13 @@
    "key": "jpy-pricing",
    "ja": "LLM API料金の日本円換算表（1ドル=155円）を新規公開。USD単価から機械計算し、現行／旧版の状態列つき（/jpy-pricing/）",
    "en": "Published LLM API pricing in Japanese yen at a fixed ¥155 = $1, calculated from the USD rates, with a current/legacy column (/en/jpy-pricing/)"
+  },
+  {
+   "date": "2026-11-17",
+   "kind": "page",
+   "key": "xiaomi-mimo-pricing",
+   "ja": "料金比較に Xiaomi（MiMo）セクションを新設し、MiMo-V2.6（Pro / Flash / Pro-UltraSpeed）の3行を公式料金表から転記。キャッシュ単価・Batch 50%・重み未公開の別まで明記（2026-11-17 直接確認 /pricing/）",
+   "en": "Added a Xiaomi (MiMo) section to the pricing tables with the three MiMo-V2.6 variants (Pro / Flash / Pro-UltraSpeed), transcribed from the official price list verified on 2026-11-17, including cache rates, the 50% Batch price and a note that weights are not published (/en/pricing/)"
   }
  ],
  "fx": {
@@ -3148,7 +3155,8 @@
      "ja": "<tr><td class=\"model-name\">GPT-5.4 nano</td><td class=\"price\">$0.20</td><td class=\"price\">$0.02</td><td class=\"price\">$1.25</td><td>最軽量・最安</td><td class=\"st-cell st-old\">旧版</td></tr>",
      "en": "<tr><td class=\"model-name\">GPT-5.4 nano</td><td class=\"price\">$0.20</td><td class=\"price\">$0.02</td><td class=\"price\">$1.25</td><td>Cheapest tier</td><td class=\"st-cell st-old\">Legacy</td></tr>"
     }
-   ]
+   ],
+   "anchor": "oh"
   },
   {
    "index": 1,
@@ -3237,7 +3245,8 @@
      "ja": "<tr><td class=\"model-name\">Claude Haiku 4.5</td><td class=\"price\">$1.00</td><td class=\"price\">$1.25</td><td class=\"price\">$0.10</td><td class=\"price\">$5.00</td><td>大量処理・分類向け</td><td class=\"st-cell st-old\">旧版</td></tr>",
      "en": "<tr><td class=\"model-name\">Claude Haiku 4.5</td><td class=\"price\">$1.00</td><td class=\"price\">$1.25</td><td class=\"price\">$0.10</td><td class=\"price\">$5.00</td><td>High-volume, classification</td><td class=\"st-cell st-old\">Legacy</td></tr>"
     }
-   ]
+   ],
+   "anchor": "ah"
   },
   {
    "index": 2,
@@ -3334,7 +3343,8 @@
      "ja": "<tr><td class=\"model-name\">Gemini 2.5 Flash-Lite</td><td class=\"price\">$0.10</td><td class=\"price\">—</td><td class=\"price\">$0.40</td><td class=\"price\">—</td><td>audio $0.30</td><td class=\"st-cell st-old\">旧版</td></tr>",
      "en": "<tr><td class=\"model-name\">Gemini 2.5 Flash-Lite</td><td class=\"price\">$0.10</td><td class=\"price\">—</td><td class=\"price\">$0.40</td><td class=\"price\">—</td><td>Audio $0.30</td><td class=\"st-cell st-old\">Legacy</td></tr>"
     }
-   ]
+   ],
+   "anchor": "gh"
   },
   {
    "index": 3,
@@ -3383,7 +3393,8 @@
      "ja": "<tr><td class=\"model-name\">DeepSeek V4 Pro<br><small>(-0813)・提供中</small></td><td class=\"price\">$0.66（オフピーク）<br>$1.32（ピーク）</td><td class=\"price\">$0.022（オフピーク）<br>$0.044（ピーク）</td><td class=\"price\">$1.98（オフピーク）<br>$3.96（ピーク）</td><td><strong>この単価は現行も有効。</strong>公式は「2026-09-14 以降も V4 Pro の API サービス提供を継続し、課金方法は変更しない」と告知済み（9/14 の V4.1 Flash ルーティング予告は撤回）。Vision 非対応・同時実行数 500。 <a href=\"/deepseek-v4-pro/\" style=\"font-weight:700;\">→提供継続のまとめ</a></td><td class=\"st-cell st-cur\">現行</td></tr>",
      "en": "<tr><td class=\"model-name\">DeepSeek V4 Pro<br><small>(-0813) · live</small></td><td class=\"price\">$0.66 (off-peak)<br>$1.32 (peak)</td><td class=\"price\">$0.022 (off-peak)<br>$0.044 (peak)</td><td class=\"price\">$1.98 (off-peak)<br>$3.96 (peak)</td><td><strong>These rates are current.</strong> DeepSeek states V4 Pro keeps running after 2026-09-14 with billing unchanged (the 9/14 routing notice was withdrawn). No vision; concurrency 500. <a href=\"/en/deepseek-v4-pro/\" style=\"font-weight:700;\">→ continuation details</a></td><td class=\"st-cell st-cur\">Current</td></tr>"
     }
-   ]
+   ],
+   "anchor": "dh"
   },
   {
    "index": 4,
@@ -3428,7 +3439,8 @@
      "ja": "<tr><td class=\"model-name\">Grok 4.6</td><td class=\"price\">$2.00</td><td class=\"price\">$6.00</td><td>2026-08-12公開。fast variantは2倍（$4/$12） <a href=\"/grok-4-6/\" style=\"font-weight:700;\">→詳細ページ</a></td><td class=\"st-cell st-old\">旧版</td></tr>",
      "en": "<tr><td class=\"model-name\">Grok 4.6</td><td class=\"price\">$2.00</td><td class=\"price\">$6.00</td><td>Released 2026-08-12. Fast variant 2× ($4/$12) <a href=\"/en/grok-4-6/\" style=\"font-weight:700;\">→Deep dive</a></td><td class=\"st-cell st-old\">Legacy</td></tr>"
     }
-   ]
+   ],
+   "anchor": "gh-x"
   },
   {
    "index": 5,
@@ -3481,7 +3493,8 @@
      "ja": "<tr><td class=\"model-name\">GLM-5.2</td><td class=\"price\">$1.40</td><td class=\"price\">$0.26</td><td class=\"price\">$4.40</td><td>MITライセンス。キャッシュ保存は期間限定無料</td><td class=\"st-cell st-old\">旧版</td></tr>",
      "en": "<tr><td class=\"model-name\">GLM-5.2</td><td class=\"price\">$1.40</td><td class=\"price\">$0.26</td><td class=\"price\">$4.40</td><td>MIT license. Cache storage limited-time free</td><td class=\"st-cell st-old\">Legacy</td></tr>"
     }
-   ]
+   ],
+   "anchor": "zh"
   },
   {
    "index": 6,
@@ -3526,10 +3539,65 @@
      "ja": "<tr><td class=\"model-name\">Qwen3.8-Max</td><td class=\"price\">$2.00</td><td class=\"price\">$6.00</td><td>フラッグシップ（2.4T MoE・1Mコンテキスト）。暗黙キャッシュ$0.25</td><td class=\"st-cell st-cur\">現行</td></tr>",
      "en": "<tr><td class=\"model-name\">Qwen3.8-Max</td><td class=\"price\">$2.00</td><td class=\"price\">$6.00</td><td>Flagship (2.4T MoE, 1M context). Implicit cache $0.25</td><td class=\"st-cell st-cur\">Current</td></tr>"
     }
-   ]
+   ],
+   "anchor": "qwen-h"
   },
   {
-   "index": 7,
+   "anchor": "xiaomi",
+   "headers": {
+    "ja": [
+     "モデル",
+     "入力(cache miss)",
+     "入力(cache hit)",
+     "出力",
+     "備考",
+     "状態"
+    ],
+    "en": [
+     "Model",
+     "Input (cache miss)",
+     "Input (cache hit)",
+     "Output",
+     "Notes",
+     "Status"
+    ]
+   },
+   "header_text": {
+    "ja": [
+     "モデル",
+     "入力(cache miss)",
+     "入力(cache hit)",
+     "出力",
+     "備考",
+     "状態"
+    ],
+    "en": [
+     "Model",
+     "Input (cache miss)",
+     "Input (cache hit)",
+     "Output",
+     "Notes",
+     "Status"
+    ]
+   },
+   "rows": [
+    {
+     "ja": "<tr><td class=\"model-name\">MiMo-V2.6-Pro</td><td class=\"price\">$0.435</td><td class=\"price\">$0.0036</td><td class=\"price\">$0.87</td><td>シリーズ最上位。入力4モダリティ（テキスト/画像/動画/音声）・1Mコンテキスト。料金はV2.5から据え置きで、キャッシュ書込は期間限定で無料 <a href=\"/china-ai/\" style=\"font-weight:700;\">→総覧</a></td><td class=\"st-cell st-cur\">現行</td></tr>",
+     "en": "<tr><td class=\"model-name\">MiMo-V2.6-Pro</td><td class=\"price\">$0.435</td><td class=\"price\">$0.0036</td><td class=\"price\">$0.87</td><td>Top of the series. Four input modalities (text, image, video, audio), 1M context. Prices unchanged from V2.5; cache writes free for a limited time <a href=\"/en/china-ai/\" style=\"font-weight:700;\">→Overview</a></td><td class=\"st-cell st-cur\">Current</td></tr>"
+    },
+    {
+     "ja": "<tr><td class=\"model-name\">MiMo-V2.6-Flash</td><td class=\"price\">$0.14</td><td class=\"price\">$0.0028</td><td class=\"price\">$0.28</td><td>バランス型。Proと同じ1Mコンテキスト・4入力モダリティ。Batch APIはリアルタイムの50%価格</td><td class=\"st-cell st-cur\">現行</td></tr>",
+     "en": "<tr><td class=\"model-name\">MiMo-V2.6-Flash</td><td class=\"price\">$0.14</td><td class=\"price\">$0.0028</td><td class=\"price\">$0.28</td><td>The balanced variant. Same 1M context and four input modalities as Pro. Batch at 50% of the real-time price</td><td class=\"st-cell st-cur\">Current</td></tr>"
+    },
+    {
+     "ja": "<tr><td class=\"model-name\">MiMo-V2.6-Pro-UltraSpeed</td><td class=\"price\">$4.35</td><td class=\"price\">$0.036</td><td class=\"price\">$8.70</td><td>Proと同じ重みを高速提供（最大20倍速）。単価はPro比10倍</td><td class=\"st-cell st-cur\">現行</td></tr>",
+     "en": "<tr><td class=\"model-name\">MiMo-V2.6-Pro-UltraSpeed</td><td class=\"price\">$4.35</td><td class=\"price\">$0.036</td><td class=\"price\">$8.70</td><td>Pro weights served faster (up to 20x output speed); 10x the Pro rates</td><td class=\"st-cell st-cur\">Current</td></tr>"
+    }
+   ],
+   "index": 7
+  },
+  {
+   "index": 8,
    "headers": {
     "ja": [
      "モデル",
@@ -3579,10 +3647,11 @@
      "ja": "<tr><td class=\"model-name\">Kimi K3</td><td class=\"price\">$3.00</td><td class=\"price\">$0.30</td><td class=\"price\">$15.00</td><td>前世代。K2系は2026-10-31以降 新規登録者に非開放・12月末で終了予定</td><td class=\"st-cell st-old\">旧版</td></tr>",
      "en": "<tr><td class=\"model-name\">Kimi K3</td><td class=\"price\">$3.00</td><td class=\"price\">$0.30</td><td class=\"price\">$15.00</td><td>Previous generation. K2 closes to new users from 2026-10-31 and retires end of Dec 2026</td><td class=\"st-cell st-old\">Legacy</td></tr>"
     }
-   ]
+   ],
+   "anchor": "kimi-h"
   },
   {
-   "index": 8,
+   "index": 9,
    "headers": {
     "ja": [
      "モデル",
@@ -3632,7 +3701,8 @@
      "ja": "<tr><td class=\"model-name\">Muse Spark<br><small>(muse-spark-1.3 / 1.2 / 1.1)</small></td><td class=\"price\">$1.25<br><small>Contributor $0.10</small></td><td class=\"price\">$0.15<br><small>Contributor $0.002</small></td><td class=\"price\">$4.25<br><small>Contributor $0.20</small></td><td>Muse Spark 1.1 は Standard モードのみ。Contributor モードは <code>muse-spark-1.3-contributor</code> / <code>1.2-contributor</code> で利用</td><td class=\"st-cell st-cur\">現行</td></tr>",
      "en": "<tr><td class=\"model-name\">Muse Spark<br><small>(muse-spark-1.3 / 1.2 / 1.1)</small></td><td class=\"price\">$1.25<br><small>Contributor $0.10</small></td><td class=\"price\">$0.15<br><small>Contributor $0.002</small></td><td class=\"price\">$4.25<br><small>Contributor $0.20</small></td><td>Muse Spark 1.1 is Standard mode only. Contributor mode is available via the <code>muse-spark-1.3-contributor</code> / <code>1.2-contributor</code> variants</td><td class=\"st-cell st-cur\">Current</td></tr>"
     }
-   ]
+   ],
+   "anchor": "meta-h"
   }
  ],
  "meta": {

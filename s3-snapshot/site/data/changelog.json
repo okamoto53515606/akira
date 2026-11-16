@@ -1,6 +1,20 @@
 {
- "updated": "2026-11-15",
+ "updated": "2026-11-17",
  "events": [
+  {
+   "date": "2026-11-17",
+   "kind": "page",
+   "key": "xiaomi-mimo-pricing",
+   "ja": "料金比較に Xiaomi（MiMo）セクションを新設し、MiMo-V2.6（Pro / Flash / Pro-UltraSpeed）の3行を公式料金表から転記。キャッシュ単価・Batch 50%・重み未公開の別まで明記（2026-11-17 直接確認 /pricing/）",
+   "en": "Added a Xiaomi (MiMo) section to the pricing tables with the three MiMo-V2.6 variants (Pro / Flash / Pro-UltraSpeed), transcribed from the official price list verified on 2026-11-17, including cache rates, the 50% Batch price and a note that weights are not published (/en/pricing/)"
+  },
+  {
+   "date": "2026-11-15",
+   "kind": "page",
+   "key": "jpy-pricing",
+   "ja": "LLM API料金の日本円換算表（1ドル=155円）を新規公開。USD単価から機械計算し、現行／旧版の状態列つき（/jpy-pricing/）",
+   "en": "Published LLM API pricing in Japanese yen at a fixed ¥155 = $1, calculated from the USD rates, with a current/legacy column (/en/jpy-pricing/)"
+  },
   {
    "date": "2026-11-15",
    "kind": "page",
