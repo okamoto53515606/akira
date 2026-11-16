@@ -43,7 +43,8 @@ TODAY = datetime.now(JST).date().isoformat()
 
 
 def _date_text(lang: str) -> str:
-    d = date.today()
+    # 2026-11-17: TODAY と同じく JST 基準（コンテナは UTC）
+    d = datetime.now(JST).date()
     return "%d年%d月%d日" % (d.year, d.month, d.day) if lang == "ja" else d.isoformat()
 
 ART_RE = re.compile(r'<article class="tl-item[^"]*" id="([^"]+)">.*?</article>\n?', re.S)
