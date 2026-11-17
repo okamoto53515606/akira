@@ -69,6 +69,30 @@ def _content_type(path: str) -> str:
     }.get(ext, "application/octet-stream")
 
 
+def _cache_control(path: str) -> str:
+    """キャッシュの寿命を**明示**する（2026-11-17 追加）。
+
+    なぜ:
+        これまで Cache-Control を付けていなかったため、CloudFront は既定TTL
+        （24時間）、ブラウザは「Last-Modified からの推測」でキャッシュしていた。
+        その結果、OGカードを差し替えても「古い画像のまま」になった（11-17 指摘）。
+        CDNのinvalidationは打てるが、**ブラウザ側は揃わない**。
+
+    方針:
+        HTML は短命（5分）＋再検証。画像/CSSは1時間。
+        加えて OGカードはURLに `?v=<生成日>` を付ける（og_card.py --wire）ので、
+        そもそもURLが変わる。
+    """
+    ext = path.rsplit(".", 1)[-1].lower() if "." in path else ""
+    if ext == "html":
+        return "public, max-age=300, must-revalidate"
+    if ext in ("css", "js", "png", "jpg", "jpeg", "webp", "svg", "ico"):
+        return "public, max-age=3600"
+    if ext == "xml":
+        return "public, max-age=600"
+    return "public, max-age=300"
+
+
 # --- 公開データの契約（2026-09-27 追加）--------------------------------------------
 # 背景: 計算機の実行時データ /data/models.json（models は配列）を、ワークスペースの
 # 料金SOT（models はオブジェクト）で上書きし、/calculator/・/en/calculator/ が
@@ -230,6 +254,7 @@ def publish_file_to_site(path: str, content: str) -> dict:
         Key=path,
         Body=body,
         ContentType=_content_type(path),
+        CacheControl=_cache_control(path),
     )
     _invalidation_paths.append(f"/{path}")
     if path == DATA_MODELS_KEY:
@@ -503,7 +528,8 @@ def _bump_sitemap_lastmod(site_dir: str, rels, s3) -> bool:
     with open(path, "w", encoding="utf-8") as fh:
         fh.write(s)
     s3.upload_file(path, LLM_SITE_BUCKET, "sitemap.xml",
-                   ExtraArgs={"ContentType": _content_type("sitemap.xml")})
+                   ExtraArgs={"ContentType": _content_type("sitemap.xml"),
+                               "CacheControl": _cache_control("sitemap.xml")})
     _invalidation_paths.append("/sitemap.xml")
     return True
 
@@ -647,7 +673,8 @@ def _render_and_publish_entrypoints(base_dir: str, s3) -> list:
             continue
         try:
             s3.upload_file(f, LLM_SITE_BUCKET, rel,
-                           ExtraArgs={"ContentType": _content_type(rel)})
+                           ExtraArgs={"ContentType": _content_type(rel),
+                                       "CacheControl": _cache_control(rel)})
             _invalidation_paths.append("/" + rel)
             published.append(rel)
         except Exception:  # noqa: BLE001
@@ -772,10 +799,13 @@ def site_upload(local_path: str, site_prefix: str = "") -> dict:
                 rejected.append({"key": key, "errors": errors})
                 continue
             s3.put_object(Bucket=LLM_SITE_BUCKET, Key=key, Body=body,
-                          ContentType=_content_type(key))
+                          ContentType=_content_type(key),
+                          CacheControl=_cache_control(key))
             _save_models_baseline(body)
         else:
-            s3.upload_file(f, LLM_SITE_BUCKET, key, ExtraArgs={"ContentType": _content_type(key)})
+            s3.upload_file(f, LLM_SITE_BUCKET, key,
+                           ExtraArgs={"ContentType": _content_type(key),
+                                      "CacheControl": _cache_control(key)})
         _invalidation_paths.append("/" + key)
         uploaded.append(key)
         # 新規ページなら site_events を自動登録（課題141）
@@ -988,7 +1018,7 @@ def _restore_published_data_file(key: str = DATA_MODELS_KEY, dry_run: bool = Fal
         return {"status": "dry_run", "reason": "復元が必要", "live_errors": live_errors}
 
     s3.put_object(Bucket=LLM_SITE_BUCKET, Key=key, Body=baseline,
-                  ContentType=_content_type(key))
+                  ContentType=_content_type(key), CacheControl=_cache_control(key))
     _invalidation_paths.append("/" + key)
     flush_invalidations()
     return {"status": "restored", "key": key, "bytes": len(baseline),
@@ -1141,7 +1171,8 @@ def generate_and_publish_image(purpose: str, site_path: str) -> dict:
 
     site_path = site_path.lstrip("/")
     s3 = boto3.client("s3", region_name=AWS_REGION)
-    s3.put_object(Bucket=LLM_SITE_BUCKET, Key=site_path, Body=image_bytes, ContentType=mime)
+    s3.put_object(Bucket=LLM_SITE_BUCKET, Key=site_path, Body=image_bytes,
+                  ContentType=mime, CacheControl=_cache_control(site_path))
     _invalidation_paths.append(f"/{site_path}")
 
     budget.record_usage(IMAGE_MODEL_ID, 0, 0, images=1, purpose=f"image: {purpose[:100]}")
@@ -1215,7 +1246,8 @@ def take_screenshot(url: str, site_path: str = "", wait_until: str = "page_loade
             site_path = site_path.lstrip("/")
             s3 = boto3.client("s3", region_name=AWS_REGION)
             s3.put_object(Bucket=LLM_SITE_BUCKET, Key=site_path, Body=image_bytes,
-                          ContentType="image/png")
+                          ContentType="image/png",
+                          CacheControl=_cache_control(site_path))
             _invalidation_paths.append(f"/{site_path}")
             result["url"] = f"{LLM_SITE_URL}/{site_path}"
 

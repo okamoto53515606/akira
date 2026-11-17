@@ -354,12 +354,33 @@ def _image_px(path):
         return None
 
 
+def _og_specs():
+    """OGカードの台帳（/workspace/data/og_specs.json）。無ければ空。
+
+    2026-11-17 追加:
+        画像を差し替えてもURLが同じままだと、CloudFront とブラウザが古いコピーを
+        持ち続ける（そもそも Cache-Control が無くキャッシュ期間が不定だった）。
+        「描き直したら URL の ?v=<生成日> も上げる」を機械で強制する。
+    """
+    ws = os.environ.get("WORKSPACE_LOCAL_DIR") or "/workspace"
+    try:
+        with open(os.path.join(ws, "data", "og_specs.json"), encoding="utf-8") as fh:
+            return json.load(fh).get("pages") or {}
+    except Exception:
+        return {}
+
+
+def _no_query(url):
+    return (url or "").split("?", 1)[0]
+
+
 def _og_image_problems(site):
     """OGP画像の配線チェック（期待値一致 / 未使用アセット / 欠損アセット / ミラー非対称）。"""
     errors, warns = [], []
     ogdir = site / "assets" / "og"
     present = set(p.name for p in ogdir.glob("*.png")) if ogdir.is_dir() else set()
     referenced = set()
+    specs = _og_specs()
 
     for rel, fname in sorted(EXPECTED_OG_IMAGES.items()):
         want = OG_BASE + fname
@@ -373,9 +394,18 @@ def _og_image_problems(site):
         s = _read(p)
         og = _meta_content(s, "property", "og:image")
         tw = _meta_content(s, "name", "twitter:image")
-        if og != want:
+        # 同じURLのまま画像だけ差し替えるとCDNとブラウザに古いコピーが残るので、
+        # 台帳に載っているページは ?v=<生成日> を必須にする（2026-11-17 追加）
+        version = ""
+        spec = specs.get(rel)
+        if spec and spec.get("generated"):
+            version = "?v=" + str(spec["generated"]).replace("-", "")
+        if _no_query(og) != want:
             errors.append("og-wiring: %s: og:image=%r expected %r" % (rel, og, want))
-        if tw != want:
+        elif version and not (og or "").endswith(version):
+            errors.append("og-wiring: %s: og:image に %s が無い（画像を描き直したら "
+                          "og_card.py --wire で版を上げる）: %r" % (rel, version, og))
+        if _no_query(tw) != want:
             errors.append("og-wiring: %s: twitter:image=%r expected %r" % (rel, tw, want))
         w = _meta_content(s, "property", "og:image:width")
         h = _meta_content(s, "property", "og:image:height")
@@ -403,7 +433,7 @@ def _og_image_problems(site):
         og = _meta_content(text, "property", "og:image") or ""
         if "/assets/og/" not in og:
             continue
-        fname = og.rsplit("/assets/og/", 1)[1]
+        fname = _no_query(og).rsplit("/assets/og/", 1)[1]
         target = ogdir / fname
         if not target.exists():
             errors.append("og-wiring: %s: og:image=%r の実ファイルが無い" % (rel, fname))

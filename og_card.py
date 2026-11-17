@@ -166,6 +166,58 @@ def load_specs(path: str) -> dict:
         return json.load(fh)
 
 
+def _version(spec: dict) -> str:
+    """キャッシュを跨ぐための版。生成日そのもの（YYYY-MM-DD → YYYYMMDD）。"""
+    return str(spec.get("generated", "")).replace("-", "")
+
+
+def expected_url(spec: dict) -> str:
+    return "%s?v=%s" % (spec.get("og_url_base", "https://llm.okamomedia.tokyo/assets/og/")
+                        + spec["image"], _version(spec))
+
+
+def wire_site(site_dir: str, specs_path: str, only: list | None = None) -> list:
+    """HTMLの og:image / twitter:image / key-visual のURLを **?v=<生成日>** に合わせる。
+
+    なぜ:
+        2026-11-17、OGカードを差し替えたのに「古い画像のまま」と言われた。
+        S3のオブジェクトは新しくなっていたが、CloudFront もブラウザも
+        **同じURLのまま古いコピーを持っていた**（そもそも Cache-Control が無く、
+        キャッシュ期間が不定だった）。
+        URLに生成日を入れれば、描き直した瞬間に別URLになるので、
+        CDNもブラウザも取り違えようがない（＝invalidationの取りこぼしに依存しない）。
+
+    対象は og_specs に登録されているページだけ（未登録ページは何もしない）。
+    """
+    import re
+
+    data = load_specs(specs_path)
+    changed = []
+    for page, spec in sorted((data.get("pages") or {}).items()):
+        if only and page not in only:
+            continue
+        p = os.path.join(site_dir, page)
+        if not os.path.isfile(p):
+            changed.append("%s: ページが無い（skip）" % page)
+            continue
+        with open(p, encoding="utf-8") as fh:
+            s = fh.read()
+        before = s
+        fname = re.escape(spec["image"])
+        url = "https://llm.okamomedia.tokyo/assets/og/%s?v=%s" % (spec["image"], _version(spec))
+        # 絶対URL（og:image / twitter:image）: 既存の ?v= は入れ替える
+        s = re.sub(r'https://llm\.okamomedia\.tokyo/assets/og/%s(\?v=[0-9A-Za-z._-]+)?' % fname,
+                   url, s)
+        # 相対URL（本文の key-visual img）: クォート込みで置換する
+        s = re.sub(r'"/assets/og/%s(\?v=[0-9A-Za-z._-]+)?"' % fname,
+                   '"/assets/og/%s?v=%s"' % (spec["image"], _version(spec)), s)
+        if s != before:
+            with open(p, "w", encoding="utf-8") as fh:
+                fh.write(s)
+            changed.append("%s → %s?v=%s" % (page, spec["image"], _version(spec)))
+    return changed
+
+
 def save_specs(path: str, data: dict) -> None:
     with open(path, "w", encoding="utf-8") as fh:
         json.dump(data, fh, ensure_ascii=False, indent=1)
@@ -198,8 +250,15 @@ def main(argv: list[str]) -> int:
     ap.add_argument("--out", default="/tmp/site/assets/og")
     ap.add_argument("--date", default=None)
     ap.add_argument("--dry", action="store_true")
+    ap.add_argument("--wire", default=None, metavar="SITE_DIR",
+                    help="HTMLのog:image等を ?v=<生成日> に合わせる（描き直した後に実行）")
     ap.add_argument("pages", nargs="*")
     args = ap.parse_args(argv)
+
+    if args.wire:
+        for line in wire_site(args.wire, args.specs, only=args.pages or None):
+            print("wire: " + line)
+        return 0
 
     data = load_specs(args.specs)
     targets = args.pages or sorted(data.get("pages", {}))

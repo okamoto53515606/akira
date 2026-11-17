@@ -24,5 +24,16 @@
   }
  },
  "assignments": {},
- "last_run": []
+ "last_run": [
+  {
+   "page": "china-ai/index.html",
+   "date": "2026-11-17",
+   "codes": []
+  },
+  {
+   "page": "deepseek-v4-1-flash/index.html",
+   "date": "2026-11-17",
+   "codes": []
+  }
+ ]
 }
