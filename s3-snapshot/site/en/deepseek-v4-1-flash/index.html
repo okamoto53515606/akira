@@ -4,16 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>DeepSeek V4.1 Flash on Azure — Deploy Steps, Pricing &amp; Benchmarks — LLM Data Hub</title>
-  <meta name="description" content="DeepSeek V4.1 Flash on Azure: a measured Microsoft Foundry deploy with the az CLI (2026-09-28, capacity 20 = 20 RPM / 20,000 TPM, pitfalls included) plus full pricing ($0.15/$0.60 off-peak, cache hits $0.003, unchanged on 2026-11-12), 1M context, 384K output, image input and benchmarks. Updated November 12, 2026.">
+  <meta name="description" content="DeepSeek V4.1 Flash (current build DeepSeek-V4.1-Flash-1017): pricing, specs and benchmarks, a measured Microsoft Foundry (Azure) deploy with the az CLI (2026-09-28, capacity 20 = 20 RPM / 20,000 TPM, pitfalls included), the search / fetch / OCR / speech APIs, GitHub Copilot setup and FAQ. $0.15/$0.60 off-peak, cache hits $0.003 (re-checked 2026-11-17). Updated November 17, 2026.">
   <link rel="canonical" href="https://llm.okamomedia.tokyo/en/deepseek-v4-1-flash/">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <meta property="og:image" content="https://llm.okamomedia.tokyo/assets/og/en-deepseek-v4-1-flash.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="DeepSeek V4.1 Flash price cards: $0.15 off-peak input and $0.60 off-peak output per 1M tokens, peak $0.30 and $1.20">
+  <meta property="og:image:alt" content="DeepSeek V4.1 Flash price cards: $0.15 off-peak input and $0.60 off-peak output per 1M tokens, current build V4.1-Flash-1017">
   <meta name="twitter:image" content="https://llm.okamomedia.tokyo/assets/og/en-deepseek-v4-1-flash.png">
-  <meta name="twitter:image:alt" content="DeepSeek V4.1 Flash price cards: $0.15 off-peak input and $0.60 off-peak output per 1M tokens, peak $0.30 and $1.20">
+  <meta name="twitter:image:alt" content="DeepSeek V4.1 Flash price cards: $0.15 off-peak input and $0.60 off-peak output per 1M tokens, current build V4.1-Flash-1017">
   <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/deepseek-v4-1-flash/">
   <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/deepseek-v4-1-flash/">
   <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/deepseek-v4-1-flash/">
@@ -22,7 +22,7 @@
   <meta property="og:type"        content="article">
   <meta property="og:url"         content="https://llm.okamomedia.tokyo/en/deepseek-v4-1-flash/">
   <meta property="og:title"       content="DeepSeek V4.1 Flash on Azure — Pricing, Deploy Walkthrough, Benchmarks &amp; Copilot Setup">
-  <meta property="og:description" content="Released 2026-09-10, DeepSeek V4.1 Flash costs $0.15/$0.60 off-peak (re-checked 2026-11-12, unchanged) and supports native image input. On Microsoft Foundry you can deploy DeepSeek-V4.1-Flash with the az CLI — measured 2026-09-28, including capacity and quota numbers.">
+  <meta property="og:description" content="Current build is DeepSeek-V4.1-Flash-1017 (2026-10-17). Costs $0.15/$0.60 off-peak (peak doubles) and supports 1M context, 384K output and native image input. Includes a measured Microsoft Foundry (Azure) deploy with the az CLI (2026-09-28, with real capacity numbers) and the search / fetch / OCR / speech API prices.">
   <meta property="og:site_name"   content="LLM Data Hub">
   <meta name="twitter:card"       content="summary_large_image">
 
@@ -33,11 +33,11 @@
     "@type": "TechArticle",
     "headline": "DeepSeek V4.1 Flash Guide — Pricing, Benchmarks, Azure AI Foundry and GitHub Copilot Setup",
     "datePublished": "2026-09-11",
-    "dateModified": "2026-11-12",
+    "dateModified": "2026-11-17",
     "author": { "@type": "Organization", "name": "okamoちゃんねる" },
     "publisher": { "@type": "Organization", "name": "okamoちゃんねる" },
     "url": "https://llm.okamomedia.tokyo/en/deepseek-v4-1-flash/",
-    "description": "DeepSeek V4.1 Flash official peak/off-peak pricing, specifications, benchmarks, setup steps, a measured Microsoft Foundry (Azure) deployment walkthrough for DeepSeek-V4.1-Flash with capacity/quota notes, first-party vs Azure differences, and the V4 Pro continuation."
+    "description": "DeepSeek V4.1 Flash (current build DeepSeek-V4.1-Flash-1017): official peak/off-peak pricing, specifications, benchmarks, the search/fetch/OCR/speech APIs, setup steps, a measured Microsoft Foundry (Azure) deployment walkthrough with capacity/quota notes, first-party vs Azure differences, and where V4 Pro stands."
   }
   </script>
 
@@ -103,26 +103,22 @@
 
   <main>
     <div class="container">
-<p style="font-size:.9rem;background:var(--c-surface2);border:1px solid var(--c-border);border-radius:6px;padding:.6rem .9rem;">Added 2026-11-12: the Azure model catalog lists this model as <code>DeepSeek-V4.1-Flash-1017</code> (Version <code>2026-10-17</code>, 1000k context, sold directly by Azure). DeepSeek’s own docs give the same MODEL VERSION, <code>DeepSeek-V4.1-Flash-1017</code>. Version strings differ by environment, so always confirm with <code>list-models</code> below.</p>
-<figure class="key-visual" style="margin:1.5rem 0 .5rem;"><img src="/assets/og/en-deepseek-v4-1-flash.png" alt="DeepSeek V4.1 Flash price cards: $0.15 off-peak input and $0.60 off-peak output per 1M tokens, peak $0.30 and $1.20" width="1200" height="630" loading="eager" decoding="async" style="width:100%;max-width:900px;height:auto;display:block;margin:0 auto;border:1px solid var(--c-border);border-radius:var(--r-md);"></figure>
+<figure class="key-visual" style="margin:1.5rem 0 .5rem;"><img src="/assets/og/en-deepseek-v4-1-flash.png" alt="DeepSeek V4.1 Flash price cards: $0.15 off-peak input and $0.60 off-peak output per 1M tokens, current build V4.1-Flash-1017" width="1200" height="630" loading="eager" decoding="async" style="width:100%;max-width:900px;height:auto;display:block;margin:0 auto;border:1px solid var(--c-border);border-radius:var(--r-md);"></figure>
 
       <div class="section" style="padding-bottom:0;">
         <h1 class="section-title" style="font-size:1.55rem;">
           DeepSeek V4.1 Flash Guide
         </h1>
         <p class="lead-note">
-          On 2026-09-10 DeepSeek officially released <strong>DeepSeek-V4.1-Flash</strong>, the smallest model in its new architecture family.
-          Prices are far lower than V4 Pro, and image input (vision) is supported natively.
-          This page covers pricing, specs and benchmarks verified only against DeepSeek's official pricing page and change log, plus setup in
-          VS Code GitHub Copilot Chat and <strong>the relationship with V4 Pro (which DeepSeek says continues after 2026-09-14)</strong>.
+          The API model name is <code>deepseek-flash</code> and the <strong>current build is DeepSeek-V4.1-Flash-1017</strong> (updated 2026-10-17): 1M context, up to 384K output, native image input, and prices far below V4 Pro.
+          This page describes <strong>only what is true today</strong>, verified against DeepSeek's official pricing page and change log — pricing, specs, benchmarks, the surrounding APIs, setup, our measured Azure walkthrough, and where V4 Pro stands.
           See also the <a href="/en/pricing/">pricing comparison</a>, the <a href="/en/calculator/">token calculator</a> and the <a href="/en/timeline/">release timeline</a>.
         </p>
 
         <div class="updated-bar">
           <span class="dot">●</span>
-          Last updated: <time datetime="2026-11-12">November 12, 2026</time>
-          &ensp;|&ensp; Primary source: <a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">official pricing page</a> (re-checked 2026-11-03, no change) · <a href="https://ai.azure.com/catalog/models/DeepSeek-V4.1-Flash" target="_blank" rel="noopener">Microsoft Foundry model catalog</a>
-          &ensp;|&ensp; Retrieved: 2026-10-05
+          Last updated: <time datetime="2026-11-17">November 17, 2026</time>
+          &ensp;|&ensp; Primary sources last checked: 2026-11-17 (<a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">pricing page</a> · <a href="https://api-docs.deepseek.com/updates/" target="_blank" rel="noopener">change log</a> · <a href="https://ai.azure.com/catalog/models/DeepSeek-V4.1-Flash" target="_blank" rel="noopener">Microsoft Foundry catalog</a>)
         </div>
       </div>
 
@@ -131,17 +127,16 @@
   <nav class="toc" aria-label="Contents">
     <p class="toc-title">Contents</p>
     <ol>
-      <li><a href="#u1017-heading">October 17, 2026 update — V4.1-Flash-1017, plus Search and Fetch APIs</a></li>
       <li><a href="#key-heading">The short version</a></li>
-      <li><a href="#price-heading">Official pricing (re-checked 2026-11-03 — unchanged)</a></li>
-      <li><a href="#pro-heading">V4 Pro keeps running (as of 2026-09-13)</a></li>
-      <li><a href="#sec-5">✅ DeepSeek says V4 Pro continues — the 9/14 routing notice was withdrawn</a></li>
+      <li><a href="#price-heading">Official pricing (peak / off-peak)</a></li>
+      <li><a href="#u1017-heading">Current model (V4.1-Flash-1017) and the surrounding APIs</a></li>
       <li><a href="#spec-heading">Specifications (official feature table)</a></li>
-      <li><a href="#bench-heading">Official benchmarks (published 2026-09-10)</a></li>
+      <li><a href="#bench-heading">Official benchmarks (current build)</a></li>
+      <li><a href="#pro-heading">Where V4 Pro stands</a></li>
       <li><a href="#setup-heading">Setup in VS Code GitHub Copilot Chat (3 steps)</a></li>
-      <li><a href="#azure-heading">Running it on Microsoft Foundry (Azure) — deploying DeepSeek-V4.1-Flash with the CLI (measured 2026-09-28)</a></li>
-      <li><a href="#sec-10">⚠️ --sku-capacity in practice (measured by the operator, 2026-09-28)</a></li>
-      <li><a href="#sec-11">⚠️ There is no deployment update in the core CLI (changing capacity)</a></li>
+      <li><a href="#azure-heading">Running it on Microsoft Foundry (Azure)</a></li>
+      <li><a href="#sec-10">⚠️ --sku-capacity in practice</a></li>
+      <li><a href="#sec-11">⚠️ There is no deployment update in the core CLI</a></li>
       <li><a href="#sec-12">⚠️ Pitfalls specific to the Azure route</a></li>
       <li><a href="#sec-13">⚠️ If you hit MissingSubscriptionRegistration</a></li>
       <li><a href="#faq-heading">FAQ</a></li>
@@ -150,45 +145,62 @@
   </nav>
 </div>
 <section class="section" style="padding-top:1.5rem;" aria-labelledby="u1017-heading">
-<h2 class="section-title" id="u1017-heading" style="font-size:1.2rem;">October 17, 2026 update — V4.1-Flash-1017, plus Search and Fetch APIs</h2>
-<div class="context-note" style="border-left-color:var(--c-green);">
-  <ul style="margin:0;padding-left:1.1rem;line-height:1.9;">
-    <li><strong>The model was updated; pricing and API calls stayed the same.</strong> Verbatim: “DeepSeek V4.1 Flash has been upgraded to DeepSeek-V4.1-Flash-1017. The official web and APP models have also been updated to the new version. The API calling method and pricing remain unchanged — simply use deepseek-flash to access the latest model.”</li>
-    <li><strong>Benchmarks below are copied from the official changelog</strong> (not our measurements): HLE (w/o tools) 42.6 (44.0*) / Terminal-Bench 4.0 42.3 / DeepSWE v1.1 77.0 / ProgramBench 29.1 / NL2Repo-Bench 68.2 / Automation-Bench v1.0.6 60.5 / Agents' Last Exam 35.4 / Apex Bench v1.1 72.1 / Chartography (w/tools) 83.0 / BabyVision (w/tools) 92.5 / ZeroBench-main (w/tools) 51.0. *pure-text subset of HLE only; Terminal-Bench 4.0 was run with the Claude Code framework, DeepSWE with Mini-SWE-V2, ZeroBench-main with Pass@5.</li>
-    <li><strong>DeepSeek says it also cut task runtime and output length.</strong> Verbatim: “While improving performance, we also reduced the model's task runtime and output length, enabling users to complete tasks at lower cost and higher speed”. DeepSeek Harness 0.2.1-rc.1 or later is recommended.</li>
-    <li><strong>The phrasing “significantly enhanced project development capabilities” does not appear verbatim on the official page</strong>, so we do not use it; we stick to the benchmark table and the runtime/output-length wording above.</li>
+<h2 class="section-title" id="u1017-heading" style="font-size:1.2rem;">Current model — DeepSeek-V4.1-Flash-1017 and the surrounding APIs</h2>
+<p class="section-sub"><code>deepseek-flash</code> points at <strong>DeepSeek-V4.1-Flash-1017</strong> (the 2026-10-17 build). The calling convention and the prices have not changed since the 2026-09-10 release.</p>
+<div class="key-box">
+  <ul>
+    <li><strong>The model name is still <code>deepseek-flash</code>.</strong> Verbatim: “DeepSeek V4.1 Flash has been upgraded to DeepSeek-V4.1-Flash-1017. … The API calling method and pricing remain unchanged — simply use deepseek-flash to access the latest model.”</li>
+    <li><strong>Better scores, shorter runs.</strong> DeepSeek says it “reduced the model's task runtime and output length, enabling users to complete tasks at lower cost and higher speed”. DeepSeek Harness 0.2.1-rc.1 or later is recommended. The numbers are in <a href="#bench-heading">Official benchmarks</a>.</li>
+    <li><strong>On 2026-11-13 the full application API suite opened up.</strong> Web search, deep thinking search, file input (PDF/Office/images), URL reading and model safety are now switches on the existing APIs, and Search / Fetch / OCR / ASR / TTS are offered as standalone APIs.</li>
   </ul>
 </div>
-<h3 style="font-size:1rem;margin:1.6rem 0 .5rem;">Web Search / Fetch APIs (released the same day)</h3>
+<h3 style="font-size:1rem;margin:1.6rem 0 .5rem;">Capabilities you can switch on in a model call</h3>
+<div class="table-wrap"><table><thead><tr><th>Capability</th><th>What enabling it does</th></tr></thead><tbody>
+<tr><td class="model-name">Web search</td><td>With thinking disabled and the <code>deepseek_web_search</code> tool on, the model runs web or image searches as needed and answers with citations</td></tr>
+<tr><td class="model-name">Deep thinking search</td><td>With thinking enabled plus <code>deepseek_web_search</code>, the model searches and reads links on its own over several reasoning steps</td></tr>
+<tr><td class="model-name">File input</td><td>Upload PDFs, Office files and images; they are plain-text extracted or layout-parsed into the context</td></tr>
+<tr><td class="model-name">URL reading</td><td>With <code>deepseek_read_url</code> enabled, the model fetches links found in the user message and answers from them</td></tr>
+<tr><td class="model-name">Model safety</td><td>Reviews input and output and returns a refusal marker on risk. Required if you serve the public</td></tr>
+</tbody></table></div>
+
+<h3 style="font-size:1rem;margin:1.6rem 0 .5rem;">Standalone API prices (official pricing page)</h3>
+<div class="table-wrap"><table><thead><tr><th>API</th><th>Unit</th><th>Price</th></tr></thead><tbody>
+<tr><td class="model-name">Search (text, image)</td><td>1,000 searches</td><td class="price">$0.75</td></tr>
+<tr><td class="model-name">Web fetch</td><td>1,000 fetches</td><td class="price">$0.75</td></tr>
+<tr><td class="model-name">File parsing / OCR</td><td>1,000 pages</td><td class="price">$0.225</td></tr>
+<tr><td class="model-name">Text to Speech (TTS)</td><td>10,000 characters</td><td class="price">$0.45<br><small>(limited-time 50% off: $0.225)</small></td></tr>
+<tr><td class="model-name">Speech to Text (ASR)</td><td>1 hour of audio</td><td class="price">$0.116<br><small>(limited-time 50% off: $0.058)</small></td></tr>
+</tbody></table></div>
+<p style="font-size:.78rem;color:var(--c-muted);margin-top:.3rem;">Billing is separate from token billing. Search and fetch are charged per successful request, whether you call the API directly or the model uses it as a tool. Token prices (Flash: $0.003 cache hit / $0.15 cache miss / $0.60 output, all off-peak) were unchanged when re-checked on 2026-11-17.</p>
+
+<h3 style="font-size:1rem;margin:1.6rem 0 .5rem;">Search / fetch endpoints</h3>
 <div class="table-wrap"><table><thead><tr><th>Item</th><th>Official documentation</th></tr></thead><tbody>
-<tr><td class="model-name">Search endpoint</td><td><code>POST https://api.deepseek.com/v1/tools/search</code></td></tr>
-<tr><td class="model-name">Fetch endpoint</td><td><code>POST https://api.deepseek.com/v1/tools/fetch</code></td></tr>
+<tr><td class="model-name">Search</td><td><code>POST https://api.deepseek.com/v1/tools/search</code></td></tr>
+<tr><td class="model-name">Fetch</td><td><code>POST https://api.deepseek.com/v1/tools/fetch</code></td></tr>
 <tr><td class="model-name">Auth</td><td>Same bearer auth as the DeepSeek API, JSON body (<code>Authorization: Bearer &lt;API Key&gt;</code>)</td></tr>
-<tr><td class="model-name">Billing (Search)</td><td>$0.75 per 1,000 successful requests</td></tr>
-<tr><td class="model-name">Billing (Fetch)</td><td>$0.75 per 1,000 successful requests</td></tr>
-<tr><td class="model-name">Search limits</td><td>query: 1–128 Unicode characters (not all whitespace); count: 1–50 (default 10); need_content defaults to false</td></tr>
+<tr><td class="model-name">Search limits</td><td>query: 1–128 characters (not all whitespace); count: 1–50 (default 10); need_content defaults to false</td></tr>
 <tr><td class="model-name">Fetch limits</td><td>url up to 8192 characters, HTTP or HTTPS. Availability depends on the target site (verbatim: “Fetching is subject to the target site's availability and access policies.”)</td></tr>
 </tbody></table></div>
-<p style="font-size:.78rem;color:var(--c-muted);margin-top:.3rem;">Billing is per successful request and is separate from token billing. Server-side tool calls made through DeepSeek Harness, Claude Code or Codex are “currently free of charge”; per-request billing starts at 00:00 Beijing time on November 1, 2026. Token prices (Flash: $0.003 cache hit / $0.15 cache miss / $0.60 output, all off-peak) were unchanged when we re-checked on 2026-11-03.</p>
+<p style="font-size:.78rem;color:var(--c-muted);">Sources: <a href="https://api-docs.deepseek.com/guides/search" target="_blank" rel="noopener">Search &amp; Fetch</a> · <a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">Models &amp; Pricing</a> · <a href="https://api-docs.deepseek.com/updates/" target="_blank" rel="noopener">Change Log</a> (retrieved 2026-11-17).</p>
 </section>
 
 <section class="section" style="padding-top:1.5rem;" aria-labelledby="key-heading">
         <div class="key-box">
           <h2 id="key-heading">The short version</h2>
           <ul>
-            <li><strong>V4.1 Flash is the current workhorse.</strong> The model ID you pass in API requests is <code>deepseek-flash</code> (labels and options inside VS Code may differ as the extension is updated). 1M context, 384K max output, native image input.</li>
+            <li><strong>V4.1 Flash is the current workhorse, and the build is <code>DeepSeek-V4.1-Flash-1017</code>.</strong> The model ID you pass in API requests is <code>deepseek-flash</code> (labels and options inside VS Code may differ as the extension is updated). 1M context, 384K max output, native image input.</li>
             <li><strong>Prices are far lower than V4 Pro.</strong> Input (cache miss) $0.15 off-peak / $0.30 peak; output $0.60 off-peak / $1.20 peak, in USD per 1M tokens. For reference, V4 Pro is $0.66 off-peak input and $1.98 off-peak output.</li>
-            <li><strong>V4 Pro keeps running after 2026-09-14.</strong> DeepSeek had announced that <code>deepseek-v4-pro</code> requests would route to V4.1 Flash from 9/14, but it <strong>withdrew that notice</strong>. No rewrite is required (<a href="#pro-heading">see below</a>).</li>
+            <li><strong>V4 Pro (<code>deepseek-v4-pro</code>, build <code>DeepSeek-V4-Pro-0813</code>) is also live.</strong> It keeps its own rate card and was never folded into V4.1 Flash pricing, so code pointing at <code>deepseek-v4-pro</code> needs no change (<a href="#pro-heading">see below</a>).</li>
           </ul>
         </div>
       </section>
 
       <!-- ===== Pricing ===== -->
       <section class="section" style="padding-top:0;" aria-labelledby="price-heading">
-        <h2 class="section-title" id="price-heading" style="font-size:1.2rem;">Official pricing (re-checked 2026-11-03 — unchanged)</h2>
+        <h2 class="section-title" id="price-heading" style="font-size:1.2rem;">Official pricing (re-checked 2026-11-17)</h2>
         <p class="section-sub">USD per 1M tokens. Off-peak rates are half the peak rates.</p>
 
-        <div class="screenshot-note">✅ Verified via Firecrawl on api-docs.deepseek.com — Models &amp; Pricing (first read 2026-09-11; <strong>re-fetched 2026-10-05 to confirm rates, peak hours and the legacy-name note are unchanged</strong>).</div>
+        <div class="screenshot-note">✅ Read directly from api-docs.deepseek.com — Models &amp; Pricing (<strong>re-fetched 2026-11-17, confirming the rates, peak hours and the legacy-name note are unchanged</strong>).</div>
 
         <div class="table-wrap">
           <table class="peak-table">
@@ -221,41 +233,40 @@
           </table>
         </div>
 
-        <p style="font-size:.78rem;color:var(--c-muted);">⏰ <strong>Peak hours</strong>: 01:00-04:00 and 06:00-10:00 UTC, <strong>Monday-Friday only (excluding Chinese public holidays)</strong> (JST 10:00-13:00 / 15:00-19:00; Beijing 09:00-12:00 / 14:00-18:00). <strong>Weekends and Chinese public holidays are off-peak all day.</strong> The peak/off-peak scheme took effect 2026-08-16 16:00 UTC, and footnote (2) on the official pricing page reads "Monday through Friday (excluding Chinese holidays)". Source: <a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">api-docs.deepseek.com</a> (first read 2026-09-11; footnote captured 2026-09-23, re-checked 2026-11-03).</p>
+        <p style="font-size:.78rem;color:var(--c-muted);">⏰ <strong>Peak hours</strong>: 01:00-04:00 and 06:00-10:00 UTC, <strong>Monday-Friday only (excluding Chinese public holidays)</strong> (JST 10:00-13:00 / 15:00-19:00; Beijing 09:00-12:00 / 14:00-18:00). <strong>Weekends and Chinese public holidays are off-peak all day.</strong> The peak/off-peak scheme took effect 2026-08-16 16:00 UTC, and footnote (2) on the official pricing page reads "Monday through Friday (excluding Chinese holidays)". Source: <a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">api-docs.deepseek.com</a> (re-checked 2026-11-17).</p>
 
         <p style="font-size:.86rem;color:var(--c-muted);margin-top:.8rem;">Estimate your own cost with the <a href="/en/calculator/">token calculator</a>, which lists both off-peak and peak rows for V4.1 Flash. For cross-provider comparison see <a href="/en/pricing/#dh">pricing (DeepSeek)</a>.</p>
       </section>
 
       <!-- ===== V4 Pro ===== -->
       <section class="section" style="padding-top:0;" aria-labelledby="pro-heading">
-        <h2 class="section-title" id="pro-heading" style="font-size:1.2rem;">V4 Pro keeps running (as of 2026-09-13)</h2>
+        <h2 class="section-title" id="pro-heading" style="font-size:1.2rem;">Where V4 Pro stands (still live)</h2>
         <p class="section-sub">Only what DeepSeek's official documentation states.</p>
 
         <div class="key-box">
-          <h2 id="sec-5">✅ DeepSeek says V4 Pro continues — the 9/14 routing notice was withdrawn</h2>
+          <h2 id="sec-5">✅ V4 Pro is still live — the 9/14 routing notice was withdrawn</h2>
           <ul>
-            <li>The 2026-09-10 V4.1 Flash announcement said DeepSeek would <strong>retire V4 Pro in an orderly manner and route <code>deepseek-v4-pro</code> requests to V4.1 Flash from 2026-09-14</strong>.</li>
-            <li>DeepSeek has since <strong>withdrawn that notice</strong>, replacing footnote (2) of the pricing page and the Change Log entry with: "<strong>In response to user demand, we have decided to continue providing API services for DeepSeek V4 Pro after September 14, 2026, with the billing method remaining unchanged.</strong>"</li>
-            <li><strong><code>deepseek-v4-pro</code> keeps working and no code or API-key change is needed.</strong> A dedicated V4 Pro row (off-peak input $0.66 / output $1.98) is still on the official pricing page — it was never folded into V4.1 Flash pricing.</li>
-            <li>DeepSeek adds that it "will provide further notice should there be any changes," so <strong>future changes cannot be ruled out</strong>. Full details and a comparison live on the <a href="/en/deepseek-v4-pro/">V4 Pro continuation page</a>.</li>
+            <li><strong><code>deepseek-v4-pro</code> keeps working and no code or API-key change is needed.</strong> The current build is <code>DeepSeek-V4-Pro-0813</code>, and its own rate card (off-peak input $0.66 / output $1.98 / cache hit $0.022) is still on the official pricing page — it was never folded into V4.1 Flash pricing.</li>
+            <li>The 2026-09-10 V4.1 Flash announcement said DeepSeek would route <code>deepseek-v4-pro</code> requests to V4.1 Flash from 2026-09-14; DeepSeek <strong>withdrew that notice</strong> and replaced it with: "<strong>In response to user demand, we have decided to continue providing API services for DeepSeek V4 Pro after September 14, 2026, with the billing method remaining unchanged.</strong>"</li>
+            <li>DeepSeek adds that it "will provide further notice should there be any changes," so <strong>future changes cannot be ruled out</strong>. Where V4 Pro fits now is covered on the <a href="/en/deepseek-v4-pro/">V4 Pro page</a>.</li>
           </ul>
         </div>
 
-        <h3 style="font-size:1rem;margin:1.5rem 0 .6rem;">Model names at a glance (as of 2026-09-13)</h3>
+        <h3 style="font-size:1rem;margin:1.5rem 0 .6rem;">Model names at a glance</h3>
         <div class="table-wrap">
           <table class="spec-table">
             <caption style="display:none;">Model names at a glance</caption>
             <thead><tr><th>Model name</th><th>Status</th><th>Actual behaviour</th></tr></thead>
             <tbody>
-              <tr><td class="model-name"><code>deepseek-flash</code></td><td>Current</td><td>DeepSeek-V4.1-Flash. Native vision, lower rates. The default choice for new code</td></tr>
-              <tr><td class="model-name"><code>deepseek-v4-pro</code></td><td><strong>Live (continuing)</strong></td><td>Billed at V4 Pro's own rates; DeepSeek confirms it continues after 2026-09-14. No vision; concurrency 500</td></tr>
+              <tr><td class="model-name"><code>deepseek-flash</code></td><td>Current</td><td><code>DeepSeek-V4.1-Flash-1017</code>. Native vision, lower rates. The default choice for new code</td></tr>
+              <tr><td class="model-name"><code>deepseek-v4-pro</code></td><td><strong>Live</strong></td><td><code>DeepSeek-V4-Pro-0813</code>, billed at V4 Pro's own rates. No vision; concurrency 500</td></tr>
               <tr><td class="model-name"><code>deepseek-v4-flash</code></td><td>Retired</td><td>Accepted temporarily for compatibility; served by V4.1 Flash at the Flash price</td></tr>
               <tr><td class="model-name"><code>deepseek-v4-flash-vision-exp</code></td><td>Retired</td><td>Same as above (the old vision experimental model folded into V4.1 Flash)</td></tr>
               <tr><td class="model-name"><code>deepseek-chat</code> / <code>deepseek-reasoner</code></td><td>Discontinued</td><td>Legacy aliases ended on 2026-07-24</td></tr>
             </tbody>
           </table>
         </div>
-        <p style="font-size:.78rem;color:var(--c-muted);">Source: <a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">Models &amp; Pricing notes (1) and (2)</a> · <a href="https://api-docs.deepseek.com/updates/" target="_blank" rel="noopener">Change Log</a> (retrieved 2026-09-13). See the <a href="/en/deepseek-v4-pro/">V4 Pro continuation page</a> for the full picture.</p>
+        <p style="font-size:.78rem;color:var(--c-muted);">Source: <a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">Models &amp; Pricing notes (1) and (2)</a> · <a href="https://api-docs.deepseek.com/updates/" target="_blank" rel="noopener">Change Log</a> (retrieved 2026-11-17). See the <a href="/en/deepseek-v4-pro/">V4 Pro page</a> for the full picture.</p>
       </section>
 
       <!-- ===== Specs ===== -->
@@ -266,7 +277,8 @@
             <caption style="display:none;">DeepSeek V4.1 Flash specifications</caption>
             <thead><tr><th>Item</th><th>V4.1 Flash (<code>deepseek-flash</code>)</th></tr></thead>
             <tbody>
-              <tr><td class="model-name">Model version</td><td>DeepSeek-V4.1-Flash</td></tr>
+              <tr><td class="model-name">Model version</td><td><code>DeepSeek-V4.1-Flash-1017</code> (the official MODEL VERSION, 2026-10-17)</td></tr>
+              <tr><td class="model-name">Azure catalog</td><td><code>DeepSeek-V4.1-Flash</code> / Version <code>2026-09-10</code> (Preview, 1000k context, 128k output) — older than the first-party 1017 build</td></tr>
               <tr><td class="model-name">Context length</td><td>1M tokens</td></tr>
               <tr><td class="model-name">Max output</td><td>384K tokens (listed as MAXIMUM: 384K)</td></tr>
               <tr><td class="model-name">Thinking mode</td><td>Both non-thinking and thinking (<strong>thinking is the default</strong>)</td></tr>
@@ -280,41 +292,33 @@
             </tbody>
           </table>
         </div>
-        <p style="font-size:.78rem;color:var(--c-muted);">Source: <a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">api-docs.deepseek.com Models &amp; Pricing</a> (retrieved 2026-09-11). See DeepSeek's Rate Limit &amp; Isolation page for concurrency details.</p>
+        <p style="font-size:.78rem;color:var(--c-muted);">Source: <a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">api-docs.deepseek.com Models &amp; Pricing</a> (retrieved 2026-11-17). See DeepSeek's Rate Limit &amp; Isolation page for concurrency details.</p>
       </section>
 
       <!-- ===== Benchmarks ===== -->
       <section class="section" style="padding-top:0;" aria-labelledby="bench-heading">
-        <h2 class="section-title" id="bench-heading" style="font-size:1.2rem;">Official benchmarks (published 2026-09-10)</h2>
-        <p class="section-sub">Numbers as published by DeepSeek in its change log. Not independently re-measured by this site.</p>
+        <h2 class="section-title" id="bench-heading" style="font-size:1.2rem;">Official benchmarks (current V4.1-Flash-1017)</h2>
+        <p class="section-sub">Numbers DeepSeek published in the 2026-10-17 change log. Not independently re-measured by this site.</p>
         <div class="table-wrap">
           <table class="bench-table">
-            <caption style="display:none;">DeepSeek V4.1 Flash official benchmarks</caption>
+            <caption style="display:none;">DeepSeek V4.1-Flash-1017 official benchmarks</caption>
             <thead><tr><th>Benchmark</th><th>Score</th></tr></thead>
             <tbody>
-              <tr><td>GPQA Diamond</td><td class="price">90.9</td></tr>
-              <tr><td>HLE</td><td class="price">36.8 (39.1) — *tested on the pure-text subset only</td></tr>
-              <tr><td>Codeforces (Rating)</td><td class="price">3471</td></tr>
-              <tr><td>MathArena Apex</td><td class="price">65.6</td></tr>
-              <tr><td>Terminal-Bench 2.1</td><td class="price">90.6</td></tr>
-              <tr><td>Terminal-Bench 3.0</td><td class="price">30.0</td></tr>
-              <tr><td>Terminal-Bench 4.0</td><td class="price">31.2</td></tr>
-              <tr><td>DeepSWE v1.1</td><td class="price">74.2</td></tr>
-              <tr><td>NL2Repo-Bench</td><td class="price">65.4</td></tr>
-              <tr><td>CyberGym</td><td class="price">88.1</td></tr>
-              <tr><td>SEC-Bench Pro</td><td class="price">62.8</td></tr>
-              <tr><td>ProgramBench</td><td class="price">20.3</td></tr>
-              <tr><td>ExploitGym</td><td class="price">15.3</td></tr>
-              <tr><td>HLE (w/ tools)</td><td class="price">63.9</td></tr>
-              <tr><td>Automation-Bench</td><td class="price">54.8</td></tr>
-              <tr><td>Agents' Last Exam</td><td class="price">31.8</td></tr>
-              <tr><td>Chartography (w/ tools)</td><td class="price">78.9</td></tr>
-              <tr><td>BabyVision (w/ tools)</td><td class="price">89.6</td></tr>
-              <tr><td>ZeroBench-main (w/ tools)</td><td class="price">49.0</td></tr>
+              <tr><td>HLE (w/o tools)</td><td class="price">42.6 (44.0*) — pure-text subset only</td></tr>
+              <tr><td>Terminal-Bench 4.0</td><td class="price">42.3</td></tr>
+              <tr><td>DeepSWE v1.1</td><td class="price">77.0</td></tr>
+              <tr><td>ProgramBench</td><td class="price">29.1</td></tr>
+              <tr><td>NL2Repo-Bench</td><td class="price">68.2</td></tr>
+              <tr><td>Automation-Bench v1.0.6</td><td class="price">60.5</td></tr>
+              <tr><td>Agents' Last Exam</td><td class="price">35.4</td></tr>
+              <tr><td>Apex Bench v1.1</td><td class="price">72.1</td></tr>
+              <tr><td>Chartography (w/ tools)</td><td class="price">83.0</td></tr>
+              <tr><td>BabyVision (w/ tools)</td><td class="price">92.5</td></tr>
+              <tr><td>ZeroBench-main (w/ tools)</td><td class="price">51.0</td></tr>
             </tbody>
           </table>
         </div>
-        <p style="font-size:.78rem;color:var(--c-muted);">Source: <a href="https://api-docs.deepseek.com/updates/" target="_blank" rel="noopener">Change Log "DeepSeek-V4.1-Flash Release" (2026-09-10)</a>. These are vendor-reported figures.</p>
+        <p style="font-size:.78rem;color:var(--c-muted);">Source: <a href="https://api-docs.deepseek.com/updates/" target="_blank" rel="noopener">Change Log “DeepSeek-V4.1-Flash-1017 Update” (2026-10-17)</a>. Terminal-Bench 4.0 was run with the Claude Code harness, DeepSWE with Mini-SWE-V2 and ZeroBench-main with Pass@5.<br>Metrics that appear only in the 2026-09-10 (first release) list — GPQA Diamond, Codeforces and others — have no published value for the current build, so they are omitted: mixing scores from different builds invites wrong comparisons, so <strong>this table covers one build only</strong>. Vendor-reported figures; not verified here.</p>
       </section>
 
       <!-- ===== Setup ===== -->
@@ -347,22 +351,21 @@
       <!-- ===== Azure AI Foundry ===== -->
       <section class="section" style="padding-top:0;" aria-labelledby="azure-heading">
         <h2 class="section-title" id="azure-heading" style="font-size:1.2rem;">Running it on Microsoft Foundry (Azure) — deploying DeepSeek-V4.1-Flash with the CLI (measured 2026-09-28)</h2>
-          <p class="section-sub" style="font-size:.92rem;">Added 2026-11-05: Azure’s DeepSeek pricing tab lists only V3 / V3.2 / R1 / V4 Pro / V4 Flash (including 0731) — <strong>there is still no DeepSeek-V4.1-Flash row</strong>. V4.1-Flash is deployed from the Microsoft Foundry model catalog (Direct from Azure); the steps below are from our 2026-09-28 run.</p>
+          <p class="section-sub" style="font-size:.92rem;">Azure’s DeepSeek pricing tab has no V4.1-Flash row; distribution is through the <strong>Microsoft Foundry model catalog (Direct from Azure)</strong>. The catalog lists <strong>Version <code>2026-09-10</code></strong> (Preview), older than the first-party <code>V4.1-Flash-1017</code> build. The steps below are from our 2026-09-28 run.</p>
         <p class="section-sub">
           DeepSeek's first-party API is not the only route: you can run DeepSeek models through <strong>Microsoft Foundry on Azure</strong>.
-          In a measurement on 2026-09-28, we <strong>deployed the current model <code>DeepSeek-V4.1-Flash</code> (version <code>2026-09-10</code>) with the <code>az</code> CLI and got a response back from the OpenAI-compatible endpoint</strong>.
+          In a measurement on 2026-09-28, we <strong>deployed <code>DeepSeek-V4.1-Flash</code> (catalog version <code>2026-09-10</code>) with the <code>az</code> CLI and got a response back from the OpenAI-compatible endpoint</strong>.
           Below: ① availability ② deploy ③ choosing capacity ④ verifying the call ⑤ the pitfalls, using the exact commands we ran.
         </p>
 
         <div class="screenshot-note">
-          ℹ️ <strong>Where the primary sources stand (Azure pricing page re-checked 2026-10-05 / Learn list as of 2026-09-29)</strong>
+          ℹ️ <strong>What Azure shows today (catalog re-checked 2026-11-17)</strong>
           <ul style="margin:.5rem 0 0;padding-left:1.2em;">
-            <li><strong>Model catalog</strong>: <code>DeepSeek-V4.1-Flash</code> is listed as "Direct from Azure" — <strong>version 2026-09-10, type Chat completion, lifecycle Preview, context window 1000k</strong>.</li>
-            <li><strong>Foundry blog (updated 2026-09-25)</strong>: two consumption paths are announced — "Direct from Azure" (public preview) and "Fireworks on Foundry" (generally available).</li>
-            <li><strong>Microsoft Learn's model list</strong> (ms.date 2026-09-21) still shows only <code>DeepSeek-V4-Pro</code>, <code>DeepSeek-V4-Flash-0731</code> (Preview) and <code>DeepSeek-V4-Flash</code> — <strong>V4.1-Flash is not listed yet</strong>.</li>
-            <li><strong>Azure's pricing page</strong> has <strong>no V4.1-Flash row yet</strong> either (re-checked <strong>2026-10-05</strong>; the DeepSeek tab still lists only V4 Pro, V4 Flash, V4 Flash 0731 and V3.1).</li>
+            <li><strong>Model catalog</strong>: <code>DeepSeek-V4.1-Flash</code> is listed as "Direct from Azure" — <strong>Version 2026-09-10, Chat completion, lifecycle Preview, context window 1000k, token limits 128k output</strong>. The input type says <code>text</code> although DeepSeek documents image input, so <strong>the catalog and the vendor disagree</strong>.</li>
+            <li><strong>Behind the first party</strong>: DeepSeek's current build is <code>V4.1-Flash-1017</code> (2026-10-17) while <strong>the catalog still points at 2026-09-10</strong>. Don't assume the newer build is available on Azure.</li>
+            <li><strong>Pricing page</strong>: the DeepSeek tab has no V4.1-Flash row (V4 Pro / V4 Flash / V4 Flash 0731 / V3.1). Use the Foundry blog's announced prices and confirm in the portal before contracting.</li>
           </ul>
-          → The catalog and the blog are ahead; Learn's list and the pricing page lag behind. Don't conclude "it isn't available because the docs don't list it" — <strong>run <code>list-models</code> against your own account and check the real thing</strong> (Step 3).
+          → Don't conclude "it isn't available because the docs don't list it" — <strong>run <code>list-models</code> against your own account and check the real thing</strong> (Step 3).
         </div>
 
         <h3 style="font-size:1rem;margin:1.5rem 0 .6rem;">Prerequisites</h3>
@@ -383,7 +386,7 @@
               <tr><td class="model-name"><code>&lt;LOCATION&gt;</code></td><td>Region (e.g. <code>eastus</code>). Availability differs per model — check the Azure portal model catalog</td></tr>
               <tr><td class="model-name"><code>&lt;ACCOUNT_NAME&gt;</code></td><td>Azure AI Services account name, which must be <strong>globally unique</strong> (e.g. <code>dsflash0928</code>). The same value is used for <code>--custom-domain</code></td></tr>
               <tr><td class="model-name"><code>&lt;DEPLOYMENT_NAME&gt;</code></td><td>Your deployment name (free choice). <strong>The <code>model</code> field in API calls takes this deployment name, not the model name</strong> (e.g. <code>ds-flash-01</code>)</td></tr>
-              <tr><td class="model-name"><code>&lt;MODEL_VERSION&gt;</code></td><td>Model version string. <strong>Measured as <code>2026-09-10</code> on 2026-09-28, but names and versions differ by environment (subscription/region) — always confirm with <code>list-models</code> below</strong></td></tr>
+              <tr><td class="model-name"><code>&lt;MODEL_VERSION&gt;</code></td><td>Model version string. <strong>Measured as <code>2026-09-10</code> on 2026-09-28; names and versions differ by environment (subscription/region), so always confirm with <code>list-models</code> below</strong></td></tr>
               <tr><td class="model-name"><code>&lt;API_KEY&gt;</code></td><td>Key of the Azure AI Services account (fetched from the CLI in the steps below)</td></tr>
             </tbody>
           </table>
@@ -527,7 +530,7 @@ The subscription is not registered to use namespace 'Microsoft.CognitiveServices
           </ul>
         </div>
 
-        <h3 style="font-size:1rem;margin:1.5rem 0 .6rem;">First-party API vs the Azure route (as of 2026-10-05)</h3>
+        <h3 style="font-size:1rem;margin:1.5rem 0 .6rem;">First-party API vs the Azure route</h3>
         <p style="font-size:.86rem;color:var(--c-muted);">Same model, not the same service. Only the differences that matter in operations:</p>
         <div class="table-wrap">
           <table class="spec-table">
@@ -553,17 +556,17 @@ The subscription is not registered to use namespace 'Microsoft.CognitiveServices
           In the Foundry blog's table (updated 2026-09-25), <strong>Direct from Azure (Global Standard) is input $0.30 / output $1.20 / cached input $0.006</strong>, and
           <strong>Fireworks on Foundry (Standard Global) is input $0.37 / output $1.50 / cached input $0.007</strong> (USD per 1M tokens).
           The Direct from Azure figures match DeepSeek's <strong>peak rates</strong> — there is no off-peak discount.
-          Because <strong>Azure's pricing page still has no V4.1-Flash row as of 2026-10-05</strong>, please confirm in
+          Because <strong>Azure's pricing page has no V4.1-Flash row</strong> (the DeepSeek tab lists V4 Pro / V4 Flash / V4 Flash 0731 / V3.1), please confirm in
           <a href="https://azure.microsoft.com/en-us/pricing/details/ai-foundry-models/deepseek/" target="_blank" rel="noopener">Azure's Foundry Models pricing page</a> or the Azure portal before you commit.
         </div>
 
         <p style="font-size:.78rem;color:var(--c-muted);">
-          Sources: <a href="https://ai.azure.com/catalog/models/DeepSeek-V4.1-Flash" target="_blank" rel="noopener">Microsoft Foundry model catalog — DeepSeek-V4.1-Flash</a> (version 2026-09-10, Preview, context window 1000k),
+          Sources: <a href="https://ai.azure.com/catalog/models/DeepSeek-V4.1-Flash" target="_blank" rel="noopener">Microsoft Foundry model catalog — DeepSeek-V4.1-Flash</a> (version 2026-09-10, Preview, context window 1000k; checked 2026-11-17),
           <a href="https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/deepseek-v4-1-flash-is-coming-to-microsoft-foundry/4556431" target="_blank" rel="noopener">Foundry blog — DeepSeek-V4.1-Flash is coming to Microsoft Foundry</a> (updated 2026-09-25; two paths and the price table),
           <a href="https://learn.microsoft.com/en-us/cli/azure/cognitiveservices/account/deployment?view=azure-cli-latest" target="_blank" rel="noopener">az cognitiveservices account deployment</a> (ms.date 2026-09-01),
           <a href="https://learn.microsoft.com/en-us/azure/foundry/foundry-models/quotas-limits" target="_blank" rel="noopener">Foundry Models quotas and limits</a> (TPM/RPM and 429 behaviour),
           <a href="https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/deployment-types" target="_blank" rel="noopener">Deployment types</a> and <a href="https://learn.microsoft.com/en-us/azure/foundry/responsible-ai/openai/data-privacy" target="_blank" rel="noopener">Data, privacy, and security</a> (data location and training).
-          The command sequence and capacity figures were <strong>measured by the operator (okamoちゃんねる) on 2026-09-28</strong> and re-checked against primary sources retrieved 2026-09-29.
+          The command sequence and capacity figures were <strong>measured by the operator (okamoちゃんねる) on 2026-09-28</strong>, and the model catalog was re-checked on 2026-11-17.
         </p>
       </section>
 
@@ -578,7 +581,7 @@ The subscription is not registered to use namespace 'Microsoft.CognitiveServices
         <p style="font-size:.88rem;color:var(--c-muted);">A. <strong>It keeps working.</strong> DeepSeek states that, in response to user demand, it will continue providing API services for DeepSeek V4 Pro after September 14, 2026, with billing unchanged. The earlier announcement that requests would route to V4.1 Flash from 9/14 has been <strong>withdrawn</strong>. No code or API-key change is required.</p>
 
         <h3 style="font-size:.98rem;margin:1.2rem 0 .4rem;">Q. When will DeepSeek V4.1 Pro be released?</h3>
-        <p style="font-size:.88rem;color:var(--c-muted);">A. No release date has been announced as of 2026-09-13. The earlier note that the routing would last "until the future release of V4.1 Pro" has itself been replaced by the V4 Pro continuation notice. This site will update as soon as an official announcement appears.</p>
+        <p style="font-size:.88rem;color:var(--c-muted);">A. Nothing had been announced as of 2026-11-17. The official pricing page lists exactly two models: <code>deepseek-flash</code> (V4.1-Flash-1017) and <code>deepseek-v4-pro</code> (V4-Pro-0813). This page will be updated when an announcement appears.</p>
 
         <h3 style="font-size:.98rem;margin:1.2rem 0 .4rem;">Q. Can it read images?</h3>
         <p style="font-size:.88rem;color:var(--c-muted);">A. Yes. V4.1 Flash is built on the new architecture family with native multimodal visual understanding, and the official feature table marks Vision as supported (V4 Pro did not). For a cross-model view of image, audio, video and PDF support, see the <a href="/en/multimodal/">multimodal LLM guide</a>.</p>
@@ -590,7 +593,7 @@ The subscription is not registered to use namespace 'Microsoft.CognitiveServices
         <p style="font-size:.88rem;color:var(--c-muted);">A. 1M-token context and 384K-token maximum output. Thinking mode supports both non-thinking and thinking, with thinking as the default.</p>
 
         <h3 style="font-size:.98rem;margin:1.2rem 0 .4rem;">Q. Can I run DeepSeek V4.1 Flash on Azure (Microsoft Foundry)?</h3>
-        <p style="font-size:.88rem;color:var(--c-muted);">A. <strong>Yes.</strong> In a measurement on 2026-09-28 we deployed <code>DeepSeek-V4.1-Flash</code> (version <code>2026-09-10</code>) with <code>az cognitiveservices account deployment create</code> and got responses from the OpenAI-compatible endpoint. It is <strong>Preview (public preview)</strong>, and as of 2026-10-05 Azure's pricing page had not been updated yet (Microsoft Learn's list as of 2026-09-29). The full walkthrough, including real capacity figures, is in the <a href="#azure-heading">Microsoft Foundry section</a>.</p>
+        <p style="font-size:.88rem;color:var(--c-muted);">A. <strong>Yes.</strong> In a measurement on 2026-09-28 we deployed <code>DeepSeek-V4.1-Flash</code> (catalog version <code>2026-09-10</code>) with <code>az cognitiveservices account deployment create</code> and got responses from the OpenAI-compatible endpoint. It is <strong>Preview (public preview)</strong>, <strong>the catalog still points at 2026-09-10</strong> while the first party is on 1017, and the pricing page has no V4.1-Flash row. The full walkthrough, including real capacity figures, is in the <a href="#azure-heading">Microsoft Foundry section</a>.</p>
 
         <h3 style="font-size:.98rem;margin:1.2rem 0 .4rem;">Q. What does the Azure route cost?</h3>
         <p style="font-size:.88rem;color:var(--c-muted);">A. Per Microsoft's Foundry blog (updated 2026-09-25): <strong>Direct from Azure is input $0.30 / output $1.20 / cached input $0.006</strong>, and <strong>Fireworks on Foundry is input $0.37 / output $1.50 / cached input $0.007</strong> (USD per 1M tokens). Direct from Azure matches DeepSeek's <strong>peak rates</strong>, with no off-peak discount. Because Azure's pricing page has no V4.1-Flash row yet, confirm in the portal before committing.</p>
@@ -603,17 +606,17 @@ The subscription is not registered to use namespace 'Microsoft.CognitiveServices
       <section class="section" style="padding-top:0;">
         <h2 class="section-title" style="font-size:1.1rem;" id="sec-15">Sources</h2>
         <ul style="font-size:.84rem;color:var(--c-muted);padding-left:1.1em;">
-          <li><a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">DeepSeek API Docs — Models &amp; Pricing</a> (pricing, specs, notes; retrieved 2026-09-11)</li>
-          <li><a href="https://api-docs.deepseek.com/updates/" target="_blank" rel="noopener">DeepSeek API Docs — Change Log (2026-09-10, DeepSeek-V4.1-Flash Release)</a> (release details, benchmarks)</li>
+          <li><a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">DeepSeek API Docs — Models &amp; Pricing</a> (pricing, specs, notes; retrieved 2026-11-17)</li>
+          <li><a href="https://api-docs.deepseek.com/updates/" target="_blank" rel="noopener">DeepSeek API Docs — Change Log</a> (2026-11-13 application API suite / 2026-10-17 V4.1-Flash-1017 / 2026-09-10 release and benchmarks)</li>
           <li><a href="https://api-docs.deepseek.com/news/news260910" target="_blank" rel="noopener">DeepSeek official news (news260910)</a></li>
-          <li>Microsoft Foundry — <a href="https://ai.azure.com/catalog/models/DeepSeek-V4.1-Flash" target="_blank" rel="noopener">model catalog (DeepSeek-V4.1-Flash)</a> · <a href="https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/deepseek-v4-1-flash-is-coming-to-microsoft-foundry/4556431" target="_blank" rel="noopener">Foundry blog (updated 2026-09-25)</a> · <a href="https://learn.microsoft.com/en-us/azure/foundry/foundry-models/quotas-limits" target="_blank" rel="noopener">Foundry Models quotas and limits</a> · <a href="https://learn.microsoft.com/en-us/cli/azure/cognitiveservices/account/deployment?view=azure-cli-latest" target="_blank" rel="noopener">az cognitiveservices account deployment</a> · <a href="https://learn.microsoft.com/en-us/azure/foundry/responsible-ai/openai/data-privacy" target="_blank" rel="noopener">Data, privacy, and security</a> (Azure section; retrieved 2026-09-29)</li>
+          <li>Microsoft Foundry — <a href="https://ai.azure.com/catalog/models/DeepSeek-V4.1-Flash" target="_blank" rel="noopener">model catalog (DeepSeek-V4.1-Flash)</a> · <a href="https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/deepseek-v4-1-flash-is-coming-to-microsoft-foundry/4556431" target="_blank" rel="noopener">Foundry blog (updated 2026-09-25)</a> · <a href="https://learn.microsoft.com/en-us/azure/foundry/foundry-models/quotas-limits" target="_blank" rel="noopener">Foundry Models quotas and limits</a> · <a href="https://learn.microsoft.com/en-us/cli/azure/cognitiveservices/account/deployment?view=azure-cli-latest" target="_blank" rel="noopener">az cognitiveservices account deployment</a> · <a href="https://learn.microsoft.com/en-us/azure/foundry/responsible-ai/openai/data-privacy" target="_blank" rel="noopener">Data, privacy, and security</a> (Azure section; retrieved 2026-11-17)</li>
         </ul>
       </section>
 
       <div class="tip-box" style="border-left-color: var(--c-red); margin-bottom:2rem;">
         <h3>⚠️ Disclaimer</h3>
         <ul>
-          <li>Pricing, specs and benchmarks on this page are based on DeepSeek's official pages (api-docs.deepseek.com) as re-retrieved on 2026-11-03 (rates unchanged from the previous read). Prices and model availability may change without notice. Always verify on the official page before contracting or production use.</li>
+          <li>Pricing, specs and benchmarks on this page are based on DeepSeek's official pages (api-docs.deepseek.com) as re-retrieved on 2026-11-17 (rates unchanged from the previous read). Prices and model availability may change without notice. Always verify on the official page before contracting or production use.</li>
           <li>Benchmark figures are vendor-reported and have not been independently re-measured by this site.</li>
           <li>The setup steps reflect the operator's environment (recorded in July 2026 on V4 Pro) and may display differently after extension updates.</li>
           <li>The Microsoft Foundry (Azure) section is based on Microsoft's own pages (model catalog, Foundry blog, Microsoft Learn) and on the <code>az</code> commands and responses the operator measured on 2026-09-28. Because the model is in Preview, SKUs, quotas, pricing and parameters can change without notice. In particular, <strong>Azure's pricing page has no V4.1-Flash row yet</strong> — always confirm in the Azure portal before committing.</li>

@@ -4,16 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>DeepSeek V4.1 Flash のAzureデプロイ手順と料金【az CLI実測・$0.15/$0.60】 — LLM Data Hub</title>
-  <meta name="description" content="DeepSeek V4.1 Flash のAzureデプロイ手順と料金を一次情報で解説。Microsoft Foundry でDeepSeek-V4.1-Flashをaz CLIでデプロイした実測（capacity 20＝20RPM/20,000TPM、eastusのサブスク上限、つまずき付き）と、オフピーク$0.15/$0.60・ピーク$0.30/$1.20・cache hit $0.003（2026-11-12再確認で変動なし）。1Mコンテキスト・384K出力・ネイティブ画像入力、公式ベンチマーク、VS Code GitHub Copilot Chatの導入手順、FAQを収録。2026年11月12日更新。">
+  <meta name="description" content="DeepSeek V4.1 Flash（現行版 DeepSeek-V4.1-Flash-1017）の料金・スペック・ベンチマークと、Microsoft Foundry（Azure）での az CLI デプロイ実測（capacity 20＝20RPM/20,000TPM、つまずき付き）、Web検索/Fetch/OCR/音声API、VS Code GitHub Copilot Chat の導入手順、FAQ を一次情報でまとめました。オフピーク$0.15/$0.60・ピーク$0.30/$1.20・cache hit $0.003（2026-11-17 再確認）。2026年11月17日更新。">
   <link rel="canonical" href="https://llm.okamomedia.tokyo/deepseek-v4-1-flash/">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <meta property="og:image" content="https://llm.okamomedia.tokyo/assets/og/ja-deepseek-v4-1-flash.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="DeepSeek V4.1 Flash: オフピーク入力$0.15・出力$0.60、1Mコンテキスト">
+  <meta property="og:image:alt" content="DeepSeek V4.1 Flash: オフピーク入力$0.15・出力$0.60、現行版 V4.1-Flash-1017">
   <meta name="twitter:image" content="https://llm.okamomedia.tokyo/assets/og/ja-deepseek-v4-1-flash.png">
-  <meta name="twitter:image:alt" content="DeepSeek V4.1 Flash: オフピーク入力$0.15・出力$0.60、1Mコンテキスト">
+  <meta name="twitter:image:alt" content="DeepSeek V4.1 Flash: オフピーク入力$0.15・出力$0.60、現行版 V4.1-Flash-1017">
   <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/deepseek-v4-1-flash/">
   <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/deepseek-v4-1-flash/">
   <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/deepseek-v4-1-flash/">
@@ -22,7 +22,7 @@
   <meta property="og:type"        content="article">
   <meta property="og:url"         content="https://llm.okamomedia.tokyo/deepseek-v4-1-flash/">
   <meta property="og:title"       content="DeepSeek V4.1 Flash を Azure で使う — 料金・az CLIデプロイ実測・ベンチマーク・Copilot 導入">
-  <meta property="og:description" content="2026-09-10リリースのDeepSeek V4.1 Flash。Microsoft Foundry ではDeepSeek-V4.1-Flashをaz CLIでデプロイできることを2026-09-28に実測（capacityの実数・つまずき付き）。料金はオフピーク$0.15/$0.60（2026-11-12再確認で変動なし）でV4 Proより大幅に安く、ネイティブの画像入力に対応。">
+  <meta property="og:description" content="現行版は DeepSeek-V4.1-Flash-1017（2026-10-17）。料金はオフピーク入力$0.15／出力$0.60（ピークは倍）で V4 Pro より大幅に安く、1Mコンテキスト・384K出力・画像入力に対応。Microsoft Foundry（Azure）での az CLI デプロイ実測（2026-09-28・capacityの実数とつまずき付き）と、Web検索/Fetch/OCR/音声APIの料金も掲載。">
   <meta property="og:site_name"   content="LLM Data Hub">
   <meta name="twitter:card"       content="summary_large_image">
 
@@ -33,11 +33,11 @@
     "@type": "TechArticle",
     "headline": "DeepSeek V4.1 Flash 実践ガイド — 料金・ベンチマーク・Azure AI Foundry／GitHub Copilot 導入手順",
     "datePublished": "2026-09-11",
-    "dateModified": "2026-11-12",
+    "dateModified": "2026-11-17",
     "author": { "@type": "Organization", "name": "okamoちゃんねる" },
     "publisher": { "@type": "Organization", "name": "okamoちゃんねる" },
     "url": "https://llm.okamomedia.tokyo/deepseek-v4-1-flash/",
-    "description": "DeepSeek V4.1 Flashの公式料金（ピーク/オフピーク）・スペック・ベンチマーク・導入手順、Azure AI FoundryでのDeepSeek-V4.1-Flashデプロイ実測（2026-09-28）とcapacity/クォータの注意点、自社APIとAzure経由の違い、V4 Proの提供継続をまとめた実践ガイド。"
+    "description": "DeepSeek V4.1 Flash（現行版 DeepSeek-V4.1-Flash-1017）の公式料金（ピーク/オフピーク）・スペック・ベンチマーク・周辺API（Web検索/Fetch/OCR/音声）・導入手順、Azure AI Foundryでのデプロイ実測（2026-09-28）とcapacity/クォータの注意点、自社APIとAzure経由の違い、V4 Proの現在をまとめた実践ガイド。"
   }
   </script>
 
@@ -105,22 +105,21 @@
     <div class="container">
 <figure class="key-visual" style="margin:1.5rem 0 .5rem;"><img src="/assets/og/ja-deepseek-v4-1-flash.png" alt="このページの内容を1枚にまとめた画像" width="1200" height="630" loading="eager" decoding="async" style="width:100%;max-width:900px;height:auto;display:block;margin:0 auto;border:1px solid var(--c-border);border-radius:var(--r-md);"></figure>
 
-<p style="font-size:.9rem;background:var(--c-surface2);border:1px solid var(--c-border);border-radius:6px;padding:.6rem .9rem;">2026-11-12 追記: Azure のモデルカタログでは本モデルが <code>DeepSeek-V4.1-Flash-1017</code>（Version: <code>2026-10-17</code>／コンテキスト1000k／DeepSeek直販）として掲載されています。DeepSeek公式の MODEL VERSION 表記も <code>DeepSeek-V4.1-Flash-1017</code> です。デプロイ時のバージョン文字列は環境で異なるため、下記の <code>list-models</code> で必ず確認してください。</p>
 
       <div class="section" style="padding-bottom:0;">
         <h1 class="section-title" style="font-size:1.55rem;">
           DeepSeek V4.1 Flash 実践ガイド
         </h1>
         <p class="lead-note">
-          2026-09-10、DeepSeek は新アーキテクチャ世代の最小モデル <strong>DeepSeek-V4.1-Flash</strong> を正式リリースしました。料金は V4 Pro より大幅に安く、ネイティブの画像入力（Vision）にも対応します。このページでは、公式料金ページとChange Logだけで裏取りした料金・スペック・ベンチマークに加え、
-          VS Code GitHub Copilot Chat での導入手順と、<strong>V4 Pro との関係（2026-09-14 以降も提供継続と公式が告知）</strong>を整理します。料金比較は <a href="/pricing/">料金比較ページ</a>、コスト試算は <a href="/calculator/">トークン計算機</a>、リリース経緯は <a href="/timeline/">リリース年表</a>も参照してください。
+          API のモデル名は <code>deepseek-flash</code>、<strong>現行版は DeepSeek-V4.1-Flash-1017</strong>（2026-10-17 更新）です。1Mコンテキスト・最大384K出力・ネイティブ画像入力に対応し、料金は V4 Pro より大幅に安くなっています。
+          このページは<strong>「いま何がどうなっているか」だけ</strong>を、DeepSeek の公式料金ページと Change Log で裏取りしてまとめたものです（料金・スペック・ベンチマーク・周辺API・導入手順・Azure 経由の実測・V4 Pro との関係）。
+          料金比較は <a href="/pricing/">料金比較ページ</a>、コスト試算は <a href="/calculator/">トークン計算機</a>、リリース経緯は <a href="/timeline/">リリース年表</a>も参照してください。
         </p>
 
         <div class="updated-bar">
           <span class="dot">●</span>
-          最終更新: <time datetime="2026-11-12">2026年11月12日</time>
-          &ensp;|&ensp; 一次情報: <a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">公式料金ページ</a>（2026-11-03 再確認・変動なし）・<a href="https://ai.azure.com/catalog/models/DeepSeek-V4.1-Flash" target="_blank" rel="noopener">Microsoft Foundry モデルカタログ</a>
-          &ensp;|&ensp; 取得日: 2026-10-05
+          最終更新: <time datetime="2026-11-17">2026年11月17日</time>
+          &ensp;|&ensp; 一次情報を最終確認: 2026-11-17（<a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">公式料金ページ</a>・<a href="https://api-docs.deepseek.com/updates/" target="_blank" rel="noopener">Change Log</a>・<a href="https://ai.azure.com/catalog/models/DeepSeek-V4.1-Flash" target="_blank" rel="noopener">Microsoft Foundry モデルカタログ</a>）
         </div>
       </div>
 
@@ -129,18 +128,17 @@
   <nav class="toc" aria-label="目次">
     <p class="toc-title">目次</p>
     <ol>
-      <li><a href="#u1017-heading">2026-10-17 の更新 — V4.1-Flash-1017 と Web検索 / Fetch API</a></li>
       <li><a href="#key-heading">3行でわかる要点</a></li>
-      <li><a href="#price-heading">公式料金（2026-11-03 再確認・前回から変動なし）</a></li>
-      <li><a href="#pro-heading">V4 Pro との関係（2026-09-13 時点: 提供継続）</a></li>
-      <li><a href="#sec-5">✅ 公式は「V4 Pro の提供を継続する」と告知 — 9/14 のルーティング予告は撤回されました</a></li>
+      <li><a href="#price-heading">公式料金（ピーク／オフピーク）</a></li>
+      <li><a href="#u1017-heading">現行モデル（V4.1-Flash-1017）と周辺API</a></li>
       <li><a href="#spec-heading">スペック（公式機能表）</a></li>
-      <li><a href="#bench-heading">公式ベンチマーク（2026-09-10 発表）</a></li>
+      <li><a href="#bench-heading">公式ベンチマーク（現行版）</a></li>
+      <li><a href="#pro-heading">V4 Pro との関係</a></li>
       <li><a href="#setup-heading">導入手順（VS Code GitHub Copilot Chat・3ステップ）</a></li>
-      <li><a href="#azure-heading">Azure AI Foundry（Microsoft Foundry）で動かす — DeepSeek-V4.1-Flash を CLI でデプロイ（2026-09-28 実測）</a></li>
-      <li><a href="#sec-10">⚠️ --sku-capacity の実運用（運営者実測・2026-09-28）</a></li>
-      <li><a href="#sec-11">⚠️ core CLI に deployment update はありません（capacity を変えるときの落とし穴）</a></li>
-      <li><a href="#sec-12">⚠️ Azure 経由で固有のつまずきどころ</a></li>
+      <li><a href="#azure-heading">Azure AI Foundry（Microsoft Foundry）で動かす</a></li>
+      <li><a href="#sec-10">⚠️ --sku-capacity の実運用</a></li>
+      <li><a href="#sec-11">⚠️ core CLI に deployment update はありません</a></li>
+      <li><a href="#sec-12">⚠️ Azure 経由で固有のつまずきところ</a></li>
       <li><a href="#sec-13">⚠️ MissingSubscriptionRegistration が出たら</a></li>
       <li><a href="#faq-heading">よくある質問</a></li>
       <li><a href="#sec-15">出典</a></li>
@@ -148,45 +146,62 @@
   </nav>
 </div>
 <section class="section" style="padding-top:1.5rem;" aria-labelledby="u1017-heading">
-<h2 class="section-title" id="u1017-heading" style="font-size:1.2rem;">2026-10-17 の更新 — V4.1-Flash-1017 と Web検索 / Fetch API</h2>
-<div class="context-note" style="border-left-color:var(--c-green);">
-  <ul style="margin:0;padding-left:1.1rem;line-height:1.9;">
-    <li><strong>モデルが更新されました（料金とAPIの呼び方は不変）。</strong>逐語: 「DeepSeek V4.1 Flash has been upgraded to DeepSeek-V4.1-Flash-1017. The official web and APP models have also been updated to the new version. The API calling method and pricing remain unchanged — simply use deepseek-flash to access the latest model.」</li>
-    <li><strong>ベンチマークは公式の記載をそのまま転記します</strong>（当サイトの測定値ではありません）。HLE (w/o tools) 42.6（44.0*）／Terminal-Bench 4.0 42.3／DeepSWE v1.1 77.0／ProgramBench 29.1／NL2Repo-Bench 68.2／Automation-Bench v1.0.6 60.5／Agents' Last Exam 35.4／Apex Bench v1.1 72.1／Chartography (w/tools) 83.0／BabyVision (w/tools) 92.5／ZeroBench-main (w/tools) 51.0。*はHLEの純テキスト部分集合のみ、Terminal-Bench 4.0 は Claude Code ハーネス、DeepSWE は Mini-SWE-V2、ZeroBench-main は Pass@5 での評価。</li>
-    <li><strong>「タスク実行時間と出力長を削減した」と公式が明記。</strong>逐語は「While improving performance, we also reduced the model's task runtime and output length, enabling users to complete tasks at lower cost and higher speed」。DeepSeek Harness 0.2.1-rc.1 以降への更新が推奨されています。</li>
-    <li><strong>「project development capabilities が大幅に強化」という要約は公式ページに逐語で見当たりません。</strong>そのため当サイトでは採用せず、上記のベンチマーク表と「runtime／出力長の削減」という逐語の範囲で書いています。</li>
+<h2 class="section-title" id="u1017-heading" style="font-size:1.2rem;">現行モデル — DeepSeek-V4.1-Flash-1017 と周辺API</h2>
+<p class="section-sub"><code>deepseek-flash</code> が指すのは <strong>DeepSeek-V4.1-Flash-1017</strong>（2026-10-17 版）です。料金とAPIの呼び方は 2026-09-10 のリリース時から変わっていません。</p>
+<div class="key-box">
+  <ul>
+    <li><strong>モデル名は <code>deepseek-flash</code> のまま。</strong>公式の逐語は「DeepSeek V4.1 Flash has been upgraded to DeepSeek-V4.1-Flash-1017. … The API calling method and pricing remain unchanged — simply use deepseek-flash to access the latest model.」</li>
+    <li><strong>性能が上がり、実行時間と出力長は短くなりました。</strong>公式は「タスク実行時間と出力長を削減し、低コスト・高速で完了できる」と明記しています。DeepSeek Harness は <strong>0.2.1-rc.1 以降</strong>が推奨です。数値は<a href="#bench-heading">公式ベンチマーク</a>にまとめました。</li>
+    <li><strong>2026-11-13 にアプリ向けAPIが一通り開放されました。</strong>Web検索・Deep thinking search・ファイル入力（PDF/Office/画像）・URL読み取り・モデルセーフティが既存APIのパラメータで使え、単体APIとして Search / Fetch / OCR / ASR / TTS も提供されています。</li>
   </ul>
 </div>
-<h3 style="font-size:1rem;margin:1.6rem 0 .5rem;">Web検索 / Fetch API（同日公開）</h3>
+<h3 style="font-size:1rem;margin:1.6rem 0 .5rem;">モデル呼び出しに組み込める機能</h3>
+<div class="table-wrap"><table><thead><tr><th>機能</th><th>有効にすると何が起きるか</th></tr></thead><tbody>
+<tr><td class="model-name">Web検索</td><td>thinking を無効にし <code>deepseek_web_search</code> を有効化。必要に応じてWeb・画像検索を行い、引用付きで回答</td></tr>
+<tr><td class="model-name">Deep thinking search</td><td>thinking 有効＋<code>deepseek_web_search</code>。推論の途中で自分から検索し、リンク先も読む</td></tr>
+<tr><td class="model-name">ファイル入力</td><td>PDF・Office・画像をアップロード。テキスト抽出またはレイアウト解析をして文脈に載せる</td></tr>
+<tr><td class="model-name">URL読み取り</td><td><code>deepseek_read_url</code> を有効化。メッセージ中のリンクを取得して回答に使う</td></tr>
+<tr><td class="model-name">モデルセーフティ</td><td>入出力を審査し、リスクがあれば拒否マーカーを返す。公開サービスでは有効化が前提</td></tr>
+</tbody></table></div>
+
+<h3 style="font-size:1rem;margin:1.6rem 0 .5rem;">単体APIの料金（公式料金ページ）</h3>
+<div class="table-wrap"><table><thead><tr><th>API</th><th>単位</th><th>料金</th></tr></thead><tbody>
+<tr><td class="model-name">Search（テキスト・画像）</td><td>1,000 検索</td><td class="price">$0.75</td></tr>
+<tr><td class="model-name">Web fetch</td><td>1,000 取得</td><td class="price">$0.75</td></tr>
+<tr><td class="model-name">File parsing / OCR</td><td>1,000 ページ</td><td class="price">$0.225</td></tr>
+<tr><td class="model-name">Text to Speech（TTS）</td><td>10,000 文字</td><td class="price">$0.45<br><small>（期間限定50%オフ $0.225）</small></td></tr>
+<tr><td class="model-name">Speech to Text（ASR）</td><td>音声1時間</td><td class="price">$0.116<br><small>（期間限定50%オフ $0.058）</small></td></tr>
+</tbody></table></div>
+<p style="font-size:.78rem;color:var(--c-muted);margin-top:.3rem;">※ トークン課金とは別建てです。Search / Fetch は「成功したリクエスト」単位で、APIを直接叩いてもモデルがツールとして使っても同じ単価。トークン単価（Flash: キャッシュヒット $0.003／ミス $0.15／出力 $0.60、いずれもオフピーク）は 2026-11-17 の再取得でも変化なしでした。</p>
+
+<h3 style="font-size:1rem;margin:1.6rem 0 .5rem;">Search / Fetch のエンドポイント</h3>
 <div class="table-wrap"><table><thead><tr><th>項目</th><th>公式ドキュメントの記載</th></tr></thead><tbody>
-<tr><td class="model-name">Search エンドポイント</td><td><code>POST https://api.deepseek.com/v1/tools/search</code></td></tr>
-<tr><td class="model-name">Fetch エンドポイント</td><td><code>POST https://api.deepseek.com/v1/tools/fetch</code></td></tr>
+<tr><td class="model-name">Search</td><td><code>POST https://api.deepseek.com/v1/tools/search</code></td></tr>
+<tr><td class="model-name">Fetch</td><td><code>POST https://api.deepseek.com/v1/tools/fetch</code></td></tr>
 <tr><td class="model-name">認証</td><td>DeepSeek API と同じ Bearer 認証・JSON（<code>Authorization: Bearer &lt;API Key&gt;</code>）</td></tr>
-<tr><td class="model-name">課金（Search）</td><td>$0.75 / 1,000 successful requests</td></tr>
-<tr><td class="model-name">課金（Fetch）</td><td>$0.75 / 1,000 successful requests</td></tr>
 <tr><td class="model-name">Search の制約</td><td>query は1〜128文字（空白のみ不可）、count は1〜50（既定10）、need_content の既定は false</td></tr>
 <tr><td class="model-name">Fetch の制約</td><td>url は8192文字以内の HTTP/HTTPS。取得は対象サイトの可用性・アクセス方針に依存（逐語: “Fetching is subject to the target site's availability and access policies.”）</td></tr>
 </tbody></table></div>
-<p style="font-size:.78rem;color:var(--c-muted);margin-top:.3rem;">※ 課金は「成功したリクエスト」単位で、トークン課金とは別建てです。DeepSeek Harness / Claude Code / Codex 経由のサーバーサイドツール呼び出しは「currently free of charge」で、<strong>2026年11月1日 00:00（北京時間）からリクエスト課金が始まる</strong>と明記されています。料金表のトークン単価（Flash: キャッシュヒット $0.003／ミス $0.15／出力 $0.60、いずれもオフピーク）は 2026-11-03 の再取得でも変化なしでした。</p>
+<p style="font-size:.78rem;color:var(--c-muted);">出典: <a href="https://api-docs.deepseek.com/guides/search" target="_blank" rel="noopener">Search &amp; Fetch</a>・<a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">Models &amp; Pricing</a>・<a href="https://api-docs.deepseek.com/updates/" target="_blank" rel="noopener">Change Log</a>（2026-11-17 取得）。</p>
 </section>
 
 <section class="section" style="padding-top:1.5rem;" aria-labelledby="key-heading">
         <div class="key-box">
           <h2 id="key-heading">3行でわかる要点</h2>
           <ul>
-            <li><strong>現行の主力は V4.1 Flash。</strong>モデルID（APIリクエストで指定する文字列）は <code>deepseek-flash</code>（VS Code 側の表示・選択肢は拡張機能の更新により異なる場合があります）。コンテキスト1M・最大出力384K・ネイティブ画像入力対応。</li>
+            <li><strong>現行の主力は V4.1 Flash（現行版 <code>DeepSeek-V4.1-Flash-1017</code>）。</strong>モデルID（APIリクエストで指定する文字列）は <code>deepseek-flash</code>（VS Code 側の表示・選択肢は拡張機能の更新により異なる場合があります）。コンテキスト1M・最大出力384K・ネイティブ画像入力対応。</li>
             <li><strong>料金は V4 Pro より大幅に安い。</strong>入力（cache miss）オフピーク $0.15 / ピーク $0.30、出力 オフピーク $0.60 / ピーク $1.20（USD・1Mトークンあたり）。参考として V4 Pro は入力オフピーク $0.66 / 出力オフピーク $1.98 です。</li>
-            <li><strong>V4 Pro は 2026-09-14 以降も提供が継続されます。</strong>公式は以前「9/14 以降 <code>deepseek-v4-pro</code> 宛を V4.1 Flash へルーティングする」と予告していましたが<strong>撤回しました</strong>。<code>deepseek-v4-pro</code> の書き換えは不要です（<a href="#pro-heading">後述</a>）。</li>
+            <li><strong>V4 Pro（<code>deepseek-v4-pro</code>／現行版 <code>DeepSeek-V4-Pro-0813</code>）も提供中です。</strong>専用の料金体系のままで、V4.1 Flash への統合はされていません。<code>deepseek-v4-pro</code> を指すコードは書き換え不要です（<a href="#pro-heading">後述</a>）。</li>
           </ul>
         </div>
       </section>
 
       <!-- ===== 料金 ===== -->
       <section class="section" style="padding-top:0;" aria-labelledby="price-heading">
-        <h2 class="section-title" id="price-heading" style="font-size:1.2rem;">公式料金（2026-11-03 再確認・前回から変動なし）</h2>
+        <h2 class="section-title" id="price-heading" style="font-size:1.2rem;">公式料金（2026-11-17 再確認）</h2>
         <p class="section-sub">単位は USD / 1Mトークン。オフピークはピークの半額です。</p>
 
-        <div class="screenshot-note">✅ api-docs.deepseek.com の Models &amp; Pricing を Firecrawl で直接確認（初回 2026-09-11 / <strong>2026-10-05 に再取得して単価・ピーク時間帯・レガシー名の注記が変わっていないことを確認</strong>）。</div>
+        <div class="screenshot-note">✅ api-docs.deepseek.com の Models &amp; Pricing を直接確認（<strong>2026-11-17 に再取得し、単価・ピーク時間帯・レガシー名の注記が変わっていないことを確認</strong>）。</div>
 
         <div class="table-wrap">
           <table class="peak-table">
@@ -219,41 +234,40 @@
           </table>
         </div>
 
-        <p style="font-size:.78rem;color:var(--c-muted);">⏰ <strong>ピーク時間帯</strong>: 01:00-04:00 UTC と 06:00-10:00 UTC の <strong>月〜金のみ（中国の祝日を除く）</strong>（<strong>日本時間 10:00-13:00 / 15:00-19:00</strong>／北京時間 09:00-12:00 / 14:00-18:00）。<strong>土日と中国の祝日は終日オフピーク</strong>です。ピーク/オフピーク制は 2026-08-16 16:00 UTC 発効で、公式料金ページの注記（2）に「月〜金（中国の祝日を除く）」と記載されています。一次情報: <a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">api-docs.deepseek.com</a>（初回 2026-09-11／注記は 2026-09-23 に確認・2026-11-03 再確認）。</p>
+        <p style="font-size:.78rem;color:var(--c-muted);">⏰ <strong>ピーク時間帯</strong>: 01:00-04:00 UTC と 06:00-10:00 UTC の <strong>月〜金のみ（中国の祝日を除く）</strong>（<strong>日本時間 10:00-13:00 / 15:00-19:00</strong>／北京時間 09:00-12:00 / 14:00-18:00）。<strong>土日と中国の祝日は終日オフピーク</strong>です。ピーク/オフピーク制は 2026-08-16 16:00 UTC 発効で、公式料金ページの注記（2）に「月〜金（中国の祝日を除く）」と記載されています。一次情報: <a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">api-docs.deepseek.com</a>（2026-11-17 再確認）。</p>
 
         <p style="font-size:.86rem;color:var(--c-muted);margin-top:.8rem;">コスト試算は <a href="/calculator/">トークン計算機</a>で、V4.1 Flash のオフピーク／ピーク両方が選べます。他社モデルとの比較は <a href="/pricing/#dh">料金比較（DeepSeek）</a>を参照してください。</p>
       </section>
 
       <!-- ===== V4 Pro との関係 ===== -->
       <section class="section" style="padding-top:0;" aria-labelledby="pro-heading">
-        <h2 class="section-title" id="pro-heading" style="font-size:1.2rem;">V4 Pro との関係（2026-09-13 時点: 提供継続）</h2>
+        <h2 class="section-title" id="pro-heading" style="font-size:1.2rem;">V4 Pro との関係（提供中）</h2>
         <p class="section-sub">公式ドキュメントの記載に基づく事実のみを記載します。</p>
 
         <div class="key-box">
-          <h2 id="sec-5">✅ 公式は「V4 Pro の提供を継続する」と告知 — 9/14 のルーティング予告は撤回されました</h2>
+          <h2 id="sec-5">✅ V4 Pro は今も提供中 — 9/14 のルーティング予告は撤回済み</h2>
           <ul>
-            <li>2026-09-10 の V4.1 Flash リリース告知では、<strong>V4 Pro を順次 retire し、2026-09-14 以降 <code>deepseek-v4-pro</code> 宛のリクエストを V4.1 Flash へルーティングする</strong>とされていました。</li>
-            <li>その後 <strong>DeepSeek はこの予告を撤回</strong>し、料金ページの注記(2) と Change Log を「<strong>2026-09-14 以降も V4 Pro の API サービス提供を継続し、課金方法は変更しない</strong>」に差し替えました（原文: "In response to user demand, we have decided to continue providing API services for DeepSeek V4 Pro after September 14, 2026, with the billing method remaining unchanged."）。</li>
-            <li><strong><code>deepseek-v4-pro</code> は現在も使い続けられます。コードや API キーの書き換えは不要です。</strong>V4 Pro 専用の料金表（オフピーク 入力 $0.66 / 出力 $1.98）も公式ページに現存し、V4.1 Flash の価格に統合されてはいません。</li>
-            <li>ただし公式は「変更があれば改めて告知する」としているため、<strong>将来の変更がゼロとは言い切れません</strong>。V4 Pro の詳細・経緯・使い分けは <a href="/deepseek-v4-pro/">V4 Pro 提供継続のまとめ</a>に記載しています。</li>
+            <li><strong><code>deepseek-v4-pro</code> は現在も使い続けられます。コードや API キーの書き換えは不要です。</strong>現行版は <code>DeepSeek-V4-Pro-0813</code> で、専用の料金表（オフピーク 入力 $0.66 / 出力 $1.98 / キャッシュヒット $0.022）も公式ページに現存し、V4.1 Flash の価格に統合されてはいません。</li>
+            <li>2026-09-10 の V4.1 Flash リリース告知には「9/14 以降 <code>deepseek-v4-pro</code> 宛を V4.1 Flash へルーティングする」と書かれていましたが、<strong>DeepSeek はこの予告を撤回</strong>し、「ユーザーの要望を受け、2026-09-14 以降も V4 Pro の API サービス提供を継続し、課金方法は変更しない」に差し替えました（原文: "In response to user demand, we have decided to continue providing API services for DeepSeek V4 Pro after September 14, 2026, with the billing method remaining unchanged."）。</li>
+            <li>ただし公式は「変更があれば改めて告知する」としているため、<strong>将来の変更がゼロとは言い切れません</strong>。V4 Pro の位置づけと使い分けは <a href="/deepseek-v4-pro/">V4 Pro のまとめ</a>に記載しています。</li>
           </ul>
         </div>
 
-        <h3 style="font-size:1rem;margin:1.5rem 0 .6rem;">モデル名ごとの扱い（2026-09-13 時点）</h3>
+        <h3 style="font-size:1rem;margin:1.5rem 0 .6rem;">モデル名ごとの扱い</h3>
         <div class="table-wrap">
           <table class="spec-table">
             <caption style="display:none;">モデル名ごとの扱い</caption>
             <thead><tr><th>モデル名</th><th>状態</th><th>実挙動</th></tr></thead>
             <tbody>
-              <tr><td class="model-name"><code>deepseek-flash</code></td><td>現行</td><td>DeepSeek-V4.1-Flash。ネイティブ Vision 対応・低単価。新規実装の第一候補</td></tr>
-              <tr><td class="model-name"><code>deepseek-v4-pro</code></td><td><strong>提供中（継続）</strong></td><td>V4 Pro 専用の料金で課金。2026-09-14 以降も提供継続と公式が告知。Vision 非対応・同時実行数 500</td></tr>
+              <tr><td class="model-name"><code>deepseek-flash</code></td><td>現行</td><td><code>DeepSeek-V4.1-Flash-1017</code>。ネイティブ Vision 対応・低単価。新規実装の第一候補</td></tr>
+              <tr><td class="model-name"><code>deepseek-v4-pro</code></td><td><strong>提供中</strong></td><td><code>DeepSeek-V4-Pro-0813</code>。V4 Pro 専用の料金で課金。Vision 非対応・同時実行数 500</td></tr>
               <tr><td class="model-name"><code>deepseek-v4-flash</code></td><td>退役済み</td><td>互換のため一時的に受理。V4.1 Flash が処理し Flash 価格で課金</td></tr>
               <tr><td class="model-name"><code>deepseek-v4-flash-vision-exp</code></td><td>退役済み</td><td>同上（旧 Vision 実験版も V4.1 Flash へ統合）</td></tr>
               <tr><td class="model-name"><code>deepseek-chat</code> / <code>deepseek-reasoner</code></td><td>終了</td><td>旧エイリアスは 2026-07-24 に終了</td></tr>
             </tbody>
           </table>
         </div>
-        <p style="font-size:.78rem;color:var(--c-muted);">出典: <a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">Models &amp; Pricing の注記(1)(2)</a>・<a href="https://api-docs.deepseek.com/updates/" target="_blank" rel="noopener">Change Log</a>（2026-09-13 取得）。V4 Pro の経緯と使い分けは<a href="/deepseek-v4-pro/">V4 Pro 提供継続のまとめ</a>にまとめています。</p>
+        <p style="font-size:.78rem;color:var(--c-muted);">出典: <a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">Models &amp; Pricing の注記(1)(2)</a>・<a href="https://api-docs.deepseek.com/updates/" target="_blank" rel="noopener">Change Log</a>（2026-11-17 取得）。V4 Pro の位置づけは<a href="/deepseek-v4-pro/">V4 Pro のまとめ</a>に記載しています。</p>
       </section>
 
       <!-- ===== スペック ===== -->
@@ -264,7 +278,8 @@
             <caption style="display:none;">DeepSeek V4.1 Flash の仕様</caption>
             <thead><tr><th>項目</th><th>V4.1 Flash（<code>deepseek-flash</code>）</th></tr></thead>
             <tbody>
-              <tr><td class="model-name">モデルバージョン</td><td>DeepSeek-V4.1-Flash（Azureカタログ: <code>DeepSeek-V4.1-Flash-1017</code>／2026-10-17）</td></tr>
+              <tr><td class="model-name">モデルバージョン</td><td><code>DeepSeek-V4.1-Flash-1017</code>（公式の MODEL VERSION・2026-10-17）</td></tr>
+              <tr><td class="model-name">Azure のカタログ</td><td><code>DeepSeek-V4.1-Flash</code> / Version <code>2026-09-10</code>（Preview・1000k context・128k output）※本家の 1017 より前の版</td></tr>
               <tr><td class="model-name">コンテキスト長</td><td>1M トークン</td></tr>
               <tr><td class="model-name">最大出力</td><td>384K トークン（公式表記 MAXIMUM: 384K）</td></tr>
               <tr><td class="model-name">thinking mode</td><td>non-thinking / thinking の両対応（<strong>thinking が既定</strong>）</td></tr>
@@ -278,41 +293,33 @@
             </tbody>
           </table>
         </div>
-        <p style="font-size:.78rem;color:var(--c-muted);">出典: <a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">api-docs.deepseek.com Models &amp; Pricing</a>（2026-09-11 取得）。同時実行数の詳細は公式の Rate Limit &amp; Isolation を参照してください。</p>
+        <p style="font-size:.78rem;color:var(--c-muted);">出典: <a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">api-docs.deepseek.com Models &amp; Pricing</a>（2026-11-17 取得）。同時実行数の詳細は公式の Rate Limit &amp; Isolation を参照してください。</p>
       </section>
 
       <!-- ===== ベンチマーク ===== -->
       <section class="section" style="padding-top:0;" aria-labelledby="bench-heading">
-        <h2 class="section-title" id="bench-heading" style="font-size:1.2rem;">公式ベンチマーク（2026-09-10 発表）</h2>
-        <p class="section-sub">DeepSeek が Change Log で公表した数値です。当サイトで再計測したものではありません。</p>
+        <h2 class="section-title" id="bench-heading" style="font-size:1.2rem;">公式ベンチマーク（現行 V4.1-Flash-1017）</h2>
+        <p class="section-sub">DeepSeek が 2026-10-17 の Change Log で公表した数値です。当サイトで再計測したものではありません。</p>
         <div class="table-wrap">
           <table class="bench-table">
-            <caption style="display:none;">DeepSeek V4.1 Flash の公式ベンチマーク</caption>
+            <caption style="display:none;">DeepSeek V4.1-Flash-1017 の公式ベンチマーク</caption>
             <thead><tr><th>ベンチマーク</th><th>スコア</th></tr></thead>
             <tbody>
-              <tr><td>GPQA Diamond</td><td class="price">90.9</td></tr>
-              <tr><td>HLE</td><td class="price">36.8（39.1）※純テキスト部分集合のみで計測</td></tr>
-              <tr><td>Codeforces（Rating）</td><td class="price">3471</td></tr>
-              <tr><td>MathArena Apex</td><td class="price">65.6</td></tr>
-              <tr><td>Terminal-Bench 2.1</td><td class="price">90.6</td></tr>
-              <tr><td>Terminal-Bench 3.0</td><td class="price">30.0</td></tr>
-              <tr><td>Terminal-Bench 4.0</td><td class="price">31.2</td></tr>
-              <tr><td>DeepSWE v1.1</td><td class="price">74.2</td></tr>
-              <tr><td>NL2Repo-Bench</td><td class="price">65.4</td></tr>
-              <tr><td>CyberGym</td><td class="price">88.1</td></tr>
-              <tr><td>SEC-Bench Pro</td><td class="price">62.8</td></tr>
-              <tr><td>ProgramBench</td><td class="price">20.3</td></tr>
-              <tr><td>ExploitGym</td><td class="price">15.3</td></tr>
-              <tr><td>HLE（ツールあり）</td><td class="price">63.9</td></tr>
-              <tr><td>Automation-Bench</td><td class="price">54.8</td></tr>
-              <tr><td>Agents' Last Exam</td><td class="price">31.8</td></tr>
-              <tr><td>Chartography（ツールあり）</td><td class="price">78.9</td></tr>
-              <tr><td>BabyVision（ツールあり）</td><td class="price">89.6</td></tr>
-              <tr><td>ZeroBench-main（ツールあり）</td><td class="price">49.0</td></tr>
+              <tr><td>HLE（ツールなし）</td><td class="price">42.6（44.0*）※純テキスト部分集合のみで計測</td></tr>
+              <tr><td>Terminal-Bench 4.0</td><td class="price">42.3</td></tr>
+              <tr><td>DeepSWE v1.1</td><td class="price">77.0</td></tr>
+              <tr><td>ProgramBench</td><td class="price">29.1</td></tr>
+              <tr><td>NL2Repo-Bench</td><td class="price">68.2</td></tr>
+              <tr><td>Automation-Bench v1.0.6</td><td class="price">60.5</td></tr>
+              <tr><td>Agents' Last Exam</td><td class="price">35.4</td></tr>
+              <tr><td>Apex Bench v1.1</td><td class="price">72.1</td></tr>
+              <tr><td>Chartography（ツールあり）</td><td class="price">83.0</td></tr>
+              <tr><td>BabyVision（ツールあり）</td><td class="price">92.5</td></tr>
+              <tr><td>ZeroBench-main（ツールあり）</td><td class="price">51.0</td></tr>
             </tbody>
           </table>
         </div>
-        <p style="font-size:.78rem;color:var(--c-muted);">出典: <a href="https://api-docs.deepseek.com/updates/" target="_blank" rel="noopener">Change Log「DeepSeek-V4.1-Flash Release」（2026-09-10）</a>。ベンチマークの数値は提供元の自己申告であり、当サイトは検証していません。</p>
+        <p style="font-size:.78rem;color:var(--c-muted);">出典: <a href="https://api-docs.deepseek.com/updates/" target="_blank" rel="noopener">Change Log「DeepSeek-V4.1-Flash-1017 Update」（2026-10-17）</a>。Terminal-Bench 4.0 は Claude Code ハーネス、DeepSWE は Mini-SWE-V2、ZeroBench-main は Pass@5 での評価です。<br>※ GPQA Diamond や Codeforces など、初期版（2026-09-10）の公表リストにだけ載っている指標は現行版の公表値がないため掲載していません。版が違う数値を並べると比較を誤るので、<strong>この表は現行版の1系統だけ</strong>にしています。ベンチマークは提供元の自己申告であり、当サイトは検証していません。</p>
       </section>
 
       <!-- ===== 導入手順 ===== -->
@@ -345,21 +352,20 @@
       <!-- ===== Azure AI Foundry で動かす ===== -->
       <section class="section" style="padding-top:0;" aria-labelledby="azure-heading">
         <h2 class="section-title" id="azure-heading" style="font-size:1.2rem;">Azure AI Foundry（Microsoft Foundry）で動かす — DeepSeek-V4.1-Flash を CLI でデプロイ（2026-09-28 実測）</h2>
-          <p class="section-sub" style="font-size:.92rem;">2026-11-05 追記: Azure の DeepSeek 料金タブに掲載されているのは V3 / V3.2 / R1 / V4 Pro / V4 Flash（0731 含む）の行のみで、<strong>DeepSeek-V4.1-Flash の行は現在もありません</strong>。V4.1-Flash は Microsoft Foundry のモデルカタログ（Direct from Azure）からデプロイします（下記の手順は 2026-09-28 実測）。</p>
+          <p class="section-sub" style="font-size:.92rem;">Azure の DeepSeek 料金タブに V4.1-Flash の行はなく、配布は <strong>Microsoft Foundry のモデルカタログ（Direct from Azure）</strong>からです。カタログの掲載は <strong>Version <code>2026-09-10</code></strong>（Preview）で、DeepSeek 本家の <code>V4.1-Flash-1017</code> より前の版です（下記の手順は 2026-09-28 実測）。</p>
         <p class="section-sub">
           DeepSeek 自社 API だけでなく、Microsoft Azure の <strong>Azure AI Foundry（Microsoft Foundry）</strong> 経由でも DeepSeek 系モデルを使えます。
-          2026年9月28日の実測では、<strong>最新の <code>DeepSeek-V4.1-Flash</code>（version <code>2026-09-10</code>）を <code>az</code> CLI でデプロイし、OpenAI 互換エンドポイントから応答を取得するところまで通りました</strong>。ここでは ①提供状況 ②デプロイ ③クォータ（capacity）の決め方 ④疎通確認 ⑤つまずきどころ の順に、実際に実行したコマンドで示します。
+          2026年9月28日の実測では、<strong><code>DeepSeek-V4.1-Flash</code>（カタログの version は <code>2026-09-10</code>）を <code>az</code> CLI でデプロイし、OpenAI 互換エンドポイントから応答を取得するところまで通りました</strong>。ここでは ①提供状況 ②デプロイ ③クォータ（capacity）の決め方 ④疎通確認 ⑤つまずきどころ の順に、実際に実行したコマンドで示します。
         </p>
 
         <div class="screenshot-note">
-          ℹ️ <strong>一次情報の更新状況（Azure の料金ページは 2026-10-05 再確認／Learn の一覧は 2026-09-29 時点）</strong>
+          ℹ️ <strong>Azure 側の掲載状況（2026-11-17 にモデルカタログを確認）</strong>
           <ul style="margin:.5rem 0 0;padding-left:1.2em;">
-            <li><strong>モデルカタログ</strong>: <code>DeepSeek-V4.1-Flash</code> が「Direct from Azure」で掲載。<strong>Version 2026-09-10 / Type: Chat completion / Lifecycle: Preview / Context window 1000k</strong>。</li>
-            <li><strong>Foundry ブログ（2026-09-25 更新）</strong>: 「Direct from Azure（public preview）」と「Fireworks on Foundry（generally available）」の<strong>2経路</strong>があると告知されています。</li>
-            <li><strong>Microsoft Learn のモデル一覧</strong>（ms.date 2026-09-21）は <code>DeepSeek-V4-Pro</code> / <code>DeepSeek-V4-Flash-0731</code>（Preview）/ <code>DeepSeek-V4-Flash</code> の3行のままで、<strong>V4.1-Flash は未掲載</strong>です。</li>
-            <li><strong>Azure の料金ページ（DeepSeek タブ）</strong>にも V4.1-Flash の行が<strong>まだありません</strong>（<strong>2026-10-05 再確認</strong>。掲載は V4 Pro / V4 Flash / V4 Flash 0731 / V3.1 の4行のみ、ページ改訂トークン <code>awa-stv=20260930-0214-20260930-2100-183594243</code>）。</li>
+            <li><strong>モデルカタログ</strong>: <code>DeepSeek-V4.1-Flash</code> が「Direct from Azure」で掲載。<strong>Version 2026-09-10 / Chat completion / Lifecycle: Preview / Context window 1000k / Token limits 128k output</strong>。入力の表記は <code>text</code> ですが、DeepSeek 本家は画像入力対応を明記しており、<strong>カタログの記載と食い違います</strong>。</li>
+            <li><strong>版が本家より古い</strong>: 本家の現行版は <code>V4.1-Flash-1017</code>（2026-10-17）ですが、<strong>カタログの版は 2026-09-10 のまま</strong>です。新しい版を前提にしないでください。</li>
+            <li><strong>料金ページ</strong>: DeepSeek タブに V4.1-Flash の行はありません（掲載は V4 Pro / V4 Flash / V4 Flash 0731 / V3.1）。価格は Foundry ブログの告知値を参照し、契約前にポータルで確認してください。</li>
           </ul>
-          → <strong>カタログとブログが先行し、Learn の一覧と料金ページが遅れている</strong>状態です。ドキュメントに無いから使えない、と判断せず、<strong>自分のアカウントで <code>list-models</code> を叩いて実物を確認する</strong>のが確実です（STEP 3）。
+          → <strong>「ドキュメントに無いから使えない」と決めつけず、自分のアカウントで <code>list-models</code> を叩いて実物を確認する</strong>のが確実です（STEP 3）。
         </div>
 
         <h3 style="font-size:1rem;margin:1.5rem 0 .6rem;">前提</h3>
@@ -380,7 +386,7 @@
               <tr><td class="model-name"><code>&lt;LOCATION&gt;</code></td><td>リージョン（例: <code>eastus</code>）。モデルによって提供リージョンが異なるため、Azure ポータルのモデルカタログで確認してください</td></tr>
               <tr><td class="model-name"><code>&lt;ACCOUNT_NAME&gt;</code></td><td>Azure AI Services アカウント名。<strong>全世界で一意</strong>にする必要があります（例: <code>dsflash0928</code>）。<code>--custom-domain</code> にも同じ値を使います</td></tr>
               <tr><td class="model-name"><code>&lt;DEPLOYMENT_NAME&gt;</code></td><td>デプロイ名（任意）。<strong>API 呼び出しの <code>model</code> に指定するのはモデル名ではなく、このデプロイ名です</strong>（例: <code>ds-flash-01</code>）</td></tr>
-              <tr><td class="model-name"><code>&lt;MODEL_VERSION&gt;</code></td><td>モデルのバージョン文字列。<strong>2026-09-28 の実測では <code>2026-09-10</code> でしたが、モデル名・バージョンは環境（サブスクリプション／リージョン）で異なるため、必ず次の <code>list-models</code> で確認してください</strong></td></tr>
+              <tr><td class="model-name"><code>&lt;MODEL_VERSION&gt;</code></td><td>モデルのバージョン文字列。<strong>2026-09-28 の実測では <code>2026-09-10</code>。モデル名・バージョンは環境（サブスクリプション／リージョン）で異なるため、必ず次の <code>list-models</code> で確認してください</strong></td></tr>
               <tr><td class="model-name"><code>&lt;API_KEY&gt;</code></td><td>Azure AI Services アカウントのキー（手順内で CLI から取得します）</td></tr>
             </tbody>
           </table>
@@ -522,7 +528,7 @@ The subscription is not registered to use namespace 'Microsoft.CognitiveServices
           </ul>
         </div>
 
-        <h3 style="font-size:1rem;margin:1.5rem 0 .6rem;">DeepSeek 自社 API と Azure 経由の違い（2026-10-05 時点）</h3>
+        <h3 style="font-size:1rem;margin:1.5rem 0 .6rem;">DeepSeek 自社 API と Azure 経由の違い</h3>
         <p style="font-size:.86rem;color:var(--c-muted);">「同じモデルだから同じ」ではありません。運用で効いてくる差だけを並べます。</p>
         <div class="table-wrap">
           <table class="spec-table">
@@ -547,12 +553,12 @@ The subscription is not registered to use namespace 'Microsoft.CognitiveServices
           💰 <strong>Azure 経由の料金（Microsoft の告知値）</strong>:
           Foundry ブログ（2026-09-25 更新）の表では、<strong>Direct from Azure（Global Standard）が入力 $0.30 / 出力 $1.20 / cached input $0.006</strong>、
           <strong>Fireworks on Foundry（Standard Global）が入力 $0.37 / 出力 $1.50 / cached input $0.007</strong>（いずれも USD / 1Mトークン）。
-          Direct from Azure の値は DeepSeek 自社 API の<strong>ピーク単価と同じ水準</strong>です。ただし <strong>Azure の料金ページには 2026-10-05 時点で V4.1-Flash の行がまだ無い（DeepSeek タブの掲載は V4 Pro / V4 Flash など4行のみ）</strong>ため、契約前に
+          Direct from Azure の値は DeepSeek 自社 API の<strong>ピーク単価と同じ水準</strong>です。ただし <strong>Azure の料金ページには V4.1-Flash の行がありません（DeepSeek タブの掲載は V4 Pro / V4 Flash / V4 Flash 0731 / V3.1）</strong>ため、契約前に
           <a href="https://azure.microsoft.com/en-us/pricing/details/ai-foundry-models/deepseek/" target="_blank" rel="noopener">Azure の Foundry Models 料金ページ</a>または Azure ポータルで必ずご確認ください。
         </div>
 
         <p style="font-size:.78rem;color:var(--c-muted);">
-          出典: <a href="https://ai.azure.com/catalog/models/DeepSeek-V4.1-Flash" target="_blank" rel="noopener">Microsoft Foundry モデルカタログ — DeepSeek-V4.1-Flash</a>（Version 2026-09-10 / Preview / Context window 1000k）、
+          出典: <a href="https://ai.azure.com/catalog/models/DeepSeek-V4.1-Flash" target="_blank" rel="noopener">Microsoft Foundry モデルカタログ — DeepSeek-V4.1-Flash</a>（Version 2026-09-10 / Preview / Context window 1000k・2026-11-17 確認）、
           <a href="https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/deepseek-v4-1-flash-is-coming-to-microsoft-foundry/4556431" target="_blank" rel="noopener">Foundry ブログ — DeepSeek-V4.1-Flash is coming to Microsoft Foundry</a>（2026-09-25 更新／2経路と料金表）、
           <a href="https://learn.microsoft.com/en-us/cli/azure/cognitiveservices/account/deployment?view=azure-cli-latest" target="_blank" rel="noopener">az cognitiveservices account deployment</a>（ms.date 2026-09-01）、
           <a href="https://learn.microsoft.com/en-us/azure/foundry/foundry-models/quotas-limits" target="_blank" rel="noopener">Foundry Models quotas and limits</a>（TPM/RPM の考え方・429）、
@@ -571,7 +577,7 @@ The subscription is not registered to use namespace 'Microsoft.CognitiveServices
         <p style="font-size:.88rem;color:var(--c-muted);">A. <strong>引き続き使えます。</strong>DeepSeek は「ユーザーの要望を受け、2026-09-14 以降も V4 Pro の API サービス提供を継続し、課金方法は変更しない」と告知しました。以前の「9/14 以降は V4.1 Flash へルーティング」という予告は<strong>撤回済み</strong>です。コードや API キーの書き換えは不要です。</p>
 
         <h3 style="font-size:.98rem;margin:1.2rem 0 .4rem;">Q. DeepSeek V4.1 Pro はいつリリースされますか？</h3>
-        <p style="font-size:.88rem;color:var(--c-muted);">A. 2026-09-13 時点で公式にリリース時期は発表されていません。なお以前の注記には「将来 V4.1 Pro がリリースされるまで（until V4.1 Pro is released in the future）」という記述がありましたが、その注記自体が V4 Pro 提供継続の文面に差し替えられています。当サイトでも公式発表が出た時点で更新します。</p>
+        <p style="font-size:.88rem;color:var(--c-muted);">A. 2026-11-17 時点で公式に発表はありません。公式料金ページに載っているモデルは <code>deepseek-flash</code>（V4.1-Flash-1017）と <code>deepseek-v4-pro</code>（V4-Pro-0813）の2つです。発表があれば本ページを更新します。</p>
 
         <h3 style="font-size:.98rem;margin:1.2rem 0 .4rem;">Q. 画像を読めますか？</h3>
         <p style="font-size:.88rem;color:var(--c-muted);">A. はい。V4.1 Flash は新アーキテクチャ世代でネイティブのマルチモーダル視覚理解に対応し、公式の機能表でも Vision が「✓」です（旧 V4 Pro は非対応）。画像を含むモデル横断の比較は <a href="/multimodal/">マルチモーダル対応LLM一覧</a>を参照してください。</p>
@@ -583,7 +589,7 @@ The subscription is not registered to use namespace 'Microsoft.CognitiveServices
         <p style="font-size:.88rem;color:var(--c-muted);">A. コンテキスト長 1M トークン、最大出力 384K トークンです。thinking mode は non-thinking と thinking の両方に対応し、thinking が既定です。</p>
 
         <h3 style="font-size:.98rem;margin:1.2rem 0 .4rem;">Q. Azure（Microsoft Foundry）でも DeepSeek V4.1 Flash を使えますか？</h3>
-        <p style="font-size:.88rem;color:var(--c-muted);">A. <strong>使えます。</strong>2026-09-28 の実測で、<code>DeepSeek-V4.1-Flash</code>（version <code>2026-09-10</code>）を <code>az cognitiveservices account deployment create</code> でデプロイし、OpenAI 互換エンドポイントから応答を取得できました。ただし <strong>Preview（public preview）</strong>で、Microsoft Learn のモデル一覧（2026-09-29 時点）と Azure の料金ページ（2026-10-05 時点）はまだ未更新です。手順と capacity の実数値は<a href="#azure-heading">Azure AI Foundry の節</a>にまとめています。</p>
+        <p style="font-size:.88rem;color:var(--c-muted);">A. <strong>使えます。</strong>2026-09-28 の実測で、<code>DeepSeek-V4.1-Flash</code>（カタログの version は <code>2026-09-10</code>）を <code>az cognitiveservices account deployment create</code> でデプロイし、OpenAI 互換エンドポイントから応答を取得できました。ただし <strong>Preview（public preview）</strong>で、<strong>カタログの版は 2026-09-10 のまま</strong>（本家の現行版は 1017）、Azure の料金ページには V4.1-Flash の行がありません。手順と capacity の実数値は<a href="#azure-heading">Azure の節</a>にまとめています。</p>
 
         <h3 style="font-size:.98rem;margin:1.2rem 0 .4rem;">Q. Azure 経由の料金はいくらですか？</h3>
         <p style="font-size:.88rem;color:var(--c-muted);">A. Microsoft の Foundry ブログ（2026-09-25 更新）の表では、<strong>Direct from Azure が入力 $0.30 / 出力 $1.20 / cached input $0.006</strong>、<strong>Fireworks on Foundry が入力 $0.37 / 出力 $1.50 / cached input $0.007</strong>（USD / 1Mトークン）。Direct from Azure は DeepSeek 自社 API の<strong>ピーク単価と同水準</strong>で、自社 API のような時間帯割引はありません。Azure の料金ページに V4.1-Flash の行がまだ無いため、契約前にポータルで確認してください。</p>
@@ -596,10 +602,10 @@ The subscription is not registered to use namespace 'Microsoft.CognitiveServices
       <section class="section" style="padding-top:0;">
         <h2 class="section-title" style="font-size:1.1rem;" id="sec-15">出典</h2>
         <ul style="font-size:.84rem;color:var(--c-muted);padding-left:1.1em;">
-          <li><a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">DeepSeek API Docs — Models &amp; Pricing</a>（料金・スペック・注記／2026-09-13 取得）</li>
-          <li><a href="https://api-docs.deepseek.com/updates/" target="_blank" rel="noopener">DeepSeek API Docs — Change Log（2026-09-10 DeepSeek-V4.1-Flash Release）</a>（リリース内容・ベンチマーク）</li>
+          <li><a href="https://api-docs.deepseek.com/quick_start/pricing" target="_blank" rel="noopener">DeepSeek API Docs — Models &amp; Pricing</a>（料金・スペック・注記／2026-11-17 取得）</li>
+          <li><a href="https://api-docs.deepseek.com/updates/" target="_blank" rel="noopener">DeepSeek API Docs — Change Log</a>（2026-11-13 アプリ向けAPI一式／2026-10-17 V4.1-Flash-1017／2026-09-10 リリース・ベンチマーク）</li>
           <li><a href="https://api-docs.deepseek.com/news/news260910" target="_blank" rel="noopener">DeepSeek 公式ニュース（news260910）</a></li>
-          <li>Microsoft Foundry — <a href="https://ai.azure.com/catalog/models/DeepSeek-V4.1-Flash" target="_blank" rel="noopener">モデルカタログ（DeepSeek-V4.1-Flash）</a>・<a href="https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/deepseek-v4-1-flash-is-coming-to-microsoft-foundry/4556431" target="_blank" rel="noopener">Foundry ブログ（2026-09-25 更新）</a>・<a href="https://learn.microsoft.com/en-us/azure/foundry/foundry-models/quotas-limits" target="_blank" rel="noopener">Foundry Models quotas and limits</a>・<a href="https://learn.microsoft.com/en-us/cli/azure/cognitiveservices/account/deployment?view=azure-cli-latest" target="_blank" rel="noopener">az cognitiveservices account deployment</a>・<a href="https://learn.microsoft.com/en-us/azure/foundry/responsible-ai/openai/data-privacy" target="_blank" rel="noopener">Data, privacy, and security</a>（Azure 節／2026-09-29 取得）</li>
+          <li>Microsoft Foundry — <a href="https://ai.azure.com/catalog/models/DeepSeek-V4.1-Flash" target="_blank" rel="noopener">モデルカタログ（DeepSeek-V4.1-Flash）</a>・<a href="https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/deepseek-v4-1-flash-is-coming-to-microsoft-foundry/4556431" target="_blank" rel="noopener">Foundry ブログ（2026-09-25 更新）</a>・<a href="https://learn.microsoft.com/en-us/azure/foundry/foundry-models/quotas-limits" target="_blank" rel="noopener">Foundry Models quotas and limits</a>・<a href="https://learn.microsoft.com/en-us/cli/azure/cognitiveservices/account/deployment?view=azure-cli-latest" target="_blank" rel="noopener">az cognitiveservices account deployment</a>・<a href="https://learn.microsoft.com/en-us/azure/foundry/responsible-ai/openai/data-privacy" target="_blank" rel="noopener">Data, privacy, and security</a>（Azure 節／2026-11-17 取得）</li>
           <li>関連ページ: <a href="/pricing/#dh">料金比較（DeepSeek）</a>・<a href="/calculator/">トークン計算機</a>・<a href="/deepseek-v4-pro/">V4 Pro 提供継続のまとめ</a>・<a href="/multimodal/">マルチモーダル対応一覧</a>・<a href="/timeline/">リリース年表</a></li>
         </ul>
       </section>
@@ -607,7 +613,7 @@ The subscription is not registered to use namespace 'Microsoft.CognitiveServices
       <div class="tip-box" style="border-left-color: var(--c-red); margin-bottom:2rem;">
         <h3>⚠️ 免責事項</h3>
         <ul>
-          <li>本ページの料金・スペック・ベンチマークは DeepSeek 公式ページ（api-docs.deepseek.com）の 2026-11-03 再取得内容に基づきます（単価は前回から変動なし）。料金・モデルの提供状況は予告なく変動することがあります。契約・本番利用前に必ず公式ページをご確認ください。</li>
+          <li>本ページの料金・スペック・ベンチマークは DeepSeek 公式ページ（api-docs.deepseek.com）の 2026-11-17 再取得内容に基づきます（単価は前回から変動なし）。料金・モデルの提供状況は予告なく変動することがあります。契約・本番利用前に必ず公式ページをご確認ください。</li>
           <li>ベンチマーク値は提供元の公表値であり、当サイトが再計測・検証したものではありません。</li>
           <li>導入手順は運営者の環境（2026年7月時点の V4 Pro での記録）に基づきます。拡張機能の仕様変更により表示が異なる場合があります。</li>
           <li>Azure AI Foundry の節は、Microsoft の公式ページ（モデルカタログ・Foundry ブログ・Microsoft Learn）と、運営者が 2026-09-28 に実測した <code>az</code> コマンド列・応答に基づきます。Azure 側は Preview のため、SKU・クォータ・料金・パラメータが予告なく変わることがあります。とくに <strong>Azure の料金ページには V4.1-Flash の行がまだ無い</strong>ため、契約前に Azure ポータルで必ずご確認ください。</li>

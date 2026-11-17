@@ -1,0 +1,62 @@
+{
+ "schema_note": "OGカード（各ページ先頭のメインビジュアル）の唯一の真実。ページ本文を更新したら、ここの facts と generated を更新して og_card.py で描き直す。generated がページの dateModified より古いと page_audit.py の R5 が ERROR にする（2026-11-17 追加：/china-ai/ の画像だけ 2026-10-29 のまま古い情報を映していた事故の再発防止）。",
+ "updated": "2026-11-17",
+ "pages": {
+  "china-ai/index.html": {
+   "image": "ja-china-ai.png",
+   "lang": "ja",
+   "kicker": "LLM Data Hub",
+   "title": "中国系AI総覧",
+   "facts": [
+    "DeepSeek・Qwen・GLM・Kimi・MiniMax",
+    "料金とオープンウェイトを一次情報で比較",
+    "Qwen 4 は 11/11〜11/25 プレビュー提供"
+   ],
+   "url": "llm.okamomedia.tokyo/china-ai/",
+   "generated": "2026-11-17",
+   "digest": "a74dc21d82af"
+  },
+  "en/china-ai/index.html": {
+   "image": "en-china-ai.png",
+   "lang": "en",
+   "kicker": "LLM Data Hub",
+   "title": "Chinese AI Models",
+   "facts": [
+    "DeepSeek · Qwen · GLM · Kimi · MiniMax",
+    "Pricing and open weights, from primary sources",
+    "Qwen 4 preview: 11/11-11/25 (Token Plan)"
+   ],
+   "url": "llm.okamomedia.tokyo/en/china-ai/",
+   "generated": "2026-11-17",
+   "digest": "b820fad24243"
+  },
+  "deepseek-v4-1-flash/index.html": {
+   "image": "ja-deepseek-v4-1-flash.png",
+   "lang": "ja",
+   "kicker": "DeepSeek V4.1 Flash",
+   "title": "入力 $0.15 / 出力 $0.60",
+   "facts": [
+    "オフピーク料金（USD / 1Mトークン）・ピークは倍",
+    "現行モデルは V4.1-Flash-1017（2026-10-17）",
+    "1Mコンテキスト・384K出力・画像/検索対応"
+   ],
+   "url": "llm.okamomedia.tokyo/deepseek-v4-1-flash/",
+   "generated": "2026-11-17",
+   "digest": "57daf3798654"
+  },
+  "en/deepseek-v4-1-flash/index.html": {
+   "image": "en-deepseek-v4-1-flash.png",
+   "lang": "en",
+   "kicker": "DeepSeek V4.1 Flash",
+   "title": "$0.15 in / $0.60 out",
+   "facts": [
+    "Off-peak, USD per 1M tokens (peak doubles)",
+    "Current model: V4.1-Flash-1017 (2026-10-17)",
+    "1M context · 384K output · vision · search"
+   ],
+   "url": "llm.okamomedia.tokyo/en/deepseek-v4-1-flash/",
+   "generated": "2026-11-17",
+   "digest": "560705e6813c"
+  }
+ }
+}

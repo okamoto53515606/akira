@@ -390,9 +390,12 @@ html[lang="en"] body {
 .st-sun { color:#b91c1c; }
 
 /* 長いページの目次（h2から機械生成。2026-11-15） */
+/* 下余白は目次側で持つ（2026-11-17）。目次の直後のセクションが
+   padding-top:0 のページで、枠線と見出しがくっついて見えていた
+   （/china-ai/ で発生。同じ書き方のページが30枚あった）。 */
 .toc { display:block; flex:none; overflow:visible;
        background:var(--c-surface2); border:1px solid var(--c-border);
-       border-radius:var(--r-md); padding:1rem 1.2rem; }
+       border-radius:var(--r-md); padding:1rem 1.2rem; margin:0 0 1.75rem; }
 /* 幅は .conclusion / .tint と同じ「容器いっぱい」に揃える（11-15 okamo指摘） */
 .toc-title { font-size:.8rem; font-weight:700; letter-spacing:.08em;
              color:var(--c-accent); margin:0 0 .5rem; text-transform:uppercase; }

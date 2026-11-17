@@ -1,0 +1,28 @@
+{
+ "schema_note": "ページ監査の状態（page_audit.py が読み書きする）。pages[パス].last=最後に監査した日、assignments[日付]=その日にコードが割り当てた対象、last_run=直近の実行結果。",
+ "updated": "2026-11-17",
+ "pages": {
+  "china-ai/index.html": {
+   "last": "2026-11-17",
+   "result": "ok",
+   "codes": []
+  },
+  "en/china-ai/index.html": {
+   "last": "2026-11-17",
+   "result": "ok",
+   "codes": []
+  },
+  "deepseek-v4-1-flash/index.html": {
+   "last": "2026-11-17",
+   "result": "ok",
+   "codes": []
+  },
+  "en/deepseek-v4-1-flash/index.html": {
+   "last": "2026-11-17",
+   "result": "ok",
+   "codes": []
+  }
+ },
+ "assignments": {},
+ "last_run": []
+}

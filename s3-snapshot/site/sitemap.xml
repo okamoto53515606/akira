@@ -29,13 +29,13 @@
   </url>
     <url>
     <loc>https://llm.okamomedia.tokyo/deepseek-v4-1-flash/</loc>
-    <lastmod>2026-11-12</lastmod>
+    <lastmod>2026-11-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://llm.okamomedia.tokyo/en/deepseek-v4-1-flash/</loc>
-    <lastmod>2026-11-12</lastmod>
+    <lastmod>2026-11-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -64,7 +64,7 @@
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://llm.okamomedia.tokyo/china-ai/</loc> <lastmod>2026-11-14</lastmod>
+    <loc>https://llm.okamomedia.tokyo/china-ai/</loc> <lastmod>2026-11-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.85</priority>
   </url>
@@ -81,7 +81,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://llm.okamomedia.tokyo/en/china-ai/</loc> <lastmod>2026-11-14</lastmod>
+    <loc>https://llm.okamomedia.tokyo/en/china-ai/</loc> <lastmod>2026-11-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.85</priority>
   </url>

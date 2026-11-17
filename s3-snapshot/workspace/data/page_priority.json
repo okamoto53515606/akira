@@ -1,0 +1,77 @@
+{
+ "schema_note": "ページ監査の優先度。score の大きい順に監査する。pv=GA4のページビュー、clicks=GSCのクリック。Akiraが毎ラン更新する（更新しなくても既定順で動く）。",
+ "updated": "2026-11-17",
+ "source": "seed: docs/site-overview-2026-09-27.md と GSC 実測（2026-11-17に並べ直し）",
+ "pages": [
+  {
+   "page": "en/deepseek-v4-1-flash/index.html",
+   "pv": 0,
+   "clicks": 22,
+   "impressions": 2293,
+   "score": 110
+  },
+  {
+   "page": "en/china-ai/index.html",
+   "pv": 0,
+   "clicks": 2,
+   "impressions": 5132,
+   "score": 60
+  },
+  {
+   "page": "china-ai/index.html",
+   "pv": 0,
+   "clicks": 0,
+   "impressions": 0,
+   "score": 40
+  },
+  {
+   "page": "timeline/index.html",
+   "pv": 20,
+   "clicks": 15,
+   "impressions": 280,
+   "score": 95
+  },
+  {
+   "page": "en/timeline/index.html",
+   "pv": 19,
+   "clicks": 0,
+   "impressions": 0,
+   "score": 19
+  },
+  {
+   "page": "en/pricing/index.html",
+   "pv": 15,
+   "clicks": 0,
+   "impressions": 0,
+   "score": 15
+  },
+  {
+   "page": "en/deepseek-v4-pro/index.html",
+   "pv": 22,
+   "clicks": 0,
+   "impressions": 0,
+   "score": 22
+  },
+  {
+   "page": "deepseek-v4-1-flash/index.html",
+   "pv": 0,
+   "clicks": 0,
+   "impressions": 0,
+   "score": 30
+  },
+  {
+   "page": "pricing/index.html",
+   "pv": 0,
+   "clicks": 0,
+   "impressions": 0,
+   "score": 10
+  },
+  {
+   "page": "en/multimodal/index.html",
+   "pv": 14,
+   "clicks": 0,
+   "impressions": 0,
+   "score": 14
+  }
+ ]
+}

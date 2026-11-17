@@ -1,6 +1,13 @@
 import os, re, sys, urllib.request
 from PIL import Image, ImageDraw, ImageFont
 
+# ⚠️ このファイルは 2026-10-29 時点の**履歴**（当時のOGカードを作り直すためだけのもの）。
+#    2026-11-17 以降、OGカードの正は /workspace/data/og_specs.json ＋ /app/og_card.py。
+#    画像の文面を直したいときは og_specs.json の facts と generated を更新して
+#    `python og_card.py --specs /workspace/data/og_specs.json --out /tmp/site/assets/og` を実行する。
+#    （このスクリプトの SPECS には「Qwen 4 は学習中」など当時の記述が残っている。
+#      再実行すると古い情報を焼き込むので、そのまま使わないこと）
+
 SITE = '/tmp/site'
 OGDIR = SITE + '/assets/og'
 FONTDIR = '/tmp/ogfonts'

@@ -26,6 +26,7 @@ load_dotenv()
 
 import budget
 import config_store
+import page_audit
 import report
 import settings
 import tools as akira_tools
@@ -811,6 +812,9 @@ def create_delegation_tools(models, run_budget_jpy: float, block_publish: bool =
         # 健全性チェックと決定論的修復（エンジニアも公開前後に使う）
         akira_tools.verify_published_contracts,
         akira_tools.restore_published_data_file,
+        # ページ監査（古い情報・追記の混在・キービジュアルの取り残し）
+        page_audit.audit_pages,
+        page_audit.set_page_priority,
         brave,
         screenshot_tool,
         fetch_image,
@@ -1203,6 +1207,8 @@ DAILY_MISSION_TEMPLATE = """今日は {today} です。LLM Data Hub（{site_url}
 - **この結果は日報に必ず1行書く**（違反0件でも「異常なし」と書け。
   黙ってちゃ伝わらんぞ。表が空になった事故を人間が3.5時間気づかなかった実例がある）
 
+{audit_line}
+
 {freshness_line}
 
 - 上の取得は**このランが始まる前に機械が済ませている**。同じURLを二度取りに行くな
@@ -1334,6 +1340,20 @@ def run_daily(dry_run: bool = False, no_publish: bool = False) -> None:
         health_line = "公開契約チェック: 実行失敗（ログ参照）"
     logger.info("健全性: %s", health_line)
 
+    # --- 1.8 今日の必須監査（ページの古い情報・追記の混在・キービジュアルの取り残し） ---
+    # 2026-11-17: okamo指摘。①/china-ai/ のメインビジュアルだけ 2026-10-29 の情報が
+    # 残っていた ②/deepseek-v4-1-flash/ が9月の話と10-17の更新の寄せ集めになっていた。
+    # 「気づくのは人間」をやめるため、GA4のPV・GSCのクリックで優先度をつけた
+    # **対象の選定をコードで行い**、ミッションに義務として差し込む
+    # （上位5ページは7日以内、それ以外は21日以内に1回）。
+    audit_line = "## 今日の必須監査\n- 選定に失敗しました（ログ参照）"
+    try:
+        import page_audit as _page_audit
+        audit_line = _page_audit.mission_line(today)
+        logger.info("必須監査: %s", audit_line.replace("\n", " / ")[:220])
+    except Exception:  # noqa: BLE001
+        logger.exception("監査対象の選定に失敗しました（続行します）")
+
     # ワークスペースのバックアップ整理は「後処理」（save_workspace の後）で行う。
     # save_workspace() はローカル全件をS3へupsertするため、保存より先に回転させると
     # 同じランで消したはずの世代がローカルから復活する（2026-09-27修正）
@@ -1418,6 +1438,9 @@ def run_daily(dry_run: bool = False, no_publish: bool = False) -> None:
         # 公開サイトの健全性チェックと決定論的修復（読取＋許可キーのみの修復）
         akira_tools.verify_published_contracts,
         akira_tools.restore_published_data_file,
+        # ページ監査（今日の対象はコードが優先度順に選んでいる）
+        page_audit.audit_pages,
+        page_audit.set_page_priority,
         file_read,
         akira_tools.update_akira_config,
         create_report_tool(collected),
@@ -1459,7 +1482,7 @@ def run_daily(dry_run: bool = False, no_publish: bool = False) -> None:
     mission = DAILY_MISSION_TEMPLATE.format(
         today=today, site_url=LLM_SITE_URL, last_work_line=last_work_line,
         health_line=health_line, freshness_line=freshness_line,
-        theme_line=theme_line,
+        theme_line=theme_line, audit_line=audit_line,
     )
     if tool_warn_line:
         mission = tool_warn_line + "\n" + mission
@@ -1594,10 +1617,19 @@ def run_daily(dry_run: bool = False, no_publish: bool = False) -> None:
             logger.exception("バックアップ整理に失敗しました（続行します）")
             rotation_line = "バックアップ整理: 実行失敗（ログ参照）"
 
+        # ページ監査の実施状況（決定論的）。割り当てたのに走っていない場合は
+        # 日報に残す（LLMの「やりました」を信用しない）。
+        try:
+            audit_done_line = page_audit.verify_assigned(today)
+        except Exception:  # noqa: BLE001
+            logger.exception("監査の実施確認に失敗しました（続行します）")
+            audit_done_line = "ページ監査: 実施確認に失敗（ログ参照）"
+
         collected["body_md"] = (collected.get("body_md") or "") + (
             "\n\n## 自動メンテナンス（決定論的）\n"
             "- " + rotation_line + "\n"
             "- " + post_line + "\n"
+            "- " + audit_done_line + "\n"
         )
         akira_tools.flush_invalidations()
         if no_publish:
