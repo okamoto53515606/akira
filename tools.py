@@ -1182,6 +1182,31 @@ def generate_and_publish_image(purpose: str, site_path: str) -> dict:
 # =====================================================================
 # スクリーンショット取得（ApiFlash）+ 画像読み取り
 # =====================================================================
+def _cache_bust(url: str) -> str:
+    """「今の見た目」を取りに行くためのキャッシュ跨ぎ（2026-11-17 追加）。
+
+    なぜ:
+        OGカードを差し替えた直後、CloudFront が古い画像を返すために
+        **「直っていない」と誤認する**事故が起きた（11-17 okamo指摘）。
+        HTML/画像のURLに `?v=<生成日>` を付けてはいるが、検証（スクショ・画像の
+        視認）は「公開物そのもの」を見たいので、毎回ユニークな `_cb` を足して
+        キャッシュ層を跨ぐ。
+
+    http(s) 以外（file: など）はそのまま返す。
+    """
+    try:
+        from urllib.parse import urlsplit, urlunsplit, parse_qsl, urlencode
+
+        p = urlsplit(url)
+        if p.scheme not in ("http", "https"):
+            return url
+        q = dict(parse_qsl(p.query, keep_blank_values=True))
+        q["_cb"] = str(int(time.time() * 1000))
+        return urlunsplit((p.scheme, p.netloc, p.path, urlencode(q), p.fragment))
+    except Exception:  # noqa: BLE001
+        return url
+
+
 @tool
 def take_screenshot(url: str, site_path: str = "", wait_until: str = "page_loaded",
                     width: int = 1280, height: int = 720) -> dict:
@@ -1214,7 +1239,7 @@ def take_screenshot(url: str, site_path: str = "", wait_until: str = "page_loade
 
     params = {
         "access_key": access_key,
-        "url": url,
+        "url": _cache_bust(url),
         "wait_until": wait_until,
         "width": str(width),
         "height": str(height),
@@ -1283,7 +1308,7 @@ def fetch_image_from_url(image_url: str) -> dict:
     _image_reader = _image_reader_module.image_reader
 
     content_type = ""
-    response = requests.get(image_url, timeout=30)
+    response = requests.get(_cache_bust(image_url), timeout=30)
     response.raise_for_status()
     content_type = response.headers.get("Content-Type", "image/png").split(";")[0].strip()
 
