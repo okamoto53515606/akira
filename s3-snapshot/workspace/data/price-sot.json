@@ -1,7 +1,7 @@
 {
  "schema_note": "LLM Data Hub の料金データ単一の真実（SOT）。HTMLの料金表・ページ本文を更新したら必ずここも更新し、tools/verify_price_consistency.py でサイト全体を検証する。金額はすべて USD / 1Mトークン。",
  "site": "https://llm.okamomedia.tokyo",
- "last_verified": "2026-11-15",
+ "last_verified": "2026-11-19",
  "sources": {
   "deepseek_pricing": "https://api-docs.deepseek.com/quick_start/pricing",
   "deepseek_news": "https://api-docs.deepseek.com/news/news260910",
@@ -830,6 +830,40 @@
    "verified": "2026-10-29",
    "relation_note": "公式ブログの逐語では「A significant step up from GPT-5.6 Terra」。GPT-5.6 Terraの後継にあたる上位グレードであり、GPT-6.1 Solとは同世代の別グレード（Solの後継ではない）。",
    "note": "272,000トークン超の入力はリクエスト全体が入力・キャッシュ2倍／出力1.5倍。Batch/Flexは50%引き、Fastは2倍、地域処理は+10%。reasoning effortは none/low/medium(既定)/high/xhigh/max。"
+  },
+  "qwen4-max": {
+   "name_ja": "Qwen4-Max",
+   "name_en": "Qwen4-Max",
+   "api_model_id": "qwen4-max",
+   "provider": "Alibaba",
+   "status": "current",
+   "price": {
+    "cache_miss_input": 1.5,
+    "cache_hit_input": 0.075,
+    "output": 4.5,
+    "cache_write": 1.875,
+    "cache_write_1h": 3.0,
+    "batch_cache_miss_input": null,
+    "batch_output": null,
+    "priority_cache_miss_input": null,
+    "priority_output": null
+   },
+   "sources": [
+    "https://www.qwencloud.com/models/qwen4-max",
+    "https://qwen.ai/blog?id=qwen4-max"
+   ],
+   "verified": "2026-11-19",
+   "note": "入力$1.50・出力$4.50・暗黙キャッシュ$0.075（1Mトークン）。明示キャッシュ作成は5分TTL $1.875／1時間TTL $3.00。1Mコンテキスト（最大入力991K・出力131K／thinking時262K）。text/image/video入力。",
+   "released": "2026-11",
+   "released_note": "2026-11-15 に QwenCloud で正式提供（11-11〜はToken Plan限定の qwen4-max-preview）",
+   "context": "1M",
+   "max_output": "131,072（thinking時 262,144）",
+   "cache_note": "暗黙キャッシュ＋明示キャッシュ（TTL 5分/1時間）",
+   "pages_planned": [
+    "/china-ai/",
+    "/pricing/#qwen-h",
+    "/calculator/"
+   ]
   }
  },
  "stale_price_patterns": [
@@ -1104,5 +1138,5 @@
    }
   }
  },
- "last_verified_scope": "2026-11-15 に Anthropic（公式 pricing）/ DeepSeek（api-docs pricing）/ Google（ai.google.dev Gemini API pricing）の逐語を再取得して突合。xAI・OpenAI・Moonshot・Xiaomi・StepFun は今回未再取得（last_verified は全体フィールドのため暫定で今日）。"
+ "last_verified_scope": "2026-11-19 に Alibaba（QwenCloud models/qwen4-max と qwen.ai/blog?id=qwen4-max）の逐語を取得して Qwen4-Max を追加。他ベンダーは 2026-11-15 の取得結果を据え置き（last_verified は全体フィールドのため暫定で今日）。"
 }

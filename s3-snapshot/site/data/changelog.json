@@ -1,6 +1,27 @@
 {
- "updated": "2026-11-17",
+ "updated": "2026-11-19",
  "events": [
+  {
+   "date": "2026-11-19",
+   "kind": "update",
+   "key": "timeline",
+   "ja": "主要LLMリリース年表（/timeline/）を更新 — 本文・数値を最新化",
+   "en": "Updated LLM Release Timeline (/en/timeline/): body and figures refreshed"
+  },
+  {
+   "date": "2026-11-19",
+   "kind": "update",
+   "key": "china-ai",
+   "ja": "中国系AIモデル総覧（/china-ai/）を更新 — 本文・数値を最新化",
+   "en": "Updated Chinese AI Models Compared (/en/china-ai/): body and figures refreshed"
+  },
+  {
+   "date": "2026-11-19",
+   "kind": "update",
+   "key": "mai",
+   "ja": "Microsoft AI (MAI) シリーズ特集（/mai/）を更新 — 見出し「最新モデル（2026年11月）」「💻 MAI Code 2 / MAI Code 2 Flash（コーディング）— 2026年11月時点で提供中」を追加",
+   "en": "Updated Microsoft AI (MAI) Series Guide (/en/mai/): added \"💻 MAI Code 2 / MAI Code 2 Flash (coding) &mdash; available…\""
+  },
   {
    "date": "2026-11-17",
    "kind": "page",
@@ -72,6 +93,13 @@
    "en": "Published the speech API pricing comparison (/en/speech-api-pricing/), normalising TTS and transcription rates to a per-minute basis and flagging deprecated character-billed TTS models"
   },
   {
+   "date": "2026-11-15",
+   "kind": "model",
+   "key": "qwen4-max-preview",
+   "ja": "Qwen4-Max を掲載（Alibaba / Qwen）",
+   "en": "Listed Qwen4-Max (Alibaba / Qwen)"
+  },
+  {
    "date": "2026-11-14",
    "kind": "page",
    "key": "timeline-order",
@@ -98,13 +126,6 @@
    "key": "gemini-4-hydrogen",
    "ja": "Gemini 4 Hydrogen を掲載（Google）",
    "en": "Listed Gemini 4 Hydrogen (Google)"
-  },
-  {
-   "date": "2026-11-11",
-   "kind": "model",
-   "key": "qwen4-max-preview",
-   "ja": "Qwen4-Max-Preview を掲載（Alibaba / Qwen）",
-   "en": "Listed Qwen4-Max-Preview (Alibaba / Qwen)"
   },
   {
    "date": "2026-11-10",

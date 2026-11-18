@@ -1,14 +1,14 @@
 {
  "schema_note": "ページ監査の状態（page_audit.py が読み書きする）。pages[パス].last=最後に監査した日、assignments[日付]=その日にコードが割り当てた対象、last_run=直近の実行結果。",
- "updated": "2026-11-17",
+ "updated": "2026-11-19",
  "pages": {
   "china-ai/index.html": {
-   "last": "2026-11-17",
+   "last": "2026-11-18",
    "result": "ok",
    "codes": []
   },
   "en/china-ai/index.html": {
-   "last": "2026-11-17",
+   "last": "2026-11-18",
    "result": "ok",
    "codes": []
   },
@@ -21,19 +21,59 @@
    "last": "2026-11-17",
    "result": "ok",
    "codes": []
+  },
+  "timeline/index.html": {
+   "last": "2026-11-18",
+   "result": "ok",
+   "codes": []
+  },
+  "en/deepseek-v4-pro/index.html": {
+   "last": "2026-11-18",
+   "result": "ok",
+   "codes": [
+    "R7"
+   ]
+  },
+  "en/timeline/index.html": {
+   "last": "2026-11-18",
+   "result": "ok",
+   "codes": []
+  },
+  "en/pricing/index.html": {
+   "last": "2026-11-18",
+   "result": "ok",
+   "codes": []
+  },
+  "en/multimodal/index.html": {
+   "last": "2026-11-18",
+   "result": "ok",
+   "codes": []
   }
  },
- "assignments": {},
+ "assignments": {
+  "2026-11-19": [
+   "timeline/index.html",
+   "en/deepseek-v4-pro/index.html"
+  ]
+ },
  "last_run": [
   {
    "page": "china-ai/index.html",
-   "date": "2026-11-17",
+   "date": "2026-11-18",
    "codes": []
   },
   {
-   "page": "deepseek-v4-1-flash/index.html",
-   "date": "2026-11-17",
+   "page": "en/china-ai/index.html",
+   "date": "2026-11-18",
    "codes": []
   }
+ ],
+ "pending": [
+  "mai/index.html",
+  "en/mai/index.html",
+  "china-ai/index.html",
+  "en/china-ai/index.html",
+  "timeline/index.html",
+  "en/timeline/index.html"
  ]
 }

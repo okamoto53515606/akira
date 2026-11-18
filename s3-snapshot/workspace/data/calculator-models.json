@@ -1,7 +1,16 @@
 {
- "updated": "2026-11-15",
+ "updated": "2026-11-19",
  "source": "各プロバイダ公式料金ページでfact確認済み（詳細は /pricing/ の出典欄）",
  "models": [
+  {
+   "name": "Qwen4-Max",
+   "provider": "alibaba",
+   "label": "Alibaba",
+   "input": 1.5,
+   "output": 4.5,
+   "note": "1Mコンテキスト・最大入力991K・出力131K（thinking時262K）。暗黙キャッシュ$0.075、明示キャッシュ作成は5分$1.875／1時間$3.00",
+   "note_en": "1M context, up to 991K input, 131K output (262K when thinking). Implicit cache $0.075; explicit cache writes $1.875 (5 min) / $3.00 (1 hour)"
+  },
   {
    "name": "Muse Ember",
    "provider": "Meta",

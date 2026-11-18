@@ -135,13 +135,28 @@ def render(spec: dict, out_path: str) -> str:
         y += int(size * 1.28)
 
     # 箇条書き
+    # 2026-11-19: 文字数を固定で決め打ちしていたため、長い箇条書きが下のURL行と
+    # 重なっていた（/timeline/ の描き直しで発覚）。**収まるまで自動で縮める**。
     y = max(y + 34, 400)
-    f_fact = get(32)
-    for fact in spec.get("facts", [])[:3]:
-        d.ellipse([82, y + 14, 96, y + 28], fill=ACCENT)
-        for i, ln in enumerate(_wrap(d, fact, f_fact, W - 220)):
+    facts = [f for f in spec.get("facts", [])[:3]]
+    bottom = H - 96          # ここより下はURL・日付の帯
+    lines_per, f_fact, step = [], get(32), 44
+    for size in (32, 30, 28, 26, 24, 22):
+        f_fact = get(size)
+        step = int(size * 1.38)
+        lines_per = [_wrap(d, f, f_fact, W - 200) for f in facts]
+        height = sum(len(ls) for ls in lines_per) * step + 8 * len(facts)
+        if y + height <= bottom:
+            break
+    for fact, lines in zip(facts, lines_per):
+        if y + len(lines) * step > bottom:      # それでも入らない分は切る
+            lines = lines[: max(1, (bottom - y) // step)]
+            if lines and not lines[-1].endswith("…"):
+                lines[-1] = lines[-1][: -1] + "…"
+        d.ellipse([82, y + step // 3, 96, y + step // 3 + 14], fill=ACCENT)
+        for i, ln in enumerate(lines):
             d.text((116, y), ln, font=f_fact, fill=TEXT if i == 0 else MUTED)
-            y += 44
+            y += step
         y += 8
 
     d.text((80, H - 64), spec.get("url", "llm.okamomedia.tokyo"),

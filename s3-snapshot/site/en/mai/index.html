@@ -8,12 +8,12 @@
   <link rel="canonical" href="https://llm.okamomedia.tokyo/en/mai/">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-  <meta property="og:image" content="https://llm.okamomedia.tokyo/assets/og-image.png">
+  <meta property="og:image" content="https://llm.okamomedia.tokyo/assets/og/en-mai.png?v=20261119">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="LLM Data Hub — LLM API pricing, token costs and model data">
-  <meta name="twitter:image" content="https://llm.okamomedia.tokyo/assets/og-image.png">
-  <meta name="twitter:image:alt" content="LLM Data Hub — LLM API pricing, token costs and model data">
+  <meta property="og:image:alt" content="Microsoft AI (MAI): MAI Code 2, speech and image models, pricing">
+  <meta name="twitter:image" content="https://llm.okamomedia.tokyo/assets/og/en-mai.png?v=20261119">
+  <meta name="twitter:image:alt" content="Microsoft AI (MAI): MAI Code 2, speech and image models, pricing">
   <link rel="alternate" hreflang="ja" href="https://llm.okamomedia.tokyo/mai/">
   <link rel="alternate" hreflang="en" href="https://llm.okamomedia.tokyo/en/mai/">
   <link rel="alternate" hreflang="x-default" href="https://llm.okamomedia.tokyo/mai/">
@@ -23,7 +23,7 @@
   <meta property="og:description" content="Microsoft's first-party MAI family: MAI-Image-2.6, MAI-Transcribe-2 and MAI-Thinking-1, with pricing, API usage, a release timeline and how to read Azure's input rows (updated November 2026).">
   <meta property="og:site_name" content="LLM Data Hub">
   <meta name="twitter:card" content="summary_large_image">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Microsoft AI (MAI) Series Guide [November 2026] — Pricing, Models, API & Timeline","datePublished":"2026-09-09","dateModified":"2026-11-15","author":{"@type":"Organization","name":"LLM Data Hub"},"publisher":{"@type":"Organization","name":"okamo channel"},"url":"https://llm.okamomedia.tokyo/en/mai/","inLanguage":"en"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Microsoft AI (MAI) Series Guide [November 2026] — Pricing, Models, API & Timeline","datePublished":"2026-09-09","dateModified":"2026-11-19","author":{"@type":"Organization","name":"LLM Data Hub"},"publisher":{"@type":"Organization","name":"okamo channel"},"url":"https://llm.okamomedia.tokyo/en/mai/","inLanguage":"en"}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://llm.okamomedia.tokyo/en/"},{"@type":"ListItem","position":2,"name":"Microsoft AI (MAI) Series","item":"https://llm.okamomedia.tokyo/en/mai/"}]}</script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-MTH8T0ECG2"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MTH8T0ECG2');</script>
@@ -49,7 +49,8 @@
 </div></section>
 
 <main><div class="container">
-<div class="updated-bar" style="margin-top:2rem;"><span class="dot">●</span>Last updated: <time datetime="2026-11-15">November 15, 2026</time> | Sources: <a href="https://microsoft.ai/blog/" target="_blank" rel="noopener">microsoft.ai blog</a> · <a href="https://azure.microsoft.com/en-us/pricing/details/ai-foundry-models/microsoft/" target="_blank" rel="noopener">Azure Foundry pricing</a> · <a href="https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure" target="_blank" rel="noopener">Microsoft Foundry docs</a> | <a href="/en/pricing/">Pricing</a> · <a href="/en/multimodal/">Multimodal</a> · <a href="/en/timeline/">Timeline</a></div>
+<figure class="key-visual" style="margin:1.5rem 0 .5rem;"><img src="/assets/og/en-mai.png?v=20261119" alt="このページの内容を1枚にまとめた画像" width="1200" height="630" loading="eager" decoding="async" style="width:100%;max-width:900px;height:auto;display:block;margin:0 auto;border:1px solid var(--c-border);border-radius:var(--r-md);"></figure>
+<div class="updated-bar" style="margin-top:2rem;"><span class="dot">●</span>Last updated: <time datetime="2026-11-19">November 19, 2026</time> | Sources: <a href="https://microsoft.ai/blog/" target="_blank" rel="noopener">microsoft.ai blog</a> · <a href="https://azure.microsoft.com/en-us/pricing/details/ai-foundry-models/microsoft/" target="_blank" rel="noopener">Azure Foundry pricing</a> · <a href="https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure" target="_blank" rel="noopener">Microsoft Foundry docs</a> | <a href="/en/pricing/">Pricing</a> · <a href="/en/multimodal/">Multimodal</a> · <a href="/en/timeline/">Timeline</a></div>
 
 <p style="font-size:.9rem;color:var(--c-muted);margin-top:1rem;"><strong>MAI (Microsoft AI)</strong> is the family of foundation models Microsoft develops itself. They are hosted and billed through Azure's <strong>Microsoft Foundry</strong> (formerly Azure AI Foundry) and distributed <strong>Azure-first</strong>. They sit alongside OpenAI models (via Azure OpenAI) as a separate family that Microsoft develops and serves itself. Specific prices are shown in the table below; the goal is to give enterprises more choice on cost, licensing and data sovereignty.</p>
 
@@ -68,7 +69,12 @@
 </div>
 <section class="section" style="padding-top:0;" aria-labelledby="latest-h">
 <h2 class="section-title" id="latest-h">Latest models (November 2026)</h2>
-<p class="section-sub">The most recent launches confirmed on the microsoft.ai blog, including the October 2, 2026 release. All are available via Microsoft Foundry / MAI Playground and other routes.</p>
+<p class="section-sub">The most recent MAI launches, <strong>as of 2026-11-19</strong>. All are available via Microsoft Foundry / MAI Playground and other routes.</p>
+<div class="tip-box" style="margin-bottom:1rem;border-left-color:var(--c-accent);">
+  <h3 style="margin-bottom:.3rem;">💻 MAI Code 2 / MAI Code 2 Flash (coding) &mdash; available as of November 2026</h3>
+  <p style="font-size:.88rem;color:var(--c-muted);margin:0 0 .5rem;">MAI&rsquo;s <strong>coding-focused model</strong>, served <strong>through GitHub Copilot</strong>. No per-token price is published, so it is not in the verified token pricing table below (Azure AI Foundry rates). Microsoft publishes a <strong>cost per task</strong> per benchmark instead: <strong>$0.309 per task</strong> averaged over four benchmarks at the 50% promotional price (GPT-6.1 Sol $0.761, Claude Opus 5.5 $6.306), and <strong>MAI Code 2 Flash</strong> at <strong>$0.052 per task</strong>. Average pass rate is 63.2% (GPT-6.1 Sol 64.1%, Claude Opus 5.5 65.3%). Context length and unit pricing remain unconfirmed here. <a href="https://microsoft.ai/models/mai-code-2/" target="_blank" rel="noopener">Microsoft AI</a> (checked 2026-11-19)</p>
+</div>
+
 
 <div class="tip-box" style="margin-bottom:1rem;border-left-color:var(--c-accent2);">
   <h3 style="margin-bottom:.3rem;">🎧 MAI-Transcribe-2-Streaming (streaming speech recognition) — Oct 2, 2026</h3>
@@ -163,6 +169,7 @@
 <h2 class="section-title" id="timeline-h">MAI release timeline</h2>
 <p class="section-sub">Dates from the microsoft.ai blog, key highlights.</p>
 <div class="table-wrap"><table><thead><tr><th>Date</th><th>Milestone</th></tr></thead><tbody>
+<tr><td class="model-name" style="border-left:3px solid var(--c-accent);padding-left:.7rem;">Nov 2026 (available)</td><td><strong>MAI Code 2 / MAI Code 2 Flash</strong> (coding; served via GitHub Copilot; no per-token price published)</td></tr>
 <tr><td class="model-name">~Sep 2025</td><td>“Two in-house models” and “Introducing MAI-Image-1” (MAI-Image-1 debuts in LMArena top 10)</td></tr>
 <tr><td class="model-name">2026-04-02</td><td>“Announcing 3 new world class MAI models” = <strong>MAI-Image-2 / MAI-Transcribe-1 / MAI-Voice-1</strong> (available in Foundry)</td></tr>
 <tr><td class="model-name">2026-04-02</td><td>MAI-Image-2-Efficient (flagship quality, 41% lower cost)</td></tr>
@@ -170,10 +177,10 @@
 <tr><td class="model-name">2026-06-02</td><td>Build 2026 “Building a hill-climbing machine: Launching seven new MAI models” = MAI-Image-2.5 / 2.5-Flash / Transcribe-1.5 / <strong>MAI-Thinking-1</strong> / Voice-2 / Voice-2-Flash / Code-1-Flash</td></tr>
 <tr><td class="model-name">Jul 2026</td><td>MAI-Cyber-1-Flash (MDASH, security) / MAI-Image-2.5-Pro &amp; MAI-Voice-2-Flash / MAI-Image-2.5 (No. 2 on Arena)</td></tr>
 <tr><td class="model-name">Aug 2026</td><td>MAI-Code-1.1-Flash (at a quarter of the cost) / MAI-Image-2.6 reaches No. 2 on Arena</td></tr>
-<tr><td class="model-name" style="border-left:3px solid var(--c-green);padding-left:.7rem;">2026-09-03 <span class="badge badge-new">New</span></td><td><strong>MAI-Transcribe-2</strong> (speech recognition, $0.10/hr limited)</td></tr>
-<tr><td class="model-name" style="border-left:3px solid var(--c-green);padding-left:.7rem;">2026-09-04 <span class="badge badge-new">New</span></td><td><strong>MAI-Image-2.6 / 2.6-Flash</strong> (image generation)</td></tr>
-<tr><td class="model-name" style="border-left:3px solid var(--c-green);padding-left:.7rem;">2026-10-02 <span class="badge badge-new">New</span></td><td><strong>MAI-Transcribe-2-Streaming</strong> (streaming speech recognition, $0.54/hr introductory through 2026) plus <strong>MAI-Voice-2.1 / 2.1-Flash</strong> (speech generation) announced</td></tr>
-<tr><td class="model-name" style="border-left:3px solid var(--c-green);padding-left:.7rem;">2026-10-07 <span class="badge badge-new">New</span></td><td><strong>A local version of MAI Code 1.1 Flash</strong> announced on Microsoft&rsquo;s developer blog, running on-device in GitHub Copilot on Windows (137B total / 6.8B active MoE; the quantized build is about 53GB and peaks at 75.5GB of memory at 256k context)</td></tr>
+<tr><td class="model-name" style="border-left:3px solid var(--c-green);padding-left:.7rem;">2026-09-03</td><td><strong>MAI-Transcribe-2</strong> (speech recognition, $0.10/hr limited)</td></tr>
+<tr><td class="model-name" style="border-left:3px solid var(--c-green);padding-left:.7rem;">2026-09-04</td><td><strong>MAI-Image-2.6 / 2.6-Flash</strong> (image generation)</td></tr>
+<tr><td class="model-name" style="border-left:3px solid var(--c-green);padding-left:.7rem;">2026-10-02</td><td><strong>MAI-Transcribe-2-Streaming</strong> (streaming speech recognition, $0.54/hr introductory through 2026) plus <strong>MAI-Voice-2.1 / 2.1-Flash</strong> (speech generation) announced</td></tr>
+<tr><td class="model-name" style="border-left:3px solid var(--c-green);padding-left:.7rem;">2026-10-07</td><td><strong>A local version of MAI Code 1.1 Flash</strong> announced on Microsoft&rsquo;s developer blog, running on-device in GitHub Copilot on Windows (137B total / 6.8B active MoE; the quantized build is about 53GB and peaks at 75.5GB of memory at 256k context)</td></tr>
 </tbody></table></div>
 <p class="source-note">Source: <a href="https://microsoft.ai/blog/" target="_blank" rel="noopener">microsoft.ai/blog</a> · <a href="https://commandline.microsoft.com/local-models-sandboxed-tools-github-windows/" target="_blank" rel="noopener">commandline.microsoft.com (Microsoft developer blog)</a></p>
 </section>

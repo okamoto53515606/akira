@@ -37,6 +37,14 @@ _MONTHS = {
     "jul": 7, "aug": 8, "sep": 9, "oct": 10, "nov": 11, "dec": 12,
 }
 
+
+# 「2026年10月更新」のような**年月だけ**の更新表現（2026-11-19 追加）。
+# /mai/ の description が「（2026年10月更新）」のまま11月の内容になっていて、
+# 日付（〜日）を要求する既存パターンでは検出できなかった。
+_RE_JP_MONTH = re.compile(r"(\d{4})年\s*(\d{1,2})月(?:に)?更新")
+_RE_EN_MONTH = re.compile(r"[Uu]pdated:?\s+(January|February|March|April|May|June|July|August|"
+                          r"September|October|November|December)\s+(\d{4})")
+
 # 「…日更新」/「更新日: …」
 _RE_JP_AFTER = re.compile(r"(\d{4})年\s*(\d{1,2})月\s*(\d{1,2})日(?:に)?更新")
 _RE_JP_BEFORE = re.compile(r"更新(?:日)?[:：]?\s*(\d{4})年\s*(\d{1,2})月\s*(\d{1,2})日")
@@ -94,6 +102,13 @@ def desc_update_dates(html: str) -> list:
             mon = _MONTHS.get(mm.group(1).lower())
             if mon:
                 out.append((key, "%s-%02d-%02d" % (mm.group(3), mon, int(mm.group(2)))))
+        # 年月だけの「更新」も突き合わせる（月の1日として比較）
+        for mm in _RE_JP_MONTH.finditer(text):
+            out.append((key + "(年月)", "%04d-%02d-01" % (int(mm.group(1)), int(mm.group(2)))))
+        for mm in _RE_EN_MONTH.finditer(text):
+            mon = _MONTHS.get(mm.group(1)[:3].lower())
+            if mon:
+                out.append((key + "(年月)", "%s-%02d-01" % (mm.group(2), mon)))
     return out
 
 
@@ -133,7 +148,15 @@ def report(site_dir: str) -> str:
             declared = jd or vd
         for key, iso in descs:
             desc_seen += 1
-            if declared and iso != declared:
+            if not declared:
+                continue
+            if key.endswith("(年月)"):
+                # 年月までしか書いていない表現は「同じ月なら合格」（2026-11-19）。
+                # 「2026年10月更新」のまま11月の内容、のような**古い月**だけを止める。
+                if iso[:7] < declared[:7]:
+                    problems.append("%s の日付=%s (宣言=%s) ＝月が古い"
+                                    % (key, iso[:7], declared[:7]))
+            elif iso != declared:
                 problems.append("%s の日付=%s (宣言=%s)" % (key, iso, declared))
         if problems:
             ng += 1

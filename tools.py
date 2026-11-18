@@ -610,7 +610,7 @@ def _s3_key_is_new(s3, key: str) -> bool:
 
     2026-11-17: サイト全体を上げ直したときに既存ページまで site_events に
     「本日公開」で登録してしまった反省から、**アップロード前に存在したか**で
-    判定する。判定できないときは False（履歴に嘘を書くより、足りない方がましい）。
+    判定する。判定できないときは False（履歴に嘘を書くより、足りない方がまし）。
     """
     from botocore.exceptions import ClientError
 
@@ -622,6 +622,203 @@ def _s3_key_is_new(s3, key: str) -> bool:
         return code in ("404", "NoSuchKey", "NotFound")
     except Exception:  # noqa: BLE001
         return False
+
+
+# --------------------------------------------------------------------------
+# 更新の検知と更新履歴への反映（2026-11-19 追加）
+#
+# 何が起きていたか:
+#   2026-11-17 に「サイト全体を上げ直したら既存32ページが“本日公開”で
+#   更新履歴を埋めた」事故を直した（`is_new` のときだけ登録）。
+#   その副作用で、**既存ページの更新は1件も履歴に載らなくなった**。
+#   11-19 は /mai/ と /china-ai/ を直したのに `/changelog/` は無反応。
+#   ＝「反映されすぎる」を直したら「反映されない」に振れた（デグレード）。
+#
+# どう直すか:
+#   新規かどうかではなく「**公開物の中身が変わったか**」で判定する。
+#   ただし updated-bar / dateModified / ?v= / sitemap lastmod は毎回変わるので、
+#   それらを潰した**指紋**を比べる（＝日付だけの更新では履歴に載らない）。
+# --------------------------------------------------------------------------
+_VOLATILE_PATTERNS = (
+    (re.compile(r'<div class="updated-bar"[^>]*>.*?</div>', re.S), ""),
+    (re.compile(r'"dateModified"\s*:\s*"[^"]*"'), '"dateModified":""'),
+    (re.compile(r"<time[^>]*>.*?</time>", re.S), ""),
+    (re.compile(r"\?v=[0-9A-Za-z._-]+"), "?v="),
+    (re.compile(r"_cb=\d+"), "_cb="),
+    (re.compile(r"<lastmod>[^<]*</lastmod>"), "<lastmod></lastmod>"),
+)
+
+
+def _content_signature(text: str) -> str:
+    """中身の指紋。日付・キャッシュ版など**毎回変わる部分を潰してから**ハッシュする。"""
+    import hashlib
+
+    t = text
+    for pat, rep in _VOLATILE_PATTERNS:
+        t = pat.sub(rep, t)
+    t = re.sub(r">\s+<", "><", t).strip()
+    return hashlib.sha256(t.encode("utf-8")).hexdigest()
+
+
+def _page_title(html: str) -> str:
+    """更新履歴に載せる短いページ名。
+
+    2026-11-19: `<title>` をそのまま使うと「…【2026年11月版】料金・モデル・API・年表」
+    まで入って1行が長くなりすぎる。**サイト名と副題を落として**先頭の名前だけ使う。
+    """
+    from html import unescape
+
+    m = re.search(r"<title[^>]*>(.*?)</title>", html, re.S)
+    if not m:
+        return ""
+    t = re.sub(r"\s+", " ", unescape(re.sub(r"<[^>]+>", "", m.group(1)))).strip()
+    t = re.split(r"\s+[—–|]\s+", t)[0]          # サイト名を落とす
+    t = re.split(r"\s*【", t)[0]                 # 「【2026年11月版】…」を落とす
+    t = re.split(r"\s*\[", t)[0]                 # 「[November 2026]…」を落とす
+    t = t.split(":", 1)[0] if len(t.split(":", 1)[0]) >= 6 else t
+    return t.strip()[:48]
+
+
+def _page_headings(html: str) -> list:
+    out = []
+    for m in re.finditer(r"<h([23])[^>]*>(.*?)</h\1>", html, re.S):
+        t = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", "", m.group(2))).strip()
+        if t:
+            out.append(t)
+    return out
+
+
+def _date_modified(html: str) -> str:
+    m = re.search(r'"dateModified"\s*:\s*"(\d{4}-\d{2}-\d{2})"', html)
+    return m.group(1) if m else ""
+
+
+def _update_event_texts(slug: str, old_html: str, new_html: str) -> tuple:
+    """更新イベントの ja/en 文言を作る（見出しの追加が分かればそれを書く）。"""
+    title = _page_title(new_html) or slug
+    old_h = set(_page_headings(old_html))
+    added = [h for h in _page_headings(new_html) if h not in old_h]
+    added = [(a if len(a) <= 60 else a[:58] + "…") for a in added][:2]
+    if added:
+        ja = "%s（/%s/）を更新 — 見出し「%s」を追加" % (title, slug, "」「".join(added))
+        en = "Updated %s (/en/%s/): added %s" % (title, slug, "; ".join('"%s"' % a for a in added))
+    else:
+        ja = "%s（/%s/）を更新 — 本文・数値を最新化" % (title, slug)
+        en = "Updated %s (/en/%s/): body and figures refreshed" % (title, slug)
+    return ja, en
+
+
+def _register_site_updates(items: list) -> list:
+    """中身が変わった既存ページを `site_events` に「更新」として1件ずつ足す。
+
+    items: [(slug, old_html, new_html)]（ja/en どちらか。両方あれば ja 側を代表にする）
+
+    同じ日に同じページのイベントが既にあれば足さない（手書きの履歴と二重にしない）。
+    8ページを超えるときは1件にまとめる（11-17 の「32件で埋まる」事故を繰り返さない）。
+    """
+    if not items:
+        return []
+    merged = {}
+    for slug, old_html, new_html in items:
+        cur = merged.setdefault(slug, {})
+        lang = "en" if _is_en_html(new_html) else "ja"
+        cur.setdefault(lang, (old_html, new_html))
+    facts_path = os.path.join(WORKSPACE_LOCAL_DIR, "data", "facts.json")
+    try:
+        with open(facts_path, encoding="utf-8") as fh:
+            facts = json.load(fh)
+    except Exception:  # noqa: BLE001
+        return []
+    events = facts.setdefault("site_events", [])
+    today = datetime.now(JST).strftime("%Y-%m-%d")
+
+    def _already(slug: str) -> bool:
+        for e in events:
+            if e.get("date") != today:
+                continue
+            if e.get("key") == slug:
+                return True
+            body = "%s %s" % (e.get("ja", ""), e.get("en", ""))
+            if "/%s/" % slug in body:
+                return True
+        return False
+
+    added = []
+    slugs = [s for s in merged if not _already(s)]
+    if len(slugs) > 8:
+        names = "、".join("/%s/" % s for s in slugs[:6])
+        events.append({
+            "date": today, "kind": "update", "key": "site-wide-update",
+            "ja": "サイト全体を更新（%dページ）: %s ほか" % (len(slugs), names),
+            "en": "Site-wide update: %d pages, including %s" % (len(slugs), names),
+        })
+        added.append("site-wide-update")
+        slugs = []
+    for slug in slugs:
+        langs = merged[slug]
+        if "ja" in langs:
+            old, new = langs["ja"]
+        else:
+            old, new = langs["en"]
+        ja, en = _update_event_texts(slug, old, new)
+        if "en" in langs:      # 英語ページも一緒に上がっていれば、英語文はそちらから作る
+            en = _update_event_texts(slug, *langs["en"])[1]
+        events.append({"date": today, "kind": "update", "key": slug, "ja": ja, "en": en})
+        added.append(slug)
+    if not added:
+        return []
+    try:
+        with open(facts_path, "w", encoding="utf-8") as fh:
+            json.dump(facts, fh, ensure_ascii=False, indent=1)
+    except Exception:  # noqa: BLE001
+        logger.exception("site_events の保存に失敗しました")
+        return []
+    return added
+
+
+def _is_en_html(html: str) -> bool:
+    """英語ページか（`<html lang="en">` で判定。hreflang は両言語にあるので使わない）。"""
+    m = re.search(r"<html[^>]*>", html[:2000])
+    return bool(m and re.search(r'lang="en', m.group(0)))
+
+
+def _audit_gate_errors(base_dir: str, rel: str, new_text: str, old_text: str) -> list:
+    """公開ゲート: ページ監査の ERROR のうち**今回の公開で新しく出たもの**だけ返す。
+
+    「新しい劣化だけを止める」のが要点（既存の借金で公開が止まると作業が進まない）。
+    ただし R4/R9（見出し・タイトルの年月が古い）は、**日付を新しくした公開**で
+    起きているなら意味が変わるので、既存でも止める（11-19 の /mai/ がその型）。
+    """
+    try:
+        import page_audit
+    except Exception:  # noqa: BLE001
+        return []
+    specs_path = os.path.join(WORKSPACE_LOCAL_DIR, "data", "og_specs.json")
+    facts_path = os.path.join(WORKSPACE_LOCAL_DIR, "data", "facts.json")
+    try:
+        with open(specs_path, encoding="utf-8") as fh:
+            specs = json.load(fh)
+    except Exception:  # noqa: BLE001
+        specs = {}
+    try:
+        with open(facts_path, encoding="utf-8") as fh:
+            facts = json.load(fh)
+    except Exception:  # noqa: BLE001
+        facts = {}
+    new_findings = page_audit.blocking_errors(rel, new_text, specs, facts)
+    if not new_findings:
+        return []
+    new_codes = {c for c, _ in new_findings}
+    old_codes = set()
+    if old_text:
+        old_codes = page_audit.error_codes(rel, old_text, specs, facts)
+    out = []
+    for code, msg in new_findings:
+        if code not in old_codes:
+            out.append("%s: %s" % (code, msg))
+        elif code in ("R4", "R9") and _date_modified(new_text) > (_date_modified(old_text) or ""):
+            out.append("%s: %s（日付だけ新しくして中身が古いまま）" % (code, msg))
+    return out
 
 
 def _render_site_from_ledger(base_dir: str) -> list:
@@ -749,6 +946,7 @@ def site_upload(local_path: str, site_prefix: str = "") -> dict:
 
     s3 = boto3.client("s3", region_name=AWS_REGION)
     uploaded, rejected, registered = [], [], []
+    updated_pages = []          # (slug, old_html, new_html) — 中身が変わった既存ページ
     for f in files:
         rel = os.path.relpath(f, base_dir).replace(os.sep, "/")
         key = rel if not site_prefix else f"{site_prefix.strip('/')}/{rel}"
@@ -787,6 +985,27 @@ def site_upload(local_path: str, site_prefix: str = "") -> dict:
             continue
         # 新規ページ判定は「アップロード前」に取る（上書き後は常に既存になる）
         is_new = _s3_key_is_new(s3, key)
+        # --- 公開ゲート: ページ監査（2026-11-19 追加）---
+        # 「中身は古いのに日付だけ新しい」「新しい情報が本文の段落にしかない」
+        # 「キービジュアルが古い」は既存の7ゲートを全部通っていた。
+        # アップロード**前**に、公開する実物に対して検査する。
+        old_html = ""
+        if rel.endswith("index.html"):
+            try:
+                with open(f, encoding="utf-8", errors="replace") as fh:
+                    new_html = fh.read()
+            except OSError:
+                new_html = ""
+            if not is_new:
+                try:
+                    old_html = s3.get_object(Bucket=LLM_SITE_BUCKET, Key=key)[
+                        "Body"].read().decode("utf-8", "replace")
+                except Exception:  # noqa: BLE001
+                    old_html = ""
+            gate_hits = _audit_gate_errors(base_dir, rel, new_html, old_html) if new_html else []
+            if gate_hits:
+                rejected.append({"key": key, "errors": gate_hits})
+                continue
         if key == DATA_MODELS_KEY:
             try:
                 with open(f, "rb") as fh:
@@ -815,18 +1034,45 @@ def site_upload(local_path: str, site_prefix: str = "") -> dict:
                 registered.append(reg)
         except Exception:  # noqa: BLE001
             pass
+        # 既存ページは「中身が変わったか」で更新履歴に載せる（2026-11-19）
+        if rel.endswith("index.html") and not is_new:
+            try:
+                with open(f, encoding="utf-8", errors="replace") as fh:
+                    new_html = fh.read()
+                if old_html and _content_signature(old_html) != _content_signature(new_html):
+                    slug = rel[:-len("/index.html")]
+                    if slug.startswith("en/"):
+                        slug = slug[3:]
+                    if slug and slug.split("/")[0] not in ("changelog", "glossary"):
+                        updated_pages.append((slug, old_html, new_html))
+            except Exception:  # noqa: BLE001
+                pass
     # 公開したページの sitemap lastmod を揃える（render_site の出力に限らない）
     sitemap_bumped = bool(uploaded and _bump_sitemap_lastmod(base_dir, uploaded, s3))
-    # 新規ページを登録したなら、トップ・更新履歴を作り直して即公開する
+    # 中身が変わった既存ページを更新履歴に足す（重複は関数側で弾く）
+    try:
+        registered += _register_site_updates(updated_pages)
+    except Exception:  # noqa: BLE001
+        logger.exception("更新履歴の自動登録に失敗しました")
+    # 新規・更新を登録したなら、トップ・更新履歴を作り直して即公開する
     rendered = []
     if registered:
         rendered = _render_and_publish_entrypoints(base_dir, s3)
+    # 触ったページは**次のランで必ず監査**する（2026-11-19）
+    try:
+        import page_audit
+
+        page_audit.note_changed([r for r in uploaded if r.endswith("index.html")])
+    except Exception:  # noqa: BLE001
+        pass
 
     result: dict = {"status": "published", "count": len(uploaded), "uploaded": uploaded}
     if render_changed:
         result["rendered_before_publish"] = render_changed
     if registered:
         result["site_events_added"] = registered   # トップ/更新履歴に自動で載る
+    if updated_pages:
+        result["updated_pages"] = sorted({s for s, _, _ in updated_pages})
     if rendered:
         result["entrypoints_refreshed"] = rendered
     if sitemap_bumped:

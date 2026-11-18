@@ -1,6 +1,6 @@
 {
  "schema_note": "OGカード（各ページ先頭のメインビジュアル）の唯一の真実。ページ本文を更新したら、ここの facts と generated を更新して og_card.py で描き直す。generated がページの dateModified より古いと page_audit.py の R5 が ERROR にする（2026-11-17 追加：/china-ai/ の画像だけ 2026-10-29 のまま古い情報を映していた事故の再発防止）。",
- "updated": "2026-11-17",
+ "updated": "2026-11-19",
  "pages": {
   "china-ai/index.html": {
    "image": "ja-china-ai.png",
@@ -10,10 +10,10 @@
    "facts": [
     "DeepSeek・Qwen・GLM・Kimi・MiniMax",
     "料金とオープンウェイトを一次情報で比較",
-    "Qwen 4 は 11/11〜11/25 プレビュー提供"
+    "Qwen4-Max は 2026-11-15 に正式提供（$1.50 / $4.50）"
    ],
    "url": "llm.okamomedia.tokyo/china-ai/",
-   "generated": "2026-11-17",
+   "generated": "2026-11-19",
    "digest": "a74dc21d82af"
   },
   "en/china-ai/index.html": {
@@ -24,10 +24,10 @@
    "facts": [
     "DeepSeek · Qwen · GLM · Kimi · MiniMax",
     "Pricing and open weights, from primary sources",
-    "Qwen 4 preview: 11/11-11/25 (Token Plan)"
+    "Qwen4-Max GA 15 Nov 2026 ($1.50 / $4.50)"
    ],
    "url": "llm.okamomedia.tokyo/en/china-ai/",
-   "generated": "2026-11-17",
+   "generated": "2026-11-19",
    "digest": "b820fad24243"
   },
   "deepseek-v4-1-flash/index.html": {
@@ -57,6 +57,62 @@
    "url": "llm.okamomedia.tokyo/en/deepseek-v4-1-flash/",
    "generated": "2026-11-17",
    "digest": "560705e6813c"
+  },
+  "mai/index.html": {
+   "image": "ja-mai.png",
+   "lang": "ja",
+   "kicker": "LLM Data Hub",
+   "title": "Microsoft AI（MAI）",
+   "facts": [
+    "MAI Code 2 は GitHub Copilot 経由・タスク単価 $0.309（4ベンチ平均）",
+    "音声は MAI-Transcribe-2-Streaming、画像は MAI-Image-2.6",
+    "トークン単価は Azure AI Foundry の公式表で確認"
+   ],
+   "url": "llm.okamomedia.tokyo/mai/",
+   "generated": "2026-11-19",
+   "digest": "20402d11da25"
+  },
+  "en/mai/index.html": {
+   "image": "en-mai.png",
+   "lang": "en",
+   "kicker": "LLM Data Hub",
+   "title": "Microsoft AI (MAI)",
+   "facts": [
+    "MAI Code 2 runs via GitHub Copilot: $0.309 per task (4-benchmark average)",
+    "Speech: MAI-Transcribe-2-Streaming. Images: MAI-Image-2.6",
+    "Token rates verified on the Azure AI Foundry price list"
+   ],
+   "url": "llm.okamomedia.tokyo/en/mai/",
+   "generated": "2026-11-19",
+   "digest": "785ceb01ce36"
+  },
+  "timeline/index.html": {
+   "image": "ja-timeline.png",
+   "lang": "ja",
+   "kicker": "LLM Data Hub",
+   "title": "主要LLM リリース年表",
+   "facts": [
+    "2025年1月〜2026年11月。発表日・料金・出典を1行ずつ",
+    "Qwen4-Max（11/15）・Gemini 4 Carbon／Hydrogen・MAI Code 2 まで収録",
+    "日英で同一の並び。日付は台帳から機械生成"
+   ],
+   "url": "llm.okamomedia.tokyo/timeline/",
+   "generated": "2026-11-19",
+   "digest": "ad4657253d77"
+  },
+  "en/timeline/index.html": {
+   "image": "en-timeline.png",
+   "lang": "en",
+   "kicker": "LLM Data Hub",
+   "title": "LLM Release Timeline",
+   "facts": [
+    "January 2025 – November 2026. One row per launch, with price and source",
+    "Includes Qwen4-Max (15 Nov), Gemini 4 Carbon/Hydrogen and MAI Code 2",
+    "Japanese and English generated from the same ledger"
+   ],
+   "url": "llm.okamomedia.tokyo/en/timeline/",
+   "generated": "2026-11-19",
+   "digest": "dc1f0641db26"
   }
  }
 }
