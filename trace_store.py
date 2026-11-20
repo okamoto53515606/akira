@@ -82,12 +82,16 @@ def redact(text: str) -> str:
     return out
 
 
-def _ddb_value(v, depth: int = 0):
+def _ddb_value(v, depth: int = 0, max_str: int = 2000):
     """DynamoDB が受け付ける型に落とす（float は Decimal、入れ子も再帰）。
 
     2026-11-21 の実機で発見: `delegate.result` の tools（dict のリスト）に
     float（秒）が入っていると **TypeError で記録が丸ごと落ちる**。DynamoDB は
     float を受け付けないため、深さに関係なく Decimal に変換する。
+
+    `max_str` は1つの文字列の上限。システムプロンプトのように**全文を残したい**
+    項目だけ `event(..., keep_full=("system_prompt",))` で上限を外す（既定の
+    2000字は「引数・結果の切れ端」を落とすためのもので、プロンプトには要らない）。
     """
     if v is None:
         return None
@@ -96,15 +100,28 @@ def _ddb_value(v, depth: int = 0):
     if isinstance(v, float):
         return Decimal(str(round(v, 3)))
     if isinstance(v, str):
-        return redact(v)[:2000]
+        return redact(v)[:max_str]
     if depth >= 4:
-        return redact(json.dumps(v, ensure_ascii=False, default=str))[:2000]
+        return redact(json.dumps(v, ensure_ascii=False, default=str))[:max_str]
     if isinstance(v, (list, tuple)):
-        return [_ddb_value(x, depth + 1) for x in v][:60]
+        return [_ddb_value(x, depth + 1, max_str) for x in v][:60]
     if isinstance(v, dict):
-        return {str(k2): _ddb_value(v2, depth + 1)
+        return {str(k2): _ddb_value(v2, depth + 1, max_str)
                 for k2, v2 in v.items() if v2 is not None}
-    return redact(str(v))[:2000]
+    return redact(str(v))[:max_str]
+
+
+# DynamoDB の1項目は 400KB。超えると ValidationException で**記録が丸ごと落ちる**
+# （ツール結果が大きい日だけ記録が消える＝一番分析したい日に限って無い、になる）。
+# 余裕を見て 18万バイトを超えたら、重い文字列から S3 へ逃がす。
+_MAX_ITEM_BYTES = 180_000
+
+
+def _item_bytes(item: dict) -> int:
+    try:
+        return len(json.dumps(item, ensure_ascii=False, default=str).encode("utf-8"))
+    except Exception:  # noqa: BLE001
+        return 0
 
 
 def _digest(text: str) -> str:
@@ -161,8 +178,13 @@ class Trace:
             ref["inline"] = text[:4000]
         return ref
 
-    def event(self, kind: str, **fields) -> None:
-        """1件の出来事を記録する（本文は含めない。必要なら blob() の戻り値を入れる）。"""
+    def event(self, kind: str, keep_full: tuple = (), **fields) -> None:
+        """1件の出来事を記録する（本文は含めない。必要なら blob() の戻り値を入れる）。
+
+        `keep_full` に名前を並べた項目だけ、文字列を切り詰めずに残す
+        （システムプロンプトの全文など）。それでも項目が `_MAX_ITEM_BYTES` を
+        超える場合は `_spill()` が S3 へ逃がす。
+        """
         if not self.enabled:
             return
         seq = self._next_seq()
@@ -178,13 +200,51 @@ class Trace:
         for k, v in fields.items():
             if v is None:
                 continue
-            item[k] = _ddb_value(v)
+            item[k] = _ddb_value(
+                v, max_str=(10_000_000 if k in keep_full else 2000))
+        if _item_bytes(item) > _MAX_ITEM_BYTES:
+            item = self._spill(item)
         self.items.append({"sk": item["sk"], "kind": kind})
         try:
             ddb, _ = self._clients()
             ddb.Table(TRACE_TABLE).put_item(Item=item)
         except Exception as e:  # noqa: BLE001
             logger.warning("trace の書き込みに失敗（%s: %s）", kind, type(e).__name__)
+
+    def _spill(self, item: dict) -> dict:
+        """項目が大きすぎるとき、重い順に S3 へ逃がして 400KB 未満に収める。
+
+        逃がした項目は `<name>_key`（S3キー）と `<name>_chars` に置き換える。
+        それでも収まらないときは、大きい入れ子項目を落として `dropped` に残す。
+        **記録が丸ごと落ちるより、痩せて残るほうがよい**。
+        """
+        moved: list[str] = []
+        for _, k in sorted(((len(v), k) for k, v in item.items()
+                            if isinstance(v, str)), reverse=True):
+            if _item_bytes(item) <= _MAX_ITEM_BYTES:
+                break
+            payload = item.pop(k, "")
+            ref = self.blob("item.%s" % k, payload)
+            item["%s_chars" % k] = len(payload)
+            if ref.get("key"):
+                item["%s_key" % k] = ref["key"]
+            moved.append(k)
+        core = {"pk", "sk", "kind", "ts", "run_id", "date", "ttl"}
+        dropped: list[str] = []
+        while _item_bytes(item) > _MAX_ITEM_BYTES:
+            rest = [(len(json.dumps(v, ensure_ascii=False, default=str)), k)
+                    for k, v in item.items()
+                    if k not in core and not k.endswith(("_key", "_chars"))]
+            if not rest:
+                break
+            _, k = max(rest)
+            item.pop(k, None)
+            dropped.append(k)
+        if moved:
+            item["spilled"] = ",".join(moved)
+        if dropped:
+            item["dropped"] = ",".join(dropped)
+        return item
 
     @staticmethod
     def redact(text):
@@ -198,9 +258,9 @@ class Trace:
         （Dynamo の項目上限400KBに対して数KB〜20KBなので本文をそのまま持つ）。
         """
         text = system_prompt or ""
-        self.event("prompt.system", agent=agent, chars=len(text),
-                   digest=_digest(text), system_prompt=text,
-                   extra=(extra or "")[:2000])
+        self.event("prompt.system", keep_full=("system_prompt",),
+                   agent=agent, chars=len(text), digest=_digest(text),
+                   system_prompt=text, extra=(extra or "")[:2000])
         if extra:
             self.blob("prompt.system.extra", extra)
 

@@ -426,5 +426,52 @@ check("flush_invalidations を try で囲んでいる",
 check("失敗を result に載せる",
       'result["invalidation"] = "%s: %s"' in _src_tools)
 
+
+print("== 記録が大きすぎても Dynamo を溢れさせない（400KB で丸ごと落ちない）")
+_written.clear()
+_put2 = []
+
+
+class _S2:
+    def put_object(self, **kw):
+        _put2.append(kw)
+
+
+_t5 = ts.Trace(today="2026-11-21", run_id="huge")
+_t5._clients = lambda: (_FakeDDB(), _S2())
+_lim = getattr(ts, "_MAX_ITEM_BYTES", 180_000)
+check("項目サイズの上限が定義されている", _lim > 0, str(_lim))
+_t5.prompt("Akira", "あ" * 400_000)          # 約1.2MB のシステムプロンプト
+_row = _written[-1] if _written else {}
+_size = len(json.dumps(_row, ensure_ascii=False, default=str).encode("utf-8"))
+check("項目が上限内に収まる", 0 < _size <= _lim, "%d bytes" % _size)
+check("溢れた本文は S3 に退避される", _row.get("spilled") == "system_prompt", str(_row.get("spilled")))
+check("S3 に全文が置かれる（切り詰めない）",
+      _put2 and len(_put2[0]["Body"]) == 1_200_000, str(len(_put2[0]["Body"]) if _put2 else 0))
+check("全文長が chars に残る", _row.get("chars") == 400_000, str(_row.get("chars")))
+
+_written.clear()
+_put2.clear()
+_t6 = ts.Trace(today="2026-11-21", run_id="prompt20k")
+_t6._clients = lambda: (_FakeDDB(), _S2())
+_t6.prompt("Claudeエンジニア", "P" * 20_000)
+_row = _written[-1] if _written else {}
+check("普通サイズのプロンプトは全文を項目に持つ（2000字で切らない）",
+      _row.get("system_prompt") == "P" * 20_000, str(len(_row.get("system_prompt") or "")))
+
+print("== 日報の曜日は JST で機械が決める（モデルに推測させない）")
+import main as _main
+
+check("2026-11-21 は土曜", _main.jst_weekday_label("2026-11-21") == "土",
+      _main.jst_weekday_label("2026-11-21"))
+check("2026-11-20 は金曜", _main.jst_weekday_label("2026-11-20") == "金",
+      _main.jst_weekday_label("2026-11-20"))
+_bad = "# 2026-11-21（金）日報 — LLM Data Hub\n\n## 見出し\n本文 2026-11-21（金）時点"
+_fixed = _main._normalize_report_body(_bad, "2026-11-21")
+check("先頭の重複見出し（日報タイトル行）を落とす",
+      _fixed.lstrip().splitlines()[0] == "## 見出し", repr(_fixed[:40]))
+check("本文中の曜日を土に直す", "（土）" in _fixed and "（金）" not in _fixed, _fixed[:80])
+check("中身は消さない", "## 見出し" in _fixed and "本文" in _fixed, _fixed[:80])
+
 print("\nRESULT: %d passed / %d failed" % (len(PASS), len(FAIL)))
 sys.exit(1 if FAIL else 0)

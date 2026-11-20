@@ -1089,6 +1089,40 @@ def create_delegation_tools(models, run_budget_jpy: float, block_publish: bool =
 # =====================================================================
 # 日報
 # =====================================================================
+_WEEKDAYS_JA = "月火水木金土日"
+
+
+def jst_weekday_label(date_iso: str) -> str:
+    """JST の日付から曜日1文字を返す（コンテナは UTC なので date.today は使わない）。"""
+    try:
+        return _WEEKDAYS_JA[datetime.strptime(date_iso, "%Y-%m-%d").weekday()]
+    except Exception:  # noqa: BLE001
+        return ""
+
+
+def _normalize_report_body(body: str, today: str) -> str:
+    """日報本文の先頭見出しを落とし、曜日を JST の正しい値に直す。
+
+    2026-11-21: 本文の先頭に「2026-11-21（金）日報 — LLM Data Hub」という行が
+    入り、①ページ側の `日報 YYYY-MM-DD` と重複 ②曜日が**土曜なのに金**
+    ③サイト名の接尾辞が日報に付く、という3つが同時に起きた。曜日はモデルに
+    推測させず、**機械が JST で決める**（ミッションにも（土）と書いて渡す）。
+    """
+    lines = body.splitlines()
+    for i, line in enumerate(lines):
+        if not line.strip():
+            continue
+        if line.lstrip().startswith("#") and ("日報" in line or today in line):
+            del lines[i]
+        break
+    text = "\n".join(lines).lstrip("\n")
+    good = jst_weekday_label(today)
+    if good:
+        text = re.sub(r"%s（[月火水木金土日]）" % re.escape(today),
+                      "%s（%s）" % (today, good), text)
+    return text
+
+
 def create_report_tool(collected: dict):
     from strands import tool
 
@@ -1107,7 +1141,8 @@ def create_report_tool(collected: dict):
                      教えてくれ。次のテーマはマルチモーダル特集が一番伸びると俺は
                      見てるが、お前の目はどうだ」
         """
-        collected["body_md"] = body_md + ledger_markdown()
+        collected["body_md"] = (_normalize_report_body(body_md, datetime.now(JST).strftime("%Y-%m-%d"))
+                                + ledger_markdown())
         collected["requests_to_okamo"] = requests_to_okamo
         # Akira本体が自分で日報を書いた証跡。これが無い＝フォールバック日報なので、
         # okamoコメントの確認済みマーカーを進めない（未反映のコメントを消費しない）
@@ -1426,7 +1461,7 @@ def _propose_themes(today: str, limit: int = 3, watch_line: str = "") -> str:
     return "\n".join(lines)
 
 
-DAILY_MISSION_TEMPLATE = """今日は {today} です。LLM Data Hub（{site_url}）の定期運用を開始してください。
+DAILY_MISSION_TEMPLATE = """今日は {today}（{weekday}）です。LLM Data Hub（{site_url}）の定期運用を開始してください。
 
 ## 前回の作業日
 {last_work_line}
@@ -1485,9 +1520,7 @@ DAILY_MISSION_TEMPLATE = """今日は {today} です。LLM Data Hub（{site_url}
 ## 注意（重要）
 - 自分で考え込んだりWeb検索・factチェックを自分でやったりせず、Claudeエンジニアに一括委任すること。
   あなた自身の役割は「テーマ決定」と「最終確認・日報執筆」に絞る
-- ask_claude_engineer は**項目ごとに1回**呼ぶ（1回に1項目。会話履歴の肥大化を避ける意味でも、
-  2項目以上を1回に詰め込むと2番目が落ちる）。Claudeエンジニア内部でのGPT/Geminiとのやり取りは
-  何度あっても問題ない
+- Claudeエンジニア内部でのGPT/Geminiとのやり取りは何度あっても問題ない
 - 未達（`NOT_DONE`）を日報から消すな。**隠すと翌週に同じ穴が開く**（11-21 に実際に消えた）。
   日報の末尾には機械の受領書（依頼項目の表）が自動で付く。
 - okamoのコメントで方針・優先度が決まったものは、その場でsite_planに写しておくこと
@@ -1735,7 +1768,8 @@ def run_daily(dry_run: bool = False, no_publish: bool = False) -> None:
 
     tool_warn_line = _missing_tool_warning(akira_tools)
     mission = DAILY_MISSION_TEMPLATE.format(
-        today=today, site_url=LLM_SITE_URL, last_work_line=last_work_line,
+        today=today, weekday=jst_weekday_label(today), site_url=LLM_SITE_URL,
+        last_work_line=last_work_line,
         health_line=health_line, freshness_line=freshness_line,
         theme_line=theme_line, audit_line=audit_line,
     )
