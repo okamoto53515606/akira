@@ -30,6 +30,7 @@ import page_audit
 import report
 import settings
 import tools as akira_tools
+import trace_store
 from settings import (
     AKIRA_MODEL_ID,
     AKIRA_USE_DEEPSEEK,
@@ -175,11 +176,18 @@ def _create_deepseek_model():
 
 
 def _debug_log_io(direction: str, agent_name: str, text: str) -> None:
-    """DEBUG_TOOL_LOGGING有効時、LLMへの指示/応答をCloudWatchへ出力する（長文は上限で切り詰め）。"""
+    """DEBUG_TOOL_LOGGING有効時、LLMへの指示/応答をCloudWatchへ出力する。
+
+    2026-11-21 修正:
+        ここは `logger.debug` で書いていたが、この logger は INFO に設定されて
+        いるため **1件も記録されていなかった**（当日のログで `Akira本体] 指示`
+        が0件だった）。原因分析が「たぶんこうだ」になる元凶なので INFO に上げる。
+        本文は 6000字で切り詰めるが、全文は trace_store が S3 に残す。
+    """
     if not DEBUG_TOOL_LOGGING:
         return
     truncated = text if len(text) <= _DEBUG_LOG_LIMIT else text[:_DEBUG_LOG_LIMIT] + f"...(以下省略, 全{len(text)}文字)"
-    logger.debug("[%s] %s:\n%s", agent_name, direction, truncated)
+    logger.info("[IO] %s %s:\n%s", agent_name, direction, truncated)
 
 
 def _is_empty_response(result) -> bool:
@@ -216,6 +224,81 @@ def _tool_call_count(agent) -> int:
         return sum(int(getattr(m, "call_count", 0) or 0) for m in tool_metrics.values())
     except Exception:  # メトリクス構造が変わっても判定を止めない
         return 0
+
+# =====================================================================
+# 依頼の「作業票」と受領書（2026-11-21）
+#
+# なぜ:
+#   11-21 のランで、Akira が「1. china-ai / 2. /mai/」の2項目を1回の依頼で出し、
+#   エンジニアは 1番だけやって 2番を**報告からも消した**。原因は
+#     (a) 依頼が「番号付きの願い」で、項目ごとの合格条件が無い
+#     (b) エンジニアが「残り呼び出し数」で自分でスコープを切る（実測: 依頼1で83回、
+#         依頼2で82回。2回目は「最小スコープ」のはずが同じだけ回っている）
+#     (c) 報告がエンジニアの文章なので、書かなければ存在しなかったことになる
+#   対策はプロンプトではなく**コード**で入れる:
+#     1. 1回の依頼に項目を1つだけ許す（複数なら機械が拒否して分割を促す）
+#     2. 各項目に item_id と accept（機械が読める合格条件）を必須にする
+#     3. 応答に `DONE: <item_id>` が無ければ**ハーネスが未達として記録**し、
+#        日報に機械が表を追記する（LLMの申告に依存しない）
+# =====================================================================
+_ITEM_LEDGER: list[dict] = []
+
+# 「1. 」「2) 」「①②」で始まる行が2つ以上あれば複数項目とみなす（保守的）
+_NUMBERED_LINE = re.compile(r"^\s*(?:[0-9]{1,2}[.)．、]|[①②③④⑤⑥⑦⑧⑨⑩])\s*\S", re.M)
+
+
+def count_request_items(request: str) -> int:
+    """依頼文に含まれる「番号付き項目」の数を数える（コードで分割を強制するため）。"""
+    return len(_NUMBERED_LINE.findall(request or ""))
+
+
+def record_item(item_id: str, request: str, accept: str, status: str = "requested",
+                reason: str = "", evidence: str = "") -> dict:
+    """作業票を1件記録する（run 内の台帳＋trace）。"""
+    row = {"item_id": item_id or "-", "request": (request or "")[:400],
+           "accept": (accept or "")[:400], "status": status,
+           "reason": reason[:300], "evidence": evidence[:300]}
+    _ITEM_LEDGER.append(row)
+    trace = trace_store.current()
+    if trace:
+        trace.event("item.status", item_id=row["item_id"], status=status,
+                    reason=row["reason"], accept=row["accept"])
+    return row
+
+
+def item_receipt(item_id: str, accept: str, response: str) -> tuple[bool, str]:
+    """応答から `DONE: <id>` / `NOT_DONE: <id>` を読み、無ければ未達にする。
+
+    戻り値: (達成したか, 受領書の1行)
+    """
+    body = response or ""
+    if not item_id:
+        return False, "未確認（item_id が無い）"
+    done = bool(re.search(r"(?im)^\s*DONE\s*[:：]\s*%s\b" % re.escape(item_id), body))
+    not_done = bool(re.search(r"(?im)^\s*NOT[_ ]?DONE\s*[:：]\s*%s\b" % re.escape(item_id), body))
+    if done and not not_done:
+        return True, "達成（応答に DONE: %s）" % item_id
+    if not_done:
+        return False, "未達（応答に NOT_DONE: %s）" % item_id
+    return False, "未確認（応答に DONE/NOT_DONE の記載が無い。accept も未確認）"
+
+
+def ledger_markdown() -> str:
+    """日報の末尾に機械が追記する「依頼項目の受領書」。"""
+    if not _ITEM_LEDGER:
+        return ""
+    rows = ["", "---", "", "### 今日の依頼項目（機械の受領書。ここは消せない）", "",
+            "| item | 判定 | 合格条件 | 根拠 |", "|---|---|---|---|"]
+    mark = {"done": "達成", "not_done": "**未達**", "requested": "未確認"}
+    for r in _ITEM_LEDGER:
+        rows.append("| %s | %s | %s | %s |" % (
+            r["item_id"], mark.get(r["status"], r["status"]),
+            (r["accept"] or "-").replace("|", "\\|")[:120],
+            (r["evidence"] or r["reason"] or "-").replace("|", "\\|")[:160]))
+    rows.append("")
+    rows.append("※「未確認」は応答に `DONE: <item>` が無かったもの。"
+                "**やったかどうかを文章で判断しない**（2026-11-21 に2番が報告から消えた）。")
+    return "\n".join(rows)
 
 
 def _record_delegation_usage(agent, model_id: str, name: str, result=None) -> float:
@@ -585,7 +668,8 @@ def create_delegation_tools(models, run_budget_jpy: float, block_publish: bool =
 
     import prompts
 
-    def _run(make_agent, model_id: str, name: str, request: str) -> str:
+    def _run(make_agent, model_id: str, name: str, request: str,
+             item_id: str = "", accept: str = "") -> str:
         """委任先を呼ぶ。例外で落ちたときだけ、状態確認つきで1回だけ再依頼する。
 
         - 空応答（ターンは正常終了）は今までどおり再依頼しない（二重作業を避ける）
@@ -623,6 +707,13 @@ def create_delegation_tools(models, run_budget_jpy: float, block_publish: bool =
                     )
             tools_before = _tool_call_count(agent)
             _debug_log_io("指示", name, request_to_send)
+            _trace = trace_store.current()
+            if _trace:
+                _trace.prompt(name, getattr(agent, "system_prompt", "") or "")
+                _trace.event("delegate.request", agent=name, item_id=item_id,
+                             attempt=attempt + 1, chars=len(request_to_send),
+                             body=_trace.blob("delegate.request", request_to_send),
+                             accept=accept)
             try:
                 result = agent(request_to_send)
             except _RunDeadlineExceeded:
@@ -649,6 +740,15 @@ def create_delegation_tools(models, run_budget_jpy: float, block_publish: bool =
             tool_calls = max(0, _tool_call_count(agent) - tools_before)
             logger.info("%s 完了 (約%.1f円 / 本日累計約%.1f円) ツール実行%d回",
                         name, cost, budget.get_run_spent_jpy(), tool_calls)
+            if _trace:
+                try:
+                    hist = _trace.tools_histogram(agent)
+                except Exception:  # noqa: BLE001
+                    hist = []
+                _trace.event("delegate.result", agent=name, item_id=item_id,
+                             tool_calls=tool_calls, cost_jpy=round(cost, 1),
+                             tools=hist,
+                             body=_trace.blob("delegate.result", str(result)))
             if tool_calls >= _DELEGATION_TOOL_WARN:
                 logger.warning(
                     "%s のツール実行が%d回に達しました（履歴肥大の兆候。1回の依頼を分割するか、"
@@ -669,7 +769,16 @@ def create_delegation_tools(models, run_budget_jpy: float, block_publish: bool =
                     f"作業が途中まで進んでいる可能性があるので、再依頼の前に"
                     f"list_local_files / list_site_files で状態を確認すること。"
                 )
-            return str(result)
+            text = str(result)
+            if item_id:
+                ok, receipt = item_receipt(item_id, accept, text)
+                record_item(item_id, request, accept,
+                            status="done" if ok else "not_done", evidence=receipt)
+                text += ("\n\n【受領書（機械が付けた。消すな）】\n"
+                         "item_id: %s\n判定: %s\n合格条件: %s\n"
+                         "※未達なら、そのまま日報に書け。別の依頼で包むな。"
+                         % (item_id, receipt, accept or "(未指定)"))
+            return text
 
     # --- 共通WEBツール（全員に配布）---
     firecrawl = _create_firecrawl_mcp()
@@ -802,6 +911,9 @@ def create_delegation_tools(models, run_budget_jpy: float, block_publish: bool =
         akira_tools.list_workspace_files,
         akira_tools.site_download,
         _upload,
+        # 描画→ゲート→公開→invalidation→実URL照合を1呼び出しに畳む（2026-11-21）。
+        # 83回の儀式を減らし、「残り呼び出し数」で依頼項目を削る理由を無くす。
+        akira_tools.publish_and_verify,
         # 画像生成はエージェント経由ではなく直接叩けるようにする。
         # 2026-09-15: ask_gemini_mother（エージェント）が400で不通になり画像が作れなかった。
         # 画像生成自体は APIキー1コールの決定論的な処理なので、依頼先のLLMが落ちても
@@ -895,17 +1007,38 @@ def create_delegation_tools(models, run_budget_jpy: float, block_publish: bool =
 
 
     @tool
-    def ask_claude_engineer(request: str) -> str:
-        """Claudeエンジニアに今回分の作業をまとめて依頼する（現場責任者としてリサーチ→執筆→
-        GPT税理士レビュー→必要ならGemini画像/UX→公開までを自律的に一気通貫で行い、最後に結果を
-        要約して返す）。1回の依頼で完結させるのが原則（持ち越しは /workspace/drafts/ に書かせる）。
-        追加の依頼は最小スコープで1回までにする。
+    def ask_claude_engineer(request: str, item_id: str = "", accept: str = "") -> str:
+        """Claudeエンジニアに**1項目だけ**依頼する（リサーチ→執筆→レビュー→公開）。
+
+        2026-11-21 の実測: 2項目を1回で渡すと、エンジニアは「残り呼び出し数」で
+        自分でスコープを切り、2番目を**報告からも消した**（依頼1: 83ツール/51.9円、
+        依頼2: 82ツール/48.9円）。だから**1回の依頼=1項目**を機械で強制する。
 
         Args:
-            request: 依頼内容。今日のテーマ候補・特筆事項を伝えれば十分（細かい手順の
-                     指示は不要。リサーチ・執筆・レビュー依頼・公開判断はClaudeエンジニアに任せる）
+            request: 依頼内容（**1項目だけ**。番号付きで2つ以上書くと機械が拒否する）
+            item_id: この依頼の識別子（例: "OK-2"）。応答の最後に `DONE: <item_id>`
+                     または `NOT_DONE: <item_id>` を書かせる。省略すると未確認扱いになる
+            accept: 合格条件（機械が読める形で書く。例:
+                    "china-ai の labs セクション内に lab-card が8枚ある"）
         """
-        return _run(_new_engineer_agent, engineer_model_id, "Claudeエンジニア", request)
+        n = count_request_items(request)
+        if n > 1:
+            trace = trace_store.current()
+            if trace:
+                trace.event("delegate.rejected", agent="Claudeエンジニア",
+                            item_id=item_id, reason="multi_item", items=n)
+            return (
+                "【依頼を分割して】1回の依頼に番号付き項目が %d 個あります。"
+                "**1回の依頼は1項目だけ**にしてください（2026-11-21 に2項目渡して"
+                "2番が丸ごと落ちた）。\n"
+                "同じ内容を、項目ごとに ask_claude_engineer を1回ずつ呼んで出し直せ。"
+                "各項目には item_id と accept（合格条件）を必ず付けること。\n"
+                "今回は**何も実行していない**。" % n)
+        if not item_id:
+            item_id = "item-%d" % (len(_ITEM_LEDGER) + 1)
+        record_item(item_id, request, accept, status="requested")
+        return _run(_new_engineer_agent, engineer_model_id, "Claudeエンジニア",
+                    request, item_id=item_id, accept=accept)
 
     return [ask_claude_engineer, ask_gpt_tax_advisor, ask_gemini_mother]
 
@@ -931,7 +1064,7 @@ def create_report_tool(collected: dict):
                      教えてくれ。次のテーマはマルチモーダル特集が一番伸びると俺は
                      見てるが、お前の目はどうだ」
         """
-        collected["body_md"] = body_md
+        collected["body_md"] = body_md + ledger_markdown()
         collected["requests_to_okamo"] = requests_to_okamo
         # Akira本体が自分で日報を書いた証跡。これが無い＝フォールバック日報なので、
         # okamoコメントの確認済みマーカーを進めない（未反映のコメントを消費しない）
@@ -949,6 +1082,9 @@ def publish_daily_report(collected: dict, budget_status: dict) -> None:
         f"当月LLM費用 約{month_cost:.0f}円 / 予算{budget_status['monthly_budget_jpy']:.0f}円"
     )
     body = collected.get("body_md") or "（日報が生成されませんでした）"
+    ledger = ledger_markdown()
+    if ledger and "今日の依頼項目（機械の受領書" not in body:
+        body += ledger
     report.save_report(today, body, collected.get("requests_to_okamo", ""), cost_summary)
     published = report.publish_reports()
     logger.info("日報公開: %s件 → %s", len(published), REPORTS_SITE_URL)
@@ -1273,10 +1409,16 @@ DAILY_MISSION_TEMPLATE = """今日は {today} です。LLM Data Hub（{site_url}
    その続きを優先テーマにする。参照はエンジニアに任せてよい）
 
 {theme_line}
-3. ask_claude_engineer に今回分をまとめて1回で依頼する。リサーチ・執筆・GPT税理士へのレビュー
-   依頼・（必要なら）Gemini子育てママへの画像/UX依頼・クリティカルな指摘がなければ公開・軽微な
-   指摘のsite_plan記録まで、Claudeエンジニアが現場責任者として自律的に行う。テーマ候補
-   を伝えるだけでよく、細かい手順の指示や公開可否の判断をあなたが都度行う必要はない
+3. ask_claude_engineer は **1項目につき1回**呼ぶ。**番号付きで2項目以上を1回にまとめるな**
+   （2026-11-21 の実測: 2項目渡したら2番目が丸ごと落ち、依頼1で83回・依頼2で82回ツールを叩いた）。
+   呼ぶときは必ず次の3つを付ける:
+   - `item_id`: 依頼の識別子（例 "OK-2"）。日報の受領書にそのまま出る
+   - `accept`: **機械が読める合格条件**（例「labs セクション内の lab-card が8枚」
+     「/mai/ の年表が日付降順で先頭が最新」）。「見出しがあること」のような見た目の条件は書くな
+   - `request`: 1項目だけの依頼文（リサーチ・執筆・レビュー・公開はエンジニアの裁量に任せる）
+   エンジニアは応答の最後に `DONE: <item_id>` か `NOT_DONE: <item_id>` を書く義務がある。
+   書かなければ**ハーネスが未確認として日報に記録する**（あなたの文章で補えると思うな）。
+   2項目以上を渡すと機械が拒否する（何も実行されない）。
 4. Claudeエンジニアからの報告（公開したページ・GPT税理士の指摘件数・記録した課題）を確認する。
    よほど気になる点がない限り、あなた自身がask_gpt_tax_advisor/ask_gemini_motherを直接呼ぶ必要はない
    （通常はClaudeエンジニアに任せる）
@@ -1290,8 +1432,11 @@ DAILY_MISSION_TEMPLATE = """今日は {today} です。LLM Data Hub（{site_url}
 ## 注意（重要）
 - 自分で考え込んだりWeb検索・factチェックを自分でやったりせず、Claudeエンジニアに一括委任すること。
   あなた自身の役割は「テーマ決定」と「最終確認・日報執筆」に絞る
-- ask_claude_engineer は原則1回のみ呼ぶ（同じエージェントを何度も呼ぶと会話履歴が肥大化する。
-  Claudeエンジニア内部でのGPT/Geminiとのやり取りは何度あっても問題ない）
+- ask_claude_engineer は**項目ごとに1回**呼ぶ（1回に1項目。会話履歴の肥大化を避ける意味でも、
+  2項目以上を1回に詰め込むと2番目が落ちる）。Claudeエンジニア内部でのGPT/Geminiとのやり取りは
+  何度あっても問題ない
+- 未達（`NOT_DONE`）を日報から消すな。**隠すと翌週に同じ穴が開く**（11-21 に実際に消えた）。
+  日報の末尾には機械の受領書（依頼項目の表）が自動で付く。
 - okamoのコメントで方針・優先度が決まったものは、その場でsite_planに写しておくこと
   （okamoのコメントは翌日以降は読めなくなる。site_planこそが恒久の作業リストだ）
 - 作業を止められたら、速やかに日報を書いて終了すること
@@ -1341,6 +1486,15 @@ def run_daily(dry_run: bool = False, no_publish: bool = False) -> None:
     remaining = max(1, int(_deadline_remaining_seconds()))
     signal.alarm(remaining)
     logger.info("作業デッドライン: %d秒", remaining)
+
+    # --- 1.4 記録の開始（2026-11-21）---
+    # 何を頼み・何を渡し・何が起きたかを run_id で繋ぐ。記録の失敗で本処理は止めない。
+    trace = trace_store.start(today=today)
+    _ITEM_LEDGER.clear()
+    trace.event("run.start", dry_run=dry_run, no_publish=no_publish,
+                month_cost_jpy=budget_status.get("month_cost_jpy"),
+                budget_jpy=budget_status.get("monthly_budget_jpy"))
+    logger.info("trace: run_id=%s（テーブル=%s）", trace.run_id, trace_store.TRACE_TABLE)
 
     # --- 1.5 サイト全体をローカル作業フォルダへDL（エンジニアのローカル編集→一括アップ用） ---
     try:
@@ -1543,6 +1697,14 @@ def run_daily(dry_run: bool = False, no_publish: bool = False) -> None:
                     "「何を取得し・何を根拠に・何を作ったか」を最後に詳しく報告すること。")
 
     _debug_log_io("指示", "Akira本体", f"system_prompt:\n{system_prompt}\n\nmission:\n{mission}")
+    trace = trace_store.current()
+    if trace:
+        # **最終系**のシステムプロンプト（lessons・skills・SITE_RULES・site_plan・
+        # okamoコメントを合成した後）をそのまま残す。プロンプト自体が間違って
+        # いることがあるので、後から全文を見られるようにする。
+        trace.prompt("Akira本体", system_prompt)
+        trace.event("mission.built", body=trace.blob("mission.built", mission),
+                    theme_chars=len(theme_line), watch_chars=len(watch_line))
     usage_model_id = DEEPSEEK_MODEL_ID if AKIRA_USE_DEEPSEEK else AKIRA_MODEL_ID
     try:
         for attempt in range(1, _MAX_EMPTY_ATTEMPTS + 1):
@@ -1699,7 +1861,14 @@ def run_daily(dry_run: bool = False, no_publish: bool = False) -> None:
                 "日報がフォールバックだったため、okamoコメントの確認済みマーカーは"
                 "進めません（未反映のコメントを次回に読み直します）"
             )
-    logger.info("=== 本日の運用終了 ===")
+    trace = trace_store.current()
+    if trace:
+        trace.event("run.end", run_spent_jpy=round(budget.get_run_spent_jpy(), 1),
+                    items=len(_ITEM_LEDGER),
+                    not_done=sum(1 for r in _ITEM_LEDGER if r["status"] != "done"),
+                    report_written=bool(collected.get("report_written")))
+    logger.info("=== 本日の運用終了 (trace run_id=%s) ===",
+                trace.run_id if trace else "-")
 
 
 def run_wi_test() -> None:

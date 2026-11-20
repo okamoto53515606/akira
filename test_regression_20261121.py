@@ -164,5 +164,131 @@ if spec and os.path.exists(spec.origin or ""):
 else:
     check("watch_releases.py が見つかる", False, "workspace/tools に無い")
 
+
+
+# =====================================================================
+# 追記（②の対策）: 記録（trace）と依頼の契約（1依頼1項目・受領書）
+# =====================================================================
+print("\n== trace: 伏字・記録・失敗しても止まらない")
+import logging as _logging
+import trace_store as ts
+
+_fake_key = "sk-" + "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6"
+check("sk- の鍵を伏字にする", _fake_key not in ts.redact("key=%s" % _fake_key))
+check("Google APIキーを伏字にする", "A" * 35 not in ts.redact("AIza" + "A" * 35))
+check("パスワード行を伏字にする",
+      "hunter2hunter2" not in ts.redact("password: hunter2hunter2"))
+check("伏字にしていない日本語は壊さない",
+      ts.redact("MiniMax をカードに戻す") == "MiniMax をカードに戻す")
+
+_written = []
+
+
+class _FakeTable:
+    def put_item(self, Item):  # noqa: N803 (boto3 の引数名)
+        _written.append(Item)
+
+
+class _FakeDDB:
+    def Table(self, name):  # noqa: N802
+        return _FakeTable()
+
+
+_t = ts.Trace(today="2026-11-21", run_id="testrun")
+_t._ddb = _FakeDDB()
+_t._s3 = object()          # _clients() が boto3 を取りに行かないようにする
+_t.blob = lambda kind, payload: {"digest": "x", "chars": 4, "inline": "BODY"}
+_t.prompt("Claudeエンジニア", "SYS-PROMPT" * 100)
+_t.event("delegate.request", agent="Claudeエンジニア", item_id="OK-2",
+         body=_t.blob("delegate.request", "req"))
+check("event が書かれる", len(_written) == 2, str(len(_written)))
+check("pk に run_id が入る", _written[0]["pk"] == "run#2026-11-21#testrun")
+check("prompt.system は本文を保持する",
+      _written[0]["kind"] == "prompt.system" and "SYS-PROMPT" in _written[0]["system_prompt"])
+check("TTL が入る", isinstance(_written[0].get("ttl"), int) and _written[0]["ttl"] > 0)
+
+
+class _Boom:
+    def Table(self, name):
+        raise RuntimeError("boom")
+
+
+_t2 = ts.Trace(today="2026-11-21", run_id="boom")
+_t2._ddb = _Boom()
+_t2._s3 = object()
+try:
+    _t2.event("run.start")
+    ok = True
+except Exception:  # noqa: BLE001
+    ok = False
+check("Dynamo が落ちても例外を投げない（日次を止めない）", ok)
+
+print("== 依頼の契約: 1依頼1項目・受領書")
+import main as M
+
+check("2項目の依頼を検出する",
+      M.count_request_items("1. china-ai の MiniMax\n2. /mai/ の年表\n") == 2)
+check("1項目の依頼は通す", M.count_request_items("china-ai の MiniMax を直す") == 0)
+check("丸数字も検出する", M.count_request_items("① A をやる\n② B をやる") == 2)
+
+_ok, _r1 = M.item_receipt("OK-2", "年表が降順", "作業しました。\nDONE: OK-2")
+check("DONE を達成として読む", _ok and "達成" in _r1, _r1)
+_ok2, _r2 = M.item_receipt("OK-2", "年表が降順", "時間切れ\nNOT_DONE: OK-2")
+check("NOT_DONE を未達として読む", (not _ok2) and "未達" in _r2, _r2)
+_ok3, _r3 = M.item_receipt("OK-2", "年表が降順", "作業しました。")
+check("記載が無ければ未確認（達成にしない）", (not _ok3) and "未確認" in _r3, _r3)
+
+M._ITEM_LEDGER.clear()
+M.record_item("OK-1", "china-ai", "lab-card 8枚", status="done", evidence="達成（DONE: OK-1）")
+M.record_item("OK-2", "mai", "年表が降順", status="not_done", evidence="未達（NOT_DONE: OK-2）")
+_md = M.ledger_markdown()
+check("受領書に両方の項目が出る", "OK-1" in _md and "OK-2" in _md)
+check("未達が強調される", "**未達**" in _md)
+M._ITEM_LEDGER.clear()
+check("項目が無ければ受領書は空", M.ledger_markdown() == "")
+
+print("== ログのレベル修正（指示・応答が実際に残るか）")
+_records = []
+
+
+class _Cap(_logging.Handler):
+    def emit(self, record):
+        _records.append(record)
+
+
+_h = _Cap()
+_logging.getLogger("akira").addHandler(_h)
+_logging.getLogger("akira").setLevel(_logging.INFO)
+_prev = M.DEBUG_TOOL_LOGGING
+M.DEBUG_TOOL_LOGGING = True
+M._debug_log_io("指示", "Akira本体", "TEST-PAYLOAD")
+M.DEBUG_TOOL_LOGGING = _prev
+_logging.getLogger("akira").removeHandler(_h)
+check("INFO で記録される（以前は DEBUG で捨てられていた）",
+      any(r.levelno == _logging.INFO and "TEST-PAYLOAD" in r.getMessage() for r in _records),
+      str([(r.levelname, r.getMessage()[:40]) for r in _records]))
+
+print("== 公開と検証の1呼び出しツール")
+_pv = getattr(tools, "publish_and_verify", None)
+check("publish_and_verify がある", _pv is not None)
+check("@tool が付いている（エージェントから呼べる）",
+      bool(getattr(_pv, "tool_spec", None)), str(type(_pv)))
+
+
+
+print("== 公開用エクスポート（許可kindのみ・伏字・S3キーを出さない）")
+import importlib.util as _ilu
+
+_spec = _ilu.spec_from_file_location("publish_trace", os.path.join(ROOT, "scripts", "publish_trace.py"))
+pt = _ilu.module_from_spec(_spec)
+_spec.loader.exec_module(pt)
+
+check("許可kindだけを公開する", set(pt.PUBLIC_FIELDS) == set(ts.PUBLIC_KINDS),
+      str(set(pt.PUBLIC_FIELDS) ^ set(ts.PUBLIC_KINDS)))
+_r = pt.redact({"a": "token=abcdefghijklmn", "b": "mail me at a.b@example.com"})
+check("公開時にも鍵を伏字にする", "abcdefghijklmn" not in json.dumps(_r, ensure_ascii=False))
+check("メールアドレスを伏字にする", "@example.com" not in json.dumps(_r, ensure_ascii=False))
+
+
 print("\nRESULT: %d passed / %d failed" % (len(PASS), len(FAIL)))
 sys.exit(1 if FAIL else 0)

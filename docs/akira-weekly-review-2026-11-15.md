@@ -168,6 +168,25 @@ okamo は**例外（＝okamo にしか決められないこと）だけ**を見�
 - **不具合の修正は、再現条件の粒度で指示する**。今回の再現条件は「カードの所属」で、
   「セクションが無いこと」ではなかった。**構造の枚数をゲートで数える**のが効く。
 
+### 観測と依頼の契約（同日追記）
+
+「対策しても毎回間違える」の原因は、**分析の入力が欠けていた**こと。実測すると
+`_debug_log_io` は `logger.debug`（logger は INFO）で**指示・応答が1件も残っていなかった**。
+また依頼文・ツール引数・成果物を結ぶ `run_id` が無く、毎回「たぶんこうだ」で分析していた。
+
+- **trace**（DynamoDB `akira-trace` / TTL120日、本文は S3）: `run.start`・`mission.built`・
+  **`prompt.system`（合成後のシステムプロンプト全文）**・`delegate.request/result`
+  （ツール内訳付き）・`item.status`・`gate.result`・`publish`・`run.end`
+- **依頼の契約**: `ask_claude_engineer(request, item_id, accept)`。**1依頼1項目**を機械で強制
+  （番号付き2項目は拒否）、`accept` は数えられる条件、応答に `DONE:`/`NOT_DONE:` が無ければ
+  ハーネスが未確認として日報の**受領書**に書く（LLMの文章では消せない）
+- **publish_and_verify**: 描画→ゲート→公開→invalidation→実URL照合を1呼び出しに
+  （1依頼83回の儀式を減らす）
+- 公開（オープンデータ）は**生の表を出さない**。`scripts/publish_trace.py` が
+  allowlist＋二重伏字で JSONL を作り、別の公開バケットに置く（バケット公開は okamo判断）。
+  詳細: [`docs/observability-2026-11-21.md`](./observability-2026-11-21.md)
+- 検証: `test_regression_20261121.py` **40/40 PASS**、実テーブル・イメージ内でも書き込み確認
+
 ### デプロイ（11-21）
 
 S3 14ファイル＋CloudFront invalidation `/*`（ID `IBUO8TTEVLQ84YU1VMGJ96NN1K`）／

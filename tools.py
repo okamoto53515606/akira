@@ -1945,3 +1945,159 @@ def list_workspace_files(rel_path: str = "") -> dict:
                 continue
     files.sort(key=lambda f: f["path"])
     return {"status": "ok", "path": rel_path or "/", "count": len(files), "files": files}
+
+
+# ---------------------------------------------------------------------------
+# 公開と検証を1呼び出しにまとめる（2026-11-21 追加）
+# ---------------------------------------------------------------------------
+@tool
+def publish_and_verify(paths: str = "", live: bool = True) -> dict:
+    """描画 → ゲート → 公開 → キャッシュ破棄 → **公開URLの実物照合** を1回でやる。
+
+    なぜ:
+        2026-11-21 の実測で、エンジニアは1回の依頼で **83回**ツールを叩いていた。
+        その大半は `render_site → check_* → site_upload → purge_cdn → verify_publish
+        → 再確認` の**同じ手順の繰り返し**で、しかも「残り呼び出し数」を理由に
+        依頼項目を自分で削っていた（2番が丸ごと落ちた）。
+        手順が決まっているものは1つのツールに畳んで、判断の余地を減らす。
+
+    何をするか:
+        1. 台帳（data/facts.json）から timeline/pricing/changelog/トップを描画
+        2. 公開する各HTMLに**公開ゲート**（ページ監査・構造の後退・決定論ゲート）を当てる
+        3. 通ったものだけ S3 へアップロード（Cache-Control 付き）
+        4. CloudFront の invalidation をまとめて発行
+        5. 公開URLを取得して**ローカルと同一バイトか**を照合（伝播待ちは最大3回）
+        6. 結果を trace に残す
+
+    Args:
+        paths: 追加で公開したいパス（"china-ai/" や "pricing/index.html " をカンマ区切り）。
+               空なら「描画で変わったファイル」だけを対象にする
+        live: 公開後に実URLを取得して照合するか（既定 true）
+    """
+    import hashlib
+    import time as _time
+
+    base_dir = os.path.abspath(SITE_LOCAL_DIR)
+    s3 = boto3.client("s3", region_name=AWS_REGION)
+    result: dict = {"rendered": [], "published": [], "rejected": [],
+                    "live": {"checked": 0, "mismatch": [], "pending": []}}
+
+    # 1. 描画（失敗しても公開は続ける）
+    try:
+        result["rendered"] = _render_site_from_ledger(base_dir)
+    except Exception:  # noqa: BLE001
+        logger.exception("描画に失敗（描画なしで続行）")
+
+    # 2. 対象の決定
+    targets: list[str] = []
+    for rel in result["rendered"]:
+        if rel.endswith(".html"):
+            targets.append(rel)
+    for p in [x.strip() for x in (paths or "").split(",") if x.strip()]:
+        try:
+            f = _resolve_local_path(p)
+        except Exception:  # noqa: BLE001
+            result["rejected"].append({"path": p, "errors": ["パスが不正"]})
+            continue
+        if os.path.isdir(f):
+            for root, _dirs, files in os.walk(f):
+                for name in files:
+                    if name.endswith(".html"):
+                        targets.append(os.path.relpath(os.path.join(root, name), base_dir))
+        elif f.endswith(".html"):
+            targets.append(os.path.relpath(f, base_dir))
+    seen, uniq = set(), []
+    for t in targets:
+        t = t.replace(os.sep, "/")
+        if t.endswith("index.html") and t not in seen:
+            seen.add(t)
+            uniq.append(t)
+
+    # 3. ゲート（公開前の実物に対して）
+    ok_targets = []
+    for rel in uniq:
+        f = os.path.join(base_dir, rel)
+        try:
+            with open(f, encoding="utf-8", errors="replace") as fh:
+                new_html = fh.read()
+        except OSError:
+            continue
+        key = rel
+        old_html = ""
+        if not _s3_key_is_new(s3, key):
+            try:
+                old_html = s3.get_object(Bucket=LLM_SITE_BUCKET, Key=key)[
+                    "Body"].read().decode("utf-8", "replace")
+            except Exception:  # noqa: BLE001
+                old_html = ""
+        hits = _audit_gate_errors(base_dir, rel, new_html, old_html)
+        if not hits and old_html:
+            hits = _structure_gate_errors(rel, new_html, old_html)
+        if hits:
+            result["rejected"].append({"key": rel, "errors": hits})
+            continue
+        ok_targets.append(rel)
+
+    # 4. アップロード
+    for rel in ok_targets:
+        try:
+            s3.upload_file(os.path.join(base_dir, rel), LLM_SITE_BUCKET, rel,
+                           ExtraArgs={"ContentType": _content_type(rel),
+                                      "CacheControl": _cache_control(rel)})
+            _invalidation_paths.append("/" + rel)
+            result["published"].append(rel)
+        except Exception as e:  # noqa: BLE001
+            result["rejected"].append({"key": rel, "errors": ["upload: %s" % e]})
+
+    # 5. invalidation（日付修正の取りこぼしを避けるため、HTMLは /* で落とす）
+    if result["published"]:
+        if len(result["published"]) > 15:
+            _invalidation_paths.append("/*")
+        flush_invalidations()
+
+    # 6. 実物照合
+    if live and result["published"]:
+        def _local_digest(rel):
+            with open(os.path.join(base_dir, rel), "rb") as fh:
+                return hashlib.sha256(fh.read()).hexdigest()
+
+        wait = [0, 15, 30]
+        for rel in result["published"]:
+            url = LLM_SITE_URL.rstrip("/") + "/" + rel[: -len("index.html")]
+            want = _local_digest(rel)
+            got = None
+            for i, secs in enumerate(wait):
+                if secs:
+                    _time.sleep(secs)
+                status, body, err = _http_get(url + "?_cb=%d" % int(_time.time() * 1000))
+                got = hashlib.sha256(body).hexdigest() if status == 200 else None
+                if got == want:
+                    break
+            result["live"]["checked"] += 1
+            if got == want:
+                continue
+            if got is None:
+                result["live"]["pending"].append({"path": "/" + rel, "note": "取得できず（伝播待ちの可能性）"})
+            else:
+                result["live"]["mismatch"].append({"path": "/" + rel})
+
+    result["status"] = "ok" if not result["rejected"] and not result["live"]["mismatch"] else "partial"
+    result["hint"] = ("published が空なら『変わっていない』か『ゲートで止まった』。"
+                      "rejected の errors を読んで直す。mismatch は伝播待ちか、"
+                      "別のファイルが公開されている疑い（ローカルのパスを確認）。")
+    try:
+        import trace_store
+
+        tr = trace_store.current()
+        if tr:
+            tr.event("publish", published=result["published"],
+                     rejected=[r["key"] for r in result["rejected"]],
+                     live_mismatch=len(result["live"]["mismatch"]))
+            if result["rejected"]:
+                tr.event("gate.result", ok=False, rejected=result["rejected"][:5])
+    except Exception:  # noqa: BLE001
+        pass
+    return result
+
+
+TOOL_publish_and_verify = publish_and_verify
