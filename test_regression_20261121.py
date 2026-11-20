@@ -473,5 +473,96 @@ check("先頭の重複見出し（日報タイトル行）を落とす",
 check("本文中の曜日を土に直す", "（土）" in _fixed and "（金）" not in _fixed, _fixed[:80])
 check("中身は消さない", "## 見出し" in _fixed and "本文" in _fixed, _fixed[:80])
 
+
+print("== 公開はHTMLだけでなく data/models.json も上げる（計算機だけ古いままを防ぐ）")
+_td = tempfile.mkdtemp()
+os.makedirs(os.path.join(_td, "data"), exist_ok=True)
+os.makedirs(os.path.join(_td, "timeline"), exist_ok=True)
+for rel in ("data/models.json", "timeline/index.html", "sitemap.xml"):
+    with open(os.path.join(_td, rel), "w", encoding="utf-8") as fh:
+        fh.write("{}")
+_html_t, _other_t = tools._publish_targets(
+    _td, ["data/models.json", "timeline/index.html"], "")
+check("HTML と それ以外 を分ける", _html_t == ["timeline/index.html"]
+      and _other_t == ["data/models.json"], "%s / %s" % (_html_t, _other_t))
+_html_t, _other_t = tools._publish_targets(_td, [], ".")
+check("paths='.' で全ファイルを拾う（JSON/XMLも）",
+      "data/models.json" in _other_t and "sitemap.xml" in _other_t, str(_other_t))
+_src_check = open(os.path.join(ROOT, "tools.py"), encoding="utf-8").read()
+check("公開ループが HTML 以外も上げている（再発防止）",
+      "if other_news:" in _src_check and "s3.upload_file(local, LLM_SITE_BUCKET, rel,"
+      in _src_check)
+
+print("== 公開中の計算機データと台帳のズレを機械が見つける（GAなのに計算機に無い）")
+_wd = tempfile.mkdtemp()
+os.makedirs(os.path.join(_wd, "data"), exist_ok=True)
+_facts_fixture = {"models": {
+    "gemini-4-neon": {"id": "gemini-4-neon", "status": "ga",
+                      "price": {"input": 3.0, "output": 15.0},
+                      "names": {"ja": "Gemini 4 Neon", "en": "Gemini 4 Neon"}},
+    "gpt-6-2-sol": {"id": "gpt-6-2-sol", "status": "ga",
+                    "price": {"input": 2.0, "output": 10.0},
+                    "names": {"ja": "GPT-6.2 Sol", "en": "GPT-6.2 Sol"}},
+    "some-preview": {"id": "some-preview", "status": "preview",
+                     "price": {"input": 1.0, "output": 2.0},
+                     "names": {"ja": "Some Preview", "en": "Some Preview"}},
+}}
+with open(os.path.join(_wd, "data", "facts.json"), "w", encoding="utf-8") as fh:
+    json.dump(_facts_fixture, fh, ensure_ascii=False)
+
+_old_wd = tools.WORKSPACE_LOCAL_DIR
+_old_get = tools._http_get
+tools.WORKSPACE_LOCAL_DIR = _wd
+_bodies = {}
+
+
+def _fake_get(url, *a, **k):
+    for key, payload in _bodies.items():
+        if key in url:
+            return 200, json.dumps(payload).encode("utf-8"), ""
+    return 404, b"", "not found"
+
+
+tools._http_get = _fake_get
+_bodies[tools.DATA_MODELS_KEY] = {"models": [{"name": "GPT-6.2 Sol"}]}
+_gaps = tools._published_calculator_gaps()
+check("公開データに無いGAモデルを指摘する", any("gemini-4-neon" in g for g in _gaps), str(_gaps))
+check("公開データにあるモデルは指摘しない", not any("gpt-6-2-sol" in g for g in _gaps), str(_gaps))
+check("GAでないモデルは対象外", not any("some-preview" in g for g in _gaps), str(_gaps))
+_bodies[tools.DATA_MODELS_KEY] = {"models": [{"name": "GPT-6.2 Sol"},
+                                             {"name": "Gemini 4 Neon"}]}
+check("揃えば0件", tools._published_calculator_gaps() == [], str(tools._published_calculator_gaps()))
+
+# 台帳の名前は別名を含むことがある（"Claude Fable 5.2 / Mythos 5.2"）。
+# 計算機側は price.name（"Claude Fable 5.2"）で登録されるので、別名でも一致させる。
+_facts_fixture["models"]["claude-fable-5-2"] = {
+    "id": "claude-fable-5-2", "status": "ga",
+    "price": {"name": "Claude Fable 5.2", "input": 8.0, "output": 40.0},
+    "names": {"ja": "Claude Fable 5.2 / Mythos 5.2",
+              "en": "Claude Fable 5.2 / Mythos 5.2"}}
+with open(os.path.join(_wd, "data", "facts.json"), "w", encoding="utf-8") as _fh:
+    json.dump(_facts_fixture, _fh, ensure_ascii=False)
+_bodies[tools.DATA_MODELS_KEY] = {"models": [{"name": "Gemini 4 Neon"},
+                                             {"name": "Claude Fable 5.2"}]}
+_g2 = tools._published_calculator_gaps()
+check("別名（スラッシュ）持ちは誤検知しない", not any("fable" in g for g in _g2), str(_g2))
+tools.WORKSPACE_LOCAL_DIR = _old_wd
+tools._http_get = _old_get
+
+
+print("== 受領書：1項目の依頼なら「DONE: 説明文」も達成として読む")
+check("id 付きはそのまま達成", _main.item_receipt("X-1", "a", "DONE: X-1")[0] == "done")
+check("1項目なら書式違いの DONE も達成",
+      _main.item_receipt("X-1", "a", "DONE: 修正して公開した", single_item=True)[0] == "done",
+      str(_main.item_receipt("X-1", "a", "DONE: 修正して公開した", single_item=True)))
+check("書式違いは evidence に残す",
+      "書式違い" in _main.item_receipt("X-1", "a", "DONE: 修正した", single_item=True)[1])
+check("書式違いの NOT_DONE は未達",
+      _main.item_receipt("X-1", "a", "NOT_DONE: できず", single_item=True)[0] == "not_done")
+check("複数項目モードでは書式違いを未確認のまま",
+      _main.item_receipt("X-1", "a", "DONE: 修正した")[0] == "unknown")
+check("DONE が無ければ未確認",
+      _main.item_receipt("X-1", "a", "完了しました", single_item=True)[0] == "unknown")
+
 print("\nRESULT: %d passed / %d failed" % (len(PASS), len(FAIL)))
 sys.exit(1 if FAIL else 0)

@@ -237,3 +237,76 @@ Dynamo には `key`/`digest`/`chars` だけ**を残す作りなので、通常�
 - 記録: 40万字でも項目が上限内（397バイト）／S3に全文／`spilled` が付く／2万字は項目に全文
 - 曜日: `2026-11-21`→土、`2026-11-20`→金／先頭の日報タイトル行を落とす／本文中の曜日を直す／
   中身は消さない
+
+## 9. /calculator/ にだけ出ない（2026-11-21 第4ラン）
+
+### 9-1. 原因（ログではなく「S3の更新時刻」で確定した）
+
+Gemini 4 Neon は `/timeline/` `/pricing/` には出るのに `/calculator/` にだけ無かった。
+計算機は静的HTMLではなく **`/data/models.json` を JS が fetch して描く**ので、ページではなく
+データファイルが古い、という見当はすぐ付いた。決め手はこれ:
+
+| 見たもの | 結果 |
+|---|---|
+| ローカル（render 後）の `data/models.json` | **58行**、Gemini 4 Neon あり（`Claude Fable 5.2` もあり） |
+| S3 の `data/models.json` | **56行**、Neon なし。`LastModified` は **2026-11-20T21:38Z**（= 11-21 06:38 JST のラン） |
+| `/calculator/` が読む公開URL | 56行のまま |
+
+つまり **描画はされていたが、アップロードされていなかった**。原因は前日に私が入れた
+`publish_and_verify` で、公開対象の収集が
+
+```python
+for rel in result["rendered"]:
+    if rel.endswith(".html"):   # ← ここ
+        targets.append(rel)
+```
+
+と **HTMLしか拾っていなかった**こと。`data/models.json`・`data/changelog.json`・`sitemap.xml`
+は「描画で変わった」と記録されるのに、公開されない。既存の `site_upload` は全ファイルを上げる
+ので、この抜けは新ツールだけの欠陥だった。
+
+なお **Dynamo の記録からは分からない**。当日のランはどれも `site_upload` を使っていて
+`publish_and_verify` を通っておらず、ツール引数・結果の記録もこの日から入れたばかりだった。
+（原因は S3 の LastModified とローカル描画結果の突き合わせで確定した。）
+
+### 9-2. 対策
+
+1. **アップロード対象を HTML 以外にも広げた**（`_publish_targets()`）。描画が変えた
+   ファイルは拡張子で弾かない。中身が同じならアップロードしない（S3の ETag と md5 で判定）。
+   `models.json` を含むときは台帳整合ゲート（`check_facts_consistency`）を通す。
+2. **公開中の現物と台帳のズレを機械が見つける**（`check_published_contracts` の C5）。
+   これまでのゲートは**ローカルの描画結果**しか見ていなかったため、この事故は素通りした。
+   公開中の `data/models.json` を取得し、台帳の `status: ga` かつ単価ありのモデルが
+   載っていなければ違反にする（別名 `A / B` 形式は分割して照合）。
+   毎朝の健全性チェックに出るので、**ミッション経由でAkiraに届く**。
+3. ついでに `tools_histogram` の `tool` が dict のまま記録される不具合を修正
+   （`{'toolUseId':…, 'name':…, 'input':…}` が名前欄に入っていた）。
+
+### 9-3. 実機で「Akiraたちが自分で検出して直せるか」を試した
+
+イメージを差し替えたうえで **Fargate を手動起動**（`846562a0…`、exit 0、所要 約10分、
+**16.7円**、トレース280イベント）。結果:
+
+| 段階 | 実測 |
+|---|---|
+| 検出 | ミッションの健全性チェックに C5 が2件（`gemini-4-neon` / `claude-fable-5-2`）出た。Akira が依頼 `FIX-MODELS-1121` を自分で作り、合格条件に「`data/models.json` に Gemini 4 Neon が入る」を書いた |
+| 実行 | エンジニアが `publish_and_verify` を実行 → `publish` イベントに `["changelog/index.html","en/changelog/index.html","data/models.json","sitemap.xml"]`、`live_mismatch 0` |
+| 結果 | 公開中の `data/models.json` が **58行**になり、Neon と Fable 5.2 の両方が入った。C5 の違反は 0 件 |
+| 副産物 | 2件目の指摘（`[bold` 等の装飾マークアップ漏れ）も自力で直した（`pricing` / `china-ai` ja+en） |
+
+**自分で見つけて、自分で直せた**。検出は偶然ではなく、C5 を入れたから鳴っている
+（ミッション本文にその文言が入っているのを S3 の `mission.built` で確認）。
+
+### 9-4. 残った摩擦と、その対策
+
+受領書がまた「未確認」になった。今回はエンジニアが応答の**先頭**に
+`DONE: 計算機データ欠落の修正と公開（…）` と書き、item_id を付けなかったため。
+作業自体は `verify_published_contracts` と `self_check` で実測されて完了している。
+
+- 1回の依頼はコードが1項目に矯正しているので、**id の無い DONE/NOT_DONE も
+  「その1項目への回答」として読む**（`item_receipt(single_item=True)`）。書式違反は
+  evidence に「書式違いの DONE を item_id として読んだ」と残す（黙って通さない）。
+- 複数項目モードのときは従来どおり未確認（対象が一意でないため）。
+
+Akira 自身も日報でこの摩擦を指摘し、「依頼文に『最終行を `DONE: <item_id>` だけにしろ』と
+明記する」と書いていた。コード側の救済と合わせて二重にする。

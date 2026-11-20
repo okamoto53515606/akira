@@ -275,8 +275,11 @@ class Trace:
             tm = getattr(metrics, "tool_metrics", None) or {}
             rows = []
             for m in tm.values():
+                t = getattr(m, "tool", "") or getattr(m, "tool_name", "?")
+                if isinstance(t, dict):      # ToolUse がそのまま入ることがある
+                    t = t.get("name") or t.get("tool_name") or "?"
                 rows.append({
-                    "tool": str(getattr(m, "tool", "") or getattr(m, "tool_name", "?")),
+                    "tool": str(t),
                     "calls": int(getattr(m, "call_count", 0) or 0),
                     "errors": int(getattr(m, "error_count", 0) or 0),
                     "seconds": round(float(getattr(m, "total_time", 0) or 0), 2),

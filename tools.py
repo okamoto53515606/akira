@@ -1286,11 +1286,66 @@ def check_published_contracts() -> dict:
         if CONTRACT_GTAG not in body.decode("utf-8", "replace"):
             violations.append("%s: GA4タグが無い" % rel)
 
+    # C5. 台帳の GA モデルが**公開中の**計算機データに居るか（2026-11-21 追加）
+    #     11-21、Gemini 4 Neon は /timeline/ と /pricing/ に出ているのに
+    #     /calculator/ だけ古いままだった（render は models.json を更新したが
+    #     公開ツールが HTML しか上げていなかった）。ローカルの描画結果を見る
+    #     既存ゲートでは捕まらないので、**公開中の現物**を台帳と突き合わせる。
+    violations += _published_calculator_gaps()
+
     return {
         "violations": violations,
         "summary": "公開契約チェック: 違反 %d 件" % len(violations),
         "ok": not violations,
     }
+
+
+def _published_calculator_gaps() -> list:
+    """公開中の data/models.json に無い「台帳のGAモデル」を返す。
+
+    台帳（/workspace/data/facts.json）と公開中の現物を突き合わせる。台帳が
+    読めないときは何も言わない（誤検知で日次を止めない）。
+    """
+    import unicodedata
+
+    def _n(text: str) -> str:
+        return unicodedata.normalize("NFKC", str(text)).lower().replace(" ", "")
+
+    try:
+        with open(os.path.join(WORKSPACE_LOCAL_DIR, "data", "facts.json"),
+                  encoding="utf-8") as fh:
+            facts = json.load(fh)
+    except Exception:  # noqa: BLE001
+        return []
+    status, body, _err = _http_get(f"{LLM_SITE_URL}/{DATA_MODELS_KEY}")
+    if status != 200:
+        return []          # 取得失敗は C1 が報告する
+    try:
+        payload = json.loads(body.decode("utf-8"))
+    except Exception:  # noqa: BLE001
+        return []
+    have = _n(" ".join(str(m.get("name", "")) for m in payload.get("models", [])
+                       if isinstance(m, dict)))
+    gaps = []
+    for mid, r in sorted((facts.get("models") or {}).items()):
+        if (r.get("status") or "") != "ga":
+            continue
+        price = r.get("price") or {}
+        if price.get("input") is None or price.get("output") is None:
+            continue       # 単価が無いのは C1 側（ga-without-price）の担当
+        # 台帳の名前は「Claude Fable 5.2 / Mythos 5.2」のように別名を含むことが
+        # あり、計算機側は price.name（"Claude Fable 5.2"）で登録されている。
+        # スラッシュ区切りの別名・price.name・id のどれかで一致すれば OK。
+        cands = [price.get("name") or ""]
+        for k in ("ja", "en"):
+            cands += [x.strip() for x in str((r.get("names") or {}).get(k) or "").split("/")]
+        cands += [mid]
+        if any(_n(c) and _n(c) in have for c in cands):
+            continue
+        gaps.append("%s: 台帳はGAだが公開中の計算機データに無い"
+                    "（render で models.json が変わったのに公開されていない疑い）"
+                    " → publish_and_verify で描画し直して公開する" % mid)
+    return gaps[:10]
 
 
 def _restore_published_data_file(key: str = DATA_MODELS_KEY, dry_run: bool = False) -> dict:
@@ -1950,6 +2005,78 @@ def list_workspace_files(rel_path: str = "") -> dict:
 # ---------------------------------------------------------------------------
 # 公開と検証を1呼び出しにまとめる（2026-11-21 追加）
 # ---------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
+# 公開対象の決定（HTML と それ以外）
+# 2026-11-21: publish_and_verify が **HTML しか上げていなかった** ため、
+# render が data/models.json を更新しても計算機だけ古いままだった
+# （Gemini 4 Neon が /timeline/ /pricing/ には出るのに /calculator/ に無い）。
+# 描画が変えたファイルは、HTML でなくても公開対象にする。
+def _publish_targets(base_dir: str, rendered: list, paths: str = "") -> tuple:
+    """(HTMLのリスト, HTML以外のリスト) を返す。重複は除く。"""
+    html_targets: list[str] = []
+    other_targets: list[str] = []
+
+    def _add(rel: str) -> None:
+        rel = rel.replace(os.sep, "/")
+        (html_targets if rel.endswith(".html") else other_targets).append(rel)
+
+    for rel in rendered or []:
+        _add(rel)
+    base = os.path.abspath(base_dir)
+    for p in [x.strip() for x in (paths or "").split(",") if x.strip()]:
+        # パスは base_dir 配下に限定する（SITE_LOCAL_DIR 固定にしない。テストや
+        # 別ディレクトリへの描画でも同じ関数を使えるようにするため）
+        f = os.path.abspath(p if os.path.isabs(p) else os.path.join(base, p.lstrip("/")))
+        if f != base and not f.startswith(base + os.sep):
+            raise ValueError("パスは %s 配下に限定されています: %s" % (base, p))
+        if os.path.isdir(f):
+            for root, _dirs, files in os.walk(f):
+                for name in files:
+                    if _is_skipped_upload_name(name):
+                        continue
+                    _add(os.path.relpath(os.path.join(root, name), base))
+        else:
+            if _is_skipped_upload_name(os.path.basename(f)):
+                continue
+            _add(os.path.relpath(f, base))
+
+    def _uniq(items: list[str]) -> list[str]:
+        seen, out = set(), []
+        for t in items:
+            if t.endswith("index.html"):
+                if t in seen:
+                    continue
+                seen.add(t)
+            elif t in seen:
+                continue
+            else:
+                seen.add(t)
+            out.append(t)
+        return out
+
+    return _uniq(html_targets), _uniq(other_targets)
+
+
+def _same_as_s3(s3, key: str, local_path: str) -> bool:
+    """S3 の現物とローカルが同一か（上げ直す必要が無いかの判定）。"""
+    import hashlib
+
+    try:
+        head = s3.head_object(Bucket=LLM_SITE_BUCKET, Key=key)
+    except Exception:  # noqa: BLE001
+        return False
+    try:
+        if head.get("ContentLength") != os.path.getsize(local_path):
+            return False
+        etag = str(head.get("ETag", "")).strip('"')
+        if "-" in etag:            # マルチパートは md5 ではない
+            return False
+        with open(local_path, "rb") as fh:
+            return hashlib.md5(fh.read()).hexdigest() == etag
+    except Exception:  # noqa: BLE001
+        return False
+
+
 @tool
 def publish_and_verify(paths: str = "", live: bool = True) -> dict:
     """描画 → ゲート → 公開 → キャッシュ破棄 → **公開URLの実物照合** を1回でやる。
@@ -1988,30 +2115,12 @@ def publish_and_verify(paths: str = "", live: bool = True) -> dict:
     except Exception:  # noqa: BLE001
         logger.exception("描画に失敗（描画なしで続行）")
 
-    # 2. 対象の決定
-    targets: list[str] = []
-    for rel in result["rendered"]:
-        if rel.endswith(".html"):
-            targets.append(rel)
-    for p in [x.strip() for x in (paths or "").split(",") if x.strip()]:
-        try:
-            f = _resolve_local_path(p)
-        except Exception:  # noqa: BLE001
-            result["rejected"].append({"path": p, "errors": ["パスが不正"]})
-            continue
-        if os.path.isdir(f):
-            for root, _dirs, files in os.walk(f):
-                for name in files:
-                    if name.endswith(".html"):
-                        targets.append(os.path.relpath(os.path.join(root, name), base_dir))
-        elif f.endswith(".html"):
-            targets.append(os.path.relpath(f, base_dir))
-    seen, uniq = set(), []
-    for t in targets:
-        t = t.replace(os.sep, "/")
-        if t.endswith("index.html") and t not in seen:
-            seen.add(t)
-            uniq.append(t)
+    # 2. 対象の決定（HTML はゲート、それ以外はデータ・アセットとして公開）
+    try:
+        uniq, other_news = _publish_targets(base_dir, result["rendered"], paths)
+    except Exception as e:  # noqa: BLE001
+        result["rejected"].append({"path": paths, "errors": ["パスが不正: %s" % e]})
+        uniq, other_news = [], []
 
     # 3. ゲート（公開前の実物に対して）
     ok_targets = []
@@ -2049,6 +2158,33 @@ def publish_and_verify(paths: str = "", live: bool = True) -> dict:
         except Exception as e:  # noqa: BLE001
             result["rejected"].append({"key": rel, "errors": ["upload: %s" % e]})
 
+    # 4-b. HTML以外（data/*.json・sitemap.xml・llms.txt・style.css・画像）
+    #      2026-11-21: ここが抜けていて、render が data/models.json を
+    #      更新しても計算機だけ古いままだった。中身が同じなら上げない。
+    if other_news:
+        facts_hits = _facts_consistency_errors(base_dir) if any(
+            r.endswith("models.json") for r in other_news) else []
+        for rel in other_news:
+            if rel.endswith("models.json") and facts_hits:
+                result["rejected"].append({"key": rel, "errors": facts_hits[:6]})
+                continue
+            try:
+                local = os.path.join(base_dir, rel)
+                if _same_as_s3(s3, rel, local):
+                    continue
+            except Exception:  # noqa: BLE001
+                continue
+            if not os.path.exists(local):
+                continue
+            try:
+                s3.upload_file(local, LLM_SITE_BUCKET, rel,
+                               ExtraArgs={"ContentType": _content_type(rel),
+                                          "CacheControl": _cache_control(rel)})
+                _invalidation_paths.append("/" + rel)
+                result["published"].append(rel)
+            except Exception as e:  # noqa: BLE001
+                result["rejected"].append({"key": rel, "errors": ["upload: %s" % e]})
+
     # 5. invalidation（日付修正の取りこぼしを避けるため、HTMLは /* で落とす）
     #    ※ここで落ちても公開自体は終わっているので、例外は握って結果に載せる
     #      （2026-11-21: LLM_DIST_ID が空の環境で InvalidAction になりツールごと
@@ -2071,7 +2207,10 @@ def publish_and_verify(paths: str = "", live: bool = True) -> dict:
 
         wait = [0, 15, 30]
         for rel in result["published"]:
-            url = LLM_SITE_URL.rstrip("/") + "/" + rel[: -len("index.html")]
+            if rel.endswith("index.html"):
+                url = LLM_SITE_URL.rstrip("/") + "/" + rel[: -len("index.html")]
+            else:
+                url = LLM_SITE_URL.rstrip("/") + "/" + rel
             want = _local_digest(rel)
             got = None
             for i, secs in enumerate(wait):

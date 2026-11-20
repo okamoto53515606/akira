@@ -276,12 +276,18 @@ def record_item(item_id: str, request: str, accept: str, status: str = "requeste
     return row
 
 
-def item_receipt(item_id: str, accept: str, response: str) -> tuple[str, str]:
+def item_receipt(item_id: str, accept: str, response: str,
+                 single_item: bool = False) -> tuple[str, str]:
     """応答から `DONE: <id>` / `NOT_DONE: <id>` を読む。
 
     戻り値: (state, 受領書の1行)。state は "done" / "not_done" / "unknown"。
     **「未確認」と「未達」を混ぜない**（2026-11-21 修正: 以前は両方 not_done に
     していたため、書式違いの未確認まで「未達」として数えていた）。
+
+    `single_item=True` のときは、id の無い `DONE: 説明…` も**その1項目への
+    回答**として読む。1回の依頼はコードが1項目に矯正しているので対象は一意。
+    （2026-11-21 の実機で「DONE: 説明文」が続き、作業は完了しているのに毎回
+      「未確認」になっていた。書式違反は evidence に残して人に見えるようにする）
     """
     body = response or ""
     if not item_id:
@@ -292,9 +298,15 @@ def item_receipt(item_id: str, accept: str, response: str) -> tuple[str, str]:
         return "done", "達成（応答に DONE: %s）" % item_id
     if not_done:
         return "not_done", "未達（応答に NOT_DONE: %s）" % item_id
-    # id 無しの DONE/NOT_DONE 行は「書式違い」。未確認として扱い、直させる。
-    loose = bool(re.search(r"(?im)^\s*(?:NOT[_ ]?DONE|DONE)\s*[:：]", body))
-    if loose:
+    # id 無しの DONE/NOT_DONE 行は「書式違い」。
+    loose_done = bool(re.search(r"(?im)^\s*DONE\s*[:：]", body))
+    loose_not = bool(re.search(r"(?im)^\s*NOT[_ ]?DONE\s*[:：]", body))
+    if single_item and (loose_done or loose_not) and not (loose_done and loose_not):
+        if loose_not:
+            return "not_done", "未達（書式違いの NOT_DONE を item_id として読んだ）"
+        return "done", ("達成（書式違いの DONE を item_id として読んだ。"
+                        "次回は `DONE: %s` と id だけ書け）" % item_id)
+    if loose_done or loose_not:
         return "unknown", "未確認（DONE/NOT_DONE はあるが item_id: %s が付いていない）" % item_id
     return "unknown", "未確認（応答に DONE/NOT_DONE の記載が無い）"
 
@@ -803,7 +815,7 @@ def create_delegation_tools(models, run_budget_jpy: float, block_publish: bool =
                 )
             text = str(result)
             if item_id:
-                state, receipt = item_receipt(item_id, accept, text)
+                state, receipt = item_receipt(item_id, accept, text, single_item=True)
                 record_item(item_id, request, accept, status=state, evidence=receipt)
                 text += ("\n\n【受領書（機械が付けた。消すな）】\n"
                          "item_id: %s\n判定: %s\n合格条件: %s\n"
