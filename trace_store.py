@@ -82,6 +82,31 @@ def redact(text: str) -> str:
     return out
 
 
+def _ddb_value(v, depth: int = 0):
+    """DynamoDB が受け付ける型に落とす（float は Decimal、入れ子も再帰）。
+
+    2026-11-21 の実機で発見: `delegate.result` の tools（dict のリスト）に
+    float（秒）が入っていると **TypeError で記録が丸ごと落ちる**。DynamoDB は
+    float を受け付けないため、深さに関係なく Decimal に変換する。
+    """
+    if v is None:
+        return None
+    if isinstance(v, bool) or isinstance(v, int):
+        return v
+    if isinstance(v, float):
+        return Decimal(str(round(v, 3)))
+    if isinstance(v, str):
+        return redact(v)[:2000]
+    if depth >= 4:
+        return redact(json.dumps(v, ensure_ascii=False, default=str))[:2000]
+    if isinstance(v, (list, tuple)):
+        return [_ddb_value(x, depth + 1) for x in v][:60]
+    if isinstance(v, dict):
+        return {str(k2): _ddb_value(v2, depth + 1)
+                for k2, v2 in v.items() if v2 is not None}
+    return redact(str(v))[:2000]
+
+
 def _digest(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8", "replace")).hexdigest()[:16]
 
@@ -153,19 +178,7 @@ class Trace:
         for k, v in fields.items():
             if v is None:
                 continue
-            if isinstance(v, str):
-                item[k] = redact(v)[:2000]
-            elif isinstance(v, bool):
-                item[k] = v
-            elif isinstance(v, int):
-                item[k] = v
-            elif isinstance(v, float):
-                # DynamoDB は float を受け付けない（TypeError）。Decimal に変換する。
-                item[k] = Decimal(str(round(v, 3)))
-            elif isinstance(v, (list, tuple)):
-                item[k] = [redact(x) if isinstance(x, str) else x for x in v][:60]
-            else:
-                item[k] = redact(json.dumps(v, ensure_ascii=False, default=str))[:2000]
+            item[k] = _ddb_value(v)
         self.items.append({"sk": item["sk"], "kind": kind})
         try:
             ddb, _ = self._clients()

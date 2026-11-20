@@ -231,16 +231,22 @@ check("2項目の依頼を検出する",
 check("1項目の依頼は通す", M.count_request_items("china-ai の MiniMax を直す") == 0)
 check("丸数字も検出する", M.count_request_items("① A をやる\n② B をやる") == 2)
 
-_ok, _r1 = M.item_receipt("OK-2", "年表が降順", "作業しました。\nDONE: OK-2")
-check("DONE を達成として読む", _ok and "達成" in _r1, _r1)
-_ok2, _r2 = M.item_receipt("OK-2", "年表が降順", "時間切れ\nNOT_DONE: OK-2")
-check("NOT_DONE を未達として読む", (not _ok2) and "未達" in _r2, _r2)
-_ok3, _r3 = M.item_receipt("OK-2", "年表が降順", "作業しました。")
-check("記載が無ければ未確認（達成にしない）", (not _ok3) and "未確認" in _r3, _r3)
+_s1, _r1 = M.item_receipt("OK-2", "年表が降順", "作業しました。\nDONE: OK-2")
+check("DONE を達成として読む", _s1 == "done" and "達成" in _r1, _r1)
+_s2, _r2 = M.item_receipt("OK-2", "年表が降順", "時間切れ\nNOT_DONE: OK-2")
+check("NOT_DONE を未達として読む", _s2 == "not_done" and "未達" in _r2, _r2)
+_s3, _r3 = M.item_receipt("OK-2", "年表が降順", "作業しました。")
+check("記載が無ければ未確認（達成にしない）", _s3 == "unknown" and "未確認" in _r3, _r3)
+# 2026-11-21 の実機で起きた型: id 無しの NOT_DONE
+_s4, _r4 = M.item_receipt("OK-2", "年表が降順", "NOT_DONE: 公開（テストランのため）")
+check("id無しの NOT_DONE は未達ではなく未確認", _s4 == "unknown" and "item_id" in _r4, _r4)
 
 M._ITEM_LEDGER.clear()
+M.record_item("OK-1", "china-ai", "lab-card 8枚", status="requested")
 M.record_item("OK-1", "china-ai", "lab-card 8枚", status="done", evidence="達成（DONE: OK-1）")
+M.record_item("OK-2", "mai", "年表が降順", status="requested")
 M.record_item("OK-2", "mai", "年表が降順", status="not_done", evidence="未達（NOT_DONE: OK-2）")
+check("同じ item は1行に集約される", len(M._ITEM_LEDGER) == 2, str(M._ITEM_LEDGER))
 _md = M.ledger_markdown()
 check("受領書に両方の項目が出る", "OK-1" in _md and "OK-2" in _md)
 check("未達が強調される", "**未達**" in _md)
@@ -289,6 +295,32 @@ _r = pt.redact({"a": "token=abcdefghijklmn", "b": "mail me at a.b@example.com"})
 check("公開時にも鍵を伏字にする", "abcdefghijklmn" not in json.dumps(_r, ensure_ascii=False))
 check("メールアドレスを伏字にする", "@example.com" not in json.dumps(_r, ensure_ascii=False))
 
+
+
+print("== テストラン（--no-publish）では公開できない")
+import inspect as _insp
+
+_src = open(os.path.join(ROOT, "main.py"), encoding="utf-8").read()
+check("publish_and_verify もドライランで差し替わる",
+      "_publish_verify = publish_and_verify" in _src and "_publish_verify," in _src)
+
+
+print("== 入れ子（dict のリスト）に float が入っても記録できる")
+_written.clear()
+_t3 = ts.Trace(today="2026-11-21", run_id="nested")
+_t3._ddb = _FakeDDB()
+_t3._s3 = object()
+_t3.event("delegate.result", agent="Claudeエンジニア", item_id="X",
+          tool_calls=20, cost_jpy=3.3,
+          tools=[{"tool": "shell", "calls": 12, "errors": 0, "seconds": 1.25}],
+          body={"digest": "abc", "chars": 10})
+check("dict のリスト（float入り）でも書ける", len(_written) == 1, str(_written))
+_tools = _written[0].get("tools") if _written else None
+check("ツール内訳が構造のまま残る",
+      isinstance(_tools, list) and _tools and _tools[0]["tool"] == "shell", str(_tools))
+import decimal as _dec
+check("秒が Decimal になっている（DynamoDBの型）",
+      isinstance(_tools[0]["seconds"], _dec.Decimal), str(type(_tools[0]["seconds"])))
 
 print("\nRESULT: %d passed / %d failed" % (len(PASS), len(FAIL)))
 sys.exit(1 if FAIL else 0)

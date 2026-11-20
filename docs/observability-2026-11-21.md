@@ -101,6 +101,27 @@ akira-trace (DynamoDB, 非公開, TTL120日)
 | 取得した第三者ページ本文 | **公開しない** |
 | 日報本文・okamoコメント | 日報は既に公開。コメントは元から非公開なので**trace にも入れない**（allowlist 外） |
 
+## 5-4. 実機テストラン（2026-11-21 07:42〜07:56 JST / `--no-publish`）
+
+| 項目 | 結果 |
+|---|---|
+| 終了 | **exit 0**（07:56:52 STOPPED）。`ERROR \| akira` は 0件 |
+| 記録 | `run#2026-11-21#0742-5d90cb` に **32イベント**（run.start / prompt.system×4 / mission.built / delegate.request×3 / item.status×6 / delegate.rejected / run.end） |
+| 依頼の契約 | 1回目で**番号付き2項目を渡して `delegate.rejected`**（＝機械が拒否）。Akira は分割して再依頼し `OK-2` は **done** |
+| 公開 | **なし**（`site_upload` / `publish_and_verify` がドライランで差し替わり、エンジニアも「公開できていません」と報告）。公開サイトは不変を実測（`/timeline/` 先頭は 2026-11-17 のまま） |
+| 費用 | 89.1円（月予算9,300円） |
+| 見張り | 台帳に無い `gpt-6-2-astra-law` / `gemini-4-neon` を検出 → エンジニアが公式で裏取りして台帳に追加（Neon=2026-11-18 GA / Astra for Law=2026-11-17、`released_source` つき）。**次回のランで公開される** |
+| 見張りの失敗 | deepseek ソースが HTTPError → ミッションに「不明」と明示（仕様どおり） |
+
+このランで見つけて直したもの:
+
+| # | 見つけた不具合 | 直した内容 |
+|---|---|---|
+| 1 | `delegate.result` が **TypeError で記録できない**（`tools` の dict のリストに float が入る／DynamoDB は float 不可） | `_ddb_value()` で入れ子も再帰的に `Decimal` 化。テスト追加 |
+| 2 | 受領書が **「未確認」も「未達」も not_done** として数えていた | 3状態（done / not_done / unknown）に分離 |
+| 3 | 同じ item を **2行**に記録（requested と done） | `record_item` を upsert に。run.end は一意な item で数える |
+| 4 | エンジニアが `NOT_DONE: 公開できず` と **item_id 無し**で書き、未確認になった | 依頼文の末尾に**ハーネスが受領書の書き方（item_id 入り）を自動で足す**。プロンプトにも明記 |
+
 ## 6. 検証
 
 - `test_regression_20261121.py`: **40/40 PASS**（伏字・Dynamo不達時の無害化・

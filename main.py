@@ -254,33 +254,49 @@ def count_request_items(request: str) -> int:
 
 def record_item(item_id: str, request: str, accept: str, status: str = "requested",
                 reason: str = "", evidence: str = "") -> dict:
-    """作業票を1件記録する（run 内の台帳＋trace）。"""
-    row = {"item_id": item_id or "-", "request": (request or "")[:400],
-           "accept": (accept or "")[:400], "status": status,
-           "reason": reason[:300], "evidence": evidence[:300]}
-    _ITEM_LEDGER.append(row)
+    """作業票を1件記録する（run 内の台帳＋trace）。
+
+    2026-11-21 修正: 以前は呼ぶたびに行を追加していたため、1項目が
+    「requested」と「done」の2行になり、受領書が二重に出て未達数も水増しされた。
+    同じ item_id は**同じ行を更新**する。
+    """
+    row = next((r for r in _ITEM_LEDGER if r["item_id"] == item_id), None)
+    if row is None:
+        row = {"item_id": item_id or "-", "request": (request or "")[:400],
+               "accept": (accept or "")[:400], "status": status,
+               "reason": reason[:300], "evidence": evidence[:300]}
+        _ITEM_LEDGER.append(row)
+    else:
+        row.update(status=status, reason=reason[:300], evidence=evidence[:300])
     trace = trace_store.current()
     if trace:
         trace.event("item.status", item_id=row["item_id"], status=status,
-                    reason=row["reason"], accept=row["accept"])
+                    reason=row["reason"], evidence=row["evidence"],
+                    accept=row["accept"])
     return row
 
 
-def item_receipt(item_id: str, accept: str, response: str) -> tuple[bool, str]:
-    """応答から `DONE: <id>` / `NOT_DONE: <id>` を読み、無ければ未達にする。
+def item_receipt(item_id: str, accept: str, response: str) -> tuple[str, str]:
+    """応答から `DONE: <id>` / `NOT_DONE: <id>` を読む。
 
-    戻り値: (達成したか, 受領書の1行)
+    戻り値: (state, 受領書の1行)。state は "done" / "not_done" / "unknown"。
+    **「未確認」と「未達」を混ぜない**（2026-11-21 修正: 以前は両方 not_done に
+    していたため、書式違いの未確認まで「未達」として数えていた）。
     """
     body = response or ""
     if not item_id:
-        return False, "未確認（item_id が無い）"
+        return "unknown", "未確認（item_id が無い）"
     done = bool(re.search(r"(?im)^\s*DONE\s*[:：]\s*%s\b" % re.escape(item_id), body))
     not_done = bool(re.search(r"(?im)^\s*NOT[_ ]?DONE\s*[:：]\s*%s\b" % re.escape(item_id), body))
     if done and not not_done:
-        return True, "達成（応答に DONE: %s）" % item_id
+        return "done", "達成（応答に DONE: %s）" % item_id
     if not_done:
-        return False, "未達（応答に NOT_DONE: %s）" % item_id
-    return False, "未確認（応答に DONE/NOT_DONE の記載が無い。accept も未確認）"
+        return "not_done", "未達（応答に NOT_DONE: %s）" % item_id
+    # id 無しの DONE/NOT_DONE 行は「書式違い」。未確認として扱い、直させる。
+    loose = bool(re.search(r"(?im)^\s*(?:NOT[_ ]?DONE|DONE)\s*[:：]", body))
+    if loose:
+        return "unknown", "未確認（DONE/NOT_DONE はあるが item_id: %s が付いていない）" % item_id
+    return "unknown", "未確認（応答に DONE/NOT_DONE の記載が無い）"
 
 
 def ledger_markdown() -> str:
@@ -289,7 +305,8 @@ def ledger_markdown() -> str:
         return ""
     rows = ["", "---", "", "### 今日の依頼項目（機械の受領書。ここは消せない）", "",
             "| item | 判定 | 合格条件 | 根拠 |", "|---|---|---|---|"]
-    mark = {"done": "達成", "not_done": "**未達**", "requested": "未確認"}
+    mark = {"done": "達成", "not_done": "**未達**", "unknown": "**未確認**",
+            "requested": "未確認"}
     for r in _ITEM_LEDGER:
         rows.append("| %s | %s | %s | %s |" % (
             r["item_id"], mark.get(r["status"], r["status"]),
@@ -706,6 +723,21 @@ def create_delegation_tools(models, run_budget_jpy: float, block_publish: bool =
                         f"と書いて終了せよ。"
                     )
             tools_before = _tool_call_count(agent)
+            # item_id を依頼文の末尾に機械で足す（Akira が書き忘れても効くように）。
+            # 2026-11-21 の実機では、エンジニアが `NOT_DONE: 公開（…` と id 無しで
+            # 書いたため未確認になっていた。
+            if item_id and "【受領書】" not in request_to_send:
+                request_to_send = (
+                    request_to_send.rstrip()
+                    + "\n\n【受領書（この依頼の締め方）】\n"
+                    + "item_id: %s\n" % item_id
+                    + "合格条件(accept): %s\n" % (accept or "(未指定)")
+                    + "作業を終えたら、応答の**最後の行**に必ず次のどちらかを書け"
+                    + "（idを必ず付ける）:\n"
+                    + "  DONE: %s\n  NOT_DONE: %s（理由を1行）\n" % (item_id, item_id)
+                    + "公開できない事情（テストラン等）がある場合も、やった作業と"
+                    + "やっていない作業を分けて NOT_DONE に書け。"
+                )
             _debug_log_io("指示", name, request_to_send)
             _trace = trace_store.current()
             if _trace:
@@ -771,9 +803,8 @@ def create_delegation_tools(models, run_budget_jpy: float, block_publish: bool =
                 )
             text = str(result)
             if item_id:
-                ok, receipt = item_receipt(item_id, accept, text)
-                record_item(item_id, request, accept,
-                            status="done" if ok else "not_done", evidence=receipt)
+                state, receipt = item_receipt(item_id, accept, text)
+                record_item(item_id, request, accept, status=state, evidence=receipt)
                 text += ("\n\n【受領書（機械が付けた。消すな）】\n"
                          "item_id: %s\n判定: %s\n合格条件: %s\n"
                          "※未達なら、そのまま日報に書け。別の依頼で包むな。"
@@ -899,9 +930,17 @@ def create_delegation_tools(models, run_budget_jpy: float, block_publish: bool =
             """【ドライラン】公開は行わない。"""
             return {"status": "dry_run", "note": "本日はドライランのため公開していません"}
 
+        @tool
+        def publish_and_verify(*args, **kwargs) -> dict:
+            """【ドライラン】描画とゲートだけ行い、公開はしない。"""
+            return {"status": "dry_run",
+                    "note": "本日はドライランのためアップロードもinvalidationもしていません"}
+
         _publish, _upload = publish_file_to_site, site_upload
+        _publish_verify = publish_and_verify
     else:
         _publish, _upload = akira_tools.publish_file_to_site, akira_tools.site_upload
+        _publish_verify = akira_tools.publish_and_verify
 
     claude_tools = [
         _publish,
@@ -913,7 +952,8 @@ def create_delegation_tools(models, run_budget_jpy: float, block_publish: bool =
         _upload,
         # 描画→ゲート→公開→invalidation→実URL照合を1呼び出しに畳む（2026-11-21）。
         # 83回の儀式を減らし、「残り呼び出し数」で依頼項目を削る理由を無くす。
-        akira_tools.publish_and_verify,
+        # ※ --no-publish / --dry-run ではスタブに差し替わる（公開させない）。
+        _publish_verify,
         # 画像生成はエージェント経由ではなく直接叩けるようにする。
         # 2026-09-15: ask_gemini_mother（エージェント）が400で不通になり画像が作れなかった。
         # 画像生成自体は APIキー1コールの決定論的な処理なので、依頼先のLLMが落ちても
@@ -1863,9 +1903,12 @@ def run_daily(dry_run: bool = False, no_publish: bool = False) -> None:
             )
     trace = trace_store.current()
     if trace:
+        _ids = {r["item_id"] for r in _ITEM_LEDGER}
         trace.event("run.end", run_spent_jpy=round(budget.get_run_spent_jpy(), 1),
-                    items=len(_ITEM_LEDGER),
-                    not_done=sum(1 for r in _ITEM_LEDGER if r["status"] != "done"),
+                    items=len(_ids),
+                    done=sum(1 for r in _ITEM_LEDGER if r["status"] == "done"),
+                    not_done=sum(1 for r in _ITEM_LEDGER if r["status"] == "not_done"),
+                    unknown=sum(1 for r in _ITEM_LEDGER if r["status"] == "unknown"),
                     report_written=bool(collected.get("report_written")))
     logger.info("=== 本日の運用終了 (trace run_id=%s) ===",
                 trace.run_id if trace else "-")
