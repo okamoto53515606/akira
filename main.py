@@ -1342,6 +1342,59 @@ def _missing_tool_warning(mod) -> str:
             "**この欠落を日報の冒頭と site_plan に書け**。\n" % ", ".join(missing))
 
 
+def _surfaces_shown(facts: dict, site_dir: str) -> dict:
+    """台帳の各モデルが「公開ページのどこに出ているか」を**実物から**判定する。
+
+    なぜ（2026-11-21 / 課題175）:
+        `shown_on` は手で書く欄で、コードは誰も更新していない。だから必ず腐る。
+        実際、gemini-4-hydrogen / gemini-4-carbon / gemini-4-neon は `/pricing/`
+        に行があるのに `shown_on` が `[timeline, calculator]` のままで、企画候補が
+        「未掲載: pricing」と**嘘**をついた（Akiraが公開ページを見て気づいた）。
+        render_site は台帳からページを描くのだから、**描かれた実物**を見ればよい。
+        これは「台帳を走査して漏れ0件と結論する」自己参照の緑を消すのと同じ話。
+    """
+    import json
+    import unicodedata
+
+    def _n(text) -> str:
+        return unicodedata.normalize("NFKC", str(text)).lower().replace(" ", "")
+
+    texts = {}
+    for surf, rels in (("timeline", ("timeline/index.html", "en/timeline/index.html")),
+                       ("pricing", ("pricing/index.html", "en/pricing/index.html"))):
+        buf = []
+        for rel in rels:
+            try:
+                with open(os.path.join(site_dir, rel), encoding="utf-8",
+                          errors="replace") as fh:
+                    buf.append(fh.read())
+            except OSError:
+                continue
+        texts[surf] = _n(" ".join(buf))
+    try:
+        with open(os.path.join(site_dir, "data", "models.json"), encoding="utf-8") as fh:
+            texts["calculator"] = _n(json.dumps(json.load(fh).get("models", []),
+                                                ensure_ascii=False))
+    except Exception as e:  # noqa: BLE001
+        # 握り潰すと「計算機に無い」と誤判定する（実際に json の import 漏れで
+        # 全モデルが calculator 未掲載になった）。必ずログに残す。
+        logger.warning("計算機データの読み込みに失敗（%s: %s）", type(e).__name__, e)
+        texts["calculator"] = ""
+
+    out = {}
+    for mid, r in (facts.get("models") or {}).items():
+        if not isinstance(r, dict):
+            continue
+        cands = [(r.get("price") or {}).get("name") or ""]
+        for k in ("ja", "en"):
+            cands += [x.strip() for x in str((r.get("names") or {}).get(k) or "").split("/")]
+        cands.append(mid)
+        # 短すぎる名前（"Gemini" 等）は誤ヒットするので使わない
+        cands = [c for c in cands if c and len(_n(c)) >= 6]
+        out[mid] = {s for s, t in texts.items() if any(_n(c) in t for c in cands)}
+    return out
+
+
 def _propose_themes(today: str, limit: int = 3, watch_line: str = "") -> str:
     """今日の企画候補を**台帳とサイトから機械的に**出す（2026-11-15 / ★3）。
 
@@ -1382,6 +1435,13 @@ def _propose_themes(today: str, limit: int = 3, watch_line: str = "") -> str:
     # A0. 新モデルのリサーチと掲載（**毎回の最優先**。okamo確認 2026-11-15）
     #     直近21日のリリースで「単価が無い」または「料金比較/計算機/年表のどれかに未掲載」
     #     のものを機械で挙げる。ここが空なら新モデルの漏れは無い。
+    # どこに出ているかは**ページの実物**から取る（shown_on は腐る。課題175）
+    shown_map = {}
+    try:
+        shown_map = _surfaces_shown(facts, site_dir)
+    except Exception:  # noqa: BLE001
+        logger.warning("公開ページからの掲載判定に失敗（台帳の shown_on で代用）")
+
     recent = []
     for k, v in models.items():
         try:
@@ -1390,7 +1450,9 @@ def _propose_themes(today: str, limit: int = 3, watch_line: str = "") -> str:
             continue
         if age < 0 or age > 21:
             continue
-        shown = set(v.get("shown_on") or [])
+        shown = shown_map.get(k)
+        if shown is None:
+            shown = set(v.get("shown_on") or [])
         missing = [x for x in ("timeline", "pricing", "calculator") if x not in shown]
         price = v.get("price") or {}
         no_price = not (price.get("input") and price.get("output"))

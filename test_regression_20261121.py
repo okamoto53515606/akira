@@ -564,5 +564,45 @@ check("複数項目モードでは書式違いを未確認のまま",
 check("DONE が無ければ未確認",
       _main.item_receipt("X-1", "a", "完了しました", single_item=True)[0] == "unknown")
 
+
+print("== 企画候補は「公開ページの実物」で掲載を判定する（shown_on は腐る・課題175）")
+_fd = tempfile.mkdtemp()
+for sub in ("data", "timeline", "en/timeline", "pricing", "en/pricing"):
+    os.makedirs(os.path.join(_fd, sub), exist_ok=True)
+with open(os.path.join(_fd, "pricing", "index.html"), "w", encoding="utf-8") as fh:
+    fh.write("<table><tr><td>Gemini 4 Neon</td></tr></table>")
+with open(os.path.join(_fd, "en", "pricing", "index.html"), "w", encoding="utf-8") as fh:
+    fh.write("<table><tr><td>Gemini 4 Neon</td></tr></table>")
+with open(os.path.join(_fd, "timeline", "index.html"), "w", encoding="utf-8") as fh:
+    fh.write("<article>Gemini 4 Neon</article>")
+with open(os.path.join(_fd, "en", "timeline", "index.html"), "w", encoding="utf-8") as fh:
+    fh.write("<article>Gemini 4 Neon</article>")
+with open(os.path.join(_fd, "data", "models.json"), "w", encoding="utf-8") as fh:
+    json.dump({"models": [{"name": "Gemini 4 Neon", "input": 3.0}]}, fh)
+_fx = {"models": {"gemini-4-neon": {
+    "id": "gemini-4-neon", "status": "ga",
+    "price": {"name": "Gemini 4 Neon", "input": 3.0, "output": 15.0},
+    "names": {"ja": "Gemini 4 Neon", "en": "Gemini 4 Neon"},
+    "shown_on": ["timeline", "calculator"]}}}          # pricing が抜けた腐った台帳
+_sh = _main._surfaces_shown(_fx, _fd)
+check("台帳の shown_on ではなく実物から pricing を検出する",
+      "pricing" in _sh["gemini-4-neon"], str(_sh.get("gemini-4-neon")))
+check("計算機（models.json）も検出する",
+      "calculator" in _sh["gemini-4-neon"], str(_sh.get("gemini-4-neon")))
+check("年表も検出する", "timeline" in _sh["gemini-4-neon"], str(_sh.get("gemini-4-neon")))
+# どこにも無いモデルは空
+with open(os.path.join(_fd, "pricing", "index.html"), "w", encoding="utf-8") as fh:
+    fh.write("<table></table>")
+with open(os.path.join(_fd, "en", "pricing", "index.html"), "w", encoding="utf-8") as fh:
+    fh.write("<table></table>")
+with open(os.path.join(_fd, "timeline", "index.html"), "w", encoding="utf-8") as fh:
+    fh.write("<article></article>")
+with open(os.path.join(_fd, "en", "timeline", "index.html"), "w", encoding="utf-8") as fh:
+    fh.write("<article></article>")
+with open(os.path.join(_fd, "data", "models.json"), "w", encoding="utf-8") as fh:
+    json.dump({"models": []}, fh)
+check("載っていなければ空", _main._surfaces_shown(_fx, _fd)["gemini-4-neon"] == set(),
+      str(_main._surfaces_shown(_fx, _fd).get("gemini-4-neon")))
+
 print("\nRESULT: %d passed / %d failed" % (len(PASS), len(FAIL)))
 sys.exit(1 if FAIL else 0)
