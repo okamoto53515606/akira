@@ -1046,6 +1046,41 @@ def _refresh_freshness_queue(today: str, limit: int = 3) -> str:
     return "\n".join(lines)
 
 
+def _release_watch_line(today: str) -> str:
+    """公式ソースの見張り（2026-11-21）をミッション用テキストにする。
+
+    なぜ:
+        2026-11-21 のランは GPT-6.2 Astra / Sol の公開に**気づかなかった**。
+        `_propose_themes()` の「新モデルの漏れ」は台帳を自分で走査しており、
+        台帳に無いモデルは候補になりえない（自己参照）。台帳が古いと
+        「漏れ 0件」という**偽の緑**になる。
+        ここでは台帳ではなく**各社の公式料金ページ**を見て、台帳に無いIDを出す。
+
+    失敗した場合は「取得できず（新モデル無し、ではない）」を必ず返す。
+    """
+    import glob
+    import importlib.util
+
+    cand = glob.glob(os.path.join(os.path.abspath(WORKSPACE_LOCAL_DIR), "tools",
+                                  "watch_releases.py"))
+    if not cand:
+        return ("## 公式ソースの見張り: **未導入**（tools/watch_releases.py が無い）"
+                " — 新モデルの見落としは検知できない。日報に書け。")
+    try:
+        spec = importlib.util.spec_from_file_location("akira_release_watch", cand[0])
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        facts_path = os.path.join(os.path.abspath(WORKSPACE_LOCAL_DIR), "data", "facts.json")
+        with open(facts_path, encoding="utf-8") as fh:
+            models = (json.load(fh) or {}).get("models") or {}
+        result = mod.scan(models, today)
+        return mod.mission_line(result)
+    except Exception as e:  # noqa: BLE001
+        logger.warning("公式ソースの見張りに失敗（本処理は続行）: %s", e)
+        return ("## 公式ソースの見張り: **失敗（%s）** — 新モデルが無い証拠ではない。"
+                "日報に書け。" % type(e).__name__)
+
+
 def _missing_tool_warning(mod) -> str:
     """必須ツールに @tool が付いているかを起動時に確認する（2026-11-15 追加）。
 
@@ -1070,7 +1105,7 @@ def _missing_tool_warning(mod) -> str:
             "**この欠落を日報の冒頭と site_plan に書け**。\n" % ", ".join(missing))
 
 
-def _propose_themes(today: str, limit: int = 3) -> str:
+def _propose_themes(today: str, limit: int = 3, watch_line: str = "") -> str:
     """今日の企画候補を**台帳とサイトから機械的に**出す（2026-11-15 / ★3）。
 
     なぜ:
@@ -1100,6 +1135,10 @@ def _propose_themes(today: str, limit: int = 3) -> str:
     cands = []
     models = facts.get("models") or {}
 
+    # A-1. 公式ソースの見張り（2026-11-21）。**台帳の外**から新モデルを拾う。
+    #      ここが無いと「台帳に無い＝漏れ0件」という自己参照の偽の緑になる。
+    if watch_line:
+        cands.append(watch_line)
     # A0. 新モデルのリサーチと掲載（**毎回の最優先**。okamo確認 2026-11-15）
     #     直近21日のリリースで「単価が無い」または「料金比較/計算機/年表のどれかに未掲載」
     #     のものを機械で挙げる。ここが空なら新モデルの漏れは無い。
@@ -1475,7 +1514,11 @@ def run_daily(dry_run: bool = False, no_publish: bool = False) -> None:
     freshness_line = _refresh_freshness_queue(today, limit=3)
     logger.info("鮮度キュー: %s", freshness_line.replace("\n", " / ")[:220])
 
-    theme_line = _propose_themes(today, limit=3)
+    # 公式ソースの見張り（2026-11-21）。台帳の外から新モデルを拾う。
+    watch_line = _release_watch_line(today)
+    logger.info("公式ソースの見張り: %s", watch_line.replace("\n", " / ")[:220])
+
+    theme_line = _propose_themes(today, limit=3, watch_line=watch_line)
     logger.info("企画候補: %s", theme_line.replace("\n", " / ")[:220])
 
     tool_warn_line = _missing_tool_warning(akira_tools)

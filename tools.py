@@ -816,8 +816,61 @@ def _audit_gate_errors(base_dir: str, rel: str, new_text: str, old_text: str) ->
     for code, msg in new_findings:
         if code not in old_codes:
             out.append("%s: %s" % (code, msg))
-        elif code in ("R4", "R9") and _date_modified(new_text) > (_date_modified(old_text) or ""):
-            out.append("%s: %s（日付だけ新しくして中身が古いまま）" % (code, msg))
+        elif code in ("R4", "R9", "R12", "R13", "R14"):
+            # 年表の重複・捏造日付・出典なしのリリース日は「既存の借金」でも止める。
+            # 事実の誤りを公開し続ける方が高くつく（2026-11-21）。
+            if code in ("R12", "R13", "R14"):
+                out.append("%s: %s" % (code, msg))
+            elif _date_modified(new_text) > (_date_modified(old_text) or ""):
+                out.append("%s: %s（日付だけ新しくして中身が古いまま）" % (code, msg))
+    return out
+
+
+STRUCTURE_ALLOW_PATH = os.path.join(WORKSPACE_LOCAL_DIR, "data", "structure_allow.json")
+
+
+def _structure_gate_errors(rel: str, new_text: str, old_text: str) -> list:
+    """公開ゲート: ページ構造の**後退**を止める（2026-11-21 追加）。
+
+    なぜ:
+        2026-11-21 の /china-ai/ は「MiniMax が Kimi と同じカードに入っている」
+        という指摘に対し、**独立セクションを新設**して直した（カードを別のブロックへ
+        移すだけでよかった）。依頼より大きい変更が入り、目次も増えた。
+        既存のゲートは文章と表しか見ておらず、**構造の変化**は誰も見ていない。
+
+    見るもの（既存ページの上書き公開のときだけ）:
+      * `class="section-title"` が増えた（新しい塊を作った）
+      * `class="lab-card"` が減った（カードを別の場所へ逃がした）
+
+    「本当にセクションを増やす必要がある」変更は data/structure_allow.json に
+    意図を書いて明示的に許可する（黙って通す道は作らない）。
+        例: {"china-ai/index.html": {"sections": 8}}
+    """
+    if not old_text or not rel.endswith("index.html"):
+        return []
+
+    def count(text, cls):
+        return len(re.findall(r'class="%s"' % re.escape(cls), text))
+
+    allow = {}
+    try:
+        with open(STRUCTURE_ALLOW_PATH, encoding="utf-8") as fh:
+            allow = ((json.load(fh) or {}).get(rel) or {})
+    except Exception:  # noqa: BLE001
+        allow = {}
+
+    out = []
+    o, n = count(old_text, "section-title"), count(new_text, "section-title")
+    limit = allow.get("sections")
+    if n > o and (limit is None or n > int(limit)):
+        out.append("STRUCTURE: セクションが %d→%d に増えている。不具合の修正は**既存の"
+                   "構造の中**を直す（カードの所属を変える等）。新しいセクションが"
+                   "必要なら data/structure_allow.json に意図を書いて許可する" % (o, n))
+    o, n = count(old_text, "lab-card"), count(new_text, "lab-card")
+    floor = allow.get("cards")
+    if n < o and (floor is None or n < int(floor)):
+        out.append("STRUCTURE: カードが %d→%d に減っている。カードを別のセクションへ"
+                   "移していないか（同じグリッド内に残すのが原則）" % (o, n))
     return out
 
 
@@ -1003,6 +1056,9 @@ def site_upload(local_path: str, site_prefix: str = "") -> dict:
                 except Exception:  # noqa: BLE001
                     old_html = ""
             gate_hits = _audit_gate_errors(base_dir, rel, new_html, old_html) if new_html else []
+            if not gate_hits and new_html and old_html:
+                # 構造の後退（セクション増・カード減）も同じ場所で止める
+                gate_hits = _structure_gate_errors(rel, new_html, old_html)
             if gate_hits:
                 rejected.append({"key": key, "errors": gate_hits})
                 continue

@@ -20,6 +20,10 @@
     R5 キービジュアル（OGカード）の生成日がページの dateModified より古い
     R6 見出しに日付が2つ以上あり、7日以上離れている（新旧セクションの併存）
     R7 「取得日 / retrieved」が dateModified より30日以上古い（WARN）
+    R12 同じ日の年表カードが同じ出来事を二重に書いている（2026-11-21 追加）
+    R13 年表カードの日付が台帳の released と違う（ページ公開日をリリース日に
+        していないか。2026-11-21 追加）
+    R14 リリース日の出典が未確認のまま年表に出している（2026-11-21 追加）
 
 優先度（okamo案「click数の多いページを優先して定期的にチェックする」）:
     data/page_priority.json の score 順に並べ、上位5ページは**7日以内**、
@@ -275,6 +279,54 @@ def _period_marks(text):
     return out
 
 
+# 2026-11-21 追加: 更新履歴（アップデートログ）は本文ではない。
+#   「今日なにを載せたか」を書いた節にモデル名が出てくるのは正常なのに、
+#   R11 がそれを「本文の段落にしか無い」と誤検知していた。
+LOG_SECTION = re.compile(
+    r'<section\b[^>]*aria-labelledby="([^"]+)"[^>]*>(.*?)</section>', re.S)
+LOG_LABEL = re.compile(r"更新履歴|アップデートログ|update log|changelog", re.I)
+# 年表のカード（R12/R13用）。id は台帳の timeline.*_id / モデルid。
+TL_ARTICLE = re.compile(r'<article class="tl-item[^"]*" id="([^"]+)">(.*?)</article>', re.S)
+TL_DATE = re.compile(r'class="tl-date">\s*(20\d{2}-\d{2}-\d{2})')
+TL_TITLE = re.compile(r'<h2[^>]*class="tl-title"[^>]*>(.*?)</h2>', re.S)
+# 同じ日の2件が「同じ出来事」かを見るための語（日本語の助詞・一般語は落とす）
+TL_STOP = {"the", "and", "for", "with", "from", "release", "released", "launch",
+           "launched", "available", "announced", "new", "model", "models",
+           "claude", "gpt", "gemini", "openai", "google", "anthropic"}
+_TL_TOKEN = re.compile(r"[A-Za-z0-9][A-Za-z0-9.\-]{2,}")
+# 「発表 / 予告」の項目はリリース日と違って当然（GA と発表で日付が違う）
+ANNOUNCE_WORDS = re.compile(r"発表|予告|提供開始へ|announce|preview|teaser", re.I)
+
+
+def _body_without_log(html: str) -> str:
+    """更新履歴のセクションを除いた本文（R11用）。"""
+
+    def drop(m):
+        hid = m.group(1)
+        label = _strip_tags(m.group(2)[:200])
+        if LOG_LABEL.search(hid) or LOG_LABEL.search(label):
+            return ""
+        return m.group(0)
+
+    return LOG_SECTION.sub(drop, html)
+
+
+def _tl_items(html: str):
+    """年表のカードを (id, 日付, タイトル) で返す。"""
+    out = []
+    for m in TL_ARTICLE.finditer(html):
+        d = TL_DATE.search(m.group(2))
+        t = TL_TITLE.search(m.group(2))
+        if not d:
+            continue
+        out.append((m.group(1), d.group(1), _strip_tags(t.group(1)) if t else ""))
+    return out
+
+
+def _tl_tokens(title: str):
+    return {w.lower() for w in _TL_TOKEN.findall(title) if w.lower() not in TL_STOP}
+
+
 def _timeline_tables(html):
     """「年表 / タイムライン」見出しの直後にある表を返す（R10用）。"""
     out = []
@@ -521,12 +573,68 @@ def audit_html(rel, html, specs=None, facts=None):
         prominent = " ".join(
             [_strip_tags(h.group(1)) for h in HEADING.finditer(html)]
             + [_strip_tags(t) for t in TABLE.findall(html)])
+        # 2026-11-21: 更新履歴の節は本文ではないので対象から外す（誤検知の除去）
+        body_text = _strip_tags(_body_without_log(html)).lower()
         hidden = [n for n in models
-                  if n.lower() in text.lower() and n.lower() not in prominent.lower()]
+                  if n.lower() in body_text and n.lower() not in prominent.lower()]
         if hidden:
             out.append(("ERROR", "R11",
                         "%s が見出し・表に無い（本文の段落だけ）。新しく載せたモデルは"
                         "見出しか表・年表に置く（読者は段落を読まない）" % "、".join(hidden[:3])))
+
+    # R12 同じ日の年表カードが同じ出来事を二重に書いている（2026-11-21 追加）
+    #     11-21 のランは「Claude Fable 5.1 / Mythos 5.1 公開」があるのに
+    #     「Claude Mythos 5.1 提供開始」を同じ 2026-09-01 に足した。
+    #     表の検査（R3/R8）は年表のカードを見ていないため素通りしていた。
+    items = _tl_items(html)
+    if items:
+        for i, (aid, adate, atitle) in enumerate(items):
+            ta = _tl_tokens(atitle)
+            if not ta:
+                continue
+            for bid, bdate, btitle in items[i + 1:]:
+                if bdate != adate:
+                    continue
+                tb = _tl_tokens(btitle)
+                if not tb:
+                    continue
+                same = len(ta & tb) / float(len(ta | tb))
+                if same >= 0.5:
+                    out.append(("ERROR", "R12",
+                                "年表の %s に同じ出来事が2件ある（「%s」と「%s」）。"
+                                "既にある項目に追記するか、片方を消す"
+                                % (adate, atitle[:30], btitle[:30])))
+                    break
+            else:
+                continue
+            break
+
+    # R13 年表カードの日付が台帳の released と違う（2026-11-21 追加）
+    #     11-21 のランは台帳のスタブに `released = ページの datePublished` を入れて
+    #     「GPT-5.6 Sol 公開（2026-08-29）」という**存在しないリリース**を作った。
+    #     カードの id がモデルidと一致するものだけを対象にする（価格改定などの
+    #     イベント項目は id が別なので対象外）。
+    if items:
+        data = _facts(facts)
+        tmodels = data.get("models") or {}
+        for aid, adate, atitle in items:
+            rec = tmodels.get(aid)
+            if not isinstance(rec, dict):
+                continue
+            rel = rec.get("released") or ""
+            src = rec.get("released_source") or ""
+            if src in ("page-published", "unknown"):
+                out.append(("ERROR", "R14",
+                            "年表の「%s」はリリース日の出典が未確認（%s）。"
+                            "公式発表の日付を確認するまで年表に出さない"
+                            % (atitle[:30], src)))
+                continue
+            if rel and rel != adate and not ANNOUNCE_WORDS.search(atitle):
+                out.append(("ERROR", "R13",
+                            "年表の「%s」が %s になっているが、台帳の released は %s。"
+                            "ページの公開日をリリース日として使っていないか"
+                            % (atitle[:30], adate, rel)))
+                break
 
     # R5 キービジュアルの日付
     specs = specs or {}
@@ -561,7 +669,8 @@ def audit_html(rel, html, specs=None, facts=None):
 # ---------------------------------------------------------------- 公開ゲート
 # 公開を止めるルール（2026-11-19）。「同じ失敗を公開しない」ための最小集合。
 # R5b（仕様が無い）は移行途中なので WARN のまま。R7（取得日が古い）も WARN。
-BLOCK_CODES = ("R1", "R2", "R3", "R4", "R5", "R6", "R8", "R9", "R10", "R11")
+BLOCK_CODES = ("R1", "R2", "R3", "R4", "R5", "R6", "R8", "R9", "R10", "R11",
+               "R12", "R13", "R14")
 
 
 def blocking_errors(rel, html, specs=None, facts=None):
