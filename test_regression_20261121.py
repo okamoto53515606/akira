@@ -15,6 +15,7 @@ import json
 import os
 import sys
 import tempfile
+from pathlib import Path
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, ROOT)
@@ -603,6 +604,52 @@ with open(os.path.join(_fd, "data", "models.json"), "w", encoding="utf-8") as fh
     json.dump({"models": []}, fh)
 check("載っていなければ空", _main._surfaces_shown(_fx, _fd)["gemini-4-neon"] == set(),
       str(_main._surfaces_shown(_fx, _fd).get("gemini-4-neon")))
+
+
+print("== 描画したら shown_on を台帳に書き戻す（手書き欄を腐らせない）")
+_rspec = importlib.util.spec_from_file_location(
+    "render_site_mirror",
+    os.path.join(ROOT, "s3-snapshot", "workspace", "tools", "render_site.py"))
+_rs = importlib.util.module_from_spec(_rspec)
+_rspec.loader.exec_module(_rs)
+check("書き戻し関数がある", hasattr(_rs, "write_back_shown_on"))
+
+_rd = tempfile.mkdtemp()
+os.makedirs(os.path.join(_rd, "site", "data"), exist_ok=True)
+for sub in ("timeline", "en/timeline", "pricing", "en/pricing"):
+    os.makedirs(os.path.join(_rd, "site", sub), exist_ok=True)
+with open(os.path.join(_rd, "site", "pricing", "index.html"), "w", encoding="utf-8") as fh:
+    fh.write("<td>Gemini 4 Neon</td>")
+with open(os.path.join(_rd, "site", "en", "pricing", "index.html"), "w", encoding="utf-8") as fh:
+    fh.write("<td>Gemini 4 Neon</td>")
+with open(os.path.join(_rd, "site", "timeline", "index.html"), "w", encoding="utf-8") as fh:
+    fh.write("<h2>Gemini 4 Neon</h2>")
+with open(os.path.join(_rd, "site", "en", "timeline", "index.html"), "w", encoding="utf-8") as fh:
+    fh.write("<h2>Gemini 4 Neon</h2>")
+with open(os.path.join(_rd, "site", "data", "models.json"), "w", encoding="utf-8") as fh:
+    json.dump({"models": [{"name": "Gemini 4 Neon"}]}, fh)
+os.makedirs(os.path.join(_rd, "ws", "data"), exist_ok=True)
+_ledger = {"models": {"gemini-4-neon": {
+    "id": "gemini-4-neon", "status": "ga",
+    "price": {"name": "Gemini 4 Neon", "input": 3.0, "output": 15.0},
+    "names": {"ja": "Gemini 4 Neon", "en": "Gemini 4 Neon"},
+    "shown_on": ["timeline"]}}}                      # 腐った値
+_ws_p = os.path.join(_rd, "ws", "data", "facts.json")
+with open(_ws_p, "w", encoding="utf-8") as fh:
+    json.dump(_ledger, fh, ensure_ascii=False, indent=1)
+_rs.write_back_shown_on(Path(_rd, "site"), Path(_rd, "ws"), _ledger)
+_after = json.loads(open(_ws_p, encoding="utf-8").read())["models"]["gemini-4-neon"]["shown_on"]
+check("実物に合わせて pricing と calculator が付く",
+      _after == ["calculator", "pricing", "timeline"], str(_after))
+check("台帳ファイルにも書かれている",
+      json.loads(open(_ws_p, encoding="utf-8").read())["models"]["gemini-4-neon"]["shown_on"]
+      == ["calculator", "pricing", "timeline"])
+check("2回目は書き換えない（冪等）",
+      _rs.write_back_shown_on(Path(_rd, "site"), Path(_rd, "ws"), _ledger) == [])
+# 計算機データが無いときは触らない（誤って一面に潰さない）
+os.remove(os.path.join(_rd, "site", "data", "models.json"))
+check("計算機データが読めないときは書き戻さない",
+      _rs.write_back_shown_on(Path(_rd, "site"), Path(_rd, "ws"), _ledger) == [])
 
 print("\nRESULT: %d passed / %d failed" % (len(PASS), len(FAIL)))
 sys.exit(1 if FAIL else 0)

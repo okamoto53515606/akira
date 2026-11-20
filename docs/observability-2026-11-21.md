@@ -361,3 +361,28 @@ Hydrogen / Carbon / Neon は消え、**本当に載っていない gpt-6-cyber �
 恒久策は `render_site` が描画時に `shown_on` を書き戻すこと。今回は
 「企画候補＝実物から」「データ＝実物に合わせて修正」までを行い、
 書き戻しは `site_plan` の課題として残す（描画ツールの変更は影響範囲が広いため）。
+
+### 10-4. 恒久策：描画のたびに `shown_on` を実物から作り直す（実装済み）
+
+`shown_on` を手で保つ限り必ず腐るので、**render_site が書き戻す**ようにした。
+
+- `compute_shown_on(site, facts)`: 描いた直後の `/pricing/`・`/timeline/`（ja/en）と
+  `/data/models.json` を読み、モデル名（別名 `A / B`・`price.name`・id）で照合して
+  「どの面に出ているか」を求める。
+- `write_back_shown_on(site, ws, facts)`: 台帳と食い違うモデルだけ `shown_on` を更新し、
+  `data/facts.json` を書き戻す（`indent=1`・`ensure_ascii=False` で既存の体裁を保つ）。
+  `run()` の最後（全ページを描いた後）に呼ぶので、**載せた瞬間に正しくなる**。
+- **計算機データが読めないときは何もしない**（一面に潰して誤情報を書かない）。
+- `render_site()` の戻り値に `ledger_updated.shown_on` を足したので、何件直したかが
+  ツール結果から見える（trace にも残る）。
+
+実測（腐った台帳を渡して描画）:
+
+```
+neon(前): ['timeline']                                 → (後): ['calculator', 'pricing', 'timeline']
+gpt-6-cyber: ['timeline']                              ← 本当に年表だけ
+2回目の run: changed 0件・台帳も変化なし（冪等）
+```
+
+これで「企画候補＝実物から」（main.py）と「台帳＝実物に合わせて自動更新」（render_site）の
+二重になり、`shown_on` を読む鮮度キュー・週次レビューも正しい値を見る。

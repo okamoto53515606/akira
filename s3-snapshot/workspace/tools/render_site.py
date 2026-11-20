@@ -36,6 +36,7 @@ from strands import tool
 DEFAULT_SITE = os.environ.get("SITE_LOCAL_DIR", "") or "/tmp/site"
 DEFAULT_WS = os.environ.get("WORKSPACE_DIR", "") or "/workspace"
 FACTS_REL = "data/facts.json"
+LAST_SHOWN_ON_UPDATED: list = []       # 直近の run で shown_on が変わったモデルid
 JST = timezone(timedelta(hours=9))
 # 2026-11-17: コンテナは UTC なので date.today() だと JST 05:00 のランで
 # 「1日前」の日付が焼かれる（課題155）。サイトは日本時間で運用するので JST 固定。
@@ -326,11 +327,35 @@ def render_pricing(site: Path, rel: str, lang: str, facts: dict) -> int:
     return len(planned)
 
 
+PROVIDER_SLUGS = ("anthropic", "openai", "google", "deepseek")
+
+
+def provider_slug(value) -> str:
+    """provider を計算機の slug に揃える（表示名 "Anthropic" -> "anthropic"）。
+
+    2026-11-21: 台帳の price.provider に表示名が入り、data/models.json だけ
+    大文字始まりになって公開契約チェックが「台帳はGAだが計算機に無い」と
+    誤判定した。既存行も含めて slug に寄せる。未知の provider（"Meta" /
+    "alibaba" など）は表示色のクラスが変わるため触らない。
+    """
+    v = str(value or "").strip()
+    if not v:
+        return "other"
+    low = v.lower()
+    return low if low in PROVIDER_SLUGS else v
+
+
 def render_models_json(site: Path, facts: dict) -> bool:
     path = site / "data" / "models.json"
     cur = json.loads(path.read_text(encoding="utf-8"))
     rows = cur.get("models", [])
     have = {r["name"] for r in rows}
+    changed = False
+    for r in rows:                      # 既存行の provider 表記を揃える
+        slug = provider_slug(r.get("provider"))
+        if r.get("provider") != slug:
+            r["provider"] = slug
+            changed = True
     add = []
     for r in ordered_records(facts):
         p = r.get("price")
@@ -341,14 +366,15 @@ def render_models_json(site: Path, facts: dict) -> bool:
             continue
         add.append({
             "name": name,
-            "provider": p.get("provider") or "other",
+            "provider": provider_slug(p.get("provider")),
             "label": p.get("label") or r.get("provider", "Other"),
             "input": p["input"], "output": p["output"],
             "note": p.get("note_ja", ""), "note_en": p.get("note_en", ""),
         })
-    if not add:
+    if not add and not changed:
         return False
-    cur["models"] = add + rows
+    if add:
+        cur["models"] = add + rows
     cur["updated"] = TODAY
     path.write_text(json.dumps(cur, ensure_ascii=False, indent=1), encoding="utf-8")
     return True
@@ -740,18 +766,219 @@ def render_features(site: Path, facts: dict) -> list:
     return changed
 
 
+# --------------------------------------------------- 1a. 年表エントリの挿入・退役
+# 背景（2026-11-21）:
+#   render_site は「既にある <article> を並べ替え・本文を書き戻す」ことしかできず、
+#   新しい年表エントリの**挿入**と重複の**削除**は手作業だった。そのため
+#   「公開中の版に render を1回かけただけでは 9ファイルを再現できない」状態だった
+#   （timeline ja/en は台帳から作れず、pending のコピーが必要だった）。
+#   台帳の 1レコード（title/desc/tag/sec/links）から article を組み立て、
+#   足りないものは挿し、`timeline_retired` に明示された id は落とす。
+def build_timeline_article(rec: dict, lang: str):
+    """台帳レコード1件から `<article class="tl-item">` を組み立てる（無理なら None）。"""
+    t = rec.get("timeline") or {}
+    aid = t.get("%s_id" % lang)
+    title = (t.get("title_%s" % lang) or "").strip()
+    desc = (t.get("desc_%s" % lang) or "").strip()
+    if not (aid and title and desc):
+        return None
+    tag = t.get("tag") or {}
+    attrs = ' class="tl-provider-tag%s"' % ((" " + tag["class"]) if tag.get("class") else "")
+    if tag.get("style"):
+        attrs += ' style="%s"' % tag["style"]
+    tag_html = "<span%s>%s</span>" % (attrs, escape(tag.get("label") or rec.get("provider", "")))
+    sec = t.get("sec")
+    h2_id = ' id="sec-%s"' % sec if sec else ""
+    arrow = " \u2192" if lang == "ja" else " &rarr;"
+    out = []
+    for L in ((t.get("links") or {}).get(lang) or []):
+        href, label = L.get("href", ""), L.get("label", "")
+        if href.startswith("http"):
+            out.append('<a href="%s" target="_blank" rel="noopener">%s%s</a>'
+                       % (href, label, arrow))
+        else:
+            out.append('<a href="%s">%s%s</a>' % (href, label, arrow))
+    links_html = '<div class="tl-links">%s</div>' % "".join(out) if out else ""
+    return ('<article class="tl-item %s" id="%s"><div class="tl-card">'
+            '<div class="tl-date">%s %s</div><h2 class="tl-title"%s>%s</h2>'
+            '<p class="tl-desc">%s</p>%s</div></article>'
+            % (rec.get("provider_class", ""), aid, rec.get("released", ""),
+               tag_html, h2_id, title, desc, links_html))
+
+
+def render_timeline_entries(site: Path, rel: str, lang: str, facts: dict) -> int:
+    """台帳にあって HTML に無い年表エントリを挿入し、退役 id を落とす。"""
+    path = site / rel
+    if not path.exists():
+        return 0
+    html = orig = path.read_text(encoding="utf-8")
+    for rid in facts.get("timeline_retired") or []:
+        html = re.sub(r'<article class="tl-item[^"]*" id="%s">.*?</article>\n?'
+                      % re.escape(rid), "", html, flags=re.S)
+    present = set(re.findall(r'<article class="tl-item[^"]*" id="([^"]+)"', html))
+    adds = []
+    for rec in ordered_records(facts):
+        aid = (rec.get("timeline") or {}).get("%s_id" % lang)
+        if not aid or aid in present:
+            continue
+        art = build_timeline_article(rec, lang)
+        if art:
+            adds.append(art)
+        else:
+            # 台帳に title/desc が揃っていないと article を組み立てられない。
+            # 黙って落とすと「追加したのに年表に出ない」事故になるので必ず言う。
+            print("  !! %s: %s の timeline 情報が不足（title_%s/desc_%s/tag/links）"
+                  % (rel, aid, lang, lang))
+    if adds:
+        start = '<div class="tl-wrap">'
+        i = html.index(start) + len(start)
+        html = html[:i] + "\n" + "\n".join(adds) + html[i:]
+    if html != orig:
+        path.write_text(html, encoding="utf-8")
+        return len(adds)
+    return 0
+
+
+# --------------------------------------------- 1c. ページ外枠（updated-bar / dateModified）
+# 背景（2026-11-21）:
+#   `.updated-bar` と JSON-LD の dateModified は手書きだったため、render では
+#   再現できず、日付がページごとにずれる温床だった（§監査R2）。
+#   台帳 `page_chrome[{path,lang,bar}]` を正とし、`{date}` / `{date_text}` を
+#   描画日（JST）で埋める。日付は1か所から出るので、sitemap lastmod とも揃う。
+UPDATED_BAR_RE = re.compile(r'<div class="updated-bar">.*?</div>', re.S)
+DATEMOD_RE = re.compile(r'"dateModified"\s*:\s*"[0-9-]+"')
+
+
+def _chrome_date(spec: dict) -> str:
+    """ページの「内容更新日」。台帳の updated を正とし、無ければ描画日。"""
+    return (spec.get("updated") or TODAY)
+
+
+def render_sitemap_lastmod(site: Path, pairs) -> bool:
+    """sitemap の lastmod をページ単位の日付で上書きする（dateModified と揃える）。"""
+    path = site / "sitemap.xml"
+    if not path.exists():
+        return False
+    s = orig = path.read_text(encoding="utf-8")
+    for rel, day in pairs:
+        prefix = "en/" if rel.startswith("en/") else ""
+        key = rel[len(prefix):-len("index.html")]
+        url = "https://llm.okamomedia.tokyo/%s%s" % (prefix, key)
+        s = re.sub(r"(<loc>%s</loc>\s*<lastmod>)[0-9-]+(</lastmod>)" % re.escape(url),
+                   r"\g<1>%s\g<2>" % day, s)
+    if s != orig:
+        path.write_text(s, encoding="utf-8")
+        return True
+    return False
+
+
+def render_page_chrome(site: Path, facts: dict) -> list:
+    touched = []
+    for spec in facts.get("page_chrome") or []:
+        rel, lang = spec.get("path"), spec.get("lang", "ja")
+        if not rel:
+            continue
+        p = site / rel
+        if not p.exists():
+            continue
+        s0 = p.read_text(encoding="utf-8")
+        s = s0
+        day = _chrome_date(spec)
+        bar = spec.get("bar") or ""
+        if isinstance(bar, dict):          # {"ja": "...", "en": "..."} も許す
+            bar = bar.get(lang, "")
+        if bar:
+            inner = (bar.replace("{date_text}", _fmt_date(day, lang))
+                        .replace("{date}", day))
+            s = UPDATED_BAR_RE.sub(
+                lambda _m: '<div class="updated-bar">%s</div>' % inner, s, count=1)
+        s = DATEMOD_RE.sub('"dateModified": "%s"' % day, s)
+        if s != s0:
+            p.write_text(s, encoding="utf-8")
+            touched.append(rel)
+    return touched
+
+
+# ------------------------------------------------- 台帳の書き戻し（shown_on）
+# 2026-11-21: `shown_on` は手書きの欄で、コードは誰も更新していなかった。そのせいで
+# 69モデルが実物と食い違い、企画候補が「pricing 未掲載」と嘘をついた（Akiraが公開
+# ページを見て気づいた）。**描いた実物から作り直して書き戻す**ようにすれば、載せた
+# 瞬間に正しくなり、二度と腐らない。
+def _norm_name(text) -> str:
+    import unicodedata
+    return unicodedata.normalize("NFKC", str(text)).lower().replace(" ", "")
+
+
+def compute_shown_on(site: Path, facts: dict) -> dict:
+    """描かれた実物（/pricing/・/timeline/・data/models.json）から掲載面を求める。"""
+    texts = {}
+    for surf, rels in (("timeline", ("timeline/index.html", "en/timeline/index.html")),
+                       ("pricing", ("pricing/index.html", "en/pricing/index.html"))):
+        buf = []
+        for rel in rels:
+            try:
+                buf.append((site / rel).read_text(encoding="utf-8", errors="replace"))
+            except OSError:
+                continue
+        texts[surf] = _norm_name(" ".join(buf))
+    try:
+        payload = json.loads((site / "data" / "models.json").read_text(encoding="utf-8"))
+        texts["calculator"] = _norm_name(json.dumps(payload.get("models", []),
+                                                    ensure_ascii=False))
+    except Exception as e:  # noqa: BLE001
+        print("  !! 計算機データを読めず（%s）: shown_on の書き戻しを見送る"
+              % type(e).__name__)
+        return {}
+    out = {}
+    for mid, r in (facts.get("models") or {}).items():
+        if not isinstance(r, dict):
+            continue
+        # 台帳の名前は「A / B」の別名を含むことがある。計算機側は price.name で
+        # 登録されるので、別名・price.name・id のどれかで一致すれば載っている。
+        cands = [(r.get("price") or {}).get("name") or ""]
+        for k in ("ja", "en"):
+            cands += [x.strip() for x in str((r.get("names") or {}).get(k) or "").split("/")]
+        cands.append(mid)
+        cands = [c for c in cands if c and len(_norm_name(c)) >= 6]   # 短名は誤ヒット
+        out[mid] = sorted({s for s, t in texts.items() if any(_norm_name(c) in t for c in cands)})
+    return out
+
+
+def write_back_shown_on(site: Path, ws: Path, facts: dict) -> list:
+    """shown_on を実物から作り直して台帳へ書き戻す。変わったモデルidを返す。"""
+    actual = compute_shown_on(site, facts)
+    if not actual:
+        return []
+    changed = []
+    for mid, r in (facts.get("models") or {}).items():
+        if not isinstance(r, dict):
+            continue
+        want = actual.get(mid, [])
+        if sorted(r.get("shown_on") or []) != want:
+            r["shown_on"] = want
+            changed.append(mid)
+    if changed:
+        (ws / FACTS_REL).write_text(json.dumps(facts, ensure_ascii=False, indent=1),
+                                    encoding="utf-8")
+    return changed
+
+
 def run(site: Path, ws: Path) -> list[str]:
     """台帳から生成し、変更したファイルの一覧を返す（冪等）。"""
     facts = load_facts(ws)
     ids = [r["id"] for r in ordered_records(facts) if r.get("timeline", {}).get("ja_id")]
     changed = []
     for rel, lang in (("timeline/index.html", "ja"), ("en/timeline/index.html", "en")):
+        # 台帳にあって HTML に無いエントリを挿し、退役 id を落とす（2026-11-21）
+        entries = render_timeline_entries(site, rel, lang, facts)
         # 先に見出し・説明文を台帳から書き戻す（R5）。並べ替えはその後。
         prose = render_timeline_prose(site, rel, lang, facts)
         did = render_timeline(site, rel, lang, ids)
+        if entries:
+            print("  timeline insert: %s %d件" % (rel, entries))
         if prose:
             print("  timeline prose: %s %d件" % (rel, len(prose)))
-        if prose or did:
+        if entries or prose or did:
             changed.append(rel)
     for rel, lang in (("pricing/index.html", "ja"), ("en/pricing/index.html", "en")):
         before = (site / rel).read_text(encoding="utf-8") if (site / rel).exists() else ""
@@ -774,8 +1001,28 @@ def run(site: Path, ws: Path) -> list[str]:
         # トップは日英で同じ台帳から出るので、片方が変われば両方の
         # sitemap lastmod を揃える（11-14: /en/ だけ 11-07 で残った）
         touched.extend(["index.html", "en/index.html"])
+    # ページ外枠（updated-bar / dateModified）は台帳から。日付は sitemap とも揃える。
+    chrome = render_page_chrome(site, facts)
+    if chrome:
+        changed.extend(chrome)
+        touched.extend(chrome)
     if render_sitemap(site, touched):
         changed.append("sitemap.xml")
+    # page_chrome の日付は sitemap lastmod の正でもある（食い違うと check_dates が落ちる）
+    pairs = [(sp["path"], _chrome_date(sp)) for sp in (facts.get("page_chrome") or [])
+             if sp.get("path")]
+    if render_sitemap_lastmod(site, pairs) and "sitemap.xml" not in changed:
+        changed.append("sitemap.xml")
+    for sp in (facts.get("page_chrome") or []):
+        if sp.get("path") in changed and _chrome_date(sp) != TODAY:
+            print("  !! %s: page_chrome の updated が %s のまま（内容を変えたら台帳を今日に上げる）"
+                  % (sp["path"], _chrome_date(sp)))
+    # 掲載面（shown_on）は描いた実物から作り直して台帳に書き戻す（2026-11-21）
+    global LAST_SHOWN_ON_UPDATED
+    LAST_SHOWN_ON_UPDATED = write_back_shown_on(site, ws, facts)
+    if LAST_SHOWN_ON_UPDATED:
+        print("  shown_on 更新: %dモデル（実物と食い違っていた）"
+              % len(LAST_SHOWN_ON_UPDATED))
     return changed
 
 
@@ -799,6 +1046,7 @@ def render_site() -> dict:
     except Exception as e:  # noqa: BLE001
         return {"status": "failed", "reason": "%s: %s" % (type(e).__name__, e)}
     return {"status": "ok", "changed": changed,
+            "ledger_updated": {"shown_on": LAST_SHOWN_ON_UPDATED},
             "note": "0件なら既に一致している。1件以上あるなら check_site_pages / check_dates を通してから site_upload"}
 
 
