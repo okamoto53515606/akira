@@ -322,5 +322,109 @@ import decimal as _dec
 check("秒が Decimal になっている（DynamoDBの型）",
       isinstance(_tools[0]["seconds"], _dec.Decimal), str(type(_tools[0]["seconds"])))
 
+
+print("== ツール呼び出し（引数・結果）も記録に残す")
+from types import SimpleNamespace as _NS
+
+
+class _FakeEv:
+    def __init__(self, name, args, result, exc=None):
+        self.tool_use = {"name": name, "input": args}
+        self.result = result
+        self.exception = exc
+
+
+_written.clear()
+_t4 = ts.Trace(today="2026-11-21", run_id="hooked")
+_t4._ddb = _FakeDDB()
+_t4._s3 = object()
+
+
+
+class _FakeS3:
+    def __init__(self):
+        self.put = []
+
+    def put_object(self, **kw):
+        self.put.append(kw)
+
+
+_s3fake = _FakeS3()
+_t4._clients = lambda: (_FakeDDB(), _s3fake)   # boto3 を取りに行かせない
+ts._CURRENT[0] = _t4
+_hook = ts.tool_hook("Claudeエンジニア")
+check("tool_hook がコールバックを返す", callable(_hook))
+_hook(_FakeEv("read_file", {"path": "index.html"}, "OK: 12 lines"))
+_kinds = [w.get("kind") for w in _written]
+check("tool.call を書く", "tool.call" in _kinds, str(_kinds))
+check("tool.args を書く", "tool.args" in _kinds, str(_kinds))
+check("tool.result を書く", "tool.result" in _kinds, str(_kinds))
+_call = next((w for w in _written if w.get("kind") == "tool.call"), {})
+check("ツール名と引数長が残る",
+      _call.get("tool") == "read_file" and _call.get("args_chars", 0) > 0, str(_call))
+check("S3 に本文が2つ（args と result）置かれる", len(_s3fake.put) == 2, str(len(_s3fake.put)))
+_args_row = next((w for w in _written if w.get("kind") == "tool.args"), {})
+check("args 行に S3 の参照が入る",
+      str((_args_row.get("body") or {}).get("key", "")).startswith("trace/"),
+      str(_args_row)[:200])
+check("正常時は error=False", _call.get("error") is False, str(_call.get("error")))
+
+_written.clear()
+_hook(_FakeEv("shell", {"command": "ls"}, "boom", exc=RuntimeError("x")))
+_call = next((w for w in _written if w.get("kind") == "tool.call"), {})
+check("例外時は error=True", _call.get("error") is True, str(_call.get("error")))
+
+_written.clear()
+_hook(_FakeEv("list_site_files", {}, "a\nb"))
+_kinds = [w.get("kind") for w in _written]
+check("雑音ツールは本文を残さない",
+      _kinds == ["tool.call"], str(_kinds))
+
+_written.clear()
+ts._CURRENT[0] = None
+_hook(_FakeEv("read_file", {"path": "x"}, "OK"))
+check("記録先が無ければ何もしない", _written == [], str(_written))
+
+print("== 監視（watch_releases）は1本落ちても次のURLで拾う")
+
+
+def _load_watch():
+    spec = importlib.util.spec_from_file_location(
+        "watch_releases", os.path.join(ROOT, "tools", "watch_releases.py"))
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+_w = _load_watch()
+_calls = []
+
+
+def _fake_fetch(url, retries=1):
+    _calls.append(url)
+    if "broken" in url:
+        raise RuntimeError("HTTP 403 for %s" % url)
+    return "<html><body>ok</body></html>", 200
+
+
+_w._fetch = _fake_fetch
+_used, _txt = _w._fetch_any(["https://broken.example/a", "https://ok.example/b"])
+check("落ちたURLの次を使う", _used == "https://ok.example/b", str(_used))
+check("1本目も試している", _calls and "broken" in _calls[0], str(_calls))
+_w._fetch = lambda url, retries=1: (_ for _ in ()).throw(RuntimeError("HTTP 500 for %s" % url))
+try:
+    _w._fetch_any(["https://x.example/a", "https://y.example/b"])
+    _raised = ""
+except Exception as e:  # noqa: BLE001
+    _raised = str(e)
+check("全滅なら最後の例外を投げる", "500" in _raised, _raised)
+
+print("== invalidation が失敗しても公開結果は失わない")
+_src_tools = open(os.path.join(ROOT, "tools.py"), encoding="utf-8").read()
+check("flush_invalidations を try で囲んでいる",
+      "flush_invalidations()\n            result[\"invalidation\"] = \"ok\"" in _src_tools)
+check("失敗を result に載せる",
+      'result["invalidation"] = "%s: %s"' in _src_tools)
+
 print("\nRESULT: %d passed / %d failed" % (len(PASS), len(FAIL)))
 sys.exit(1 if FAIL else 0)

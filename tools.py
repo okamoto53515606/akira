@@ -2050,10 +2050,18 @@ def publish_and_verify(paths: str = "", live: bool = True) -> dict:
             result["rejected"].append({"key": rel, "errors": ["upload: %s" % e]})
 
     # 5. invalidation（日付修正の取りこぼしを避けるため、HTMLは /* で落とす）
+    #    ※ここで落ちても公開自体は終わっているので、例外は握って結果に載せる
+    #      （2026-11-21: LLM_DIST_ID が空の環境で InvalidAction になりツールごと
+    #       例外で落ちた。失敗は「失敗」と返すのが正しい）。
     if result["published"]:
         if len(result["published"]) > 15:
             _invalidation_paths.append("/*")
-        flush_invalidations()
+        try:
+            flush_invalidations()
+            result["invalidation"] = "ok"
+        except Exception as e:  # noqa: BLE001
+            result["invalidation"] = "%s: %s" % (type(e).__name__, str(e)[:160])
+            logger.error("invalidation に失敗（公開は完了）: %s", e)
 
     # 6. 実物照合
     if live and result["published"]:

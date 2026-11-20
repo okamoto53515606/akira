@@ -186,6 +186,10 @@ class Trace:
         except Exception as e:  # noqa: BLE001
             logger.warning("trace の書き込みに失敗（%s: %s）", kind, type(e).__name__)
 
+    @staticmethod
+    def redact(text):
+        return redact(text)
+
     # ---------------------------------------------------------------- 便利関数
     def prompt(self, agent: str, system_prompt: str, extra: str = "") -> None:
         """エージェントに渡した**最終系のシステムプロンプト**を残す。
@@ -221,6 +225,62 @@ class Trace:
             return rows[:40]
         except Exception:  # noqa: BLE001
             return []
+
+
+# ---------------------------------------------------------------- ツール単位の記録
+# 2026-11-21 追加: 「ツールの名前・回数」までは取れていたが、**引数と結果**が
+# 無かったため「何を grep し、何を書いたか」が分からなかった。
+# strands の AfterToolCallEvent をフックして、1呼び出し=1イベントで残す。
+# 本文は S3 に置き、Dynamo には digest と文字数だけを入れる（表を太らせない）。
+_MAX_BODY = 32_000          # 1呼び出しあたりの保存上限（これを超えたら切り詰め）
+_NOISY_TOOLS = ("list_local_files", "list_site_files", "list_workspace_files")
+
+
+def tool_hook(agent_name: str):
+    """Agent(hooks=[trace_store.tool_hook("Claudeエンジニア")]) 用のコールバック。"""
+    try:
+        from strands.hooks.events import AfterToolCallEvent
+    except Exception:  # noqa: BLE001
+        return None
+
+    def _cb(event) -> None:  # 型注釈は strands がイベント種別の判定に使う
+        tr = current()
+        if not tr:
+            return
+        try:
+            tu = getattr(event, "tool_use", None) or {}
+            if isinstance(tu, dict):
+                tool = str(tu.get("name") or "?")
+                args = tu.get("input") or tu.get("arguments") or {}
+            else:
+                tool = str(getattr(tu, "name", "?"))
+                args = getattr(tu, "input", {}) or {}
+            res = getattr(event, "result", None)
+            exc = getattr(event, "exception", None)
+            text = res if isinstance(res, str) else json.dumps(res, ensure_ascii=False, default=str)
+            err = bool(exc) or str(getattr(res, "status", "")) == "error"
+            arg_text = json.dumps(args, ensure_ascii=False, default=str)
+            tr.event("tool.call", agent=agent_name, tool=tool, error=err,
+                     args_chars=len(arg_text), result_chars=len(text),
+                     name=tr.redact(tool))
+            if tool in _NOISY_TOOLS:
+                return
+            # 本文はS3に置き、Dynamo 側には参照（key/digest/chars）を1行ずつ残す。
+            # 参照が無いと「どのオブジェクトがその呼び出しのものか」を辿れない。
+            pairs = []
+            if arg_text not in ("", "{}", "null"):
+                pairs.append(("tool.args", "%s %s" % (tool, arg_text[:_MAX_BODY])))
+            pairs.append(("tool.result", "%s %s" % (tool, text[:_MAX_BODY])))
+            for bkind, payload in pairs:
+                ref = tr.blob(bkind, payload)
+                if ref:
+                    tr.event(bkind, agent=agent_name, tool=tool,
+                             name=tr.redact(tool), body=ref)
+        except Exception:  # noqa: BLE001
+            logger.warning("ツール記録のフックで失敗（%s）", type(e).__name__)
+
+    _cb.__annotations__ = {"event": AfterToolCallEvent}
+    return _cb
 
 
 def current() -> "Trace | None":

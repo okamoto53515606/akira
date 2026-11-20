@@ -124,7 +124,7 @@ akira-trace (DynamoDB, 非公開, TTL120日)
 
 ## 6. 検証
 
-- `test_regression_20261121.py`: **40/40 PASS**（伏字・Dynamo不達時の無害化・
+- `test_regression_20261121.py`: **62/62 PASS**（伏字・Dynamo不達時の無害化・
   1依頼1項目の検出・DONE/NOT_DONE の解釈・受領書・ログが INFO で残ること・
   エクスポートの allowlist と伏字）
 - 実テーブルで書き込み→読み出し→`publish_trace.py` で公開用JSONLを生成（
@@ -132,6 +132,29 @@ akira-trace (DynamoDB, 非公開, TTL120日)
 - **イメージ内**でも `trace_store` の書き込み・読み出しを実行して確認
 - DynamoDB `akira-trace`: ACTIVE / TTL 有効 / IAM `akira-trace-write`（PutItem・GetItem・
   BatchWriteItem・Query のみ）
+
+### 6-1. 残り3点の片付け（2026-11-21 夜）
+
+| 残っていたこと | どうしたか |
+|---|---|
+| 台帳に載ったまま**未公開**の2件（Gemini 4 Neon / GPT-6.2 Astra for Law） | `publish_and_verify` で公開。`/timeline/` に `id="gemini-4-neon"`（2026-11-18）と `id="gpt-6-2-astra-law"`（2026-11-17）が出ていることを実測。`site_events` にも1件足したのでトップの「直近の更新」と更新履歴に載っている |
+| 監視（watch_releases）が DeepSeek の価格ページ取得で `HTTPError` → 「不明」扱い | 候補URLを複数持ち、`_fetch` に1回だけのリトライ、5xx以外は即座に次の候補へ。失敗は `失敗元（例外クラス HTTPコード）` の形で残す。実測で4ソースすべて取得できた |
+| ツール呼び出しの**引数と結果**が記録に無い | `trace_store.tool_hook(agent名)` を4エージェントすべてに渡した。`tool.call`（ツール名・引数長・結果長・エラーの有無）と、本文の `tool.args` / `tool.result`（S3、32KBで切る）を1行ずつ残す。一覧系の雑音ツールは行だけ |
+
+`publish_and_verify` の順序は「描画 → ゲート → アップロード → 無効化 → 公開後の
+突き合わせ」。初回は無効化で `InvalidAction`（`LLM_DIST_ID` が空の環境で実行した）
+になり、**アップロード済みなのにツール全体が例外で落ちた**。無効化は `try` で囲み、
+成否を `invalidation` として返すようにした（公開は完了しているので、そこで落とさ
+ない）。
+
+### 6-2. 追加したテスト
+
+- `tool_hook`: 記録が3行（`tool.call` / `tool.args` / `tool.result`）出ること、
+  S3 に本文が2つ置かれ参照が Dynamo 側の行に入ること、例外時に `error=True`、
+  雑音ツールは行だけ、記録先が無いときは何もしない
+- `watch_releases._fetch_any`: 1本目が落ちたら2本目を使う、全滅なら最後の例外
+  （HTTPコードを含む）を投げる
+- `publish_and_verify`: 無効化の失敗を握って `invalidation` に載せる（ソース検査）
 
 ## 7. 前提が変わったときの要注意事項
 

@@ -35,14 +35,26 @@ TIMEOUT = 30
 MAX_PENDING = 12
 
 # 各社の公式料金ページ（モデルIDが必ず載る場所）。UAを付けないと弾くサイトがある。
+# (名前, [URL候補…], 抽出パターン)。2026-11-21: 1本だけだと、その日の 403/5xx で
+# **丸ごと「不明」**になる（実機で deepseek が HTTPError になった）。候補を複数持ち、
+# 失敗したら次を試す。料金ページが落ちていてもチェンジログでIDは拾える。
 SOURCES = (
-    ("openai", "https://developers.openai.com/ja-JP/api/docs/pricing",
+    ("openai",
+     ["https://developers.openai.com/ja-JP/api/docs/pricing",
+      "https://developers.openai.com/api/docs/pricing"],
      r"(?<![a-z0-9/._-])gpt-[0-9][a-z0-9.\-]*"),
-    ("anthropic", "https://platform.claude.com/docs/en/about-claude/pricing",
+    ("anthropic",
+     ["https://platform.claude.com/docs/en/about-claude/pricing",
+      "https://docs.anthropic.com/en/docs/about-claude/pricing"],
      r"(?<![a-z0-9/._-])claude-(?:opus|sonnet|haiku|fable|mythos)-[0-9][a-z0-9.\-]*"),
-    ("google", "https://ai.google.dev/gemini-api/docs/pricing",
+    ("google",
+     ["https://ai.google.dev/gemini-api/docs/pricing",
+      "https://ai.google.dev/gemini-api/docs/changelog"],
      r"(?<![a-z0-9/._-])gemini-[0-9][a-z0-9.\-]*"),
-    ("deepseek", "https://api-docs.deepseek.com/quick_start/pricing",
+    ("deepseek",
+     ["https://api-docs.deepseek.com/quick_start/pricing/",
+      "https://api-docs.deepseek.com/quick_start/pricing",
+      "https://api-docs.deepseek.com/updates/"],
      r"(?<![a-z0-9/._-])deepseek-[a-z0-9][a-z0-9.\-]*"),
 )
 
@@ -111,10 +123,33 @@ def _looks_like_model(mid: str) -> bool:
     return 4 <= len(low) <= 48
 
 
-def _fetch(url: str) -> str:
-    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (akira-release-watch)"})
-    with urllib.request.urlopen(req, timeout=TIMEOUT) as r:  # noqa: S310 (固定URL)
-        return r.read().decode("utf-8", "replace")
+def _fetch(url: str, retries: int = 1) -> str:
+    """1URLを取得する。一時的な失敗（5xx・切断）は1回だけやり直す。"""
+    last = None
+    for _ in range(retries + 1):
+        req = urllib.request.Request(
+            url, headers={"User-Agent": "Mozilla/5.0 (akira-release-watch)"})
+        try:
+            with urllib.request.urlopen(req, timeout=TIMEOUT) as r:  # noqa: S310
+                return r.read().decode("utf-8", "replace")
+        except urllib.error.HTTPError as e:
+            last = e
+            if e.code < 500:
+                raise
+        except Exception as e:  # noqa: BLE001
+            last = e
+    raise last
+
+
+def _fetch_any(urls: list[str]) -> tuple[str, str]:
+    """候補URLを順に試し、(URL, 本文) を返す。全部だめなら最後の例外を投げる。"""
+    last = None
+    for u in urls:
+        try:
+            return u, _fetch(u)
+        except Exception as e:  # noqa: BLE001
+            last = e
+    raise last if last else RuntimeError("no url")
 
 
 def _load_state() -> dict:
@@ -152,12 +187,17 @@ def scan(ledger_models: dict, today: str | None = None) -> dict:
     seen_all: set[str] = set()
     ok_sources, failed = [], []
     per_source: dict = {}
-    for name, url, pattern in SOURCES:
+    used_url = {}
+    for name, urls, pattern in SOURCES:
         try:
-            html = _fetch(url)
+            url, html = _fetch_any(urls)
         except Exception as e:  # noqa: BLE001
-            failed.append("%s（%s）" % (name, type(e).__name__))
+            # 失敗は「クラス名＋HTTPコード」まで残す（原因が分からないと直せない）
+            code = getattr(e, "code", "")
+            failed.append("%s（%s%s）" % (name, type(e).__name__,
+                                         " %s" % code if code else ""))
             continue
+        used_url[name] = url
         ids = set()
         for raw in re.findall(pattern, html, re.I):
             low = raw.lower().rstrip(".-")
@@ -213,6 +253,7 @@ def scan(ledger_models: dict, today: str | None = None) -> dict:
     state.update({
         "updated": today,
         "ok_sources": ok_sources,
+        "used_urls": used_url,
         "failed_sources": failed,
         "pending": pending,
         "seen": sorted(seen_all),
@@ -227,6 +268,7 @@ def scan(ledger_models: dict, today: str | None = None) -> dict:
         "date": today,
         "status": "ok" if not failed else ("partial" if ok_sources else "failed"),
         "ok_sources": ok_sources,
+        "used_urls": used_url,
         "failed_sources": failed,
         "unknown_in_ledger": pending,
         "new_this_scan": unknown,

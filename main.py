@@ -853,6 +853,7 @@ def create_delegation_tools(models, run_budget_jpy: float, block_publish: bool =
             model=models["gpt"],
             system_prompt=prompts.GPT_TAX_ADVISOR_PROMPT,
             tools=gpt_tools,
+            hooks=trace_store_hooks("GPT税理士"),
         )
     gemini_tools = [
         akira_tools.generate_and_publish_image,
@@ -886,6 +887,7 @@ def create_delegation_tools(models, run_budget_jpy: float, block_publish: bool =
             model=models["gemini"],
             system_prompt=prompts.GEMINI_MOTHER_PROMPT,
             tools=gemini_tools,
+            hooks=trace_store_hooks("Gemini子育てママ"),
         )
 
     @tool
@@ -1037,6 +1039,7 @@ def create_delegation_tools(models, run_budget_jpy: float, block_publish: bool =
             model=engineer_model,
             system_prompt=engineer_prompt,
             tools=claude_tools,
+            hooks=trace_store_hooks("Claudeエンジニア"),
             # Firecrawlの巨大結果が履歴に残り続けるのを防ぐ（2026-09-09: 66.5万トークン）。
             # per_turn=True でモデル呼び出し前に窓を切る。プロンプト側の cache+要約と併用。
             conversation_manager=SlidingWindowConversationManager(
@@ -1220,6 +1223,16 @@ def _refresh_freshness_queue(today: str, limit: int = 3) -> str:
                      " → `source_gap_report` で理由を見て、URLを疑うか okamo に確認する")
     lines.append("- 失敗が1件でもあれば**日報に1行書く**（黙って取れていないことが一番まずい）")
     return "\n".join(lines)
+
+
+def trace_store_hooks(agent_name: str) -> list:
+    """ツール1呼び出し（引数・結果）を trace に残すフック。失敗しても空を返す。"""
+    try:
+        hook = trace_store.tool_hook(agent_name)
+        return [hook] if hook else []
+    except Exception:  # noqa: BLE001
+        logger.warning("ツール記録のフックを登録できません（%s）", agent_name)
+        return []
 
 
 def _release_watch_line(today: str) -> str:
@@ -1706,6 +1719,7 @@ def run_daily(dry_run: bool = False, no_publish: bool = False) -> None:
         model=models["akira"],
         system_prompt=system_prompt,
         tools=akira_tools_list,
+        hooks=trace_store_hooks("Akira本体"),
     )
 
     # 鮮度キューの先頭3件は**コードで取得**する（モデルに頼むと0件が続いた）。
