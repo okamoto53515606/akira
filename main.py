@@ -1060,6 +1060,7 @@ def _release_watch_line(today: str) -> str:
     """
     import glob
     import importlib.util
+    import json
 
     cand = glob.glob(os.path.join(os.path.abspath(WORKSPACE_LOCAL_DIR), "tools",
                                   "watch_releases.py"))
@@ -1138,7 +1139,10 @@ def _propose_themes(today: str, limit: int = 3, watch_line: str = "") -> str:
     # A-1. 公式ソースの見張り（2026-11-21）。**台帳の外**から新モデルを拾う。
     #      ここが無いと「台帳に無い＝漏れ0件」という自己参照の偽の緑になる。
     if watch_line:
-        cands.append(watch_line)
+        # 箇条書きの中に入るので、見出し記号と改行は潰して1項目にする
+        flat = " / ".join(x.strip().lstrip("#").strip()
+                          for x in watch_line.splitlines() if x.strip())
+        cands.append(flat)
     # A0. 新モデルのリサーチと掲載（**毎回の最優先**。okamo確認 2026-11-15）
     #     直近21日のリリースで「単価が無い」または「料金比較/計算機/年表のどれかに未掲載」
     #     のものを機械で挙げる。ここが空なら新モデルの漏れは無い。
