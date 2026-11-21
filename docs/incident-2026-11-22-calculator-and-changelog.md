@@ -71,6 +71,8 @@ sitemap の lastmod だけが 11-22 に進み、**「変わったように見え
 - 修復した内容はログと日報の「自動メンテナンス」欄に出る
 
 `repair_calculator_fx` は Akira 本体とエンジニアの両方のツールにも配布した。
+ただし `--dry-run` / `--no-publish` では**修復ツール自体を渡さない**（従来は
+`restore_published_data_file` がテストランでも書き込めた）。
 
 ### 4-3. 描画側（workspace `tools/render_site.py`）
 
@@ -109,5 +111,5 @@ sitemap の lastmod だけが 11-22 に進み、**「変わったように見え
   中身が変わったページだけ `site_events` に載る／日付だけの変更は載らない）
 - 既存: `test_regression_20261121.py` 96/96 PASS、`test_regression_20261119.py` ALL PASS
 - イメージ内で同一の検証を実行（`docker run`）
-- ECR `akira:latest` digest `sha256:d993d4d69ee89501f9e2a57d8c1ae5496e1c9f0ca040ba1c3a66dada842b779a`
+- ECR `akira:latest` digest `sha256:b4d72db9933253a6a3621c0fbdf6b53554ad8f97602efd445ad18262d36c40cb`
 - workspace `tools/render_site.py`・`data/facts.json`・`data/calculator-models.json` を更新

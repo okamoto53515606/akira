@@ -950,11 +950,24 @@ def create_delegation_tools(models, run_budget_jpy: float, block_publish: bool =
             return {"status": "dry_run",
                     "note": "本日はドライランのためアップロードもinvalidationもしていません"}
 
+        @tool
+        def restore_published_data_file(*args, **kwargs) -> dict:
+            """【ドライラン】復元しない。"""
+            return {"status": "dry_run", "note": "本日はドライランのため復元していません"}
+
+        @tool
+        def repair_calculator_fx(*args, **kwargs) -> dict:
+            """【ドライラン】修復しない（判定だけ）。"""
+            return {"status": "dry_run", "note": "本日はドライランのため修復していません"}
+
         _publish, _upload = publish_file_to_site, site_upload
         _publish_verify = publish_and_verify
+        _restore_data, _repair_fx = restore_published_data_file, repair_calculator_fx
     else:
         _publish, _upload = akira_tools.publish_file_to_site, akira_tools.site_upload
         _publish_verify = akira_tools.publish_and_verify
+        _restore_data, _repair_fx = (akira_tools.restore_published_data_file,
+                                     akira_tools.repair_calculator_fx)
 
     claude_tools = [
         _publish,
@@ -977,9 +990,9 @@ def create_delegation_tools(models, run_budget_jpy: float, block_publish: bool =
         akira_tools.get_site_plan,
         # 健全性チェックと決定論的修復（エンジニアも公開前後に使う）
         akira_tools.verify_published_contracts,
-        akira_tools.restore_published_data_file,
+        _restore_data,
         # 計算機の円換算レート欠落の修復（2026-11-22: 全行¥0 が7日間見逃された）
-        akira_tools.repair_calculator_fx,
+        _repair_fx,
         # ページ監査（古い情報・追記の混在・キービジュアルの取り残し）
         page_audit.audit_pages,
         page_audit.set_page_priority,
@@ -1609,7 +1622,7 @@ DAILY_MISSION_TEMPLATE = """今日は {today}（{weekday}）です。LLM Data Hu
 """
 
 
-def _repair_contract_violations(contract: dict, phase: str) -> dict:
+def _repair_contract_violations(contract: dict, phase: str, allow_write: bool = True) -> dict:
     """公開契約の違反を「機械で直せる種類」だけ直して再検査する（2026-11-22 追加）。
 
     なぜ:
@@ -1623,10 +1636,18 @@ def _repair_contract_violations(contract: dict, phase: str) -> dict:
         - fx（円換算レート）の欠落/0 → repair_calculator_fx（台帳 facts.fx から）
         - それ以外の計算機データ破損 → 契約合格済みベースラインから復元
 
+    Args:
+        allow_write: False（--dry-run / --no-publish）なら**何も書き込まない**。
+            テストランが本番サイトを修復してしまわないための安全弁。
+
     戻り値: 再検査後の check_published_contracts() の結果。
     """
     violations = contract.get("violations") or []
     if not violations:
+        return contract
+    if not allow_write:
+        logger.warning("[%s] 契約違反 %d件（--dry-run/--no-publish のため修復しません）: %s",
+                       phase, len(violations), violations[:5])
         return contract
     text = " ".join(violations)
     fx_issue = ("fx." in text) or ("為替レート" in text)
@@ -1729,7 +1750,8 @@ def run_daily(dry_run: bool = False, no_publish: bool = False) -> None:
         logger.info("%s", contract["summary"])
         if contract["violations"]:
             logger.warning("公開契約の違反: %s", contract["violations"])
-            contract = _repair_contract_violations(contract, "起動時")
+            contract = _repair_contract_violations(
+                contract, "起動時", allow_write=not (dry_run or no_publish))
         health_line = contract["summary"]
         health_line += ("（公開サイトは正常）" if not contract["violations"]
                         else "（残: %s）" % " / ".join(contract["violations"][:5]))
@@ -1833,11 +1855,8 @@ def run_daily(dry_run: bool = False, no_publish: bool = False) -> None:
         akira_tools.get_site_file,
         akira_tools.list_site_files,
         akira_tools.list_local_files,
-        # 公開サイトの健全性チェックと決定論的修復（読取＋許可キーのみの修復）
+        # 公開サイトの健全性チェック（読取のみ）
         akira_tools.verify_published_contracts,
-        akira_tools.restore_published_data_file,
-        # 計算機の円換算レート欠落の修復（2026-11-22）
-        akira_tools.repair_calculator_fx,
         # ページ監査（今日の対象はコードが優先度順に選んでいる）
         page_audit.audit_pages,
         page_audit.set_page_priority,
@@ -1847,6 +1866,12 @@ def run_daily(dry_run: bool = False, no_publish: bool = False) -> None:
         _create_brave_mcp(),
         *akira_extra_tools,
     ]
+    # 書き込みを伴う決定論的修復は、本番ランだけに渡す（2026-11-22）。
+    # --dry-run / --no-publish は「サイトを触らない」安全弁なので、Akira自身からも
+    # 修復ツールを外す（従来は restore_published_data_file が素通りしていた）。
+    if not (dry_run or no_publish):
+        akira_tools_list += [akira_tools.restore_published_data_file,
+                             akira_tools.repair_calculator_fx]
     # 自己点検（全ゲート＋決定事項＋台帳ズレを1回で返す）は**Akiraも持つ**。
     # 2026-11-15: 6本のゲートを個別に叩く手順は踏まれなかった（Akiraは
     # 「check_page_shape は存在しない」と誤認した）。1呼び出しにまとめて渡す。
