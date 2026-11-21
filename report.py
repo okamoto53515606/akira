@@ -21,6 +21,7 @@
 # マーカー保存し、そこからの差分を必ず取得する（main.py run_daily参照）。
 
 import html as html_mod
+import hashlib
 import logging
 import re
 import time
@@ -36,13 +37,35 @@ log = logging.getLogger(__name__)
 # 共通アセット（CSS・favicon・タッチアイコン）の置き場。
 # HTML側には <style> を書かず、この1枚のCSSを全ページから読み込む。
 ASSETS_DIR = Path(__file__).resolve().parent / "report_assets"
-CSS_KEY = "assets/report.css"
 FAVICON_KEY = "favicon.svg"
 TOUCH_ICON_KEY = "apple-touch-icon.png"
 
 # 日報HTMLは5分で再検証（CloudFront既定24時間のままだと更新が反映されない）。
 HTML_CACHE_CONTROL = "public, max-age=300, must-revalidate"
 ASSET_CACHE_CONTROL = "public, max-age=3600"
+# CSSはURLに内容ハッシュを入れるので、長期キャッシュしてよい。
+CSS_IMMUTABLE_CACHE_CONTROL = "public, max-age=31536000, immutable"
+
+
+def _css_asset() -> tuple[str, bytes]:
+    """共通CSSの公開キー（内容ハッシュ入り）と中身を返す。
+
+    URLが内容と一緒に変わるので、ブラウザキャッシュを消さなくても必ず最新が届く
+    （2026-11-21: /assets/report.css 固定URL＋max-age=3600 で1時間古いCSSが
+    使われる事故が出たため）。
+    """
+    data = (ASSETS_DIR / "report.css").read_bytes()
+    digest = hashlib.sha256(data).hexdigest()[:10]
+    return f"assets/report.{digest}.css", data
+
+
+try:
+    CSS_KEY, CSS_BYTES = _css_asset()
+except OSError as exc:  # アセット欠けでも日報自体は止めない
+    log.warning("共通CSSを読めない: %s", exc)
+    CSS_KEY, CSS_BYTES = "assets/report.css", b""
+
+CSS_HREF = f"/{CSS_KEY}"
 
 # 全ページ先頭に置くAkiraの自己紹介。
 PROFILE_HTML = """<section class="profile" aria-label="Akiraの自己紹介">
@@ -89,7 +112,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 <meta name="theme-color" content="#0f1117">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="stylesheet" href="/assets/report.css">
+<link rel="stylesheet" href="{css_href}">
 {head_extra}<!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-SCTXEKT13C"></script>
 <script>
@@ -350,6 +373,17 @@ def _md_to_html(md: str) -> str:
     return "\n".join(out)
 
 
+def _page(title: str, body: str, profile: str, head_extra: str = "") -> str:
+    """PAGE_TEMPLATE を埋める（CSSのURLは内容ハッシュ入り）。"""
+    return PAGE_TEMPLATE.format(
+        title=title,
+        body=body,
+        profile=profile,
+        head_extra=head_extra,
+        css_href=CSS_HREF,
+    )
+
+
 def render_report_page(item: dict) -> str:
     """日報1件をHTMLページにする（自己紹介＋okamoコメント欄つき）。"""
     date = item["sk"]
@@ -372,7 +406,7 @@ def render_report_page(item: dict) -> str:
         + requests_html
         + f'<h2>okamoのコメント</h2><div class="comment">{comment_html}</div>'
     )
-    return PAGE_TEMPLATE.format(title=f"日報 {date}", body=body, profile=PROFILE_BLOCK_HTML, head_extra="")
+    return _page(title=f"日報 {date}", body=body, profile=PROFILE_BLOCK_HTML)
 
 
 def render_index_page(items: list[dict]) -> str:
@@ -388,7 +422,7 @@ def render_index_page(items: list[dict]) -> str:
         f'<p class="meta">{len(items)} 日分・新しい順</p>'
         f'<ul class="report-list">{rows}</ul>'
     )
-    return PAGE_TEMPLATE.format(title="一覧", body=body, profile=PROFILE_BLOCK_HTML, head_extra="")
+    return _page(title="一覧", body=body, profile=PROFILE_BLOCK_HTML)
 
 
 def render_404_page() -> str:
@@ -398,7 +432,7 @@ def render_404_page() -> str:
         "<p>URL が変更された可能性があります。日報の一覧から辿り直してください。</p>"
         '<p><a href="/">Akira日報の一覧へ</a></p>'
     )
-    return PAGE_TEMPLATE.format(
+    return _page(
         title="404 Not Found",
         body=body,
         profile="",
@@ -469,17 +503,36 @@ def _put(s3, key: str, body: bytes, content_type: str, cache_control: str) -> No
 
 
 def _publish_assets(s3) -> list[str]:
-    """共通CSS・favicon・タッチアイコンをS3へ上げる（毎回上書き）。"""
-    assets = [
-        (CSS_KEY, "report.css", "text/css; charset=utf-8"),
+    """共通CSS・favicon・タッチアイコンをS3へ上げる（毎回上書き）。
+
+    CSSは中身のハッシュをファイル名に入れて公開する（ブラウザが必ず取り直す）。
+    ブラウザキャッシュに残った旧HTMLはハッシュ無しの `/assets/report.css` を
+    参照しているので、そちらも最新内容で上書きしておく（5分で再検証）。
+    """
+    published = []
+
+    css_path = ASSETS_DIR / "report.css"
+    if CSS_BYTES and css_path.exists():
+        _put(s3, CSS_KEY, CSS_BYTES, "text/css; charset=utf-8", CSS_IMMUTABLE_CACHE_CONTROL)
+        published.append(f"/{CSS_KEY}")
+        _put(
+            s3,
+            "assets/report.css",
+            css_path.read_bytes(),
+            "text/css; charset=utf-8",
+            HTML_CACHE_CONTROL,
+        )
+        published.append("/assets/report.css")
+    else:
+        # アセット欠けで日報そのものを落とさない。ただし黙って握り潰さない。
+        log.warning("日報の共通CSSが見つからない: %s", css_path)
+
+    for key, name, content_type in (
         (FAVICON_KEY, "favicon.svg", "image/svg+xml"),
         (TOUCH_ICON_KEY, "apple-touch-icon.png", "image/png"),
-    ]
-    published = []
-    for key, name, content_type in assets:
+    ):
         path = ASSETS_DIR / name
         if not path.exists():
-            # アセット欠けで日報そのものを落とさない。ただし黙って握り潰さない。
             log.warning("日報アセットが見つからない: %s", path)
             continue
         _put(s3, key, path.read_bytes(), content_type, ASSET_CACHE_CONTROL)
