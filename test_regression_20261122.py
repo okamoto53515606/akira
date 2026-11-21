@@ -177,5 +177,24 @@ res2, cap2 = run_publish_and_verify(DATE_ONLY)
 check("日付だけの変更は履歴に載せない（指紋で判定）",
       cap2["updates"] == [] and cap2["entrypoints"] == 0, str(cap2["updates"]))
 
+# ------------------------------- 5. トップの「直近の更新」と台帳の突き合わせ
+# 11-22 は /changelog/ だけ直してトップを公開し忘れ、「履歴は11-22・トップは11-21」
+# という食い違いが残った。同じ台帳から描く2か所を突き合わせる検査を足した。
+TOP_OLD = ('<html><body><section><!-- topcl:begin -->'
+           '<ul><li><span class="cl-date">2026-11-21</span> <span class="cl-text">x</span></li>'
+           '<li><span class="cl-date">2026-11-19</span> <span class="cl-text">y</span></li></ul>'
+           '<!-- topcl:end --></section></body></html>')
+TOP_NEW = TOP_OLD.replace("2026-11-21", "2026-11-22")
+TOP_NOMARK = '<html><body><p>マーカー無し</p></body></html>'
+
+check("トップの直近の更新から最新日を取る", tools._top_latest_event_date(TOP_OLD) == "2026-11-21")
+check("マーカーが無ければ空", tools._top_latest_event_date(TOP_NOMARK) == "")
+_FACTS = {"models": {"m1": {"released": "2026-11-10",
+                            "events": [{"date": "2026-11-12"}]}},
+          "site_events": [{"date": "2026-11-22"}, {"date": "2026-11-19"}]}
+check("台帳の最新イベント日を取る", tools._ledger_latest_event_date(_FACTS) == "2026-11-22")
+check("トップが台帳に追いつけば一致", tools._top_latest_event_date(TOP_NEW)
+      == tools._ledger_latest_event_date(_FACTS))
+
 print("\nRESULT: %d passed / %d failed" % (len(PASS), len(FAIL)))
 sys.exit(1 if FAIL else 0)

@@ -1220,6 +1220,37 @@ CONTRACT_MAIN_PAGES = (
     "timeline/index.html", "china-ai/index.html", "multimodal/index.html",
     "glossary/index.html", "en/glossary/index.html",
 )
+# トップの「直近の更新」ブロック（render_site.render_home がここだけを書き換える）
+TOPCL_BEGIN = "<!-- topcl:begin -->"
+TOPCL_END = "<!-- topcl:end -->"
+
+
+def _top_latest_event_date(html: str) -> str:
+    """トップの「直近の更新」に並ぶ日付のうち最新を返す（無ければ空）。"""
+    i, j = html.find(TOPCL_BEGIN), html.find(TOPCL_END)
+    if i < 0 or j < i:
+        return ""
+    dates = re.findall(r'<span class="cl-date">(\d{4}-\d{2}-\d{2})</span>',
+                       html[i:j])
+    return max(dates) if dates else ""
+
+
+def _ledger_latest_event_date(facts: dict) -> str:
+    """台帳から「更新履歴の最新日」を求める（render_site.changelog_events と同じ入力）。"""
+    dates = []
+    for r in (facts.get("models") or {}).values():
+        if not isinstance(r, dict):
+            continue
+        if r.get("released"):
+            dates.append(str(r["released"]))
+        for e in (r.get("events") or []):
+            if isinstance(e, dict) and e.get("date"):
+                dates.append(str(e["date"]))
+    for e in (facts.get("site_events") or []):
+        if isinstance(e, dict) and e.get("date"):
+            dates.append(str(e["date"]))
+    dates = [d for d in dates if re.fullmatch(r"\d{4}-\d{2}-\d{2}", d)]
+    return max(dates) if dates else ""
 
 
 def _http_get(url: str, timeout: int = 20) -> tuple[int, bytes, str]:
@@ -1512,6 +1543,12 @@ def check_published_contracts() -> dict:
     #     既存ゲートでは捕まらないので、**公開中の現物**を台帳と突き合わせる。
     violations += _published_calculator_gaps()
 
+    # C6. トップの「直近の更新」が台帳の最新イベントと一致するか（2026-11-22 追加）
+    #     /changelog/ を新しい site_events から描き直しても、トップの
+    #     「直近の更新」ブロックは render_home が別に描く。片方だけ公開すると
+    #     「更新履歴は11-22・トップは11-21」という食い違いが残る。
+    violations += _published_home_gaps()
+
     return {
         "violations": violations,
         "summary": "公開契約チェック: 違反 %d 件" % len(violations),
@@ -1565,6 +1602,37 @@ def _published_calculator_gaps() -> list:
                     "（render で models.json が変わったのに公開されていない疑い）"
                     " → publish_and_verify で描画し直して公開する" % mid)
     return gaps[:10]
+
+
+def _published_home_gaps() -> list:
+    """トップの「直近の更新」が台帳より古いままなら指摘する（2026-11-22 追加）。
+
+    なぜ:
+        /changelog/ を新しい site_events から描き直しても、トップの
+        「直近の更新」は `render_home` が別に描く。11-22 は更新履歴だけ直して
+        トップを公開し忘れ、「更新履歴は11-22・トップは11-21」という
+        食い違いが残った（どちらも HTTP 200 で日付以外は正常に見える）。
+    """
+    try:
+        with open(os.path.join(WORKSPACE_LOCAL_DIR, "data", "facts.json"),
+                  encoding="utf-8") as fh:
+            facts = json.load(fh)
+    except Exception:  # noqa: BLE001
+        return []
+    latest = _ledger_latest_event_date(facts)
+    if not latest:
+        return []
+    gaps = []
+    for url_rel, label in (("", "index.html"), ("en/", "en/index.html")):
+        status, body, _err = _http_get(LLM_SITE_URL.rstrip("/") + "/" + url_rel)
+        if status != 200:
+            continue            # 疎通は C4 が報告する
+        top = _top_latest_event_date(body.decode("utf-8", "replace"))
+        if top and top < latest:
+            gaps.append("%s: トップの「直近の更新」が %s のまま（台帳の最新は %s）"
+                        " → refresh_entrypoints() で描き直して公開する"
+                        % (label, top, latest))
+    return gaps
 
 
 def _restore_published_data_file(key: str = DATA_MODELS_KEY, dry_run: bool = False) -> dict:
@@ -1631,6 +1699,48 @@ def restore_published_data_file(key: str = DATA_MODELS_KEY, dry_run: bool = Fals
         dry_run: True なら判定だけして書き込まない
     """
     return _restore_published_data_file(key, dry_run)
+
+
+@tool
+def refresh_entrypoints(dry_run: bool = False) -> dict:
+    """トップ・/changelog/・sitemap を台帳から描き直して公開する（決定論的・LLMコスト0）。
+
+    なぜ:
+        2026-11-22、/changelog/ だけを新しい site_events から直して、
+        トップの「直近の更新」を公開し忘れた（11-21のまま残った）。
+        どちらも同じ台帳（`changelog_events`）から描くので、**まとめて作り直す**。
+
+    何をするか:
+        1. render_site（workspace の tools/render_site.py）を実行
+        2. 変わったら index.html・en/index.html・/changelog/ 日英・sitemap.xml・
+           data/changelog.json を公開（HTMLを含むので invalidation は `/*`）
+
+    Args:
+        dry_run: True なら描画だけして公開しない
+    """
+    base_dir = os.path.abspath(SITE_LOCAL_DIR)
+    if dry_run:
+        try:
+            return {"status": "dry_run", "rendered": _render_site_from_ledger(base_dir)}
+        except Exception as e:  # noqa: BLE001
+            return {"status": "failed", "reason": "描画に失敗: %s" % e}
+    s3 = boto3.client("s3", region_name=AWS_REGION)
+    try:
+        published = _render_and_publish_entrypoints(base_dir, s3)
+    except Exception as e:  # noqa: BLE001
+        return {"status": "failed", "reason": "描画・公開に失敗: %s" % e}
+    try:
+        flush_invalidations()
+    except Exception as e:  # noqa: BLE001
+        logger.error("invalidation に失敗（公開は完了）: %s", e)
+        return {"status": "refreshed_invalidation_failed", "published": published,
+                "error": str(e)}
+    return {
+        "status": "refreshed" if published else "skipped",
+        "published": published,
+        "reason": ("トップ・更新履歴・sitemap を台帳から作り直しました"
+                   if published else "台帳と一致しているため変更なし"),
+    }
 
 
 @tool

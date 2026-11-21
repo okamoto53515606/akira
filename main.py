@@ -1659,6 +1659,14 @@ def _repair_contract_violations(contract: dict, phase: str, allow_write: bool = 
             fx_fixed = rep.get("status") in ("repaired", "skipped")
         except Exception:  # noqa: BLE001
             logger.exception("[%s] 計算機レートの自動修復に失敗しました", phase)
+    if "直近の更新" in text:
+        # トップの「直近の更新」だけ古い（更新履歴は新しい）状態。
+        # どちらも同じ台帳から描くので、まとめて作り直して公開する（2026-11-22）。
+        try:
+            rep = akira_tools.refresh_entrypoints()
+            logger.warning("[%s] トップ・更新履歴・sitemap を再描画: %s", phase, rep)
+        except Exception:  # noqa: BLE001
+            logger.exception("[%s] トップ・更新履歴の再描画に失敗しました", phase)
     if any(akira_tools.DATA_MODELS_KEY in v for v in violations) and not fx_fixed:
         try:
             rep = akira_tools.restore_published_data_file()

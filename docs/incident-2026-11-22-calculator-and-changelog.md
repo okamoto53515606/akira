@@ -111,5 +111,33 @@ sitemap の lastmod だけが 11-22 に進み、**「変わったように見え
   中身が変わったページだけ `site_events` に載る／日付だけの変更は載らない）
 - 既存: `test_regression_20261121.py` 96/96 PASS、`test_regression_20261119.py` ALL PASS
 - イメージ内で同一の検証を実行（`docker run`）
-- ECR `akira:latest` digest `sha256:b4d72db9933253a6a3621c0fbdf6b53554ad8f97602efd445ad18262d36c40cb`
+- ECR `akira:latest` digest `sha256:d3c57974639014447afdb99f4dd1cb2bbc8eb419ed230d1b1980414e0a0b4372`
 - workspace `tools/render_site.py`・`data/facts.json`・`data/calculator-models.json` を更新
+
+## 9. 追記: トップの「直近の更新」だけ古いままだった
+
+`/changelog/` を直したあと、トップ（`/`・`/en/`）の「直近の更新」が 11-21 のまま
+残っていた。原因は**直した範囲の取り違え**で、`/changelog/` と トップは
+同じ台帳 `changelog_events()` から描かれるが描画関数が別。
+
+- `/changelog/` … `render_changelog()`
+- トップの「直近の更新」… `render_home()`（`<!-- topcl:begin -->` 〜 `<!-- topcl:end -->`）
+
+11-22 のランでもトップは更新されていない（`render_home` を呼んだ時点で
+`site_events` がまだ無く、`top_block()` の最新日が 11-21 のままだった）。
+そのため、更新履歴を直したあとに `render_home` をもう一度通す必要があった。
+
+### 打ち手
+
+| 追加 | 内容 |
+|---|---|
+| `check_published_contracts` C6 | 公開中のトップの `topcl` ブロックの最新日 vs 台帳の最新イベント日（`released` / `models[].events` / `site_events` の最大）。古ければ違反 |
+| `refresh_entrypoints()` | 描画 → トップ（ja/en）・`/changelog/`（ja/en）・`sitemap.xml`・`data/changelog.json` を公開（HTMLを含むので `/*`） |
+| `main._repair_contract_violations` | 「直近の更新」の違反を検出したら `refresh_entrypoints()` を自動実行（起動時・公開後） |
+
+### 実測
+
+- `/` と `/en/`: 直近の更新の先頭3件が **2026-11-22**（画像/音声API・Gemini 3.8 Flash・DeepSeek）
+- `sitemap.xml`: `/`・`/en/` の lastmod も 2026-11-22
+- invalidation: `I5X35958YJZSBF4V1W27Q0WXQF`（`/*`）
+- 回帰テスト **20/20 PASS**（トップの最新日抽出・台帳の最新イベント日・一致判定を追加）

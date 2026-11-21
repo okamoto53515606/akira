@@ -205,6 +205,7 @@ ECR `akira:latest` digest `sha256:a9ddd65b…`。詳細は
 |---|---|---|---|---|
 | 1 | トークン計算機の「参考円換算」が全行 ¥0（11-15 から7日間） | 計算機のJSは `data/models.json` の `fx.usd_jpy` を読むが、`render_models_json` が `fx` を書いていなかった。為替入力の初期値も空 → `f=0`。契約検査は `models` 配列と「JSONを参照しているか」だけを見ており、**計算結果の値**を見ていなかった | 計算機データの契約に `fx.usd_jpy` を必須化／`#fx-rate` の初期値>0 を検査／`repair_calculator_fx()` で台帳 `facts.fx` から決定論的に修復／描画側が `fx` を書く | **完了**。実測 59行が ¥28/¥30/¥31（0円なし） |
 | 2 | `/changelog/` に今日の更新が0件（sitemap lastmod だけ 11-22） | `publish_and_verify` が `site_upload` の「変更ページを `site_events` に足す」「入り口を再描画して公開する」を持っていなかった。11-22 は `publish_and_verify` を7回だけ使用＝`site_events` は 11-21 のまま。描画は冪等で「その呼び出しの差分」しか返さないため、先に別呼び出しで描かれた changelog は公開対象外だった | `publish_and_verify` に登録・入り口再描画・sitemap lastmod を通す。HTMLを含む再公開の invalidation は `/*`。今日の4件を台帳に足して公開 | **完了**。11-22 エントリ4件 |
+| 3 | トップの「直近の更新」だけ 11-21 のまま | `/changelog/` とトップは同じ台帳から描くが、描画関数が別（`render_changelog` / `render_home`）。前者だけ直して公開したため、2か所が食い違った | 公開契約 C6（トップの最新日 vs 台帳の最新イベント日）を追加。`refresh_entrypoints()` でトップ・履歴・sitemap をまとめて描き直し、違反時は自動実行 | **完了**。`/`・`/en/` とも先頭3件が 11-22 |
 
 ### この1件から出た原則（§4 の核に足す）
 
