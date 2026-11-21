@@ -1,0 +1,1 @@
+shell {"command": "cd /workspace && grep -o \"\\[bold[^]]*\\]\\|\\[yellow[^]]*\\]\\|\\[red[^]]*\\]\\|\\[green[^]]*\\]\\|\\[/bold\\]\" data/facts.json | sort | uniq -c; echo \"=== tmp render ===\"; rm -rf /tmp/sc && mkdir -p /tmp/sc && cp -a /tmp/site /tmp/sc/site && python3 tools/render_site.py --site /tmp/sc/site --workspace /workspace 2>&1 | tail -20"}

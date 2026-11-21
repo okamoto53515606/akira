@@ -5,8 +5,8 @@
 
 | フォルダ | 取得元 | 取得日時 | 内容 |
 |---|---|---|---|
-| `site/` | `s3://akira-llm-site/` | 2026-09-27 | 公開サイトの全ファイル（72件・5.9MB）。`llm.okamomedia.tokyo` で配信されているものと同じ |
-| `workspace/` | `s3://akira-workspace/` の `cache/` 以外 | 2026-09-27 | AIの作業場（45ファイル・716KB）。`tools/` `data/` `parts/` `notes/` |
+| `site/` | `s3://akira-llm-site/` | 2026-11-21 | 公開サイトの全ファイル（153件・13MB）。`llm.okamomedia.tokyo` で配信されているものと同じ |
+| `workspace/` | `s3://akira-workspace/` の `cache/` 以外 | 2026-11-21 | AIの作業場（679ファイル・11MB）。`tools/` `data/` `parts/` `notes/` `drafts/` `trace/` |
 
 ## 注意（読む前に）
 

@@ -1,7 +1,7 @@
 {
  "schema_note": "LLM Data Hub の料金データ単一の真実（SOT）。HTMLの料金表・ページ本文を更新したら必ずここも更新し、tools/verify_price_consistency.py でサイト全体を検証する。金額はすべて USD / 1Mトークン。",
  "site": "https://llm.okamomedia.tokyo",
- "last_verified": "2026-11-19",
+ "last_verified": "2026-11-21",
  "sources": {
   "deepseek_pricing": "https://api-docs.deepseek.com/quick_start/pricing",
   "deepseek_news": "https://api-docs.deepseek.com/news/news260910",
@@ -15,7 +15,8 @@
   "gemini_api_pricing": "https://ai.google.dev/gemini-api/docs/pricing",
   "gemini_nano_banana_2_1_model": "https://ai.google.dev/gemini-api/docs/models/gemini-nano-banana-2.1",
   "openai_gpt61_terra": "https://openai.com/index/introducing-gpt-6-1-terra/",
-  "openai_model_gpt61_terra": "https://developers.openai.com/api/docs/models/gpt-6.1-terra"
+  "openai_model_gpt61_terra": "https://developers.openai.com/api/docs/models/gpt-6.1-terra",
+  "openai_astra_law": "https://openai.com/index/astra-law-6-2/"
  },
  "models": {
   "deepseek-v4.1-flash": {
@@ -864,6 +865,93 @@
     "/pricing/#qwen-h",
     "/calculator/"
    ]
+  },
+  "gemini-4-neon": {
+   "name_ja": "Gemini 4 Neon",
+   "name_en": "Gemini 4 Neon",
+   "api_model_id": "gemini-4-neon",
+   "provider": "Google",
+   "status": "current",
+   "released": "2026-11-18",
+   "released_note": "GA（Gemini API リリースノート November 18, 2026 の「generally available (GA)」）",
+   "price": {
+    "cache_miss_input": 3.0,
+    "cache_hit_input": 0.15,
+    "output": 15.0,
+    "cache_write": null
+   },
+   "sources": [
+    "https://ai.google.dev/gemini-api/docs/pricing",
+    "https://ai.google.dev/gemini-api/docs/changelog"
+   ],
+   "verified": "2026-11-21",
+   "context": "1M",
+   "max_output": "1M（long decode）",
+   "note": "出力単価は思考トークン込み。暗黙キャッシュのみ（明示キャッシュ非対応）。無料枠なし。200K超の段階課金なし。",
+   "pages": [
+    "/timeline/",
+    "/en/timeline/",
+    "/pricing/",
+    "/en/pricing/"
+   ]
+  },
+  "gpt-6.2-astra-law": {
+   "name_ja": "GPT-6.2 Astra for Law",
+   "name_en": "GPT-6.2 Astra for Law",
+   "api_model_id": "gpt-6.2-astra-law",
+   "provider": "OpenAI",
+   "status": "trusted-access",
+   "released": "2026-11-17",
+   "released_note": "OpenAI 公式ブログ November 17, 2026",
+   "price": {
+    "cache_miss_input": 8.0,
+    "cache_hit_input": 0.4,
+    "output": 40.0,
+    "cache_write_30m": 10.0,
+    "cache_write_12h": 20.0
+   },
+   "sources": [
+    "https://developers.openai.com/api/docs/pricing",
+    "https://openai.com/index/astra-law-6-2/"
+   ],
+   "verified": "2026-11-21",
+   "note": "プロモーション料金は少なくとも2026-12-31まで。Trusted Access Program（ChatGPT Enterprise 申請・API含む）。法務向けモデル構成。",
+   "pages": [
+    "/timeline/",
+    "/en/timeline/",
+    "/pricing/",
+    "/en/pricing/"
+   ]
+  },
+  "gpt-6-cyber": {
+   "name_ja": "GPT-6 Cyber",
+   "name_en": "GPT-6 Cyber",
+   "api_model_id": "gpt-6-cyber",
+   "provider": "OpenAI",
+   "status": "trusted-access",
+   "released": "2026-11-05",
+   "price": {
+    "cache_hit_input": 2.0,
+    "cache_miss_input": 20.0,
+    "output": 100.0,
+    "cache_write_input_30m": 25.0,
+    "cache_write_input_12h": 50.0
+   },
+   "context": null,
+   "max_output": null,
+   "pages": [
+    "/timeline/",
+    "/pricing/",
+    "/en/timeline/",
+    "/en/pricing/"
+   ],
+   "sources": [
+    "https://openai.com/index/introducing-gpt-6-cyber/",
+    "https://deploymentsafety.openai.com/gpt-6-cyber",
+    "https://developers.openai.com/api/docs/pricing"
+   ],
+   "note": "サイバー特化（GPT-6 Astra のバリアント）。提供は Daybreak Red の承認顧客のみだが、OpenAI は「We will progressively expand access to all Daybreak Red customers soon」としている。OpenAI API料金ページの Standard 表（Prices per 1M tokens）: 入力$20.00／出力$100.00／キャッシュ入力$2.00／cache書込 30分$25・12時間$50。APIモデルIDは同表の記載どおり gpt-6-cyber。コンテキスト長・最大出力は公式料金ページに記載なし。2026-11-21確認",
+   "verified": "2026-11-21"
   }
  },
  "stale_price_patterns": [

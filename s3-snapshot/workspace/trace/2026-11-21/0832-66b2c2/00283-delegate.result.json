@@ -1,0 +1,19 @@
+DONE: 計算機データ欠落の修正と公開（/data/models.json 他4ファイル公開、公開契約チェック 違反0件）
+
+やったこと:
+1. **真因の特定**（2件、原因が別）
+   - `Gemini 4 Neon`: 生成器 `render_models_json` が「台帳に無い行の**追加のみ**」で、台帳→描画の結果が未公開のまま放置されていた（render すれば入る状態）。
+   - `Claude Fable 5.2`: 台帳の `price.provider` が表示名 `"Anthropic"`（他は slug）、さらに `names.ja` が `"Claude Fable 5.2 / Mythos 5.2"` で、公開契約ゲート（names で照合）が models.json の name `"Claude Fable 5.2"` と一致せず「計算機に無い」と誤判定。加えて既存行は更新されないため、台帳を直しても反映されない構造だった。
+2. **台帳を修正**（`/workspace/data/facts.json`, バックアップは `notes/backup-20261121/`）
+   - `claude-fable-5-2`: `price.provider` → `anthropic`、`names.ja/en` → `Claude Fable 5.2`（Mythos 5.2 の別名は timeline 側に残存）。
+3. **生成器を修正**（`/workspace/tools/render_site.py`）
+   - `provider_slug()` を追加し、**既存行も** `anthropic/openai/google/deepseek` は slug に正規化（未知の `Meta`/`alibaba` は色クラスが変わるため不触）。`changed` のみでも書き戻すようにして「台帳だけ直しても models.json が直らない」穴を塞いだ。
+4. **描画 → ゲート → 公開**
+   - `self_check`: 全ゲート **ERROR 0**、台帳とのズレ **0件**（sitemap.xml の lastmod 11-19→11-21 も解消）。
+   - `publish_and_verify`: 4ファイル公開（`data/models.json`, `changelog/`, `en/changelog/`, `sitemap.xml`）、実URL照合 mismatch 0、invalidation ok。
+5. **公開物の実物確認**
+   - 公開中の `/data/models.json`: rows 58 / updated 2026-11-21 / `Gemini 4 Neon` (google, 3.0/15.0) あり / `Claude Fable 5.2` の provider は `anthropic`。
+   - `verify_published_contracts`: **違反 0件**。
+   - `[bold yellow]` 等の装飾マークアップは **全数0件**（models.json・/pricing/・/en/pricing/ を grep。残っていたのは JS のログ接頭辞 `[calculator]` と引用文中の `collect[ed]` `[link]` のみで、モデル名の可読性に影響なし）。/pricing/ にも Neon は日英とも掲載済み。
+
+再発防止メモ: `/app/tools.py` 経由の render 呼び出し直後に models.json が直っていない挙動を1回観測したため、`python3 tools/render_site.py --site /tmp/site --workspace /workspace` を直接実行し中身で確認する手順を `/workspace/notes/20261121-calculator-gap.md` に記録した。

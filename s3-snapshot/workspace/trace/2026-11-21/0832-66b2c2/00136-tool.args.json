@@ -1,0 +1,1 @@
+shell {"command": "cd /workspace/data && python3 -c \"\nimport json\nd=json.load(open('facts.json'))\nm=d['models']\nprint('n models', len(m))\nprint(type(m))\nk=m[0] if isinstance(m,list) else None\nprint(json.dumps(k, ensure_ascii=False)[:800] if k else '')\n\" "}

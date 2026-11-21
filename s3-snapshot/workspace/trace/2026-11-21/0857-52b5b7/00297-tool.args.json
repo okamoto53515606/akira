@@ -1,0 +1,1 @@
+shell {"command": "cd /workspace/tools && sed -n '380,430p' render_site.py && echo \"=====changelog render=====\" && sed -n '430,530p' render_site.py"}

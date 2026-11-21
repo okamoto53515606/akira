@@ -1,0 +1,27 @@
+## 報告（課題158「New」バッジ全数掃除）
+
+### やったこと
+「New」を**状態ラベル**として使うのを全廃し、状態は**状態列（現行/旧版）**で表す方針に統一しました。
+
+- **消した**: `.badge-new` ピル（glossary 8・kimi 2・multimodal 6）／`.tl-new`（年表4）／🆕（ja/en 各1）／changelog のモデル名直後 `New`（9）／`New flagship`・`New tier` ラベル（en 見出し・備考・pricing 備考）／`data/models.json` の古い `"New flagship"` 注記1件
+- **状態を失わないよう移した先**: `/kimi-k3-1-pro/` は**状態列を新設**（kimi-k3 前世代=旧版）、`/gpt-6-sol-luna/` は既存の世代列、`/multimodal/` は現行 Nano Banana 2.1 を `<strong>` 強調
+- **残した13件**（一般名詞・固有名・公式引用）: "New containment test" / "New code should use…" / "New frontier models" / "New Records" / "Newest" / "New rates" / Qwen公式題名 "A New Architecture…" / 公式 "What's New" リンク / 年表の説明文（ja/en 両側に対称で残置）
+- **ja/en パリティ**: en で落としたラベルの ja 側（`新フラッグシップ`・pricing 備考2行・gpt-6 の meta description）も同時に落とし、**片側残りゼロ**。`最新フラッグシップ`（=latest）と en 小文字 "new" は温存
+- **ついでに潰した監査ERROR**: `/multimodal/` の R2 追記バナー3本を現在形の見出しに統合
+
+**実測**: `badge-new` 0 / `tl-new` 0 / 🆕 0（ローカル全HTML・台帳・models.json）、ja=en=0。self_check ERROR 0、audit ERROR 0。
+
+### 公開したページ（43ファイル）
+`/kimi-k3-1-pro/` `/glossary/`（+配下10） `/gpt-6/` `/gpt-6-sol-luna/` `/grok-4-6/` `/grok-4-7/` `/claude-fable-5-1/` `/pricing/` `/multimodal/` `/changelog/` と各 en 版、`data/models.json`。ゲート拒否0・live照合 mismatch 0。
+
+### GPT税理士の指摘
+**クリティカル1 / 軽微4**。ただしクリティカルの原因は**私の依頼文の前提ミス**でした（「GPT-6 Astra は旧版」と書いて渡したが、実物は GPT-6 Astra も「現行」＝提供中、旧版は GPT-5.x のみ）。実物確認の結果**公開内容に事実誤認はありません**（両方提供中）。残る論点は「現行＝提供中か、最新か」の語彙の曖昧さ。軽微4件は実測で「値下げ幅・期間限定は ja/en とも残存」を確認済み。
+
+### site_plan に記録した課題
+- **183**（高）: 状態列の語彙定義 — 「現行」→「提供中」等。6社×ja/en の一括変更なので単独ランで
+- **180**: `render_models_json` が既存行の `note` を更新しない（DeepSeek のピーク/オフピーク差があるため自動同期は不可、検査で人に出す方針）
+- **181**: `og_specs.json` 未登録のキービジュアル4枚（R5b WARN）
+- **182**: 値下げ・割引の注記書式を決める
+- **184**: `/multimodal/` の掲載モデル数と本文「13モデル」の整合
+
+DONE: 158

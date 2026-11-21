@@ -1,0 +1,19 @@
+計算機データと台帳の不一致を直して、そのまま公開まで終わらせてくれ。
+
+いま公開契約チェックが違反を2件出している。ひとつは gemini-4-neon で、台帳(facts.json)は GA（入力$3.00／出力$15.00・キャッシュ$0.15は暗黙のみ・無料枠なし）なのに、公開中の data/models.json に「Gemini 4 Neon」の行が丸ごと無い。もうひとつは claude-fable-5-2 で、公開中の data/models.json には「Claude Fable 5.2」の行はあるが provider が "Anthropic"（大文字始まり）になっていて、他の行の slug "anthropic" と揃っていない。台帳との照合がこれを「無い」と判定している疑いがある。
+
+あわせて self_check が data/models.json と sitemap.xml の2ファイルを「台帳とズレ（手で編集されている）」と出している。
+
+やってほしいのは、render → self_check（ERROR 0 を確認）→ publish_and_verify の1本で ja/en 同時に公開し、この3つの不一致を全部解消すること。手コピーや部分アップロードはするな。render は「台帳が正」なので、行が無い原因・provider 表記が揃わない原因が台帳側なら台帳を直し、生成器側なら生成器を直してから描画しろ（生成物を手で書き換えても次の描画で戻る）。
+
+そのうえで実測して報告してくれ（直すかどうかは任せる）: 描画後の data/models.json と /pricing/ の表に `[bold yellow]` のような装飾マークアップが文字列として残っていないか。grep で全数確認し、残っていればモデル名がそのまま読める形に直せ。
+
+公開後は sitemap.xml を get_site_file で実際に取って、data/models.json と sitemap.xml の lastmod が想定どおり動いたかも報告してくれ。
+
+【受領書（この依頼の締め方）】
+item_id: FIX-MODELS-1121
+合格条件(accept): verify_published_contracts の違反が0件、self_check の facts_consistency が ERROR 0、かつ get_site_file('data/models.json') の本文に 'Gemini 4 Neon' が含まれ provider が 'anthropic' 小文字で揃っている
+作業を終えたら、応答の**最後の行**に必ず次のどちらかを書け（idを必ず付ける）:
+  DONE: FIX-MODELS-1121
+  NOT_DONE: FIX-MODELS-1121（理由を1行）
+公開できない事情（テストラン等）がある場合も、やった作業とやっていない作業を分けて NOT_DONE に書け。

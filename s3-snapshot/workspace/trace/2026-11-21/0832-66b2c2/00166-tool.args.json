@@ -1,0 +1,1 @@
+shell {"command": "grep -n \"_render_drift\" -A40 /workspace/tools/self_check.py | head -70"}

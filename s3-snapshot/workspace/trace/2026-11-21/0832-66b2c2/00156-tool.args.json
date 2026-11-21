@@ -1,0 +1,1 @@
+shell {"command": "grep -rn \"ga-not-in-calculator\" -A20 -B20 /workspace/tools/check_facts_consistency.py | head -80"}

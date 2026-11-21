@@ -1,0 +1,1 @@
+shell {"command": "cd /workspace/data && python3 -c \"\nimport json\nd=json.load(open('facts.json'))\nprint(type(d), list(d.keys())[:40])\n\""}

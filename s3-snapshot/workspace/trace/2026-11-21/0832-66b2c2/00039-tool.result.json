@@ -1,0 +1,1 @@
+file_read {"toolUseId": "call_01_9jqreFS38oyaiZsJafbO5631", "status": "success", "content": [{"text": "  4:  \"models\": [\n  5:   {\n→ 6:    \"name\": \"Gemini 4 [bold yellow]Neon[/bold yellow]\",\n  7:    \"provider\": \"google\",\n  8:    \"label\": \"Google\","}]}

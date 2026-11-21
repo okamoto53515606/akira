@@ -1,0 +1,1 @@
+publish_and_verify {"paths": "data/models.json,changelog/,en/changelog/,sitemap.xml"}

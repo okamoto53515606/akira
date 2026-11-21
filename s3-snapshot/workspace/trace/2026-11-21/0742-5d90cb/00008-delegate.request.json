@@ -1,0 +1,9 @@
+【本日はテストラン。site_upload / publish_file_to_site は無効化されている。公開はするな】
+
+作業対象は `/mai/`（ja）と `/en/mai/`（en）だけで、目的は「年表の時系列順序と年月表記の鮮度を直す」こと。okamo の指示 OK-2 がこれで、2ラン続けて未実施になっている。
+
+やること：末尾の年表を日付の降順（新しい順）に並べ替える。並べ替えだけで、行の文言・日付・内容は一切変えるな。ja と en は同じ順序にすること。本文は台帳が正なので `/workspace/data/facts.json` の `features.mai.blocks[]`（`heading.ja` / `heading.en` / `body.ja` / `body.en`）を直し、`render_site` で書き戻せ。HTML の直接編集は次の描画で巻き戻る。同じ流れで、目次にある「最新モデル（2026年10月）」を 2026年11月に更新し（en は "October 2026" 等の該当表記）、ページ内に残っている古い年月表記を全数 grep で洗い出して当月表記に直す。grep は走査対象とヒット件数を報告に書け。0件なら「0件」と書け。
+
+やるな：内容の追加・新エントリの追加・単価や提供段階やモデル名の変更。今回は並べ替えと年月表記の更新だけ。
+
+終わり方：公開はできないのでローカルで `render_site` まで実行し、`python3 /workspace/tools/check_page_shape.py` と `self_check` で ERROR 0 を確認して終われ。報告の最後に必ず `DONE: OK-2` または `NOT_DONE: OK-2` を書け。

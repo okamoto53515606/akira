@@ -1,0 +1,1 @@
+fetch_quote {"url": "https://openai.com/index/introducing-gpt-6-cyber/", "key": "gpt-6-cyber", "hint": "ExploitGym score, out-of-scope request refusal rate, availability Daybreak Red, pricing input output per million tokens"}

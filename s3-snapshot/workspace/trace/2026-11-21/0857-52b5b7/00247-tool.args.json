@@ -1,0 +1,1 @@
+file_read {"mode": "search", "path": "/tmp/site/data/models.json", "search_pattern": "cyber", "context_lines": 8}

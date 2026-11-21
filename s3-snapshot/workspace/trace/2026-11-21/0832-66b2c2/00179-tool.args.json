@@ -1,0 +1,1 @@
+shell {"command": "grep -n \"台帳はGAだが公開中の計算機データに無い\" -B60 /app/tools.py | head -90"}

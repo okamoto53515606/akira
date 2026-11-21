@@ -1,0 +1,38 @@
+## やったこと
+
+**1. 再現テスト（公開版 → render 1回 → pending と突き合わせ）**
+
+`site_download(dest_dir=/tmp/repro/site)` で**公開中の版**を取り、`render_site` を1回かけて `drafts/pending-2026-11-21/` の9ファイルと MD5 比較。
+
+- 初回: **5/9**（`pricing` ja/en・`timeline` ja/en の4本が不一致）
+- 原因を特定 → 台帳と生成器を修正 → **9/9 一致**。2回目は **0 changes**（冪等）、`diff -r` で現行ツリーと完全一致、`self_check` **ERROR 0**（dates / facts_consistency 含む）。
+
+**2. 不一致の原因は全部「台帳に無い情報を HTML に手で入れていた」**
+
+| 再現できなかったもの | 手で入っていた実体 | 直し方（台帳側） |
+|---|---|---|
+| 年表の**エントリ挿入** | 新モデルの `<article>` を手貼り（render は並べ替えと本文書き戻しだけ） | `models[].timeline.{sec,tag,links}` を追加 → `build_timeline_article()` が組み立て、`render_timeline_entries()` が挿入 |
+| 年表の**重複削除** | `qwen-4-training` を手で削除 | `timeline_retired: ["qwen-4-training"]`（台帳が正） |
+| **updated-bar** | 4本とも手書き（日付＋「追加: …」文） | `page_chrome[{path,lang,updated,bar}]`、`{date}`/`{date_text}` を描画 |
+| **dateModified** | 手書き。en/timeline だけ空白の有無も不揃い | 台帳 `updated` に正規化 |
+| **sitemap.xml** | pending 9ファイルに**入っていなかった**（lastmod 11-19 のまま＝dateModified 11-21 と食い違い） | `render_sitemap_lastmod()` が `updated` で上書き |
+
+HTML は1文字も手で直していません。`tools/render_site.py` に5関数を追加し `run()` に配線、`data/facts.json` に台帳項目を追加しただけです（差分0で再現することを実測確認）。
+
+**3. 副産物**: pending が取りこぼしていた **sitemap.xml の lastmod 11-19 → 11-21** も render が出すようになり、公開時に日付3点（dateModified / updated-bar / lastmod）が揃います。警告も追加（`!! timeline 情報が不足` / `!! updated が古い`）＝「追加したのに年表に出ない」を無言でやらかさないため。
+
+- 記録: `notes/repro-20261121-render.md`、`drafts/pending-2026-11-21/README.md`（コピー手順を廃止と明記）、バックアップ `notes/backup-20261121/`
+
+## 公開したページ
+**なし**（サイト内容は不変。公開ツールはドライラン環境で、かつ今回は生成器と台帳の修復のみ）。`self_check` は公開可（ERROR 0）。
+
+## GPT税理士のレビュー
+**未依頼・指摘0件**。今回は新規の事実主張を伴わない再現性の修復で、検証は MD5 一致・冪等性・`self_check`/`check_dates`/`check_facts_consistency` の機械判定で足りるため。代わりに `self_check`（ERROR 0）と2回描画の差分0で担保しました。
+
+## site_plan に記録した課題
+- **171**: `page_chrome` は pricing/timeline の4ページのみ。他ページの updated-bar / dateModified はまだ手書き（＝日付ズレの温床が残存）→ 触るついでに移行し、render 2回で 0 changes を確認する
+- **172**: 年表に新モデルを出すときは台帳に `timeline.{ja_id,en_id,title_*,desc_*,sec,tag,links}` が全部必要（欠けるとスキップされる。出す前に grep で実測）
+- **173**: `page_chrome[].updated` が内容更新日の正。日付3点はこの1か所から出る
+- 併せて「⚠ 未公開の差分あり」の項を「コピー手順は廃止／次は `render_site`→`self_check`→`publish_and_verify`」に更新
+
+DONE: 再現性テスト（公開版→render 1回→pending と 9/9 MD5 一致、冪等・self_check ERROR 0。item_id指定なし）

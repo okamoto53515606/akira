@@ -1,0 +1,1 @@
+shell {"command": "cd /workspace/cache && sed -n '255,285p' openai-pricing-check-cyber-2026-11-21.md; echo \"=== unit header near top tables ===\"; sed -n '95,106p' openai-pricing-check-cyber-2026-11-21.md"}

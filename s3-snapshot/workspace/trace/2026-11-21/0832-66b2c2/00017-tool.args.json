@@ -1,0 +1,1 @@
+file_read {"path": "/workspace/site/data/models.json", "mode": "search", "search_pattern": "fable-5-2|gemini-4-neon", "context_lines": 2}

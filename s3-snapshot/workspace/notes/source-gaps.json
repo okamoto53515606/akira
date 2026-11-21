@@ -28,6 +28,25 @@
     "reasons": {},
     "total": 6
    }
+  },
+  "2026-11-21": {
+   "discover": {
+    "failed": 0,
+    "names": {},
+    "reasons": {},
+    "total": 2
+   },
+   "fetch": {
+    "failed": 2,
+    "names": {
+     "openai-model-astra-law": 1,
+     "openai-model-astra-law-md": 1
+    },
+    "reasons": {
+     "empty_body_0": 2
+    },
+    "total": 24
+   }
   }
  },
  "version": 1

@@ -1,0 +1,1 @@
+file_read {"mode": "search", "path": "/tmp/site/data/models.json", "search_pattern": "Neon|Hydrogen|Carbon|Fable 5.2", "context_lines": 1}

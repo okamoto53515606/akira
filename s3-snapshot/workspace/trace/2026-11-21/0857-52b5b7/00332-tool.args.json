@@ -1,0 +1,1 @@
+shell {"command": "cd /workspace && python3 - <<'PYEOF'\nimport json\ninv=json.load(open('notes/newbadge-inventory.json'))\nnews=[x for x in inv if x['tok'] in ('New','Newest')]\nprint(\"New/Newest hits:\",len(news))\nfor x in news:\n    print(\"%-45s L%-5d %s\" % (x['f'],x['ln'],x['ctx'][:150].replace('\\n',' ')))\nPYEOF"}

@@ -1,0 +1,1 @@
+file_read {"mode": "chunk", "path": "/tmp/site/data/models.json", "chunk_size": 700, "chunk_offset": 1400}

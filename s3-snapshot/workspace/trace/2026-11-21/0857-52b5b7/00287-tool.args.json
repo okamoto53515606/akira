@@ -1,0 +1,1 @@
+shell {"command": "cd /workspace/tools && wc -l render_site.py && echo \"=== targets / writes ===\" && grep -n \"write_text\\|open(\\|TARGETS\\|def \\|facts\\[\" render_site.py | head -60"}

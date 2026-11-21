@@ -1,0 +1,1 @@
+shell {"command": "cd /tmp/site && echo \"=== LOCAL grep -r '\\[bold' ===\" && grep -r '\\[bold' . 2>/dev/null | wc -l && echo \"--- by file ---\" && grep -rl '\\[bold' . 2>/dev/null | sort && echo \"=== by ext ===\" && grep -r '\\[bold' . 2>/dev/null | cut -d: -f1 | sed 's/.*\\.//' | sort | uniq -c"}

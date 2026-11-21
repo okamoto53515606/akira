@@ -1,0 +1,1 @@
+file_read {"toolUseId": "call_00_XYXwiwttkn21qjKVaqOy2315", "status": "success", "content": [{"text": "Error processing file /tmp/site/data/models.json: 'utf-8' codec can't decode byte 0x87 in position 0: invalid start byte"}]}

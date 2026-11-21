@@ -1,0 +1,1 @@
+file_read {"mode": "search", "path": "/workspace/site/data/models.json,/workspace/data/models.json", "search_pattern": "gpt-6-cyber"}

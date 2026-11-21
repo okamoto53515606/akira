@@ -1,0 +1,1 @@
+shell {"command": "cd /workspace && python3 -c \"\nimport json\ns=json.load(open('data/price-sot.json'))\nk=list(s['models'])[4]\nprint(k); print(json.dumps(s['models'][k],ensure_ascii=False,indent=1))\nprint('sources sample:',json.dumps(s.get('sources'),ensure_ascii=False)[:300])\n\""}

@@ -1,0 +1,1 @@
+shell {"command": "cd /tmp/site\necho \"=== 2回目の render 後の差分（冪等性） ===\"\nfind . -type f \\( -name '*.html' -o -name '*.css' -o -name '*.json' -o -name '*.xml' \\) -print0 | xargs -0 md5sum | sort -k2 > /tmp/after2.md5\ndiff /tmp/before.md5 /tmp/after2.md5 && echo \"render1/render2 とも差分0（冪等）\"\necho \"=== [bold 再確認 ===\"; grep -ro '\\[bold' . | wc -l"}

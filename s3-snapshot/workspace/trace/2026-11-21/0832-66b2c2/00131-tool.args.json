@@ -1,0 +1,1 @@
+shell {"command": "grep -rln \"models.json\" /workspace --include=*.py 2>/dev/null | head -20; echo ---; ls /workspace; echo ---; ls /workspace/tools 2>/dev/null | head"}

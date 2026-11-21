@@ -1,0 +1,1 @@
+audit_pages {"toolUseId": "call_01_vtuwvxpyU1wjeJ4ablbV7231", "status": "success", "content": [{"text": "ページ監査 2件 / ERROR 0 / WARN 1\n- /gemini-3-7-flash/: 異常なし\n- /en/deepseek-v4-pro/\n  [WARN] R7 「取得日」が最終更新より30日以上古い（2026-09-13）。今の値で取り直したか確認\n（ERROR 0。WARN は日報に1行だけ書けばよい）"}]}

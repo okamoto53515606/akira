@@ -1,0 +1,1 @@
+firecrawl_scrape {"formats": ["html"], "includeTags": ["style"], "maxAge": 0, "url": "https://llm.okamomedia.tokyo/pricing/"}

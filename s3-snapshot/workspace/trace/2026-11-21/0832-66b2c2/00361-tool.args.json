@@ -1,0 +1,1 @@
+shell {"command": "head -40 /workspace/tools/check_css_contract.py; echo \"=== tail ===\"; tail -12 /workspace/tools/check_css_contract.py"}

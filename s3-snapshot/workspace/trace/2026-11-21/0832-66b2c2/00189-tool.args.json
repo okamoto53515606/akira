@@ -1,0 +1,1 @@
+shell {"command": "cd /workspace && python3 -c \"\nimport re\ns=open('tools/render_site.py').read()\nfor m in re.finditer(r'.*\\[[\\\"\\x27]name[\\\"\\x27]\\].*', s):\n    print(m.group(0)[:140])\n\" | head -30; echo ===; grep -n \"lastmod\\|sitemap\" /workspace/tools/render_site.py | head -40"}

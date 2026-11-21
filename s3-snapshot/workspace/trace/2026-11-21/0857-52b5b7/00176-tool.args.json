@@ -1,0 +1,1 @@
+shell {"command": "cd /workspace/cache && grep -n -i -o \".\\{80\\}expand.\\{100\\}\" gpt-6-cyber-2026-11-21.md | head -5; echo ---; grep -n -i -o \".\\{60\\}train.\\{120\\}\" gpt-6-cyber-2026-11-21.md | head -6; echo ---; grep -n -i -o \".\\{60\\}context length.\\{80\\}\" gpt-6-cyber-2026-11-21.md | head -3"}

@@ -1,0 +1,1 @@
+file_read {"mode": "find", "path": "/workspace/**/data/models.json"}

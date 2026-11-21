@@ -1,0 +1,212 @@
+[
+ {
+  "lang": "ja",
+  "file": "facts.json names.gemini-4-argon",
+  "n": 1,
+  "label": "drop trailing New"
+ },
+ {
+  "lang": "ja",
+  "file": "facts.json names.deepseek-v4-flash-vision-exp",
+  "n": 1,
+  "label": "drop trailing New"
+ },
+ {
+  "lang": "en",
+  "file": "facts.json names.deepseek-v4-flash-vision-exp",
+  "n": 1,
+  "label": "drop trailing New"
+ },
+ {
+  "lang": "ja",
+  "file": "facts.json names.cloudflare-sol-discount",
+  "n": 1,
+  "label": "drop trailing New"
+ },
+ {
+  "lang": "en",
+  "file": "facts.json names.cloudflare-sol-discount",
+  "n": 1,
+  "label": "drop trailing New"
+ },
+ {
+  "lang": "ja",
+  "file": "facts.json names.deepseek-v4-flash",
+  "n": 1,
+  "label": "drop trailing New"
+ },
+ {
+  "lang": "en",
+  "file": "facts.json names.deepseek-v4-flash",
+  "n": 1,
+  "label": "drop trailing New"
+ },
+ {
+  "lang": "ja",
+  "file": "facts.json names.gpt-5-6-pricecut",
+  "n": 1,
+  "label": "drop trailing Updated"
+ },
+ {
+  "lang": "en",
+  "file": "facts.json names.gpt-5-6-pricecut",
+  "n": 1,
+  "label": "drop trailing Updated"
+ },
+ {
+  "lang": "ja",
+  "file": "facts.json names.gemini-3-6-flash",
+  "n": 1,
+  "label": "drop trailing New"
+ },
+ {
+  "lang": "en",
+  "file": "facts.json names.gemini-3-6-flash",
+  "n": 1,
+  "label": "drop trailing New"
+ },
+ {
+  "lang": "en",
+  "file": "facts.json price.note.gpt-6",
+  "n": 1,
+  "label": "New flagship -> Flagship"
+ },
+ {
+  "lang": "en",
+  "file": "facts.json pricing_tables",
+  "n": 1,
+  "label": "New flagship -> Flagship"
+ },
+ {
+  "lang": "en",
+  "file": "facts.json pricing_tables",
+  "n": 1,
+  "label": "New flagship -> Flagship"
+ },
+ {
+  "lang": "en",
+  "file": "facts.json features/china-ai[5]",
+  "n": 2,
+  "label": "New deep-dive -> A deep-dive"
+ },
+ {
+  "lang": "ja",
+  "file": "facts.json features/multimodal[2]",
+  "n": 3,
+  "label": "remove badge-new span"
+ },
+ {
+  "lang": "en",
+  "file": "facts.json features/multimodal[2]",
+  "n": 3,
+  "label": "remove badge-new span"
+ },
+ {
+  "lang": "ja",
+  "file": "glossary/index.html",
+  "n": 4,
+  "label": "replace '<span class=\"badge badge-new\">New</span> '"
+ },
+ {
+  "lang": "en",
+  "file": "en/glossary/index.html",
+  "n": 4,
+  "label": "replace '<span class=\"badge badge-new\">New</span> '"
+ },
+ {
+  "lang": "ja",
+  "file": "kimi-k3-1-pro/index.html",
+  "n": 1,
+  "label": "add 状態 column (tables)"
+ },
+ {
+  "lang": "ja",
+  "file": "kimi-k3-1-pro/index.html",
+  "n": 1,
+  "label": "rows marked 旧版"
+ },
+ {
+  "lang": "en",
+  "file": "en/kimi-k3-1-pro/index.html",
+  "n": 2,
+  "label": "add Status column (tables)"
+ },
+ {
+  "lang": "en",
+  "file": "en/kimi-k3-1-pro/index.html",
+  "n": 2,
+  "label": "rows marked Legacy"
+ },
+ {
+  "lang": "ja",
+  "file": "gpt-6-sol-luna/index.html",
+  "n": 2,
+  "label": "replace '<strong>新（GPT-6世代）</strong>'"
+ },
+ {
+  "lang": "ja",
+  "file": "gpt-6-sol-luna/index.html",
+  "n": 2,
+  "label": "replace '旧（GPT-5.6世代）'"
+ },
+ {
+  "lang": "en",
+  "file": "en/gpt-6-sol-luna/index.html",
+  "n": 2,
+  "label": "replace '<strong>New (GPT-6 era)</strong>'"
+ },
+ {
+  "lang": "en",
+  "file": "en/gpt-6-sol-luna/index.html",
+  "n": 2,
+  "label": "replace 'Older (GPT-5.6 era)'"
+ },
+ {
+  "lang": "en",
+  "file": "en/gpt-6/index.html",
+  "n": 3,
+  "label": "replace \"OpenAI's New Flagship\""
+ },
+ {
+  "lang": "en",
+  "file": "en/gpt-6/index.html",
+  "n": 2,
+  "label": "replace 'New flagship'"
+ },
+ {
+  "lang": "en",
+  "file": "en/claude-fable-5-1/index.html",
+  "n": 1,
+  "label": "replace \"Anthropic's New Mythos-Class Flagship\""
+ },
+ {
+  "lang": "en",
+  "file": "en/claude-fable-5-1/index.html",
+  "n": 1,
+  "label": "replace 'New flagship'"
+ },
+ {
+  "lang": "en",
+  "file": "en/grok-4-6/index.html",
+  "n": 3,
+  "label": "replace \"xAI's New Flagship\""
+ },
+ {
+  "lang": "en",
+  "file": "en/grok-4-7/index.html",
+  "n": 3,
+  "label": "replace 'Larger New Flagship'"
+ },
+ {
+  "lang": "ja",
+  "file": "grok-4-6/index.html",
+  "n": 1,
+  "label": "remove 🆕"
+ },
+ {
+  "lang": "en",
+  "file": "en/grok-4-6/index.html",
+  "n": 1,
+  "label": "remove 🆕"
+ }
+]

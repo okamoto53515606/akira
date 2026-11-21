@@ -1,0 +1,1 @@
+file_read {"mode": "search", "path": "data/models.json", "search_pattern": "gpt-6-cyber", "context_lines": 6}

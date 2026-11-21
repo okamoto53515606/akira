@@ -1,0 +1,1 @@
+shell {"command": "cd /tmp/site && echo \"=== all class tokens containing new ===\" && grep -rho 'class=\"[^\"]*\"' --include=*.html . | tr ' ' '\\n' | grep -i 'new' | sort | uniq -c | sort -rn && echo \"=== context of New word ===\" && grep -rn 'New' --include=*.html . | head -60"}

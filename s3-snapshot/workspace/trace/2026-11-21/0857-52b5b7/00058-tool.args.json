@@ -1,0 +1,1 @@
+fetch_quote {"hint": "gpt-6-cyber pricing input output per million tokens", "key": "openai-pricing-check-cyber", "url": "https://developers.openai.com/api/docs/pricing"}

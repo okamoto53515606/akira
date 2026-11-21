@@ -1,0 +1,1 @@
+shell {"command": "cd /tmp/site && grep -n \"追記\" multimodal/index.html | cut -c1-400 && echo \"=== facts 追記 ===\" && grep -o \".\\{80\\}追記.\\{160\\}\" /workspace/data/facts.json | head -5"}

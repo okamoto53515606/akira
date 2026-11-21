@@ -1,0 +1,1 @@
+shell {"command": "cd /workspace/cache && echo \"=== cyber in pricing page ===\"; grep -n -i \"cyber\" openai-pricing-check-cyber-2026-11-21.md | head -20; echo \"=== gpt-6 rows ===\"; grep -n -i \"gpt-6\" openai-pricing-check-cyber-2026-11-21.md | head -20"}

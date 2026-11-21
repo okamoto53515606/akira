@@ -1,0 +1,92 @@
+【本日(2026-11-21)取得した一次情報。事実の根拠はこの中だけ】
+### deepseek-v4-1-flash-2026-11-21.md
+# deepseek-v4-1-flash — 一次情報スナップショット
+取得日時: 2026-11-21 (JST)
+出典: https://api-docs.deepseek.com/updates/
+取得方法: firecrawl scrape / markdown / 30981字
+
+[Skip to main content](https://api-docs.deepseek.com/updates/#__docusaurus_skipToContent_fallback)
+
+The full suite of DeepSeek application APIs is now available: web search, file input, URL reading, model safety, ASR, TTS and more. [Click here to view the guide](https://api-docs.deepseek.com/guides/build_a_chatbot)
+
+On this page
+
+Copy MarkdownCopy Markdown
+
+[Open Markdown](https://api-docs.deepseek.com/updates.md "Open Markdown in a new tab")
+
+# Change Log
+
+* * *
+
+## Date: 2026-11-13 [​](https://api-docs.deepseek.com/updates/\#date-2026-11-13 "Direct link to Date: 2026-11-13")
+
+### Releasing the full suite of application APIs [​](https://api-docs.deepseek.com/updates/\#releasing-the-full-suite-of-application-apis "Direct link to Releasing the full suite of application APIs")
+
+In the DeepSeek App (including the web version), web search, file input, URL reading, voice interaction and safety work together with model inference to form the conversation experience users know. Today we open these capabilities to developers: enable the corresponding parameters in the existing APIs to get conversation features such as web search, file input and URL reading, with the tool calls and context assembly handled by the service.
+
+The `deepseek-flash` model supports the following in the Messages, Responses and Chat Completions APIs:
+
+- **[Web search](https://api-docs.deepseek.com/guides/web_tools#web-search)**: with thinking disabled and the `deepseek_web_search` tool enabled, the model runs web or image searches as the question requires and answers with citations.
+- **[Deep thinking search](https://api-docs.deepseek.com/guides/web_tools#search-while-thinking)**: with thinking enabled and the `deepseek_web_search` tool enabled, the model searches the web and reads links on its own over multiple reasoning steps.
+- **[File input](https://api-docs.deepseek.com/guides/document_parsing)**: upload PDFs, Office files, images, and more; after plain-text extraction or rich-layout parsing, they are added to the conversation context for the model to answer from.
+- **[URL reading](https://api-docs.deepseek.com/guides/web_tools#read-links)**: with the `deepseek_read_url` tool enabled, the model detects links in the user message, fetches the pages and answers with them in context.
+- **[Model safety](https://api-docs.deepseek.com/guides/safety)**: with the safety check parameter enabled, we provide basic risk control: the model input and output are reviewed, and a refusal marker is returned when a risk is found. If you provide a service to the public, enable this parameter and fulfill obligations such as content safety review, large model registration and AI labeling.
+
+In addition, these underlying capabilities and the voice capabilities are available as standalone APIs, including [Search and Fetch](https://api-docs.deepseek.com/guides/search), [OCR](https://api-docs.deepseek.com/guides/ocr), [ASR](https://api-docs.deepseek.com/guides/asr) and [TTS](https://api-docs.deepseek.com/guides/tts).
+
+We have also built and open-sourced a demo chat client on these APIs, which can import your DeepSeek chat history; see [Demo](https://api-docs.deepseek.com/guides/build_a_chatbot#demo).
+
+See [Build a Chatbot](https://api-docs.deepseek.com/guides/build_a_chatbot) for how to use them, and [Models & Pricing](https://api-docs.deepseek.com/quick_start/pricing) for prices.
+
+* * *
+
+## Date: 2026-10-17 [​](https://api-docs.deepseek.com/updates/\#date-2026-10-17 "Direct link to Date: 2026-10-17")
+
+### Opening up the in-house search API [​](https://api-docs.deepseek.com/updates/\#opening-up-the-in-house-search-api "Direct link to Opening up the in-house search API")
+
+DeepSeek's web and API search capabilities are powered by our in-house DeepSeek search engine, which reliably handles hundreds of millions of search requests from around the world every day. DeepSeek Search is an AI-native general-purpose search engine that indexes hundreds of billions of web pages, supports multilingual search, and returns highly relevant, authoritative, and timely results in real time. It filters SEO spam, GEO manipulation, and low-quality AIGC through strict detection mechanisms, ensuring authoritative and trustworthy information for users and LLMs. For usage details, see the [Search & Fetch guide](https://api-docs.deepseek.com/guides/search).
+
+### DeepSeek-V4.1-Flash-1017 Update [​](https://api-docs.deepseek.com/updates/\#deepseek-v41-flash-1017-update "Direct link to DeepSeek-V4.1-Flash-1017 Update")
+
+DeepSeek V4.1 Flash has been upgraded to DeepSeek-V4.1-Flash-1017. The official web and APP models have also been updated to the new version. The API calling method and pricing remain unchanged — simply use `deepseek-flash` to access the latest model.
+
+**Performance–cost Pareto improvement**
+
+Compared with the previous DeepSeek V4.1, the new model delivers substantial improvements across benchmarks:
+
+- HLE (w/o tools): 42.6 (44.0\*)
+- Terminal-Bench 4.0: 42.3
+- DeepSWE v1.1: 77.0
+- ProgramBench: 29.1
+- NL2Repo-Bench: 68.2
+- Automation-Bench v1.0.6: 60.5
+- Agents' Last Exam: 35.4
+- Apex Bench v1.1: 72.1
+- Chartography (w/tools): 83.0
+- BabyVision (w/tools): 92.5
+- ZeroBench-main (w/tools): 51.0
+
+\\* Tested only on the pure-text subset of the HLE benchmark set. Terminal-Bench 4.0 was tested with the Claude Code framework, and DeepSWE with the Mini-SWE-V2 framework. ZeroBench-main was evaluated with Pass@5.
+
+While improving performance, we also reduced the model's task runtime and output length, enabling users to complete tasks at lower cost and higher speed and achieving a new performance–cost Pareto optimum across multiple harnesses. We specifically optimized for DeepSeek Harness, Tencent CodeBuddy, WorkBuddy, and other platforms. Please upgrade to DeepSeek Harness 0.2.1-rc.1 or 
+
+※ここに無い事実を根拠にクリティカルと判定しないこと。必要なら『未確認』と書く。
+※クリティカルには『この中のURL＋逐語引用』を必ず併記する。併記できないものは軽微。
+
+レビュー対象: 事実台帳 /workspace/data/facts.json の models["gpt-6-cyber"]（timeline.desc_ja/desc_en、status、price、sources）と、pricing_tables の anchor="oh" に追加した GPT-6 Cyber の行。/workspace/data/price-sot.json の models["gpt-6-cyber"] も同内容。
+
+作業内容: 2026-11-05 発表の GPT-6 Cyber（サイバー特化）について、これまで status=unknown・price=null・quote=null だったのを、一次情報で裏取りして更新。
+
+一次情報（本日取得、/workspace/cache/ に保存済み。evidence_pack に出るはず）:
+1. https://openai.com/index/introducing-gpt-6-cyber/ — 「initially available through the API and Codex to a select group of approved Daybreak Red customers」「ExploitGym … 48.5%, up from 32.1% for GPT‑5.6 Cyber」「avoided exploiting out-of-scope services in 99.93% of tests without its deployment prompt, and 100% with this prompt」
+2. https://deploymentsafety.openai.com/gpt-6-cyber — 「cyber-specialized variant of GPT-6 Astra」「Critical in Cybersecurity, High in the Biological and Chemical domain」
+3. https://developers.openai.com/api/docs/pricing — Standard 表（Prices per 1M tokens）に「Cyber / Trusted Access: Daybreak | gpt-6-cyber | $20.00 | $100.00 | $2.00 | $25.00 | $50.00」
+
+判断してほしい点:
+(a) 単価が公式に出たので指示は「status を ga」だったが、提供は Daybreak Red の承認顧客のみ・順次拡大と明記されているため ga（一般提供）は誤りと判断し、既存の gpt-6-2-astra-law と同じ status="trusted-access"（料金表の状態欄は「限定提供」）にした。この判断は妥当か。
+(b) 料金表にこの行を載せること自体（汎用モデルではないのに OpenAI 表へ入れる）が誤解を招かないか。備考に「汎用モデルではない点に注意」と書いた。
+(c) 数値・帰属（$20/$100 は 100万トークンあたり、キャッシュ入力 $2.00、cache書込 30分$25/12時間$50）に誤りはないか。
+(d) 見出し（title_ja/title_en）と desc の主張に、一次情報に無い断定が混ざっていないか。
+
+価値・PV貢献の観点（サイバー特化モデルの料金を載せる意味があるか）も一言。クリティカル判定にはURLと逐語引用を併記してください。

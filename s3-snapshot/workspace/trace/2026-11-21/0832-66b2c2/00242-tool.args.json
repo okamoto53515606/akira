@@ -1,0 +1,1 @@
+shell {"command": "cd /tmp/site && grep -o \"Claude Fable 5.2[^<]*\" changelog/index.html | head -3; echo \"=== sitemap timeline lastmod ===\"; grep -A1 \"timeline/\" sitemap.xml | head -6; echo \"=== SITE_LOCAL_DIR env ===\"; python3 -c \"\nimport os; print(os.environ.get('SITE_LOCAL_DIR')); print(os.environ.get('WORKSPACE_DIR'))\""}

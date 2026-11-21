@@ -1,7 +1,52 @@
 {
- "updated": "2026-11-19",
+ "updated": "2026-11-21",
  "source": "各プロバイダ公式料金ページでfact確認済み（詳細は /pricing/ の出典欄）",
  "models": [
+  {
+   "name": "GPT-6 Cyber",
+   "provider": "openai",
+   "label": "OpenAI",
+   "input": 20.0,
+   "output": 100.0,
+   "note": "Daybreak Red（承認制）経由のみ・順次拡大予定。100万トークンあたり 入力$20.00／出力$100.00／キャッシュ入力$2.00。cache書込 30分$25／12時間$50",
+   "note_en": "Available only through Daybreak Red (approved customers; access expanding progressively). $20.00 input / $100.00 output / $2.00 cached input per 1M tokens. Cache writes $25 (30m) / $50 (12h)"
+  },
+  {
+   "name": "Gemini 4 Neon",
+   "provider": "google",
+   "label": "Google",
+   "input": 3.0,
+   "output": 15.0,
+   "note": "100万トークン全体にフラット単価（段階課金なし）。キャッシュ$0.15（暗黙キャッシュのみ・明示キャッシュ非対応）・無料枠なし",
+   "note_en": "Flat rate across the full 1M tokens (no tiers). Cache $0.15 (implicit only; explicit caching not supported). No free tier"
+  },
+  {
+   "name": "GPT-6.2 Astra for Law",
+   "provider": "openai",
+   "label": "OpenAI",
+   "input": 8.0,
+   "output": 40.0,
+   "note": "法務向けモデル構成。Trusted Access Program 経由（ChatGPT Enterprise 顧客が申請・API 含む）。キャッシュ入力$0.40・キャッシュ書込 30分$10／12時間$20。プロモ価格は少なくとも2026-12-31まで",
+   "note_en": "Legal configuration. Available via the Trusted Access Program (ChatGPT Enterprise customers can request access, including through the API). Cached input $0.40, cache writes $10 (30m) / $20 (12h). Promotional rates through at least 2026-12-31"
+  },
+  {
+   "name": "GPT-6.2 Sol",
+   "provider": "openai",
+   "label": "OpenAI",
+   "input": 2.0,
+   "output": 10.0,
+   "note": "272K超は入力$4／出力$15／キャッシュ$0.20。GPT-6.1 Sol と同額",
+   "note_en": "Long context (>272K): $4 in / $15 out / $0.20 cached. Same price as GPT-6.1 Sol"
+  },
+  {
+   "name": "GPT-6.2 Astra",
+   "provider": "openai",
+   "label": "OpenAI",
+   "input": 8.0,
+   "output": 40.0,
+   "note": "272K超は入力$16／出力$60／キャッシュ$0.80。cache書込 30分$10／12時間$20",
+   "note_en": "Long context (>272K): $16 in / $60 out / $0.80 cached. Cache writes $10 (30m) / $20 (12h)"
+  },
   {
    "name": "Qwen4-Max",
    "provider": "alibaba",
@@ -22,7 +67,7 @@
   },
   {
    "name": "Claude Fable 5.2",
-   "provider": "Anthropic",
+   "provider": "anthropic",
    "label": "Anthropic",
    "input": 8.0,
    "output": 40.0,
@@ -162,7 +207,7 @@
    "input": 10.0,
    "output": 50.0,
    "note": "2026-09-03発表・最上位モデル・cache読込$1.00",
-   "note_en": "New flagship (2026-09-03) · cache read $1.00"
+   "note_en": "Flagship (2026-09-03) · cache read $1.00"
   },
   {
    "name": "GPT-6 Sol",

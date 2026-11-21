@@ -1,0 +1,1 @@
+shell {"command": "grep -rln \"台帳はGAだが公開中の計算機データに無い\" / --include=*.py 2>/dev/null | head -5"}

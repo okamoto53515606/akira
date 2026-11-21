@@ -1,0 +1,1 @@
+shell {"command": "cd /tmp/site 2>/dev/null && pwd && ls | head -40 && echo \"---HTML count---\" && find . -name \"*.html\" | wc -l && echo \"---ja/en split---\" && find . -name \"*.html\" -not -path \"./en/*\" | wc -l && find ./en -name \"*.html\" 2>/dev/null | wc -l"}

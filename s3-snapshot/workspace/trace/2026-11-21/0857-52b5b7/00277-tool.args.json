@@ -1,0 +1,1 @@
+shell {"command": "cd /workspace && echo \"=== workspace tree ===\" && ls && echo \"--- data ---\" && ls data/ 2>/dev/null && echo \"--- tools ---\" && ls tools/ 2>/dev/null && echo \"--- render_site.py? ---\" && find . -maxdepth 2 -name \"*.py\" | head -20"}

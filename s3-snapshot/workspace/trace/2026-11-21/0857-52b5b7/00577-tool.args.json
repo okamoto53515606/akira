@@ -1,0 +1,1 @@
+file_read {"mode": "search", "path": "/tmp/site", "recursive": true, "search_pattern": "badge-new|tl-new|🆕"}

@@ -41,6 +41,7 @@ DEFAULT_WS = os.environ.get("WORKSPACE_DIR", "") or "/workspace"
 GATES = [
     ("page_shape", "check_page_shape.py", []),
     ("css_contract", "check_css_contract.py", []),
+    ("markup_leak", "check_markup_leak.py", []),
     ("site_integrity", "check_site_integrity.py", []),
     ("dates", "check_dates.py", []),
     ("facts_consistency", "check_facts_consistency.py", ["__WS__"]),

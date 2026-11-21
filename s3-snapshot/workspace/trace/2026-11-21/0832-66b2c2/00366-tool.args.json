@@ -1,0 +1,1 @@
+shell {"command": "echo \"=== check_dates.py (登録型) の型 ===\"; grep -n 'from strands\\|@tool\\|^TOOL' /workspace/tools/check_dates.py; tail -20 /workspace/tools/check_dates.py; echo \"=== self_check が呼ぶゲート一覧 ===\"; grep -n 'import\\|check_' /workspace/tools/self_check.py | head -30"}

@@ -1,0 +1,1 @@
+shell {"command": "cd /tmp/site && python3 -c \"\nimport json\nd=json.load(open('data/models.json'))\nfor m in d['models']:\n    s=json.dumps(m,ensure_ascii=False)\n    if 'New' in s: print(json.dumps(m,ensure_ascii=False,indent=1))\n\" && echo \"=== render_models_json note source ===\" && sed -n '348,382p' /workspace/tools/render_site.py | grep -n \"note\" "}

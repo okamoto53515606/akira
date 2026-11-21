@@ -1,0 +1,1 @@
+shell {"command": "cd /tmp/site && for f in claude-fable-5-1/index.html en/claude-fable-5-1/index.html gpt-6/index.html en/gpt-6/index.html gpt-6-sol-luna/index.html; do echo \"########## $f\"; grep -n \"<th>\" $f | head -6; echo \"--- rows with New ---\"; grep -n \"<tr>\" $f | grep -i \"new\" | cut -c1-260; done"}

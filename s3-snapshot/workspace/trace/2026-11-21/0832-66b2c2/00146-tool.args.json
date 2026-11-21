@@ -1,0 +1,1 @@
+shell {"command": "cd /workspace/data && python3 -c \"\nimport json\nd=json.load(open('facts.json'))\nm=d['models']\nprint(list(m.keys()))\nprint('---neon---')\nprint(json.dumps(m.get('gemini-4-neon'), ensure_ascii=False, indent=1))\nprint('---fable52---')\nprint(json.dumps(m.get('claude-fable-5-2'), ensure_ascii=False, indent=1))\n\""}

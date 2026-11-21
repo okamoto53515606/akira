@@ -1,0 +1,9 @@
+gpt-6-cyber の一次情報の裏取りを頼む。台帳 /workspace/data/facts.json の gpt-6-cyber は released 2026-11-05 / status unknown / price null で年表には載っているんだが、sources の2件（https://openai.com/index/introducing-gpt-6-cyber/ と https://deploymentsafety.openai.com/gpt-6-cyber）が fetched_at も quote も null のままで、本文に書いてある ExploitGym 48.5%（GPT-5.6 Cyber は 32.1%）、範囲外サービス回避 99.93%、「initially available through the API and Codex to a select group of approved Daybreak Red customers」という逐語が一度も実物で確認されていない。まずこの2URLを実際に取得して、逐語引用と取得日（2026-11-21）を sources に書き戻してくれ。取れた内容と今の timeline 記述（desc_ja / desc_en）が食い違っていたら、追記で積まずに現在形で書き直す。あわせて released_source を必ず入れる（公式の発表ページで確認できたら official-announcement、確認できなければ unknown）。もし公式に単価（input / output、何あたりか）が公開されていれば、status を ga にして price を埋め、料金比較・計算機・年表の3面に反映してよい。単価が無いまま ga にしないこと。単価が無ければ限定提供のままで構わないが、その場合は年表の記述が「2026-11-21 時点で公式に価格の記載なし」と読める形になっているか確認してくれ。URLが404や移転だったら discover_sources で探し直し、それでも取れなければ取れなかった事実を日報に残して止めてよい。公開後は self_check で ERROR 0 を確認すること。応答の最終行は `DONE: GPT6-CYBER-1121` だけにしろ。
+
+【受領書（この依頼の締め方）】
+item_id: GPT6-CYBER-1121
+合格条件(accept): 台帳 facts.json の gpt-6-cyber.sources が2件とも fetched_at=2026-11-21 かつ quote が非null。gpt-6-cyber.released_source が official-announcement / unknown のいずれか。公開 /timeline/ と /en/timeline/ に gpt-6-cyber の記述が残り、日英で矛盾しない。単価が公開されていれば /pricing/ と /data/models.json（計算機）に該当行があり、公開されていなければ status は unknown のまま。self_check ERROR 0。
+作業を終えたら、応答の**最後の行**に必ず次のどちらかを書け（idを必ず付ける）:
+  DONE: GPT6-CYBER-1121
+  NOT_DONE: GPT6-CYBER-1121（理由を1行）
+公開できない事情（テストラン等）がある場合も、やった作業とやっていない作業を分けて NOT_DONE に書け。

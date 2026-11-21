@@ -1,0 +1,1 @@
+shell {"command": "cd /tmp/site/assets && grep -n \"price-flag\\|badge-intro\\|badge-new\\|\\.badge\\b\" style.css | head -20 && echo \"=== defs ===\" && awk '/^\\.price-flag/,/^}/' style.css | head -20 && echo \"---badge---\" && awk '/^\\.badge[ ,{]/,/^}/' style.css | head -20 && echo \"---badge-intro---\" && awk '/^\\.badge-intro/,/^}/' style.css | head -12"}

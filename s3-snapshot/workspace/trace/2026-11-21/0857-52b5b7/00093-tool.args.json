@@ -1,0 +1,1 @@
+shell {"command": "cd /workspace && sed -n '200,300p' tools/render_site.py; echo \"=== facts pricing_tables meta ===\"; python3 -c \"\nimport json\nd=json.load(open('data/facts.json'))\nfor t in d['pricing_tables']:\n    print({k:(v if not isinstance(v,(list,dict)) else type(v).__name__) for k,v in t.items()})\n\""}

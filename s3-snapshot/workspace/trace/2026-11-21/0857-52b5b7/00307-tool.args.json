@@ -1,0 +1,1 @@
+shell {"command": "cd /workspace/tools && echo \"=== render_site.py literal New/badge markers ===\" && grep -n \"New\\|badge-new\\|tl-new\\|🆕\\|値下\\|プロモ\" render_site.py | head -40 && echo \"=== render_features targets ===\" && sed -n '731,780p' render_site.py"}

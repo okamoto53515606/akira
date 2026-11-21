@@ -1,51 +1,117 @@
 {
  "schema_note": "ページ監査の状態（page_audit.py が読み書きする）。pages[パス].last=最後に監査した日、assignments[日付]=その日にコードが割り当てた対象、last_run=直近の実行結果。",
- "updated": "2026-11-19",
+ "updated": "2026-11-21",
  "pages": {
   "china-ai/index.html": {
-   "last": "2026-11-18",
+   "last": "2026-11-20",
    "result": "ok",
    "codes": []
   },
   "en/china-ai/index.html": {
-   "last": "2026-11-18",
+   "last": "2026-11-20",
    "result": "ok",
    "codes": []
   },
   "deepseek-v4-1-flash/index.html": {
-   "last": "2026-11-17",
+   "last": "2026-11-20",
    "result": "ok",
    "codes": []
   },
   "en/deepseek-v4-1-flash/index.html": {
-   "last": "2026-11-17",
+   "last": "2026-11-20",
    "result": "ok",
    "codes": []
   },
   "timeline/index.html": {
-   "last": "2026-11-18",
+   "last": "2026-11-20",
    "result": "ok",
-   "codes": []
+   "codes": [
+    "R5b"
+   ]
   },
   "en/deepseek-v4-pro/index.html": {
-   "last": "2026-11-18",
+   "last": "2026-11-20",
    "result": "ok",
    "codes": [
     "R7"
    ]
   },
   "en/timeline/index.html": {
-   "last": "2026-11-18",
+   "last": "2026-11-20",
    "result": "ok",
-   "codes": []
+   "codes": [
+    "R5b"
+   ]
   },
   "en/pricing/index.html": {
-   "last": "2026-11-18",
+   "last": "2026-11-20",
+   "result": "ok",
+   "codes": [
+    "R5b"
+   ]
+  },
+  "en/multimodal/index.html": {
+   "last": "2026-11-21",
+   "result": "ok",
+   "codes": [
+    "R5b"
+   ]
+  },
+  "mai/index.html": {
+   "last": "2026-11-20",
    "result": "ok",
    "codes": []
   },
-  "en/multimodal/index.html": {
-   "last": "2026-11-18",
+  "pricing/index.html": {
+   "last": "2026-11-20",
+   "result": "ok",
+   "codes": [
+    "R5b"
+   ]
+  },
+  "index.html": {
+   "last": "2026-11-20",
+   "result": "ok",
+   "codes": []
+  },
+  "gemini-3-7-flash/index.html": {
+   "last": "2026-11-20",
+   "result": "ok",
+   "codes": []
+  },
+  "glm-5-3-flash/index.html": {
+   "last": "2026-11-21",
+   "result": "ok",
+   "codes": []
+  },
+  "kimi-k3-1-pro/index.html": {
+   "last": "2026-11-21",
+   "result": "ok",
+   "codes": [
+    "R5b"
+   ]
+  },
+  "en/kimi-k3-1-pro/index.html": {
+   "last": "2026-11-21",
+   "result": "ok",
+   "codes": [
+    "R5b"
+   ]
+  },
+  "multimodal/index.html": {
+   "last": "2026-11-21",
+   "result": "ok",
+   "codes": [
+    "R5b"
+   ]
+  },
+  "glossary/index.html": {
+   "last": "2026-11-21",
+   "result": "ok",
+   "codes": []
+  },
+  "en/glossary/index.html": {
+   "last": "2026-11-21",
    "result": "ok",
    "codes": []
   }
@@ -54,26 +120,58 @@
   "2026-11-19": [
    "timeline/index.html",
    "en/deepseek-v4-pro/index.html"
+  ],
+  "2026-11-21": [
+   "glm-5-3-flash/index.html",
+   "en/multimodal/index.html"
   ]
  },
  "last_run": [
   {
-   "page": "china-ai/index.html",
-   "date": "2026-11-18",
+   "page": "glm-5-3-flash/index.html",
+   "date": "2026-11-21",
    "codes": []
   },
   {
-   "page": "en/china-ai/index.html",
-   "date": "2026-11-18",
-   "codes": []
+   "page": "en/multimodal/index.html",
+   "date": "2026-11-21",
+   "codes": [
+    "R5b"
+   ]
   }
  ],
  "pending": [
-  "mai/index.html",
-  "en/mai/index.html",
+  "speech-api-pricing/index.html",
+  "gemini-4-argon/index.html",
+  "gemini-3-1-flash-lite/index.html",
+  "image-api-pricing/index.html",
   "china-ai/index.html",
-  "en/china-ai/index.html",
-  "timeline/index.html",
-  "en/timeline/index.html"
+  "claude-mythos-5-1/index.html",
+  "gpt-6-1-sol/index.html",
+  "changelog/index.html",
+  "prompt-cache-pricing/index.html",
+  "claude-fable-5-1/index.html",
+  "claude-haiku-5-5/index.html",
+  "qwen-3-8-flash/index.html",
+  "claude-opus-5-5/index.html",
+  "gpt-6-1-terra/index.html",
+  "gpt-5-6-sol/index.html",
+  "frontier-model-comparison/index.html",
+  "jpy-pricing/index.html",
+  "glossary/no-training/index.html",
+  "glossary/gpt-6-astra-benchmarks/index.html",
+  "glossary/zero-data-retention/index.html",
+  "glossary/four-data-requirements/index.html",
+  "glossary/prompt-cache/index.html",
+  "glossary/one-million-context/index.html",
+  "glossary/benchmarks/index.html",
+  "glossary/benchmark-orgs/index.html",
+  "glossary/data-residency/index.html",
+  "glossary/zero-operator-access/index.html",
+  "glossary/harness/index.html",
+  "calculator/index.html",
+  "grok-4-7/index.html",
+  "batch-api-pricing/index.html",
+  "claude-sonnet-5-5/index.html"
  ]
 }

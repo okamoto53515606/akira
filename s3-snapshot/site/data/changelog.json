@@ -1,6 +1,34 @@
 {
- "updated": "2026-11-19",
+ "updated": "2026-11-21",
  "events": [
+  {
+   "date": "2026-11-21",
+   "kind": "update",
+   "key": "timeline",
+   "ja": "主要LLMリリース年表（/timeline/）を更新 — 見出し「Claude Mythos 5.1 提供開始 — トラステッドアクセス限定の上位モデル」「GPT-5.6 Sol 公開 — 入力$4.00／出力$20.00（272K以下）」を追加",
+   "en": "Updated LLM Release Timeline (/en/timeline/): added \"Claude Mythos 5.1 available — a trusted-access-only tier a…\"; \"GPT-5.6 Sol released — $4.00 input / $20.00 output up to 2…\""
+  },
+  {
+   "date": "2026-11-21",
+   "kind": "update",
+   "key": "mai",
+   "ja": "Microsoft AI (MAI) シリーズ特集（/mai/）を更新 — 本文・数値を最新化",
+   "en": "Updated Microsoft AI (MAI) Series Guide (/en/mai/): body and figures refreshed"
+  },
+  {
+   "date": "2026-11-21",
+   "kind": "update",
+   "key": "en",
+   "ja": "LLM API Pricing and Token Costs (Nov 2026)（/en/）を更新 — 本文・数値を最新化",
+   "en": "Updated LLM API Pricing and Token Costs (Nov 2026) (/en/en/): body and figures refreshed"
+  },
+  {
+   "date": "2026-11-21",
+   "kind": "update",
+   "key": "china-ai",
+   "ja": "中国系AIモデル総覧（/china-ai/）を更新 — 本文・数値を最新化",
+   "en": "Updated Chinese AI Models Compared (/en/china-ai/): body and figures refreshed"
+  },
   {
    "date": "2026-11-19",
    "kind": "update",
@@ -28,6 +56,20 @@
    "key": "xiaomi-mimo-pricing",
    "ja": "料金比較に Xiaomi（MiMo）セクションを新設し、MiMo-V2.6（Pro / Flash / Pro-UltraSpeed）の3行を公式料金表から転記。キャッシュ単価・Batch 50%・重み未公開の別まで明記（2026-11-17 直接確認 /pricing/）",
    "en": "Added a Xiaomi (MiMo) section to the pricing tables with the three MiMo-V2.6 variants (Pro / Flash / Pro-UltraSpeed), transcribed from the official price list verified on 2026-11-17, including cache rates, the 50% Batch price and a note that weights are not published (/en/pricing/)"
+  },
+  {
+   "date": "2026-11-17",
+   "kind": "model",
+   "key": "gpt-6-2-sol",
+   "ja": "GPT-6.2 Sol を掲載（OpenAI）",
+   "en": "Listed GPT-6.2 Sol (OpenAI)"
+  },
+  {
+   "date": "2026-11-17",
+   "kind": "model",
+   "key": "gpt-6-2-astra",
+   "ja": "GPT-6.2 Astra を掲載（OpenAI）",
+   "en": "Listed GPT-6.2 Astra (OpenAI)"
   },
   {
    "date": "2026-11-15",
@@ -319,6 +361,13 @@
   {
    "date": "2026-09-01",
    "kind": "model",
+   "key": "claude-mythos-5-1",
+   "ja": "Claude Mythos 5.1 を掲載（Anthropic）",
+   "en": "Listed Claude Mythos 5.1 (Anthropic)"
+  },
+  {
+   "date": "2026-09-01",
+   "kind": "model",
    "key": "claude-fable-5-1",
    "ja": "Claude Fable 5.1 / Mythos 5.1 を掲載（Anthropic）",
    "en": "Listed Claude Fable 5.1 / Mythos 5.1 (Anthropic)"
@@ -406,6 +455,20 @@
    "key": "gemini-3-6-flash",
    "ja": "Gemini 3.6 Flash・3.5 Flash-Lite・3.5 Flash Cyber 公開 New を掲載（Google）",
    "en": "Listed Gemini 3.6 Flash, 3.5 Flash-Lite, 3.5 Flash Cyber released New (Google)"
+  },
+  {
+   "date": "2026-07-09",
+   "kind": "model",
+   "key": "gpt-5-6-luna",
+   "ja": "GPT-5.6 Luna を掲載（OpenAI）",
+   "en": "Listed GPT-5.6 Luna (OpenAI)"
+  },
+  {
+   "date": "2026-07-09",
+   "kind": "model",
+   "key": "gpt-5-6-sol",
+   "ja": "GPT-5.6 Sol を掲載（OpenAI）",
+   "en": "Listed GPT-5.6 Sol (OpenAI)"
   },
   {
    "date": "2026-07-09",

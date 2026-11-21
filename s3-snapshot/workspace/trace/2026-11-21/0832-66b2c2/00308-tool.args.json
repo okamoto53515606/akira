@@ -1,0 +1,1 @@
+firecrawl_scrape {"url": "https://llm.okamomedia.tokyo/pricing/", "formats": ["query"], "maxAge": 0, "onlyMainContent": false, "queryOptions": {"prompt": "本文やCSSに '[bold yellow]' という文字列がそのまま残っている箇所はあるか。あればその前後の語を逐語で引用せよ。無ければ『なし』とだけ答えよ。", "mode": "directQuote"}}

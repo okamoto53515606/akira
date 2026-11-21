@@ -1,6 +1,6 @@
 {
  "schema_note": "OGカード（各ページ先頭のメインビジュアル）の唯一の真実。ページ本文を更新したら、ここの facts と generated を更新して og_card.py で描き直す。generated がページの dateModified より古いと page_audit.py の R5 が ERROR にする（2026-11-17 追加：/china-ai/ の画像だけ 2026-10-29 のまま古い情報を映していた事故の再発防止）。",
- "updated": "2026-11-19",
+ "updated": "2026-11-21",
  "pages": {
   "china-ai/index.html": {
    "image": "ja-china-ai.png",
@@ -9,12 +9,12 @@
    "title": "中国系AI総覧",
    "facts": [
     "DeepSeek・Qwen・GLM・Kimi・MiniMax",
-    "料金とオープンウェイトを一次情報で比較",
+    "MiniMax は M3.1 Flash 入力$0.15／出力$0.60（公式）",
     "Qwen4-Max は 2026-11-15 に正式提供（$1.50 / $4.50）"
    ],
    "url": "llm.okamomedia.tokyo/china-ai/",
-   "generated": "2026-11-19",
-   "digest": "a74dc21d82af"
+   "generated": "2026-11-21",
+   "digest": "39f4a6db4dd3"
   },
   "en/china-ai/index.html": {
    "image": "en-china-ai.png",
@@ -23,12 +23,12 @@
    "title": "Chinese AI Models",
    "facts": [
     "DeepSeek · Qwen · GLM · Kimi · MiniMax",
-    "Pricing and open weights, from primary sources",
+    "MiniMax M3.1 Flash $0.15 in / $0.60 out (official)",
     "Qwen4-Max GA 15 Nov 2026 ($1.50 / $4.50)"
    ],
    "url": "llm.okamomedia.tokyo/en/china-ai/",
-   "generated": "2026-11-19",
-   "digest": "b820fad24243"
+   "generated": "2026-11-21",
+   "digest": "49f115c005ce"
   },
   "deepseek-v4-1-flash/index.html": {
    "image": "ja-deepseek-v4-1-flash.png",
@@ -93,12 +93,12 @@
    "title": "主要LLM リリース年表",
    "facts": [
     "2025年1月〜2026年11月。発表日・料金・出典を1行ずつ",
-    "Qwen4-Max（11/15）・Gemini 4 Carbon／Hydrogen・MAI Code 2 まで収録",
+    "GPT-6.2 Astra（入力$8／出力$40）と Sol（$2／$10）を追加",
     "日英で同一の並び。日付は台帳から機械生成"
    ],
    "url": "llm.okamomedia.tokyo/timeline/",
-   "generated": "2026-11-19",
-   "digest": "ad4657253d77"
+   "generated": "2026-11-21",
+   "digest": "aea0fdcefde4"
   },
   "en/timeline/index.html": {
    "image": "en-timeline.png",
@@ -107,12 +107,12 @@
    "title": "LLM Release Timeline",
    "facts": [
     "January 2025 – November 2026. One row per launch, with price and source",
-    "Includes Qwen4-Max (15 Nov), Gemini 4 Carbon/Hydrogen and MAI Code 2",
+    "Adds GPT-6.2 Astra ($8 / $40) and GPT-6.2 Sol ($2 / $10)",
     "Japanese and English generated from the same ledger"
    ],
    "url": "llm.okamomedia.tokyo/en/timeline/",
-   "generated": "2026-11-19",
-   "digest": "dc1f0641db26"
+   "generated": "2026-11-21",
+   "digest": "dbe14d92dea3"
   }
  }
 }

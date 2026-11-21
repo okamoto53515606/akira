@@ -1,0 +1,1 @@
+shell {"command": "cd /tmp/site && grep -rno \"\\[[a-z/][a-z ]*\\]\" --include=*.html --include=*.json . | grep -iE \"bold|yellow|red|green|blue|white|black|underline|italic\" | head -20; echo \"=== bold/yellow anywhere ===\"; grep -rl \"bold\" --include=*.html --include=*.json . | head -10"}

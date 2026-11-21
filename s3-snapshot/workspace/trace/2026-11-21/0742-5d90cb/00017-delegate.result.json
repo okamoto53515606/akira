@@ -1,0 +1,23 @@
+## 実施内容（2026-11-21 昼）
+
+**新モデル2件を3面（年表／料金比較／計算機）へ反映**（一次情報の逐語は `/workspace/cache/` に取得済み）
+
+| | Gemini 4 Neon | GPT-6.2 Astra for Law |
+|---|---|---|
+| 発表 | 2026-11-18 GA（リリースノート逐語「generally available (GA)」） | 2026-11-17（公式ブログ「Today, we're releasing an updated Astra for Law」） |
+| 単価 | $3.00 / $15.00・cache $0.15（暗黙のみ）・無料枠なし・1Mまでフラット | $8.00 / $40.00・cache入力$0.40・cache書込30分$10/12h$20・プロモ少なくとも12/31 |
+| 提供 | 有料ティアのみ | Trusted Access Program 経由（Enterprise 申請・API含む） |
+
+- `/timeline/`・`/en/timeline/`: 記事を追加（Neon が先頭＝2026-11-18、Law は Astra/Sol の直後）。`.updated-bar` と `dateModified` を 11-21 に統一。article id は `gemini-4-neon` / `gpt-6-2-astra-law`、見出し id は新規 sec-60/61（重複なしを確認）。
+- `/pricing/`・`/en/pricing/`: Google 表の**1行目**に Neon、OpenAI 表の3行目に Law。updated-bar に確認日 11-21 と追加2件を明記、dateModified も 11-21。
+- 計算機 `data/models.json`: 58モデル（Neon / Astra for Law を含む）。`price-sot.json` にも2件登録、`facts.json` の `updated`＝2026-11-21。
+- **ついで修正**: 年表 2026-09-22 の Qwen 4 二重掲載（`qwen-4-training` と `qwen-4-in-training`）を後者に統合 → audit の R12 ERROR 解消。
+
+**検証**: `render_site` 差分0 → `self_check` ERROR 0（台帳とのズレ0）→ `audit_pages` 4ページ ERROR 0。表は「1行目のモデル名＋行数」で台帳と突合（gh 14行＝先頭 Gemini 4 Neon / oh 15行＝先頭 GPT-6.2 Astra）。年表は57→56記事・id重複なし・日付降順を機械確認。
+
+**⚠ 公開できていません**: 本セッションは `publish_and_verify` / `site_upload` が**ドライラン**。変更後の実ファイルを `/workspace/drafts/pending-2026-11-21/`（9ファイル＋手順README）に退避しました。`facts.json`・`price-sot.json` は永続側に適用済みなので、翌日は「コピー → render_site → self_check → publish_and_verify」だけで出ます。
+
+**site_plan に記録した課題**: 167 を更新（`ja/en-pricing.png`・`ja/en-timeline.png` の4枚が `og_specs.json` に無く R5b WARN）／170 新設（年表の `sec-N` 連番崩れ、重複のみ禁止）／未公開差分の存在と手順を冒頭に明記。GPT税理士レビューは `/tmp/site` を読めない制約（課題7）があるため、公開前ランで要点を本文添付して実施します。
+
+DONE: gemini-4-neon / gpt-6.2-astra-law の料金比較・計算機・年表3面への反映＋整合検証（ERROR 0）
+NOT_DONE: 公開（publish_and_verify がドライランのため実行不可。差分は drafts/pending-2026-11-21 に退避済み）

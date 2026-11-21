@@ -1,0 +1,1 @@
+verify_published_contracts {"toolUseId": "call_00_UOhurpXYFvlvqc46skwV1146", "status": "success", "content": [{"text": "公開契約チェック: 違反 2 件\n  - claude-fable-5-2: 台帳はGAだが公開中の計算機データに無い（render で models.json が変わったのに公開されていない疑い） → publish_and_verify で描画し直して公開する\n  - gemini-4-neon: 台帳はGAだが公開中の計算機データに無い（render で models.json が変わったのに公開されていない疑い） → publish_and_verify で描画し直して公開する"}]}

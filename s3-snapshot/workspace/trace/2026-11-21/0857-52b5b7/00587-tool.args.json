@@ -1,0 +1,1 @@
+file_read {"mode": "search", "path": "/tmp/site/pricing/index.html,/tmp/site/en/pricing/index.html,/tmp/site/glossary/index.html,/tmp/site/multimodal/index.html,/tmp/site/en/multimodal/index.html,/tmp/site/kimi-k3-1-pro/index.html,/tmp/site/timeline/index.html", "search_pattern": "badge-new|tl-new|🆕|値下|プロモ"}

@@ -1,0 +1,1100 @@
+[
+ {
+  "f": "calculator/index.html",
+  "ln": 44,
+  "tok": "プロモ",
+  "ctx": "able 5.1は$10/$50（cache読込$0.25・2026-09-01公開）。Claude Sonnet 5は$2/$10（導入価格から恒久化）。GPT-5.6 Solはプロモ価格(〜11/21)。Gemini 3.8/3.7/3.6 Flashは初回価格(〜12/31)。Gemini Omni 1.1 Flashは入力$1.50・出力はテキスト$"
+ },
+ {
+  "f": "calculator/index.html",
+  "ln": 44,
+  "tok": "プロモ",
+  "ctx": "mni 1.1 Flashは入力$1.50・出力はテキスト$9.00／動画$17.50（表はテキスト出力で計算）。GLM-5.3-Flashはlist価格($0.15/$0.50・プロモ終了)。DeepSeekは<strong>V4.1 Flash</strong>（オフピーク$0.15/$0.60・ピーク$0.30/$1.20）が現行主力で、ピーク/オフピ"
+ },
+ {
+  "f": "calculator/index.html",
+  "ln": 44,
+  "tok": "値下",
+  "ctx": "sh価格で課金。V4 Proは2026-09-14以降も提供継続（9/14ルーティング予告は撤回済み）で、V4 Pro単価も現行有効。GPT-5.6 Terra/Lunaは7/30値下げ後。契約前に必ず公式ページで確認を。<a href=\"/pricing/\">料金比較ページ</a>で詳細出典参照。</p>"
+ },
+ {
+  "f": "changelog/index.html",
+  "ln": 80,
+  "tok": "New",
+  "ctx": "ate\">2026-10-13</span> <span class=\"cl-text\">Gemini 4 Argon 公開（GA）— 1Mコンテキストのフラッグシップ推論モデル New を掲載（Google）</span></li>"
+ },
+ {
+  "f": "changelog/index.html",
+  "ln": 104,
+  "tok": "プロモ",
+  "ctx": "<li><span class=\"cl-date\">2026-08-21</span> <span class=\"cl-text\">GPT-5.6 Sol プロモ価格へ を掲載（OpenAI）</span></li>"
+ },
+ {
+  "f": "changelog/index.html",
+  "ln": 105,
+  "tok": "New",
+  "ctx": "\"cl-date\">2026-08-21</span> <span class=\"cl-text\">DeepSeek V4 Flash Vision Exp 公開（実験的モデル） New を掲載（DeepSeek）</span></li>"
+ },
+ {
+  "f": "changelog/index.html",
+  "ln": 106,
+  "tok": "New",
+  "ctx": "\"cl-date\">2026-08-19</span> <span class=\"cl-text\">Cloudflare AI GatewayでGPT-5.6 Solが50%オフ New を掲載（OpenAI / Cloudflare）</span></li>"
+ },
+ {
+  "f": "changelog/index.html",
+  "ln": 110,
+  "tok": "New",
+  "ctx": "s=\"cl-date\">2026-07-31</span> <span class=\"cl-text\">DeepSeek V4 Flash 公式リリース（public beta） New を掲載（DeepSeek）</span></li>"
+ },
+ {
+  "f": "changelog/index.html",
+  "ln": 111,
+  "tok": "値下",
+  "ctx": "<li><span class=\"cl-date\">2026-07-30</span> <span class=\"cl-text\">GPT-5.6 Terra/Luna 大幅値下げ Updated を掲載（OpenAI）</span></li>"
+ },
+ {
+  "f": "changelog/index.html",
+  "ln": 113,
+  "tok": "New",
+  "ctx": "026-07-21</span> <span class=\"cl-text\">Gemini 3.6 Flash・3.5 Flash-Lite・3.5 Flash Cyber 公開 New を掲載（Google）</span></li>"
+ },
+ {
+  "f": "china-ai/index.html",
+  "ln": 103,
+  "tok": "プロモ",
+  "ctx": "ce\">$0.15</td><td class=\"price\">$0.50</td><td>MIT</td><td>320B/18B MoE・1Mコンテキスト。list価格（導入時プロモは9/9終了）。<a href=\"/glm-5-3-flash/\">詳細ページ</a>。<a href=\"https://docs.z.ai/guides/overview/"
+ },
+ {
+  "f": "china-ai/index.html",
+  "ln": 154,
+  "tok": "プロモ",
+  "ctx": "  <li><span class=\"cl-date\">2026-09-09</span><span class=\"cl-text\">GLM 5.3 Flash の導入時50%オフプロモ（$0.075/$0.25）が終了。以後は list 価格（$0.15/$0.50）。<a href=\"/glm-5-3-flash/\">詳細ページ</a>・料金比較・計算機"
+ },
+ {
+  "f": "china-ai/index.html",
+  "ln": 156,
+  "tok": "プロモ",
+  "ctx": "span><span class=\"cl-text\">GLM 5.3 Flash（Z.ai・2026-08-26公開）を追記。list価格$0.15/$0.50（導入時50%オフのプロモ$0.075/$0.25は9/9終了）・320B/18B MoE・1Mコンテキスト・MITを一次情報（docs.z.ai / z.ai公式ブログ）で裏取り。<a href=\""
+ },
+ {
+  "f": "claude-fable-5-1/index.html",
+  "ln": 46,
+  "tok": "値下",
+  "ctx": "  <p class=\"lead\">AnthropicのMythosクラス新フラッグシップ。コーディング・知識労働・長期間エージェントで新境地を開き、キャッシュ読込の値下げで実質最大約45%安に。</p>"
+ },
+ {
+  "f": "claude-fable-5-1/index.html",
+  "ln": 87,
+  "tok": "値下",
+  "ctx": "  * この値下げにより、典型的なワークロードで <strong>約25%減</strong>、高エージェント的ワークロード（ツール・コンテキスト多用）では <strong>最大約45%減</"
+ },
+ {
+  "f": "claude-fable-5-1/index.html",
+  "ln": 145,
+  "tok": "プロモ",
+  "ctx": "><td class=\"price\">$4.00</td><td class=\"price\">$20.00</td><td class=\"price\">$0.40</td><td>プロモ価格（〜2026-11-21）。絶対額では最安</td></tr>"
+ },
+ {
+  "f": "claude-fable-5-1/index.html",
+  "ln": 157,
+  "tok": "値下",
+  "ctx": "lass=\"use-case-card\"><div class=\"icon\">💻</div><h4>長期間エージェント</h4><p>複数ステップ・長時間の自律実行。キャッシュ読込値下げでコスト効率が向上。</p></div>"
+ },
+ {
+  "f": "claude-haiku-5-5/index.html",
+  "ln": 48,
+  "tok": "値下",
+  "ctx": "    <p class=\"price-flag\">🚀 2026年10月7日公開 — Claude 5.5世代の最速・最安。Haiku 4.5（$1/$5）から大きく値下げ</p>"
+ },
+ {
+  "f": "claude-opus-5-5/index.html",
+  "ln": 47,
+  "tok": "値下",
+  "ctx": "  <p class=\"price-flag\">🚀 2026年9月22日公開 — Claude 5.5世代の第一弾・Opus 5比 20%値下げ</p>"
+ },
+ {
+  "f": "claude-opus-5-5/index.html",
+  "ln": 49,
+  "tok": "値下",
+  "ctx": "5ファミリー」の最初のモデルとして公開。公式の主張は「<strong>多くの作業でFable 5.1と同等の性能を、Opus 5より40%安いコストで</strong>」。新世代の値下げ競争の火付け役になったモデルです。</p>"
+ },
+ {
+  "f": "claude-opus-5-5/index.html",
+  "ln": 82,
+  "tok": "値下",
+  "ctx": "    <li><strong>値下げが本題。</strong>入力$5→$4、出力$25→$20、キャッシュ読込$0.50→$0.20（60%減）。エージェント型コーディングではキャッシュ読込が請求の大半を占め"
+ },
+ {
+  "f": "claude-opus-5-5/index.html",
+  "ln": 243,
+  "tok": "値下",
+  "ctx": "    <li><strong>値下げ競争の起点:</strong> 公開の直後にOpenAIがGPT-6 Sol / Lunaを約半額で発表しており、<a href=\"/gpt-6-sol-luna/\">当サイ"
+ },
+ {
+  "f": "claude-opus-5-5/index.html",
+  "ln": 243,
+  "tok": "値下",
+  "ctx": "l / Lunaを約半額で発表しており、<a href=\"/gpt-6-sol-luna/\">当サイトのGPT-6 Sol / Luna解説</a>と併せて読むと、2026年9月の値下げ合戦が立体的に見えます。</li>"
+ },
+ {
+  "f": "claude-sonnet-5-5/index.html",
+  "ln": 81,
+  "tok": "値下",
+  "ctx": "    <li><strong>値下げではなく世代更新です。</strong>入力$2・出力$10は、前世代のClaude Sonnet 5（$2/$10）と<strong>同じ</strong>。Opus 5."
+ },
+ {
+  "f": "deepseek-v4-pro/index.html",
+  "ln": 218,
+  "tok": "プロモ",
+  "ctx": "-04:00 UTC と 06:00-10:00 UTC（日本時間 月〜金 10:00-13:00 / 15:00-19:00）、土日は終日オフピーク。オフピークはピークの半額。旧プロモ価格（$0.435/$0.87）は廃止済み。低コスト側の単価は <a href=\"/deepseek-v4-1-flash/#price-heading\">V4.1 Flas"
+ },
+ {
+  "f": "deepseek-v4-pro/index.html",
+  "ln": 315,
+  "tok": "プロモ",
+  "ctx": "          <strong>旧プロモ価格（$0.435/$0.87）時代の計測値</strong>であり、現行の V4 Pro 単価（出力 オフピーク $1.98）とは前提が異なるため削除しました。現在のコスト"
+ },
+ {
+  "f": "en/changelog/index.html",
+  "ln": 105,
+  "tok": "New",
+  "ctx": "</span> <span class=\"cl-text\">Listed DeepSeek V4 Flash Vision Exp released (experimental) New (DeepSeek)</span></li>"
+ },
+ {
+  "f": "en/changelog/index.html",
+  "ln": 106,
+  "tok": "New",
+  "ctx": "6-08-19</span> <span class=\"cl-text\">Listed GPT-5.6 Sol 50% off via Cloudflare AI Gateway New (OpenAI / Cloudflare)</span></li>"
+ },
+ {
+  "f": "en/changelog/index.html",
+  "ln": 110,
+  "tok": "New",
+  "ctx": "1</span> <span class=\"cl-text\">Listed DeepSeek V4 Flash officially released (public beta) New (DeepSeek)</span></li>"
+ },
+ {
+  "f": "en/changelog/index.html",
+  "ln": 113,
+  "tok": "New",
+  "ctx": "> <span class=\"cl-text\">Listed Gemini 3.6 Flash, 3.5 Flash-Lite, 3.5 Flash Cyber released New (Google)</span></li>"
+ },
+ {
+  "f": "en/china-ai/index.html",
+  "ln": 155,
+  "tok": "New",
+  "ctx": " active MoE, 256K→1M context, Qwen4 architecture preview — verified against qwen.ai/blog. New <a href=\"/en/qwen-3-8-flash/\">deep-dive page</a>.</span></li>"
+ },
+ {
+  "f": "en/china-ai/index.html",
+  "ln": 156,
+  "tok": "New",
+  "ctx": "ended 9/9), 320B/18B MoE, 1M context, MIT — verified against docs.z.ai and the Z.ai blog. New <a href=\"/en/glm-5-3-flash/\">deep-dive page</a>.</span></li>"
+ },
+ {
+  "f": "en/claude-fable-5-1/index.html",
+  "ln": 26,
+  "tok": "New",
+  "ctx": "ontext\":\"https://schema.org\",\"@type\":\"Article\",\"headline\":\"Claude Fable 5.1 — Anthropic's New Mythos-Class Flagship [Pricing, Benchmarks & Comparison]\",\"datePublished\":\"2026-09-01\""
+ },
+ {
+  "f": "en/claude-fable-5-1/index.html",
+  "ln": 143,
+  "tok": "New",
+  "ctx": "<td class=\"price\">$10.00</td><td class=\"price\">$50.00</td><td class=\"price\">$0.25</td><td>New flagship (Mythos-class)</td></tr>"
+ },
+ {
+  "f": "en/claude-opus-5-5/index.html",
+  "ln": 212,
+  "tok": "New",
+  "ctx": "<tr><td class=\"model-name\">New containment test</td><td>Attempted to circumvent boundaries about <strong>85% less oft"
+ },
+ {
+  "f": "en/deepseek-v4-1-flash/index.html",
+  "ln": 590,
+  "tok": "New",
+  "ctx": "models are retired: requests are served by V4.1 Flash and billed at the V4.1 Flash price. New code should use <code>deepseek-flash</code>.</p>"
+ },
+ {
+  "f": "en/glossary/index.html",
+  "ln": 101,
+  "tok": "badge-new",
+  "ctx": "        <h3 class=\"card-title\"><span class=\"badge badge-new\">New</span> The four data-protection requirements — \"not stored\", \"not seen\", \"n"
+ },
+ {
+  "f": "en/glossary/index.html",
+  "ln": 101,
+  "tok": "New",
+  "ctx": "        <h3 class=\"card-title\"><span class=\"badge badge-new\">New</span> The four data-protection requirements — \"not stored\", \"not seen\", \"not learned "
+ },
+ {
+  "f": "en/glossary/index.html",
+  "ln": 107,
+  "tok": "badge-new",
+  "ctx": "        <h3 class=\"card-title\"><span class=\"badge badge-new\">New</span> What is zero operator access (ZOA)? — \"not retained\" and \"not viewab"
+ },
+ {
+  "f": "en/glossary/index.html",
+  "ln": 107,
+  "tok": "New",
+  "ctx": "        <h3 class=\"card-title\"><span class=\"badge badge-new\">New</span> What is zero operator access (ZOA)? — \"not retained\" and \"not viewable\" are dif"
+ },
+ {
+  "f": "en/glossary/index.html",
+  "ln": 113,
+  "tok": "badge-new",
+  "ctx": "        <h3 class=\"card-title\"><span class=\"badge badge-new\">New</span> No-training explained — why one vendor gives two answers</h3>"
+ },
+ {
+  "f": "en/glossary/index.html",
+  "ln": 113,
+  "tok": "New",
+  "ctx": "        <h3 class=\"card-title\"><span class=\"badge badge-new\">New</span> No-training explained — why one vendor gives two answers</h3>"
+ },
+ {
+  "f": "en/glossary/index.html",
+  "ln": 119,
+  "tok": "badge-new",
+  "ctx": "        <h3 class=\"card-title\"><span class=\"badge badge-new\">New</span> Data residency explained — “not sent abroad” is two promises</h3>"
+ },
+ {
+  "f": "en/glossary/index.html",
+  "ln": 119,
+  "tok": "New",
+  "ctx": "        <h3 class=\"card-title\"><span class=\"badge badge-new\">New</span> Data residency explained — “not sent abroad” is two promises</h3>"
+ },
+ {
+  "f": "en/glossary/zero-data-retention/index.html",
+  "ln": 250,
+  "tok": "New",
+  "ctx": "        But <strong>the list grows</strong>. New frontier models get added, so check the official page <strong>once before signing and "
+ },
+ {
+  "f": "en/gpt-6/index.html",
+  "ln": 6,
+  "tok": "New",
+  "ctx": "  <title>GPT-6 Astra — OpenAI's New Flagship [Pricing, Benchmarks &amp; Availability] — LLM Data Hub</title>"
+ },
+ {
+  "f": "en/gpt-6/index.html",
+  "ln": 22,
+  "tok": "New",
+  "ctx": "  <meta property=\"og:title\" content=\"GPT-6 Astra — OpenAI's New Flagship [Pricing, Benchmarks &amp; Availability]\">"
+ },
+ {
+  "f": "en/gpt-6/index.html",
+  "ln": 26,
+  "tok": "New",
+  "ctx": "on\">{\"@context\":\"https://schema.org\",\"@type\":\"Article\",\"headline\":\"GPT-6 Astra — OpenAI's New Flagship [Pricing, Benchmarks & Availability]\",\"datePublished\":\"2026-09-03\",\"dateModif"
+ },
+ {
+  "f": "en/gpt-6/index.html",
+  "ln": 44,
+  "tok": "New",
+  "ctx": "  <p class=\"price-flag\">✨ New flagship — Standard $10/$50 (announced 2026-09-03)</p>"
+ },
+ {
+  "f": "en/gpt-6/index.html",
+  "ln": 66,
+  "tok": "New",
+  "ctx": "      <li><a href=\"#perf-h\">Performance — New Records Across Key Benchmarks</a></li>"
+ },
+ {
+  "f": "en/gpt-6/index.html",
+  "ln": 125,
+  "tok": "New",
+  "ctx": "<h2 class=\"section-title\" id=\"perf-h\" style=\"font-size:1.2rem;\">Performance — New Records Across Key Benchmarks</h2>"
+ },
+ {
+  "f": "en/gpt-6/index.html",
+  "ln": 151,
+  "tok": "New",
+  "ctx": "td><td>OpenAI</td><td class=\"price\">$10.00</td><td class=\"price\">$50.00</td><td>—</td><td>New flagship (baseline)</td></tr>"
+ },
+ {
+  "f": "en/gpt-6-sol-luna/index.html",
+  "ln": 84,
+  "tok": "New",
+  "ctx": "  <tr><td class=\"model-name\"><strong>New (GPT-6 era)</strong></td><td><strong>GPT-6 Sol</strong></td><td class=\"price\"><strong>"
+ },
+ {
+  "f": "en/gpt-6-sol-luna/index.html",
+  "ln": 85,
+  "tok": "New",
+  "ctx": "  <tr><td class=\"model-name\"><strong>New (GPT-6 era)</strong></td><td><strong>GPT-6 Luna</strong></td><td class=\"price\"><strong"
+ },
+ {
+  "f": "en/grok-4-6/index.html",
+  "ln": 6,
+  "tok": "New",
+  "ctx": "  <title>Grok 4.6 — xAI's New Flagship for Coding &amp; Agents [Pricing, Benchmarks &amp; Comparison] — LLM Data Hub"
+ },
+ {
+  "f": "en/grok-4-6/index.html",
+  "ln": 22,
+  "tok": "New",
+  "ctx": "  <meta property=\"og:title\" content=\"Grok 4.6 — xAI's New Flagship for Coding &amp; Agents\">"
+ },
+ {
+  "f": "en/grok-4-6/index.html",
+  "ln": 26,
+  "tok": "New",
+  "ctx": "/ld+json\">{\"@context\":\"https://schema.org\",\"@type\":\"Article\",\"headline\":\"Grok 4.6 — xAI's New Flagship for Coding & Agents [Pricing, Benchmarks & Comparison]\",\"datePublished\":\"2026"
+ },
+ {
+  "f": "en/grok-4-6/index.html",
+  "ln": 55,
+  "tok": "🆕",
+  "ctx": "<div class=\"context-note\" style=\"border-left-color:var(--c-accent);margin-bottom:1rem;\">🆕 The successor, <strong>Grok 4.7</strong> (released 2026-09-21 at the same $2/$6), is now"
+ },
+ {
+  "f": "en/grok-4-7/index.html",
+  "ln": 6,
+  "tok": "New",
+  "ctx": "  <title>Grok 4.7 — xAI&rsquo;s Larger New Flagship [Pricing, Benchmarks &amp; Comparison] — LLM Data Hub</title>"
+ },
+ {
+  "f": "en/grok-4-7/index.html",
+  "ln": 22,
+  "tok": "New",
+  "ctx": "  <meta property=\"og:title\" content=\"Grok 4.7 — xAI&rsquo;s Larger New Flagship\">"
+ },
+ {
+  "f": "en/grok-4-7/index.html",
+  "ln": 26,
+  "tok": "New",
+  "ctx": "n\">{\"@context\":\"https://schema.org\",\"@type\":\"Article\",\"headline\":\"Grok 4.7 — xAI's Larger New Flagship [Pricing, Benchmarks & Comparison]\",\"datePublished\":\"2026-09-23\",\"dateModifie"
+ },
+ {
+  "f": "en/kimi-k3-1-pro/index.html",
+  "ln": 105,
+  "tok": "badge-new",
+  "ctx": "<tr><td class=\"model-name\">kimi-k3.1-pro <span class=\"badge badge-new\">New</span></td><td class=\"price\">$2.00</td><td class=\"price\">$10.00</td><td cla"
+ },
+ {
+  "f": "en/kimi-k3-1-pro/index.html",
+  "ln": 105,
+  "tok": "New",
+  "ctx": "<tr><td class=\"model-name\">kimi-k3.1-pro <span class=\"badge badge-new\">New</span></td><td class=\"price\">$2.00</td><td class=\"price\">$10.00</td><td class=\"price\">"
+ },
+ {
+  "f": "en/mai/index.html",
+  "ln": 207,
+  "tok": "Newest",
+  "ctx": "    <li><strong>Newest speech recognition (2026-10-02):</strong> MAI-Transcribe-2-Streaming transcribes 60"
+ },
+ {
+  "f": "en/multimodal/index.html",
+  "ln": 178,
+  "tok": "badge-new",
+  "ctx": "\"model-name\">Realtime speech dialogue<br><small>Live / Realtime</small><span class=\"badge badge-new\">New</span></td><td><strong>Gemini 3.8 Live</strong><br><strong>Gemini 3.8 Live "
+ },
+ {
+  "f": "en/multimodal/index.html",
+  "ln": 178,
+  "tok": "New",
+  "ctx": "\">Realtime speech dialogue<br><small>Live / Realtime</small><span class=\"badge badge-new\">New</span></td><td><strong>Gemini 3.8 Live</strong><br><strong>Gemini 3.8 Live Extended Th"
+ },
+ {
+  "f": "en/multimodal/index.html",
+  "ln": 180,
+  "tok": "badge-new",
+  "ctx": "ss=\"model-name\">Image generation / edit</td><td>Gemini Nano Banana 2.1 <span class=\"badge badge-new\">New</span><br>Gemini 3.1 Flash Image (Nano Banana 2)<br>Gemini 3 Pro Image (Nan"
+ },
+ {
+  "f": "en/multimodal/index.html",
+  "ln": 180,
+  "tok": "New",
+  "ctx": "ame\">Image generation / edit</td><td>Gemini Nano Banana 2.1 <span class=\"badge badge-new\">New</span><br>Gemini 3.1 Flash Image (Nano Banana 2)<br>Gemini 3 Pro Image (Nano Banana Pr"
+ },
+ {
+  "f": "en/multimodal/index.html",
+  "ln": 181,
+  "tok": "badge-new",
+  "ctx": "<tr><td class=\"model-name\">Speech generation (TTS)<span class=\"badge badge-new\">New</span></td><td><strong>Gemini 3.8 Flash TTS</strong><br><strong>Gemini 3.8 "
+ },
+ {
+  "f": "en/multimodal/index.html",
+  "ln": 181,
+  "tok": "New",
+  "ctx": "<tr><td class=\"model-name\">Speech generation (TTS)<span class=\"badge badge-new\">New</span></td><td><strong>Gemini 3.8 Flash TTS</strong><br><strong>Gemini 3.8 Flash-Lite "
+ },
+ {
+  "f": "en/pricing/index.html",
+  "ln": 66,
+  "tok": "New",
+  "ctx": "><td class=\"price\">$8.00</td><td class=\"price\">$0.40</td><td class=\"price\">$40.00</td><td>New flagship (announced 2026-11-17). Long context $16.00/$0.80/$60.00. 20% cheaper in/out "
+ },
+ {
+  "f": "en/pricing/index.html",
+  "ln": 70,
+  "tok": "New",
+  "ctx": "<td class=\"price\">$10.00</td><td class=\"price\">$1.00</td><td class=\"price\">$50.00</td><td>New flagship (announced 2026-09-03). Long: $20/$2/$75. Fast mode 2× <a href=\"/en/gpt-6/\" s"
+ },
+ {
+  "f": "en/pricing/index.html",
+  "ln": 187,
+  "tok": "New",
+  "ctx": "Flash, but <strong>DeepSeek withdrew that notice and confirmed V4 Pro continues</strong>. New rates: $0.15/$0.60 off-peak, $0.30/$1.20 peak (cache-miss input / output) — about 77% "
+ },
+ {
+  "f": "en/qwen-3-8-flash/index.html",
+  "ln": 111,
+  "tok": "New",
+  "ctx": "og?id=qwen3.8-flash-next\" target=\"_blank\" rel=\"noopener\">Qwen blog \"Qwen3.8-Flash-Next: A New Architecture, Towards Ultimate Cost-Efficiency\"</a> · <a href=\"https://huggingface.co/"
+ },
+ {
+  "f": "en/timeline/index.html",
+  "ln": 49,
+  "tok": "New",
+  "ctx": "com/code/docs/en/kimi-code/whats-new.html\" target=\"_blank\" rel=\"noopener\">Official What's New →</a><a href=\"/en/china-ai/#labs-h\">China AI overview →</a></div></div></article>"
+ },
+ {
+  "f": "en/timeline/index.html",
+  "ln": 79,
+  "tok": "New",
+  "ctx": "tl-title\" id=\"sec-44\">GPT-5.6 family released — Sol / Terra / Luna</h2><p class=\"tl-desc\">New flagship Sol, balanced Terra, and fastest low-cost Luna released together. Terra/Luna "
+ },
+ {
+  "f": "en/timeline/index.html",
+  "ln": 81,
+  "tok": "New",
+  "ctx": "de Fable 5 / Mythos 5 released — new &quot;Mythos class&quot; tier</h2><p class=\"tl-desc\">New tier above Opus. Fable 5 general availability, Mythos 5 limited. Paused 6/12 → restore"
+ },
+ {
+  "f": "gemini-3-1-flash-lite/index.html",
+  "ln": 133,
+  "tok": "値下",
+  "ctx": "<p class=\"section-sub\">安さでは業界トップクラスだが、GPT-5.6 Lunaの80%値下げにより競争が激化。価格はすべてUSD/1Mトークン（Standard料金・テキスト入力）。</p>"
+ },
+ {
+  "f": "glm-5-3-flash/index.html",
+  "ln": 63,
+  "tok": "プロモ",
+  "ctx": "      <li><a href=\"#pricing-h\">料金（list・プロモ終了後）</a></li>"
+ },
+ {
+  "f": "glm-5-3-flash/index.html",
+  "ln": 73,
+  "tok": "プロモ",
+  "ctx": "<h2 class=\"section-title\" id=\"pricing-h\" style=\"font-size:1.2rem;\">料金（list・プロモ終了後）</h2>"
+ },
+ {
+  "f": "glm-5-3-flash/index.html",
+  "ln": 77,
+  "tok": "プロモ",
+  "ctx": "=\"price\">$0.03</td><td class=\"price\">期間限定無料</td><td class=\"price\">$0.50</td><td>list価格。導入時プロモ（$0.075/$0.25）は2026-09-09 24:00（UTC+8）に終了</td></tr>"
+ },
+ {
+  "f": "glm-5-3-flash/index.html",
+  "ln": 83,
+  "tok": "プロモ",
+  "ctx": "  💡 <strong>価格について:</strong> 導入時50%オフのプロモ（入力$0.075・出力$0.25）は<strong>2026-09-09 24:00（UTC+8 = 9/10 01:00 JST）</strong>で終了しました。以後は"
+ },
+ {
+  "f": "glm-5-3-flash/index.html",
+  "ln": 117,
+  "tok": "プロモ",
+  "ctx": "    <li><strong>Artificial Analysis Intelligence Index v4.1.1:</strong> スコア57（プロモ価格時の $0.045/タスク）。従来は約10倍のコストでしか得られなかった知能レベルと位置づけ。</li>"
+ },
+ {
+  "f": "glm-5-3-flash/index.html",
+  "ln": 143,
+  "tok": "プロモ",
+  "ctx": ".78rem;color:var(--c-muted);margin-top:.3rem;\">※ GLM-5.3-Flashはlist価格$0.15/$0.50（導入時50%オフのプロモは2026-09-09終了）。DeepSeekは2026-09-10リリースの <strong>V4.1 Flash</strong> が現行でピーク/オフピーク価格制（ca"
+ },
+ {
+  "f": "glm-5-3-flash/index.html",
+  "ln": 185,
+  "tok": "プロモ",
+  "ctx": "    <li>料金はZ.ai公式ページ（docs.z.ai）を2026-09-09に確認したものです。予告なく変動します。導入時プロモ（$0.075/$0.25）は2026-09-09 24:00（UTC+8）に終了。契約前に必ず公式ページをご確認ください。</li>"
+ },
+ {
+  "f": "glossary/index.html",
+  "ln": 98,
+  "tok": "badge-new",
+  "ctx": "        <h3 class=\"card-title\"><span class=\"badge badge-new\">New</span> データを守る4要件とは — 「残さない・見せない・学ばせない・出さない」</h3>"
+ },
+ {
+  "f": "glossary/index.html",
+  "ln": 98,
+  "tok": "New",
+  "ctx": "        <h3 class=\"card-title\"><span class=\"badge badge-new\">New</span> データを守る4要件とは — 「残さない・見せない・学ばせない・出さない」</h3>"
+ },
+ {
+  "f": "glossary/index.html",
+  "ln": 104,
+  "tok": "badge-new",
+  "ctx": "        <h3 class=\"card-title\"><span class=\"badge badge-new\">New</span> ZOA（ゼロオペレーターアクセス）とは — 「保存しない」と「見られない」は別の約束</h3>"
+ },
+ {
+  "f": "glossary/index.html",
+  "ln": 104,
+  "tok": "New",
+  "ctx": "        <h3 class=\"card-title\"><span class=\"badge badge-new\">New</span> ZOA（ゼロオペレーターアクセス）とは — 「保存しない」と「見られない」は別の約束</h3>"
+ },
+ {
+  "f": "glossary/index.html",
+  "ln": 110,
+  "tok": "badge-new",
+  "ctx": "        <h3 class=\"card-title\"><span class=\"badge badge-new\">New</span> 学習に使わせない（no-training）とは — 「無料で試す」と「契約して使う」で答えが変わる</h3>"
+ },
+ {
+  "f": "glossary/index.html",
+  "ln": 110,
+  "tok": "New",
+  "ctx": "        <h3 class=\"card-title\"><span class=\"badge badge-new\">New</span> 学習に使わせない（no-training）とは — 「無料で試す」と「契約して使う」で答えが変わる</h3>"
+ },
+ {
+  "f": "glossary/index.html",
+  "ln": 116,
+  "tok": "badge-new",
+  "ctx": "        <h3 class=\"card-title\"><span class=\"badge badge-new\">New</span> 出さない（データレジデンシー）とは — データが国外に出ない＝「保存」と「処理」は別の約束</h3>"
+ },
+ {
+  "f": "glossary/index.html",
+  "ln": 116,
+  "tok": "New",
+  "ctx": "        <h3 class=\"card-title\"><span class=\"badge badge-new\">New</span> 出さない（データレジデンシー）とは — データが国外に出ない＝「保存」と「処理」は別の約束</h3>"
+ },
+ {
+  "f": "gpt-5-6-luna/index.html",
+  "ln": 6,
+  "tok": "値下",
+  "ctx": "  <title>GPT-5.6 Luna — 80%値下げで最強コスパ軽量モデルに【料金・性能・比較】 — LLM Data Hub</title>"
+ },
+ {
+  "f": "gpt-5-6-luna/index.html",
+  "ln": 7,
+  "tok": "値下",
+  "ctx": "  <meta name=\"description\" content=\"OpenAI GPT-5.6 Lunaの最新料金（$0.20/$1.20・2026年7月30日80%値下げ後）・仕様・性能・Gemini 3.1 Flash-LiteやClaude Haiku 4.5との比較・ユースケースを一次情報ベースで解説。1.05Mコンテキスト・128K出"
+ },
+ {
+  "f": "gpt-5-6-luna/index.html",
+  "ln": 22,
+  "tok": "値下",
+  "ctx": "  <meta property=\"og:title\" content=\"GPT-5.6 Luna — 80%値下げで最強コスパ軽量モデルに\">"
+ },
+ {
+  "f": "gpt-5-6-luna/index.html",
+  "ln": 26,
+  "tok": "値下",
+  "ctx": "ld+json\">{\"@context\":\"https://schema.org\",\"@type\":\"Article\",\"headline\":\"GPT-5.6 Luna — 80%値下げで最強コスパ軽量モデルに【料金・性能・比較】\",\"datePublished\":\"2026-08-07\",\"dateModified\":\"2026-09-25\",\"autho"
+ },
+ {
+  "f": "gpt-5-6-luna/index.html",
+  "ln": 44,
+  "tok": "値下",
+  "ctx": "  <p class=\"price-flag\">💰 2026年7月30日 80%値下げ — $1.00→$0.20 / $6.00→$1.20</p>"
+ },
+ {
+  "f": "gpt-5-6-luna/index.html",
+  "ln": 46,
+  "tok": "値下",
+  "ctx": "  <p class=\"lead\">OpenAIの最速・最安モデルが劇的値下げ。<a href=\"/gemini-3-1-flash-lite/\" style=\"color:var(--c-blue);\">Gemini 3.1 Flash-Lite</"
+ },
+ {
+  "f": "gpt-5-6-luna/index.html",
+  "ln": 90,
+  "tok": "値下",
+  "ctx": "  <span class=\"arrow\">→ $0.20 / $1.20</span>（2026年7月30日 — 80%値下げ。発表からわずか21日後）<br>"
+ },
+ {
+  "f": "gpt-5-6-luna/index.html",
+  "ln": 142,
+  "tok": "値下",
+  "ctx": "<p class=\"section-sub\">GPT-5.6 Lunaの80%値下げにより、主要軽量モデルの中で最も安価な部類に。価格はすべてUSD/1Mトークン（標準料金・Short context）。</p>"
+ },
+ {
+  "f": "gpt-5-6-luna/index.html",
+  "ln": 175,
+  "tok": "プロモ",
+  "ctx": "d><td class=\"price\">$4.00</td><td class=\"price\">$20.00</td><td>最難関タスク・長期エージェント・失敗コストが高い業務（プロモ〜11/21）</td></tr>"
+ },
+ {
+  "f": "gpt-5-6-sol/index.html",
+  "ln": 6,
+  "tok": "プロモ",
+  "ctx": "  <title>GPT-5.6 Sol — OpenAI最強フラッグシップ【料金・性能・プロモ価格】 — LLM Data Hub</title>"
+ },
+ {
+  "f": "gpt-5-6-sol/index.html",
+  "ln": 7,
+  "tok": "プロモ",
+  "ctx": "  <meta name=\"description\" content=\"OpenAI GPT-5.6 Solの最新料金（プロモ価格 $4/$20・少なくとも2026年11月21日まで）・仕様・性能・Claude Opus 5やGPT-5.5との比較・Cloudflare AI Gateway 50%"
+ },
+ {
+  "f": "gpt-5-6-sol/index.html",
+  "ln": 22,
+  "tok": "プロモ",
+  "ctx": "  <meta property=\"og:title\" content=\"GPT-5.6 Sol — OpenAI最強フラッグシップ【料金・性能・プロモ価格】\">"
+ },
+ {
+  "f": "gpt-5-6-sol/index.html",
+  "ln": 23,
+  "tok": "プロモ",
+  "ctx": "  <meta property=\"og:description\" content=\"OpenAI GPT-5.6 Solの最新料金（プロモ価格 $4/$20・少なくとも2026年11月21日まで）・性能・競合比較を一次情報ベースで解説。\">"
+ },
+ {
+  "f": "gpt-5-6-sol/index.html",
+  "ln": 26,
+  "tok": "プロモ",
+  "ctx": "t\":\"https://schema.org\",\"@type\":\"Article\",\"headline\":\"GPT-5.6 Sol — OpenAI最強フラッグシップ【料金・性能・プロモ価格】\",\"datePublished\":\"2026-08-29\",\"dateModified\":\"2026-09-25\",\"author\":{\"@type\":\"Organi"
+ },
+ {
+  "f": "gpt-5-6-sol/index.html",
+  "ln": 42,
+  "tok": "プロモ",
+  "ctx": "  <p class=\"price-flag\">💰 プロモ価格 — $5→$4 / $30→$20（少なくとも2026-11-21まで）</p>"
+ },
+ {
+  "f": "gpt-5-6-sol/index.html",
+  "ln": 44,
+  "tok": "プロモ",
+  "ctx": "  <p class=\"lead\">OpenAIの現行フラッグシップ。最難関の専門業務・長期エージェント向け。8月のプロモ価格で<a href=\"/pricing/#ah\" style=\"color:var(--c-blue);\">Claude Opus 5</a>より安く。</p>"
+ },
+ {
+  "f": "gpt-5-6-sol/index.html",
+  "ln": 46,
+  "tok": "プロモ",
+  "ctx": "    <div class=\"stat\"><div class=\"val\">$4.00</div><div class=\"lbl\">入力 / 1M tokens（プロモ）</div></div>"
+ },
+ {
+  "f": "gpt-5-6-sol/index.html",
+  "ln": 47,
+  "tok": "プロモ",
+  "ctx": "    <div class=\"stat\"><div class=\"val\">$20.00</div><div class=\"lbl\">出力 / 1M tokens（プロモ）</div></div>"
+ },
+ {
+  "f": "gpt-5-6-sol/index.html",
+  "ln": 65,
+  "tok": "プロモ",
+  "ctx": "      <li><a href=\"#pricing-h\">料金（プロモーション価格・2026-08-29確認）</a></li>"
+ },
+ {
+  "f": "gpt-5-6-sol/index.html",
+  "ln": 75,
+  "tok": "プロモ",
+  "ctx": "<h2 class=\"section-title\" id=\"pricing-h\" style=\"font-size:1.2rem;\">料金（プロモーション価格・2026-08-29確認）</h2>"
+ },
+ {
+  "f": "gpt-5-6-sol/index.html",
+  "ln": 76,
+  "tok": "プロモ",
+  "ctx": "class=\"section-sub\">OpenAI公式料金ページ（developers.openai.com）を直接確認した数値。単位はUSD / 1Mトークン。<strong>プロモ価格は少なくとも2026年11月21日まで有効</strong>（OpenAI公式明記）。</p>"
+ },
+ {
+  "f": "gpt-5-6-sol/index.html",
+  "ln": 89,
+  "tok": "プロモ",
+  "ctx": "span style=\"color:var(--c-accent2);font-weight:700;\">→ $4.00 / $20.00</span>（2026-08-21発表のプロモ価格。入力20%減・出力33%減）<br>"
+ },
+ {
+  "f": "gpt-5-6-sol/index.html",
+  "ln": 90,
+  "tok": "プロモ",
+  "ctx": "  ※ プロモ価格は「少なくとも2026年11月21日まで」有効。終了後の価格は未公表のため、11/22以降を前提としたコスト設計はしないこと。"
+ },
+ {
+  "f": "gpt-5-6-sol/index.html",
+  "ln": 94,
+  "tok": "プロモ",
+  "ctx": "> を指定すると自動適用。<strong>Unified Billingユーザーのみ</strong>（Bring Your Own Keysは対象外）。Cloudflare掲載のプロモ料金は入力 $2.50 / 出力 $15 / キャッシュ読込 $0.25（Cloudflare掲載の標準 $5/$30/$0.50 比）。なお、OpenAI直接の $4/$2"
+ },
+ {
+  "f": "gpt-5-6-sol/index.html",
+  "ln": 94,
+  "tok": "プロモ",
+  "ctx": "モ料金は入力 $2.50 / 出力 $15 / キャッシュ読込 $0.25（Cloudflare掲載の標準 $5/$30/$0.50 比）。なお、OpenAI直接の $4/$20 プロモとの併用・重複適用はCloudflareの告知では明示されておらず、実際の請求額はCloudflareの請求画面・最新料金表で確認してください。"
+ },
+ {
+  "f": "gpt-5-6-sol/index.html",
+  "ln": 135,
+  "tok": "プロモ",
+  "ctx": "<p class=\"section-sub\">すべてUSD/1Mトークン（標準・Short context）。Solのプロモ価格により、最上位クラスでは有力な選択肢に。</p>"
+ },
+ {
+  "f": "gpt-5-6-sol/index.html",
+  "ln": 138,
+  "tok": "プロモ",
+  "ctx": "/td><td>OpenAI</td><td class=\"price\">$4.00</td><td class=\"price\">$20.00</td><td>—</td><td>プロモ価格（〜11/21）</td></tr>"
+ },
+ {
+  "f": "gpt-5-6-sol/index.html",
+  "ln": 178,
+  "tok": "プロモ",
+  "ctx": "  <p style=\"color:var(--c-muted);font-size:.9rem;margin-bottom:1rem;\">GPT-5.6 Sol（プロモ価格）を含む全モデルのトークンコストを一括計算。入力・出力トークン数を入れるだけ。</p>"
+ },
+ {
+  "f": "gpt-5-6-sol/index.html",
+  "ln": 187,
+  "tok": "プロモ",
+  "ctx": "    <li>料金はOpenAI公式ページ（developers.openai.com）を2026-08-29に確認したものです。プロモ価格（$4/$20）は「少なくとも2026年11月21日まで」有効と明記されていますが、終了後の価格は未公表です。契約前に必ず公式ページをご確認ください。</li>"
+ },
+ {
+  "f": "gpt-6/index.html",
+  "ln": 95,
+  "tok": "プロモ",
+  "ctx": "  <strong>価格の位置づけ:</strong> GPT-6 Astra は <a href=\"/gpt-5-6-sol/\">GPT-5.6 Sol</a>（プロモ $4/$20）の上位世代で、Sol と比べ入力2.5倍・出力2.5倍。キャッシュ読込は入力の10%（$1.00）、キャッシュ書込は入力の1.25倍（$12.50）。Long"
+ },
+ {
+  "f": "gpt-6/index.html",
+  "ln": 148,
+  "tok": "プロモ",
+  "ctx": "ass=\"section-sub\">すべてUSD/1Mトークン（標準・Short context）。GPT-6 Astra は最上位ティアの料金帯。価格はすべて Standard（プロモ含む表記は備考参照）。</p>"
+ },
+ {
+  "f": "gpt-6/index.html",
+  "ln": 154,
+  "tok": "プロモ",
+  "ctx": "><td class=\"price\">$4.00</td><td class=\"price\">$20.00</td><td class=\"winner\">Sol安</td><td>プロモ価格（〜11/21）。前世代フラッグシップ</td></tr>"
+ },
+ {
+  "f": "gpt-6/index.html",
+  "ln": 159,
+  "tok": "プロモ",
+  "ctx": "rgin-top:.3rem;\">※ GPT-6 Astra は最上位ティアの料金帯。コスト重視なら <a href=\"/gpt-5-6-sol/\">Sol</a>（$4/$20・プロモ）や <a href=\"/gemini-3-8-flash/\">Gemini 3.8 Flash</a>（$0.75/$3.75）が有力。OpenAIは「Astraはタスクあ"
+ },
+ {
+  "f": "gpt-6/index.html",
+  "ln": 182,
+  "tok": "プロモ",
+  "ctx": "-5.6 Sol</a></td><td class=\"price\">$4.00</td><td class=\"price\">$20.00</td><td>高精度推論を低コストで（プロモ〜11/21）。コスパ最優先のフラッグシップ用途</td></tr>"
+ },
+ {
+  "f": "gpt-6-sol-luna/index.html",
+  "ln": 7,
+  "tok": "値下",
+  "ctx": "Luna $0.10/$0.50・キャッシュ入力90%割引）と1,050,000トークンのコンテキスト、公式ベンチ6項目を一次情報で解説。GPT-5.6 Sol/Lunaから50%値下げ。AutomationBench・DeepSWEは運営元が別である点も明記。2026年9月22日公開・2026年9月25日更新。\">"
+ },
+ {
+  "f": "gpt-6-sol-luna/index.html",
+  "ln": 47,
+  "tok": "値下",
+  "ctx": "  <p class=\"price-flag\">⚡ 2026年9月22日公開 — GPT-5.6版から<strong>50%値下げ</strong></p>"
+ },
+ {
+  "f": "gpt-6-sol-luna/index.html",
+  "ln": 95,
+  "tok": "値下",
+  "ctx": "d><td class=\"price\">$10.00</td><td class=\"price\">$0.20</td><td class=\"winner\">$4/$20 → 50%値下げ</td></tr>"
+ },
+ {
+  "f": "gpt-6-sol-luna/index.html",
+  "ln": 96,
+  "tok": "値下",
+  "ctx": "d class=\"price\">$0.50</td><td class=\"price\">$0.01</td><td class=\"winner\">$0.20/$1.20 → 50%値下げ</td></tr>"
+ },
+ {
+  "f": "gpt-6-sol-luna/index.html",
+  "ln": 178,
+  "tok": "値下",
+  "ctx": "<p class=\"section-sub\">値下げと同じくらい実務に効くのが、GPT-6向けのキャッシュ改善です。OpenAIは「キャッシュ入力トークンの読み出しで<strong>90%割引</strong>」に加え、既定で"
+ },
+ {
+  "f": "gpt-6-sol-luna/index.html",
+  "ln": 199,
+  "tok": "値下",
+  "ctx": "m;\">※ Astraの料金は当サイト<a href=\"/pricing/\">料金比較ページ</a>で確認した $10/$50（キャッシュ読込 $1.00）です。Astraは今回の値下げ対象ではなく、GPT-6世代の中で最上位に位置づけられています。</p>"
+ },
+ {
+  "f": "grok-4-6/index.html",
+  "ln": 55,
+  "tok": "🆕",
+  "ctx": "<div class=\"context-note\" style=\"border-left-color:var(--c-accent);margin-bottom:1rem;\">🆕 後継の <strong>Grok 4.7</strong>（2026-09-21公開・同じ $2/$6）が登場しました。 <a href=\"/grok-4-7/\">Grok 4"
+ },
+ {
+  "f": "index.html",
+  "ln": 53,
+  "tok": "値下",
+  "ctx": "デル</h3><p class=\"card-desc\">2026-09-22公開。Solは$2/$10、Lunaは$0.10/$0.50でGPT-5.6版から<strong>50%値下げ</strong>。1,050,000コンテキスト・128K出力・キャッシュ入力90%割引。公式ベンチ6項目を<strong>運営元つき</strong>で整理。<stron"
+ },
+ {
+  "f": "index.html",
+  "ln": 54,
+  "tok": "値下",
+  "ctx": "弾・Opus 5より安い</h3><p class=\"card-desc\">2026-09-22公開。入力$4・出力$20・キャッシュ読込$0.20（Opus 5の$5/$25から値下げ）。1Mコンテキスト・128K出力。公式ベンチ9項目と「誰のハーネスでの測定か」、40%安の根拠、thinking無効化不可の仕様変更まで一次情報で解説。</p><a hre"
+ },
+ {
+  "f": "index.html",
+  "ln": 63,
+  "tok": "値下",
+  "ctx": "le class=\"card\"><div class=\"card-icon\">🌙</div><h3 class=\"card-title\">GPT-5.6 Luna（旧版）— 80%値下げで最強コスパ軽量モデルだった</h3><p class=\"card-desc\">$0.20/$1.20に劇的値下げ（2026-09-22にGPT-6 Lunaへ後継・本ページ"
+ },
+ {
+  "f": "index.html",
+  "ln": 63,
+  "tok": "値下",
+  "ctx": "card-title\">GPT-5.6 Luna（旧版）— 80%値下げで最強コスパ軽量モデルだった</h3><p class=\"card-desc\">$0.20/$1.20に劇的値下げ（2026-09-22にGPT-6 Lunaへ後継・本ページは旧世代の記録）。Gemini Flash-Liteより安く、GPT-5.5超えの性能。競合比較・ユースケース・最"
+ },
+ {
+  "f": "index.html",
+  "ln": 64,
+  "tok": "プロモ",
+  "ctx": "ard\"><div class=\"card-icon\">☀️</div><h3 class=\"card-title\">GPT-5.6 Sol（旧版）— OpenAIフラッグシップ（プロモ価格）</h3><p class=\"card-desc\">$4/$20に値下げ（2026-09-22にGPT-6 Solへ後継・本ページは旧世代の記録）。1.05Mコンテキス"
+ },
+ {
+  "f": "index.html",
+  "ln": 64,
+  "tok": "値下",
+  "ctx": " class=\"card-title\">GPT-5.6 Sol（旧版）— OpenAIフラッグシップ（プロモ価格）</h3><p class=\"card-desc\">$4/$20に値下げ（2026-09-22にGPT-6 Solへ後継・本ページは旧世代の記録）。1.05Mコンテキスト・128K出力の最上位推論モデル。Claude Opus 5との比較・Clo"
+ },
+ {
+  "f": "jpy-pricing/index.html",
+  "ln": 97,
+  "tok": "プロモ",
+  "ctx": "p class=\"na\" style=\"font-size:.78rem;\">※ DeepSeek V4 Flash は 2026-09-10 に V4.1 Flash へ統合（旧プロモ価格も廃止）。推移を見るため旧版として残しています。</p>"
+ },
+ {
+  "f": "kimi-k3-1-pro/index.html",
+  "ln": 106,
+  "tok": "badge-new",
+  "ctx": "<tr><td class=\"model-name\">kimi-k3.1-pro <span class=\"badge badge-new\">New</span></td><td class=\"price\">$2.00</td><td class=\"price\">$10.00</td><td cla"
+ },
+ {
+  "f": "kimi-k3-1-pro/index.html",
+  "ln": 106,
+  "tok": "New",
+  "ctx": "<tr><td class=\"model-name\">kimi-k3.1-pro <span class=\"badge badge-new\">New</span></td><td class=\"price\">$2.00</td><td class=\"price\">$10.00</td><td class=\"price\">"
+ },
+ {
+  "f": "mai/index.html",
+  "ln": 76,
+  "tok": "プロモ",
+  "ctx": "せん。公式が示すのは<strong>ベンチマークごとのタスクあたりコスト</strong>で、4ベンチマーク平均は <strong>$0.309/task</strong>（50%プロモ価格。GPT-6.1 Sol $0.761、Claude Opus 5.5 $6.306）、軽量版の <strong>MAI Code 2 Flash</strong> は "
+ },
+ {
+  "f": "multimodal/index.html",
+  "ln": 179,
+  "tok": "badge-new",
+  "ctx": "<tr><td class=\"model-name\">リアルタイム音声対話<br><small>Live / Realtime</small><span class=\"badge badge-new\">New</span></td><td><strong>Gemini 3.8 Live</strong><br><strong>Gemini 3.8 Live "
+ },
+ {
+  "f": "multimodal/index.html",
+  "ln": 179,
+  "tok": "New",
+  "ctx": "ss=\"model-name\">リアルタイム音声対話<br><small>Live / Realtime</small><span class=\"badge badge-new\">New</span></td><td><strong>Gemini 3.8 Live</strong><br><strong>Gemini 3.8 Live Extended Th"
+ },
+ {
+  "f": "multimodal/index.html",
+  "ln": 181,
+  "tok": "badge-new",
+  "ctx": "<tr><td class=\"model-name\">画像生成・編集</td><td>Gemini Nano Banana 2.1 <span class=\"badge badge-new\">New</span><br>Gemini 3.1 Flash Image（Nano Banana 2）<br>Gemini 3 Pro Image（Nano "
+ },
+ {
+  "f": "multimodal/index.html",
+  "ln": 181,
+  "tok": "New",
+  "ctx": "d class=\"model-name\">画像生成・編集</td><td>Gemini Nano Banana 2.1 <span class=\"badge badge-new\">New</span><br>Gemini 3.1 Flash Image（Nano Banana 2）<br>Gemini 3 Pro Image（Nano Banana Pro）"
+ },
+ {
+  "f": "multimodal/index.html",
+  "ln": 182,
+  "tok": "badge-new",
+  "ctx": "<tr><td class=\"model-name\">音声生成（TTS）<span class=\"badge badge-new\">New</span></td><td><strong>Gemini 3.8 Flash TTS</strong><br><strong>Gemini 3.8 "
+ },
+ {
+  "f": "multimodal/index.html",
+  "ln": 182,
+  "tok": "New",
+  "ctx": "<tr><td class=\"model-name\">音声生成（TTS）<span class=\"badge badge-new\">New</span></td><td><strong>Gemini 3.8 Flash TTS</strong><br><strong>Gemini 3.8 Flash-Lite "
+ },
+ {
+  "f": "pricing/index.html",
+  "ln": 64,
+  "tok": "プロモ",
+  "ctx": ".10/$0.50）公開（2026-09-22）を追加。</strong><strong>GPT-6 Astra公開（2026-09-03・$10/$50）、GPT-5.6 Solプロモ価格（$4/$20・少なくとも〜2026-11-21）、2026年7月30日のGPT-5.6 Terra/Luna値下げを反映。</strong></p>"
+ },
+ {
+  "f": "pricing/index.html",
+  "ln": 64,
+  "tok": "値下",
+  "ctx": "026-09-03・$10/$50）、GPT-5.6 Solプロモ価格（$4/$20・少なくとも〜2026-11-21）、2026年7月30日のGPT-5.6 Terra/Luna値下げを反映。</strong></p>"
+ },
+ {
+  "f": "pricing/index.html",
+  "ln": 69,
+  "tok": "プロモ",
+  "ctx": "2026-11-17公開）。<strong>Trusted Access Program 経由</strong>で ChatGPT Enterprise 顧客が申請（API含む）。プロモ価格は少なくとも2026-12-31まで。cache書込 30分$10／12時間$20。<a href=\"/timeline/#gpt-6-2-astra-law\" styl"
+ },
+ {
+  "f": "pricing/index.html",
+  "ln": 72,
+  "tok": "値下",
+  "ctx": "\"price\">$0.20</td><td class=\"price\">$10.00</td><td>2026-09-22公開。GPT-5.6 Solの後継で<strong>50%値下げ</strong>（旧$4/$20）。1,050,000コンテキスト・128K出力 <a href=\"/gpt-6-sol-luna/\" style=\"font-weight"
+ },
+ {
+  "f": "pricing/index.html",
+  "ln": 75,
+  "tok": "値下",
+  "ctx": "\"price\">$0.01</td><td class=\"price\">$0.50</td><td>2026-09-22公開。GPT-5.6 Lunaの後継で<strong>50%値下げ</strong>（旧$0.20/$1.20）。Free/Goはデスクトップアプリで利用可 <a href=\"/gpt-6-sol-luna/\" style=\"font-we"
+ },
+ {
+  "f": "pricing/index.html",
+  "ln": 76,
+  "tok": "プロモ",
+  "ctx": "ass=\"price\">$0.40</td><td class=\"price\">$20.00</td><td>GPT-6 Solの前世代（<strong>旧版</strong>）。プロモ価格（旧$5/$30）。Long: $8/$0.80/$30 <a href=\"/gpt-5-6-sol/\" style=\"font-weight:700;\">→詳細ページ<"
+ },
+ {
+  "f": "pricing/index.html",
+  "ln": 77,
+  "tok": "値下",
+  "ctx": "=\"price\">$2.00</td><td class=\"price\">$0.20</td><td class=\"price\">$12.00</td><td>2026-07-30値下げ（旧$2.50/$15）。Long: $4/$0.40/$18</td><td class=\"st-cell st-old\">旧版</td></tr>"
+ },
+ {
+  "f": "pricing/index.html",
+  "ln": 78,
+  "tok": "値下",
+  "ctx": "\">$0.02</td><td class=\"price\">$1.20</td><td>GPT-6 Lunaの前世代（<strong>旧版</strong>）。2026-07-30値下げ（旧$1/$6）。Long: $0.40/$0.04/$1.80 <a href=\"/gpt-5-6-luna/\" style=\"font-weight:700;\">→詳細ペ"
+ },
+ {
+  "f": "pricing/index.html",
+  "ln": 84,
+  "tok": "プロモ",
+  "ctx": "ol/Lunaは<strong>旧版</strong>になりました。段階的ロールアウト中（API/Plusは「今後数日以内」）。<br>💰 <strong>GPT-5.6 Solはプロモ価格 $4/$20（少なくとも〜2026-11-21、旧$5/$30）</strong>。Cloudflare AI Gatewayは期間限定50%オフ（〜2026-09-1"
+ },
+ {
+  "f": "pricing/index.html",
+  "ln": 84,
+  "tok": "プロモ",
+  "ctx": "a href=\"/gpt-6/\">📄 GPT-6 Astra 詳細解説 →</a> · <a href=\"/gpt-5-6-sol/\">📄 GPT-5.6 Sol 詳細解説（料金・プロモ・競合比較）→</a> · <a href=\"/gpt-5-6-luna/\">📄 GPT-5.6 Luna 詳細解説 →</a></p>"
+ },
+ {
+  "f": "pricing/index.html",
+  "ln": 109,
+  "tok": "値下",
+  "ctx": "Firecrawlで直接確認（2026-08-14 JST）。<strong>Gemini 3.7 Flash公開（2026-08-14）・Gemini 3.6 Flash初回価格値下げを反映。</strong> <strong>Gemini 4 Argon（gemini-4-argon）がGA。$2.00/$10.00（思考トークン含む）・キャッシュ$0."
+ },
+ {
+  "f": "pricing/index.html",
+  "ln": 117,
+  "tok": "値下",
+  "ctx": "e-intro\">〜12/31</span><br><small>$7.50(1/1〜)</small></td><td class=\"price\">—</td><td>初回価格へ値下げ（旧$1.50/$7.50）</td><td class=\"st-cell st-old\">旧版</td></tr>"
+ },
+ {
+  "f": "pricing/index.html",
+  "ln": 131,
+  "tok": "値下",
+  "ctx": "6rem;display:inline-block;\">📋 2026-09-10 に <strong>DeepSeek-V4.1-Flash</strong> が登場し、全モデルが値下げ。<strong>V4 Pro は 2026-09-14 以降も提供継続</strong>（9/14 の V4.1 Flash ルーティング予告は公式が撤回）</p>"
+ },
+ {
+  "f": "pricing/index.html",
+  "ln": 137,
+  "tok": "プロモ",
+  "ctx": "00-12:00 / 14:00-18:00）。<strong>土日は終日オフピーク</strong>。オフピークはピークの半額。2026-08-16 16:00 UTC 発効。旧プロモ価格（V4 Pro $0.435/$0.87、V4 Flash $0.14/$0.28）は廃止。旧モデル名 <code>deepseek-v4-flash</code>・<c"
+ },
+ {
+  "f": "pricing/index.html",
+  "ln": 151,
+  "tok": "プロモ",
+  "ctx": "ng:.4rem .8rem;margin-bottom:.6rem;display:inline-block;\">📋 GLM-5.3-Flashはlist価格（導入時50%オフのプロモは9/9終了）。GLM-5.3/5.2は標準価格</p>"
+ },
+ {
+  "f": "pricing/index.html",
+  "ln": 152,
+  "tok": "プロモ",
+  "ctx": "\">✅ docs.z.ai をFirecrawlで直接確認（2026-09-09）。<strong>GLM-5.3-Flash（2026-08-26公開）を反映。導入時50%オフのプロモ（$0.075/$0.25）は2026-09-09 24:00（UTC+8）で終了。以後はlist価格（$0.15/$0.50）。</strong></p>"
+ },
+ {
+  "f": "pricing/index.html",
+  "ln": 195,
+  "tok": "値下",
+  "ctx": "a注目</span><h3 style=\"font-size:.95rem;color:var(--c-accent2);\">DeepSeek V4.1 Flash 登場 — 大幅値下げと画像対応、V4 Pro は提供継続へ（9/14予告は撤回）</h3><p style=\"font-size:.86rem;color:var(--c-muted);\">V4"
+ },
+ {
+  "f": "pricing/index.html",
+  "ln": 196,
+  "tok": "値下",
+  "ctx": "は 2026-08-16 16:00 UTC 発効。土日は終日オフピーク。<strong>2026-09-10 に DeepSeek-V4.1-Flash がリリースされ全モデルが値下げ。V4 Flash / V4 Flash Vision Exp 宛のリクエストは V4.1 Flash へルーティングされ V4.1 Flash の価格で課金されます。V4 "
+ },
+ {
+  "f": "qwen-3-8-flash/index.html",
+  "ln": 111,
+  "tok": "New",
+  "ctx": "log?id=qwen3.8-flash-next\" target=\"_blank\" rel=\"noopener\">Qwen公式ブログ「Qwen3.8-Flash-Next: A New Architecture, Towards Ultimate Cost-Efficiency」</a> · <a href=\"https://huggingface.co/"
+ },
+ {
+  "f": "qwen-3-8-flash/index.html",
+  "ln": 139,
+  "tok": "プロモ",
+  "ctx": "s=\"price\">$0.15</td><td class=\"price\">$0.50</td><td class=\"winner\">GLM安</td><td>list価格（導入時プロモは9/9終了）</td></tr>"
+ },
+ {
+  "f": "qwen-3-8-flash/index.html",
+  "ln": 145,
+  "tok": "プロモ",
+  "ctx": ".78rem;color:var(--c-muted);margin-top:.3rem;\">※ GLM-5.3-Flashはlist価格$0.15/$0.50（導入時50%オフのプロモは9/9終了）。DeepSeekは2026-09-10リリースの <strong>V4.1 Flash</strong> が現行でピーク/オフピーク価格制（cache mis"
+ },
+ {
+  "f": "timeline/index.html",
+  "ln": 40,
+  "tok": "プロモ",
+  "ctx": "けモデル構成」です。単価は入力$8.00／キャッシュ入力$0.40／出力$40.00（100万トークン）、キャッシュ書込は30分$10.00・12時間$20.00、<strong>プロモーション料金は少なくとも2026年12月31日まで</strong>。Harvey LAB-AA では full credit 20.8%で首位（GPT-6.2 Astra "
+ },
+ {
+  "f": "timeline/index.html",
+  "ln": 49,
+  "tok": "New",
+  "ctx": "w.kimi.com/code/docs/en/kimi-code/whats-new.html\" target=\"_blank\" rel=\"noopener\">公式What's New →</a><a href=\"/china-ai/#labs-h\">中国AI総覧 →</a></div></div></article>"
+ },
+ {
+  "f": "timeline/index.html",
+  "ln": 59,
+  "tok": "値下",
+  "ctx": "nAI</span></div><h2 class=\"tl-title\" id=\"sec-20\">GPT-6 Sol / GPT-6 Luna 公開 — GPT-5.6版から50%値下げ</h2><p class=\"tl-desc\">GPT-6世代の実用2モデル。Solは入力$4→$2・出力$20→$10、Lunaは$0.20/$1.20→$0.10/$0."
+ },
+ {
+  "f": "timeline/index.html",
+  "ln": 63,
+  "tok": "値下",
+  "ctx": "pseek\">DeepSeek</span></div><h2 class=\"tl-title\" id=\"sec-24\">DeepSeek-V4.1-Flash リリース — 大幅値下げ・ネイティブ画像入力（V4 Pro の 9/14 ルーティングはのちに撤回）</h2><p class=\"tl-desc\">新アーキテクチャ世代の最小モデル。1Mコンテキスト"
+ },
+ {
+  "f": "timeline/index.html",
+  "ln": 68,
+  "tok": "プロモ",
+  "ctx": "出力・MIT。GLM-5.2を上回るコーディング/エージェント性能を約1/10の価格で。<span class=\"tl-price-badge\">$0.15/$0.50（list・プロモ終了後）</span></p><div class=\"tl-links\"><a href=\"https://z.ai/blog/glm-5.3-flash\" target=\""
+ },
+ {
+  "f": "timeline/index.html",
+  "ln": 69,
+  "tok": "プロモ",
+  "ctx": "=\"tl-provider-tag openai\">OpenAI</span></div><h2 class=\"tl-title\" id=\"sec-32\">GPT-5.6 Sol プロモ価格へ — $4/$20（少なくとも〜11/21）</h2><p class=\"tl-desc\">フラッグシップSolを$5→$4（入力）/ $30→$20（出力）に値下げ（"
+ },
+ {
+  "f": "timeline/index.html",
+  "ln": 69,
+  "tok": "値下",
+  "ctx": "Sol プロモ価格へ — $4/$20（少なくとも〜11/21）</h2><p class=\"tl-desc\">フラッグシップSolを$5→$4（入力）/ $30→$20（出力）に値下げ（3ヶ月間）。Fast mode・long-context・Batch/Flexにも適用。旧標準$5/$30。プロモは「少なくとも2026-11-21まで」。<span cl"
+ },
+ {
+  "f": "timeline/index.html",
+  "ln": 69,
+  "tok": "プロモ",
+  "ctx": "ッグシップSolを$5→$4（入力）/ $30→$20（出力）に値下げ（3ヶ月間）。Fast mode・long-context・Batch/Flexにも適用。旧標準$5/$30。プロモは「少なくとも2026-11-21まで」。<span class=\"tl-price-badge\">$4/$20（Short context）</span></p><div "
+ },
+ {
+  "f": "timeline/index.html",
+  "ln": 76,
+  "tok": "値下",
+  "ctx": "ider-tag openai\">OpenAI</span></div><h2 class=\"tl-title\" id=\"sec-41\">GPT-5.6 Terra/Luna 大幅値下げ</h2><p class=\"tl-desc\">Terra: $2.50→$2.00 / $15.00→$12.00。Luna: $1.00→$0.20 / $6.00→$1"
+ },
+ {
+  "f": "timeline/index.html",
+  "ln": 79,
+  "tok": "値下",
+  "ctx": "rra/Luna</h2><p class=\"tl-desc\">新フラッグシップSol・バランス型Terra・最速低コストLunaの3モデル同時公開。7/30にTerra/Luna値下げ。<span class=\"tl-price-badge\">Sol $5/$30・Terra $2/$12・Luna $0.20/$1.20（7/30改定後）</span><"
+ },
+ {
+  "f": "timeline/index.html",
+  "ln": 84,
+  "tok": "プロモ",
+  "ctx": "/49B active）・V4 Flash（284B/13B active）。<span class=\"tl-price-badge\">V4 Pro $0.435/$0.87（当時プロモ・現在は廃止）</span></p><div class=\"tl-links\"><a href=\"https://api-docs.deepseek.com/news/new"
+ },
+ {
+  "f": "timeline/index.html",
+  "ln": 102,
+  "tok": "値下",
+  "ctx": "  <div class=\"dg-box\"><strong>③ 価格改定</strong><br>導入価格→通常価格、値下げ、期間限定価格</div>"
+ }
+]

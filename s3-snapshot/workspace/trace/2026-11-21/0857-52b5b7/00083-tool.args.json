@@ -1,0 +1,1 @@
+shell {"command": "ls /workspace/tools 2>/dev/null | head -30; echo ---; grep -rln \"pricing_tables\" /workspace/tools /opt/*/tools 2>/dev/null | head; echo ---; python3 -c \"\nimport json\ns=json.load(open('/workspace/data/price-sot.json'))\nprint(type(s), list(s)[:6] if isinstance(s,dict) else len(s))\n\" "}

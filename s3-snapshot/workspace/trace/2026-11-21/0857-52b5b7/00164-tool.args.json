@@ -1,0 +1,1 @@
+file_read {"diff_type": "unified", "path": "/workspace/data/facts.json,/workspace/data/price-sot.json", "mode": "view", "format": "txt", "neutral_name": "x", "comparison_path": "", "git_history": true, "num_revisions": 5, "start_line": 0, "end_line": 0, "chunk_size": 0, "chunk_offset": 0, "search_pattern": "", "context_lines": 0, "recursive": true}

@@ -1,0 +1,1 @@
+shell {"command": "cd /workspace && rm -rf /tmp/sc2 && mkdir -p /tmp/sc2 && cp -a /tmp/site /tmp/sc2/site && python3 tools/render_site.py --site /tmp/sc2/site --workspace /workspace 2>&1 | tail -5; python3 -c \"\nimport json\nrows=json.load(open('/tmp/sc2/site/data/models.json'))['models']\nprint([r['provider'] for r in rows if r['name']=='Claude Fable 5.2'])\n\""}

@@ -1,0 +1,1 @@
+shell {"command": "cd /tmp/site && grep -rn \"\\[bold\\|\\[/bold\\|\\[yellow\\|\\[red\\|\\[green\" data/models.json pricing/index.html en/pricing/index.html | head -20; echo \"=== count all html ===\"; grep -rl \"\\[bold\" --include=*.html --include=*.json . | head -20"}

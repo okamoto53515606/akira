@@ -1,0 +1,1 @@
+shell {"command": "cd /tmp/site && grep -rnE \"\\[(/?)[A-Za-z][A-Za-z ]*\\]\" --include=*.html --include=*.json . | grep -viE \"\\[(0-9|x|X|注|要|出典|公式|無料|旧|新|GA|Post|Get|href|ja|en)\\]\" | head -15; echo \"=== bold-ish grep count ===\"; grep -rn \"bold yellow\\|\\[bold\\|\\[/bold\\|\\[yellow\" --include=*.html --include=*.json . | wc -l"}

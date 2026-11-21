@@ -60,7 +60,7 @@
   <nav class="toc" aria-label="目次">
     <p class="toc-title">目次</p>
     <ol>
-      <li><a href="#latest-h">最新モデル（2026年10月）</a></li>
+      <li><a href="#latest-h">最新モデル（2026年11月）</a></li>
       <li><a href="#pricing-h">モデル別・料金（Azure Foundry 確認済み）</a></li>
       <li><a href="#api-h">使い方（API / アクセス方法）</a></li>
       <li><a href="#timeline-h">MAI リリース年表</a></li>
@@ -167,19 +167,30 @@
 <h2 class="section-title" id="timeline-h">MAI リリース年表</h2>
 <p class="section-sub">microsoft.ai blog の記事から日付を整理。主要なもの。</p>
 <div class="table-wrap"><table><thead><tr><th>日付</th><th>出来事</th></tr></thead><tbody>
+
 <tr><td class="model-name" style="border-left:3px solid var(--c-accent);padding-left:.7rem;">2026-11（提供中）</td><td><strong>MAI Code 2 / MAI Code 2 Flash</strong>（コーディング特化・GitHub Copilot 経由・トークン単価は未公表）</td></tr>
-<tr><td class="model-name">2025-09頃</td><td>「Two in-house models」「Introducing MAI-Image-1」（MAI-Image-1、LMArena トップ10入り）</td></tr>
-<tr><td class="model-name">2026-04-02</td><td>「Announcing 3 new world class MAI models」＝ <strong>MAI-Image-2 / MAI-Transcribe-1 / MAI-Voice-1</strong>（Foundry で提供開始）</td></tr>
-<tr><td class="model-name">2026-04-02</td><td>MAI-Image-2-Efficient（フラッグシップ品質・41%低コスト）</td></tr>
-<tr><td class="model-name">2026-05</td><td>MAI-Transcribe-1.5 / MAI-Code-1-Flash を発表</td></tr>
-<tr><td class="model-name">2026-06-02</td><td>Build 2026「Building a hill-climbing machine: Launching seven new MAI models」＝ MAI-Image-2.5 / 2.5-Flash / Transcribe-1.5 / <strong>MAI-Thinking-1</strong> / Voice-2 / Voice-2-Flash / Code-1-Flash</td></tr>
-<tr><td class="model-name">2026-07</td><td>MAI-Cyber-1-Flash（MDASH 防御用途）/ MAI-Image-2.5-Pro・MAI-Voice-2-Flash / MAI-Image-2.5（Arena No.2）</td></tr>
-<tr><td class="model-name">2026-08</td><td>MAI-Code-1.1-Flash（4分の1のコスト）/ MAI-Image-2.6 が Arena No.2 に</td></tr>
-<tr><td class="model-name" style="border-left:3px solid var(--c-green);padding-left:.7rem;">2026-09-03</td><td><strong>MAI-Transcribe-2</strong>（音声認識・$0.10/時 限定）</td></tr>
-<tr><td class="model-name" style="border-left:3px solid var(--c-green);padding-left:.7rem;">2026-09-04</td><td><strong>MAI-Image-2.6 / 2.6-Flash</strong>（画像生成）</td></tr>
-<tr><td class="model-name" style="border-left:3px solid var(--c-green);padding-left:.7rem;">2026-10-02</td><td><strong>MAI-Transcribe-2-Streaming</strong>（ストリーミング音声認識・$0.54/時 年内導入価格）と <strong>MAI-Voice-2.1 / 2.1-Flash</strong>（音声生成）を発表</td></tr>
+
 <tr><td class="model-name" style="border-left:3px solid var(--c-green);padding-left:.7rem;">2026-10-07</td><td><strong>MAI Code 1.1 Flash のローカル版</strong>を Microsoft の開発者ブログが発表。Windows の GitHub Copilot でオンデバイス推論（137B総・6.8BアクティブのMoE。量子化版は約53GB、256kコンテキストでピークメモリ75.5GB）</td></tr>
-</tbody></table></div>
+
+<tr><td class="model-name" style="border-left:3px solid var(--c-green);padding-left:.7rem;">2026-10-02</td><td><strong>MAI-Transcribe-2-Streaming</strong>（ストリーミング音声認識・$0.54/時 年内導入価格）と <strong>MAI-Voice-2.1 / 2.1-Flash</strong>（音声生成）を発表</td></tr>
+
+<tr><td class="model-name" style="border-left:3px solid var(--c-green);padding-left:.7rem;">2026-09-04</td><td><strong>MAI-Image-2.6 / 2.6-Flash</strong>（画像生成）</td></tr>
+
+<tr><td class="model-name" style="border-left:3px solid var(--c-green);padding-left:.7rem;">2026-09-03</td><td><strong>MAI-Transcribe-2</strong>（音声認識・$0.10/時 限定）</td></tr>
+
+<tr><td class="model-name">2026-08</td><td>MAI-Code-1.1-Flash（4分の1のコスト）/ MAI-Image-2.6 が Arena No.2 に</td></tr>
+
+<tr><td class="model-name">2026-07</td><td>MAI-Cyber-1-Flash（MDASH 防御用途）/ MAI-Image-2.5-Pro・MAI-Voice-2-Flash / MAI-Image-2.5（Arena No.2）</td></tr>
+
+<tr><td class="model-name">2026-06-02</td><td>Build 2026「Building a hill-climbing machine: Launching seven new MAI models」＝ MAI-Image-2.5 / 2.5-Flash / Transcribe-1.5 / <strong>MAI-Thinking-1</strong> / Voice-2 / Voice-2-Flash / Code-1-Flash</td></tr>
+
+<tr><td class="model-name">2026-05</td><td>MAI-Transcribe-1.5 / MAI-Code-1-Flash を発表</td></tr>
+
+<tr><td class="model-name">2026-04-02</td><td>「Announcing 3 new world class MAI models」＝ <strong>MAI-Image-2 / MAI-Transcribe-1 / MAI-Voice-1</strong>（Foundry で提供開始）</td></tr>
+
+<tr><td class="model-name">2026-04-02</td><td>MAI-Image-2-Efficient（フラッグシップ品質・41%低コスト）</td></tr>
+
+<tr><td class="model-name">2025-09頃</td><td>「Two in-house models」「Introducing MAI-Image-1」（MAI-Image-1、LMArena トップ10入り）</td></tr></tbody></table></div>
 <p class="source-note">出典: <a href="https://microsoft.ai/blog/" target="_blank" rel="noopener">microsoft.ai/blog</a> · <a href="https://commandline.microsoft.com/local-models-sandboxed-tools-github-windows/" target="_blank" rel="noopener">commandline.microsoft.com（Microsoft 開発者ブログ）</a></p>
 </section>
 

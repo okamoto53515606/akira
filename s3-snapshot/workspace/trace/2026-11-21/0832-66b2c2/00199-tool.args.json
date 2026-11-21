@@ -1,0 +1,1 @@
+shell {"command": "cd /tmp && diff /tmp/site/data/models.json /tmp/sc/site/data/models.json | head -30; echo \"=== sitemap ===\"; diff /tmp/site/sitemap.xml /tmp/sc/site/sitemap.xml | head -40"}

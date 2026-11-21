@@ -1,0 +1,1 @@
+shell {"command": "cd /tmp/site && echo \"=== 値下 contexts ===\" && grep -rn \"値下\" --include=*.html . | cut -c1-200 && echo && echo \"=== プロモ contexts ===\" && grep -rn \"プロモ\" --include=*.html . | cut -c1-200 && echo && echo \"=== 🆕 contexts ===\" && grep -rn \"🆕\" --include=*.html . | cut -c1-200"}
