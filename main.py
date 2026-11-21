@@ -978,6 +978,8 @@ def create_delegation_tools(models, run_budget_jpy: float, block_publish: bool =
         # 健全性チェックと決定論的修復（エンジニアも公開前後に使う）
         akira_tools.verify_published_contracts,
         akira_tools.restore_published_data_file,
+        # 計算機の円換算レート欠落の修復（2026-11-22: 全行¥0 が7日間見逃された）
+        akira_tools.repair_calculator_fx,
         # ページ監査（古い情報・追記の混在・キービジュアルの取り残し）
         page_audit.audit_pages,
         page_audit.set_page_priority,
@@ -1607,6 +1609,48 @@ DAILY_MISSION_TEMPLATE = """今日は {today}（{weekday}）です。LLM Data Hu
 """
 
 
+def _repair_contract_violations(contract: dict, phase: str) -> dict:
+    """公開契約の違反を「機械で直せる種類」だけ直して再検査する（2026-11-22 追加）。
+
+    なぜ:
+        2026-11-15〜11-22、/calculator/ の参考円換算が全行 ¥0 だった
+        （data/models.json に fx が無く、為替入力が空 → f=0）。
+        ページは 200・表も出るので、人間が気づくまで7日間残った。
+        既存の復元（restore_published_data_file）はベースラインそのものが
+        fx を持たないと何もできないため、専用の決定論的修復を持つ。
+
+    直すもの:
+        - fx（円換算レート）の欠落/0 → repair_calculator_fx（台帳 facts.fx から）
+        - それ以外の計算機データ破損 → 契約合格済みベースラインから復元
+
+    戻り値: 再検査後の check_published_contracts() の結果。
+    """
+    violations = contract.get("violations") or []
+    if not violations:
+        return contract
+    text = " ".join(violations)
+    fx_issue = ("fx." in text) or ("為替レート" in text)
+    fx_fixed = False
+    if fx_issue:
+        try:
+            rep = akira_tools.repair_calculator_fx()
+            logger.warning("[%s] 計算機の為替レートを自動修復: %s", phase, rep)
+            fx_fixed = rep.get("status") in ("repaired", "skipped")
+        except Exception:  # noqa: BLE001
+            logger.exception("[%s] 計算機レートの自動修復に失敗しました", phase)
+    if any(akira_tools.DATA_MODELS_KEY in v for v in violations) and not fx_fixed:
+        try:
+            rep = akira_tools.restore_published_data_file()
+            logger.info("[%s] 計算機データの自動復元: %s", phase, rep)
+        except Exception:  # noqa: BLE001
+            logger.exception("[%s] 計算機データの自動復元に失敗しました", phase)
+    try:
+        return akira_tools.check_published_contracts()
+    except Exception:  # noqa: BLE001
+        logger.exception("[%s] 修復後の再検査に失敗しました", phase)
+        return contract
+
+
 def run_daily(dry_run: bool = False, no_publish: bool = False) -> None:
     from strands import Agent
 
@@ -1685,10 +1729,7 @@ def run_daily(dry_run: bool = False, no_publish: bool = False) -> None:
         logger.info("%s", contract["summary"])
         if contract["violations"]:
             logger.warning("公開契約の違反: %s", contract["violations"])
-            if any(akira_tools.DATA_MODELS_KEY in v for v in contract["violations"]):
-                repair = akira_tools.restore_published_data_file()
-                logger.info("計算機データの自動復元: %s", repair)
-                contract = akira_tools.check_published_contracts()
+            contract = _repair_contract_violations(contract, "起動時")
         health_line = contract["summary"]
         health_line += ("（公開サイトは正常）" if not contract["violations"]
                         else "（残: %s）" % " / ".join(contract["violations"][:5]))
@@ -1795,6 +1836,8 @@ def run_daily(dry_run: bool = False, no_publish: bool = False) -> None:
         # 公開サイトの健全性チェックと決定論的修復（読取＋許可キーのみの修復）
         akira_tools.verify_published_contracts,
         akira_tools.restore_published_data_file,
+        # 計算機の円換算レート欠落の修復（2026-11-22）
+        akira_tools.repair_calculator_fx,
         # ページ監査（今日の対象はコードが優先度順に選んでいる）
         page_audit.audit_pages,
         page_audit.set_page_priority,
@@ -1957,10 +2000,7 @@ def run_daily(dry_run: bool = False, no_publish: bool = False) -> None:
             post = akira_tools.check_published_contracts()
             if post["violations"]:
                 logger.error("公開後の契約違反: %s", post["violations"])
-                if any(akira_tools.DATA_MODELS_KEY in v for v in post["violations"]):
-                    repair = akira_tools.restore_published_data_file()
-                    logger.info("公開後の自動復元: %s", repair)
-                    post = akira_tools.check_published_contracts()
+                post = _repair_contract_violations(post, "公開後")
             post_line = post["summary"] + (
                 "（公開サイトは正常）" if not post["violations"]
                 else "（残: %s）" % " / ".join(post["violations"][:5])

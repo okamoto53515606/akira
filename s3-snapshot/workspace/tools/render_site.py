@@ -371,6 +371,16 @@ def render_models_json(site: Path, facts: dict) -> bool:
             "input": p["input"], "output": p["output"],
             "note": p.get("note_ja", ""), "note_en": p.get("note_en", ""),
         })
+    # 計算機の円換算レート（2026-11-22 追加）。
+    # /calculator/ のJSは models.json の fx.usd_jpy を読む。ここを書かないと
+    # 為替入力が空 → 参考円換算が全行¥0 になる（2026-11-15〜11-22 に実際に起きた。
+    # ページは200・表も出るので既存の7ゲートでは検出できなかった）。
+    # 台帳 facts.fx を正とし、無ければサイト既定の155を書く。
+    want_fx = {"usd_jpy": float((facts.get("fx") or {}).get("usd_jpy") or 155.0),
+               "source": "facts.fx（サイト全体で固定）"}
+    if cur.get("fx") != want_fx:
+        cur["fx"] = want_fx
+        changed = True
     if not add and not changed:
         return False
     if add:

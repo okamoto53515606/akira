@@ -104,6 +104,16 @@ def _cache_control(path: str) -> str:
 DATA_MODELS_KEY = "data/models.json"
 MODELS_REQUIRED_FIELDS = ("name", "provider", "label", "input", "output")
 MODELS_MIN_ROWS = 10  # 実データは38行。桁違いの縮小（取り違え・切り詰め）を検知する下限
+# 計算機の円換算レート（2026-11-22 追加）。
+# 背景: 2026-11-15 に計算機の為替入力を「HTMLの固定値」から「data/models.json の
+# fx.usd_jpy」へ移したが、render_site は models.json に fx を書いていなかった。
+# そのため入力欄が空のまま → f=0 → **参考円換算が全行 ¥0** という静かな故障が
+# 7日間続いた（ページはHTTP 200・表も出る・既存ゲートは全部緑）。
+# 対策は3段: ①models.json に fx を必ず持たせる（描画側）②契約違反なら公開させない
+# ③公開中に欠けていたら決定論的に修復する（repair_calculator_fx）。
+CALC_FX_DEFAULT = 155.0  # サイト全体のルール（1ドル=155円固定）。台帳 facts.fx が正
+CALC_FX_KEY = "fx"
+CALC_FX_FIELD = "usd_jpy"
 BASELINE_MODELS_PATH = os.path.join(WORKSPACE_LOCAL_DIR, "data", "calculator-models.json")
 _SOT_MARKERS = ("schema_note", "stale_price_patterns", "stale_policy")
 
@@ -184,6 +194,14 @@ def validate_calculator_models(payload: object) -> list[str]:
         return errors
     if len(models) < MODELS_MIN_ROWS:
         errors.append("models の行数が少なすぎます: %d < %d" % (len(models), MODELS_MIN_ROWS))
+    # fx（円換算レート）は計算機の表示に直結する。欠けると全行が ¥0 になる（2026-11-22）。
+    fx = payload.get(CALC_FX_KEY)
+    rate = fx.get(CALC_FX_FIELD) if isinstance(fx, dict) else None
+    if isinstance(rate, bool) or not isinstance(rate, (int, float)) or rate <= 0:
+        errors.append(
+            "fx.%s が正の数値ではありません: %r（計算機の参考円換算が全行¥0になる。"
+            "台帳 facts.fx から描画すること）" % (CALC_FX_FIELD, rate)
+        )
     for i, m in enumerate(models):
         if not isinstance(m, dict):
             errors.append("models[%d] がオブジェクトではありません" % i)
@@ -930,7 +948,14 @@ def _render_and_publish_entrypoints(base_dir: str, s3) -> list:
         except Exception:  # noqa: BLE001
             continue
     # 変化が無いならアップロードもしない（無駄な invalidation を避ける）
-    return published if changed else []
+    if not changed:
+        return []
+    # HTMLはパス指定の invalidation では落ちない（viewer-request が
+    # /x/ → /x/index.html に書き換えるため。2026-09-27・11-17 と同じ罠）。
+    # 入り口を作り直したときは必ずワイルドカードで落とす。
+    if any(rel.endswith(".html") for rel in published):
+        _invalidation_paths.append("/*")
+    return published
 
 
 @tool
@@ -1215,6 +1240,194 @@ def _url_to_key(path: str) -> str:
     return rel + "/index.html" if rel else "index.html"
 
 
+# --- 計算機の為替（円換算）契約と決定論的修復（2026-11-22 追加）------------------
+# 2026-11-15 に計算機の為替入力を「HTMLの固定値 155」から「data/models.json の
+# fx.usd_jpy」へ移したが、描画側（render_models_json）が fx を書いていなかった。
+# 入力欄が空 → f=0 → **参考円換算が全行 ¥0**。ページはHTTP 200・表も出る・
+# 7ゲートも全部緑なので、誰も気づけないまま7日間続いた。
+# 対策は3段で持つ:
+#   ① 計算機データの契約に fx を必須にする（上で実装。公開ゲートで止まる）
+#   ② 計算機ページの為替入力に「正の初期値」を必須にする（下の C2 で検査）
+#   ③ 公開中に欠けていたら機械で入れ直す（この repair_calculator_fx。LLM判断なし）
+_FX_INPUT_RE = re.compile(r'(id="fx-rate"[^>]*?\bvalue=")([^"]*)(")')
+
+
+def _fx_rate_from_facts(default: float = CALC_FX_DEFAULT) -> float:
+    """台帳 facts.fx.usd_jpy を返す（読めなければサイト既定の155）。"""
+    try:
+        with open(os.path.join(WORKSPACE_LOCAL_DIR, "data", "facts.json"),
+                  encoding="utf-8") as fh:
+            facts = json.load(fh)
+        rate = (facts.get(CALC_FX_KEY) or {}).get(CALC_FX_FIELD)
+        if isinstance(rate, (int, float)) and not isinstance(rate, bool) and rate > 0:
+            return float(rate)
+    except Exception:  # noqa: BLE001
+        pass
+    return float(default)
+
+
+def _with_calc_fx(payload: dict, rate: float) -> bool:
+    """models.json の payload に fx を入れる（変更があったら True）。"""
+    fx = payload.get(CALC_FX_KEY)
+    if isinstance(fx, dict) and fx.get(CALC_FX_FIELD) == rate:
+        return False
+    payload[CALC_FX_KEY] = {CALC_FX_FIELD: rate,
+                            "source": "facts.fx（サイト全体で固定）"}
+    return True
+
+
+def _calc_fx_default(html: str):
+    """計算機ページの為替入力の初期値（未設定・0 なら None）。"""
+    m = _FX_INPUT_RE.search(html)
+    if not m:
+        return None
+    try:
+        v = float(m.group(2))
+    except ValueError:
+        return None
+    return v if v > 0 else None
+
+
+def _patch_calc_fx_default(html: str, rate: float) -> str:
+    """為替入力の初期値を rate にする（空・0 のときだけ書き換える＝冪等）。"""
+    if _calc_fx_default(html):
+        return html
+    if _FX_INPUT_RE.search(html):
+        return _FX_INPUT_RE.sub(
+            lambda m: "%s%g%s" % (m.group(1), rate, m.group(3)), html, count=1)
+    return html
+
+
+@tool
+def repair_calculator_fx(rate: float = 0.0, dry_run: bool = False) -> dict:
+    """計算機の円換算レートを台帳（facts.fx）から公開物へ入れ直す（決定論的・LLMコスト0）。
+
+    なぜ:
+        2026-11-15〜11-22、/calculator/ と /en/calculator/ の「参考円換算」が
+        **全行 ¥0** だった。data/models.json に fx が無く、為替入力が空のまま
+        計算されていたため。ページは 200 を返し表も出るので、既存ゲートでは
+        検出できなかった。毎朝の契約チェック → この関数で自動修復する。
+
+    何をするか:
+        1. data/models.json（ローカル優先。無ければ公開中の現物）に
+           `fx: {usd_jpy: <台帳の値>}` を入れて公開する（契約検証を通してから）
+        2. /calculator/・/en/calculator/ の為替入力の初期値が空/0なら 155 を入れる
+        3. invalidation（HTMLは `/*`）
+
+    Args:
+        rate: 明示したいレート（0 なら台帳 facts.fx.usd_jpy → 無ければ155）
+        dry_run: True なら判定だけして書き込まない
+    """
+    if isinstance(rate, (int, float)) and not isinstance(rate, bool) and rate > 0:
+        fx = float(rate)
+    else:
+        fx = _fx_rate_from_facts()
+    base_dir = os.path.abspath(SITE_LOCAL_DIR)
+    s3 = boto3.client("s3", region_name=AWS_REGION)
+    changes: list[str] = []
+    skipped: list[str] = []
+
+    # (1) data/models.json に fx を入れる
+    local_models = os.path.join(base_dir, DATA_MODELS_KEY)
+    payload = None
+    if os.path.exists(local_models):
+        try:
+            with open(local_models, encoding="utf-8") as fh:
+                payload = json.load(fh)
+        except Exception as e:  # noqa: BLE001
+            logger.warning("ローカルの計算機データを読めません（公開中の現物を使います）: %s", e)
+            payload = None
+    if payload is None:
+        try:
+            payload = json.loads(
+                s3.get_object(Bucket=LLM_SITE_BUCKET, Key=DATA_MODELS_KEY)[
+                    "Body"].read().decode("utf-8"))
+        except Exception as e:  # noqa: BLE001
+            return {"status": "failed", "rate": fx,
+                    "reason": "計算機データを取得できません: %s" % e}
+    if _with_calc_fx(payload, fx):
+        body = json.dumps(payload, ensure_ascii=False, indent=1).encode("utf-8")
+        errors = _site_data_errors(DATA_MODELS_KEY, body)
+        if errors:
+            return {"status": "failed", "rate": fx,
+                    "reason": "修復後の計算機データが契約違反です（公開しません）",
+                    "errors": errors}
+        if not dry_run:
+            try:
+                if os.path.exists(local_models):
+                    with open(local_models, "wb") as fh:
+                        fh.write(body)
+                s3.put_object(Bucket=LLM_SITE_BUCKET, Key=DATA_MODELS_KEY, Body=body,
+                              ContentType=_content_type(DATA_MODELS_KEY),
+                              CacheControl=_cache_control(DATA_MODELS_KEY))
+                _invalidation_paths.append("/" + DATA_MODELS_KEY)
+                _save_models_baseline(body)
+            except Exception as e:  # noqa: BLE001
+                return {"status": "failed", "rate": fx,
+                        "reason": "計算機データの書き戻しに失敗: %s" % e}
+        changes.append(DATA_MODELS_KEY)
+    else:
+        skipped.append(DATA_MODELS_KEY)
+
+    # (2) 計算機ページの為替入力の初期値
+    html_changed = False
+    for rel in CONTRACT_CALC_PAGES:
+        local = os.path.join(base_dir, rel)
+        text = None
+        if os.path.exists(local):
+            try:
+                with open(local, encoding="utf-8", errors="replace") as fh:
+                    text = fh.read()
+            except OSError:
+                text = None
+        if text is None:
+            try:
+                text = s3.get_object(Bucket=LLM_SITE_BUCKET, Key=rel)[
+                    "Body"].read().decode("utf-8", "replace")
+            except Exception:  # noqa: BLE001
+                skipped.append(rel)
+                continue
+        new = _patch_calc_fx_default(text, fx)
+        if new == text:
+            skipped.append(rel)
+            continue
+        if not dry_run:
+            try:
+                if os.path.exists(local):
+                    with open(local, "w", encoding="utf-8") as fh:
+                        fh.write(new)
+                body = new.encode("utf-8")
+                s3.put_object(Bucket=LLM_SITE_BUCKET, Key=rel, Body=body,
+                              ContentType=_content_type(rel),
+                              CacheControl=_cache_control(rel))
+                _invalidation_paths.append("/" + rel)
+            except Exception as e:  # noqa: BLE001
+                logger.exception("計算機ページの修復に失敗: %s", e)
+                skipped.append(rel)
+                continue
+        changes.append(rel)
+        html_changed = True
+    if html_changed and not dry_run:
+        # viewer-request が /x/ → /x/index.html に書き換えるため、パス指定の
+        # invalidation ではブラウザ/CDNの実URLが落ちない（既知の罠）。`/*` を使う。
+        _invalidation_paths.append("/*")
+    if changes and not dry_run:
+        try:
+            flush_invalidations()
+        except Exception as e:  # noqa: BLE001
+            logger.error("invalidation に失敗（修復自体は完了）: %s", e)
+            return {"status": "repaired_invalidation_failed", "rate": fx,
+                    "changes": changes, "skipped": skipped, "error": str(e)}
+    return {
+        "status": "dry_run" if (dry_run and changes) else ("repaired" if changes else "skipped"),
+        "rate": fx,
+        "changes": changes,
+        "skipped": skipped,
+        "reason": ("計算機の参考円換算レートが欠けていたので入れ直しました"
+                   if changes else "計算機のレートは既に入っています（修復不要）"),
+    }
+
+
 def _sitemap_loc_keys(xml: bytes) -> set[str]:
     import re
 
@@ -1264,6 +1477,12 @@ def check_published_contracts() -> dict:
             violations.append("%s: 計算機データ(%s)の読み込みが消えている" % (rel, DATA_MODELS_KEY))
         if CONTRACT_GTAG not in text:
             violations.append("%s: GA4タグが無い" % rel)
+        # C2b. 為替入力の初期値（2026-11-22）。空だと計算機は ¥0 を並べるのに
+        #      HTTP 200・表ありで「正常」に見える（7日間これで見逃した）。
+        if _calc_fx_default(text) is None:
+            violations.append(
+                "%s: 為替レート(#fx-rate)の初期値が空/0（参考円換算が全行¥0になる）"
+                " → repair_calculator_fx() で修復" % rel)
 
     # C3. sitemap と公開実体の一致
     status, body, err = _http_get(f"{LLM_SITE_URL}/sitemap.xml")
@@ -2124,6 +2343,7 @@ def publish_and_verify(paths: str = "", live: bool = True) -> dict:
 
     # 3. ゲート（公開前の実物に対して）
     ok_targets = []
+    prior: dict = {}          # rel -> {"old_html": str, "is_new": bool}（履歴登録に使う）
     for rel in uniq:
         f = os.path.join(base_dir, rel)
         try:
@@ -2133,7 +2353,8 @@ def publish_and_verify(paths: str = "", live: bool = True) -> dict:
             continue
         key = rel
         old_html = ""
-        if not _s3_key_is_new(s3, key):
+        is_new = _s3_key_is_new(s3, key)
+        if not is_new:
             try:
                 old_html = s3.get_object(Bucket=LLM_SITE_BUCKET, Key=key)[
                     "Body"].read().decode("utf-8", "replace")
@@ -2145,6 +2366,7 @@ def publish_and_verify(paths: str = "", live: bool = True) -> dict:
         if hits:
             result["rejected"].append({"key": rel, "errors": hits})
             continue
+        prior[rel] = {"old_html": old_html, "is_new": is_new}
         ok_targets.append(rel)
 
     # 4. アップロード
@@ -2185,12 +2407,71 @@ def publish_and_verify(paths: str = "", live: bool = True) -> dict:
             except Exception as e:  # noqa: BLE001
                 result["rejected"].append({"key": rel, "errors": ["upload: %s" % e]})
 
+    # 4-c. 更新履歴（site_events）への登録と入り口の再公開（2026-11-22 追加）
+    #      2026-11-21 に「儀式を1呼び出しに畳む」ため publish_and_verify を入れたが、
+    #      site_upload がやっていた **中身が変わった既存ページを site_events に足す**
+    #      処理が移されていなかった。そのため 11-22 のランは /pricing/ や
+    #      /deepseek-v4-1-flash/ を更新したのに /changelog/ が 11-21 のまま＝
+    #      「今日の更新が0件」になった（sitemap lastmod だけ 11-22 に進んで、
+    #      中身が変わっていないことを誰も検出できなかった）。
+    #      ここで site_upload と同じ登録・再描画を必ず通す。
+    registered: list[str] = []
+    updated_pages = []          # (slug, old_html, new_html)
+    for rel in result["published"]:
+        if not rel.endswith("index.html"):
+            continue
+        info = prior.get(rel) or {}
+        try:
+            if info.get("is_new"):
+                reg = _register_site_event(rel, base_dir, is_new=True)
+                if reg:
+                    registered.append(reg)
+                continue
+            old_html = info.get("old_html") or ""
+            if not old_html:
+                continue
+            with open(os.path.join(base_dir, rel), encoding="utf-8",
+                      errors="replace") as fh:
+                new_html = fh.read()
+            if _content_signature(old_html) == _content_signature(new_html):
+                continue
+            slug = rel[: -len("/index.html")]
+            if slug.startswith("en/"):
+                slug = slug[3:]
+            if slug and slug.split("/")[0] not in ("changelog", "glossary"):
+                updated_pages.append((slug, old_html, new_html))
+        except Exception:  # noqa: BLE001
+            logger.exception("更新履歴の判定に失敗しました: %s", rel)
+    try:
+        registered += _register_site_updates(updated_pages)
+    except Exception:  # noqa: BLE001
+        logger.exception("更新履歴の自動登録に失敗しました")
+    if registered:
+        result["site_events_added"] = registered
+        try:
+            refreshed = _render_and_publish_entrypoints(base_dir, s3)
+            if refreshed:
+                result["entrypoints_refreshed"] = refreshed
+                result["published"] += [r for r in refreshed
+                                        if r not in result["published"]]
+        except Exception:  # noqa: BLE001
+            logger.exception("トップ・更新履歴の再描画に失敗しました")
+    # 手で直したページも sitemap lastmod を公開時に揃える（site_upload と同じ）
+    try:
+        if result["published"] and _bump_sitemap_lastmod(
+                base_dir, [r for r in result["published"] if r.endswith("index.html")], s3):
+            result["sitemap"] = "lastmod updated"
+            if "sitemap.xml" not in result["published"]:
+                result["published"].append("sitemap.xml")
+    except Exception:  # noqa: BLE001
+        logger.exception("sitemap lastmod の更新に失敗しました（続行します）")
+
     # 5. invalidation（日付修正の取りこぼしを避けるため、HTMLは /* で落とす）
     #    ※ここで落ちても公開自体は終わっているので、例外は握って結果に載せる
     #      （2026-11-21: LLM_DIST_ID が空の環境で InvalidAction になりツールごと
     #       例外で落ちた。失敗は「失敗」と返すのが正しい）。
     if result["published"]:
-        if len(result["published"]) > 15:
+        if len(result["published"]) > 15 or result.get("entrypoints_refreshed"):
             _invalidation_paths.append("/*")
         try:
             flush_invalidations()

@@ -194,3 +194,23 @@ workspace `data/facts.json`・`data/og_specs.json`・`tools/watch_releases.py`�
 ECR `akira:latest` digest `sha256:a9ddd65b…`。詳細は
 [`docs/incident-2026-11-21-release-blindspot.md`](./incident-2026-11-21-release-blindspot.md)。
 
+---
+
+## 8. 2026-11-22 追記（計算機の円換算が全行¥0／更新履歴が0件）
+
+11-21 に追加した `publish_and_verify`（儀式の削減）が、**`site_upload` の仕事の一部を
+置き去りにしていた**。7ゲート・ページ監査・公開契約チェックはすべて ERROR 0 で通っていた。
+
+| # | 事象 | 原因（コードの事実） | 打ち手 | 結果 |
+|---|---|---|---|---|
+| 1 | トークン計算機の「参考円換算」が全行 ¥0（11-15 から7日間） | 計算機のJSは `data/models.json` の `fx.usd_jpy` を読むが、`render_models_json` が `fx` を書いていなかった。為替入力の初期値も空 → `f=0`。契約検査は `models` 配列と「JSONを参照しているか」だけを見ており、**計算結果の値**を見ていなかった | 計算機データの契約に `fx.usd_jpy` を必須化／`#fx-rate` の初期値>0 を検査／`repair_calculator_fx()` で台帳 `facts.fx` から決定論的に修復／描画側が `fx` を書く | **完了**。実測 59行が ¥28/¥30/¥31（0円なし） |
+| 2 | `/changelog/` に今日の更新が0件（sitemap lastmod だけ 11-22） | `publish_and_verify` が `site_upload` の「変更ページを `site_events` に足す」「入り口を再描画して公開する」を持っていなかった。11-22 は `publish_and_verify` を7回だけ使用＝`site_events` は 11-21 のまま。描画は冪等で「その呼び出しの差分」しか返さないため、先に別呼び出しで描かれた changelog は公開対象外だった | `publish_and_verify` に登録・入り口再描画・sitemap lastmod を通す。HTMLを含む再公開の invalidation は `/*`。今日の4件を台帳に足して公開 | **完了**。11-22 エントリ4件 |
+
+### この1件から出た原則（§4 の核に足す）
+
+- **「配線」ではなく「値」を検査する**。`data/models.json` を読んでいることは正常の証拠にならない。
+- **冪等な描画の「差分」を公開対象にしない**。公開ツールは状態（`site_events`・実ファイル）から対象を決める。
+- **lastmod は中身が変わったときだけ動かす**。日付だけ進むと「更新した」という嘘の信号になる。
+
+詳細: [`docs/incident-2026-11-22-calculator-and-changelog.md`](./incident-2026-11-22-calculator-and-changelog.md)
+
