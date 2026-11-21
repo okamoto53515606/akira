@@ -53,6 +53,32 @@ PROFILE_HTML = """<section class="profile" aria-label="Akiraの自己紹介">
 </div>
 </section>"""
 
+# 自己紹介の直下に置くリンク（Akiraの口調で説明する）。
+PROFILE_LINKS_HTML = """<nav class="profile-links" aria-label="Akiraのリンク">
+<a class="profile-link" href="https://llm.okamomedia.tokyo" target="_blank" rel="noopener noreferrer">
+<span class="profile-link-title">Akiraが運営しているサイト</span>
+<span class="profile-link-desc">料金もモデルも、俺が毎日見に行って直してるのはこっちだ。</span>
+<span class="profile-link-url">llm.okamomedia.tokyo</span>
+</a>
+<a class="profile-link" href="https://github.com/okamoto53515606/akira" target="_blank" rel="noopener noreferrer">
+<span class="profile-link-title">githubで公開中のAkiraの仕組み</span>
+<span class="profile-link-desc">俺の頭の中身と段取りは、隠さず全部ここに置いてある。</span>
+<span class="profile-link-url">github.com/okamoto53515606/akira</span>
+</a>
+</nav>"""
+
+PROFILE_BLOCK_HTML = PROFILE_HTML + "\n" + PROFILE_LINKS_HTML
+
+SITE_URL = "https://akira.okamomedia.tokyo"
+LLM_SITE_URL = "https://llm.okamomedia.tokyo"
+REPO_URL = "https://github.com/okamoto53515606/akira"
+
+ROBOTS_TXT = f"""User-agent: *
+Allow: /
+
+Sitemap: {SITE_URL}/sitemap.xml
+"""
+
 PAGE_TEMPLATE = """<!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -83,7 +109,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 {profile}
 {body}
 </main>
-<footer class="site-footer"><p>Akira（元警察犬のジャーマン・シェパード）による自動生成。掲載内容に機密情報は含まれません。</p></footer>
+<footer class="site-footer"><p><strong>AkiraはAIです。</strong>元警察犬のジャーマン・シェパードという設定で動くAIエージェントが、この日報を毎回自動生成しています。掲載内容に機密情報は含まれません。</p></footer>
 </body>
 </html>
 """
@@ -346,7 +372,7 @@ def render_report_page(item: dict) -> str:
         + requests_html
         + f'<h2>okamoのコメント</h2><div class="comment">{comment_html}</div>'
     )
-    return PAGE_TEMPLATE.format(title=f"日報 {date}", body=body, profile=PROFILE_HTML, head_extra="")
+    return PAGE_TEMPLATE.format(title=f"日報 {date}", body=body, profile=PROFILE_BLOCK_HTML, head_extra="")
 
 
 def render_index_page(items: list[dict]) -> str:
@@ -362,7 +388,7 @@ def render_index_page(items: list[dict]) -> str:
         f'<p class="meta">{len(items)} 日分・新しい順</p>'
         f'<ul class="report-list">{rows}</ul>'
     )
-    return PAGE_TEMPLATE.format(title="一覧", body=body, profile=PROFILE_HTML, head_extra="")
+    return PAGE_TEMPLATE.format(title="一覧", body=body, profile=PROFILE_BLOCK_HTML, head_extra="")
 
 
 def render_404_page() -> str:
@@ -377,6 +403,58 @@ def render_404_page() -> str:
         body=body,
         profile="",
         head_extra='<meta name="robots" content="noindex">\n',
+    )
+
+
+def render_llms_txt(items: list[dict]) -> str:
+    """AI向けの llms.txt。サイトの要約と、全日報への URL 一覧を置く。"""
+    lines = [
+        "# Akira日報",
+        "",
+        "> Akira（元警察犬のジャーマン・シェパード）による作業日報。AIが運営するLLM情報サイト",
+        "> llm.okamomedia.tokyo を、その日に何をどう直したかの記録。",
+        "",
+        "## このサイト",
+        "- 運営: Akira（AI）。llm.okamomedia.tokyo の運営を任されている。",
+        "- 内容: 公開サイトの変更点、検証結果、判断と理由、okamoへの依頼、okamoからのコメント。",
+        "- 言語: 日本語。",
+        "- 過去分もすべて同じ形式で残している（下の一覧）。",
+        "",
+        "## 日報",
+    ]
+    lines += [f"- [{i['sk']}]({SITE_URL}/reports/{i['sk']}.html)" for i in items]
+    lines += [
+        "",
+        "## 関連リンク",
+        f"- [llm.okamomedia.tokyo]({LLM_SITE_URL}): Akiraが運営しているサイト（LLMの料金・モデル情報）",
+        f"- [GitHub okamoto53515606/akira]({REPO_URL}): Akiraの仕組み（コード・プロンプト・設計資料）",
+        f"- [sitemap.xml]({SITE_URL}/sitemap.xml)",
+        "",
+        "## 引用について",
+        "- 日報の記述は書いた時点の記録で、その後の変更で古くなっていることがある。",
+        "- 料金・モデルの最新値は llm.okamomedia.tokyo を一次情報として参照すること。",
+        "",
+    ]
+    return "\n".join(lines)
+
+
+def render_sitemap_xml(items: list[dict]) -> str:
+    """sitemap.xml（Search Console 送信用）。トップと全日報を並べる。"""
+    last = items[0]["sk"] if items else datetime.now(JST).strftime("%Y-%m-%d")
+    urls = [
+        f"  <url><loc>{SITE_URL}/</loc><lastmod>{last}</lastmod>"
+        f"<changefreq>daily</changefreq><priority>1.0</priority></url>"
+    ]
+    urls += [
+        f"  <url><loc>{SITE_URL}/reports/{i['sk']}.html</loc>"
+        f"<lastmod>{i['sk']}</lastmod><priority>0.6</priority></url>"
+        for i in items
+    ]
+    return (
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        + "\n".join(urls)
+        + "\n</urlset>\n"
     )
 
 
@@ -454,6 +532,35 @@ def publish_reports() -> list[str]:
         HTML_CACHE_CONTROL,
     )
     published.append("/404.html")
+
+    # AI向け（llms.txt）と検索エンジン向け（sitemap.xml / robots.txt）。
+    # どちらも毎回の日報一覧から作り直すので、追加・削除に追随する。
+    _put(
+        s3,
+        "llms.txt",
+        render_llms_txt(items).encode("utf-8"),
+        "text/plain; charset=utf-8",
+        HTML_CACHE_CONTROL,
+    )
+    published.append("/llms.txt")
+
+    _put(
+        s3,
+        "sitemap.xml",
+        render_sitemap_xml(items).encode("utf-8"),
+        "application/xml; charset=utf-8",
+        HTML_CACHE_CONTROL,
+    )
+    published.append("/sitemap.xml")
+
+    _put(
+        s3,
+        "robots.txt",
+        ROBOTS_TXT.encode("utf-8"),
+        "text/plain; charset=utf-8",
+        HTML_CACHE_CONTROL,
+    )
+    published.append("/robots.txt")
 
     if not REPORTS_DIST_ID:
         log.warning("REPORTS_DIST_ID が未設定のため invalidation をスキップした")

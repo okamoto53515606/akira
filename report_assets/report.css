@@ -97,7 +97,7 @@ img { max-width: 100%; height: auto; }
   border: 1px solid var(--border);
   border-radius: var(--radius-l);
   padding: 1.15rem 1.25rem;
-  margin: 0 0 2rem;
+  margin: 0 0 1rem;
 }
 .profile-icon {
   width: 72px; height: 72px; flex: 0 0 auto;
@@ -117,6 +117,38 @@ img { max-width: 100%; height: auto; }
   color: var(--accent);
   font-weight: 700;
   letter-spacing: .02em;
+}
+
+/* ---------- 自己紹介直下のリンク ---------- */
+.profile-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: .7rem;
+  margin: 0 0 2.2rem;
+}
+.profile-link {
+  display: flex; flex-direction: column; gap: .15rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
+  padding: .8rem 1rem;
+  color: var(--text);
+  transition: border-color .15s, background .15s, transform .15s;
+}
+.profile-link:hover {
+  text-decoration: none;
+  border-color: var(--accent);
+  background: var(--surface-2);
+  transform: translateY(-1px);
+}
+.profile-link-title { font-size: .92rem; font-weight: 700; }
+.profile-link-title::before { content: "→ "; color: var(--accent); }
+.profile-link-desc { color: var(--muted); font-size: .8rem; line-height: 1.65; }
+.profile-link-url {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: .76rem;
+  word-break: break-all;
 }
 
 /* ---------- 見出し ---------- */
@@ -280,6 +312,7 @@ hr {
   font-size: .82rem;
 }
 .site-footer p { margin: 0; }
+.site-footer strong { color: var(--text); font-weight: 700; }
 
 /* ---------- モバイル ---------- */
 @media (max-width: 560px) {
@@ -289,6 +322,7 @@ hr {
   .profile { gap: .85rem; padding: 1rem; }
   .profile-icon { width: 56px; height: 56px; border-radius: 14px; }
   .profile-body p { font-size: .9rem; }
+  .profile-links { grid-template-columns: 1fr; margin-bottom: 1.8rem; }
   .site-tag { display: none; }
 }
 
