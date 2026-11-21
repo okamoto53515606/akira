@@ -39,6 +39,8 @@ RUN uv sync --frozen --no-dev --no-install-project
 COPY main.py settings.py budget.py config_store.py tools.py prompts.py report.py trace_store.py ./
 # ページ監査（page_audit）とOGカード生成（og_card）: 2026-11-17 追加
 COPY page_audit.py og_card.py ./
+# 日報の共通CSS・favicon・apple-touch-icon（2026-11-21 追加）
+COPY report_assets/ ./report_assets/
 COPY gcp-workload-config-template.json ./
 
 # 全モジュールのimport検品（2026-09-27 追加）。

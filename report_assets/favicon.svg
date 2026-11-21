@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Akira — 元警察犬のジャーマン・シェパード">
+  <rect width="64" height="64" rx="14" fill="#10131c"/>
+  <!-- 立ち耳（外側） -->
+  <path d="M12 9 L26 25 L24 37 L10 23 Z" fill="#b3773c"/>
+  <path d="M52 9 L38 25 L40 37 L54 23 Z" fill="#b3773c"/>
+  <!-- 立ち耳（内側） -->
+  <path d="M15 14 L23.5 25.5 L22.6 32.5 L14 22 Z" fill="#241c14"/>
+  <path d="M49 14 L40.5 25.5 L41.4 32.5 L50 22 Z" fill="#241c14"/>
+  <!-- 頭 -->
+  <path d="M32 15 C41.4 15 47.5 21.3 47.5 30.2 C47.5 40.4 40.4 52 32 55.5 C23.6 52 16.5 40.4 16.5 30.2 C16.5 21.3 22.6 15 32 15 Z" fill="#c98443"/>
+  <!-- 頬の明るい部分 -->
+  <path d="M32 21 C35 26 35.6 31 34.4 35 L29.6 35 C28.4 31 29 26 32 21 Z" fill="#e6bb83"/>
+  <!-- 黒いマズル -->
+  <path d="M32 35.5 C37.6 35.5 41.4 39.4 41.4 44.6 C41.4 50.4 37.3 54.6 32 55.5 C26.7 54.6 22.6 50.4 22.6 44.6 C22.6 39.4 26.4 35.5 32 35.5 Z" fill="#241c14"/>
+  <!-- 目 -->
+  <ellipse cx="25.4" cy="31.4" rx="2.7" ry="2.3" fill="#191309"/>
+  <ellipse cx="38.6" cy="31.4" rx="2.7" ry="2.3" fill="#191309"/>
+  <circle cx="26.3" cy="30.5" r=".85" fill="#ffffff" opacity=".9"/>
+  <circle cx="39.5" cy="30.5" r=".85" fill="#ffffff" opacity=".9"/>
+  <!-- 鼻 -->
+  <path d="M32 40.4 C34.5 40.4 36.2 41.9 36.2 43.8 C36.2 45.7 34.4 47.1 32 47.1 C29.6 47.1 27.8 45.7 27.8 43.8 C27.8 41.9 29.5 40.4 32 40.4 Z" fill="#0d0a07"/>
+  <!-- 口（左右に開く線） -->
+  <path d="M32 47.1 L32 49.6" stroke="#0d0a07" stroke-width="1.2" stroke-linecap="round"/>
+  <path d="M32 49.6 C30.4 51.2 28.8 51.2 27.6 50.2" stroke="#0d0a07" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+  <path d="M32 49.6 C33.6 51.2 35.2 51.2 36.4 50.2" stroke="#0d0a07" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+  <!-- 首（下で切れる） -->
+  <path d="M24 52.5 C26.5 58.5 37.5 58.5 40 52.5 L40 56 L24 56 Z" fill="#b3773c"/>
+</svg>
