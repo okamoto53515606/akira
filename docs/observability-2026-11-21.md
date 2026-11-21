@@ -386,3 +386,16 @@ gpt-6-cyber: ['timeline']                              ← 本当に年表だけ
 
 これで「企画候補＝実物から」（main.py）と「台帳＝実物に合わせて自動更新」（render_site）の
 二重になり、`shown_on` を読む鮮度キュー・週次レビューも正しい値を見る。
+
+#### 実機での確認（2026-11-21 第5ラン）
+
+1. **本番イメージの中で腐った台帳を直せるか**: S3 の `render_site.py` と台帳を持ち込み、
+   `gemini-4-neon` と `gpt-6-2-astra-law` の `shown_on` を `["timeline"]` に壊してから
+   `docker run --entrypoint python … render_site.py` を実行 → **両方とも
+   `["calculator","pricing","timeline"]` に修復**された。
+2. **配備されているか**: Fargate を1回実行し、`render_site` のツール結果が
+   `"ledger_updated": {"shown_on": []}` を返すことを確認（＝新しい描画ツールが動いており、
+   今回は既に揃っていたので0件）。この回で `gpt-6-cyber`（唯一の本物の穴）が
+   `/timeline/` `/pricing/` `/data/models.json` に入り、公開中は **59行**になった。
+3. 台帳の最終状態: 88モデル中 `shown_on` が空なのは `qwen-4-training` / `gpt-5` の2件だけ
+   （どちらもどの面にも出していない行なので、**空が正しい**）。
