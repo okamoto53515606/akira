@@ -215,3 +215,38 @@ ECR `akira:latest` digest `sha256:a9ddd65b…`。詳細は
 
 詳細: [`docs/incident-2026-11-22-calculator-and-changelog.md`](./incident-2026-11-22-calculator-and-changelog.md)
 
+---
+
+## 9. 2026-11-24 追記（Claudeエンジニアが起動しない／共有MCPの同時起動レース）
+
+11-24 05:00 の定時ランで、**Claudeエンジニアが一度も起動しなかった**。
+`the client session is currently running` で Agent生成が2回連続失敗。サイトの健全性
+（公開契約・`self_check`・ページ監査）は全部 ERROR 0 で、壊れたのは「委任先を組み立てる」
+段階だけだった。本命の `qwen4-max-preview` の3面反映（11/25 期限）は未実施。
+
+| # | 事象 | 原因（コードの事実） | 打ち手 | 結果 |
+|---|---|---|---|---|
+| 1 | エンジニアのAgent生成が2回とも `Failed to start MCP client: the client session is currently running`（05:14:08 に同一秒・同一オブジェクト） | Akiraが `ask_claude_engineer` と `ask_gemini_mother` を**同じターンで並列に**呼んだ。brave/firecrawl の MCPClient は委任先3AIで共有。strands の `load_tools()` は `_tool_provider_started` が False なら `start()` を呼ぶが、このフラグは**起動完了後**に立つ。2スレッドが同時に生成すると後発が「起動中」を見て `start()` を拒否される | Agentの**生成だけ**を `_MCP_INIT_LOCK` で直列化（実行は並列のまま。2人目は起動済みツールを再利用） | **完了**。エンジニア3回とも起動（100/76/9ツール） |
+| 2 | 既存の再試行が同じ穴に落ちた | 11-17 の `_revive_dead_mcp()` は「started だが session 死亡」だけを扱い、**未started＋session生存（＝他スレッドが起動中）** を「正常」として素通り。再試行は待たずに同じ `start()` を叩いた | 3状態（正常／接続切れ／起動中）で分岐。「起動中」は `stop()` せず（相手の道具を殺す・keepaliveも消える）最大180秒待つ | **完了**。`test_regression_20261124.py` 8/8 |
+| 3 | 定時ランで落ちた作業のやり直し | ハーネス側の不具合なので、次回まで待つと 11/25 期限に間に合わない | 修正イメージで Fargate を1回だけ再実行（`run-task`）。依頼文は書かず site_plan から Akira 自身に選ばせる | **完了**。台帳ズレ4件→0、`/glm-5-3-flash/` 刷新、GLM-5.4 を三面反映、changelog 11-24 に3件 |
+
+### この1件から出た原則（§4 の核に足す）
+
+- **共有リソースの初期化は「生成フェーズ」で直列化する**。実行を並列にしたいことと、
+  初期化を並列にしてよいことは別。ロックは「生成」にだけ掛ける。
+- **状態は2値でなく3値で扱う**（正常／死んでいる／起動中）。「未開始」を「正常」と
+  同一視したせいで、リトライが同じ穴に落ちた。
+- **リトライは「原因が解消する経路」を持たせる**。待たずに同じ呼び出しを繰り返す
+  リトライは、失敗を2回記録するだけ。
+- **壊れたのはハーネスでも、直す作業はAkiraに任せられる**。原因を1つ潰せば
+  既存の判断ループ（site_plan → 企画 → 委任 → ゲート → 日報）がそのまま回る。
+
+### デプロイ（11-24）
+
+ECR `akira:latest` digest `sha256:1c45cd9d…`（タスク定義 `akira-daily:23` は `:latest`
+参照のため更新不要）。検証は `test_regression_20261124.py` 8/8（ローカル py3.10 と
+イメージ内 py3.12）、既存回帰 19日 ALL PASS / 21日 96/96 / 22日 20/20。
+再実行は `task/akira/efc1ec2553a940acb51b2d3510d112fd`（06:13:45〜06:32:38 JST・exit 0）。
+
+詳細: [`docs/incident-2026-11-24-engineer-mcp-race.md`](./incident-2026-11-24-engineer-mcp-race.md)
+

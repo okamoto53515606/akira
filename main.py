@@ -16,6 +16,7 @@ import logging
 import os
 import re
 import signal
+import threading
 import time
 import types
 from datetime import datetime, timezone
@@ -635,6 +636,30 @@ def _sanitize_review(text: str) -> str:
 # 落として次の依頼で起動し直す（その窓で回線が死んだままになる事故がある）。
 _MCP_KEEPALIVE = "akira-harness-keepalive"
 
+# MCPクライアントの「起動」はスレッドセーフではない（2026-11-24 実事故）。
+#
+# strands の MCPClient.load_tools() は `_tool_provider_started` を見て start() を
+# 呼び、このフラグが立つのは**起動が完了した後**。Akira が ask_gemini_mother と
+# ask_claude_engineer を同じターンで並列に呼ぶと、2スレッドが同じ MCPClient
+# （brave/firecrawl は委任先3AIで共有）を同時に start() し、後から入った方が
+# `MCPClientInitializationError: the client session is currently running` で落ちる。
+# 2026-11-24 05:14 の「Claudeエンジニアが起動しない」がこれ。
+# 対策: Agent の**生成**（＝MCPの起動）だけをこのロックで直列化する。依頼の実行は
+# 並列のままなので、待ち時間は増えない（2人目は起動済みのツールを再利用する）。
+_MCP_INIT_LOCK = threading.RLock()
+_MCP_START_WAIT_SECONDS = 180
+
+
+def _mcp_started(client) -> bool:
+    return bool(getattr(client, "_tool_provider_started", False))
+
+
+def _mcp_active(client) -> bool:
+    try:
+        return bool(client._is_session_active())
+    except Exception:  # noqa: BLE001
+        return False
+
 
 def _iter_mcp_clients(tools):
     """ツール一覧から MCPClient（= ToolProvider）だけを取り出す。"""
@@ -656,20 +681,32 @@ def _revive_dead_mcp(tools, where: str) -> int:
         `RuntimeError: Connection to the MCP server was closed` で**Agentの生成
         そのものが落ちる**。2026-11-17 05:34 の2回目の依頼がこれで全滅した
         （エンジニアのAgent生成時 / 3つのMCPを共有していた）。
-    何をするか:
-        started なのに session が生きていないクライアントを stop() で初期化し、
-        次の load_tools() で start() させる。戻り値は復旧した数。
+    何をするか（3状態で分岐する。2026-11-24 に状態2と3の取り違えで事故）:
+        1. started かつ session 生存 → 正常。何もしない
+        2. started だが session 死亡 → stop() で初期化し、次の load_tools で start させる
+        3. **未started だが session 生存 → 他スレッドが起動中**。ここで stop() すると
+           並列で動いている相手のAgentの道具を殺す。起動完了を待つだけにする。
+           2026-11-24 はこの状態で、待たずに再試行したため start() が
+           「the client session is currently running」で2回とも失敗した。
+    戻り値は復旧した数。
     """
     revived = 0
     for c in _iter_mcp_clients(tools):
-        try:
-            if not getattr(c, "_tool_provider_started", False):
-                continue
-            active = bool(c._is_session_active())
-        except Exception:  # noqa: BLE001
-            active = False
-        if active:
+        started = _mcp_started(c)
+        active = _mcp_active(c)
+        if started and active:
             continue
+        if (not started) and active:
+            # 他スレッドが start() の途中。止めずに、フラグが立つまで待つ。
+            logger.info("MCP起動中なので完了を待ちます（%s）", where)
+            wait_until = time.time() + _MCP_START_WAIT_SECONDS
+            while time.time() < wait_until:
+                if _mcp_started(c) or not _mcp_active(c):
+                    break
+                time.sleep(0.2)
+            if _mcp_started(c):
+                continue
+            logger.warning("MCPの起動待ちがタイムアウトしました（%s）。作り直します", where)
         logger.warning("MCP接続が切れたままだったので作り直します（%s）", where)
         try:
             c.stop(None, None, None)
@@ -689,7 +726,9 @@ def create_delegation_tools(models, run_budget_jpy: float, block_publish: bool =
     """3AIを「ツール」としてAkiraに渡す（agent-as-toolパターン）。
 
     各呼び出しのトークン使用量は個別モデルIDで akira-usage に記録する。
-    MCPクライアントはセッション競合を避けるためエージェントごとに個別生成する。
+    MCPクライアント（brave/firecrawl/github）は**3AIで共有**する。共有すると
+    「Agentが消えたら接続を閉じる」既定動作が邪魔になるので常駐consumer を付け、
+    生成（＝MCPの起動）は _MCP_INIT_LOCK で直列化する（2026-11-24）。
     run_budget_jpy: 今回実行で使える上限（＝月次予算の残額。ハードリミット）。
     """
     from strands import Agent, tool
@@ -716,24 +755,27 @@ def create_delegation_tools(models, run_budget_jpy: float, block_publish: bool =
                 return _STOP_WORK_MSG
             # MCPが死んだままだと Agent の生成そのものが落ちる（2026-11-17）。
             # 毎回ここで健康確認してから作る。
-            _revive_dead_mcp(_shared_mcp, name)
-            try:
-                agent = make_agent()
-            except Exception as e:  # noqa: BLE001
-                logger.warning("%s のAgent生成に失敗（%s: %s）。MCPを作り直して1回だけ再試行します",
-                               name, type(e).__name__, str(e)[:160])
-                _revive_dead_mcp(_shared_mcp, name + "/再試行")
+            # さらに、Akira は2人以上を同じターンで並列に呼ぶことがある。MCPの起動は
+            # スレッドセーフでないため、生成そのものをロックで直列化する（2026-11-24）。
+            with _MCP_INIT_LOCK:
+                _revive_dead_mcp(_shared_mcp, name)
                 try:
                     agent = make_agent()
-                except Exception as e2:  # noqa: BLE001
-                    logger.error("%s のAgent生成に再試行しても失敗（%s: %s）",
-                                 name, type(e2).__name__, str(e2)[:160])
-                    return (
-                        f"【{name}: 起動できず】{type(e2).__name__}: {str(e2)[:200]}\n"
-                        f"MCPクライアントの再接続に失敗した。作業は何も実行していない。"
-                        f"同じ依頼をこのランで送り直さず、日報に「{name}が起動できなかった」"
-                        f"と書いて終了せよ。"
-                    )
+                except Exception as e:  # noqa: BLE001
+                    logger.warning("%s のAgent生成に失敗（%s: %s）。MCPを作り直して1回だけ再試行します",
+                                   name, type(e).__name__, str(e)[:160])
+                    _revive_dead_mcp(_shared_mcp, name + "/再試行")
+                    try:
+                        agent = make_agent()
+                    except Exception as e2:  # noqa: BLE001
+                        logger.error("%s のAgent生成に再試行しても失敗（%s: %s）",
+                                     name, type(e2).__name__, str(e2)[:160])
+                        return (
+                            f"【{name}: 起動できず】{type(e2).__name__}: {str(e2)[:200]}\n"
+                            f"MCPクライアントの再接続に失敗した。作業は何も実行していない。"
+                            f"同じ依頼をこのランで送り直さず、日報に「{name}が起動できなかった」"
+                            f"と書いて終了せよ。"
+                        )
             tools_before = _tool_call_count(agent)
             # item_id を依頼文の末尾に機械で足す（Akira が書き忘れても効くように）。
             # 2026-11-21 の実機では、エンジニアが `NOT_DONE: 公開（…` と id 無しで
