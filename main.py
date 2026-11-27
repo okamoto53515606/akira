@@ -509,7 +509,24 @@ def _create_bigquery_mcp():
     )
 
 
-def _evidence_block(max_files: int = 6, max_chars: int = 6000) -> str:
+def _evidence_keywords(text: str) -> set:
+    """依頼文から「ファイル名と突き合わせる語」を作る（2026-11-27 追加）。
+
+    英字の語・URLのホスト・モデルIDの断片だけを使う（日本語はファイル名に
+    現れないので落とす）。`z.ai` → `zai` のように区切りを落とした形も作る。
+    """
+    out: set = set()
+    for word in re.findall(r"[A-Za-z][A-Za-z0-9._\-]{2,}", text or ""):
+        low = word.lower()
+        out.add(low)
+        out.add(re.sub(r"[._\-]", "", low))
+        for part in re.split(r"[._\-/]", low):
+            if len(part) >= 3:
+                out.add(part)
+    return {t for t in out if len(t) >= 3}
+
+
+def _evidence_block(max_files: int = 10, max_chars: int = 6000, request: str = "") -> str:
     """レビュー担当に渡す「本日取得した一次情報」だけの前置き（2026-11-14 追加）。
 
     11-14 の GPT税理士は「提示された当日取得のGoogle一次情報によれば」と書いて
@@ -519,10 +536,22 @@ def _evidence_block(max_files: int = 6, max_chars: int = 6000) -> str:
 
     対策は「古い証拠を読ませない」こと。当日の cache（本文冒頭の『取得日時:』が今日）
     だけを文字列にして前置きする。mtime は restore/save で毎日当日になるので使わない。
+
+    2026-11-27 修正（11-26 の課題188）:
+        以前はファイル名の**アルファベット順に6件で打ち切って**いた。11-26 は当日の
+        cache が12件あり、先頭6件が deepseek / kimi / openai（for-healthcare・
+        announcement・models-docs）で埋まったため、**`openai-pricing` と `zai-*` が
+        丸ごと落ちた**。GPT税理士は「一次情報が無い」と書き、Akiraは「中身はあるのに
+        渡っていない」と記録した（課題188）。黙って落とすのが一番まずいので、
+          1. 依頼文の語とファイル名の一致で**並べ替え**（関係ない証拠で枠を埋めない）
+          2. 上限を10件に広げる
+          3. 打ち切ったファイル名を**明示**する（無いのではなく入っていない、と分かる）
+        の3点に変えた。
     """
     cache_dir = os.path.join(WORKSPACE_LOCAL_DIR, "cache")
     today = datetime.now(JST).date().isoformat()
-    chunks: list[str] = []
+    keywords = _evidence_keywords(request)
+    cands: list[tuple[float, str, str]] = []
     try:
         if os.path.isdir(cache_dir):
             for name in sorted(os.listdir(cache_dir)):
@@ -531,29 +560,43 @@ def _evidence_block(max_files: int = 6, max_chars: int = 6000) -> str:
                 path = os.path.join(cache_dir, name)
                 try:
                     with open(path, encoding="utf-8", errors="replace") as fh:
-                        if ("取得日時: %s" % today) not in fh.read(300):
-                            continue
-                        fh.seek(0)
-                        chunks.append("### %s\n%s" % (name, fh.read(max_chars)))
+                        text = fh.read()
                 except OSError:
                     continue
-                if len(chunks) >= max_files:
-                    break
+                if ("取得日時: %s" % today) not in text[:300]:
+                    continue
+                low = name.lower()
+                score = float(sum(1 for k in keywords if k in low))
+                if score:
+                    # 名前で当たった語が本文にも出るなら、その証拠は本命
+                    score += 0.5 * sum(1 for k in keywords if k in text[:4000].lower())
+                cands.append((score, name, text))
     except OSError:
-        chunks = []
-    if not chunks:
+        cands = []
+    if not cands:
         return (
             "【本日取得した一次情報: なし】\n"
             "今日はまだ一次情報を取得していない。**事実の断定をしないこと**。\n"
             "古い記憶や古いキャッシュを根拠に『クリティカル』と判定してはいけない。\n"
             "確認したい点だけを挙げ、事実は『未確認』と書く。\n\n"
         )
+    # 関連度→名前の順（同じ入力なら同じ並び＝再現できる）
+    cands.sort(key=lambda c: (-c[0], c[1]))
+    chosen = cands[:max_files]
+    omitted = [c[1] for c in cands[max_files:]]
+    chunks = ["### %s\n%s" % (name, text[:max_chars]) for _, name, text in chosen]
     body = "\n\n".join(chunks)[:max_chars]
+    note = ""
+    if omitted:
+        note = ("※**本日取得済みだが、この前置きには入れていない証拠**（枠の都合）: %s\n"
+                "  → 必要なら `file_read` で `/workspace/cache/<名前>` を直接読め。"
+                "「一次情報が無い」と書く前に、ここに名前が無いか確認しろ。\n"
+                % ", ".join("`%s`" % o for o in omitted))
     return (
-        "【本日(%s)取得した一次情報。事実の根拠はこの中だけ】\n%s\n\n"
+        "【本日(%s)取得した一次情報。事実の根拠はこの中だけ】\n%s\n%s\n"
         "※ここに無い事実を根拠にクリティカルと判定しないこと。必要なら『未確認』と書く。\n"
         "※クリティカルには『この中のURL＋逐語引用』を必ず併記する。併記できないものは軽微。\n\n"
-        % (today, body)
+        % (today, body, note)
     )
 
 
@@ -777,10 +820,21 @@ def create_delegation_tools(models, run_budget_jpy: float, block_publish: bool =
                             f"と書いて終了せよ。"
                         )
             tools_before = _tool_call_count(agent)
-            # item_id を依頼文の末尾に機械で足す（Akira が書き忘れても効くように）。
+            # item_id を依頼文の**先頭と末尾の両方**に機械で足す（Akira が書き忘れても効く）。
             # 2026-11-21 の実機では、エンジニアが `NOT_DONE: 公開（…` と id 無しで
-            # 書いたため未確認になっていた。
+            # 書いたため未確認になっていた。2026-11-26 は**末尾だけ**に置いたため、
+            # 4.6KB の依頼文の最後の数行が読み飛ばされ、エンジニアが2回とも
+            # 「item_id が提示されていない」と判断して `DONE: gpt-6-2-healthcare`
+            # のような通称を返した（受領書は「書式違い」として拾えたが、機械の
+            # 判定がモデルの注意力に依存していた）。長い依頼では先頭に置くのが効く。
             if item_id and "【受領書】" not in request_to_send:
+                request_to_send = (
+                    "【この依頼の item_id: %s】\n"
+                    "応答の**最終行**は `DONE: %s` か `NOT_DONE: %s（理由を1行）` の"
+                    "どちらかにする。id を付け忘れると機械は**未確認**として日報に残す。\n\n"
+                    % (item_id, item_id, item_id)
+                    + request_to_send.lstrip()
+                )
                 request_to_send = (
                     request_to_send.rstrip()
                     + "\n\n【受領書（この依頼の締め方）】\n"
@@ -956,7 +1010,7 @@ def create_delegation_tools(models, run_budget_jpy: float, block_publish: bool =
             request: レビュー対象（サイト内パスや本文）と確認してほしい観点
         """
         result = _run(_new_gpt_agent, OPENAI_MODEL_ID, "GPT税理士",
-                      _evidence_block() + request)
+                      _evidence_block(request=request) + request)
         return _sanitize_review(result)
 
     @tool
@@ -1375,6 +1429,57 @@ def _release_watch_line(today: str) -> str:
                 "日報に書け。" % type(e).__name__)
 
 
+# 配布元（Azure等）のカタログ照合の結果。実行後にローカルだけを再判定するため保持する。
+_PLATFORM_STATE: dict = {}
+
+
+def _platform_watch_line(today: str) -> str:
+    """配布元カタログ（Azure Foundry 等）の掲載状況をミッション用テキストにする。
+
+    なぜ（2026-11-27）:
+        11-17 に「Azure のカタログは Version 2026-09-10 のまま」と書いた。
+        同じ日に Azure は **`DeepSeek-V4.1-Flash-1017`（2026-10-17）を別エントリで
+        追加**していた。既存エントリの版が上がるのではなく**名前ごと増える**ので、
+        ページの記述は静かに古くなる。にもかかわらず、台帳にもページにも
+        「古くなった」とは書かれないため、誰も気づけなかった（11-26 も未着手）。
+        だから機械が配布元を見に行き、**ページが書いている version と突き合わせる**。
+
+    失敗は「載っていない」ではない。**不明**と明示する。
+    """
+    global _PLATFORM_STATE
+    try:
+        import platform_watch
+    except Exception as e:  # noqa: BLE001
+        logger.warning("platform_watch を読み込めません: %s", e)
+        return ("## 配布元カタログの見張り: **未導入**（platform_watch.py を読めない: %s）"
+                " — 掲載状況の古さは検知できていない。日報に書け。" % type(e).__name__)
+    try:
+        state = platform_watch.scan(today=today, site_dir=akira_tools.SITE_LOCAL_DIR)
+        _PLATFORM_STATE = state
+        return platform_watch.mission_line(state)
+    except Exception as e:  # noqa: BLE001
+        logger.warning("配布元カタログの見張りに失敗（本処理は続行）: %s", e)
+        return ("## 配布元カタログの見張り: **失敗（%s）** — 掲載が無い証拠ではない。"
+                "日報に書け。" % type(e).__name__)
+
+
+def _platform_leftover_line() -> str:
+    """実行後にローカルページだけを見直し、まだ古ければ日報に残す1行を返す。
+
+    Akira（またはエンジニア）が直していれば空文字（日報に出さない）。
+    """
+    if not _PLATFORM_STATE.get("results"):
+        return ""
+    try:
+        import platform_watch
+        after = {"results": [platform_watch.recheck_local(
+            r, site_dir=akira_tools.SITE_LOCAL_DIR) for r in _PLATFORM_STATE["results"]]}
+        return platform_watch.stale_line(after)
+    except Exception as e:  # noqa: BLE001
+        logger.warning("配布元カタログの再判定に失敗: %s", e)
+        return "配布元カタログ: 再判定に失敗（%s）" % type(e).__name__
+
+
 def _missing_tool_warning(mod) -> str:
     """必須ツールに @tool が付いているかを起動時に確認する（2026-11-15 追加）。
 
@@ -1606,6 +1711,8 @@ DAILY_MISSION_TEMPLATE = """今日は {today}（{weekday}）です。LLM Data Hu
   黙ってちゃ伝わらんぞ。表が空になった事故を人間が3.5時間気づかなかった実例がある）
 
 {audit_line}
+
+{platform_line}
 
 {freshness_line}
 
@@ -1955,6 +2062,11 @@ def run_daily(dry_run: bool = False, no_publish: bool = False) -> None:
     watch_line = _release_watch_line(today)
     logger.info("公式ソースの見張り: %s", watch_line.replace("\n", " / ")[:220])
 
+    # 配布元カタログの見張り（2026-11-27）。Azure 等の version が進んだのに
+    # ページが古いまま、を機械で見つける。
+    platform_line = _platform_watch_line(today)
+    logger.info("配布元カタログの見張り: %s", platform_line.replace("\n", " / ")[:400])
+
     theme_line = _propose_themes(today, limit=3, watch_line=watch_line)
     logger.info("企画候補: %s", theme_line.replace("\n", " / ")[:220])
 
@@ -1963,6 +2075,7 @@ def run_daily(dry_run: bool = False, no_publish: bool = False) -> None:
         today=today, weekday=jst_weekday_label(today), site_url=LLM_SITE_URL,
         last_work_line=last_work_line,
         health_line=health_line, freshness_line=freshness_line,
+        platform_line=platform_line,
         theme_line=theme_line, audit_line=audit_line,
     )
     if tool_warn_line:
@@ -2111,11 +2224,19 @@ def run_daily(dry_run: bool = False, no_publish: bool = False) -> None:
             logger.exception("監査の実施確認に失敗しました（続行します）")
             audit_done_line = "ページ監査: 実施確認に失敗（ログ参照）"
 
+        # 配布元カタログとの差が残っているか（2026-11-27）。Akiraが直していれば
+        # 何も出さない。残っていれば**日報に残す**（ミッションで伝えただけでは
+        # 11-17〜11-26 のように素通りする）。
+        platform_left = _platform_leftover_line()
+        if platform_left:
+            logger.warning("配布元カタログの差が残っています: %s", platform_left)
+
         collected["body_md"] = (collected.get("body_md") or "") + (
             "\n\n## 自動メンテナンス（決定論的）\n"
             "- " + rotation_line + "\n"
             "- " + post_line + "\n"
             "- " + audit_done_line + "\n"
+            + ("- " + platform_left + "\n" if platform_left else "")
         )
         akira_tools.flush_invalidations()
         if no_publish:

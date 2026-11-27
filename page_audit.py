@@ -828,7 +828,17 @@ def audit_pages(pages: str = "") -> str:
                 warn += sev == "WARN"
         else:
             lines.append("- %s: 異常なし" % nice)
-    state["last_run"] = runs
+    # last_run は**当日分を累積**する（2026-11-27 修正）。
+    # 以前は呼び出しごとに上書きしていたため、1日に audit_pages を複数回
+    # （ページを分けて、または直したあとの再確認で）呼ぶと、最後の呼び出しの
+    # ページしか残らず、post の verify_assigned が「未実施」と**嘘**をついた。
+    # 11-26 の日報は「ページ監査: 未実施 2件（/image-api-pricing/,
+    # /en/deepseek-v4-pro/）」と書いたが、Akiraは両方監査して ERROR 0 を確認している。
+    merged = {r.get("page"): r for r in (state.get("last_run") or [])
+              if r.get("date") == today and r.get("page")}
+    for r in runs:
+        merged[r["page"]] = r
+    state["last_run"] = list(merged.values())
     state["updated"] = today
     # 監査したページは「変更ページの持ち越し」から外す（2026-11-19）
     done = {r["page"] for r in runs}

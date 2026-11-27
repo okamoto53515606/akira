@@ -38,7 +38,7 @@ RUN uv sync --frozen --no-dev --no-install-project
 # アプリケーションコード
 COPY main.py settings.py budget.py config_store.py tools.py prompts.py report.py trace_store.py ./
 # ページ監査（page_audit）とOGカード生成（og_card）: 2026-11-17 追加
-COPY page_audit.py og_card.py ./
+COPY page_audit.py og_card.py platform_watch.py ./
 # 日報の共通CSS・favicon・apple-touch-icon（2026-11-21 追加）
 COPY report_assets/ ./report_assets/
 COPY gcp-workload-config-template.json ./
@@ -49,7 +49,7 @@ COPY gcp-workload-config-template.json ./
 # （2026-09-27に実際に踏みかけた。import tools だけの検品では見逃す）。
 # ここで落とせば「壊れたイメージをビルド・push する」事故を防げる。
 # ※ ENV PATH の設定より前に置いているため、venv の python を絶対パスで呼ぶ
-RUN /app/.venv/bin/python -c "import budget, config_store, prompts, report, settings, tools, main, page_audit, og_card, trace_store"
+RUN /app/.venv/bin/python -c "import budget, config_store, prompts, report, settings, tools, main, page_audit, og_card, trace_store, platform_watch"
 
 # npx の Brave Search MCP と Firecrawl MCP を事前キャッシュ
 RUN npx -y @brave/brave-search-mcp-server --help 2>/dev/null || true

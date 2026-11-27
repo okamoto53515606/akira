@@ -1543,6 +1543,11 @@ def check_published_contracts() -> dict:
     #     既存ゲートでは捕まらないので、**公開中の現物**を台帳と突き合わせる。
     violations += _published_calculator_gaps()
 
+    # C7. ローカルの描画結果と公開中の計算機データがずれていないか（2026-11-27 追加）
+    #     11-26 の課題199: /tmp/site の models.json が61件・公開は59件。C1/C5 は
+    #     「公開中の現物」しか見ないので、**描いて公開し忘れた**状態は緑のままだった。
+    violations += _local_vs_published_models_gap()
+
     # C6. トップの「直近の更新」が台帳の最新イベントと一致するか（2026-11-22 追加）
     #     /changelog/ を新しい site_events から描き直しても、トップの
     #     「直近の更新」ブロックは render_home が別に描く。片方だけ公開すると
@@ -1602,6 +1607,53 @@ def _published_calculator_gaps() -> list:
                     "（render で models.json が変わったのに公開されていない疑い）"
                     " → publish_and_verify で描画し直して公開する" % mid)
     return gaps[:10]
+
+
+def _local_vs_published_models_gap() -> list:
+    """ローカルの描画結果と公開中の計算機データの差を返す（2026-11-27 追加）。
+
+    なぜ:
+        11-26 の日報（課題199）は「/tmp/site の data/models.json が61件、公開は
+        59件。計算機が2モデル遅れている可能性がある。**契約チェックは通っている
+        から、表が欠けても誰も叫ばない**」と書いた。C1（スキーマ）も C5（台帳の
+        GA モデルが公開中にあるか）も**公開中の現物しか見ない**ので、描画したのに
+        公開し忘れた状態は検出できない。ここで初めて「ローカル vs 公開」を見る。
+
+    ローカルが無い（site_download 前）・公開が取れない場合は何も言わない
+    （C1 側が報告する。誤検知で日次を止めない）。
+    """
+    import unicodedata
+
+    def _n(text) -> str:
+        return unicodedata.normalize("NFKC", str(text)).lower().replace(" ", "")
+
+    path = os.path.join(SITE_LOCAL_DIR, DATA_MODELS_KEY)
+    if not os.path.exists(path):
+        return []
+    try:
+        with open(path, encoding="utf-8") as fh:
+            local = json.load(fh)
+    except Exception:  # noqa: BLE001
+        return ["%s: ローカルのファイルがJSONとして読めない（描画が壊れている疑い）"
+                % DATA_MODELS_KEY]
+    status, body, _err = _http_get(f"{LLM_SITE_URL}/{DATA_MODELS_KEY}")
+    if status != 200:
+        return []                     # 取得失敗は C1 が報告する
+    try:
+        live = json.loads(body.decode("utf-8"))
+    except Exception:  # noqa: BLE001
+        return []
+    local_rows = [m for m in (local.get("models") or []) if isinstance(m, dict)]
+    live_names = {_n(m.get("name", "")) for m in (live.get("models") or [])
+                  if isinstance(m, dict)}
+    missing = [m.get("name", "?") for m in local_rows if _n(m.get("name", "")) not in live_names]
+    if not missing:
+        return []
+    return ["%s: ローカルに %d 行・公開は %d 行。ローカルにしか無いモデル: %s"
+            "（描画したのに公開していない）→ publish_and_verify で "
+            "data/models.json も公開する"
+            % (DATA_MODELS_KEY, len(local_rows), len(live_names),
+               ", ".join(missing[:6]))]
 
 
 def _published_home_gaps() -> list:
