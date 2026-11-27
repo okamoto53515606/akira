@@ -1504,6 +1504,33 @@ def _missing_tool_warning(mod) -> str:
             "**この欠落を日報の冒頭と site_plan に書け**。\n" % ", ".join(missing))
 
 
+def _workspace_tool_skip_line(mod) -> str:
+    """ワークスペースの自作ツールで「@tool はあるのに読めなかった」ものを可視化する。
+
+    なぜ（2026-11-28）:
+        `tools/` には @tool を持たないCLIスクリプト（check_page_shape 等）が
+        同居していて、ローダーが毎朝4件×2回「@tool を付けた TOOL 変数が定義
+        されていません」と出していた。意味のない警告が並ぶと、本物のスキップ
+        （2026-11-15 の site_upload 欠落）が埋もれる。ローダー側でスクリプトは
+        静かに飛ばすようにし、**本当に落ちたものだけ**ミッションの先頭に出す。
+    """
+    getter = getattr(mod, "workspace_tool_skips", None)
+    if not callable(getter):
+        return ""
+    try:
+        skips = getter() or []
+    except Exception:  # noqa: BLE001
+        return ""
+    if not skips:
+        return ""
+    logger.error("ワークスペースツールの読み込み失敗: %s", skips)
+    return ("## ⚠️ 自作ツールの読み込み失敗（機械検知）\n"
+            + "\n".join("- `%s` … %s" % (s.get("file"), s.get("reason"))
+                        for s in skips[:10])
+            + "\n- これらは今日は使えない。**代わりの手順で進め、日報と site_plan に"
+              "書け**（黙って別の方法に逃げるな）。\n")
+
+
 def _surfaces_shown(facts: dict, site_dir: str) -> dict:
     """台帳の各モデルが「公開ページのどこに出ているか」を**実物から**判定する。
 
@@ -2080,6 +2107,9 @@ def run_daily(dry_run: bool = False, no_publish: bool = False) -> None:
     )
     if tool_warn_line:
         mission = tool_warn_line + "\n" + mission
+    skip_line = _workspace_tool_skip_line(akira_tools)
+    if skip_line:
+        mission = skip_line + "\n" + mission
     if dry_run:
         mission += "\n\n【重要】今日はドライランです。公開・依頼は行わず、計画の提示だけしてください。"
     if no_publish:

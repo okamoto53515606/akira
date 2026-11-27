@@ -37,9 +37,27 @@ import json
 import os
 import re
 import sys
-from datetime import date, datetime
+from datetime import date, datetime, timedelta, timezone
 
 from strands import tool
+
+JST = timezone(timedelta(hours=9))
+
+
+def _today() -> str:
+    """JST の今日（YYYY-MM-DD）。
+
+    なぜ（2026-11-28）:
+        コンテナの時計は UTC。`date.today()` だと JST 05:00 のランで**前日**に
+        なる（課題155と同じ型。render_site は 11-17 に直したが、ここは残って
+        いた）。しかも同日の `main.run_daily` は `datetime.now(JST)` で
+        `today` を作り、`mission_line(today)` に渡す。つまり
+        **assignments は JST のキーで書かれ、audit_pages は UTC のキーで
+        読む/書く**ので、`verify_assigned` は永久に一致せず「未実施」と言う。
+        11-28 の日報は実際に監査して ERROR 0 だったのに
+        「ページ監査: **未実施 2件**」と書いた（11-26 の逆方向の嘘）。
+    """
+    return datetime.now(JST).date().isoformat()
 
 WORKSPACE_DIR = os.environ.get("WORKSPACE_LOCAL_DIR") or "/workspace"
 SITE_DIR = os.environ.get("SITE_LOCAL_DIR") or "/tmp/site"
@@ -704,7 +722,7 @@ def note_changed(pages):
     state = _load(STATE_PATH, {})
     pend = [p for p in (state.get("pending") or []) if p not in rels]
     state["pending"] = (rels + pend)[:40]
-    state["updated"] = date.today().isoformat()
+    state["updated"] = _today()
     _save(STATE_PATH, state)
     return rels
 
@@ -712,7 +730,7 @@ def note_changed(pages):
 # ---------------------------------------------------------------- 対象選定
 def pick_targets(today=None, n=PER_RUN, write=True):
     """今日の監査対象を**コードで**決める（LLMの判断を挟まない）。"""
-    today = today or date.today().isoformat()
+    today = today or _today()
     state = _load(STATE_PATH, {})
     seen = state.get("pages", {})
     rows = priority()
@@ -765,7 +783,7 @@ def mission_line(today=None):
 
 def verify_assigned(today=None):
     """その日に割り当てた監査が実際に走ったかを検算する（後処理用）。"""
-    today = today or date.today().isoformat()
+    today = today or _today()
     state = _load(STATE_PATH, {})
     assigned = (state.get("assignments") or {}).get(today) or []
     if not assigned:
@@ -794,7 +812,7 @@ def audit_pages(pages: str = "") -> str:
     Returns:
         検査レポート。ERROR が1件でもあれば、その日のうちに直すこと。
     """
-    today = date.today().isoformat()
+    today = _today()
     state = _load(STATE_PATH, {})
     if pages.strip():
         rels = [p.strip().lstrip("/") for p in re.split(r"[,\s]+", pages) if p.strip()]
@@ -879,7 +897,7 @@ def set_page_priority(entries: str) -> str:
     pages.sort(key=lambda p: -p["score"])
     _save(PRIORITY_PATH, {
         "schema_note": DEFAULT_PRIORITY["schema_note"],
-        "updated": date.today().isoformat(),
+        "updated": _today(),
         "source": "set_page_priority（AkiraがGA4/GSCの実測から更新）",
         "pages": pages,
     })

@@ -40,6 +40,10 @@ from settings import (
 
 _invalidation_paths: list[str] = []  # 実行終盤にまとめてinvalidation
 
+# 直前の load_workspace_tools() で「@tool を持っているのに読めなかった」ファイル。
+# CLIスクリプト（@tool を持たない）は入れない（2026-11-28）。
+_WORKSPACE_TOOL_SKIPS: list[dict] = []
+
 logger = logging.getLogger("akira.tools")
 
 # サイト全体をローカルに展開する作業フォルダ。タスク開始時に run_daily が S3 から全件DLする。
@@ -114,6 +118,16 @@ MODELS_MIN_ROWS = 10  # 実データは38行。桁違いの縮小（取り違え
 CALC_FX_DEFAULT = 155.0  # サイト全体のルール（1ドル=155円固定）。台帳 facts.fx が正
 CALC_FX_KEY = "fx"
 CALC_FX_FIELD = "usd_jpy"
+# 業種別構成（for Law / for Healthcare など）は**料金表と年表にだけ**載せ、
+# 計算機には入れない（2026-11-26 の決定）。
+# なぜコードに書くか（2026-11-28）:
+#   11-26 は決定を文章（lessons / site_plan）に書いただけだった。台帳の
+#   `shown_on` には `calculator` が残り、11-28 のランで healthcare 2件が
+#   計算機データに混入した（59→61）。しかも描画の `write_back_shown_on` が
+#   「計算機に載っている」ことを根拠に `calculator` を**逆流**させ、除外設定
+#   そのものを消していた。文章の決定は、データにもゲートにも書かないと効かない。
+# 増やすときはここに足す（描画側の除外と二重にする＝片方が壊れても止まる）。
+CALC_EXCLUDED_NAME_PATTERNS = ("for law", "for healthcare")
 BASELINE_MODELS_PATH = os.path.join(WORKSPACE_LOCAL_DIR, "data", "calculator-models.json")
 _SOT_MARKERS = ("schema_note", "stale_price_patterns", "stale_policy")
 
@@ -211,6 +225,15 @@ def validate_calculator_models(payload: object) -> list[str]:
             errors.append("models[%d] に必須キーがありません: %s" % (i, ",".join(missing)))
         if not isinstance(m.get("provider"), str) or not m.get("provider"):
             errors.append("models[%d].provider が空です" % i)
+        # 業種別構成は計算機に入れない（2026-11-26 の決定をここで物理的に止める）。
+        _low = str(m.get("name") or "").lower()
+        _deny = [p for p in CALC_EXCLUDED_NAME_PATTERNS if p in _low]
+        if _deny:
+            errors.append(
+                "models[%d].name=%r は業種別構成（%s）。料金表・年表にだけ載せ、"
+                "計算機には入れない決定（2026-11-26）"
+                % (i, m.get("name"), _deny[0])
+            )
         for field in ("input", "output"):
             v = m.get(field)
             if isinstance(v, bool) or not isinstance(v, (int, float)) or v <= 0:
@@ -243,6 +266,34 @@ def _save_models_baseline(data: bytes) -> str | None:
         return BASELINE_MODELS_PATH
     except OSError:
         return None
+
+
+def _gate_data_file(rel: str, local_path: str) -> tuple[bytes | None, list[str]]:
+    """公開直前のデータ契約チェック（data/models.json だけが対象）。
+
+    戻り値: (検査済みのバイト列, 違反リスト)。対象外のキーは (None, [])。
+
+    なぜ（2026-11-28）:
+        公開経路が4本ある（`publish_file_to_site` / `site_upload` /
+        `repair_calculator_fx` / `publish_and_verify`）のに、契約ゲートと
+        ベースライン保存は**最初の3本にしか無かった**。
+        11-28 のランは Akira が `publish_and_verify` で data/models.json を
+        公開したため、
+          ① 壊れた計算機データを止める物理防御の外側を通った
+          ② 「最後に公開した正常版」（修復の原資）が 59行・
+             `GPT-6.2 Astra for Law` 入りの**旧版のまま**残った
+        実測: ベースラインは同日 05:22:46 に公開した59行版とバイト一致。
+        つまり次に計算機データが壊れたら、自動復元で Law 行が**復活する**。
+    経路ごとに書くと、また1本増えたときに同じ穴が開く。ここに1本化する。
+    """
+    if rel != DATA_MODELS_KEY:
+        return None, []
+    try:
+        with open(local_path, "rb") as fh:
+            body = fh.read()
+    except OSError as e:
+        return None, ["読み込み失敗: %s" % e]
+    return body, _site_data_errors(rel, body)
 
 
 @tool
@@ -1594,6 +1645,12 @@ def _published_calculator_gaps() -> list:
         price = r.get("price") or {}
         if price.get("input") is None or price.get("output") is None:
             continue       # 単価が無いのは C1 側（ga-without-price）の担当
+        # 業種別構成は計算機に入れない決定（2026-11-26）。C1（validate_calculator_models）
+        # が公開を拒否するので、ここで「無い」と叫ぶと**永久に直せない違反**になる
+        # （2026-11-28 追加）。
+        if any(_n(p) in _n("%s %s" % (price.get("name") or "", mid))
+               for p in CALC_EXCLUDED_NAME_PATTERNS):
+            continue
         # 台帳の名前は「Claude Fable 5.2 / Mythos 5.2」のように別名を含むことが
         # あり、計算機側は price.name（"Claude Fable 5.2"）で登録されている。
         # スラッシュ区切りの別名・price.name・id のどれかで一致すれば OK。
@@ -2301,11 +2358,24 @@ def load_workspace_tools() -> list:
     - 1ファイルでもimportに失敗したらスキップして続行（1個の壊れたツールで
       日次実行全体を止めない）
     - 同名ツールの重複・上限件数（WORKSPACE_TOOLS_MAX）もガード
+
+    「静かに落ちる」を止める（2026-11-28）:
+        `tools/` には**ツールではないCLIスクリプト**が同居している
+        （check_page_shape.py / check_sections.py / check_css_contract.py /
+        check_site_integrity.py。self_check が subprocess で叩く）。従来は
+        これらにも「@tool を付けた TOOL 変数が定義されていません」と出ていた。
+        毎朝4件×2回、意味のない警告が並ぶと **本物のスキップが埋もれる**
+        （2026-11-15 は site_upload の @tool が1行消えているのを人間が見落とし、
+        「ツールが無い→boto3でバケット名を総当たり」の高コスト経路に逃避した）。
+        → @tool を1つも持たないファイルは**スクリプトとして静かに飛ばし**、
+          @tool はあるのに解決できない／import に失敗した**本物の異常だけ**
+          WARNING を出して `workspace_tool_skips()` に残す（ミッションに載せる）。
     """
     import glob
     import importlib.util
     import sys
 
+    _WORKSPACE_TOOL_SKIPS.clear()
     tools_dir = os.path.join(os.path.abspath(WORKSPACE_LOCAL_DIR), "tools")
     if not os.path.isdir(tools_dir):
         return []
@@ -2327,25 +2397,41 @@ def load_workspace_tools() -> list:
             sys.modules[modname] = module
             spec.loader.exec_module(module)
             candidate = getattr(module, "TOOL", None)
+            decorated = [
+                v for v in vars(module).values()
+                if hasattr(v, "tool_spec") and getattr(v, "tool_name", None)
+            ]
             if candidate is None:
                 # TOOL代入の書き忘れ対策: @tool 付き関数が1個だけならそれを TOOL とみなす
                 # （複数ある場合は曖昧なのでスキップ。変数名からは意図が読めないため）
-                decorated = [
-                    v for v in vars(module).values()
-                    if hasattr(v, "tool_spec") and getattr(v, "tool_name", None)
-                ]
                 if len(decorated) == 1:
                     candidate = decorated[0]
             if candidate is None or not hasattr(candidate, "tool_spec"):
-                raise ValueError("@tool を付けた TOOL 変数が定義されていません")
+                if not decorated:
+                    # @tool を持たない＝ツールではなくCLIスクリプト。
+                    # self_check / site_upload が subprocess で叩く想定なので静かに飛ばす。
+                    continue
+                raise ValueError(
+                    "@tool が %d 個あり TOOL を決められません（1ファイル1ツール。"
+                    "`TOOL = <関数名>` を書く）" % len(decorated))
             tool_name = getattr(candidate, "tool_name", stem)
             if tool_name in seen_names:
                 continue  # 同名は先勝ち
             seen_names.add(tool_name)
             loaded.append(candidate)
         except Exception as e:
-            print(f"[workspace] ツールのロードをスキップ: {os.path.basename(path)}: {e}")
+            name = os.path.basename(path)
+            _WORKSPACE_TOOL_SKIPS.append({"file": name, "reason": str(e)})
+            logger.warning("[workspace] ツールのロードをスキップ: %s: %s", name, e)
     return loaded
+
+
+def workspace_tool_skips() -> list:
+    """直前の `load_workspace_tools()` で**本当に落ちた**ツールの一覧。
+
+    CLIスクリプト（@tool を持たないファイル）は含めない。
+    """
+    return list(_WORKSPACE_TOOL_SKIPS)
 
 
 @tool
@@ -2534,9 +2620,19 @@ def publish_and_verify(paths: str = "", live: bool = True) -> dict:
     # 4. アップロード
     for rel in ok_targets:
         try:
-            s3.upload_file(os.path.join(base_dir, rel), LLM_SITE_BUCKET, rel,
-                           ExtraArgs={"ContentType": _content_type(rel),
-                                      "CacheControl": _cache_control(rel)})
+            body, gate_errors = _gate_data_file(rel, os.path.join(base_dir, rel))
+            if gate_errors:
+                result["rejected"].append({"key": rel, "errors": gate_errors})
+                continue
+            if body is not None:
+                s3.put_object(Bucket=LLM_SITE_BUCKET, Key=rel, Body=body,
+                              ContentType=_content_type(rel),
+                              CacheControl=_cache_control(rel))
+                _save_models_baseline(body)
+            else:
+                s3.upload_file(os.path.join(base_dir, rel), LLM_SITE_BUCKET, rel,
+                               ExtraArgs={"ContentType": _content_type(rel),
+                                          "CacheControl": _cache_control(rel)})
             _invalidation_paths.append("/" + rel)
             result["published"].append(rel)
         except Exception as e:  # noqa: BLE001
@@ -2560,12 +2656,24 @@ def publish_and_verify(paths: str = "", live: bool = True) -> dict:
                 continue
             if not os.path.exists(local):
                 continue
+            body, gate_errors = _gate_data_file(rel, local)
+            if gate_errors:
+                result["rejected"].append({"key": rel, "errors": gate_errors[:6]})
+                continue
             try:
-                s3.upload_file(local, LLM_SITE_BUCKET, rel,
-                               ExtraArgs={"ContentType": _content_type(rel),
-                                          "CacheControl": _cache_control(rel)})
+                if body is not None:
+                    s3.put_object(Bucket=LLM_SITE_BUCKET, Key=rel, Body=body,
+                                  ContentType=_content_type(rel),
+                                  CacheControl=_cache_control(rel))
+                else:
+                    s3.upload_file(local, LLM_SITE_BUCKET, rel,
+                                   ExtraArgs={"ContentType": _content_type(rel),
+                                              "CacheControl": _cache_control(rel)})
                 _invalidation_paths.append("/" + rel)
                 result["published"].append(rel)
+                if body is not None:
+                    # 修復の原資を必ず最新の公開版に更新する（2026-11-28）
+                    _save_models_baseline(body)
             except Exception as e:  # noqa: BLE001
                 result["rejected"].append({"key": rel, "errors": ["upload: %s" % e]})
 

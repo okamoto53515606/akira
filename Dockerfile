@@ -55,9 +55,17 @@ RUN /app/.venv/bin/python -c "import budget, config_store, prompts, report, sett
 RUN npx -y @brave/brave-search-mcp-server --help 2>/dev/null || true
 RUN npx -y firecrawl-mcp --help 2>/dev/null || true
 
+# 2026-11-28: 標準出力をブロックバッファしない。
+# 既定のままだと strands の callback（"Tool #N:" や独白）が最後にまとめて
+# 吐かれ、CloudWatch 上で**日報公開より後に独白が並ぶ**（時系列が読めない）。
+# 同日は更に stdout のバッファが満杯で
+# `BlockingIOError: [Errno 11] write could not complete without blocking` が
+# logging.emit の中で起き、ワークスペース保存の行が1件**失われた**。
+
 ENV PATH="/app/.venv/bin:$PATH" \
     GCP_WORKLOAD_IDENTITY_TEMPLATE="/app/gcp-workload-config-template.json" \
-    BYPASS_TOOL_CONSENT=true
+    BYPASS_TOOL_CONSENT=true \
+    PYTHONUNBUFFERED=1
 
 # APIキーは実行時にSecrets Managerから取得（イメージに含めない）
 ENTRYPOINT ["python", "main.py"]
