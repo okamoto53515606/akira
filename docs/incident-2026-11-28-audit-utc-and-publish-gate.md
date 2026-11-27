@@ -186,7 +186,7 @@ $ python -c "validate_calculator_models(旧ベースライン59行)"
 
 ## 6. 検証
 
-`test_regression_20261128.py` **29/29 PASS**（ネットワーク・AWS・LLM不要）。
+`test_regression_20261128.py` **33/33 PASS**（ネットワーク・AWS・LLM不要）。
 
 - 監査: 壊れた状態（`last_run` がUTC日付）なら「未実施」になる＝テストが11-28の
   嘘を捉えている／直したコードは `last_run` をJSTで書き「実施済み」になる／
@@ -209,14 +209,15 @@ $ python -c "validate_calculator_models(旧ベースライン59行)"
 
 ## 7. デプロイ
 
-ECR `akira:latest` digest `sha256:a1e15d1d73eff6a85a74ce61992ad0896945972b288f85f0d5bcce45b24b237e`
+ECR `akira:latest` digest `sha256:693e646a2c39f24852b9affe7240e97655c824fc11254269d35740f323984e1d`
 （タスク定義 `akira-daily:23` は `:latest` 参照なので更新不要）。
 ベースライン `akira-workspace/data/calculator-models.json` を公開中の58行で上書き
 （md5 一致を実測）。
 
 再実行（下記9）を回した時点のイメージは `sha256:20a9edf1…`。その後に足した
-「C5 が業種別構成を叫ばない」ガードと「凍結規約をエンジニアのプロンプトへ」は
-`sha256:a1e15d1d…` に含まれ、次回の定時ラン（11-30 05:00）から効く。
+「C5 が業種別構成を叫ばない」ガード・「凍結規約をエンジニアのプロンプトへ」・
+「出力の伏字（output_guard）」は `sha256:693e646a…` に含まれ、次回の定時ラン
+（11-30 05:00）から効く。
 
 ## 8. 原則（§4 の核に足す）
 
@@ -255,3 +256,55 @@ exit 0 / run_id=0706-b71ecf / 本日累計 168.1円（朝のラン 72.0円 ＋ �
 
 なお `WARN 37→1` は Akira の報告値。`site_pages` の WARN が「既知の積み残し」と
 して緑に混ざる状態は、この棚卸しでかなり減った。
+
+---
+
+## 10. 再実行中に見つかった**セキュリティ事故**（APIキーのログ流出）
+
+### 事象
+
+07:17:05、Claudeエンジニアが `env` を実行し、**`OPENAI_API_KEY` の実値をツール結果に
+載せた**。その結果は strands の callback で stdout に書かれ、CloudWatch Logs
+（`/ecs/akira`）に**平文で残った**。Akira 自身も次のターンで
+「I just leaked an API key into the transcript by running `env | grep`」と気づいている。
+
+```
+2026-11-28 07:17:05  OPENAI_API_KEY=sk-proj-（実キー。ここでは伏せています）
+```
+
+### なぜ止まらなかったか
+
+- 伏字（`trace_store.redact`）は **trace の記録にしか掛かっていなかった**。
+  実際、同じターンの trace 本文（`00716-tool.result.json`）には鍵は残っていない。
+- ところが **stdout / stderr は素通し**。CloudWatch にはそちらが流れる。
+- プロンプトにも「`env` を叩くな」と書いていなかった（規約が無かった）。
+
+### 打ち手（デプロイ済み）
+
+1. `output_guard.py` を追加し、`main()` の冒頭で `install()`。
+   `trace_store.redact()` を **sys.stdout / sys.stderr の write** と
+   **logging のレコード（msg と args）**に通す。既存の伏字パターン
+   （`sk-` / `AIza` / `ghp_` / `AKIA` / Bearer / `api_key=…` / 秘密鍵）がそのまま効く。
+   実測: `KEY=sk-proj-ABC…` → `KEY=sk-***`。
+2. `CLAUDE_ENGINEER_PROMPT` に「`env` / `printenv` / `set` / `export -p` を実行しない。
+   値を見たいときは長さだけ見る」を追加（**出さないのが原則**、伏字は最後の網）。
+3. リポジトリにコミットする `cloudwatchlog/2026-11-28.txt` は該当行を伏字に置換した
+   （push 時に GitHub の Push Protection が `OpenAI API Key` として検出して
+   ブロックしたため。検出された以上、**公開リポジトリに history を残さない**）。
+
+### 残る対応（okamo にしかできない）
+
+- **OpenAI の API キーをローテーションしてください。** CloudWatch Logs には
+  07:17:05 の生ログが残っています（ロググループの保持期間中）。S3 の trace 本文には
+  残っていないことを確認済み。新キーは Secrets Manager
+  （`okamo-channel/secrets`）の `OPENAI_API_KEY` を書き換えるだけで反映されます
+  （タスク定義の更新は不要）。
+- 同種の確認: `ANTHROPIC` / `GEMINI` / `DEEPSEEK` / `BRAVE` / `FIRECRAWL` / `GITHUB`
+  のキーは、同日のログに現れていない（grep で0件）。
+
+### 原則（§8 に足す）
+
+- **「記録には伏字がある」は「出力には伏字がある」ではない**。秘匿情報の通り道を
+  数えるときは、trace・DynamoDB・S3・**stdout / CloudWatch**・日報を別々に数える。
+- **規約（プロンプト）と網（コード）を二重にする**。網だけだと気づかないまま漏れ続け、
+  規約だけだと破られる。

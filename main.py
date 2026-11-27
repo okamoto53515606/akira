@@ -2349,6 +2349,15 @@ def main():
     parser.add_argument("--test-wi", action="store_true",
                          help="GCP Workload Identityの疎通テストのみ実行（LLM呼び出し・予算ゲートなし）")
     args = parser.parse_args()
+    # 秘匿情報の最後の網（2026-11-28）。エンジニアが `env` を叩いて
+    # OPENAI_API_KEY の実値をツール結果に載せ、それが CloudWatch に流れた。
+    # 伏字は trace にしか掛かっていなかったので、stdout/stderr/logging にも通す。
+    try:
+        import output_guard
+
+        output_guard.install()
+    except Exception:  # noqa: BLE001  伏字の失敗で日次を止めない
+        logger.exception("出力の伏字を設定できませんでした（続行します）")
     if args.test_wi:
         run_wi_test()
         return

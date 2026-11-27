@@ -326,15 +326,30 @@ stale 判定、取得失敗が `unknown`、1日に分けた監査で誤報しな
 
 ### デプロイ（11-28）
 
-ECR `akira:latest` digest `sha256:a1e15d1d…`（タスク定義 `akira-daily:23` は `:latest`
+ECR `akira:latest` digest `sha256:693e646a…`（タスク定義 `akira-daily:23` は `:latest`
 参照のため更新不要）。Dockerfile に `PYTHONUNBUFFERED=1`（stdout のバッファで
 CloudWatch の時系列が壊れ、`BlockingIOError` で1行失われたため）。
 ベースライン `akira-workspace/data/calculator-models.json` を公開中の58行に差し替え
 （md5 一致を実測）。
 
-検証は `test_regression_20261128.py` **29/29 PASS**（監査の日付・公開経路のゲートと
-ベースライン・業種別構成の拒否・C1とC5の非矛盾・ローダーの静かなスキップ・凍結規約の
-置き場所）＋既存回帰 11-19 ALL PASS / 11-21 96/96 / 11-22 20/20 / 11-24 8/8 / 11-27 35/35。
+検証は `test_regression_20261128.py` **33/33 PASS**（監査の日付・公開経路のゲートと
+ベースライン・業種別構成の拒否・C1とC5の非矛盾・ローダーの静かなスキップ・
+出力の伏字・凍結規約の置き場所）＋既存回帰 11-19 ALL PASS / 11-21 96/96 /
+11-22 20/20 / 11-24 8/8 / 11-27 35/35。
+
+### 再実行で見つかったセキュリティ事故（要対応）
+
+同日 07:17:05、エンジニアが `env` を叩いて **`OPENAI_API_KEY` の実値をツール結果に
+載せ**、それが stdout 経由で CloudWatch Logs に平文で残った（Akira 自身も
+「I just leaked an API key into the transcript」と気づいている）。伏字は trace にしか
+掛かっておらず、**stdout / stderr は素通し**だった。
+
+- 打ち手: `output_guard.py`（`trace_store.redact` を stdout / stderr / logging に通す）
+  ＋ プロンプトに「`env` を叩くな」＋ コミットするログは伏字化（GitHub の Push
+  Protection が実際にブロックした）。
+- **残る対応（okamo しかできない）: OpenAI の API キーのローテーション。**
+  Secrets Manager の `OPENAI_API_KEY` を書き換えるだけで反映される（タスク定義は
+  更新不要）。他のキーは同日のログに現れていない（grep 0件）。
 
 ### Fargate の Akira に自律的に直させた（07:06〜07:30）
 

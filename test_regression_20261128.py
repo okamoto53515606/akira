@@ -293,6 +293,40 @@ def test_workspace_loader() -> None:
             tools.WORKSPACE_LOCAL_DIR = old
 
 
+# ---------------------------------------------------------------- ⑥ 出力の伏字
+def test_output_guard() -> None:
+    print("\n[⑥] 秘匿情報が stdout / logging に素通りしないか")
+    import io
+    import logging
+
+    import output_guard
+
+    # 実キーは絶対に書かない（2026-11-28 に一度ここへ実物を貼ってしまい、
+    # public リポジトリの history に載った）。形だけを持つ**作り物**を組み立てる。
+    leaked = "OPENAI_API_KEY=" + "sk-" + "proj-" + ("TEST" + "0" * 20 + "-" + "x" * 24)
+    buf = io.StringIO()
+    st = output_guard.RedactingStream(buf)
+    st.write(leaked + "\n")
+    out = buf.getvalue()
+    check("stdout 経由の鍵が伏字になる", "sk-proj-" not in out, out[:80])
+    check("伏字以外は落とさない（キー名は残る）", "OPENAI_API_KEY=" in out, out[:80])
+
+    stream = io.StringIO()
+    handler = logging.StreamHandler(stream)
+    handler.addFilter(output_guard.RedactFilter())
+    lg = logging.getLogger("akira.test.guard")
+    lg.propagate = False
+    lg.addHandler(handler)
+    lg.setLevel(logging.INFO)
+    lg.info("result: %s", leaked)
+    logged = stream.getvalue()
+    check("logging 経由（引数）の鍵が伏字になる", "sk-proj-" not in logged, logged[:80])
+    lg.removeHandler(handler)
+
+    check("install() は何度呼んでも stdout を二重に包まない",
+          (output_guard.install() is None) and (output_guard.install() is None))
+
+
 # ---------------------------------------------------------------- 配線
 def test_wiring() -> None:
     print("\n[配線] ミッション・日報への差し込み")
@@ -321,6 +355,7 @@ def main_() -> None:
     test_publish_and_verify_gate()
     test_calc_denylist()
     test_workspace_loader()
+    test_output_guard()
     test_wiring()
     print("\nRESULT: %d passed / %d failed" % (len(PASS), len(FAIL)))
     if FAIL:
