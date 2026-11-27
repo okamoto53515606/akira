@@ -6302,7 +6302,7 @@
 2026-11-28 07:17:05 JST [akira/akira/19bfe2ca106447a7b6f7592cde3edad1] 904-| `DeepSeek-V4-Flash-0731`<br>**Preview** | chat-completion <br> (with reasoning content) | \- **Input:** text (1,000,000 tokens) <br> \- **Output:** text (384,000 tokens) <br> \- **Languages:**`en` and `zh`<br> \- **Tool calling:** Yes <br> \- **Response formats:** Text, JSON |
 2026-11-28 07:17:05 JST [akira/akira/19bfe2ca106447a7b6f7592cde3edad1] 905-| `DeepSeek-V4-Flash` | chat-completion <br> (with reasoning content) | \- **Input:** text (1,000,000 tokens) <br> \- **Output:** text (384,000 tokens) <br> \- **Languages:**`en` and `zh`<br> \- **Tool calling:** Yes <br> \- **Response formats:** Text, JSON |
 2026-11-28 07:17:05 JST [akira/akira/19bfe2ca106447a7b6f7592cde3edad1] === env ===
-2026-11-28 07:17:05 JST [akira/akira/19bfe2ca106447a7b6f7592cde3edad1] OPENAI_API_KEY=sk-***（2026-11-28 伏字。元は実キー）
+2026-11-28 07:17:05 JST [akira/akira/19bfe2ca106447a7b6f7592cde3edad1] OPENAI_API_KEY=sk-***
 2026-11-28 07:17:07 JST [akira/akira/19bfe2ca106447a7b6f7592cde3edad1] Azure page today (2026-11-28) lists `DeepSeek-V4-Pro` — claim holds. So I can update the retrieved date honestly.
 2026-11-28 07:17:07 JST [akira/akira/19bfe2ca106447a7b6f7592cde3edad1] Careful: I just leaked an API key into the transcript by running `env | grep`. That's bad practice per rules (no secrets in files) — it's in the conversation, not in files. I will NOT write it anywhere. Note lesson: never dump env. I should record this in lessons later maybe.
 2026-11-28 07:17:07 JST [akira/akira/19bfe2ca106447a7b6f7592cde3edad1] Now, bucket: env didn't show. site_upload is a tool, I can't easily get the mtime. Alternative for multimodal generated date: use S3 listing via list_site_files? No mtime. 

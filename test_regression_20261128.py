@@ -326,6 +326,29 @@ def test_output_guard() -> None:
     check("install() は何度呼んでも stdout を二重に包まない",
           (output_guard.install() is None) and (output_guard.install() is None))
 
+    # 伏字の定義は1箇所（redact_rules）に集約されているか。
+    # 2026-11-28: trace_store と scripts/publish_trace.py に同じ REDACT が二重管理され、
+    # そのうえ stdout / CloudWatch / fetch_log.sh は素通しだった。
+    import redact_rules
+
+    ts_src = open(os.path.join(ROOT, "trace_store.py"), encoding="utf-8").read()
+    check("trace_store は REDACT を redact_rules から取る（自前定義が残っていない）",
+          "redact_rules.PATTERNS" in ts_src and 're.compile(r"sk-' not in ts_src)
+    pt_src = open(os.path.join(ROOT, "scripts", "publish_trace.py"),
+                  encoding="utf-8").read()
+    check("publish_trace は独自の REDACT を持たない",
+          "REDACT = (" not in pt_src and "redact_rules.redact" in pt_src)
+    check("redact_rules のパターンで実際に伏字になる",
+          "sk-proj-" not in redact_rules.redact("k=" + "sk-" + "proj-" + "A" * 40))
+
+    # CloudWatch ログのDLが伏字を通っているか（シェル側の配線）
+    fetch = open(os.path.join(ROOT, "cloudwatchlog", "fetch_log.sh"),
+                 encoding="utf-8").read()
+    check("fetch_log.sh が redact_rules を通してから保存する",
+          "redact_rules.py" in fetch and '| "$PYTHON_BIN" "$REDACT_PY" > "$OUT_FILE"'
+          in fetch)
+    check("fetch_log.sh は伏字漏れを検出したら失敗する", "伏字漏れ" in fetch)
+
 
 # ---------------------------------------------------------------- 配線
 def test_wiring() -> None:

@@ -326,13 +326,13 @@ stale 判定、取得失敗が `unknown`、1日に分けた監査で誤報しな
 
 ### デプロイ（11-28）
 
-ECR `akira:latest` digest `sha256:693e646a…`（タスク定義 `akira-daily:23` は `:latest`
+ECR `akira:latest` digest `sha256:f075e749…`（タスク定義 `akira-daily:23` は `:latest`
 参照のため更新不要）。Dockerfile に `PYTHONUNBUFFERED=1`（stdout のバッファで
 CloudWatch の時系列が壊れ、`BlockingIOError` で1行失われたため）。
 ベースライン `akira-workspace/data/calculator-models.json` を公開中の58行に差し替え
 （md5 一致を実測）。
 
-検証は `test_regression_20261128.py` **33/33 PASS**（監査の日付・公開経路のゲートと
+検証は `test_regression_20261128.py` **38/38 PASS**（監査の日付・公開経路のゲートと
 ベースライン・業種別構成の拒否・C1とC5の非矛盾・ローダーの静かなスキップ・
 出力の伏字・凍結規約の置き場所）＋既存回帰 11-19 ALL PASS / 11-21 96/96 /
 11-22 20/20 / 11-24 8/8 / 11-27 35/35。
@@ -346,10 +346,14 @@ CloudWatch の時系列が壊れ、`BlockingIOError` で1行失われたため�
 
 - 打ち手: `output_guard.py`（`trace_store.redact` を stdout / stderr / logging に通す）
   ＋ プロンプトに「`env` を叩くな」＋ コミットするログは伏字化（GitHub の Push
-  Protection が実際にブロックした）。
-- **残る対応（okamo しかできない）: OpenAI の API キーのローテーション。**
-  Secrets Manager の `OPENAI_API_KEY` を書き換えるだけで反映される（タスク定義は
-  更新不要）。他のキーは同日のログに現れていない（grep 0件）。
+  Protection が実際にブロックした）＋ **`cloudwatchlog/fetch_log.sh` がDL時に伏字**。
+  伏字の定義は `redact_rules.py` に一本化した（trace / 公開JSONL / stdout / ログDL が
+  同じパターンを使う）。
+- **キーはローテーション済み**（`okamo-channel/secrets` を 11-28 07:53 に更新。キー名は
+  `OPENAI_API_KEY` のまま、タスク定義は `SECRET_ARN` だけなので再起動で反映）。
+- GitHub 側は `main` を差し替えて実キーを含むコミットを外した（全履歴を再走査して 0件）。
+  未到達オブジェクトは SHA 直指定で一時的に残るため、完全削除は GitHub サポートへの
+  purge 依頼が必要（キーは無効化済みなので実害なし）。
 
 ### Fargate の Akira に自律的に直させた（07:06〜07:30）
 

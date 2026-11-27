@@ -36,6 +36,8 @@ import uuid
 from datetime import datetime, timedelta, timezone
 from decimal import Decimal
 
+import redact_rules
+
 logger = logging.getLogger("akira.trace")
 
 JST = timezone(timedelta(hours=9))
@@ -46,21 +48,10 @@ TRACE_BUCKET = os.environ.get("TRACE_BUCKET", os.environ.get("WORKSPACE_BUCKET",
 TRACE_ENABLED = (os.environ.get("TRACE_ENABLED", "true").strip().lower()
                  not in ("0", "false", "no", "off"))
 
-# 伏字にするもの（記録にも公開にも残さない）
-REDACT = (
-    (re.compile(r"sk-[A-Za-z0-9_\-]{16,}"), "sk-***"),
-    (re.compile(r"AIza[0-9A-Za-z_\-]{30,}"), "AIza***"),
-    (re.compile(r"gh[pousr]_[A-Za-z0-9]{20,}"), "gh*_***"),
-    (re.compile(r"github_pat_[A-Za-z0-9_]{20,}"), "github_pat_***"),
-    (re.compile(r"AKIA[0-9A-Z]{16}"), "AKIA***"),
-    (re.compile(r"ASIA[0-9A-Z]{16}"), "ASIA***"),
-    (re.compile(r"xox[abprs]-[A-Za-z0-9\-]{10,}"), "xox*-***"),
-    (re.compile(r"(?i)(bearer\s+)[A-Za-z0-9._\-]{16,}"), r"\1***"),
-    (re.compile(r"-----BEGIN [A-Z ]*PRIVATE KEY-----.*?-----END [A-Z ]*PRIVATE KEY-----",
-                re.S), "-----BEGIN PRIVATE KEY-----***"),
-    (re.compile(r"(?i)((?:api[_-]?key|secret|password|token)\s*[=:]\s*)[^\s\"',}]{8,}"),
-     r"\1***"),
-)
+# 伏字にするもの（記録にも公開にも残さない）。
+# 2026-11-28: 定義は redact_rules.py に集約した（trace / 公開JSONL / stdout /
+# CloudWatchログDL が同じパターンを使う）。ここは後方互換のための別名。
+REDACT = redact_rules.PATTERNS
 
 # 公開してよい kind（scripts/publish_trace.py が使う）
 PUBLIC_KINDS = ("run.start", "run.end", "mission.built", "prompt.system", "plan.item",
@@ -71,15 +62,8 @@ PUBLIC_KINDS = ("run.start", "run.end", "mission.built", "prompt.system", "plan.
 _NO_BLOB = ("run.start", "run.end", "item.status", "gate.result", "publish",
             "report.claim", "plan.item")
 
-
-def redact(text: str) -> str:
-    """秘匿情報らしき文字列を伏字にする（記録時と公開時の両方で使う）。"""
-    if not isinstance(text, str):
-        return text
-    out = text
-    for pat, rep in REDACT:
-        out = pat.sub(rep, out)
-    return out
+# 秘匿情報らしき文字列を伏字にする（記録時と公開時の両方で使う）。
+redact = redact_rules.redact
 
 
 def _ddb_value(v, depth: int = 0, max_str: int = 2000):

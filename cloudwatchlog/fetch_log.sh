@@ -40,10 +40,27 @@ aws logs filter-log-events \
   --end-time "$END_MS" \
   --output json > "$TMP_FILE"
 
-# ページネーションで複数JSONが連結されていても jq -s (slurp) でまとめて処理する
+# ページネーションで複数JSONが連結されていても jq -s (slurp) でまとめて処理する。
+# 2026-11-28: **保存する前に秘匿情報を伏字にする**。エンジニアが `env` を叩いた出力に
+# OPENAI_API_KEY の実値が混ざり、それがこのファイル経由で public リポジトリへ入りかけた
+# （GitHub の Push Protection がブロックした）。伏字の定義は ../redact_rules.py が唯一。
+REDACT_PY="$SCRIPT_DIR/../redact_rules.py"
+if [[ ! -f "$REDACT_PY" ]]; then
+  echo "redact_rules.py が見つかりません: $REDACT_PY" >&2
+  exit 1
+fi
+PYTHON_BIN="${PYTHON_BIN:-python3}"
+
 jq -s -r '
   [.[].events[]] | sort_by(.timestamp)[] |
   "\((.timestamp/1000 + 32400) | gmtime | strftime("%Y-%m-%d %H:%M:%S")) JST [\(.logStreamName)] \(.message)"
-' "$TMP_FILE" > "$OUT_FILE"
+' "$TMP_FILE" | "$PYTHON_BIN" "$REDACT_PY" > "$OUT_FILE"
 
-echo "Saved $(wc -l < "$OUT_FILE") lines to $OUT_FILE"
+# 伏字が効いているかを毎回検算する（0件であることを確認できないなら失敗させる）
+LEFTOVER="$(grep -cE "sk-[A-Za-z0-9_-]{16,}|AIza[0-9A-Za-z_-]{30,}|gh[pousr]_[A-Za-z0-9]{20,}|AKIA[0-9A-Z]{16}" "$OUT_FILE" || true)"
+if [[ "$LEFTOVER" != "0" ]]; then
+  echo "伏字漏れが ${LEFTOVER} 行あります: $OUT_FILE" >&2
+  exit 1
+fi
+
+echo "Saved $(wc -l < "$OUT_FILE") lines to $OUT_FILE (secrets redacted)"

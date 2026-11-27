@@ -37,6 +37,9 @@ from datetime import date, timedelta
 
 import boto3
 
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import redact_rules  # noqa: E402  伏字の定義はリポジトリ直下の1箇所に置く
+
 TABLE = os.environ.get("TRACE_TABLE", "akira-trace")
 REGION = os.environ.get("AWS_REGION", "us-east-1")
 
@@ -58,30 +61,14 @@ PUBLIC_FIELDS = {
 # 公開時に**必ず**落とす属性（内部参照・有効期限）
 DROP_FIELDS = ("pk", "sk", "ttl")
 
-REDACT = (
-    (re.compile(r"sk-[A-Za-z0-9_\-]{16,}"), "sk-***"),
-    (re.compile(r"AIza[0-9A-Za-z_\-]{30,}"), "AIza***"),
-    (re.compile(r"gh[pousr]_[A-Za-z0-9]{20,}"), "gh*_***"),
-    (re.compile(r"github_pat_[A-Za-z0-9_]{20,}"), "github_pat_***"),
-    (re.compile(r"AKIA[0-9A-Z]{16}"), "AKIA***"),
-    (re.compile(r"ASIA[0-9A-Z]{16}"), "ASIA***"),
-    (re.compile(r"xox[abprs]-[A-Za-z0-9\-]{10,}"), "xox*-***"),
-    (re.compile(r"(?i)(bearer\s+)[A-Za-z0-9._\-]{16,}"), r"\1***"),
-    (re.compile(r"-----BEGIN [A-Z ]*PRIVATE KEY-----.*?-----END [A-Z ]*PRIVATE KEY-----",
-                re.S), "-----BEGIN PRIVATE KEY-----***"),
-    (re.compile(r"(?i)((?:api[_-]?key|secret|password|token)\s*[=:]\s*)[^\s\"',}]{8,}"),
-     r"\1***"),
-    # メールアドレス（okamoコメント等に混ざる場合の保険）
-    (re.compile(r"[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}"), "***@***"),
-)
+# 伏字の定義は redact_rules.py が唯一（2026-11-28）。ここでは公開物だけに
+# メールアドレスの伏字を足す（ログの可読性を落とすので既定では掛けない）。
+EMAIL = (redact_rules.EMAIL_PATTERN,)
 
 
 def redact(value):
     if isinstance(value, str):
-        out = value
-        for pat, rep in REDACT:
-            out = pat.sub(rep, out)
-        return out
+        return redact_rules.redact(value, extra=EMAIL)
     if isinstance(value, list):
         return [redact(v) for v in value]
     if isinstance(value, dict):

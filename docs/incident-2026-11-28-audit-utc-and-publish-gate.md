@@ -186,7 +186,7 @@ $ python -c "validate_calculator_models(旧ベースライン59行)"
 
 ## 6. 検証
 
-`test_regression_20261128.py` **33/33 PASS**（ネットワーク・AWS・LLM不要）。
+`test_regression_20261128.py` **38/38 PASS**（ネットワーク・AWS・LLM不要）。
 
 - 監査: 壊れた状態（`last_run` がUTC日付）なら「未実施」になる＝テストが11-28の
   嘘を捉えている／直したコードは `last_run` をJSTで書き「実施済み」になる／
@@ -209,15 +209,15 @@ $ python -c "validate_calculator_models(旧ベースライン59行)"
 
 ## 7. デプロイ
 
-ECR `akira:latest` digest `sha256:693e646a2c39f24852b9affe7240e97655c824fc11254269d35740f323984e1d`
+ECR `akira:latest` digest `sha256:f075e749c4509b2afd12b0ee84a86640e45823d6a8a30837c097ece9d1abcc78`
 （タスク定義 `akira-daily:23` は `:latest` 参照なので更新不要）。
 ベースライン `akira-workspace/data/calculator-models.json` を公開中の58行で上書き
 （md5 一致を実測）。
 
 再実行（下記9）を回した時点のイメージは `sha256:20a9edf1…`。その後に足した
 「C5 が業種別構成を叫ばない」ガード・「凍結規約をエンジニアのプロンプトへ」・
-「出力の伏字（output_guard）」は `sha256:693e646a…` に含まれ、次回の定時ラン
-（11-30 05:00）から効く。
+「出力の伏字（output_guard / redact_rules）」は `sha256:f075e749…` に含まれ、
+次回の定時ラン（11-30 05:00）から効く。
 
 ## 8. 原則（§4 の核に足す）
 
@@ -291,6 +291,13 @@ exit 0 / run_id=0706-b71ecf / 本日累計 168.1円（朝のラン 72.0円 ＋ �
 3. リポジトリにコミットする `cloudwatchlog/2026-11-28.txt` は該当行を伏字に置換した
    （push 時に GitHub の Push Protection が `OpenAI API Key` として検出して
    ブロックしたため。検出された以上、**公開リポジトリに history を残さない**）。
+4. **伏字の定義を1箇所に集約**（`redact_rules.py`）。同じ `REDACT` が
+   `trace_store.py` と `scripts/publish_trace.py` に二重管理されていたので、
+   trace 記録・公開JSONL・stdout/logging・**ログDL** が同じパターンを使う形にした。
+5. **`cloudwatchlog/fetch_log.sh` は保存前に伏字を通す**
+   （`jq` の出力を `redact_rules.py` にパイプし、保存後に `sk-` 等が残っていないかを
+   毎回検算して、残っていれば**失敗させる**）。実測: 2026-11-28 のログ 8,951 行を
+   再取得して伏字後 0 件・行数は不変。
 
 ### 残る対応（okamo にしかできない）
 
@@ -299,6 +306,25 @@ exit 0 / run_id=0706-b71ecf / 本日累計 168.1円（朝のラン 72.0円 ＋ �
   残っていないことを確認済み。新キーは Secrets Manager
   （`okamo-channel/secrets`）の `OPENAI_API_KEY` を書き換えるだけで反映されます
   （タスク定義の更新は不要）。
+- **2026-11-28 07:53 に `okamo-channel/secrets` が更新済み**（`OPENAI_API_KEY` は
+  新キーに差し替わっている。キー名は変わらず `OPENAI_API_KEY`）。タスク定義の
+  `environment` に鍵は無く `SECRET_ARN` だけなので、**再起動すれば新キーが使われる**
+  （イメージ再ビルドもタスク定義更新も不要）。
+
+### GitHub に残っていないかの確認（実測）
+
+- 一度 push した `41c66ae` には、**テストのダミーとして実キーを貼ってしまっていた**
+  （伏字のテストを書くときに実物をコピーした）。これを `reset --soft` で作り直し、
+  `--force-with-lease` で `main` を差し替えた（現在の `main` は `2308a44`）。
+  ダミーは `"sk-" + "proj-" + …` と**実行時に組み立てる**形にして、ソースに
+  連続した鍵文字列を作らない。
+- 全コミット（`git rev-list --all`）を再走査して、実キーの断片すら **0件**
+  （確認コマンドのパターンは `sk-proj-` までにして、断片を文書に残さない）。
+  `git ls-remote` の `refs/heads/main` も差し替え後の SHA。
+- ただし GitHub は**未到達になったオブジェクトを SHA 直指定でしばらく保持する**
+  （`/commits/41c66ae…` が 200 を返すことを確認）。キーはローテーション済みなので
+  実害は無いが、**完全削除したい場合は GitHub サポートに purge を依頼する**のが
+  唯一の手段（リポジトリ削除以外では利用者側で消せない）。
 - 同種の確認: `ANTHROPIC` / `GEMINI` / `DEEPSEEK` / `BRAVE` / `FIRECRAWL` / `GITHUB`
   のキーは、同日のログに現れていない（grep で0件）。
 
