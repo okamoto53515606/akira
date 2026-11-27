@@ -185,6 +185,24 @@ def test_platform_watch() -> None:
     check("unknown を stale として日報に残さない",
           platform_watch.stale_line({"results": [unk]}) == "")
 
+    # エントリ1件のページだけ落ちても、残りで判定する
+    flaky = dict(mapping)
+    def flaky_fetch(url):
+        if url.endswith("/DeepSeek-V4.1-Flash"):
+            raise RuntimeError("model page 404")
+        return flaky[url]
+    with tempfile.TemporaryDirectory() as tmp:
+        for rel in platform_watch.TARGETS[0]["pages"]:
+            _write(os.path.join(tmp, rel), _site_page("2026-09-10"))
+        part = platform_watch.check_target(platform_watch.TARGETS[0],
+                                          site_dir=tmp, fetcher=flaky_fetch)
+        check("モデルページ1件が落ちても最新エントリで判定する",
+              part["newest"]["name"] == "DeepSeek-V4.1-Flash-1017", str(part["newest"]))
+        check("読めなかったエントリを隠さない", part["skipped"] == ["DeepSeek-V4.1-Flash"],
+              str(part["skipped"]))
+        check("読めなかったエントリをミッションにも書く",
+              "読めなかったエントリ" in platform_watch.mission_line({"results": [part]}))
+
 
 # ---------------------------------------------------------------- ② 監査
 def test_audit_last_run() -> None:

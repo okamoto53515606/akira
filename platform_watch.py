@@ -38,7 +38,7 @@ JST = timezone(timedelta(hours=9))
 WORKSPACE = os.environ.get("WORKSPACE_LOCAL_DIR", "/workspace")
 STATE_PATH = os.path.join(WORKSPACE, "data", "platform_watch.json")
 SITE_DIR = os.environ.get("SITE_LOCAL_DIR", "/tmp/site")
-TIMEOUT = 45
+TIMEOUT = 30
 UA = "Mozilla/5.0 (akira-platform-watch)"
 
 # 見張る対象。増やすときはここに1件足す（ページのパスはサイト内の相対パス）。
@@ -177,19 +177,28 @@ def check_target(target: dict, site_dir: str | None = None, fetcher=None) -> dic
     fetch = fetcher or _fetch
     res = {"id": target["id"], "label": target["label"], "entries": [],
            "newest": None, "claims": {}, "verdict": "unknown", "reason": "",
-           "missing_pages": []}
+           "missing_pages": [], "skipped": []}
     try:
         listing = fetch(LIST_URL.format(q=target["query"]))
         names = parse_entry_names(listing, target["family"])
         if not names:
             res["reason"] = "カタログ一覧に %s が見つからない" % target["family"]
             return res
-        entries = []
+        entries, skipped = [], []
         for name in names:
-            meta = parse_meta(fetch(MODEL_URL.format(name=name)))
+            # 1件のモデルページが落ちても全体を「不明」にしない（一覧とページの
+            # 取得の間にエントリが消えることがある）。読めなかった名前は残す。
+            try:
+                meta = parse_meta(fetch(MODEL_URL.format(name=name)))
+            except Exception:  # noqa: BLE001
+                skipped.append(name)
+                continue
             if meta["version"]:
                 meta["name"] = name
                 entries.append(meta)
+            else:
+                skipped.append(name)
+        res["skipped"] = skipped
         if not entries:
             res["reason"] = "エントリはあるが version を読めない（%s）" % ", ".join(names)
             return res
@@ -309,6 +318,9 @@ def mission_line(state: dict) -> str:
                             "・" + detail if detail else ""))
         else:
             lines.append("- %s: 判定できず（%s）" % (r["label"], r.get("reason")))
+        if r.get("skipped"):
+            lines.append("  - ※読めなかったエントリ: %s（version を取得できず判定から外した）"
+                         % ", ".join("`%s`" % s for s in r["skipped"]))
     lines.append("- この結果は日報に1行書く（一致でも「配布元: 変化なし」と書け）")
     return "\n".join(lines)
 
